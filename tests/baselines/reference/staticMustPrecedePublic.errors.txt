@@ -1,0 +1,14 @@
+tests/cases/compiler/staticMustPrecedePublic.ts(2,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/compiler/staticMustPrecedePublic.ts(3,12): error TS1029: 'private' modifier must precede 'static' modifier.
+
+
+==== tests/cases/compiler/staticMustPrecedePublic.ts (2 errors) ====
+    class Outer {
+        static public intI: number;
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+        static private stringF: string;
+               ~~~~~~~
+!!! error TS1029: 'private' modifier must precede 'static' modifier.
+    }
+    

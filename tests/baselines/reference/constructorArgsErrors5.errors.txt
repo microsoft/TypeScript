@@ -1,0 +1,11 @@
+tests/cases/compiler/constructorArgsErrors5.ts(2,18): error TS1090: 'export' modifier cannot appear on a parameter.
+
+
+==== tests/cases/compiler/constructorArgsErrors5.ts (1 errors) ====
+    class foo {
+        constructor (export a: number) {
+                     ~~~~~~
+!!! error TS1090: 'export' modifier cannot appear on a parameter.
+        }
+    }
+    

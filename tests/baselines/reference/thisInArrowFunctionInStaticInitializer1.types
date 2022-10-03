@@ -1,0 +1,19 @@
+=== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts ===
+function log(a) { }
+>log : (a: any) => void
+>a : any
+
+class Vector {
+>Vector : Vector
+
+ static foo = () => {
+>foo : () => void
+>() => {  // 'this' should be allowed in a static initializer.  log(this); } : () => void
+
+  // 'this' should be allowed in a static initializer.
+  log(this);
+>log(this) : void
+>log : (a: any) => void
+>this : typeof Vector
+ }
+}

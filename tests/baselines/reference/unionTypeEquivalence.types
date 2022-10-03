@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/union/unionTypeEquivalence.ts ===
+// A | B is equivalent to A if B is a subtype of A
+class C { }
+>C : C
+
+class D extends C { foo() { } }
+>D : D
+>C : C
+>foo : () => void
+
+var x: C;
+>x : C
+
+var x : C | D;
+>x : C
+
+// A | B is equivalent to B | A.
+var y: string | number;
+>y : string | number
+
+var y : number | string;
+>y : string | number
+
+// AB | C is equivalent to A | BC, where AB is A | B and BC is B | C.
+var z : string | number | boolean;
+>z : string | number | boolean
+
+var z : (string | number) | boolean;
+>z : string | number | boolean
+
+var z : string | (number | boolean);
+>z : string | number | boolean
+
+var AB : string | number;
+>AB : string | number
+
+var BC : number | boolean;
+>BC : number | boolean
+
+var z1: typeof AB | boolean;
+>z1 : string | number | boolean
+>AB : string | number
+
+var z1: string | typeof BC;
+>z1 : string | number | boolean
+>BC : number | boolean
+

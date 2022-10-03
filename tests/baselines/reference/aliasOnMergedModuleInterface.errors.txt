@@ -1,0 +1,25 @@
+tests/cases/compiler/aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo' as a value.
+
+
+==== tests/cases/compiler/aliasOnMergedModuleInterface_1.ts (1 errors) ====
+    ///<reference path='aliasOnMergedModuleInterface_0.ts' />
+    import foo = require("foo")
+    var z: foo;
+    z.bar("hello"); // This should be ok
+    var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
+                   ~~~
+!!! error TS2708: Cannot use namespace 'foo' as a value.
+    
+==== tests/cases/compiler/aliasOnMergedModuleInterface_0.ts (0 errors) ====
+    declare module "foo"
+    {
+        module B {
+            export interface A {
+            }
+        }
+        interface B {
+            bar(name: string): B.A;
+        }
+        export = B;
+    }
+    

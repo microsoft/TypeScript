@@ -1,0 +1,204 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts ===
+declare const foo: any;
+>foo : any
+
+@foo
+>foo : any
+
+class C {
+>C : C
+
+    static a = 1;
+>a : number
+>1 : 1
+
+    static b = this.a + 1;
+>b : number
+>this.a + 1 : number
+>this.a : number
+>this : typeof C
+>a : number
+>1 : 1
+}
+
+@foo
+>foo : any
+
+class D extends C {
+>D : D
+>C : C
+
+    static c = 2;
+>c : number
+>2 : 2
+
+    static d = this.c + 1;
+>d : number
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+
+    static e = super.a + this.c + 1;
+>e : number
+>super.a + this.c + 1 : number
+>super.a + this.c : number
+>super.a : number
+>super : typeof C
+>a : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+
+    static f = () => this.c + 1;
+>f : () => number
+>() => this.c + 1 : () => number
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+
+    static ff = function () { this.c + 1 }
+>ff : () => void
+>function () { this.c + 1 } : () => void
+>this.c + 1 : any
+>this.c : any
+>this : any
+>c : any
+>1 : 1
+
+    static foo () {
+>foo : () => number
+
+        return this.c + 1;
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+    }
+    static get fa () {
+>fa : number
+
+        return this.c + 1;
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+    }
+    static set fa (v: number) {
+>fa : number
+>v : number
+
+        this.c = v + 1;
+>this.c = v + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>v + 1 : number
+>v : number
+>1 : 1
+    }
+}
+
+class CC {
+>CC : CC
+
+    static a = 1;
+>a : number
+>1 : 1
+
+    static b = this.a + 1;
+>b : number
+>this.a + 1 : number
+>this.a : number
+>this : typeof CC
+>a : number
+>1 : 1
+}
+
+class DD extends CC {
+>DD : DD
+>CC : CC
+
+    static c = 2;
+>c : number
+>2 : 2
+
+    static d = this.c + 1;
+>d : number
+>this.c + 1 : number
+>this.c : number
+>this : typeof DD
+>c : number
+>1 : 1
+
+    static e = super.a + this.c + 1;
+>e : number
+>super.a + this.c + 1 : number
+>super.a + this.c : number
+>super.a : number
+>super : typeof CC
+>a : number
+>this.c : number
+>this : typeof DD
+>c : number
+>1 : 1
+
+    static f = () => this.c + 1;
+>f : () => number
+>() => this.c + 1 : () => number
+>this.c + 1 : number
+>this.c : number
+>this : typeof DD
+>c : number
+>1 : 1
+
+    static ff = function () { this.c + 1 }
+>ff : () => void
+>function () { this.c + 1 } : () => void
+>this.c + 1 : any
+>this.c : any
+>this : any
+>c : any
+>1 : 1
+
+    static foo () {
+>foo : () => number
+
+        return this.c + 1;
+>this.c + 1 : number
+>this.c : number
+>this : typeof DD
+>c : number
+>1 : 1
+    }
+    static get fa () {
+>fa : number
+
+        return this.c + 1;
+>this.c + 1 : number
+>this.c : number
+>this : typeof DD
+>c : number
+>1 : 1
+    }
+    static set fa (v: number) {
+>fa : number
+>v : number
+
+        this.c = v + 1;
+>this.c = v + 1 : number
+>this.c : number
+>this : typeof DD
+>c : number
+>v + 1 : number
+>v : number
+>1 : 1
+    }
+}
+

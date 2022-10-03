@@ -1,0 +1,8 @@
+tests/cases/compiler/forIn2.ts(1,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '1'.
+
+
+==== tests/cases/compiler/forIn2.ts (1 errors) ====
+    for (var i in 1) {
+                  ~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '1'.
+    }

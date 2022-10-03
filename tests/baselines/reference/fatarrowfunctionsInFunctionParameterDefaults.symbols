@@ -1,0 +1,18 @@
+=== tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
+function fn(x = () => this, y = x()) {
+>fn : Symbol(fn, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 0))
+>x : Symbol(x, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 12))
+>y : Symbol(y, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 27))
+>x : Symbol(x, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 12))
+
+    // should be 4
+    return y;
+>y : Symbol(y, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 27))
+
+}
+
+fn.call(4); // Should be 4
+>fn.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(fatarrowfunctionsInFunctionParameterDefaults.ts, 0, 0))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+

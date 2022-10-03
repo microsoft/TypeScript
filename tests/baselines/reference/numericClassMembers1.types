@@ -1,0 +1,37 @@
+=== tests/cases/compiler/numericClassMembers1.ts ===
+class C234 {
+>C234 : C234
+
+  0 = 1; 
+>0 : number
+>1 : 1
+
+  0.0 = 2;
+>0.0 : number
+>2 : 2
+}
+ 
+class C235 { 
+>C235 : C235
+
+  0.0 = 1;
+>0.0 : number
+>1 : 1
+
+ '0' = 2;
+>'0' : number
+>2 : 2
+}
+
+class C236 {
+>C236 : C236
+
+    '0.0' = 1;
+>'0.0' : number
+>1 : 1
+
+    '0' = 2;
+>'0' : number
+>2 : 2
+}
+

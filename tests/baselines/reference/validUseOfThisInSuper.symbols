@@ -1,0 +1,19 @@
+=== tests/cases/compiler/validUseOfThisInSuper.ts ===
+class Base {
+>Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+
+    constructor(public b: Base) {
+>b : Symbol(Base.b, Decl(validUseOfThisInSuper.ts, 1, 16))
+>Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+    }
+}
+class Super extends Base {
+>Super : Symbol(Super, Decl(validUseOfThisInSuper.ts, 3, 1))
+>Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+
+    constructor() {
+        super((() => this)()); // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
+>super : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+>this : Symbol(Super, Decl(validUseOfThisInSuper.ts, 3, 1))
+    }
+}

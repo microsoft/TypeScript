@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesWithModule.ts ===
+// module export
+
+module m {
+>m : Symbol(m, Decl(objectLiteralShorthandPropertiesWithModule.ts, 0, 0), Decl(objectLiteralShorthandPropertiesWithModule.ts, 4, 1))
+
+    export var x;
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesWithModule.ts, 3, 14))
+}
+
+module m {
+>m : Symbol(m, Decl(objectLiteralShorthandPropertiesWithModule.ts, 0, 0), Decl(objectLiteralShorthandPropertiesWithModule.ts, 4, 1))
+
+    var z = x;
+>z : Symbol(z, Decl(objectLiteralShorthandPropertiesWithModule.ts, 7, 7))
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesWithModule.ts, 3, 14))
+
+    var y = {
+>y : Symbol(y, Decl(objectLiteralShorthandPropertiesWithModule.ts, 8, 7))
+
+        a: x,
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesWithModule.ts, 8, 13))
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesWithModule.ts, 3, 14))
+
+        x
+>x : Symbol(x, Decl(objectLiteralShorthandPropertiesWithModule.ts, 9, 13))
+
+    };
+}
+

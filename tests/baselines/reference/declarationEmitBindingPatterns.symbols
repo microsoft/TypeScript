@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declarationEmitBindingPatterns.ts ===
+const k = ({x: z = 'y'}) => { }
+>k : Symbol(k, Decl(declarationEmitBindingPatterns.ts, 0, 5))
+>x : Symbol(x)
+>z : Symbol(z, Decl(declarationEmitBindingPatterns.ts, 0, 12))
+
+var a;
+>a : Symbol(a, Decl(declarationEmitBindingPatterns.ts, 2, 3))
+
+function f({} = a, [] = a, { p: {} = a} = a) {
+>f : Symbol(f, Decl(declarationEmitBindingPatterns.ts, 2, 6))
+>a : Symbol(a, Decl(declarationEmitBindingPatterns.ts, 2, 3))
+>a : Symbol(a, Decl(declarationEmitBindingPatterns.ts, 2, 3))
+>a : Symbol(a, Decl(declarationEmitBindingPatterns.ts, 2, 3))
+>a : Symbol(a, Decl(declarationEmitBindingPatterns.ts, 2, 3))
+}

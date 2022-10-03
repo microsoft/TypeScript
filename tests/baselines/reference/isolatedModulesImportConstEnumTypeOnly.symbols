@@ -1,0 +1,14 @@
+=== tests/cases/compiler/enum.ts ===
+export const enum Foo { Bar }
+>Foo : Symbol(Foo, Decl(enum.ts, 0, 0))
+>Bar : Symbol(Foo.Bar, Decl(enum.ts, 0, 23))
+
+=== tests/cases/compiler/index.ts ===
+import { Foo } from "./enum";
+>Foo : Symbol(Foo, Decl(index.ts, 0, 8))
+
+function f(foo: Foo) { return; }
+>f : Symbol(f, Decl(index.ts, 0, 29))
+>foo : Symbol(foo, Decl(index.ts, 1, 11))
+>Foo : Symbol(Foo, Decl(index.ts, 0, 8))
+

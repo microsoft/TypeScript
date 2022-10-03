@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/templates/templateStringInNewOperatorES6.ts(1,13): error TS2351: This expression is not constructable.
+  Type 'String' has no construct signatures.
+
+
+==== tests/cases/conformance/es6/templates/templateStringInNewOperatorES6.ts (1 errors) ====
+    var x = new `abc${ 1 }def`;
+                ~~~~~~~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'String' has no construct signatures.

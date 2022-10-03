@@ -1,0 +1,10 @@
+=== tests/cases/compiler/aliasInaccessibleModule.ts ===
+module M {
+>M : typeof M
+
+    module N {
+    }
+    export import X = N;
+>X : any
+>N : error
+}

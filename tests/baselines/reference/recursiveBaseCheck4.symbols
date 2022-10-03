@@ -1,0 +1,9 @@
+=== tests/cases/compiler/recursiveBaseCheck4.ts ===
+class M<T> extends M<string> { }
+>M : Symbol(M, Decl(recursiveBaseCheck4.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveBaseCheck4.ts, 0, 8))
+>M : Symbol(M, Decl(recursiveBaseCheck4.ts, 0, 0))
+
+(new M).blah;
+>M : Symbol(M, Decl(recursiveBaseCheck4.ts, 0, 0))
+

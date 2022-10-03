@@ -1,0 +1,19 @@
+tests/cases/conformance/salsa/npm-install.js(7,9): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/salsa/npm-install.js (1 errors) ====
+    function Installer () {
+        this.args = 0
+    }
+    Installer.prototype.loadArgMetadata = function (next) {
+        // ArrowFunction isn't treated as a this-container
+        (args) => {
+            this.args = 'hi'
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.newProperty = 1
+        }
+    }
+    var i = new Installer()
+    i.newProperty = i.args // ok, number ==> number | undefined
+    

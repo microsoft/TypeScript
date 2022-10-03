@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration5.ts ===
+class C {
+>C : C
+
+  private constructor() { }
+}

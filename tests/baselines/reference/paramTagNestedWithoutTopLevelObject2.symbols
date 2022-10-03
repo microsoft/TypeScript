@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject2.js ===
+/**
+ * @param {object} xyz.bar
+ * @param {number} xyz.bar.p
+ */
+function g(xyz) {
+>g : Symbol(g, Decl(paramTagNestedWithoutTopLevelObject2.js, 0, 0))
+>xyz : Symbol(xyz, Decl(paramTagNestedWithoutTopLevelObject2.js, 4, 11))
+
+    return xyz.bar.p;
+>xyz : Symbol(xyz, Decl(paramTagNestedWithoutTopLevelObject2.js, 4, 11))
+}

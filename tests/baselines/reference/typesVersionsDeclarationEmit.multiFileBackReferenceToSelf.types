@@ -1,0 +1,33 @@
+=== tests/cases/conformance/declarationEmit/node_modules/ext/index.d.ts ===
+export interface A {}
+export function fa(): A;
+>fa : () => A
+
+=== tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts ===
+export interface B {}
+export function fb(): B;
+>fb : () => B
+
+=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
+export * from "../";
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts ===
+export * from "../other";
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/declarationEmit/main.ts ===
+import { fa } from "ext";
+>fa : any
+
+import { fb } from "ext/other";
+>fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
+
+export const va = fa();
+>va : any
+>fa() : any
+>fa : any
+
+export const vb = fb();
+>vb : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
+>fb() : import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
+>fb : () => import("tests/cases/conformance/declarationEmit/node_modules/ext/other").B
+

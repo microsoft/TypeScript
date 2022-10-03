@@ -1,0 +1,19 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallAndConstructSignature.ts ===
+interface Foo {
+    (): number;
+    new (): any;
+}
+
+var f: Foo;
+>f : Foo
+
+var r = f();
+>r : number
+>f() : number
+>f : Foo
+
+var r2 = new f();
+>r2 : any
+>new f() : any
+>f : Foo
+

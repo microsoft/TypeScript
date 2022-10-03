@@ -1,0 +1,58 @@
+=== tests/cases/compiler/BaseA.js ===
+// regression test for #18254
+export default class BaseA {
+>BaseA : Symbol(BaseA, Decl(BaseA.js, 0, 0))
+}
+=== tests/cases/compiler/SubA.js ===
+import BaseA from './BaseA';
+>BaseA : Symbol(BaseA, Decl(SubA.js, 0, 6))
+
+export default class SubA extends BaseA {
+>SubA : Symbol(SubA, Decl(SubA.js, 0, 28))
+>BaseA : Symbol(BaseA, Decl(SubA.js, 0, 6))
+}
+=== tests/cases/compiler/BaseB.js ===
+import BaseA from './BaseA';
+>BaseA : Symbol(BaseA, Decl(BaseB.js, 0, 6))
+
+export default class B<T: BaseA> {
+>B : Symbol(B, Decl(BaseB.js, 0, 28))
+>T : Symbol(T, Decl(BaseB.js, 1, 23))
+>BaseA : Symbol(BaseA, Decl(BaseB.js, 1, 25))
+
+    _AClass: Class<T>;
+>_AClass : Symbol(B._AClass, Decl(BaseB.js, 1, 34))
+>Class : Symbol(Class)
+>T : Symbol(T, Decl(BaseB.js, 1, 23))
+
+    constructor(AClass: Class<T>) {
+>AClass : Symbol(AClass, Decl(BaseB.js, 3, 16))
+>Class : Symbol(Class)
+>T : Symbol(T, Decl(BaseB.js, 1, 23))
+
+        this._AClass = AClass;
+>this._AClass : Symbol(B._AClass, Decl(BaseB.js, 1, 34))
+>this : Symbol(B, Decl(BaseB.js, 0, 28))
+>_AClass : Symbol(B._AClass, Decl(BaseB.js, 1, 34))
+>AClass : Symbol(AClass, Decl(BaseB.js, 3, 16))
+    }
+}
+=== tests/cases/compiler/SubB.js ===
+import SubA from './SubA';
+>SubA : Symbol(SubA, Decl(SubB.js, 0, 6))
+
+import BaseB from './BaseB';
+>BaseB : Symbol(BaseB, Decl(SubB.js, 1, 6))
+
+export default class SubB extends BaseB<SubA> {
+>SubB : Symbol(SubB, Decl(SubB.js, 1, 28))
+>BaseB : Symbol(BaseB, Decl(SubB.js, 1, 6))
+>SubA : Symbol(SubA, Decl(SubB.js, 0, 6))
+
+    constructor() {
+        super(SubA);
+>super : Symbol(BaseB, Decl(BaseB.js, 0, 28))
+>SubA : Symbol(SubA, Decl(SubB.js, 0, 6))
+    }
+}
+

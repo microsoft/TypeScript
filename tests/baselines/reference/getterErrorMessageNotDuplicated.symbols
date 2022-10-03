@@ -1,0 +1,31 @@
+=== tests/cases/compiler/getterErrorMessageNotDuplicated.ts ===
+interface Thing {
+>Thing : Symbol(Thing, Decl(getterErrorMessageNotDuplicated.ts, 0, 0))
+
+    get style(): Foo;
+>style : Symbol(Thing.style, Decl(getterErrorMessageNotDuplicated.ts, 0, 17), Decl(getterErrorMessageNotDuplicated.ts, 1, 21))
+>Foo : Symbol(Foo, Decl(getterErrorMessageNotDuplicated.ts, 3, 1))
+
+    set style(cssText: string | Bar);
+>style : Symbol(Thing.style, Decl(getterErrorMessageNotDuplicated.ts, 0, 17), Decl(getterErrorMessageNotDuplicated.ts, 1, 21))
+>cssText : Symbol(cssText, Decl(getterErrorMessageNotDuplicated.ts, 2, 14))
+>Bar : Symbol(Bar, Decl(getterErrorMessageNotDuplicated.ts, 8, 1))
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(getterErrorMessageNotDuplicated.ts, 3, 1))
+
+    hello: string;
+>hello : Symbol(Foo.hello, Decl(getterErrorMessageNotDuplicated.ts, 5, 15))
+
+    world: number;
+>world : Symbol(Foo.world, Decl(getterErrorMessageNotDuplicated.ts, 6, 18))
+}
+
+interface Bar extends Foo {
+>Bar : Symbol(Bar, Decl(getterErrorMessageNotDuplicated.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(getterErrorMessageNotDuplicated.ts, 3, 1))
+
+    extra: any;
+>extra : Symbol(Bar.extra, Decl(getterErrorMessageNotDuplicated.ts, 10, 27))
+}

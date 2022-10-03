@@ -1,0 +1,36 @@
+=== tests/cases/compiler/specializationError.ts ===
+interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 18))
+
+    then<U>(value: T): void;
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 22))
+>U : Symbol(U, Decl(specializationError.ts, 1, 9))
+>value : Symbol(value, Decl(specializationError.ts, 1, 12))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 18))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(specializationError.ts, 2, 1))
+
+    bar(value: "Menu"): Promise<string>;
+>bar : Symbol(Bar.bar, Decl(specializationError.ts, 4, 15), Decl(specializationError.ts, 5, 40), Decl(specializationError.ts, 6, 55))
+>value : Symbol(value, Decl(specializationError.ts, 5, 8))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 0))
+
+    bar<T>(value: string, element: string): Promise<T>;
+>bar : Symbol(Bar.bar, Decl(specializationError.ts, 4, 15), Decl(specializationError.ts, 5, 40), Decl(specializationError.ts, 6, 55))
+>T : Symbol(T, Decl(specializationError.ts, 6, 8))
+>value : Symbol(value, Decl(specializationError.ts, 6, 11))
+>element : Symbol(element, Decl(specializationError.ts, 6, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 0))
+>T : Symbol(T, Decl(specializationError.ts, 6, 8))
+
+    bar<T>(value: string): Promise<T>;
+>bar : Symbol(Bar.bar, Decl(specializationError.ts, 4, 15), Decl(specializationError.ts, 5, 40), Decl(specializationError.ts, 6, 55))
+>T : Symbol(T, Decl(specializationError.ts, 7, 8))
+>value : Symbol(value, Decl(specializationError.ts, 7, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(specializationError.ts, 0, 0))
+>T : Symbol(T, Decl(specializationError.ts, 7, 8))
+}
+

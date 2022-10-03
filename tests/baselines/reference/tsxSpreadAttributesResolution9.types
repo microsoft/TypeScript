@@ -1,0 +1,73 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface OptionProp {
+    x?: 2
+>x : 2
+
+    y?: boolean
+>y : boolean
+}
+
+class Opt extends React.Component<OptionProp, {}> {
+>Opt : Opt
+>React.Component : React.Component<OptionProp, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+    }
+}
+
+const obj: OptionProp = {};
+>obj : OptionProp
+>{} : {}
+
+const obj1: OptionProp = {
+>obj1 : OptionProp
+>{    x: 2} : { x: 2; }
+
+    x: 2
+>x : 2
+>2 : 2
+}
+
+// OK
+let p = <Opt />;
+>p : JSX.Element
+><Opt /> : JSX.Element
+>Opt : typeof Opt
+
+let y = <Opt {...obj} />;
+>y : JSX.Element
+><Opt {...obj} /> : JSX.Element
+>Opt : typeof Opt
+>obj : OptionProp
+
+let y1 = <Opt {...obj1} />;
+>y1 : JSX.Element
+><Opt {...obj1} /> : JSX.Element
+>Opt : typeof Opt
+>obj1 : OptionProp
+
+let y2 = <Opt {...obj1} y/>;
+>y2 : JSX.Element
+><Opt {...obj1} y/> : JSX.Element
+>Opt : typeof Opt
+>obj1 : OptionProp
+>y : true
+
+let y3 = <Opt x={2} />;
+>y3 : JSX.Element
+><Opt x={2} /> : JSX.Element
+>Opt : typeof Opt
+>x : 2
+>2 : 2
+

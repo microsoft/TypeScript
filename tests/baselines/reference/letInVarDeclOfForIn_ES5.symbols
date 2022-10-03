@@ -1,0 +1,10 @@
+=== tests/cases/compiler/letInVarDeclOfForIn_ES5.ts ===
+// should not be an error
+for (var let in [1,2,3]) {}
+>let : Symbol(let, Decl(letInVarDeclOfForIn_ES5.ts, 1, 8), Decl(letInVarDeclOfForIn_ES5.ts, 4, 9))
+
+{
+	for (var let in [1,2,3]) {}
+>let : Symbol(let, Decl(letInVarDeclOfForIn_ES5.ts, 1, 8), Decl(letInVarDeclOfForIn_ES5.ts, 4, 9))
+}
+

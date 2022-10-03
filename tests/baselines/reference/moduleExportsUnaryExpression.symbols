@@ -1,0 +1,48 @@
+=== tests/cases/compiler/moduleExportsUnaryExpression.ts ===
+let x = 1;
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+export function foo(y: number) {
+>foo : Symbol(foo, Decl(moduleExportsUnaryExpression.ts, 0, 10))
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+
+    if (y <= x++) return y <= x++;
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    if (y <= x--) return y <= x--;
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    if (y <= ++x) return y <= ++x;
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    if (y <= --x) return y <= --x;
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+>y : Symbol(y, Decl(moduleExportsUnaryExpression.ts, 2, 20))
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    x++;
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    x--;
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    ++x;
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+
+    --x;
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
+}
+
+export { x };
+>x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 14, 8))
+

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/protoInIndexer.ts ===
+class X {
+>X : X
+
+    constructor() {
+        this['__proto__'] = null; // used to cause ICE
+>this['__proto__'] = null : null
+>this['__proto__'] : error
+>this : this
+>'__proto__' : "__proto__"
+>null : null
+    }
+}

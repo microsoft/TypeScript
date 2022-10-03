@@ -1,0 +1,40 @@
+=== tests/cases/compiler/targetTypeCalls.ts ===
+var fra1: (v:any)=>string = function() { return function (v:string) {return v;}; }() // should work
+>fra1 : (v: any) => string
+>v : any
+>function() { return function (v:string) {return v;}; }() : (v: string) => string
+>function() { return function (v:string) {return v;}; } : () => (v: string) => string
+>function (v:string) {return v;} : (v: string) => string
+>v : string
+>v : string
+
+var fra2: (v:any)=>number = function() { return function () { return 0; } }() // should work
+>fra2 : (v: any) => number
+>v : any
+>function() { return function () { return 0; } }() : () => number
+>function() { return function () { return 0; } } : () => () => number
+>function () { return 0; } : () => number
+>0 : 0
+
+var fra3: (v:any)=>string = function() { return function() { return function(v) {return v;};}(); }() // should work
+>fra3 : (v: any) => string
+>v : any
+>function() { return function() { return function(v) {return v;};}(); }() : (v: any) => any
+>function() { return function() { return function(v) {return v;};}(); } : () => (v: any) => any
+>function() { return function(v) {return v;};}() : (v: any) => any
+>function() { return function(v) {return v;};} : () => (v: any) => any
+>function(v) {return v;} : (v: any) => any
+>v : any
+>v : any
+
+var fra4: (v:any)=>void = function() { return function() { return function(v) {return v;};}(); }() // should work
+>fra4 : (v: any) => void
+>v : any
+>function() { return function() { return function(v) {return v;};}(); }() : (v: any) => any
+>function() { return function() { return function(v) {return v;};}(); } : () => (v: any) => any
+>function() { return function(v) {return v;};}() : (v: any) => any
+>function() { return function(v) {return v;};} : () => (v: any) => any
+>function(v) {return v;} : (v: any) => any
+>v : any
+>v : any
+

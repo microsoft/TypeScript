@@ -1,0 +1,14 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndLogicalOrExpressions01.ts(7,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndLogicalOrExpressions01.ts (1 errors) ====
+    declare function myRandBool(): boolean;
+    
+    let a: "foo" = "foo";
+    let b = a || "foo";
+    let c: "foo" = b;
+    let d = b || "bar";
+    let e: "foo" | "bar" = d;
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+    

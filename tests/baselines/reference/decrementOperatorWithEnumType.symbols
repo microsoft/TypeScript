@@ -1,0 +1,29 @@
+=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts ===
+// -- operator on enum type
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(decrementOperatorWithEnumType.ts, 0, 0))
+>A : Symbol(ENUM1.A, Decl(decrementOperatorWithEnumType.ts, 2, 12))
+>B : Symbol(ENUM1.B, Decl(decrementOperatorWithEnumType.ts, 2, 15))
+>"" : Symbol(ENUM1[""], Decl(decrementOperatorWithEnumType.ts, 2, 18))
+
+// expression
+var ResultIsNumber1 = --ENUM1["A"];
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(decrementOperatorWithEnumType.ts, 5, 3))
+>ENUM1 : Symbol(ENUM1, Decl(decrementOperatorWithEnumType.ts, 0, 0))
+>"A" : Symbol(ENUM1.A, Decl(decrementOperatorWithEnumType.ts, 2, 12))
+
+var ResultIsNumber2 = ENUM1.A--;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(decrementOperatorWithEnumType.ts, 6, 3))
+>ENUM1.A : Symbol(ENUM1.A, Decl(decrementOperatorWithEnumType.ts, 2, 12))
+>ENUM1 : Symbol(ENUM1, Decl(decrementOperatorWithEnumType.ts, 0, 0))
+>A : Symbol(ENUM1.A, Decl(decrementOperatorWithEnumType.ts, 2, 12))
+
+// miss assignment operator
+--ENUM1["A"];
+>ENUM1 : Symbol(ENUM1, Decl(decrementOperatorWithEnumType.ts, 0, 0))
+>"A" : Symbol(ENUM1.A, Decl(decrementOperatorWithEnumType.ts, 2, 12))
+
+ENUM1[A]--;
+>ENUM1 : Symbol(ENUM1, Decl(decrementOperatorWithEnumType.ts, 0, 0))
+

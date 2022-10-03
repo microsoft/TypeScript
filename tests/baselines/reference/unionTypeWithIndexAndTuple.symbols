@@ -1,0 +1,18 @@
+=== tests/cases/compiler/unionTypeWithIndexAndTuple.ts ===
+interface I {
+>I : Symbol(I, Decl(unionTypeWithIndexAndTuple.ts, 0, 0))
+
+    [index: number]: any;
+>index : Symbol(index, Decl(unionTypeWithIndexAndTuple.ts, 1, 5))
+
+    someOtherProperty: number;
+>someOtherProperty : Symbol(I.someOtherProperty, Decl(unionTypeWithIndexAndTuple.ts, 1, 25))
+}
+function f(args: ["a"] | I) { }
+>f : Symbol(f, Decl(unionTypeWithIndexAndTuple.ts, 3, 1))
+>args : Symbol(args, Decl(unionTypeWithIndexAndTuple.ts, 4, 11))
+>I : Symbol(I, Decl(unionTypeWithIndexAndTuple.ts, 0, 0))
+
+f(["a"]);
+>f : Symbol(f, Decl(unionTypeWithIndexAndTuple.ts, 3, 1))
+

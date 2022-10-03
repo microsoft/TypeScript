@@ -1,0 +1,29 @@
+=== tests/cases/compiler/collisionThisExpressionAndLocalVarInLambda.ts ===
+declare function alert(message?: any): void;
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --), Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>message : Symbol(message, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 23))
+
+var x = {
+>x : Symbol(x, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 2, 3))
+
+    doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 2, 9))
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 3, 14))
+
+        var _this = 2;
+>_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 4, 11))
+
+        return callback(this);
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 3, 14))
+>this : Symbol(globalThis)
+    }
+}
+alert(x.doStuff(x => alert(x)));
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --), Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>x.doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 2, 9))
+>x : Symbol(x, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 2, 3))
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 2, 9))
+>x : Symbol(x, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 8, 16))
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --), Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>x : Symbol(x, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 8, 16))
+

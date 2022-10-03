@@ -1,0 +1,31 @@
+=== tests/cases/compiler/noImplicitAnyForMethodParameters.ts ===
+declare class A {
+>A : A
+
+    private foo(a); // OK - ambient class and private method - no error
+>foo : (a: any) => any
+>a : any
+}
+
+declare class B {
+>B : B
+
+    public foo(a); // OK - ambient class and public method - error
+>foo : (a: any) => any
+>a : any
+}
+
+class C {
+>C : C
+
+    private foo(a) { } // OK - non-ambient class and private method - error
+>foo : (a: any) => void
+>a : any
+}
+class D {
+>D : D
+
+    public foo(a) { } // OK - non-ambient class and public method - error
+>foo : (a: any) => void
+>a : any
+}

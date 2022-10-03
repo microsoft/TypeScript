@@ -1,0 +1,65 @@
+=== tests/cases/conformance/jsdoc/jsdocSignatureOnReturnedFunction.js ===
+function f1() {
+>f1 : Symbol(f1, Decl(jsdocSignatureOnReturnedFunction.js, 0, 0))
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return (a, b) => {
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 6, 12))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 6, 14))
+
+        return a + b;
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 6, 12))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 6, 14))
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(jsdocSignatureOnReturnedFunction.js, 9, 1))
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return function (a, b){
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 17, 21))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 17, 23))
+
+        return a + b;
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 17, 21))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 17, 23))
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(jsdocSignatureOnReturnedFunction.js, 20, 1))
+
+    /** @type {(a: number, b: number) => number} */
+    return (a, b) => {
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 24, 12))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 24, 14))
+
+        return a + b;
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 24, 12))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 24, 14))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(jsdocSignatureOnReturnedFunction.js, 27, 1))
+
+    /** @type {(a: number, b: number) => number} */
+    return function (a, b){
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 31, 21))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 31, 23))
+
+        return a + b;
+>a : Symbol(a, Decl(jsdocSignatureOnReturnedFunction.js, 31, 21))
+>b : Symbol(b, Decl(jsdocSignatureOnReturnedFunction.js, 31, 23))
+    }
+}
+

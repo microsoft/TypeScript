@@ -1,0 +1,134 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(2,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(3,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(4,6): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(5,6): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(6,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(6,7): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(7,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(11,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(12,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(13,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(14,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(15,6): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(16,6): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(17,6): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(18,6): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(20,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(21,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(22,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(23,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(24,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(25,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(26,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(27,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(28,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(29,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(30,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(31,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(32,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(33,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(34,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(35,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts (31 errors) ====
+    // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+    -1 ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +1 ** 2
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** -2 ** 3;
+         ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** -2 ** -3;
+         ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -1 ** -2 ** -3;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+          ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -(1 ** 2) ** 3;
+    ~~~~~~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    
+    var temp = 10;
+    
+    -++temp ** 3;
+    ~~~~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +--temp ** 3;
+    ~~~~~~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -temp++ ** 3;
+    ~~~~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +temp-- ** 3;
+    ~~~~~~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** -++temp ** 3;
+         ~~~~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** +--temp ** 3;
+         ~~~~~~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** -temp++ ** 3;
+         ~~~~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    1 ** +temp-- ** 3;
+         ~~~~~~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    
+    -3 ** temp++;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** temp--;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** ++temp;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** --temp;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** temp++;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** temp--;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** ++temp;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** --temp;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** temp++ ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** temp-- ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** ++temp ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -3 ** --temp ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** temp++ ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** temp-- ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** ++temp ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +3 ** --temp ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    
+    
+    

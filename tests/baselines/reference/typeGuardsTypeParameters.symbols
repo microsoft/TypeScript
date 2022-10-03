@@ -1,0 +1,97 @@
+=== tests/cases/conformance/controlFlow/typeGuardsTypeParameters.ts ===
+// Type guards involving type parameters produce intersection types
+
+class C {
+>C : Symbol(C, Decl(typeGuardsTypeParameters.ts, 0, 0))
+
+    prop: string;
+>prop : Symbol(C.prop, Decl(typeGuardsTypeParameters.ts, 2, 9))
+}
+
+function f1<T>(x: T) {
+>f1 : Symbol(f1, Decl(typeGuardsTypeParameters.ts, 4, 1))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 6, 12))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 6, 15))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 6, 12))
+
+    if (x instanceof C) {
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 6, 15))
+>C : Symbol(C, Decl(typeGuardsTypeParameters.ts, 0, 0))
+
+        let v1: T = x;
+>v1 : Symbol(v1, Decl(typeGuardsTypeParameters.ts, 8, 11))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 6, 12))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 6, 15))
+
+        let v2: C = x;
+>v2 : Symbol(v2, Decl(typeGuardsTypeParameters.ts, 9, 11))
+>C : Symbol(C, Decl(typeGuardsTypeParameters.ts, 0, 0))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 6, 15))
+
+        x.prop;
+>x.prop : Symbol(C.prop, Decl(typeGuardsTypeParameters.ts, 2, 9))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 6, 15))
+>prop : Symbol(C.prop, Decl(typeGuardsTypeParameters.ts, 2, 9))
+    }
+}
+
+function f2<T>(x: T) {
+>f2 : Symbol(f2, Decl(typeGuardsTypeParameters.ts, 12, 1))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 14, 12))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 14, 12))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
+
+        let v1: T = x;
+>v1 : Symbol(v1, Decl(typeGuardsTypeParameters.ts, 16, 11))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 14, 12))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
+
+        let v2: string = x;
+>v2 : Symbol(v2, Decl(typeGuardsTypeParameters.ts, 17, 11))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// Repro from #13872
+
+function fun<T>(item: { [P in keyof T]: T[P] }) {
+>fun : Symbol(fun, Decl(typeGuardsTypeParameters.ts, 20, 1))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 24, 13))
+>item : Symbol(item, Decl(typeGuardsTypeParameters.ts, 24, 16))
+>P : Symbol(P, Decl(typeGuardsTypeParameters.ts, 24, 25))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 24, 13))
+>T : Symbol(T, Decl(typeGuardsTypeParameters.ts, 24, 13))
+>P : Symbol(P, Decl(typeGuardsTypeParameters.ts, 24, 25))
+
+    const strings: string[] = [];
+>strings : Symbol(strings, Decl(typeGuardsTypeParameters.ts, 25, 9))
+
+    for (const key in item) {
+>key : Symbol(key, Decl(typeGuardsTypeParameters.ts, 26, 14))
+>item : Symbol(item, Decl(typeGuardsTypeParameters.ts, 24, 16))
+
+        const value = item[key];
+>value : Symbol(value, Decl(typeGuardsTypeParameters.ts, 27, 13))
+>item : Symbol(item, Decl(typeGuardsTypeParameters.ts, 24, 16))
+>key : Symbol(key, Decl(typeGuardsTypeParameters.ts, 26, 14))
+
+        if (typeof value === "string") {
+>value : Symbol(value, Decl(typeGuardsTypeParameters.ts, 27, 13))
+
+            strings.push(value);
+>strings.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>strings : Symbol(strings, Decl(typeGuardsTypeParameters.ts, 25, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(typeGuardsTypeParameters.ts, 27, 13))
+        }
+    }
+}
+

@@ -1,0 +1,12 @@
+tests/cases/compiler/moduleAugmentationGlobal6_1.ts(1,1): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+tests/cases/compiler/moduleAugmentationGlobal6_1.ts(1,1): error TS2670: Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.
+
+
+==== tests/cases/compiler/moduleAugmentationGlobal6_1.ts (2 errors) ====
+    global {
+    ~~~~~~
+!!! error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+    ~~~~~~
+!!! error TS2670: Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.
+        interface Array<T> { x }
+    }

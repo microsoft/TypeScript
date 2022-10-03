@@ -1,0 +1,45 @@
+=== tests/cases/conformance/externalModules/err1.d.ts ===
+// Illegal, can't be in script file
+No type information for this code.export as namespace Foo;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/err2.d.ts ===
+// Illegal, can't be in external ambient module
+declare module "Foo" {
+>"Foo" : Symbol("Foo", Decl(err2.d.ts, 0, 0))
+
+	export as namespace Bar;
+}
+
+=== tests/cases/conformance/externalModules/err3.d.ts ===
+// Illegal, can't have modifiers
+export var p;
+>p : Symbol(p, Decl(err3.d.ts, 1, 10))
+
+static export as namespace oo1;
+>oo1 : Symbol(oo1, Decl(err3.d.ts, 1, 13))
+
+declare export as namespace oo2;
+>oo2 : Symbol(oo2, Decl(err3.d.ts, 2, 31))
+
+public export as namespace oo3;
+>oo3 : Symbol(oo3, Decl(err3.d.ts, 3, 32))
+
+const export as namespace oo4;
+>oo4 : Symbol(oo4, Decl(err3.d.ts, 5, 5))
+
+=== tests/cases/conformance/externalModules/err4.d.ts ===
+// Illegal, must be at top-level
+export namespace B {
+>B : Symbol(B, Decl(err4.d.ts, 0, 0))
+
+	export as namespace C1;
+}
+
+=== tests/cases/conformance/externalModules/err5.ts ===
+// Illegal, may not appear in implementation files
+export var v;
+>v : Symbol(v, Decl(err5.ts, 1, 10))
+
+export as namespace C2;
+
+

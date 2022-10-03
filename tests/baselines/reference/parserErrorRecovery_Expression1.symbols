@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Expressions/parserErrorRecovery_Expression1.ts ===
+var v = ()({});
+>v : Symbol(v, Decl(parserErrorRecovery_Expression1.ts, 0, 3))
+

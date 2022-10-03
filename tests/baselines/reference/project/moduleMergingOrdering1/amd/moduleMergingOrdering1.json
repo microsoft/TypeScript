@@ -1,0 +1,17 @@
+{
+    "scenario": "module merging ordering 1",
+    "projectRoot": "tests/cases/projects/moduleMergeOrder",
+    "inputFiles": [
+        "a.ts",
+        "b.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "a.ts",
+        "b.ts"
+    ],
+    "emittedFiles": [
+        "a.js",
+        "b.js"
+    ]
+}

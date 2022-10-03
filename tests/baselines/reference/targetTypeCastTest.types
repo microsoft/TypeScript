@@ -1,0 +1,67 @@
+=== tests/cases/compiler/targetTypeCastTest.ts ===
+declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
+>Point : new (x: number, y: number) => { x: number; y: number; }
+>x : number
+>y : number
+>x : number
+>y : number
+
+function Point(x, y) {
+>Point : (x: any, y: any) => void
+>x : any
+>y : any
+
+    this.x = x;
+>this.x = x : any
+>this.x : any
+>this : any
+>x : any
+>x : any
+
+    this.y = y;   
+>this.y = y : any
+>this.y : any
+>this : any
+>y : any
+>y : any
+}
+
+interface Adder {
+    (x: number, y: number): number;   
+>x : number
+>y : number
+}
+
+var add = <Adder>function(x,y) {    return x+ y;   }
+>add : Adder
+><Adder>function(x,y) {    return x+ y;   } : Adder
+>function(x,y) {    return x+ y;   } : (x: number, y: number) => number
+>x : number
+>y : number
+>x+ y : number
+>x : number
+>y : number
+
+
+interface Adder2 {
+    (x: number, y: number): number;   
+>x : number
+>y : number
+}
+
+var add2: Adder2 = function(x,y) {
+>add2 : Adder2
+>function(x,y) {    return 0;} : (x: number, y: number) => number
+>x : number
+>y : number
+
+    return 0;
+>0 : 0
+}
+
+function add3(x,y) {x}
+>add3 : (x: any, y: any) => void
+>x : any
+>y : any
+>x : any
+

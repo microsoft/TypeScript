@@ -1,0 +1,269 @@
+=== tests/cases/compiler/capturedLetConstInLoop9_ES6.ts ===
+for (let x = 0; x < 1; ++x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 0, 8))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 0, 8))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 0, 8))
+
+    let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 1, 7))
+
+    (function() { return x });
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 1, 7))
+    {
+        let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 4, 11))
+
+        (function() { return x });
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 4, 11))
+    }
+
+    try { }
+    catch (e) {
+>e : Symbol(e, Decl(capturedLetConstInLoop9_ES6.ts, 9, 11))
+
+        let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 10, 11))
+
+        (function() { return x });
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 10, 11))
+    }
+
+    switch (x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 1, 7))
+
+        case 1:
+            let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 16, 15))
+
+            (function() { return x });
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 16, 15))
+
+           break;
+    }
+    
+    while (1 == 1) {
+        let x;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 22, 11))
+
+        (function() { return x });
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 22, 11))
+    }
+    
+    class A {
+>A : Symbol(A, Decl(capturedLetConstInLoop9_ES6.ts, 24, 5))
+
+        m() {
+>m : Symbol(A.m, Decl(capturedLetConstInLoop9_ES6.ts, 26, 13))
+
+            return x + 1;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 1, 7))
+        }
+    }
+}
+
+declare function use(a: any);
+>use : Symbol(use, Decl(capturedLetConstInLoop9_ES6.ts, 31, 1))
+>a : Symbol(a, Decl(capturedLetConstInLoop9_ES6.ts, 33, 21))
+
+function foo() {
+>foo : Symbol(foo, Decl(capturedLetConstInLoop9_ES6.ts, 33, 29))
+
+    l0:
+    for (let a of []) {
+>a : Symbol(a, Decl(capturedLetConstInLoop9_ES6.ts, 37, 12))
+        
+        if (a === 1) {
+>a : Symbol(a, Decl(capturedLetConstInLoop9_ES6.ts, 37, 12))
+
+            break;
+        }
+        
+        if (a === 2) {
+>a : Symbol(a, Decl(capturedLetConstInLoop9_ES6.ts, 37, 12))
+
+            break l0;
+        }
+        
+        for (let b of []) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 47, 16))
+
+            var [{x, y:z}] = [{x:1, y:2}];
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 48, 18))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 48, 35))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 48, 20))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 48, 31))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 48, 35))
+
+            if (b === 1) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 47, 16))
+
+                break;
+            }
+            
+            
+            if (b === 2) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 47, 16))
+
+                break l0;
+            }
+            
+            l1:
+            if (b === 3) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 47, 16))
+
+                break l1;
+            }
+            
+            return 50;
+        }
+
+        for (let b of []) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 66, 16))
+
+            var [{x1, y:z1}] = [{x1:1, y:arguments.length}];
+>x1 : Symbol(x1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 18))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 67, 38))
+>z1 : Symbol(z1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 21))
+>x1 : Symbol(x1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 33))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 67, 38))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+            if (b === 1) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 66, 16))
+
+                break;
+            }
+            
+            if (b === 2) {
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 66, 16))
+
+                break l0;
+            }
+            () => b
+>b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 66, 16))
+
+            return 100;
+        }
+
+        
+        () => a;
+>a : Symbol(a, Decl(capturedLetConstInLoop9_ES6.ts, 37, 12))
+    }
+    
+    use(x);
+>use : Symbol(use, Decl(capturedLetConstInLoop9_ES6.ts, 31, 1))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 48, 18))
+
+    use(z);
+>use : Symbol(use, Decl(capturedLetConstInLoop9_ES6.ts, 31, 1))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 48, 20))
+
+    use(x1);
+>use : Symbol(use, Decl(capturedLetConstInLoop9_ES6.ts, 31, 1))
+>x1 : Symbol(x1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 18))
+
+    use(z1);
+>use : Symbol(use, Decl(capturedLetConstInLoop9_ES6.ts, 31, 1))
+>z1 : Symbol(z1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 21))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(capturedLetConstInLoop9_ES6.ts, 87, 1))
+
+    for (let x of []) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 90, 12))
+
+        if (x === 1) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 90, 12))
+
+            break;
+        }
+        else if (x === 2) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 90, 12))
+
+            continue;
+        }
+        
+        while (1 === 1) {
+            if (x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 90, 12))
+
+                break;
+            }
+            else {
+                continue;
+            }
+        }
+        
+        switch(x) {
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 90, 12))
+
+            case 1: break;
+            case 2: continue;
+        }
+        
+        for (let y of []) {
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 112, 16))
+
+            switch(y) {
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 112, 16))
+
+                case 1: break;
+                case 2: continue;
+            }
+        }
+    }
+}
+
+class C {
+>C : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 119, 1))
+
+    constructor(private N: number) { }
+>N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(capturedLetConstInLoop9_ES6.ts, 122, 38))
+
+        for (let i = 0; i < 100; i++) {
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+
+            let f = () => this.N * i;
+>f : Symbol(f, Decl(capturedLetConstInLoop9_ES6.ts, 125, 15))
+>this.N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+>this : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 119, 1))
+>N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+        }
+    }
+}
+
+function foo3 () {
+>foo3 : Symbol(foo3, Decl(capturedLetConstInLoop9_ES6.ts, 128, 1))
+
+    let x = arguments.length;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 131, 7))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+    for (let y of []) {
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 132, 12))
+
+        let z = arguments.length;
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 133, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+        (function() { return y + z + arguments.length; });
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 132, 12))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 133, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+    }
+}

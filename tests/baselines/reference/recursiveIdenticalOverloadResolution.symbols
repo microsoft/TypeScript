@@ -1,0 +1,37 @@
+=== tests/cases/compiler/recursiveIdenticalOverloadResolution.ts ===
+module M {
+>M : Symbol(M, Decl(recursiveIdenticalOverloadResolution.ts, 0, 0))
+
+   interface I { (i: I): I; }
+>I : Symbol(I, Decl(recursiveIdenticalOverloadResolution.ts, 0, 10))
+>i : Symbol(i, Decl(recursiveIdenticalOverloadResolution.ts, 2, 18))
+>I : Symbol(I, Decl(recursiveIdenticalOverloadResolution.ts, 0, 10))
+>I : Symbol(I, Decl(recursiveIdenticalOverloadResolution.ts, 0, 10))
+
+   function f(p: I) { return f };
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>p : Symbol(p, Decl(recursiveIdenticalOverloadResolution.ts, 4, 14))
+>I : Symbol(I, Decl(recursiveIdenticalOverloadResolution.ts, 0, 10))
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+
+   var i: I;
+>i : Symbol(i, Decl(recursiveIdenticalOverloadResolution.ts, 6, 6))
+>I : Symbol(I, Decl(recursiveIdenticalOverloadResolution.ts, 0, 10))
+
+   f(i);
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>i : Symbol(i, Decl(recursiveIdenticalOverloadResolution.ts, 6, 6))
+
+   f(f(i));
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>i : Symbol(i, Decl(recursiveIdenticalOverloadResolution.ts, 6, 6))
+
+   f((f(f(i))));
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>f : Symbol(f, Decl(recursiveIdenticalOverloadResolution.ts, 2, 29))
+>i : Symbol(i, Decl(recursiveIdenticalOverloadResolution.ts, 6, 6))
+
+}
+

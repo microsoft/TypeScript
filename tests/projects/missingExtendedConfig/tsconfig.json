@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"composite": true
+	},
+	"references": [
+		{ "path": "./tsconfig.first.json" },
+		{ "path": "./tsconfig.second.json" }
+	]
+}

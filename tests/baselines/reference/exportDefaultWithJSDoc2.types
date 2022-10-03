@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.js ===
+/**
+ * A number, or a string containing a number.
+ * @typedef {(number|string)} NumberLike
+ */
+
+export default /** @type {NumberLike[]} */([ ]);
+>([ ]) : NumberLike[]
+>[ ] : undefined[]
+
+=== tests/cases/compiler/b.ts ===
+import A from './a'
+>A : import("tests/cases/compiler/a").NumberLike[]
+
+A[0]
+>A[0] : import("tests/cases/compiler/a").NumberLike
+>A : import("tests/cases/compiler/a").NumberLike[]
+>0 : 0
+

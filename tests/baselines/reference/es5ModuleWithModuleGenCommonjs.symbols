@@ -1,0 +1,14 @@
+=== tests/cases/compiler/es5ModuleWithModuleGenCommonjs.ts ===
+export class A
+>A : Symbol(A, Decl(es5ModuleWithModuleGenCommonjs.ts, 0, 0))
+{
+    constructor ()
+    {
+    }
+
+    public B()
+>B : Symbol(A.B, Decl(es5ModuleWithModuleGenCommonjs.ts, 4, 5))
+    {
+        return 42;
+    }
+}

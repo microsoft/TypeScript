@@ -1,0 +1,83 @@
+=== tests/cases/compiler/letConstInCaseClauses.ts ===
+var x = 10;
+>x : number
+>10 : 10
+
+var y = 20;
+>y : number
+>20 : 20
+{
+    let x = 1;
+>x : number
+>1 : 1
+
+    let y = 2;
+>y : number
+>2 : 2
+
+    console.log(x)
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+
+    switch (x) {
+>x : number
+
+        case 10:
+>10 : 10
+
+            let x = 20;
+>x : number
+>20 : 20
+    }
+    switch (y) {
+>y : number
+
+        case 10:
+>10 : 10
+
+            let y = 20;
+>y : number
+>20 : 20
+    }
+}
+
+{
+    const x = 1;
+>x : 1
+>1 : 1
+
+    const y = 2;
+>y : 2
+>2 : 2
+
+    console.log(x)
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : 1
+
+    switch (x) {
+>x : 1
+
+        case 10:
+>10 : 10
+
+            const x = 20;
+>x : 20
+>20 : 20
+    }
+    switch (y) {
+>y : 2
+
+        case 10:
+>10 : 10
+
+            const y = 20;
+>y : 20
+>20 : 20
+    }
+}

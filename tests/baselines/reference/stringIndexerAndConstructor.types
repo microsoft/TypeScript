@@ -1,0 +1,24 @@
+=== tests/cases/compiler/stringIndexerAndConstructor.ts ===
+class C {
+>C : C
+
+    [s: string]: number;
+>s : string
+
+    constructor() { }
+    static v() { }
+>v : () => void
+}
+
+interface I {
+    [s: string]: number;
+>s : string
+
+    (): boolean;
+    new (): boolean;
+    "": string;
+>"" : string
+
+    d: string;
+>d : string
+}

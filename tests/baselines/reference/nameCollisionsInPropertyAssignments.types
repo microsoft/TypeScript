@@ -1,0 +1,12 @@
+=== tests/cases/compiler/nameCollisionsInPropertyAssignments.ts ===
+var x = 1
+>x : number
+>1 : 1
+
+var y = { x() { x++; } }; 
+>y : { x(): void; }
+>{ x() { x++; } } : { x(): void; }
+>x : () => void
+>x++ : number
+>x : number
+

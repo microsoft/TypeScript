@@ -1,0 +1,118 @@
+tests/cases/compiler/newOperator.ts(3,13): error TS2693: 'ifc' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(10,14): error TS2351: This expression is not constructable.
+  Type 'Number' has no construct signatures.
+tests/cases/compiler/newOperator.ts(11,14): error TS2351: This expression is not constructable.
+  Type 'String' has no construct signatures.
+tests/cases/compiler/newOperator.ts(12,5): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(18,14): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(18,21): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/newOperator.ts(21,1): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(22,2): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
+tests/cases/compiler/newOperator.ts(31,14): error TS2351: This expression is not constructable.
+  Type 'Date' has no construct signatures.
+tests/cases/compiler/newOperator.ts(38,5): error TS2351: This expression is not constructable.
+  No constituent of type '{ a: string; } | { b: string; }' is constructable.
+tests/cases/compiler/newOperator.ts(42,5): error TS2351: This expression is not constructable.
+  Not all constituents of type '{ a: string; } | (new (a: string) => void)' are constructable.
+    Type '{ a: string; }' has no construct signatures.
+tests/cases/compiler/newOperator.ts(46,5): error TS2351: This expression is not constructable.
+  Each member of the union type '(new <T extends number>(a: T) => void) | (new <T>(a: string) => void)' has construct signatures, but none of those signatures are compatible with each other.
+tests/cases/compiler/newOperator.ts(56,24): error TS1011: An element access expression should take an argument.
+
+
+==== tests/cases/compiler/newOperator.ts (14 errors) ====
+    interface ifc { }
+    // Attempting to 'new' an interface yields poor error
+    var i = new ifc();
+                ~~~
+!!! error TS2693: 'ifc' only refers to a type, but is being used as a value here.
+    
+    // Parens are optional
+    var x = new Date;
+    var y = new Date();
+    
+    // Target is not a class or var, good error
+    var t1 = new 53();
+                 ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Number' has no construct signatures.
+    var t2 = new ''();
+                 ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'String' has no construct signatures.
+    new string;
+        ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+    
+    // Use in LHS of expression?
+    (new Date()).toString();
+    
+    // Various spacing
+    var t3 = new string[]( );
+                 ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                        
+!!! error TS1011: An element access expression should take an argument.
+    var t4 =
+    new
+    string
+    ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+    [
+     
+!!! error TS1011: An element access expression should take an argument.
+        ]
+        (
+            );
+    
+    // Unresolved symbol
+    var f = new q();
+                ~
+!!! error TS2304: Cannot find name 'q'.
+    
+    // not legal
+    var t5 = new new Date;
+                 ~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Date' has no construct signatures.
+    
+    // Can be an expression
+    new String;
+    
+    // Error on union
+    declare const union: { a: string } | { b: string }
+    new union;
+        ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   No constituent of type '{ a: string; } | { b: string; }' is constructable.
+    
+    // Error on union with one constructor
+    declare const ctorUnion: { a: string } | (new (a: string) => void)
+    new ctorUnion("");
+        ~~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Not all constituents of type '{ a: string; } | (new (a: string) => void)' are constructable.
+!!! error TS2351:     Type '{ a: string; }' has no construct signatures.
+    
+    // Error on union with incompatible constructors
+    declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+    new ctorUnion2("");
+        ~~~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Each member of the union type '(new <T extends number>(a: T) => void) | (new <T>(a: string) => void)' has construct signatures, but none of those signatures are compatible with each other.
+    
+    module M {
+        export class T {
+            x: number;
+        }
+    }
+    
+    class S {
+        public get xs(): M.T[] {
+            return new M.T[];
+                           
+!!! error TS1011: An element access expression should take an argument.
+        }
+    }
+    

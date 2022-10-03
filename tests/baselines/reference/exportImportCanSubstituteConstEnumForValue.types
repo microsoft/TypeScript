@@ -1,0 +1,129 @@
+=== tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts ===
+module MsPortalFx.ViewModels.Dialogs {
+>MsPortalFx : typeof MsPortalFx
+>ViewModels : typeof ViewModels
+>Dialogs : typeof Dialogs
+
+    export const enum DialogResult {
+>DialogResult : DialogResult
+
+        Abort,
+>Abort : DialogResult.Abort
+
+        Cancel,
+>Cancel : DialogResult.Cancel
+
+        Ignore,
+>Ignore : DialogResult.Ignore
+
+        No,
+>No : DialogResult.No
+
+        Ok,
+>Ok : DialogResult.Ok
+
+        Retry,
+>Retry : DialogResult.Retry
+
+        Yes,
+>Yes : DialogResult.Yes
+    }
+
+    export interface DialogResultCallback {
+        (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
+>result : DialogResult
+>MsPortalFx : any
+>ViewModels : any
+>Dialogs : any
+    }
+
+    export function someExportedFunction() {
+>someExportedFunction : () => void
+    }
+
+    export const enum MessageBoxButtons {
+>MessageBoxButtons : MessageBoxButtons
+
+        AbortRetryIgnore,
+>AbortRetryIgnore : MessageBoxButtons.AbortRetryIgnore
+
+        OK,
+>OK : MessageBoxButtons.OK
+
+        OKCancel,
+>OKCancel : MessageBoxButtons.OKCancel
+
+        RetryCancel,
+>RetryCancel : MessageBoxButtons.RetryCancel
+
+        YesNo,
+>YesNo : MessageBoxButtons.YesNo
+
+        YesNoCancel,
+>YesNoCancel : MessageBoxButtons.YesNoCancel
+    }
+}
+
+
+module MsPortalFx.ViewModels {
+>MsPortalFx : typeof MsPortalFx
+>ViewModels : typeof ViewModels
+
+    /**
+     * For some reason javascript code is emitted for this re-exported const enum.
+     */
+    export import ReExportedEnum = Dialogs.DialogResult;
+>ReExportedEnum : typeof ReExportedEnum
+>Dialogs : typeof Dialogs
+>DialogResult : ReExportedEnum
+
+    /**
+     * Not exported to show difference. No javascript is emmitted (as expected)
+     */
+    import DialogButtons = Dialogs.MessageBoxButtons;
+>DialogButtons : typeof DialogButtons
+>Dialogs : typeof Dialogs
+>MessageBoxButtons : DialogButtons
+
+    /**
+     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     */
+    export import Callback = Dialogs.DialogResultCallback;
+>Callback : any
+>Dialogs : typeof Dialogs
+>DialogResultCallback : Callback
+
+    export class SomeUsagesOfTheseConsts {
+>SomeUsagesOfTheseConsts : SomeUsagesOfTheseConsts
+
+        constructor() {
+            // these do get replaced by the const value
+            const value1 = ReExportedEnum.Cancel;
+>value1 : ReExportedEnum.Cancel
+>ReExportedEnum.Cancel : ReExportedEnum.Cancel
+>ReExportedEnum : typeof ReExportedEnum
+>Cancel : ReExportedEnum.Cancel
+
+            console.log(value1);
+>console.log(value1) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value1 : ReExportedEnum.Cancel
+
+            const value2 = DialogButtons.OKCancel;
+>value2 : DialogButtons.OKCancel
+>DialogButtons.OKCancel : DialogButtons.OKCancel
+>DialogButtons : typeof DialogButtons
+>OKCancel : DialogButtons.OKCancel
+
+            console.log(value2);
+>console.log(value2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value2 : DialogButtons.OKCancel
+        }
+    }
+}
+

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/taggedTemplatesInDifferentScopes.ts ===
+export function tag(parts: TemplateStringsArray, ...values: any[]) {
+>tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>parts : TemplateStringsArray
+>values : any[]
+
+    return parts[0];
+>parts[0] : string
+>parts : TemplateStringsArray
+>0 : 0
+}
+function foo() {
+>foo : () => void
+
+    tag `foo`;
+>tag `foo` : string
+>tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>`foo` : "foo"
+
+    tag `foo2`;
+>tag `foo2` : string
+>tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>`foo2` : "foo2"
+}
+
+function bar() {
+>bar : () => void
+
+    tag `bar`;
+>tag `bar` : string
+>tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>`bar` : "bar"
+
+    tag `bar2`;
+>tag `bar2` : string
+>tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>`bar2` : "bar2"
+}
+
+foo();
+>foo() : void
+>foo : () => void
+
+bar();
+>bar() : void
+>bar : () => void
+

@@ -1,0 +1,52 @@
+=== tests/cases/compiler/file1.ts ===
+declare class Promise { }
+>Promise : Symbol(Promise, Decl(file1.ts, 0, 0))
+
+declare function Foo(): void;
+>Foo : Symbol(Foo, Decl(file1.ts, 0, 25))
+
+declare class C {}
+>C : Symbol(C, Decl(file1.ts, 1, 29))
+
+declare enum E {X = 1};
+>E : Symbol(E, Decl(file1.ts, 2, 18))
+>X : Symbol(E.X, Decl(file1.ts, 3, 16))
+
+export var promise = Promise;
+>promise : Symbol(promise, Decl(file1.ts, 5, 10))
+>Promise : Symbol(Promise, Decl(file1.ts, 0, 0))
+
+export var foo = Foo;
+>foo : Symbol(foo, Decl(file1.ts, 6, 10))
+>Foo : Symbol(Foo, Decl(file1.ts, 0, 25))
+
+export var c = C;
+>c : Symbol(c, Decl(file1.ts, 7, 10))
+>C : Symbol(C, Decl(file1.ts, 1, 29))
+
+export var e = E;
+>e : Symbol(e, Decl(file1.ts, 8, 10))
+>E : Symbol(E, Decl(file1.ts, 2, 18))
+
+=== tests/cases/compiler/file2.ts ===
+export declare function foo();
+>foo : Symbol(foo, Decl(file2.ts, 0, 0))
+
+=== tests/cases/compiler/file3.ts ===
+export declare class C {}
+>C : Symbol(C, Decl(file3.ts, 0, 0))
+
+=== tests/cases/compiler/file4.ts ===
+export declare var v: number;
+>v : Symbol(v, Decl(file4.ts, 0, 18))
+
+=== tests/cases/compiler/file5.ts ===
+export declare enum E {X = 1}
+>E : Symbol(E, Decl(file5.ts, 0, 0))
+>X : Symbol(E.X, Decl(file5.ts, 0, 23))
+
+=== tests/cases/compiler/file6.ts ===
+export declare module M { var v: number; }
+>M : Symbol(M, Decl(file6.ts, 0, 0))
+>v : Symbol(v, Decl(file6.ts, 0, 29))
+

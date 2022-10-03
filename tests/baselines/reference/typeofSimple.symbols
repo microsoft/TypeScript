@@ -1,0 +1,37 @@
+=== tests/cases/compiler/typeofSimple.ts ===
+var v = 3;
+>v : Symbol(v, Decl(typeofSimple.ts, 0, 3))
+
+var v2: typeof v;
+>v2 : Symbol(v2, Decl(typeofSimple.ts, 1, 3))
+>v : Symbol(v, Decl(typeofSimple.ts, 0, 3))
+
+var v3: string = v2; // Not assignment compatible
+>v3 : Symbol(v3, Decl(typeofSimple.ts, 2, 3))
+>v2 : Symbol(v2, Decl(typeofSimple.ts, 1, 3))
+
+interface I<T> { x: T; }
+>I : Symbol(I, Decl(typeofSimple.ts, 2, 20))
+>T : Symbol(T, Decl(typeofSimple.ts, 4, 12))
+>x : Symbol(I.x, Decl(typeofSimple.ts, 4, 16))
+>T : Symbol(T, Decl(typeofSimple.ts, 4, 12))
+
+interface J { }
+>J : Symbol(J, Decl(typeofSimple.ts, 4, 24))
+
+var numberJ: typeof J; //Error, cannot reference type in typeof
+>numberJ : Symbol(numberJ, Decl(typeofSimple.ts, 7, 3))
+
+var numberI: I<typeof v2>;
+>numberI : Symbol(numberI, Decl(typeofSimple.ts, 8, 3))
+>I : Symbol(I, Decl(typeofSimple.ts, 2, 20))
+>v2 : Symbol(v2, Decl(typeofSimple.ts, 1, 3))
+
+var fun: () => I<number>;
+>fun : Symbol(fun, Decl(typeofSimple.ts, 10, 3))
+>I : Symbol(I, Decl(typeofSimple.ts, 2, 20))
+
+numberI = fun();
+>numberI : Symbol(numberI, Decl(typeofSimple.ts, 8, 3))
+>fun : Symbol(fun, Decl(typeofSimple.ts, 10, 3))
+

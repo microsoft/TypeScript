@@ -1,0 +1,35 @@
+tests/cases/compiler/callOverloads4.ts(1,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/callOverloads4.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/callOverloads4.ts(2,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/callOverloads4.ts(3,7): error TS2813: Class declaration cannot implement overload list for 'Foo'.
+
+
+==== tests/cases/compiler/callOverloads4.ts (4 errors) ====
+    function Foo():Foo; // error
+             ~~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/callOverloads4.ts:3:7: Consider adding a 'declare' modifier to this class.
+    function Foo(s:string):Foo; // error
+             ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+             ~~~
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/callOverloads4.ts:3:7: Consider adding a 'declare' modifier to this class.
+    class Foo { // error
+          ~~~
+!!! error TS2813: Class declaration cannot implement overload list for 'Foo'.
+!!! related TS6506 tests/cases/compiler/callOverloads4.ts:3:7: Consider adding a 'declare' modifier to this class.
+        bar1() { /*WScript.Echo("bar1");*/ }
+        constructor(s: string);
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();
+    Foo("s");
+    

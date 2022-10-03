@@ -1,0 +1,19 @@
+tests/cases/conformance/externalModules/a.ts(6,9): error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
+
+
+==== tests/cases/conformance/externalModules/a.ts (1 errors) ====
+    import * as Bar from './foo';
+    Bar.fn();
+    let x: Bar.Thing;
+    let y: number = x.n;
+    // should error
+    let z = Foo;
+            ~~~
+!!! error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
+    
+==== tests/cases/conformance/externalModules/foo.d.ts (0 errors) ====
+    export var x: number;
+    export function fn(): void;
+    export interface Thing { n: typeof x }
+    export as namespace Foo;
+    

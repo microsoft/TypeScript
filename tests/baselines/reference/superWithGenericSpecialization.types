@@ -1,0 +1,37 @@
+=== tests/cases/compiler/superWithGenericSpecialization.ts ===
+class C<T> {
+>C : C<T>
+
+    x: T;
+>x : T
+}
+
+class D<T> extends C<string> {
+>D : D<T>
+>C : C<string>
+
+    y: T;
+>y : T
+
+    constructor() {
+        super(); // uses the type parameter type of the base class, ie string
+>super() : void
+>super : typeof C
+    }
+}
+
+var d: D<number>;
+>d : D<number>
+
+var r: string = d.x;
+>r : string
+>d.x : string
+>d : D<number>
+>x : string
+
+var r2: number = d.y;
+>r2 : number
+>d.y : number
+>d : D<number>
+>y : number
+

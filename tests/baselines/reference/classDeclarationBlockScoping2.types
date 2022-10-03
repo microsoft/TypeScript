@@ -1,0 +1,23 @@
+=== tests/cases/compiler/classDeclarationBlockScoping2.ts ===
+function f() {
+>f : () => boolean
+
+    class C {}
+>C : C
+
+    var c1 = C;
+>c1 : typeof C
+>C : typeof C
+    {
+        class C {}
+>C : C
+
+        var c2 = C;
+>c2 : typeof C
+>C : typeof C
+    }
+    return C === c1;
+>C === c1 : boolean
+>C : typeof C
+>c1 : typeof C
+}

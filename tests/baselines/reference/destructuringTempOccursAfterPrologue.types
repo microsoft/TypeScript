@@ -1,0 +1,20 @@
+=== tests/cases/compiler/destructuringTempOccursAfterPrologue.ts ===
+function test(p: any) {
+>test : (p: any) => void
+>p : any
+
+    'use strict';
+>'use strict' : "use strict"
+
+    'use strong';
+>'use strong' : "use strong"
+
+    p = { prop: p } = p;
+>p = { prop: p } = p : any
+>p : any
+>{ prop: p } = p : any
+>{ prop: p } : { prop: any; }
+>prop : any
+>p : any
+>p : any
+}

@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class '(anonymous)' because it has a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class '(anonymous)' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts (2 errors) ====
+    const C = class {
+        #field = this.#method();
+        #method() { return 42; }
+        static getInstance() { return new C(); }
+        getField() { return this.#field };
+    }
+    
+    console.log(C.getInstance().getField());
+    C.getInstance().#method; // Error
+                    ~~~~~~~
+!!! error TS18013: Property '#method' is not accessible outside class '(anonymous)' because it has a private identifier.
+    C.getInstance().#field; // Error
+                    ~~~~~~
+!!! error TS18013: Property '#field' is not accessible outside class '(anonymous)' because it has a private identifier.
+    
+    

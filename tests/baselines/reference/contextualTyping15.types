@@ -1,0 +1,8 @@
+=== tests/cases/compiler/contextualTyping15.ts ===
+class foo { public bar: { (): number; (i: number): number; } = function() { return 1 }; }
+>foo : foo
+>bar : { (): number; (i: number): number; }
+>i : number
+>function() { return 1 } : () => number
+>1 : 1
+

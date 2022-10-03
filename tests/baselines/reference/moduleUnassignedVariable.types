@@ -1,0 +1,20 @@
+=== tests/cases/compiler/moduleUnassignedVariable.ts ===
+module Bar {
+>Bar : typeof Bar
+
+    export var a = 1;
+>a : number
+>1 : 1
+
+    function fooA() { return a; } // Correct: return Bar.a
+>fooA : () => number
+>a : number
+
+    export var b;
+>b : any
+
+    function fooB() { return b; } // Incorrect: return b
+>fooB : () => any
+>b : any
+}
+

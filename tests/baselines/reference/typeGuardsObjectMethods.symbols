@@ -1,0 +1,133 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsObjectMethods.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// variables in global
+var num: number;
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+
+var strOrNum: string | number;
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+
+var var1: string | number;
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+
+var obj1 = {
+>obj1 : Symbol(obj1, Decl(typeGuardsObjectMethods.ts, 7, 3))
+
+    // Inside method
+    method(param: string | number) {
+>method : Symbol(method, Decl(typeGuardsObjectMethods.ts, 7, 12))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 9, 11))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 14, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 14, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 14, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 9, 11))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 9, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return strOrNum;
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+
+    },
+    get prop() {
+>prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 27, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 27, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 27, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return strOrNum;
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+
+    },
+    set prop(param: string | number) {
+>prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 32, 13))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 37, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 37, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 37, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 32, 13))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 32, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+};
+// return expression of the method
+strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum); 
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+>obj1.method : Symbol(method, Decl(typeGuardsObjectMethods.ts, 7, 12))
+>obj1 : Symbol(obj1, Decl(typeGuardsObjectMethods.ts, 7, 3))
+>method : Symbol(method, Decl(typeGuardsObjectMethods.ts, 7, 12))
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+>obj1.method : Symbol(method, Decl(typeGuardsObjectMethods.ts, 7, 12))
+>obj1 : Symbol(obj1, Decl(typeGuardsObjectMethods.ts, 7, 3))
+>method : Symbol(method, Decl(typeGuardsObjectMethods.ts, 7, 12))
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+
+// accessing getter property
+strOrNum = typeof obj1.prop === "string" && obj1.prop; 
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
+>obj1.prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+>obj1 : Symbol(obj1, Decl(typeGuardsObjectMethods.ts, 7, 3))
+>prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+>obj1.prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+>obj1 : Symbol(obj1, Decl(typeGuardsObjectMethods.ts, 7, 3))
+>prop : Symbol(prop, Decl(typeGuardsObjectMethods.ts, 21, 6), Decl(typeGuardsObjectMethods.ts, 31, 6))
+

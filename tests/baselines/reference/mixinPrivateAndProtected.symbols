@@ -1,0 +1,224 @@
+=== tests/cases/compiler/mixinPrivateAndProtected.ts ===
+// Repro from #13830
+
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixinPrivateAndProtected.ts, 0, 0))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 2, 17))
+>args : Symbol(args, Decl(mixinPrivateAndProtected.ts, 2, 26))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 2, 17))
+
+class A {
+>A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
+
+    public pb: number = 2;
+>pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+
+    protected ptd: number = 1;
+>ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+
+    private pvt: number = 0;
+>pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+}
+
+function mixB<T extends Constructor<{}>>(Cls: T) {
+>mixB : Symbol(mixB, Decl(mixinPrivateAndProtected.ts, 8, 1))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 10, 14))
+>Constructor : Symbol(Constructor, Decl(mixinPrivateAndProtected.ts, 0, 0))
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 10, 41))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 10, 14))
+
+    return class extends Cls {
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 10, 41))
+
+        protected ptd: number = 10;
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 11, 30))
+
+        private pvt: number = 0;
+>pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 12, 35))
+
+    };
+}
+
+function mixB2<T extends Constructor<A>>(Cls: T) {
+>mixB2 : Symbol(mixB2, Decl(mixinPrivateAndProtected.ts, 15, 1))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 17, 15))
+>Constructor : Symbol(Constructor, Decl(mixinPrivateAndProtected.ts, 0, 0))
+>A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 17, 41))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 17, 15))
+
+    return class extends Cls {
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 17, 41))
+
+        protected ptd: number = 10;
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 18, 30))
+
+    };
+}
+
+const
+    AB = mixB(A),
+>AB : Symbol(AB, Decl(mixinPrivateAndProtected.ts, 23, 5))
+>mixB : Symbol(mixB, Decl(mixinPrivateAndProtected.ts, 8, 1))
+>A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
+
+    AB2 = mixB2(A);
+>AB2 : Symbol(AB2, Decl(mixinPrivateAndProtected.ts, 24, 17))
+>mixB2 : Symbol(mixB2, Decl(mixinPrivateAndProtected.ts, 15, 1))
+>A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
+
+function mixC<T extends Constructor<{}>>(Cls: T) {
+>mixC : Symbol(mixC, Decl(mixinPrivateAndProtected.ts, 25, 19))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 27, 14))
+>Constructor : Symbol(Constructor, Decl(mixinPrivateAndProtected.ts, 0, 0))
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 27, 41))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 27, 14))
+
+    return class extends Cls {
+>Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 27, 41))
+
+        protected ptd: number = 100;
+>ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 28, 30))
+
+        private pvt: number = 0;
+>pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 29, 36))
+
+    };
+}
+
+const
+    AB2C = mixC(AB2),
+>AB2C : Symbol(AB2C, Decl(mixinPrivateAndProtected.ts, 34, 5))
+>mixC : Symbol(mixC, Decl(mixinPrivateAndProtected.ts, 25, 19))
+>AB2 : Symbol(AB2, Decl(mixinPrivateAndProtected.ts, 24, 17))
+
+    ABC = mixC(AB);
+>ABC : Symbol(ABC, Decl(mixinPrivateAndProtected.ts, 35, 21))
+>mixC : Symbol(mixC, Decl(mixinPrivateAndProtected.ts, 25, 19))
+>AB : Symbol(AB, Decl(mixinPrivateAndProtected.ts, 23, 5))
+
+const
+    a = new A(),
+>a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
+>A : Symbol(A, Decl(mixinPrivateAndProtected.ts, 2, 47))
+
+    ab = new AB(),
+>ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
+>AB : Symbol(AB, Decl(mixinPrivateAndProtected.ts, 23, 5))
+
+    abc = new ABC(),
+>abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
+>ABC : Symbol(ABC, Decl(mixinPrivateAndProtected.ts, 35, 21))
+
+    ab2c = new AB2C();
+>ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
+>AB2C : Symbol(AB2C, Decl(mixinPrivateAndProtected.ts, 34, 5))
+
+a.pb.toFixed();
+>a.pb.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+>a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
+>pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+a.ptd.toFixed();    // Error
+>a.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
+>ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+a.pvt.toFixed();    // Error
+>a.pvt.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+>a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
+>pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+ab.pb.toFixed();
+>ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
+
+ab.ptd.toFixed();   // Error
+>ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
+
+ab.pvt.toFixed();   // Error
+>ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
+
+abc.pb.toFixed();
+>abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
+
+abc.ptd.toFixed();  // Error
+>abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
+
+abc.pvt.toFixed();  // Error
+>abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
+
+ab2c.pb.toFixed();
+>ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
+
+ab2c.ptd.toFixed(); // Error
+>ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
+
+ab2c.pvt.toFixed(); // Error
+>ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
+
+// Repro from #13924
+
+class Person {
+>Person : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
+
+	constructor(public name: string) {}
+>name : Symbol(Person.name, Decl(mixinPrivateAndProtected.ts, 63, 13))
+
+	protected myProtectedFunction() {
+>myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+
+		// do something
+	}
+}
+
+function PersonMixin<T extends Constructor<Person>>(Base: T) {
+>PersonMixin : Symbol(PersonMixin, Decl(mixinPrivateAndProtected.ts, 68, 1))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 70, 21))
+>Constructor : Symbol(Constructor, Decl(mixinPrivateAndProtected.ts, 0, 0))
+>Person : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
+>Base : Symbol(Base, Decl(mixinPrivateAndProtected.ts, 70, 52))
+>T : Symbol(T, Decl(mixinPrivateAndProtected.ts, 70, 21))
+
+	return class extends Base {
+>Base : Symbol(Base, Decl(mixinPrivateAndProtected.ts, 70, 52))
+
+		constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinPrivateAndProtected.ts, 72, 14))
+
+			super(...args);
+>super : Symbol(T, Decl(mixinPrivateAndProtected.ts, 70, 21))
+>args : Symbol(args, Decl(mixinPrivateAndProtected.ts, 72, 14))
+		}
+
+		myProtectedFunction() {
+>myProtectedFunction : Symbol((Anonymous class).myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 74, 3))
+
+			super.myProtectedFunction();
+>super.myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+>super : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
+>myProtectedFunction : Symbol(Person.myProtectedFunction, Decl(mixinPrivateAndProtected.ts, 63, 36))
+
+			// do more things
+		}
+	};
+}
+
+class Customer extends PersonMixin(Person) {
+>Customer : Symbol(Customer, Decl(mixinPrivateAndProtected.ts, 81, 1))
+>PersonMixin : Symbol(PersonMixin, Decl(mixinPrivateAndProtected.ts, 68, 1))
+>Person : Symbol(Person, Decl(mixinPrivateAndProtected.ts, 58, 19))
+
+	accountBalance: number;
+>accountBalance : Symbol(Customer.accountBalance, Decl(mixinPrivateAndProtected.ts, 83, 44))
+
+    f() {
+>f : Symbol(Customer.f, Decl(mixinPrivateAndProtected.ts, 84, 24))
+    }
+}
+

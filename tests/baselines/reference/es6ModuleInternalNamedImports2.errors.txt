@@ -1,0 +1,60 @@
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(30,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are not permitted in a namespace.
+
+
+==== tests/cases/compiler/es6ModuleInternalNamedImports2.ts (8 errors) ====
+    export module M {
+        // variable
+        export var M_V = 0;
+        // interface
+        export interface M_I { }
+        //calss
+        export class M_C { }
+        // instantiated module
+        export module M_M { var x; }
+        // uninstantiated module
+        export module M_MU { }
+        // function
+        export function M_F() { }
+        // enum
+        export enum M_E { }
+        // type
+        export type M_T = number;
+        // alias
+        export import M_A = M_M;
+    }
+    
+    export module M {
+        // Reexports
+        export {M_V as v};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_I as i};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_C as c};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_M as m};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_MU as mu};
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_F as f};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_E as e};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+        export {M_A as a};
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+    }
+    

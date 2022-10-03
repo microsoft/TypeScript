@@ -1,0 +1,92 @@
+=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts ===
+if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href)) / (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j"), /(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)), b = !0;
+>Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href) : any
+>Ca.test(c.href) : any
+>Ca.test : any
+>Ca : any
+>test : any
+>c.href : any
+>c : any
+>href : any
+>Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href) : boolean
+>Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) : boolean
+>Ba.test(c.href) : any
+>Ba.test : any
+>Ba : any
+>test : any
+>c.href : any
+>c : any
+>href : any
+>/(\\?|&)adurl=/.test(c.href) : boolean
+>/(\\?|&)adurl=/.test : (string: string) => boolean
+>/(\\?|&)adurl=/ : RegExp
+>test : (string: string) => boolean
+>c.href : any
+>c : any
+>href : any
+>!/(\\?|&)q=/.test(c.href) : boolean
+>/(\\?|&)q=/.test(c.href) : boolean
+>/(\\?|&)q=/.test : (string: string) => boolean
+>/(\\?|&)q=/ : RegExp
+>test : (string: string) => boolean
+>c.href : any
+>c : any
+>href : any
+>/ (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j"), /(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)), b = !0 : true
+>/ (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j"), /(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)) : any
+>/ (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j") : string | true
+>/ (\\ ? | & ) rct = j / .test(c.href) : boolean
+>/ (\\ ? | & ) rct = j / .test : (string: string) => boolean
+>/ (\\ ? | & ) rct = j / : RegExp
+>test : (string: string) => boolean
+>c.href : any
+>c : any
+>href : any
+>(d += "&rct=j") : string
+>d += "&rct=j" : string
+>d : any
+>"&rct=j" : "&rct=j"
+>/(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)) : any
+>/(\\?|&)q=/.test(c.href) : boolean
+>/(\\?|&)q=/.test : (string: string) => boolean
+>/(\\?|&)q=/ : RegExp
+>test : (string: string) => boolean
+>c.href : any
+>c : any
+>href : any
+>(d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)) : any
+>d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length) : any
+>d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A) : string
+>d : any
+>"&q=" + encodeURIComponent(W("q") || W("as_q") || A) : string
+>"&q=" : "&q="
+>encodeURIComponent(W("q") || W("as_q") || A) : string
+>encodeURIComponent : (uriComponent: string | number | boolean) => string
+>W("q") || W("as_q") || A : any
+>W("q") || W("as_q") : any
+>W("q") : any
+>W : any
+>"q" : "q"
+>W("as_q") : any
+>W : any
+>"as_q" : "as_q"
+>A : any
+>d = d.substring(0, 1948 - c.href.length) : any
+>d : any
+>d.substring(0, 1948 - c.href.length) : any
+>d.substring : any
+>d : any
+>substring : any
+>0 : 0
+>1948 - c.href.length : number
+>1948 : 1948
+>c.href.length : any
+>c.href : any
+>c : any
+>href : any
+>length : any
+>b = !0 : true
+>b : any
+>!0 : true
+>0 : 0
+

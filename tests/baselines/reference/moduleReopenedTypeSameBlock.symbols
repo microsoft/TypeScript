@@ -1,0 +1,18 @@
+=== tests/cases/compiler/moduleReopenedTypeSameBlock.ts ===
+module M { export class C1 { } }
+>M : Symbol(M, Decl(moduleReopenedTypeSameBlock.ts, 0, 0), Decl(moduleReopenedTypeSameBlock.ts, 0, 32))
+>C1 : Symbol(C1, Decl(moduleReopenedTypeSameBlock.ts, 0, 10))
+
+module M {
+>M : Symbol(M, Decl(moduleReopenedTypeSameBlock.ts, 0, 0), Decl(moduleReopenedTypeSameBlock.ts, 0, 32))
+
+    export interface I { n: number; }
+>I : Symbol(I, Decl(moduleReopenedTypeSameBlock.ts, 1, 10))
+>n : Symbol(I.n, Decl(moduleReopenedTypeSameBlock.ts, 2, 24))
+
+    export class C2 { f(): I { return null; } }
+>C2 : Symbol(C2, Decl(moduleReopenedTypeSameBlock.ts, 2, 37))
+>f : Symbol(C2.f, Decl(moduleReopenedTypeSameBlock.ts, 3, 21))
+>I : Symbol(I, Decl(moduleReopenedTypeSameBlock.ts, 1, 10))
+}
+

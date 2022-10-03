@@ -1,0 +1,23 @@
+=== tests/cases/compiler/typeParameterConstraintInstantiation.ts ===
+// Check that type parameter constraints are properly instantiated
+
+interface Mapper<T> {
+    map<U extends T, V extends U[]>(f: (item: T) => U): V;
+>map : <U extends T, V extends U[]>(f: (item: T) => U) => V
+>f : (item: T) => U
+>item : T
+}
+
+var m: Mapper<string>;
+>m : Mapper<string>
+
+var a = m.map((x: string) => x);  // string[]
+>a : string[]
+>m.map((x: string) => x) : string[]
+>m.map : <U extends string, V extends U[]>(f: (item: string) => U) => V
+>m : Mapper<string>
+>map : <U extends string, V extends U[]>(f: (item: string) => U) => V
+>(x: string) => x : (x: string) => string
+>x : string
+>x : string
+

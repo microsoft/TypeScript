@@ -1,0 +1,38 @@
+=== tests/cases/compiler/contextuallyTypingOrOperator.ts ===
+var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
+>v : Symbol(v, Decl(contextuallyTypingOrOperator.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypingOrOperator.ts, 0, 8))
+>_ : Symbol(_, Decl(contextuallyTypingOrOperator.ts, 0, 13))
+>a : Symbol(a, Decl(contextuallyTypingOrOperator.ts, 0, 39))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 0, 42))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 0, 42))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextuallyTypingOrOperator.ts, 0, 63))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 0, 66))
+
+var v2 = (s: string) => s.length || function (s) { s.length };
+>v2 : Symbol(v2, Decl(contextuallyTypingOrOperator.ts, 2, 3))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 2, 10))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 2, 10))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 2, 46))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 2, 46))
+
+var v3 = (s: string) => s.length || function (s: number) { return 1 };
+>v3 : Symbol(v3, Decl(contextuallyTypingOrOperator.ts, 4, 3))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 4, 10))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 4, 10))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 4, 46))
+
+var v4 = (s: number) => 1 || function (s: string) { return s.length };
+>v4 : Symbol(v4, Decl(contextuallyTypingOrOperator.ts, 5, 3))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 5, 10))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 5, 39))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypingOrOperator.ts, 5, 39))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

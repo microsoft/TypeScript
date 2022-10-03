@@ -1,0 +1,282 @@
+=== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts ===
+// Recursive mapped types simply appear empty
+
+type Recurse = {
+>Recurse : Symbol(Recurse, Decl(recursiveMappedTypes.ts, 0, 0))
+
+    [K in keyof Recurse]: Recurse[K]
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 3, 5))
+>Recurse : Symbol(Recurse, Decl(recursiveMappedTypes.ts, 0, 0))
+>Recurse : Symbol(Recurse, Decl(recursiveMappedTypes.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 3, 5))
+}
+
+type Recurse1 = {
+>Recurse1 : Symbol(Recurse1, Decl(recursiveMappedTypes.ts, 4, 1))
+
+    [K in keyof Recurse2]: Recurse2[K]
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 7, 5))
+>Recurse2 : Symbol(Recurse2, Decl(recursiveMappedTypes.ts, 8, 1))
+>Recurse2 : Symbol(Recurse2, Decl(recursiveMappedTypes.ts, 8, 1))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 7, 5))
+}
+
+type Recurse2 = {
+>Recurse2 : Symbol(Recurse2, Decl(recursiveMappedTypes.ts, 8, 1))
+
+    [K in keyof Recurse1]: Recurse1[K]
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 11, 5))
+>Recurse1 : Symbol(Recurse1, Decl(recursiveMappedTypes.ts, 4, 1))
+>Recurse1 : Symbol(Recurse1, Decl(recursiveMappedTypes.ts, 4, 1))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 11, 5))
+}
+
+// Repro from #27881
+
+export type Circular<T> = {[P in keyof T]: Circular<T>};
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 16, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+
+type tup = [number, number, number, number];
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+
+function foo(arg: Circular<tup>): tup {
+>foo : Symbol(foo, Decl(recursiveMappedTypes.ts, 17, 44))
+>arg : Symbol(arg, Decl(recursiveMappedTypes.ts, 19, 13))
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+
+  return arg;
+>arg : Symbol(arg, Decl(recursiveMappedTypes.ts, 19, 13))
+}
+
+// Repro from #29442
+
+type DeepMap<T extends unknown[], R> = {
+>DeepMap : Symbol(DeepMap, Decl(recursiveMappedTypes.ts, 21, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 25, 13))
+>R : Symbol(R, Decl(recursiveMappedTypes.ts, 25, 33))
+
+  [K in keyof T]: T[K] extends unknown[] ? DeepMap<T[K], R> : R;
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 26, 3))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 25, 13))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 25, 13))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 26, 3))
+>DeepMap : Symbol(DeepMap, Decl(recursiveMappedTypes.ts, 21, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 25, 13))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 26, 3))
+>R : Symbol(R, Decl(recursiveMappedTypes.ts, 25, 33))
+>R : Symbol(R, Decl(recursiveMappedTypes.ts, 25, 33))
+
+};
+
+type tpl = [string, [string, [string]]];
+>tpl : Symbol(tpl, Decl(recursiveMappedTypes.ts, 27, 2))
+
+type arr = string[][];
+>arr : Symbol(arr, Decl(recursiveMappedTypes.ts, 29, 40))
+
+type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
+>t1 : Symbol(t1, Decl(recursiveMappedTypes.ts, 30, 22))
+>DeepMap : Symbol(DeepMap, Decl(recursiveMappedTypes.ts, 21, 1))
+>tpl : Symbol(tpl, Decl(recursiveMappedTypes.ts, 27, 2))
+
+type t2 = DeepMap<arr, number>;  // number[][]
+>t2 : Symbol(t2, Decl(recursiveMappedTypes.ts, 32, 31))
+>DeepMap : Symbol(DeepMap, Decl(recursiveMappedTypes.ts, 21, 1))
+>arr : Symbol(arr, Decl(recursiveMappedTypes.ts, 29, 40))
+
+// Repro from #29577
+
+type Transform<T> = { [K in keyof T]: Transform<T[K]> };
+>Transform : Symbol(Transform, Decl(recursiveMappedTypes.ts, 33, 31))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 37, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 37, 23))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 37, 15))
+>Transform : Symbol(Transform, Decl(recursiveMappedTypes.ts, 33, 31))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 37, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 37, 23))
+
+interface User {
+>User : Symbol(User, Decl(recursiveMappedTypes.ts, 37, 56))
+
+    avatar: string;
+>avatar : Symbol(User.avatar, Decl(recursiveMappedTypes.ts, 39, 16))
+}
+
+interface Guest {
+>Guest : Symbol(Guest, Decl(recursiveMappedTypes.ts, 41, 1))
+
+    displayName: string;
+>displayName : Symbol(Guest.displayName, Decl(recursiveMappedTypes.ts, 43, 17))
+}
+
+interface Product {
+>Product : Symbol(Product, Decl(recursiveMappedTypes.ts, 45, 1))
+
+    users: (User | Guest)[];
+>users : Symbol(Product.users, Decl(recursiveMappedTypes.ts, 47, 19))
+>User : Symbol(User, Decl(recursiveMappedTypes.ts, 37, 56))
+>Guest : Symbol(Guest, Decl(recursiveMappedTypes.ts, 41, 1))
+}
+
+declare var product: Transform<Product>;
+>product : Symbol(product, Decl(recursiveMappedTypes.ts, 51, 11))
+>Transform : Symbol(Transform, Decl(recursiveMappedTypes.ts, 33, 31))
+>Product : Symbol(Product, Decl(recursiveMappedTypes.ts, 45, 1))
+
+product.users;  // (Transform<User> | Transform<Guest>)[]
+>product.users : Symbol(users, Decl(recursiveMappedTypes.ts, 47, 19))
+>product : Symbol(product, Decl(recursiveMappedTypes.ts, 51, 11))
+>users : Symbol(users, Decl(recursiveMappedTypes.ts, 47, 19))
+
+// Repro from #29702
+
+type Remap1<T> = { [P in keyof T]: Remap1<T[P]>; };
+>Remap1 : Symbol(Remap1, Decl(recursiveMappedTypes.ts, 52, 14))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 56, 12))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 56, 20))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 56, 12))
+>Remap1 : Symbol(Remap1, Decl(recursiveMappedTypes.ts, 52, 14))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 56, 12))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 56, 20))
+
+type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
+>Remap2 : Symbol(Remap2, Decl(recursiveMappedTypes.ts, 56, 51))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 57, 12))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 57, 12))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 57, 39))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 57, 12))
+>Remap2 : Symbol(Remap2, Decl(recursiveMappedTypes.ts, 56, 51))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 57, 12))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 57, 39))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 57, 12))
+  
+type a = Remap1<string[]>;  // string[]
+>a : Symbol(a, Decl(recursiveMappedTypes.ts, 57, 74))
+>Remap1 : Symbol(Remap1, Decl(recursiveMappedTypes.ts, 52, 14))
+
+type b = Remap2<string[]>;  // string[]
+>b : Symbol(b, Decl(recursiveMappedTypes.ts, 59, 26))
+>Remap2 : Symbol(Remap2, Decl(recursiveMappedTypes.ts, 56, 51))
+
+// Repro from #29992
+
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(recursiveMappedTypes.ts, 60, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 64, 29))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 64, 21))
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 65, 19))
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(recursiveMappedTypes.ts, 60, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 65, 11))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 65, 19))
+
+export interface ListWidget {
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+
+    "type": "list",
+>"type" : Symbol(ListWidget["type"], Decl(recursiveMappedTypes.ts, 67, 29))
+
+    "minimum_count": number,
+>"minimum_count" : Symbol(ListWidget["minimum_count"], Decl(recursiveMappedTypes.ts, 68, 19))
+
+    "maximum_count": number,
+>"maximum_count" : Symbol(ListWidget["maximum_count"], Decl(recursiveMappedTypes.ts, 69, 28))
+
+    "collapsable"?: boolean, //default to false, means all expanded
+>"collapsable" : Symbol(ListWidget["collapsable"], Decl(recursiveMappedTypes.ts, 70, 28))
+
+    "each": Child<ListWidget>;
+>"each" : Symbol(ListWidget["each"], Decl(recursiveMappedTypes.ts, 71, 28))
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : Symbol(ListChild, Decl(recursiveMappedTypes.ts, 73, 1))
+>Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+>ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+
+declare let x: ListChild;
+>x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
+>ListChild : Symbol(ListChild, Decl(recursiveMappedTypes.ts, 73, 1))
+
+x.type;
+>x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
+
+// Repros from #41790
+
+export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+>TV : Symbol(TV, Decl(recursiveMappedTypes.ts, 78, 7))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 82, 17))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 82, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 82, 64))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 82, 64))
+
+export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+>ObjectOrArray : Symbol(ObjectOrArray, Decl(recursiveMappedTypes.ts, 82, 85))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+
+export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
+>ThemeValue : Symbol(ThemeValue, Decl(recursiveMappedTypes.ts, 84, 104))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+
+    ThemeType[K] extends TVal[] ? number :
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+
+    ThemeType[K] extends Record<infer E, TVal> ? E :
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 87, 37))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 87, 37))
+
+    ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>ObjectOrArray : Symbol(ObjectOrArray, Decl(recursiveMappedTypes.ts, 82, 85))
+>F : Symbol(F, Decl(recursiveMappedTypes.ts, 88, 44))
+>F : Symbol(F, Decl(recursiveMappedTypes.ts, 88, 44))
+
+export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
+>Foo : Symbol(Foo, Decl(recursiveMappedTypes.ts, 88, 60))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 90, 16))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 90, 16))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 90, 34))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 90, 44))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 90, 44))
+

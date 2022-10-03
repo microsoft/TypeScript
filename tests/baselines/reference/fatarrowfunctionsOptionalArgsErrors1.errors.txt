@@ -1,0 +1,19 @@
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts(1,9): error TS1016: A required parameter cannot follow an optional parameter.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts(2,8): error TS1047: A rest parameter cannot be optional.
+tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts(4,5): error TS1048: A rest parameter cannot have an initializer.
+
+
+==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts (3 errors) ====
+    (arg1?, arg2) => 101;
+            ~~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    (...arg?) => 102;
+           ~
+!!! error TS1047: A rest parameter cannot be optional.
+    (...arg) => 103;
+    (...arg:number [] = []) => 104;
+        ~~~
+!!! error TS1048: A rest parameter cannot have an initializer.
+    
+    // Uninitialized parameter makes the initialized one required
+    (arg1 = 1, arg2) => 1; 

@@ -1,0 +1,72 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+module Root {
+>Root : typeof Root
+
+    export module A {
+>A : typeof A
+
+        export interface Point {
+            x: number;
+>x : number
+
+            y: number;
+>y : number
+        }
+
+        export module Utils {
+>Utils : typeof Utils
+
+            export function mirror<T extends Point>(p: T) {
+>mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>p : T
+
+                return { x: p.y, y: p.x };
+>{ x: p.y, y: p.x } : { x: number; y: number; }
+>x : number
+>p.y : number
+>p : T
+>y : number
+>y : number
+>p.x : number
+>p : T
+>x : number
+            }
+        }
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+module otherRoot {
+>otherRoot : typeof otherRoot
+
+    export module A {
+>A : typeof A
+
+        // have to be fully qualified since in different root
+        export var Origin: Root.A.Point = { x: 0, y: 0 };
+>Origin : Root.A.Point
+>Root : any
+>A : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+        export module Utils {
+>Utils : typeof Utils
+
+            export class Plane {
+>Plane : Plane
+
+                constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
+>tl : Root.A.Point
+>Root : any
+>A : any
+>br : Root.A.Point
+>Root : any
+>A : any
+            }
+        }
+    }
+}

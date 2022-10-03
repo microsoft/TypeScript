@@ -1,0 +1,9 @@
+=== tests/cases/compiler/objectLitStructuralTypeMismatch.ts ===
+// Shouldn't compile
+var x: { a: number; } = { b: 5 };
+>x : { a: number; }
+>a : number
+>{ b: 5 } : { b: number; }
+>b : number
+>5 : 5
+

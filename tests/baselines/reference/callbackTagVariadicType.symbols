@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/callbackTagVariadicType.js ===
+/**
+ * @callback Foo
+ * @param {...string} args
+ * @returns {number}
+ */
+
+/** @type {Foo} */
+export const x = () => 1
+>x : Symbol(x, Decl(callbackTagVariadicType.js, 7, 12))
+
+var res = x('a', 'b')
+>res : Symbol(res, Decl(callbackTagVariadicType.js, 8, 3))
+>x : Symbol(x, Decl(callbackTagVariadicType.js, 7, 12))
+

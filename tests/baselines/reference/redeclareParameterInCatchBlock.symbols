@@ -1,0 +1,53 @@
+=== tests/cases/compiler/redeclareParameterInCatchBlock.ts ===
+try {
+
+} catch(e) {
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 2, 8))
+
+    const e = null;
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 3, 9))
+}
+
+try {
+
+} catch(e) {
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 8, 8))
+
+    let e;
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 9, 7))
+}
+
+try {
+
+} catch ([a, b]) {
+>a : Symbol(a, Decl(redeclareParameterInCatchBlock.ts, 14, 10))
+>b : Symbol(b, Decl(redeclareParameterInCatchBlock.ts, 14, 12))
+
+    const [c, b] = [0, 1];
+>c : Symbol(c, Decl(redeclareParameterInCatchBlock.ts, 15, 11))
+>b : Symbol(b, Decl(redeclareParameterInCatchBlock.ts, 15, 13))
+}
+
+try {
+
+} catch ({ a: x, b: x }) {
+>a : Symbol(a)
+>x : Symbol(x, Decl(redeclareParameterInCatchBlock.ts, 20, 10))
+>b : Symbol(b)
+>x : Symbol(x, Decl(redeclareParameterInCatchBlock.ts, 20, 16))
+
+}
+
+try {
+
+} catch(e) {
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 26, 8))
+
+    function test() {
+>test : Symbol(test, Decl(redeclareParameterInCatchBlock.ts, 26, 12))
+
+        let e;
+>e : Symbol(e, Decl(redeclareParameterInCatchBlock.ts, 28, 11))
+    }
+}
+

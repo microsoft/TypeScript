@@ -1,0 +1,24 @@
+tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts(15,5): error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
+  Index signature for type 'string' is missing in type 'Foo'.
+
+
+==== tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts (1 errors) ====
+    interface IHandler {
+        (e): boolean;
+    }
+    
+    interface IHandlerMap {
+        [type: string]: IHandler;
+    }
+    
+    class Foo {
+        public Boz(): void { }
+    }
+    
+    function Biz(map: IHandlerMap) { }
+    
+    Biz(new Foo());
+        ~~~~~~~~~
+!!! error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
+!!! error TS2345:   Index signature for type 'string' is missing in type 'Foo'.
+    

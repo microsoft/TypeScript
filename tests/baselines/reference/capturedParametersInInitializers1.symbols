@@ -1,0 +1,89 @@
+=== tests/cases/compiler/capturedParametersInInitializers1.ts ===
+// ok - usage is deferred
+function foo1(y = class {c = x}, x = 1) {
+>foo1 : Symbol(foo1, Decl(capturedParametersInInitializers1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 1, 14))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
+
+    new y().c;
+>new y().c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 1, 14))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+}
+
+// ok - used in file
+function foo2(y = function(x: typeof z) {}, z = 1) {
+>foo2 : Symbol(foo2, Decl(capturedParametersInInitializers1.ts, 3, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 6, 14))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 6, 27))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 6, 43))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 6, 43))
+    
+}
+
+// ok -used in type
+let a;
+>a : Symbol(a, Decl(capturedParametersInInitializers1.ts, 11, 3))
+
+function foo3(y = { x: <typeof z>a }, z = 1) {
+>foo3 : Symbol(foo3, Decl(capturedParametersInInitializers1.ts, 11, 6))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 12, 14))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 12, 19))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 12, 37))
+>a : Symbol(a, Decl(capturedParametersInInitializers1.ts, 11, 3))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 12, 37))
+    
+}
+
+// error - used before declaration
+function foo4(y = {z}, z = 1) {
+>foo4 : Symbol(foo4, Decl(capturedParametersInInitializers1.ts, 14, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 17, 14))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 17, 19))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 17, 22))
+}
+
+// error - used before declaration, IIFEs are inlined
+function foo5(y = (() => z)(), z = 1) {
+>foo5 : Symbol(foo5, Decl(capturedParametersInInitializers1.ts, 18, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 21, 14))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 21, 30))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 21, 30))
+}
+
+// ok - IIFE inside another function
+function foo6(y = () => (() => z)(), z = 1) {
+>foo6 : Symbol(foo6, Decl(capturedParametersInInitializers1.ts, 22, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 25, 14))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 25, 36))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 25, 36))
+}
+
+// ok - used inside immediately invoked generator function
+function foo7(y = (function*() {yield z})(), z = 1) {
+>foo7 : Symbol(foo7, Decl(capturedParametersInInitializers1.ts, 26, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 29, 14))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 29, 44))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 29, 44))
+}
+
+// ok - used inside immediately invoked async function
+function foo8(y = (async () => z)(), z = 1) {
+>foo8 : Symbol(foo8, Decl(capturedParametersInInitializers1.ts, 30, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 33, 14))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 33, 36))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 33, 36))
+}
+
+// error - used as computed name of method
+function foo9(y = {[z]() { return z; }}, z = 1) {
+>foo9 : Symbol(foo9, Decl(capturedParametersInInitializers1.ts, 34, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 37, 14))
+>[z] : Symbol([z], Decl(capturedParametersInInitializers1.ts, 37, 19))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 37, 40))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 37, 40))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 37, 40))
+}
+

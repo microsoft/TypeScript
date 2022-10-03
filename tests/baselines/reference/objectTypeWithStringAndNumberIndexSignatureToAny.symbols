@@ -1,0 +1,247 @@
+=== tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
+// When checking compatibility between two types,
+// TypeScript should not require an index signature if
+// the target side index signature maps to `any` *and*
+// the target side has *any* string index signature to `any`.
+//
+// So an index signature like in
+//
+//  { [x: number]: any }
+//
+// is still required of a source type, but neither index signature in
+//
+//  { [x: number]: any, [x: string]: any; }
+//
+// should be required; *however*, the number index signature in
+//
+//  { [x: number]: number, [x: string]: any; }
+//
+// should always be required.
+
+interface StringTo<T> {
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 19, 19))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 20, 5))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 19, 19))
+}
+
+interface NumberTo<T> {
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 23, 19))
+
+    [x: number]: T;
+>x : Symbol(x, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 24, 5))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 23, 19))
+}
+
+interface StringAndNumberTo<T> extends StringTo<T>, NumberTo<T> {
+>StringAndNumberTo : Symbol(StringAndNumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 25, 1))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 27, 28))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 27, 28))
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+>T : Symbol(T, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 27, 28))
+}
+
+interface Obj {
+>Obj : Symbol(Obj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 28, 1))
+
+    hello: string;
+>hello : Symbol(Obj.hello, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 30, 15))
+
+    world: number;
+>world : Symbol(Obj.world, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 31, 18))
+}
+
+function f1(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) {
+>f1 : Symbol(f1, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 33, 1))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+>StringAndNumberTo : Symbol(StringAndNumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 25, 1))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+>Obj : Symbol(Obj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 28, 1))
+
+    sToAny = nToAny;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+
+    sToAny = bothToAny;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+
+    sToAny = someObj;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+
+    nToAny = sToAny;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+
+    nToAny = bothToAny;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+
+    nToAny = someObj;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+
+    bothToAny = sToAny;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+
+    bothToAny = nToAny;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+
+    bothToAny = someObj;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+
+    someObj = sToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 12))
+
+    someObj = nToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 34))
+
+    someObj = bothToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 92))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 35, 57))
+}
+
+function f2(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<any> & NumberTo<any>, someObj: Obj) {
+>f2 : Symbol(f2, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 51, 1))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+>Obj : Symbol(Obj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 28, 1))
+
+    sToAny = nToAny;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+
+    sToAny = bothToAny;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+
+    sToAny = someObj;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+
+    nToAny = sToAny;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+
+    nToAny = bothToAny;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+
+    nToAny = someObj;
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+
+    bothToAny = sToAny;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+
+    bothToAny = nToAny;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+
+    bothToAny = someObj;
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+
+    someObj = sToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 12))
+
+    someObj = nToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+>nToAny : Symbol(nToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 34))
+
+    someObj = bothToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 99))
+>bothToAny : Symbol(bothToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 53, 57))
+}
+
+type NumberToNumber = NumberTo<number>;
+>NumberToNumber : Symbol(NumberToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 69, 1))
+>NumberTo : Symbol(NumberTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 21, 1))
+
+interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
+>StringToAnyNumberToNumber : Symbol(StringToAnyNumberToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 71, 39))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>NumberToNumber : Symbol(NumberToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 69, 1))
+}
+
+function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) {
+>f3 : Symbol(f3, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 74, 1))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+>StringTo : Symbol(StringTo, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 0, 0))
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+>NumberToNumber : Symbol(NumberToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 69, 1))
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+>StringToAnyNumberToNumber : Symbol(StringToAnyNumberToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 71, 39))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+>Obj : Symbol(Obj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 28, 1))
+
+    sToAny = nToNumber;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+
+    sToAny = strToAnyNumToNum;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+
+    sToAny = someObj;
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+
+    nToNumber = sToAny;
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+
+    nToNumber = strToAnyNumToNum;
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+
+    nToNumber = someObj;
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+
+    strToAnyNumToNum = sToAny;
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+
+    strToAnyNumToNum = nToNumber;
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+
+    strToAnyNumToNum = someObj;
+>strToAnyNumToNum : Symbol(strToAnyNumToNum, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 61))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+
+    someObj = sToAny;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+>sToAny : Symbol(sToAny, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 12))
+
+    someObj = nToNumber;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+>nToNumber : Symbol(nToNumber, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 34))
+
+    someObj = someObj;
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+>someObj : Symbol(someObj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 76, 106))
+}

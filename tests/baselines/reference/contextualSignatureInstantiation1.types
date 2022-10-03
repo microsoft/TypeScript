@@ -1,0 +1,44 @@
+=== tests/cases/compiler/contextualSignatureInstantiation1.ts ===
+declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
+>map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
+>f : (x: S) => T
+>x : S
+>a : S[]
+
+var e = <K>(x: string, y?: K) => x.length;
+>e : <K>(x: string, y?: K) => number
+><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
+>x : string
+>y : K
+>x.length : number
+>x : string
+>length : number
+
+var r99 = map(e); // should be {}[] for S since a generic lambda is not inferentially typed
+>r99 : <K>(a: string[]) => number[]
+>map(e) : <K>(a: string[]) => number[]
+>map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
+>e : <K>(x: string, y?: K) => number
+
+declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[]) => T[];
+>map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
+>length : number
+>f : (x: S) => T
+>x : S
+>a : S[]
+
+var e2 = <K>(x: string, y?: K) => x.length;
+>e2 : <K>(x: string, y?: K) => number
+><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
+>x : string
+>y : K
+>x.length : number
+>x : string
+>length : number
+
+var r100 = map2(e2); // type arg inference should fail for S since a generic lambda is not inferentially typed. Falls back to { length: number }
+>r100 : <K>(a: string[]) => number[]
+>map2(e2) : <K>(a: string[]) => number[]
+>map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
+>e2 : <K>(x: string, y?: K) => number
+

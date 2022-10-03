@@ -1,0 +1,27 @@
+=== tests/cases/compiler/auxiliry.ts ===
+export class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(auxiliry.ts, 0, 0))
+
+    field: string;
+>field : Symbol(SomeClass.field, Decl(auxiliry.ts, 0, 24))
+}
+
+=== tests/cases/compiler/test.ts ===
+import { SomeClass } from './auxiliry';
+>SomeClass : Symbol(SomeClass, Decl(test.ts, 0, 8))
+
+function annotation(): PropertyDecorator {
+>annotation : Symbol(annotation, Decl(test.ts, 0, 39))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+
+    return (target: any): void => { };
+>target : Symbol(target, Decl(test.ts, 2, 12))
+}
+export class ClassA {
+>ClassA : Symbol(ClassA, Decl(test.ts, 3, 1))
+
+    @annotation() array: SomeClass | null | string;
+>annotation : Symbol(annotation, Decl(test.ts, 0, 39))
+>array : Symbol(ClassA.array, Decl(test.ts, 4, 21))
+>SomeClass : Symbol(SomeClass, Decl(test.ts, 0, 8))
+}

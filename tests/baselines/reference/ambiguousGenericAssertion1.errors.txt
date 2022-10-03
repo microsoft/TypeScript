@@ -1,0 +1,23 @@
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,10): error TS1109: Expression expected.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,15): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,16): error TS1005: ')' expected.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,19): error TS1005: ',' expected.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,21): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/ambiguousGenericAssertion1.ts (5 errors) ====
+    function f<T>(x: T): T { return null; }
+    var r = <T>(x: T) => x;
+    var r2 = < <T>(x: T) => T>f; // valid
+    var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operation
+             ~~
+!!! error TS1109: Expression expected.
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+                   ~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1005: ',' expected.
+                        ~~
+!!! error TS1005: ';' expected.
+    

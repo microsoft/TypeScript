@@ -1,0 +1,8 @@
+=== tests/cases/compiler/example.js ===
+// @ts-check
+/**
+ * @type {function(@foo)}
+ */
+let x;
+>x : (arg0: any, arg1: foo) => any
+

@@ -1,0 +1,310 @@
+=== tests/cases/compiler/commentsInheritance.ts ===
+/** i1 is interface with properties*/
+interface i1 {
+>i1 : Symbol(i1, Decl(commentsInheritance.ts, 0, 0))
+
+    /** i1_p1*/
+    i1_p1: number;
+>i1_p1 : Symbol(i1.i1_p1, Decl(commentsInheritance.ts, 1, 14))
+
+    /** i1_f1*/
+    i1_f1(): void;
+>i1_f1 : Symbol(i1.i1_f1, Decl(commentsInheritance.ts, 3, 18))
+
+    /** i1_l1*/
+    i1_l1: () => void;
+>i1_l1 : Symbol(i1.i1_l1, Decl(commentsInheritance.ts, 5, 18))
+
+    // il_nc_p1
+    i1_nc_p1: number;
+>i1_nc_p1 : Symbol(i1.i1_nc_p1, Decl(commentsInheritance.ts, 7, 22))
+
+    i1_nc_f1(): void;
+>i1_nc_f1 : Symbol(i1.i1_nc_f1, Decl(commentsInheritance.ts, 9, 21))
+
+    i1_nc_l1: () => void;
+>i1_nc_l1 : Symbol(i1.i1_nc_l1, Decl(commentsInheritance.ts, 10, 21))
+
+    p1: number;
+>p1 : Symbol(i1.p1, Decl(commentsInheritance.ts, 11, 25))
+
+    f1(): void;
+>f1 : Symbol(i1.f1, Decl(commentsInheritance.ts, 12, 15))
+
+    l1: () => void;
+>l1 : Symbol(i1.l1, Decl(commentsInheritance.ts, 13, 15))
+
+    nc_p1: number;
+>nc_p1 : Symbol(i1.nc_p1, Decl(commentsInheritance.ts, 14, 19))
+
+    nc_f1(): void;
+>nc_f1 : Symbol(i1.nc_f1, Decl(commentsInheritance.ts, 15, 18))
+
+    nc_l1: () => void;
+>nc_l1 : Symbol(i1.nc_l1, Decl(commentsInheritance.ts, 16, 18))
+}
+class c1 implements i1 {
+>c1 : Symbol(c1, Decl(commentsInheritance.ts, 18, 1))
+>i1 : Symbol(i1, Decl(commentsInheritance.ts, 0, 0))
+
+    public i1_p1: number;
+>i1_p1 : Symbol(c1.i1_p1, Decl(commentsInheritance.ts, 19, 24))
+
+    // i1_f1
+    public i1_f1() {
+>i1_f1 : Symbol(c1.i1_f1, Decl(commentsInheritance.ts, 20, 25))
+    }
+    public i1_l1: () => void;
+>i1_l1 : Symbol(c1.i1_l1, Decl(commentsInheritance.ts, 23, 5))
+
+    public i1_nc_p1: number;
+>i1_nc_p1 : Symbol(c1.i1_nc_p1, Decl(commentsInheritance.ts, 24, 29))
+
+    public i1_nc_f1() {
+>i1_nc_f1 : Symbol(c1.i1_nc_f1, Decl(commentsInheritance.ts, 25, 28))
+    }
+    public i1_nc_l1: () => void;
+>i1_nc_l1 : Symbol(c1.i1_nc_l1, Decl(commentsInheritance.ts, 27, 5))
+
+    /** c1_p1*/
+    public p1: number;
+>p1 : Symbol(c1.p1, Decl(commentsInheritance.ts, 28, 32))
+
+    /** c1_f1*/
+    public f1() {
+>f1 : Symbol(c1.f1, Decl(commentsInheritance.ts, 30, 22))
+    }
+    /** c1_l1*/
+    public l1: () => void;
+>l1 : Symbol(c1.l1, Decl(commentsInheritance.ts, 33, 5))
+
+    /** c1_nc_p1*/
+    public nc_p1: number;
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsInheritance.ts, 35, 26))
+
+    /** c1_nc_f1*/
+    public nc_f1() {
+>nc_f1 : Symbol(c1.nc_f1, Decl(commentsInheritance.ts, 37, 25))
+    }
+    /** c1_nc_l1*/
+    public nc_l1: () => void;
+>nc_l1 : Symbol(c1.nc_l1, Decl(commentsInheritance.ts, 40, 5))
+}
+var i1_i: i1;
+>i1_i : Symbol(i1_i, Decl(commentsInheritance.ts, 44, 3))
+>i1 : Symbol(i1, Decl(commentsInheritance.ts, 0, 0))
+
+var c1_i = new c1();
+>c1_i : Symbol(c1_i, Decl(commentsInheritance.ts, 45, 3))
+>c1 : Symbol(c1, Decl(commentsInheritance.ts, 18, 1))
+
+// assign to interface
+i1_i = c1_i;
+>i1_i : Symbol(i1_i, Decl(commentsInheritance.ts, 44, 3))
+>c1_i : Symbol(c1_i, Decl(commentsInheritance.ts, 45, 3))
+
+class c2 {
+>c2 : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+
+    /** c2 c2_p1*/
+    public c2_p1: number;
+>c2_p1 : Symbol(c2.c2_p1, Decl(commentsInheritance.ts, 48, 10))
+
+    /** c2 c2_f1*/
+    public c2_f1() {
+>c2_f1 : Symbol(c2.c2_f1, Decl(commentsInheritance.ts, 50, 25))
+    }
+    /** c2 c2_prop*/
+    public get c2_prop() {
+>c2_prop : Symbol(c2.c2_prop, Decl(commentsInheritance.ts, 53, 5))
+
+        return 10;
+    }
+    public c2_nc_p1: number;
+>c2_nc_p1 : Symbol(c2.c2_nc_p1, Decl(commentsInheritance.ts, 57, 5))
+
+    public c2_nc_f1() {
+>c2_nc_f1 : Symbol(c2.c2_nc_f1, Decl(commentsInheritance.ts, 58, 28))
+    }
+    public get c2_nc_prop() {
+>c2_nc_prop : Symbol(c2.c2_nc_prop, Decl(commentsInheritance.ts, 60, 5))
+
+        return 10;
+    }
+    /** c2 p1*/
+    public p1: number;
+>p1 : Symbol(c2.p1, Decl(commentsInheritance.ts, 63, 5))
+
+    /** c2 f1*/
+    public f1() {
+>f1 : Symbol(c2.f1, Decl(commentsInheritance.ts, 65, 22))
+    }
+    /** c2 prop*/
+    public get prop() {
+>prop : Symbol(c2.prop, Decl(commentsInheritance.ts, 68, 5))
+
+        return 10;
+    }
+    public nc_p1: number;
+>nc_p1 : Symbol(c2.nc_p1, Decl(commentsInheritance.ts, 72, 5))
+
+    public nc_f1() {
+>nc_f1 : Symbol(c2.nc_f1, Decl(commentsInheritance.ts, 73, 25))
+    }
+    public get nc_prop() {
+>nc_prop : Symbol(c2.nc_prop, Decl(commentsInheritance.ts, 75, 5))
+
+        return 10;
+    }
+    /** c2 constructor*/
+    constructor(a: number) {
+>a : Symbol(a, Decl(commentsInheritance.ts, 80, 16))
+
+        this.c2_p1 = a;
+>this.c2_p1 : Symbol(c2.c2_p1, Decl(commentsInheritance.ts, 48, 10))
+>this : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+>c2_p1 : Symbol(c2.c2_p1, Decl(commentsInheritance.ts, 48, 10))
+>a : Symbol(a, Decl(commentsInheritance.ts, 80, 16))
+    }
+}
+class c3 extends c2 {
+>c3 : Symbol(c3, Decl(commentsInheritance.ts, 83, 1))
+>c2 : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+
+    constructor() {
+        super(10);
+>super : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+    }
+    /** c3 p1*/
+    public p1: number;
+>p1 : Symbol(c3.p1, Decl(commentsInheritance.ts, 87, 5))
+
+    /** c3 f1*/
+    public f1() {
+>f1 : Symbol(c3.f1, Decl(commentsInheritance.ts, 89, 22))
+    }
+    /** c3 prop*/
+    public get prop() {
+>prop : Symbol(c3.prop, Decl(commentsInheritance.ts, 92, 5))
+
+        return 10;
+    }
+    public nc_p1: number;
+>nc_p1 : Symbol(c3.nc_p1, Decl(commentsInheritance.ts, 96, 5))
+
+    public nc_f1() {
+>nc_f1 : Symbol(c3.nc_f1, Decl(commentsInheritance.ts, 97, 25))
+    }
+    public get nc_prop() {
+>nc_prop : Symbol(c3.nc_prop, Decl(commentsInheritance.ts, 99, 5))
+
+        return 10;
+    }
+}
+var c2_i = new c2(10);
+>c2_i : Symbol(c2_i, Decl(commentsInheritance.ts, 104, 3))
+>c2 : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+
+var c3_i = new c3();
+>c3_i : Symbol(c3_i, Decl(commentsInheritance.ts, 105, 3))
+>c3 : Symbol(c3, Decl(commentsInheritance.ts, 83, 1))
+
+// assign
+c2_i = c3_i;
+>c2_i : Symbol(c2_i, Decl(commentsInheritance.ts, 104, 3))
+>c3_i : Symbol(c3_i, Decl(commentsInheritance.ts, 105, 3))
+
+class c4 extends c2 {
+>c4 : Symbol(c4, Decl(commentsInheritance.ts, 107, 12))
+>c2 : Symbol(c2, Decl(commentsInheritance.ts, 47, 12))
+}
+var c4_i = new c4(10);
+>c4_i : Symbol(c4_i, Decl(commentsInheritance.ts, 110, 3))
+>c4 : Symbol(c4, Decl(commentsInheritance.ts, 107, 12))
+
+interface i2 {
+>i2 : Symbol(i2, Decl(commentsInheritance.ts, 110, 22))
+
+    /** i2_p1*/
+    i2_p1: number;
+>i2_p1 : Symbol(i2.i2_p1, Decl(commentsInheritance.ts, 111, 14))
+
+    /** i2_f1*/
+    i2_f1(): void;
+>i2_f1 : Symbol(i2.i2_f1, Decl(commentsInheritance.ts, 113, 18))
+
+    /** i2_l1*/
+    i2_l1: () => void;
+>i2_l1 : Symbol(i2.i2_l1, Decl(commentsInheritance.ts, 115, 18))
+
+    // i2_nc_p1
+    i2_nc_p1: number;
+>i2_nc_p1 : Symbol(i2.i2_nc_p1, Decl(commentsInheritance.ts, 117, 22))
+
+    i2_nc_f1(): void;
+>i2_nc_f1 : Symbol(i2.i2_nc_f1, Decl(commentsInheritance.ts, 119, 21))
+
+    i2_nc_l1: () => void;
+>i2_nc_l1 : Symbol(i2.i2_nc_l1, Decl(commentsInheritance.ts, 120, 21))
+
+    /** i2 p1*/
+    p1: number;
+>p1 : Symbol(i2.p1, Decl(commentsInheritance.ts, 121, 25))
+
+    /** i2 f1*/
+    f1(): void;
+>f1 : Symbol(i2.f1, Decl(commentsInheritance.ts, 123, 15))
+
+    /** i2 l1*/
+    l1: () => void;
+>l1 : Symbol(i2.l1, Decl(commentsInheritance.ts, 125, 15))
+
+    nc_p1: number;
+>nc_p1 : Symbol(i2.nc_p1, Decl(commentsInheritance.ts, 127, 19))
+
+    nc_f1(): void;
+>nc_f1 : Symbol(i2.nc_f1, Decl(commentsInheritance.ts, 128, 18))
+
+    nc_l1: () => void;
+>nc_l1 : Symbol(i2.nc_l1, Decl(commentsInheritance.ts, 129, 18))
+}
+interface i3 extends i2 {
+>i3 : Symbol(i3, Decl(commentsInheritance.ts, 131, 1))
+>i2 : Symbol(i2, Decl(commentsInheritance.ts, 110, 22))
+
+    /** i3 p1 */
+    p1: number;
+>p1 : Symbol(i3.p1, Decl(commentsInheritance.ts, 132, 25))
+
+    /**
+    * i3 f1
+    */
+    f1(): void;
+>f1 : Symbol(i3.f1, Decl(commentsInheritance.ts, 134, 15))
+
+    /** i3 l1*/
+    l1: () => void;
+>l1 : Symbol(i3.l1, Decl(commentsInheritance.ts, 138, 15))
+
+    nc_p1: number;
+>nc_p1 : Symbol(i3.nc_p1, Decl(commentsInheritance.ts, 140, 19))
+
+    nc_f1(): void;
+>nc_f1 : Symbol(i3.nc_f1, Decl(commentsInheritance.ts, 141, 18))
+
+    nc_l1: () => void;
+>nc_l1 : Symbol(i3.nc_l1, Decl(commentsInheritance.ts, 142, 18))
+}
+var i2_i: i2;
+>i2_i : Symbol(i2_i, Decl(commentsInheritance.ts, 145, 3))
+>i2 : Symbol(i2, Decl(commentsInheritance.ts, 110, 22))
+
+var i3_i: i3;
+>i3_i : Symbol(i3_i, Decl(commentsInheritance.ts, 146, 3))
+>i3 : Symbol(i3, Decl(commentsInheritance.ts, 131, 1))
+
+// assign to interface
+i2_i = i3_i;
+>i2_i : Symbol(i2_i, Decl(commentsInheritance.ts, 145, 3))
+>i3_i : Symbol(i3_i, Decl(commentsInheritance.ts, 146, 3))
+

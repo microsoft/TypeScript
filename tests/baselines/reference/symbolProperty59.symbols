@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty59.ts ===
+interface I {
+>I : Symbol(I, Decl(symbolProperty59.ts, 0, 0))
+
+    [Symbol.keyFor]: string;
+>[Symbol.keyFor] : Symbol(I[Symbol.keyFor], Decl(symbolProperty59.ts, 0, 13))
+>Symbol.keyFor : Symbol(SymbolConstructor.keyFor, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>keyFor : Symbol(SymbolConstructor.keyFor, Decl(lib.es2015.symbol.d.ts, --, --))
+}

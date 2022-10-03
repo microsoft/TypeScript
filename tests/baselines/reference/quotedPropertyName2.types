@@ -1,0 +1,8 @@
+=== tests/cases/compiler/quotedPropertyName2.ts ===
+class Test1 {
+>Test1 : Test1
+
+  static "prop1" = 0;
+>"prop1" : number
+>0 : 0
+}

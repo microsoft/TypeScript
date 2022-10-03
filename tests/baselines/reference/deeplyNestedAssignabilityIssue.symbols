@@ -1,0 +1,62 @@
+=== tests/cases/compiler/deeplyNestedAssignabilityIssue.ts ===
+interface A {
+>A : Symbol(A, Decl(deeplyNestedAssignabilityIssue.ts, 0, 0))
+
+    a: number;
+>a : Symbol(A.a, Decl(deeplyNestedAssignabilityIssue.ts, 0, 13))
+}
+
+interface Large {
+>Large : Symbol(Large, Decl(deeplyNestedAssignabilityIssue.ts, 2, 1))
+
+    something: {
+>something : Symbol(Large.something, Decl(deeplyNestedAssignabilityIssue.ts, 4, 17))
+
+        another: {
+>another : Symbol(another, Decl(deeplyNestedAssignabilityIssue.ts, 5, 16))
+
+            more: {
+>more : Symbol(more, Decl(deeplyNestedAssignabilityIssue.ts, 6, 18))
+
+                thing: A;
+>thing : Symbol(thing, Decl(deeplyNestedAssignabilityIssue.ts, 7, 19))
+>A : Symbol(A, Decl(deeplyNestedAssignabilityIssue.ts, 0, 0))
+            }
+            yetstill: {
+>yetstill : Symbol(yetstill, Decl(deeplyNestedAssignabilityIssue.ts, 9, 13))
+
+                another: A;
+>another : Symbol(another, Decl(deeplyNestedAssignabilityIssue.ts, 10, 23))
+>A : Symbol(A, Decl(deeplyNestedAssignabilityIssue.ts, 0, 0))
+            }
+        }
+    }
+}
+
+const x: Large = {
+>x : Symbol(x, Decl(deeplyNestedAssignabilityIssue.ts, 17, 5))
+>Large : Symbol(Large, Decl(deeplyNestedAssignabilityIssue.ts, 2, 1))
+
+    something: {
+>something : Symbol(something, Decl(deeplyNestedAssignabilityIssue.ts, 17, 18))
+
+        another: {
+>another : Symbol(another, Decl(deeplyNestedAssignabilityIssue.ts, 18, 16))
+
+            more: {
+>more : Symbol(more, Decl(deeplyNestedAssignabilityIssue.ts, 19, 18))
+
+                thing: {}
+>thing : Symbol(thing, Decl(deeplyNestedAssignabilityIssue.ts, 20, 19))
+
+            },
+            yetstill: {
+>yetstill : Symbol(yetstill, Decl(deeplyNestedAssignabilityIssue.ts, 22, 14))
+
+                another: {}
+>another : Symbol(another, Decl(deeplyNestedAssignabilityIssue.ts, 23, 23))
+            }
+        }
+    }
+}
+

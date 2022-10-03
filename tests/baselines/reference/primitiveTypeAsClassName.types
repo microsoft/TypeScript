@@ -1,0 +1,4 @@
+=== tests/cases/compiler/primitiveTypeAsClassName.ts ===
+class any {}
+>any : any
+

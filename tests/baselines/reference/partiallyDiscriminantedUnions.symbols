@@ -1,0 +1,117 @@
+=== tests/cases/compiler/partiallyDiscriminantedUnions.ts ===
+// Repro from #10586
+
+interface A1 {
+>A1 : Symbol(A1, Decl(partiallyDiscriminantedUnions.ts, 0, 0))
+
+    type: 'a';
+>type : Symbol(A1.type, Decl(partiallyDiscriminantedUnions.ts, 2, 14))
+
+    subtype: 1;
+>subtype : Symbol(A1.subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14))
+}
+
+interface A2 {
+>A2 : Symbol(A2, Decl(partiallyDiscriminantedUnions.ts, 5, 1))
+
+    type: 'a';
+>type : Symbol(A2.type, Decl(partiallyDiscriminantedUnions.ts, 7, 14))
+
+    subtype: 2;
+>subtype : Symbol(A2.subtype, Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+
+    foo: number;
+>foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+}
+
+interface B {
+>B : Symbol(B, Decl(partiallyDiscriminantedUnions.ts, 11, 1))
+
+    type: 'b';
+>type : Symbol(B.type, Decl(partiallyDiscriminantedUnions.ts, 13, 13))
+}
+
+type AB = A1 | A2 | B;
+>AB : Symbol(AB, Decl(partiallyDiscriminantedUnions.ts, 15, 1))
+>A1 : Symbol(A1, Decl(partiallyDiscriminantedUnions.ts, 0, 0))
+>A2 : Symbol(A2, Decl(partiallyDiscriminantedUnions.ts, 5, 1))
+>B : Symbol(B, Decl(partiallyDiscriminantedUnions.ts, 11, 1))
+
+const ab: AB = <AB>{};
+>ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
+>AB : Symbol(AB, Decl(partiallyDiscriminantedUnions.ts, 15, 1))
+>AB : Symbol(AB, Decl(partiallyDiscriminantedUnions.ts, 15, 1))
+
+if (ab.type === 'a') {
+>ab.type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 2, 14), Decl(partiallyDiscriminantedUnions.ts, 7, 14), Decl(partiallyDiscriminantedUnions.ts, 13, 13))
+>ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
+>type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 2, 14), Decl(partiallyDiscriminantedUnions.ts, 7, 14), Decl(partiallyDiscriminantedUnions.ts, 13, 13))
+
+    if (ab.subtype === 2) {
+>ab.subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14), Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+>ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
+>subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14), Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+
+        ab.foo;
+>ab.foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+>ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
+>foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+    }
+}
+
+// Repro from #11185
+
+class Square { kind: "square"; }
+>Square : Symbol(Square, Decl(partiallyDiscriminantedUnions.ts, 25, 1))
+>kind : Symbol(Square.kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14))
+
+class Circle { kind: "circle"; }
+>Circle : Symbol(Circle, Decl(partiallyDiscriminantedUnions.ts, 29, 32))
+>kind : Symbol(Circle.kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14))
+
+type Shape = Circle | Square;
+>Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+>Circle : Symbol(Circle, Decl(partiallyDiscriminantedUnions.ts, 29, 32))
+>Square : Symbol(Square, Decl(partiallyDiscriminantedUnions.ts, 25, 1))
+
+type Shapes = Shape | Array<Shape>;
+>Shapes : Symbol(Shapes, Decl(partiallyDiscriminantedUnions.ts, 32, 29))
+>Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+
+function isShape(s : Shapes): s is Shape {
+>isShape : Symbol(isShape, Decl(partiallyDiscriminantedUnions.ts, 33, 35))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
+>Shapes : Symbol(Shapes, Decl(partiallyDiscriminantedUnions.ts, 32, 29))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
+>Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+
+    return !Array.isArray(s);
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
+}
+
+function fail(s: Shapes) {
+>fail : Symbol(fail, Decl(partiallyDiscriminantedUnions.ts, 37, 1))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+>Shapes : Symbol(Shapes, Decl(partiallyDiscriminantedUnions.ts, 32, 29))
+
+    if (isShape(s)) {
+>isShape : Symbol(isShape, Decl(partiallyDiscriminantedUnions.ts, 33, 35))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+
+        if (s.kind === "circle") {
+>s.kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+>kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
+
+            let c: Circle = s;
+>c : Symbol(c, Decl(partiallyDiscriminantedUnions.ts, 42, 15))
+>Circle : Symbol(Circle, Decl(partiallyDiscriminantedUnions.ts, 29, 32))
+>s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+        }
+    }
+}

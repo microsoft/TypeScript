@@ -1,0 +1,51 @@
+=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts ===
+class Module {
+>Module : Symbol(Module, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 0, 0))
+
+    public members: Class[];
+>members : Symbol(Module.members, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 0, 14))
+>Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
+}
+
+class Namespace {
+>Namespace : Symbol(Namespace, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 2, 1))
+
+    public members: (Class | Property)[];
+>members : Symbol(Namespace.members, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 4, 17))
+>Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
+>Property : Symbol(Property, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 10, 1))
+}
+
+class Class {
+>Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
+
+    public parent: Namespace;
+>parent : Symbol(Class.parent, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 8, 13))
+>Namespace : Symbol(Namespace, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 2, 1))
+}
+
+class Property {
+>Property : Symbol(Property, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 10, 1))
+
+    public parent: Module | Class;
+>parent : Symbol(Property.parent, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 12, 16))
+>Module : Symbol(Module, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 0, 0))
+>Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
+}
+
+var c: Class;
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
+>Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
+
+var p: Property;
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
+>Property : Symbol(Property, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 10, 1))
+
+c = p;
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
+
+p = c;
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
+

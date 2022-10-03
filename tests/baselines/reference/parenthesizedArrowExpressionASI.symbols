@@ -1,0 +1,11 @@
+=== tests/cases/compiler/parenthesizedArrowExpressionASI.ts ===
+const x = (a: any[]) => (
+>x : Symbol(x, Decl(parenthesizedArrowExpressionASI.ts, 0, 5))
+>a : Symbol(a, Decl(parenthesizedArrowExpressionASI.ts, 0, 11))
+
+    // comment
+    undefined as number
+>undefined : Symbol(undefined)
+
+);
+

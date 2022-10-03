@@ -1,0 +1,43 @@
+=== tests/cases/conformance/jsdoc/forgot.js ===
+/**
+ * @param {T} a
+ * @template T
+ */
+function f(a) {
+>f : Symbol(f, Decl(forgot.js, 0, 0))
+>a : Symbol(a, Decl(forgot.js, 4, 11))
+
+    return () => a
+>a : Symbol(a, Decl(forgot.js, 4, 11))
+}
+let n = f(1)()
+>n : Symbol(n, Decl(forgot.js, 7, 3))
+>f : Symbol(f, Decl(forgot.js, 0, 0))
+
+/**
+ * @param {T} a
+ * @template T
+ * @returns {function(): T}
+ */
+function g(a) {
+>g : Symbol(g, Decl(forgot.js, 7, 14))
+>a : Symbol(a, Decl(forgot.js, 14, 11))
+
+    return () => a
+>a : Symbol(a, Decl(forgot.js, 14, 11))
+}
+let s = g('hi')()
+>s : Symbol(s, Decl(forgot.js, 17, 3))
+>g : Symbol(g, Decl(forgot.js, 7, 14))
+
+/**
+ * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
+ */
+Element.prototype.animate = function(keyframes) {};
+>Element.prototype.animate : Symbol(Animatable.animate, Decl(lib.dom.d.ts, --, --))
+>Element.prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>animate : Symbol(Animatable.animate, Decl(lib.dom.d.ts, --, --))
+>keyframes : Symbol(keyframes, Decl(forgot.js, 22, 37))
+

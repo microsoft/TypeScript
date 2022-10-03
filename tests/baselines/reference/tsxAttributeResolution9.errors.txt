@@ -1,0 +1,31 @@
+tests/cases/conformance/jsx/file.tsx(9,14): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    	}
+    	interface ElementAttributesProperty {
+    		props;
+    	}
+    }
+    
+    interface Props {  
+      foo: string;
+    }
+    
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    export class MyComponent {  
+      render() {
+      }
+    
+      props: { foo: string; }
+    }
+    
+    <MyComponent foo="bar" />; // ok  
+    <MyComponent foo={0} />; // should be an error
+                 ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:12: The expected type comes from property 'foo' which is declared here on type '{ foo: string; }'
+    

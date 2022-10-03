@@ -1,0 +1,30 @@
+tests/cases/conformance/externalModules/typeOnly/index.ts(9,17): error TS1361: 'C' cannot be used as a value because it was imported using 'import type'.
+tests/cases/conformance/externalModules/typeOnly/index.ts(10,17): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+
+
+==== tests/cases/conformance/externalModules/typeOnly/types.ts (0 errors) ====
+    export interface I {}
+    export class C {}
+    
+==== tests/cases/conformance/externalModules/typeOnly/ns.ts (0 errors) ====
+    import type * as types from './types';
+    export { types };
+    
+==== tests/cases/conformance/externalModules/typeOnly/index.ts (2 errors) ====
+    import { types } from './ns';
+    import type { C, I } from './types';
+    
+    interface Q extends C {}
+    interface R extends I {}
+    interface S extends types.C {}
+    interface T extends types.I {}
+    
+    class U extends C {} // Error
+                    ~
+!!! error TS1361: 'C' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/index.ts:2:15: 'C' was imported here.
+    class V extends types.C {} // Error
+                    ~~~~~
+!!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/ns.ts:1:18: 'types' was imported here.
+    

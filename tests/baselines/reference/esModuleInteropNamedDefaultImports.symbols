@@ -1,0 +1,32 @@
+=== tests/cases/compiler/mod.ts ===
+export default class Foo {}
+>Foo : Symbol(Foo, Decl(mod.ts, 0, 0))
+
+export class Bar {}
+>Bar : Symbol(Bar, Decl(mod.ts, 0, 27))
+
+=== tests/cases/compiler/idx.ts ===
+import Foo from "./mod";
+>Foo : Symbol(Foo, Decl(idx.ts, 0, 6))
+
+import { default as Foo2 } from "./mod";
+>default : Symbol(Foo, Decl(mod.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(idx.ts, 1, 8))
+
+import { Bar, default as Foo3 } from "./mod";
+>Bar : Symbol(Bar, Decl(idx.ts, 2, 8))
+>default : Symbol(Foo, Decl(mod.ts, 0, 0))
+>Foo3 : Symbol(Foo3, Decl(idx.ts, 2, 13))
+
+new Foo();
+>Foo : Symbol(Foo, Decl(idx.ts, 0, 6))
+
+new Foo2();
+>Foo2 : Symbol(Foo2, Decl(idx.ts, 1, 8))
+
+new Bar();
+>Bar : Symbol(Bar, Decl(idx.ts, 2, 8))
+
+new Foo3();
+>Foo3 : Symbol(Foo3, Decl(idx.ts, 2, 13))
+

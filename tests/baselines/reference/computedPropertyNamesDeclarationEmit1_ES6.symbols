@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit1_ES6.ts ===
+class C {
+>C : Symbol(C, Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 0, 0))
+
+    ["" + ""]() { }
+>["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 0, 9))
+
+    get ["" + ""]() { return 0; }
+>["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 1, 19))
+
+    set ["" + ""](x) { }
+>["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 2, 33))
+>x : Symbol(x, Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 3, 18))
+}

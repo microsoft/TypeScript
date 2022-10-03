@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/lovefield-ts.d.ts ===
+// bug #27352, crashes from github.com/google/lovefield
+declare namespace lf {
+>lf : typeof lf
+
+    export enum Order { ASC, DESC }
+>Order : Order
+>ASC : Order
+>DESC : Order
+}
+
+=== tests/cases/conformance/salsa/enums.js ===
+lf.Order = {}
+>lf.Order = {} : typeof lf.Order
+>lf.Order : typeof lf.Order
+>lf : typeof lf
+>Order : typeof lf.Order
+>{} : {}
+
+lf.Order.DESC = 0;
+>lf.Order.DESC = 0 : 0
+>lf.Order.DESC : any
+>lf.Order : typeof lf.Order
+>lf : typeof lf
+>Order : typeof lf.Order
+>DESC : any
+>0 : 0
+
+lf.Order.ASC = 1;
+>lf.Order.ASC = 1 : 1
+>lf.Order.ASC : any
+>lf.Order : typeof lf.Order
+>lf : typeof lf
+>Order : typeof lf.Order
+>ASC : any
+>1 : 1
+

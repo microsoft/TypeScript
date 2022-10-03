@@ -1,0 +1,38 @@
+=== tests/cases/compiler/t1.ts ===
+export var x = "x";
+>x : string
+>"x" : "x"
+
+=== tests/cases/compiler/t2.ts ===
+export { x, from
+>x : any
+>from : any
+
+    "./t1";
+>"./t1" : "./t1"
+
+=== tests/cases/compiler/t3.ts ===
+export { from
+>from : any
+
+    "./t1";
+>"./t1" : "./t1"
+
+=== tests/cases/compiler/t4.ts ===
+export { x as a from
+>x : any
+>a : any
+>from : any
+
+    "./t1";
+>"./t1" : "./t1"
+
+=== tests/cases/compiler/t5.ts ===
+export { x as a, from
+>x : any
+>a : any
+>from : any
+
+    "./t1";
+>"./t1" : "./t1"
+

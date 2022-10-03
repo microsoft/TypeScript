@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts ===
+var type;
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias01.ts, 0, 3))
+
+var string;
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias01.ts, 1, 3))
+
+var Foo;
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 2, 3))
+
+type
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias01.ts, 0, 3))
+
+Foo = string;
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 2, 3))
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias01.ts, 1, 3))
+

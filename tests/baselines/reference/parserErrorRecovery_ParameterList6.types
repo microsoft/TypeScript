@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList6.ts ===
+class Foo {
+>Foo : Foo
+
+    public banana (x: break) { }
+>banana : (x: break) => void
+>x : break
+}

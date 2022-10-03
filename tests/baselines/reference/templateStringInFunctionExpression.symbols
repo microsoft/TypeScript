@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts ===
+var x = function y() {
+>x : Symbol(x, Decl(templateStringInFunctionExpression.ts, 0, 3))
+>y : Symbol(y, Decl(templateStringInFunctionExpression.ts, 0, 7))
+
+    `abc${ 0 }def`
+    return `abc${ 0 }def`;
+};

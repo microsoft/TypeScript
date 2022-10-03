@@ -1,0 +1,17 @@
+tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts(4,14): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts (1 errors) ====
+    // Error forward referencing derived class with forwarding constructor
+    
+    function f() {
+        var d1 = new derived();
+                 ~~~~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts:8:26: An argument for 'n' was not provided.
+        var d2 = new derived(4);
+    }
+    
+    class base { constructor(public n: number) { } }
+    class derived extends base { }
+    

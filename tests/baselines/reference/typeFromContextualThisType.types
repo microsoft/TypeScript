@@ -1,0 +1,48 @@
+=== tests/cases/conformance/salsa/bug25926.js ===
+/** @type {{ a(): void; b?(n: number): number; }} */
+const o1 = {
+>o1 : { a(): void; b?(n: number): number; }
+>{    a() {        this.b = n => n;    }} : { a(): void; }
+
+    a() {
+>a : () => void
+
+        this.b = n => n;
+>this.b = n => n : (n: number) => number
+>this.b : ((n: number) => number) | undefined
+>this : { a(): void; b?(n: number): number; }
+>b : ((n: number) => number) | undefined
+>n => n : (n: number) => number
+>n : number
+>n : number
+    }
+};
+
+/** @type {{ d(): void; e?(n: number): number; f?(n: number): number; g?: number }} */
+const o2 = {
+>o2 : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+>{    d() {        this.e = this.f = m => this.g || m;    }} : { d(): void; }
+
+    d() {
+>d : () => void
+
+        this.e = this.f = m => this.g || m;
+>this.e = this.f = m => this.g || m : (m: number) => number
+>this.e : ((n: number) => number) | undefined
+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+>e : ((n: number) => number) | undefined
+>this.f = m => this.g || m : (m: number) => number
+>this.f : ((n: number) => number) | undefined
+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+>f : ((n: number) => number) | undefined
+>m => this.g || m : (m: number) => number
+>m : number
+>this.g || m : number
+>this.g : number | undefined
+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+>g : number | undefined
+>m : number
+    }
+};
+
+

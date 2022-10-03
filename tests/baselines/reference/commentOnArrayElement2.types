@@ -1,0 +1,14 @@
+=== tests/cases/compiler/commentOnArrayElement2.ts ===
+const array = [
+>array : number[]
+>[    /* element 1*/    1 /* end of element 1 */,    2    /* end of element 2 */] : number[]
+
+    /* element 1*/
+    1 /* end of element 1 */,
+>1 : 1
+
+    2
+>2 : 2
+
+    /* end of element 2 */
+];

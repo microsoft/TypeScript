@@ -1,0 +1,23 @@
+=== tests/cases/compiler/contextualTypingOfArrayLiterals1.ts ===
+interface I {
+>I : Symbol(I, Decl(contextualTypingOfArrayLiterals1.ts, 0, 0))
+
+   [x: number]: Date;
+>x : Symbol(x, Decl(contextualTypingOfArrayLiterals1.ts, 1, 4))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var x3: I = [new Date(), 1]; 
+>x3 : Symbol(x3, Decl(contextualTypingOfArrayLiterals1.ts, 4, 3))
+>I : Symbol(I, Decl(contextualTypingOfArrayLiterals1.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r2 = x3[1]; 
+>r2 : Symbol(r2, Decl(contextualTypingOfArrayLiterals1.ts, 5, 3))
+>x3 : Symbol(x3, Decl(contextualTypingOfArrayLiterals1.ts, 4, 3))
+
+r2.getDate(); 
+>r2.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+>r2 : Symbol(r2, Decl(contextualTypingOfArrayLiterals1.ts, 5, 3))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+

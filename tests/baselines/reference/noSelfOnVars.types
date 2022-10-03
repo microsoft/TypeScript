@@ -1,0 +1,14 @@
+=== tests/cases/compiler/noSelfOnVars.ts ===
+function foo() {
+>foo : () => void
+
+    function bar() { }
+>bar : () => void
+
+    var x = bar;
+>x : () => void
+>bar : () => void
+}
+
+
+

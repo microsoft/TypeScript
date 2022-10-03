@@ -1,0 +1,16 @@
+=== /src/foo.mts ===
+export function foo() {
+>foo : () => string
+
+    return "";
+>"" : ""
+}
+
+=== /src/bar.mts ===
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error, suggest adding ".mjs"
+>foo : any
+
+import { baz } from "./baz"; // should error, ask for extension, no extension suggestion
+>baz : any
+

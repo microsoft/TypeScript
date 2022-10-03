@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts ===
+export module C { export interface I { } }
+>C : Symbol(C, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 0))
+>I : Symbol(I, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 17))
+
+export import v = C;
+>v : Symbol(v, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 42))
+>C : Symbol(C, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 0))
+
+export module M {
+>M : Symbol(M, Decl(declarationEmitNameConflictsWithAlias.ts, 1, 20))
+
+    export module C { export interface I { } }
+>C : Symbol(C, Decl(declarationEmitNameConflictsWithAlias.ts, 2, 17))
+>I : Symbol(I, Decl(declarationEmitNameConflictsWithAlias.ts, 3, 21))
+
+    export var w: v.I; // Gets emitted as C.I, which is the wrong interface
+>w : Symbol(w, Decl(declarationEmitNameConflictsWithAlias.ts, 4, 14))
+>v : Symbol(v, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 42))
+>I : Symbol(v.I, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 17))
+}

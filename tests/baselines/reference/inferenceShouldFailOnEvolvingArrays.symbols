@@ -1,0 +1,73 @@
+=== tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts ===
+// repro from https://github.com/Microsoft/TypeScript/issues/25675
+// The type of `arg` blocks inference but simplifies to T.
+function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]): T {
+>logLength : Symbol(logLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 19))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 36))
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 55))
+>K : Symbol(K, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 63))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 36))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 19))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 36))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 19))
+
+    console.log(arg.length);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>arg.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 55))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    return arg;
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 2, 55))
+}
+logLength(42);  // error
+>logLength : Symbol(logLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 0, 0))
+
+let z;
+>z : Symbol(z, Decl(inferenceShouldFailOnEvolvingArrays.ts, 7, 3))
+
+z = logLength(42);  // no error; T is inferred as `any`
+>z : Symbol(z, Decl(inferenceShouldFailOnEvolvingArrays.ts, 7, 3))
+>logLength : Symbol(logLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 0, 0))
+
+function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T }[U]): T {
+>logFirstLength : Symbol(logFirstLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 8, 18))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 24))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 43))
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 62))
+>K : Symbol(K, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 70))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 43))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 24))
+>U : Symbol(U, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 43))
+>T : Symbol(T, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 24))
+
+    console.log(arg[0].length);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>arg[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 62))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    return arg;
+>arg : Symbol(arg, Decl(inferenceShouldFailOnEvolvingArrays.ts, 10, 62))
+}
+logFirstLength([42]);  // error
+>logFirstLength : Symbol(logFirstLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 8, 18))
+
+let zz = [];
+>zz : Symbol(zz, Decl(inferenceShouldFailOnEvolvingArrays.ts, 15, 3))
+
+zz.push(logLength(42));  // no error; T is inferred as `any`
+>zz.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>zz : Symbol(zz, Decl(inferenceShouldFailOnEvolvingArrays.ts, 15, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>logLength : Symbol(logLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 0, 0))
+
+zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
+>zz : Symbol(zz, Decl(inferenceShouldFailOnEvolvingArrays.ts, 15, 3))
+>logFirstLength : Symbol(logFirstLength, Decl(inferenceShouldFailOnEvolvingArrays.ts, 8, 18))
+

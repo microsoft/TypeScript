@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/classDeclarations/mergeClassInterfaceAndModule.ts ===
+interface C1 {}
+>C1 : Symbol(C1, Decl(mergeClassInterfaceAndModule.ts, 0, 0), Decl(mergeClassInterfaceAndModule.ts, 0, 15), Decl(mergeClassInterfaceAndModule.ts, 1, 19))
+
+declare class C1 {}
+>C1 : Symbol(C1, Decl(mergeClassInterfaceAndModule.ts, 0, 0), Decl(mergeClassInterfaceAndModule.ts, 0, 15), Decl(mergeClassInterfaceAndModule.ts, 1, 19))
+
+module C1 {}
+>C1 : Symbol(C1, Decl(mergeClassInterfaceAndModule.ts, 0, 0), Decl(mergeClassInterfaceAndModule.ts, 0, 15), Decl(mergeClassInterfaceAndModule.ts, 1, 19))
+
+declare class C2 {}
+>C2 : Symbol(C2, Decl(mergeClassInterfaceAndModule.ts, 2, 12), Decl(mergeClassInterfaceAndModule.ts, 4, 19), Decl(mergeClassInterfaceAndModule.ts, 5, 15))
+
+interface C2 {}
+>C2 : Symbol(C2, Decl(mergeClassInterfaceAndModule.ts, 2, 12), Decl(mergeClassInterfaceAndModule.ts, 4, 19), Decl(mergeClassInterfaceAndModule.ts, 5, 15))
+
+module C2 {}
+>C2 : Symbol(C2, Decl(mergeClassInterfaceAndModule.ts, 2, 12), Decl(mergeClassInterfaceAndModule.ts, 4, 19), Decl(mergeClassInterfaceAndModule.ts, 5, 15))
+
+declare class C3 {}
+>C3 : Symbol(C3, Decl(mergeClassInterfaceAndModule.ts, 6, 12), Decl(mergeClassInterfaceAndModule.ts, 8, 19), Decl(mergeClassInterfaceAndModule.ts, 9, 12))
+
+module C3 {}
+>C3 : Symbol(C3, Decl(mergeClassInterfaceAndModule.ts, 6, 12), Decl(mergeClassInterfaceAndModule.ts, 8, 19), Decl(mergeClassInterfaceAndModule.ts, 9, 12))
+
+interface C3 {}
+>C3 : Symbol(C3, Decl(mergeClassInterfaceAndModule.ts, 6, 12), Decl(mergeClassInterfaceAndModule.ts, 8, 19), Decl(mergeClassInterfaceAndModule.ts, 9, 12))
+
+module C4 {}
+>C4 : Symbol(C4, Decl(mergeClassInterfaceAndModule.ts, 10, 15), Decl(mergeClassInterfaceAndModule.ts, 12, 12), Decl(mergeClassInterfaceAndModule.ts, 13, 19))
+
+declare class C4 {} // error -- class declaration must precede module declaration
+>C4 : Symbol(C4, Decl(mergeClassInterfaceAndModule.ts, 10, 15), Decl(mergeClassInterfaceAndModule.ts, 12, 12), Decl(mergeClassInterfaceAndModule.ts, 13, 19))
+
+interface C4 {}
+>C4 : Symbol(C4, Decl(mergeClassInterfaceAndModule.ts, 10, 15), Decl(mergeClassInterfaceAndModule.ts, 12, 12), Decl(mergeClassInterfaceAndModule.ts, 13, 19))
+

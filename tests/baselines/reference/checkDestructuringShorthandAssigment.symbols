@@ -1,0 +1,10 @@
+=== tests/cases/compiler/bug25434.js ===
+// should not crash while checking
+function Test({ b = '' } = {}) {}
+>Test : Symbol(Test, Decl(bug25434.js, 0, 0))
+>b : Symbol(b, Decl(bug25434.js, 1, 15))
+
+Test(({ b = '5' } = {}));
+>Test : Symbol(Test, Decl(bug25434.js, 0, 0))
+>b : Symbol(b, Decl(bug25434.js, 3, 7))
+

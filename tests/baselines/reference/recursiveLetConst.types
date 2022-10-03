@@ -1,0 +1,69 @@
+=== tests/cases/compiler/recursiveLetConst.ts ===
+'use strict'
+>'use strict' : "use strict"
+
+let x = x + 1;
+>x : any
+>x + 1 : any
+>x : any
+>1 : 1
+
+let [x1] = x1 + 1;
+>x1 : any
+>x1 + 1 : any
+>x1 : any
+>1 : 1
+
+const y = y + 2;
+>y : any
+>y + 2 : any
+>y : any
+>2 : 2
+
+const [y1] = y1 + 1;
+>y1 : any
+>y1 + 1 : any
+>y1 : any
+>1 : 1
+
+for (let v = v; ; ) { }
+>v : any
+>v : any
+
+for (let [v] = v; ;) { }
+>v : any
+>v : any
+
+for (let v in v) { }
+>v : any
+>v : any
+
+for (let v of v) { }
+>v : any
+>v : any
+
+for (let [v] of v) { }
+>v : any
+>v : any
+
+let [x2 = x2] = []
+>x2 : any
+>x2 : any
+>[] : []
+
+let z0 = () => z0;
+>z0 : () => any
+>() => z0 : () => any
+>z0 : () => any
+
+let z1 = function () { return z1; }
+>z1 : () => any
+>function () { return z1; } : () => any
+>z1 : () => any
+
+let z2 = { f() { return z2;}}
+>z2 : { f(): any; }
+>{ f() { return z2;}} : { f(): { f(): any; }; }
+>f : () => { f(): any; }
+>z2 : { f(): any; }
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/index.js ===
+/**
+ * @param {Array<*>} list
+ */
+function thing(list) {
+>thing : Symbol(thing, Decl(index.js, 0, 0))
+>list : Symbol(list, Decl(index.js, 3, 15))
+
+    return list;
+>list : Symbol(list, Decl(index.js, 3, 15))
+}
+

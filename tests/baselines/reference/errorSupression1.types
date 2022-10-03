@@ -1,0 +1,21 @@
+=== tests/cases/compiler/errorSupression1.ts ===
+class Foo { static bar() { return "x"; } }
+>Foo : Foo
+>bar : () => string
+>"x" : "x"
+
+var baz = Foo.b;
+>baz : any
+>Foo.b : any
+>Foo : typeof Foo
+>b : any
+
+  // Foo.b won't bind. 
+baz.concat("y");
+>baz.concat("y") : any
+>baz.concat : any
+>baz : any
+>concat : any
+>"y" : "y"
+
+  // So we don't want an error on 'concat'.

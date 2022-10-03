@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+/**
+ * foo
+ *
+ * @public
+ * @param {object} opts
+ * @param {number} opts.a
+ * @param {number} [opts.b]
+ * @param {number} [opts.c]
+ * @returns {number}
+ */
+function foo({ a, b, c }) {
+>foo : Symbol(foo, Decl(foo.js, 0, 0))
+>a : Symbol(a, Decl(foo.js, 10, 14))
+>b : Symbol(b, Decl(foo.js, 10, 17))
+>c : Symbol(c, Decl(foo.js, 10, 20))
+
+    return a + (b ?? 0) + (c ?? 0);
+>a : Symbol(a, Decl(foo.js, 10, 14))
+>b : Symbol(b, Decl(foo.js, 10, 17))
+>c : Symbol(c, Decl(foo.js, 10, 20))
+}
+

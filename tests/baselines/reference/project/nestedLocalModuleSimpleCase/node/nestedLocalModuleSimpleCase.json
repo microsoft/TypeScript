@@ -1,0 +1,14 @@
+{
+    "scenario": "nested local module - simple case",
+    "projectRoot": "tests/cases/projects/NestedLocalModule-SimpleCase",
+    "inputFiles": [
+        "test1.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test1.ts"
+    ],
+    "emittedFiles": [
+        "test1.js"
+    ]
+}

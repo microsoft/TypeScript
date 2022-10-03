@@ -1,0 +1,55 @@
+=== tests/cases/compiler/aliasBug.ts ===
+module foo {    
+>foo : Symbol(foo, Decl(aliasBug.ts, 0, 0))
+
+    export class Provide {
+>Provide : Symbol(Provide, Decl(aliasBug.ts, 0, 12))
+    }
+
+    export module bar { export module baz {export class boo {}}}
+>bar : Symbol(bar, Decl(aliasBug.ts, 2, 5))
+>baz : Symbol(baz, Decl(aliasBug.ts, 4, 23))
+>boo : Symbol(boo, Decl(aliasBug.ts, 4, 43))
+}
+
+import provide = foo;
+>provide : Symbol(provide, Decl(aliasBug.ts, 5, 1))
+>foo : Symbol(foo, Decl(aliasBug.ts, 0, 0))
+
+import booz = foo.bar.baz;
+>booz : Symbol(booz, Decl(aliasBug.ts, 7, 21))
+>foo : Symbol(foo, Decl(aliasBug.ts, 0, 0))
+>bar : Symbol(provide.bar, Decl(aliasBug.ts, 2, 5))
+>baz : Symbol(booz, Decl(aliasBug.ts, 4, 23))
+
+var p = new provide.Provide();
+>p : Symbol(p, Decl(aliasBug.ts, 10, 3))
+>provide.Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+>provide : Symbol(provide, Decl(aliasBug.ts, 5, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+
+function use() {
+>use : Symbol(use, Decl(aliasBug.ts, 10, 30))
+
+  var p1: provide.Provide; // error here, but should be okay
+>p1 : Symbol(p1, Decl(aliasBug.ts, 13, 5))
+>provide : Symbol(provide, Decl(aliasBug.ts, 5, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+
+  var p2: foo.Provide;
+>p2 : Symbol(p2, Decl(aliasBug.ts, 14, 5))
+>foo : Symbol(foo, Decl(aliasBug.ts, 0, 0))
+>Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+
+  var p3:booz.bar;
+>p3 : Symbol(p3, Decl(aliasBug.ts, 15, 5))
+>booz : Symbol(booz, Decl(aliasBug.ts, 7, 21))
+>bar : Symbol(booz.bar)
+
+  var p22 = new provide.Provide();
+>p22 : Symbol(p22, Decl(aliasBug.ts, 16, 5))
+>provide.Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+>provide : Symbol(provide, Decl(aliasBug.ts, 5, 1))
+>Provide : Symbol(provide.Provide, Decl(aliasBug.ts, 0, 12))
+}
+

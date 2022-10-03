@@ -1,0 +1,16 @@
+tests/cases/compiler/exportingContainingVisibleType.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/exportingContainingVisibleType.ts (1 errors) ====
+    class Foo {
+        public get foo() {
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            var i: Foo;
+            return i; // Should be fine (previous bug report visibility error).
+     
+        }
+    }
+     
+    export var x = 5;
+    

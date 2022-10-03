@@ -1,0 +1,16 @@
+tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): error TS2345: Argument of type 'Elephant' is not assignable to parameter of type 'Giraffe'.
+  Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+
+
+==== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts (1 errors) ====
+    interface Animal { x }
+    interface Giraffe extends Animal { y }
+    interface Elephant extends Animal { z }
+    function f<T extends Animal>(x: T, y: T): T { return undefined; }
+    var g: Giraffe;
+    var e: Elephant;
+    f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
+         ~
+!!! error TS2345: Argument of type 'Elephant' is not assignable to parameter of type 'Giraffe'.
+!!! error TS2345:   Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+!!! related TS2728 tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts:2:36: 'y' is declared here.

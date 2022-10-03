@@ -1,0 +1,62 @@
+=== tests/cases/compiler/superAccess2.ts ===
+class P {
+>P : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+    x() { }
+>x : Symbol(P.x, Decl(superAccess2.ts, 0, 9))
+
+    static y() { }
+>y : Symbol(P.y, Decl(superAccess2.ts, 1, 11))
+}
+
+class Q extends P {
+>Q : Symbol(Q, Decl(superAccess2.ts, 3, 1))
+>P : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+    xx = super;
+>xx : Symbol(Q.xx, Decl(superAccess2.ts, 5, 19))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+    static yy = super; // error for static initializer accessing super
+>yy : Symbol(Q.yy, Decl(superAccess2.ts, 6, 15))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+    // Super is not allowed in constructor args
+    constructor(public z = super, zz = super, zzz = () => super) {
+>z : Symbol(Q.z, Decl(superAccess2.ts, 10, 16))
+>zz : Symbol(zz, Decl(superAccess2.ts, 10, 33))
+>zzz : Symbol(zzz, Decl(superAccess2.ts, 10, 45))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+        super();
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+    }
+
+    foo(zz = super) {
+>foo : Symbol(Q.foo, Decl(superAccess2.ts, 12, 5))
+>zz : Symbol(zz, Decl(superAccess2.ts, 14, 8))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+        super.x();
+>super.x : Symbol(P.x, Decl(superAccess2.ts, 0, 9))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+>x : Symbol(P.x, Decl(superAccess2.ts, 0, 9))
+
+        super.y(); // error
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+    }
+
+    static bar(zz = super) {
+>bar : Symbol(Q.bar, Decl(superAccess2.ts, 17, 5))
+>zz : Symbol(zz, Decl(superAccess2.ts, 19, 15))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+        super.x(); // error
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+
+        super.y();
+>super.y : Symbol(P.y, Decl(superAccess2.ts, 1, 11))
+>super : Symbol(P, Decl(superAccess2.ts, 0, 0))
+>y : Symbol(P.y, Decl(superAccess2.ts, 1, 11))
+    }
+}

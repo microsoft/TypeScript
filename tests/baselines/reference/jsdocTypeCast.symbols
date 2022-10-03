@@ -1,0 +1,33 @@
+=== tests/cases/compiler/jsdocTypeCast.js ===
+/**
+ * @param {string} x
+ */
+ function f(x) {
+>f : Symbol(f, Decl(jsdocTypeCast.js, 0, 0))
+>x : Symbol(x, Decl(jsdocTypeCast.js, 3, 12))
+
+    /** @type {'a' | 'b'} */
+    let a = (x); // Error
+>a : Symbol(a, Decl(jsdocTypeCast.js, 5, 7))
+>x : Symbol(x, Decl(jsdocTypeCast.js, 3, 12))
+
+    a;
+>a : Symbol(a, Decl(jsdocTypeCast.js, 5, 7))
+
+    /** @type {'a' | 'b'} */
+    let b = (((x))); // Error
+>b : Symbol(b, Decl(jsdocTypeCast.js, 9, 7))
+>x : Symbol(x, Decl(jsdocTypeCast.js, 3, 12))
+
+    b;
+>b : Symbol(b, Decl(jsdocTypeCast.js, 9, 7))
+
+    /** @type {'a' | 'b'} */
+    let c = /** @type {'a' | 'b'} */ (x); // Ok
+>c : Symbol(c, Decl(jsdocTypeCast.js, 13, 7))
+>x : Symbol(x, Decl(jsdocTypeCast.js, 3, 12))
+
+    c;
+>c : Symbol(c, Decl(jsdocTypeCast.js, 13, 7))
+}
+

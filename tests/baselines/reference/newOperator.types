@@ -1,0 +1,146 @@
+=== tests/cases/compiler/newOperator.ts ===
+interface ifc { }
+// Attempting to 'new' an interface yields poor error
+var i = new ifc();
+>i : any
+>new ifc() : any
+>ifc : any
+
+// Parens are optional
+var x = new Date;
+>x : Date
+>new Date : Date
+>Date : DateConstructor
+
+var y = new Date();
+>y : Date
+>new Date() : Date
+>Date : DateConstructor
+
+// Target is not a class or var, good error
+var t1 = new 53();
+>t1 : any
+>new 53() : any
+>53 : 53
+
+var t2 = new ''();
+>t2 : any
+>new ''() : any
+>'' : ""
+
+new string;
+>new string : any
+>string : any
+
+// Use in LHS of expression?
+(new Date()).toString();
+>(new Date()).toString() : string
+>(new Date()).toString : () => string
+>(new Date()) : Date
+>new Date() : Date
+>Date : DateConstructor
+>toString : () => string
+
+// Various spacing
+var t3 = new string[]( );
+>t3 : any
+>new string[]( ) : any
+>string[] : any
+>string : any
+> : any
+
+var t4 =
+>t4 : any
+
+new
+>newstring[    ]    (        ) : any
+
+string
+>string[    ] : any
+>string : any
+
+[
+    ]
+> : any
+
+    (
+        );
+
+// Unresolved symbol
+var f = new q();
+>f : any
+>new q() : any
+>q : any
+
+// not legal
+var t5 = new new Date;
+>t5 : any
+>new new Date : any
+>new Date : Date
+>Date : DateConstructor
+
+// Can be an expression
+new String;
+>new String : String
+>String : StringConstructor
+
+// Error on union
+declare const union: { a: string } | { b: string }
+>union : { a: string; } | { b: string; }
+>a : string
+>b : string
+
+new union;
+>new union : any
+>union : { a: string; } | { b: string; }
+
+// Error on union with one constructor
+declare const ctorUnion: { a: string } | (new (a: string) => void)
+>ctorUnion : { a: string; } | (new (a: string) => void)
+>a : string
+>a : string
+
+new ctorUnion("");
+>new ctorUnion("") : any
+>ctorUnion : { a: string; } | (new (a: string) => void)
+>"" : ""
+
+// Error on union with incompatible constructors
+declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+>ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+>a : T
+>a : string
+
+new ctorUnion2("");
+>new ctorUnion2("") : any
+>ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+>"" : ""
+
+module M {
+>M : typeof M
+
+    export class T {
+>T : T
+
+        x: number;
+>x : number
+    }
+}
+
+class S {
+>S : S
+
+    public get xs(): M.T[] {
+>xs : M.T[]
+>M : any
+
+        return new M.T[];
+>new M.T[] : any
+>M.T[] : any
+>M.T : typeof M.T
+>M : typeof M
+>T : typeof M.T
+> : any
+    }
+}
+

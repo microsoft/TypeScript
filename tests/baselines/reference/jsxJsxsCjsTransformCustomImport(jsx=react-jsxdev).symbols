@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx ===
+/// <reference path="react16.d.ts" />
+const a = <>
+>a : Symbol(a, Decl(jsxJsxsCjsTransformCustomImport.tsx, 1, 5))
+
+  <p></p>
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+
+  text
+  <div className="foo"></div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(jsxJsxsCjsTransformCustomImport.tsx, 4, 6))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+</>
+
+export {};

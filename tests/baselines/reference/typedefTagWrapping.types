@@ -1,0 +1,190 @@
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/** 
+ * @typedef {function(string): boolean}
+ * Type1
+ */
+
+/**
+ * Tries to use a type whose name is on a different
+ * line than the typedef tag.
+ * @param {Type1} func The function to call.
+ * @param {string} arg The argument to call it with.
+ * @returns {boolean} The return.
+ */
+function callIt(func, arg) {
+>callIt : (func: Type1, arg: string) => boolean
+>func : Type1
+>arg : string
+
+  return func(arg);
+>func(arg) : boolean
+>func : Type1
+>arg : string
+}
+
+=== tests/cases/conformance/jsdoc/mod2.js ===
+/** 
+ * @typedef {{
+ *   num: number,
+ *   str: string,
+ *   boo: boolean
+ * }} Type2
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type2} obj The object.
+ * @returns {string|number} The return.
+ */
+function check(obj) {
+>check : (obj: Type2) => string | number
+>obj : Type2
+
+  return obj.boo ? obj.num : obj.str;
+>obj.boo ? obj.num : obj.str : string | number
+>obj.boo : boolean
+>obj : Type2
+>boo : boolean
+>obj.num : number
+>obj : Type2
+>num : number
+>obj.str : string
+>obj : Type2
+>str : string
+}
+
+=== tests/cases/conformance/jsdoc/mod3.js ===
+/**
+ * A function whose signature is very long.
+ *
+ * @typedef {function(boolean, string, number):
+ *     (string|number)} StringOrNumber1
+ */
+
+/**
+ * Makes use of a function type with a long signature.
+ * @param {StringOrNumber1} func The function.
+ * @param {boolean} bool The condition.
+ * @param {string} str The string.
+ * @param {number} num The number.
+ * @returns {string|number} The return.
+ */
+function use1(func, bool, str, num) {
+>use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber1
+>bool : boolean
+>str : string
+>num : number
+
+  return func(bool, str, num)
+>func(bool, str, num) : string | number
+>func : StringOrNumber1
+>bool : boolean
+>str : string
+>num : number
+}
+
+=== tests/cases/conformance/jsdoc/mod4.js ===
+/**
+ * A function whose signature is very long.
+ *
+ * @typedef {function(boolean, string,
+ *    number):
+ *    (string|number)} StringOrNumber2
+ */
+
+/**
+ * Makes use of a function type with a long signature.
+ * @param {StringOrNumber2} func The function.
+ * @param {boolean} bool The condition.
+ * @param {string} str The string.
+ * @param {number} num The number.
+ * @returns {string|number} The return.
+ */
+function use2(func, bool, str, num) {
+>use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber2
+>bool : boolean
+>str : string
+>num : number
+
+  return func(bool, str, num)
+>func(bool, str, num) : string | number
+>func : StringOrNumber2
+>bool : boolean
+>str : string
+>num : number
+}
+
+=== tests/cases/conformance/jsdoc/mod5.js ===
+/** 
+ * @typedef {{
+ *   num:
+ *   number,
+ *   str:
+ *   string,
+ *   boo:
+ *   boolean
+ * }} Type5
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type5} obj The object.
+ * @returns {string|number} The return.
+ */
+function check5(obj) {
+>check5 : (obj: Type5) => string | number
+>obj : Type5
+
+  return obj.boo ? obj.num : obj.str;
+>obj.boo ? obj.num : obj.str : string | number
+>obj.boo : boolean
+>obj : Type5
+>boo : boolean
+>obj.num : number
+>obj : Type5
+>num : number
+>obj.str : string
+>obj : Type5
+>str : string
+}
+
+=== tests/cases/conformance/jsdoc/mod6.js ===
+/** 
+ * @typedef {{
+ *   foo:
+ *   *,
+ *   bar:
+ *   *
+ * }} Type6
+ */
+
+/**
+ * Makes use of a type with a multiline type expression.
+ * @param {Type6} obj The object.
+ * @returns {*} The return.
+ */
+function check6(obj) {
+>check6 : (obj: Type6) => any
+>obj : Type6
+
+  return obj.foo;
+>obj.foo : any
+>obj : Type6
+>foo : any
+}
+
+
+=== tests/cases/conformance/jsdoc/mod7.js ===
+/** 
+No type information for this code.   Multiline type expressions in comments without leading * are not supported.
+No type information for this code.   @typedef {{
+No type information for this code.     foo:
+No type information for this code.     *,
+No type information for this code.     bar:
+No type information for this code.     *
+No type information for this code.   }} Type7
+No type information for this code. */
+No type information for this code.
+No type information for this code.

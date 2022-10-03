@@ -1,0 +1,7 @@
+=== tests/cases/compiler/test.d.ts ===
+export default undefined;
+>undefined : undefined
+
+export var __esModule;
+>__esModule : any
+

@@ -1,0 +1,30 @@
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(2,9): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(3,9): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(4,11): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(6,9): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(7,9): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(8,11): error TS1182: A destructuring declaration must have an initializer.
+
+
+==== tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts (6 errors) ====
+    (function () {
+        var {};
+            ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+        let {};
+            ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+        const {};
+              ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+    
+        var [];
+            ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+        let [];
+            ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+        const [];
+              ~~
+!!! error TS1182: A destructuring declaration must have an initializer.
+    })();

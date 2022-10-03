@@ -1,0 +1,8 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck3.ts ===
+var tuple: [string, number] = ["", 0];
+>tuple : Symbol(tuple, Decl(ES5For-ofTypeCheck3.ts, 0, 3))
+
+for (var v of tuple) { }
+>v : Symbol(v, Decl(ES5For-ofTypeCheck3.ts, 1, 8))
+>tuple : Symbol(tuple, Decl(ES5For-ofTypeCheck3.ts, 0, 3))
+

@@ -1,0 +1,34 @@
+=== tests/cases/compiler/t.ts ===
+/// <reference path="a"/>
+/// <reference path="b"/>
+/// <reference path="c"/>
+var a = aa;  // Check that a.ts is referenced
+>a : number
+>aa : number
+
+var b = bb;  // Check that b.d.ts is referenced
+>b : number
+>bb : number
+
+var c = cc;  // Check that c.ts has precedence over c.d.ts
+>c : number
+>cc : number
+
+=== tests/cases/compiler/a.ts ===
+var aa = 1;
+>aa : number
+>1 : 1
+
+=== tests/cases/compiler/b.d.ts ===
+declare var bb: number;
+>bb : number
+
+=== tests/cases/compiler/c.ts ===
+var cc = 1;
+>cc : number
+>1 : 1
+
+=== tests/cases/compiler/c.d.ts ===
+declare var xx: number;
+>xx : number
+

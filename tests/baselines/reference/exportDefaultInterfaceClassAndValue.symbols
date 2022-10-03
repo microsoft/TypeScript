@@ -1,0 +1,13 @@
+=== tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts ===
+const foo = 1
+>foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 5))
+
+export default foo
+>foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 5))
+
+export default class Foo {}
+>Foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
+
+export default interface Foo {}
+>Foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
+

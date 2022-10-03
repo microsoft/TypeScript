@@ -1,0 +1,58 @@
+=== tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts ===
+module m3 {
+>m3 : Symbol(m3, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 0))
+
+    export module m2 {
+>m2 : Symbol(m2, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 11))
+
+        export interface connectModule {
+>connectModule : Symbol(connectModule, Decl(declFileExportAssignmentImportInternalModule.ts, 1, 22))
+
+            (res, req, next): void;
+>res : Symbol(res, Decl(declFileExportAssignmentImportInternalModule.ts, 3, 13))
+>req : Symbol(req, Decl(declFileExportAssignmentImportInternalModule.ts, 3, 17))
+>next : Symbol(next, Decl(declFileExportAssignmentImportInternalModule.ts, 3, 22))
+        }
+        export interface connectExport {
+>connectExport : Symbol(connectExport, Decl(declFileExportAssignmentImportInternalModule.ts, 4, 9))
+
+            use: (mod: connectModule) => connectExport;
+>use : Symbol(connectExport.use, Decl(declFileExportAssignmentImportInternalModule.ts, 5, 40))
+>mod : Symbol(mod, Decl(declFileExportAssignmentImportInternalModule.ts, 6, 18))
+>connectModule : Symbol(connectModule, Decl(declFileExportAssignmentImportInternalModule.ts, 1, 22))
+>connectExport : Symbol(connectExport, Decl(declFileExportAssignmentImportInternalModule.ts, 4, 9))
+
+            listen: (port: number) => void;
+>listen : Symbol(connectExport.listen, Decl(declFileExportAssignmentImportInternalModule.ts, 6, 55))
+>port : Symbol(port, Decl(declFileExportAssignmentImportInternalModule.ts, 7, 21))
+        }
+
+    }
+
+    export var server: {
+>server : Symbol(server, Decl(declFileExportAssignmentImportInternalModule.ts, 12, 14))
+
+        (): m2.connectExport;
+>m2 : Symbol(m2, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 11))
+>connectExport : Symbol(m2.connectExport, Decl(declFileExportAssignmentImportInternalModule.ts, 4, 9))
+
+        test1: m2.connectModule;
+>test1 : Symbol(test1, Decl(declFileExportAssignmentImportInternalModule.ts, 13, 29))
+>m2 : Symbol(m2, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 11))
+>connectModule : Symbol(m2.connectModule, Decl(declFileExportAssignmentImportInternalModule.ts, 1, 22))
+
+        test2(): m2.connectModule;
+>test2 : Symbol(test2, Decl(declFileExportAssignmentImportInternalModule.ts, 14, 32))
+>m2 : Symbol(m2, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 11))
+>connectModule : Symbol(m2.connectModule, Decl(declFileExportAssignmentImportInternalModule.ts, 1, 22))
+
+    };
+}
+
+import m = m3
+>m : Symbol(m, Decl(declFileExportAssignmentImportInternalModule.ts, 17, 1))
+>m3 : Symbol(m3, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 0))
+
+export = m;
+>m : Symbol(m, Decl(declFileExportAssignmentImportInternalModule.ts, 17, 1))
+

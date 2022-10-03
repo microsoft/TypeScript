@@ -1,0 +1,13 @@
+tests/cases/compiler/staticGetter1.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/staticGetter1.ts (1 errors) ====
+    // once caused stack overflow
+    class C {
+        static get x() {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return this;
+        }
+    }
+    

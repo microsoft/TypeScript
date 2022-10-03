@@ -1,0 +1,25 @@
+=== tests/cases/compiler/reversedRecusiveTypeInstantiation.ts ===
+interface A<StringArgPos1, NumberArgPos2> {
+   xPos1 : StringArgPos1
+>xPos1 : StringArgPos1
+
+   yPos2 : NumberArgPos2
+>yPos2 : NumberArgPos2
+
+   zPos2Pos1 : A<NumberArgPos2, StringArgPos1>
+>zPos2Pos1 : A<NumberArgPos2, StringArgPos1>
+}
+
+var a : A<string, number>
+>a : A<string, number>
+
+a.zPos2Pos1.xPos1 = 1
+>a.zPos2Pos1.xPos1 = 1 : 1
+>a.zPos2Pos1.xPos1 : number
+>a.zPos2Pos1 : A<number, string>
+>a : A<string, number>
+>zPos2Pos1 : A<number, string>
+>xPos1 : number
+>1 : 1
+
+

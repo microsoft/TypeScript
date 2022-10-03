@@ -1,0 +1,43 @@
+=== tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
+let x: string | number | boolean | RegExp | Function;
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+let obj: any;
+>obj : Symbol(obj, Decl(controlFlowForInStatement.ts, 1, 3))
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowForInStatement.ts, 2, 3))
+
+x = /a/;
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+
+for (let y in obj) {
+>y : Symbol(y, Decl(controlFlowForInStatement.ts, 5, 8))
+>obj : Symbol(obj, Decl(controlFlowForInStatement.ts, 1, 3))
+
+    x = y;
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+>y : Symbol(y, Decl(controlFlowForInStatement.ts, 5, 8))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowForInStatement.ts, 2, 3))
+
+        x = 42;
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+
+        continue;
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowForInStatement.ts, 2, 3))
+
+        x = true;
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+
+        break;
+    }
+}
+x; // RegExp | string | number | boolean
+>x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
+

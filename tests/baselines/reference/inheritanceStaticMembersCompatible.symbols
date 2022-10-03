@@ -1,0 +1,17 @@
+=== tests/cases/compiler/inheritanceStaticMembersCompatible.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceStaticMembersCompatible.ts, 0, 0))
+
+    static x: a;
+>x : Symbol(a.x, Decl(inheritanceStaticMembersCompatible.ts, 0, 9))
+>a : Symbol(a, Decl(inheritanceStaticMembersCompatible.ts, 0, 0))
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceStaticMembersCompatible.ts, 2, 1))
+>a : Symbol(a, Decl(inheritanceStaticMembersCompatible.ts, 0, 0))
+
+    static x: b;
+>x : Symbol(b.x, Decl(inheritanceStaticMembersCompatible.ts, 4, 19))
+>b : Symbol(b, Decl(inheritanceStaticMembersCompatible.ts, 2, 1))
+}

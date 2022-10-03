@@ -1,0 +1,6 @@
+=== tests/cases/compiler/circularConstrainedMappedTypeNoCrash.ts ===
+type Loop<T, U extends Loop<T, U>> = {
+>Loop : Loop<T, U>
+
+    [P in keyof T]: U[P] extends boolean ? number : string;
+};

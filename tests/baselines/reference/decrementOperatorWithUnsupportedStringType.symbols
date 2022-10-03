@@ -1,0 +1,205 @@
+=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedStringType.ts ===
+// -- operator on string type
+var STRING: string;
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+var STRING1: string[] = ["", ""];
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+function foo(): string { return ""; }
+>foo : Symbol(foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 33))
+
+class A {
+>A : Symbol(A, Decl(decrementOperatorWithUnsupportedStringType.ts, 4, 37))
+
+    public a: string;
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+
+    static foo() { return ""; }
+>foo : Symbol(A.foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+
+    export var n: string;
+>n : Symbol(n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>A : Symbol(A, Decl(decrementOperatorWithUnsupportedStringType.ts, 4, 37))
+
+// string type var
+var ResultIsNumber1 = --STRING;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(decrementOperatorWithUnsupportedStringType.ts, 17, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+var ResultIsNumber2 = --STRING1;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(decrementOperatorWithUnsupportedStringType.ts, 18, 3))
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+var ResultIsNumber3 = STRING--;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(decrementOperatorWithUnsupportedStringType.ts, 20, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+var ResultIsNumber4 = STRING1--;
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(decrementOperatorWithUnsupportedStringType.ts, 21, 3))
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+// string type literal
+var ResultIsNumber5 = --"";
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(decrementOperatorWithUnsupportedStringType.ts, 24, 3))
+
+var ResultIsNumber6 = --{ x: "", y: "" };
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(decrementOperatorWithUnsupportedStringType.ts, 25, 3))
+>x : Symbol(x, Decl(decrementOperatorWithUnsupportedStringType.ts, 25, 25))
+>y : Symbol(y, Decl(decrementOperatorWithUnsupportedStringType.ts, 25, 32))
+
+var ResultIsNumber7 = --{ x: "", y: (s: string) => { return s; } };
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(decrementOperatorWithUnsupportedStringType.ts, 26, 3))
+>x : Symbol(x, Decl(decrementOperatorWithUnsupportedStringType.ts, 26, 25))
+>y : Symbol(y, Decl(decrementOperatorWithUnsupportedStringType.ts, 26, 32))
+>s : Symbol(s, Decl(decrementOperatorWithUnsupportedStringType.ts, 26, 37))
+>s : Symbol(s, Decl(decrementOperatorWithUnsupportedStringType.ts, 26, 37))
+
+var ResultIsNumber8 = ""--;
+>ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(decrementOperatorWithUnsupportedStringType.ts, 28, 3))
+
+var ResultIsNumber9 = { x: "", y: "" }--;
+>ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(decrementOperatorWithUnsupportedStringType.ts, 29, 3))
+>x : Symbol(x, Decl(decrementOperatorWithUnsupportedStringType.ts, 29, 23))
+>y : Symbol(y, Decl(decrementOperatorWithUnsupportedStringType.ts, 29, 30))
+
+var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }--;
+>ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(decrementOperatorWithUnsupportedStringType.ts, 30, 3))
+>x : Symbol(x, Decl(decrementOperatorWithUnsupportedStringType.ts, 30, 24))
+>y : Symbol(y, Decl(decrementOperatorWithUnsupportedStringType.ts, 30, 31))
+>s : Symbol(s, Decl(decrementOperatorWithUnsupportedStringType.ts, 30, 36))
+>s : Symbol(s, Decl(decrementOperatorWithUnsupportedStringType.ts, 30, 36))
+
+// string type expressions
+var ResultIsNumber11 = --objA.a;
+>ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(decrementOperatorWithUnsupportedStringType.ts, 33, 3))
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+
+var ResultIsNumber12 = --M.n;
+>ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(decrementOperatorWithUnsupportedStringType.ts, 34, 3))
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+
+var ResultIsNumber13 = --STRING1[0];
+>ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(decrementOperatorWithUnsupportedStringType.ts, 35, 3))
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+var ResultIsNumber14 = --foo();
+>ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(decrementOperatorWithUnsupportedStringType.ts, 36, 3))
+>foo : Symbol(foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 33))
+
+var ResultIsNumber15 = --A.foo();
+>ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(decrementOperatorWithUnsupportedStringType.ts, 37, 3))
+>A.foo : Symbol(A.foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 7, 21))
+>A : Symbol(A, Decl(decrementOperatorWithUnsupportedStringType.ts, 4, 37))
+>foo : Symbol(A.foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 7, 21))
+
+var ResultIsNumber16 = --(STRING + STRING);
+>ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(decrementOperatorWithUnsupportedStringType.ts, 38, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+var ResultIsNumber17 = objA.a--;
+>ResultIsNumber17 : Symbol(ResultIsNumber17, Decl(decrementOperatorWithUnsupportedStringType.ts, 40, 3))
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+
+var ResultIsNumber18 = M.n--;
+>ResultIsNumber18 : Symbol(ResultIsNumber18, Decl(decrementOperatorWithUnsupportedStringType.ts, 41, 3))
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+
+var ResultIsNumber19 = STRING1[0]--;
+>ResultIsNumber19 : Symbol(ResultIsNumber19, Decl(decrementOperatorWithUnsupportedStringType.ts, 42, 3))
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+var ResultIsNumber20 = foo()--;
+>ResultIsNumber20 : Symbol(ResultIsNumber20, Decl(decrementOperatorWithUnsupportedStringType.ts, 43, 3))
+>foo : Symbol(foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 33))
+
+var ResultIsNumber21 = A.foo()--;
+>ResultIsNumber21 : Symbol(ResultIsNumber21, Decl(decrementOperatorWithUnsupportedStringType.ts, 44, 3))
+>A.foo : Symbol(A.foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 7, 21))
+>A : Symbol(A, Decl(decrementOperatorWithUnsupportedStringType.ts, 4, 37))
+>foo : Symbol(A.foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 7, 21))
+
+var ResultIsNumber22 = (STRING + STRING)--;
+>ResultIsNumber22 : Symbol(ResultIsNumber22, Decl(decrementOperatorWithUnsupportedStringType.ts, 45, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+// miss assignment operators
+--"";
+--STRING;
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+--STRING1;
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+--STRING1[0];
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+--foo();
+>foo : Symbol(foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 33))
+
+--objA.a;
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+
+--M.n;
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+
+--objA.a, M.n;
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+
+""--;
+STRING--;
+>STRING : Symbol(STRING, Decl(decrementOperatorWithUnsupportedStringType.ts, 1, 3))
+
+STRING1--;
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+STRING1[0]--;
+>STRING1 : Symbol(STRING1, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 3))
+
+foo()--;
+>foo : Symbol(foo, Decl(decrementOperatorWithUnsupportedStringType.ts, 2, 33))
+
+objA.a--;
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+
+M.n--;
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+
+objA.a--, M.n--;
+>objA.a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(decrementOperatorWithUnsupportedStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(decrementOperatorWithUnsupportedStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+>M : Symbol(M, Decl(decrementOperatorWithUnsupportedStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(decrementOperatorWithUnsupportedStringType.ts, 11, 14))
+

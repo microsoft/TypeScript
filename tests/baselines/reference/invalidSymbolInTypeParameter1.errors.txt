@@ -1,0 +1,10 @@
+tests/cases/compiler/invalidSymbolInTypeParameter1.ts(2,26): error TS2304: Cannot find name 'WAWA'.
+
+
+==== tests/cases/compiler/invalidSymbolInTypeParameter1.ts (1 errors) ====
+    function test() {
+        var cats = new Array<WAWA>(); // WAWA is not a valid type
+                             ~~~~
+!!! error TS2304: Cannot find name 'WAWA'.
+    }
+    

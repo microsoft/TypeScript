@@ -1,0 +1,22 @@
+tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts(2,7): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts(3,5): error TS2322: Type 'Object' is not assignable to type 'string'.
+tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts(4,15): error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
+tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts(5,5): error TS2304: Cannot find name 'derp'.
+
+
+==== tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts (4 errors) ====
+    var functions = [function () {
+      var k: string = 10;
+          ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        k = new Object();
+        ~
+!!! error TS2322: Type 'Object' is not assignable to type 'string'.
+        [1, 2, 3].NonexistantMethod();
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
+        derp();
+        ~~~~
+!!! error TS2304: Cannot find name 'derp'.
+    }];
+    

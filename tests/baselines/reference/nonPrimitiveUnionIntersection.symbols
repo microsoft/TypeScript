@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts ===
+var a: object & string = ""; // error
+>a : Symbol(a, Decl(nonPrimitiveUnionIntersection.ts, 0, 3))
+
+var b: object | string = ""; // ok
+>b : Symbol(b, Decl(nonPrimitiveUnionIntersection.ts, 1, 3))
+
+var c: object & {} = 123; // error
+>c : Symbol(c, Decl(nonPrimitiveUnionIntersection.ts, 2, 3))
+
+a = b; // error
+>a : Symbol(a, Decl(nonPrimitiveUnionIntersection.ts, 0, 3))
+>b : Symbol(b, Decl(nonPrimitiveUnionIntersection.ts, 1, 3))
+
+b = a; // ok
+>b : Symbol(b, Decl(nonPrimitiveUnionIntersection.ts, 1, 3))
+>a : Symbol(a, Decl(nonPrimitiveUnionIntersection.ts, 0, 3))
+
+const foo: object & {} = {bar: 'bar'}; // ok
+>foo : Symbol(foo, Decl(nonPrimitiveUnionIntersection.ts, 6, 5))
+>bar : Symbol(bar, Decl(nonPrimitiveUnionIntersection.ts, 6, 26))
+
+const bar: object & {err: string} = {bar: 'bar'}; // error
+>bar : Symbol(bar, Decl(nonPrimitiveUnionIntersection.ts, 7, 5))
+>err : Symbol(err, Decl(nonPrimitiveUnionIntersection.ts, 7, 21))
+>bar : Symbol(bar, Decl(nonPrimitiveUnionIntersection.ts, 7, 37))
+

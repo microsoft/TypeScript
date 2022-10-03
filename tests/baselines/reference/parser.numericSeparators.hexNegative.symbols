@@ -1,0 +1,19 @@
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+0x00_
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+0x_110
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+0_X0101
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+0x01__11
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+0X0110_0110__
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+0x___0111010_0101_1
+No type information for this code.
+No type information for this code.

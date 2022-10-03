@@ -1,0 +1,61 @@
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(14,43): error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(15,29): error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts (12 errors) ====
+    // -- operator on enum type
+    
+    enum ENUM { };
+    enum ENUM1 { A, B, "" };
+    
+    // enum type var
+    var ResultIsNumber1 = --ENUM;
+                            ~~~~
+!!! error TS2628: Cannot assign to 'ENUM' because it is an enum.
+    var ResultIsNumber2 = --ENUM1;
+                            ~~~~~
+!!! error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+    
+    var ResultIsNumber3 = ENUM--;
+                          ~~~~
+!!! error TS2628: Cannot assign to 'ENUM' because it is an enum.
+    var ResultIsNumber4 = ENUM1--;
+                          ~~~~~
+!!! error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+    
+    // enum type expressions
+    var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
+                            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+                                              ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
+    var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+                                ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
+    
+    // miss assignment operator
+    --ENUM;
+      ~~~~
+!!! error TS2628: Cannot assign to 'ENUM' because it is an enum.
+    --ENUM1;
+      ~~~~~
+!!! error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+    
+    ENUM--;
+    ~~~~
+!!! error TS2628: Cannot assign to 'ENUM' because it is an enum.
+    ENUM1--;
+    ~~~~~
+!!! error TS2628: Cannot assign to 'ENUM1' because it is an enum.

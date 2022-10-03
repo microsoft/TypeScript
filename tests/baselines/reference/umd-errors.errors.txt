@@ -1,0 +1,56 @@
+tests/cases/conformance/externalModules/err1.d.ts(2,1): error TS1314: Global module exports may only appear in module files.
+tests/cases/conformance/externalModules/err2.d.ts(3,2): error TS1316: Global module exports may only appear at top level.
+tests/cases/conformance/externalModules/err3.d.ts(3,1): error TS1184: Modifiers cannot appear here.
+tests/cases/conformance/externalModules/err3.d.ts(4,1): error TS1184: Modifiers cannot appear here.
+tests/cases/conformance/externalModules/err3.d.ts(5,1): error TS1184: Modifiers cannot appear here.
+tests/cases/conformance/externalModules/err3.d.ts(6,7): error TS1389: 'export' is not allowed as a variable declaration name.
+tests/cases/conformance/externalModules/err4.d.ts(3,2): error TS1316: Global module exports may only appear at top level.
+tests/cases/conformance/externalModules/err5.ts(3,1): error TS1315: Global module exports may only appear in declaration files.
+
+
+==== tests/cases/conformance/externalModules/err1.d.ts (1 errors) ====
+    // Illegal, can't be in script file
+    export as namespace Foo;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1314: Global module exports may only appear in module files.
+    
+==== tests/cases/conformance/externalModules/err2.d.ts (1 errors) ====
+    // Illegal, can't be in external ambient module
+    declare module "Foo" {
+    	export as namespace Bar;
+    	~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1316: Global module exports may only appear at top level.
+    }
+    
+==== tests/cases/conformance/externalModules/err3.d.ts (4 errors) ====
+    // Illegal, can't have modifiers
+    export var p;
+    static export as namespace oo1;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+    declare export as namespace oo2;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+    public export as namespace oo3;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+    const export as namespace oo4;
+          ~~~~~~
+!!! error TS1389: 'export' is not allowed as a variable declaration name.
+    
+==== tests/cases/conformance/externalModules/err4.d.ts (1 errors) ====
+    // Illegal, must be at top-level
+    export namespace B {
+    	export as namespace C1;
+    	~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1316: Global module exports may only appear at top level.
+    }
+    
+==== tests/cases/conformance/externalModules/err5.ts (1 errors) ====
+    // Illegal, may not appear in implementation files
+    export var v;
+    export as namespace C2;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1315: Global module exports may only appear in declaration files.
+    
+    

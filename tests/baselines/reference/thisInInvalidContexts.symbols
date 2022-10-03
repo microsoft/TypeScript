@@ -1,0 +1,78 @@
+=== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts ===
+class BaseErrClass {
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+
+    constructor(t: any) { }
+>t : Symbol(t, Decl(thisInInvalidContexts.ts, 1, 16))
+}
+
+class ClassWithNoInitializer extends BaseErrClass {
+>ClassWithNoInitializer : Symbol(ClassWithNoInitializer, Decl(thisInInvalidContexts.ts, 2, 1))
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+
+    t;
+>t : Symbol(ClassWithNoInitializer.t, Decl(thisInInvalidContexts.ts, 4, 51))
+
+    //'this' in optional super call
+    constructor() {
+        super(this); // Error
+>super : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+>this : Symbol(ClassWithNoInitializer, Decl(thisInInvalidContexts.ts, 2, 1))
+    }
+}
+
+class ClassWithInitializer extends BaseErrClass {
+>ClassWithInitializer : Symbol(ClassWithInitializer, Decl(thisInInvalidContexts.ts, 10, 1))
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+
+    t = 4;
+>t : Symbol(ClassWithInitializer.t, Decl(thisInInvalidContexts.ts, 12, 49))
+
+    //'this' in required super call
+    constructor() {
+        super(this); // Error
+>super : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+>this : Symbol(ClassWithInitializer, Decl(thisInInvalidContexts.ts, 10, 1))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(thisInInvalidContexts.ts, 18, 1))
+
+    //'this' in module variable
+    var x = this; // Error
+>x : Symbol(x, Decl(thisInInvalidContexts.ts, 22, 7))
+}
+
+//'this' as type parameter constraint
+// function fn<T extends this >() { } // Error
+
+//'this' as a type argument
+function genericFunc<T>(x: T) { }
+>genericFunc : Symbol(genericFunc, Decl(thisInInvalidContexts.ts, 23, 1))
+>T : Symbol(T, Decl(thisInInvalidContexts.ts, 29, 21))
+>x : Symbol(x, Decl(thisInInvalidContexts.ts, 29, 24))
+>T : Symbol(T, Decl(thisInInvalidContexts.ts, 29, 21))
+
+genericFunc<this>(undefined);  // Should be an error
+>genericFunc : Symbol(genericFunc, Decl(thisInInvalidContexts.ts, 23, 1))
+>undefined : Symbol(undefined)
+
+class ErrClass3 extends this {
+>ErrClass3 : Symbol(ErrClass3, Decl(thisInInvalidContexts.ts, 30, 29))
+>this : Symbol(globalThis)
+
+}
+
+//'this' as a computed enum value
+enum SomeEnum {
+>SomeEnum : Symbol(SomeEnum, Decl(thisInInvalidContexts.ts, 34, 1))
+
+    A = this, // Should not be allowed
+>A : Symbol(SomeEnum.A, Decl(thisInInvalidContexts.ts, 37, 15))
+
+    B = this.spaaaace // Also should not be allowed
+>B : Symbol(SomeEnum.B, Decl(thisInInvalidContexts.ts, 38, 13))
+}
+
+

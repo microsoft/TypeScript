@@ -1,0 +1,40 @@
+=== tests/cases/compiler/staticMemberWithStringAndNumberNames.ts ===
+class C {
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+
+    static "foo" = 0;
+>"foo" : Symbol(C["foo"], Decl(staticMemberWithStringAndNumberNames.ts, 0, 9))
+
+    static 0 = 1;
+>0 : Symbol(C[0], Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
+
+    x = C['foo'];
+>x : Symbol(C.x, Decl(staticMemberWithStringAndNumberNames.ts, 2, 17))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>'foo' : Symbol(C["foo"], Decl(staticMemberWithStringAndNumberNames.ts, 0, 9))
+
+    x2 = C['0'];
+>x2 : Symbol(C.x2, Decl(staticMemberWithStringAndNumberNames.ts, 4, 17))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>'0' : Symbol(C[0], Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
+
+    x3 = C[0];
+>x3 : Symbol(C.x3, Decl(staticMemberWithStringAndNumberNames.ts, 5, 16))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>0 : Symbol(C[0], Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
+        
+    static s = C['foo'];
+>s : Symbol(C.s, Decl(staticMemberWithStringAndNumberNames.ts, 6, 14))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>'foo' : Symbol(C["foo"], Decl(staticMemberWithStringAndNumberNames.ts, 0, 9))
+
+    static s2 = C['0'];
+>s2 : Symbol(C.s2, Decl(staticMemberWithStringAndNumberNames.ts, 8, 24))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>'0' : Symbol(C[0], Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
+
+    static s3 = C[0];
+>s3 : Symbol(C.s3, Decl(staticMemberWithStringAndNumberNames.ts, 9, 23))
+>C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
+>0 : Symbol(C[0], Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
+}

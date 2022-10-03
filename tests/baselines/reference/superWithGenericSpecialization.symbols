@@ -1,0 +1,41 @@
+=== tests/cases/compiler/superWithGenericSpecialization.ts ===
+class C<T> {
+>C : Symbol(C, Decl(superWithGenericSpecialization.ts, 0, 0))
+>T : Symbol(T, Decl(superWithGenericSpecialization.ts, 0, 8))
+
+    x: T;
+>x : Symbol(C.x, Decl(superWithGenericSpecialization.ts, 0, 12))
+>T : Symbol(T, Decl(superWithGenericSpecialization.ts, 0, 8))
+}
+
+class D<T> extends C<string> {
+>D : Symbol(D, Decl(superWithGenericSpecialization.ts, 2, 1))
+>T : Symbol(T, Decl(superWithGenericSpecialization.ts, 4, 8))
+>C : Symbol(C, Decl(superWithGenericSpecialization.ts, 0, 0))
+
+    y: T;
+>y : Symbol(D.y, Decl(superWithGenericSpecialization.ts, 4, 30))
+>T : Symbol(T, Decl(superWithGenericSpecialization.ts, 4, 8))
+
+    constructor() {
+        super(); // uses the type parameter type of the base class, ie string
+>super : Symbol(C, Decl(superWithGenericSpecialization.ts, 0, 0))
+    }
+}
+
+var d: D<number>;
+>d : Symbol(d, Decl(superWithGenericSpecialization.ts, 11, 3))
+>D : Symbol(D, Decl(superWithGenericSpecialization.ts, 2, 1))
+
+var r: string = d.x;
+>r : Symbol(r, Decl(superWithGenericSpecialization.ts, 12, 3))
+>d.x : Symbol(C.x, Decl(superWithGenericSpecialization.ts, 0, 12))
+>d : Symbol(d, Decl(superWithGenericSpecialization.ts, 11, 3))
+>x : Symbol(C.x, Decl(superWithGenericSpecialization.ts, 0, 12))
+
+var r2: number = d.y;
+>r2 : Symbol(r2, Decl(superWithGenericSpecialization.ts, 13, 3))
+>d.y : Symbol(D.y, Decl(superWithGenericSpecialization.ts, 4, 30))
+>d : Symbol(d, Decl(superWithGenericSpecialization.ts, 11, 3))
+>y : Symbol(D.y, Decl(superWithGenericSpecialization.ts, 4, 30))
+

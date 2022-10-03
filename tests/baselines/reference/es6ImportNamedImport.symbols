@@ -1,0 +1,122 @@
+=== tests/cases/compiler/es6ImportNamedImport_0.ts ===
+export var a = 10;
+>a : Symbol(a, Decl(es6ImportNamedImport_0.ts, 0, 10))
+
+export var x = a;
+>x : Symbol(x, Decl(es6ImportNamedImport_0.ts, 1, 10))
+>a : Symbol(a, Decl(es6ImportNamedImport_0.ts, 0, 10))
+
+export var m = a;
+>m : Symbol(m, Decl(es6ImportNamedImport_0.ts, 2, 10))
+>a : Symbol(a, Decl(es6ImportNamedImport_0.ts, 0, 10))
+
+export var a1 = 10;
+>a1 : Symbol(a1, Decl(es6ImportNamedImport_0.ts, 3, 10))
+
+export var x1 = 10;
+>x1 : Symbol(x1, Decl(es6ImportNamedImport_0.ts, 4, 10))
+
+export var z1 = 10;
+>z1 : Symbol(z1, Decl(es6ImportNamedImport_0.ts, 5, 10))
+
+export var z2 = 10;
+>z2 : Symbol(z2, Decl(es6ImportNamedImport_0.ts, 6, 10))
+
+export var aaaa = 10;
+>aaaa : Symbol(aaaa, Decl(es6ImportNamedImport_0.ts, 7, 10))
+
+=== tests/cases/compiler/es6ImportNamedImport_1.ts ===
+import { } from "./es6ImportNamedImport_0";
+import { a } from "./es6ImportNamedImport_0";
+>a : Symbol(a, Decl(es6ImportNamedImport_1.ts, 1, 8))
+
+var xxxx = a;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>a : Symbol(a, Decl(es6ImportNamedImport_1.ts, 1, 8))
+
+import { a as b } from "./es6ImportNamedImport_0";
+>a : Symbol(a, Decl(es6ImportNamedImport_0.ts, 0, 10))
+>b : Symbol(b, Decl(es6ImportNamedImport_1.ts, 3, 8))
+
+var xxxx = b;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>b : Symbol(b, Decl(es6ImportNamedImport_1.ts, 3, 8))
+
+import { x, a as y } from "./es6ImportNamedImport_0";
+>x : Symbol(x, Decl(es6ImportNamedImport_1.ts, 5, 8))
+>a : Symbol(a, Decl(es6ImportNamedImport_0.ts, 0, 10))
+>y : Symbol(y, Decl(es6ImportNamedImport_1.ts, 5, 11))
+
+var xxxx = x;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>x : Symbol(x, Decl(es6ImportNamedImport_1.ts, 5, 8))
+
+var xxxx = y;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>y : Symbol(y, Decl(es6ImportNamedImport_1.ts, 5, 11))
+
+import { x as z,  } from "./es6ImportNamedImport_0";
+>x : Symbol(x, Decl(es6ImportNamedImport_0.ts, 1, 10))
+>z : Symbol(z, Decl(es6ImportNamedImport_1.ts, 8, 8))
+
+var xxxx = z;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>z : Symbol(z, Decl(es6ImportNamedImport_1.ts, 8, 8))
+
+import { m,  } from "./es6ImportNamedImport_0";
+>m : Symbol(m, Decl(es6ImportNamedImport_1.ts, 10, 8))
+
+var xxxx = m;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>m : Symbol(m, Decl(es6ImportNamedImport_1.ts, 10, 8))
+
+import { a1, x1 } from "./es6ImportNamedImport_0";
+>a1 : Symbol(a1, Decl(es6ImportNamedImport_1.ts, 12, 8))
+>x1 : Symbol(x1, Decl(es6ImportNamedImport_1.ts, 12, 12))
+
+var xxxx = a1;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>a1 : Symbol(a1, Decl(es6ImportNamedImport_1.ts, 12, 8))
+
+var xxxx = x1;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>x1 : Symbol(x1, Decl(es6ImportNamedImport_1.ts, 12, 12))
+
+import { a1 as a11, x1 as x11 } from "./es6ImportNamedImport_0";
+>a1 : Symbol(a1, Decl(es6ImportNamedImport_0.ts, 3, 10))
+>a11 : Symbol(a11, Decl(es6ImportNamedImport_1.ts, 15, 8))
+>x1 : Symbol(x1, Decl(es6ImportNamedImport_0.ts, 4, 10))
+>x11 : Symbol(x11, Decl(es6ImportNamedImport_1.ts, 15, 19))
+
+var xxxx = a11;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>a11 : Symbol(a11, Decl(es6ImportNamedImport_1.ts, 15, 8))
+
+var xxxx = x11;
+>xxxx : Symbol(xxxx, Decl(es6ImportNamedImport_1.ts, 2, 3), Decl(es6ImportNamedImport_1.ts, 4, 3), Decl(es6ImportNamedImport_1.ts, 6, 3), Decl(es6ImportNamedImport_1.ts, 7, 3), Decl(es6ImportNamedImport_1.ts, 9, 3) ... and 5 more)
+>x11 : Symbol(x11, Decl(es6ImportNamedImport_1.ts, 15, 19))
+
+import { z1 } from "./es6ImportNamedImport_0";
+>z1 : Symbol(z1, Decl(es6ImportNamedImport_1.ts, 18, 8))
+
+var z111 = z1;
+>z111 : Symbol(z111, Decl(es6ImportNamedImport_1.ts, 19, 3))
+>z1 : Symbol(z1, Decl(es6ImportNamedImport_1.ts, 18, 8))
+
+import { z2 as z3 } from "./es6ImportNamedImport_0";
+>z2 : Symbol(z3, Decl(es6ImportNamedImport_0.ts, 6, 10))
+>z3 : Symbol(z3, Decl(es6ImportNamedImport_1.ts, 20, 8))
+
+var z2 = z3; // z2 shouldn't give redeclare error
+>z2 : Symbol(z2, Decl(es6ImportNamedImport_1.ts, 21, 3))
+>z3 : Symbol(z3, Decl(es6ImportNamedImport_1.ts, 20, 8))
+
+// These are elided
+import { aaaa } from "./es6ImportNamedImport_0";
+>aaaa : Symbol(aaaa, Decl(es6ImportNamedImport_1.ts, 24, 8))
+
+// These are elided
+import { aaaa as bbbb } from "./es6ImportNamedImport_0";
+>aaaa : Symbol(aaaa, Decl(es6ImportNamedImport_0.ts, 7, 10))
+>bbbb : Symbol(bbbb, Decl(es6ImportNamedImport_1.ts, 26, 8))
+

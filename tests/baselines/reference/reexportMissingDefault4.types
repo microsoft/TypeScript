@@ -1,0 +1,14 @@
+=== tests/cases/compiler/b.d.ts ===
+declare var b: number;
+>b : number
+
+export { b };
+>b : number
+
+=== tests/cases/compiler/a.ts ===
+export { b } from "./b";
+>b : number
+
+export { default } from "./b";
+>default : any
+

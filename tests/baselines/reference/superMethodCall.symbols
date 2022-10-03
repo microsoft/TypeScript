@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/superMethodCall.ts ===
+class Base {
+>Base : Symbol(Base, Decl(superMethodCall.ts, 0, 0))
+
+    method?() { }
+>method : Symbol(Base.method, Decl(superMethodCall.ts, 0, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(superMethodCall.ts, 2, 1))
+>Base : Symbol(Base, Decl(superMethodCall.ts, 0, 0))
+
+    method() {
+>method : Symbol(Derived.method, Decl(superMethodCall.ts, 4, 28))
+
+        return super.method?.();
+>super.method : Symbol(Base.method, Decl(superMethodCall.ts, 0, 12))
+>super : Symbol(Base, Decl(superMethodCall.ts, 0, 0))
+>method : Symbol(Base.method, Decl(superMethodCall.ts, 0, 12))
+    }
+
+    async asyncMethod() {
+>asyncMethod : Symbol(Derived.asyncMethod, Decl(superMethodCall.ts, 7, 5))
+
+        return super.method?.();
+>super.method : Symbol(Base.method, Decl(superMethodCall.ts, 0, 12))
+>super : Symbol(Base, Decl(superMethodCall.ts, 0, 0))
+>method : Symbol(Base.method, Decl(superMethodCall.ts, 0, 12))
+    }
+}

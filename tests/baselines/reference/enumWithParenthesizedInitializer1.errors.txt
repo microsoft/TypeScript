@@ -1,0 +1,9 @@
+tests/cases/compiler/enumWithParenthesizedInitializer1.ts(3,1): error TS1005: ')' expected.
+
+
+==== tests/cases/compiler/enumWithParenthesizedInitializer1.ts (1 errors) ====
+    enum E {
+     e = -(3
+    }
+    ~
+!!! error TS1005: ')' expected.

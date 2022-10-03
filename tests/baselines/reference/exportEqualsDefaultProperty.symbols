@@ -1,0 +1,24 @@
+=== tests/cases/compiler/exp.ts ===
+var x = {
+>x : Symbol(x, Decl(exp.ts, 0, 3))
+
+    "greeting": "hello, world",
+>"greeting" : Symbol("greeting", Decl(exp.ts, 0, 9))
+
+    "default": 42
+>"default" : Symbol("default", Decl(exp.ts, 1, 31))
+
+};
+
+export = x
+>x : Symbol(x, Decl(exp.ts, 0, 3))
+
+=== tests/cases/compiler/imp.ts ===
+import foo from "./exp";
+>foo : Symbol(foo, Decl(imp.ts, 0, 6))
+
+foo.toExponential(2);
+>foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(imp.ts, 0, 6))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+

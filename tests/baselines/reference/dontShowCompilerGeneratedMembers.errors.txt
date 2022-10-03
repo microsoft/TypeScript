@@ -1,0 +1,13 @@
+tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(3,6): error TS1139: Type parameter declaration expected.
+tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(4,1): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts (2 errors) ====
+    var f: {
+        x: number;
+        <-
+         ~
+!!! error TS1139: Type parameter declaration expected.
+    };
+    ~
+!!! error TS1109: Expression expected.

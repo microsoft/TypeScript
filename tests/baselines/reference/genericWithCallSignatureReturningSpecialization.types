@@ -1,0 +1,16 @@
+=== tests/cases/compiler/genericWithCallSignatureReturningSpecialization.ts ===
+interface B<T> {
+    f(): B<number>;
+>f : () => B<number>
+
+    (value: T): void;
+>value : T
+}
+var x: B<boolean>;
+>x : B<boolean>
+
+x(true); // was error
+>x(true) : void
+>x : B<boolean>
+>true : true
+

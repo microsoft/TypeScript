@@ -1,0 +1,29 @@
+=== tests/cases/compiler/voidIsInitialized.ts ===
+const x: void = undefined;
+>x : void
+>undefined : undefined
+
+const y: void = undefined;
+>y : void
+>undefined : undefined
+
+if(typeof x === "undefined") {
+>typeof x === "undefined" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : void
+>"undefined" : "undefined"
+
+    x // no error: assume x2 is initialised
+>x : undefined
+}
+
+if(typeof y !== "undefined") {
+>typeof y !== "undefined" : boolean
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>y : void
+>"undefined" : "undefined"
+
+    y // no error: do not narrow void
+>y : never
+}
+

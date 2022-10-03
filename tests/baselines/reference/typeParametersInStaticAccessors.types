@@ -1,0 +1,13 @@
+=== tests/cases/compiler/typeParametersInStaticAccessors.ts ===
+class foo<T> {
+>foo : foo<T>
+
+    static get Foo(): () => T { return null; }
+>Foo : () => T
+>null : null
+
+    static set Bar(v: { v: T }) { }
+>Bar : { v: T; }
+>v : { v: T; }
+>v : T
+} 

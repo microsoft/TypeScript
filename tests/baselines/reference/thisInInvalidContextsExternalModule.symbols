@@ -1,0 +1,77 @@
+=== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts ===
+class BaseErrClass {
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
+
+    constructor(t: any) { }
+>t : Symbol(t, Decl(thisInInvalidContextsExternalModule.ts, 1, 16))
+}
+
+class ClassWithNoInitializer extends BaseErrClass {
+>ClassWithNoInitializer : Symbol(ClassWithNoInitializer, Decl(thisInInvalidContextsExternalModule.ts, 2, 1))
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
+
+    t;
+>t : Symbol(ClassWithNoInitializer.t, Decl(thisInInvalidContextsExternalModule.ts, 4, 51))
+
+    //'this' in optional super call
+    constructor() {
+        super(this); // error: "super" has to be called before "this" accessing
+>super : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
+>this : Symbol(ClassWithNoInitializer, Decl(thisInInvalidContextsExternalModule.ts, 2, 1))
+    }
+}
+
+class ClassWithInitializer extends BaseErrClass {
+>ClassWithInitializer : Symbol(ClassWithInitializer, Decl(thisInInvalidContextsExternalModule.ts, 10, 1))
+>BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
+
+    t = 4;
+>t : Symbol(ClassWithInitializer.t, Decl(thisInInvalidContextsExternalModule.ts, 12, 49))
+
+    //'this' in required super call
+    constructor() {
+        super(this); // Error
+>super : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
+>this : Symbol(ClassWithInitializer, Decl(thisInInvalidContextsExternalModule.ts, 10, 1))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(thisInInvalidContextsExternalModule.ts, 18, 1))
+
+    //'this' in module variable
+    var x = this; // Error
+>x : Symbol(x, Decl(thisInInvalidContextsExternalModule.ts, 22, 7))
+}
+
+//'this' as type parameter constraint
+// function fn<T extends this >() { } // Error
+
+//'this' as a type argument
+function genericFunc<T>(x: T) { }
+>genericFunc : Symbol(genericFunc, Decl(thisInInvalidContextsExternalModule.ts, 23, 1))
+>T : Symbol(T, Decl(thisInInvalidContextsExternalModule.ts, 29, 21))
+>x : Symbol(x, Decl(thisInInvalidContextsExternalModule.ts, 29, 24))
+>T : Symbol(T, Decl(thisInInvalidContextsExternalModule.ts, 29, 21))
+
+genericFunc<this>(undefined);  // Should be an error
+>genericFunc : Symbol(genericFunc, Decl(thisInInvalidContextsExternalModule.ts, 23, 1))
+>undefined : Symbol(undefined)
+
+class ErrClass3 extends this {
+>ErrClass3 : Symbol(ErrClass3, Decl(thisInInvalidContextsExternalModule.ts, 30, 29))
+
+}
+
+//'this' as a computed enum value
+enum SomeEnum {
+>SomeEnum : Symbol(SomeEnum, Decl(thisInInvalidContextsExternalModule.ts, 34, 1))
+
+    A = this, // Should not be allowed
+>A : Symbol(SomeEnum.A, Decl(thisInInvalidContextsExternalModule.ts, 37, 15))
+
+    B = this.spaaaace // Also should not be allowed
+>B : Symbol(SomeEnum.B, Decl(thisInInvalidContextsExternalModule.ts, 38, 13))
+}
+
+export = this; // Should be an error

@@ -1,0 +1,62 @@
+=== tests/cases/compiler/lambdaArgCrash.ts ===
+class Event {
+>Event : Event
+
+	 private _listeners: any[] = [];
+>_listeners : any[]
+>[] : undefined[]
+
+	 constructor () {
+
+		 // TODO: remove
+
+		 this._listeners = [];
+>this._listeners = [] : undefined[]
+>this._listeners : any[]
+>this : this
+>_listeners : any[]
+>[] : undefined[]
+
+	}
+
+	 add(listener: () => any): void {
+>add : (listener: () => any) => void
+>listener : () => any
+
+		 /// <summary>Registers a new listener for the event.</summary>
+
+		 /// <param name="listener">The callback function to register.</param>
+
+		 this._listeners.push(listener);
+>this._listeners.push(listener) : number
+>this._listeners.push : (...items: any[]) => number
+>this._listeners : any[]
+>this : this
+>_listeners : any[]
+>push : (...items: any[]) => number
+>listener : () => any
+
+	}
+
+}
+ 
+class ItemSetEvent extends Event {
+>ItemSetEvent : ItemSetEvent
+>Event : Event
+
+	 add(listener: (items: ItemSet) => void ) {
+>add : (listener: (items: ItemSet) => void) => void
+>listener : (items: ItemSet) => void
+>items : ItemSet
+
+	 	super.add(listener);
+>super.add(listener) : void
+>super.add : (listener: () => any) => void
+>super : Event
+>add : (listener: () => any) => void
+>listener : (items: ItemSet) => void
+
+	}
+
+}
+

@@ -1,0 +1,62 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+function EmptySFC1() {
+>EmptySFC1 : () => JSX.Element
+
+    return <div>hello</div>;
+><div>hello</div> : JSX.Element
+>div : any
+>div : any
+}
+
+function EmptySFC2() {
+>EmptySFC2 : () => JSX.Element
+
+    return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+}
+
+function SFC2(prop: { x: boolean }) {
+>SFC2 : (prop: {    x: boolean;}) => JSX.Element
+>prop : { x: boolean; }
+>x : boolean
+
+    return <h1>World</h1>;
+><h1>World</h1> : JSX.Element
+>h1 : any
+>h1 : any
+}
+
+var EmptySFCComp = EmptySFC1 || EmptySFC2;
+>EmptySFCComp : () => JSX.Element
+>EmptySFC1 || EmptySFC2 : () => JSX.Element
+>EmptySFC1 : () => JSX.Element
+>EmptySFC2 : () => JSX.Element
+
+var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+>SFC2AndEmptyComp : (prop: { x: boolean; }) => JSX.Element
+>SFC2 || EmptySFC1 : (prop: { x: boolean; }) => JSX.Element
+>SFC2 : (prop: { x: boolean; }) => JSX.Element
+>EmptySFC1 : () => JSX.Element
+
+let a = <EmptySFCComp />
+>a : JSX.Element
+><EmptySFCComp /> : JSX.Element
+>EmptySFCComp : () => JSX.Element
+
+let a1 = <EmptySFCComp data-prop />
+>a1 : JSX.Element
+><EmptySFCComp data-prop /> : JSX.Element
+>EmptySFCComp : () => JSX.Element
+>data-prop : true
+
+let b = <SFC2AndEmptyComp x />
+>b : JSX.Element
+><SFC2AndEmptyComp x /> : JSX.Element
+>SFC2AndEmptyComp : (prop: { x: boolean; }) => JSX.Element
+>x : true
+

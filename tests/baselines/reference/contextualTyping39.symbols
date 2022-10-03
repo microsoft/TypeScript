@@ -1,0 +1,4 @@
+=== tests/cases/compiler/contextualTyping39.ts ===
+var foo = <{ (): number; }> function() { return "err"; };
+>foo : Symbol(foo, Decl(contextualTyping39.ts, 0, 3))
+

@@ -1,0 +1,10 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyReadonly.ts ===
+class C {
+>C : C
+
+    readonly readonly x: number;
+>x : number
+
+    constructor(readonly readonly y: number) {}
+>y : number
+}

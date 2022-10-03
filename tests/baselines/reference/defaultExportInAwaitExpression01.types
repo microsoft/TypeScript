@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/modules/a.ts ===
+const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+>x : Promise<unknown>
+>new Promise( ( resolve, reject ) => { resolve( {} ); } ) : Promise<unknown>
+>Promise : PromiseConstructor
+>( resolve, reject ) => { resolve( {} ); } : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
+>reject : (reason?: any) => void
+>resolve( {} ) : void
+>resolve : (value: unknown) => void
+>{} : {}
+
+export default x;
+>x : Promise<unknown>
+
+=== tests/cases/conformance/es6/modules/b.ts ===
+import x from './a';
+>x : Promise<unknown>
+
+( async function() {
+>( async function() {    const value = await x;}() ) : Promise<void>
+>async function() {    const value = await x;}() : Promise<void>
+>async function() {    const value = await x;} : () => Promise<void>
+
+    const value = await x;
+>value : unknown
+>await x : unknown
+>x : Promise<unknown>
+
+}() );
+

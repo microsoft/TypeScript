@@ -1,0 +1,13 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile.js.map
+{"version":3,"file":"inputFile.js","sourceRoot":"sourceRootDir/","sources":["inputFile.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB;IAAA;IAGA,CAAC;IAAD,QAAC;AAAD,CAAC,AAHD,IAGC"}
+FileName : /tests/cases/fourslash/inputFile.js
+var x = 109;
+var foo = "hello world";
+var M = /** @class */ (function () {
+    function M() {
+    }
+    return M;
+}());
+//# sourceMappingURL=inputFile.js.map

@@ -1,0 +1,51 @@
+
+1  >module m {
+
+    ~~~~~~~~~~~                                   => Pos: (0 to 10)  SpanInfo: {"start":0,"length":32}
+    >module m {
+    >    class c {
+    >    }
+    >}
+    >:=> (line 1, col 0) to (line 4, col 1)
+--------------------------------
+2  >    class c {
+
+    ~~~~~~~~~~~~~~                                => Pos: (11 to 24)  SpanInfo: {"start":15,"length":15}
+    >class c {
+    >    }
+    >:=> (line 2, col 4) to (line 3, col 5)
+--------------------------------
+3  >    }
+
+    ~~~~~~                                        => Pos: (25 to 30)  SpanInfo: {"start":29,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
+--------------------------------
+4  >}
+
+    ~~                                            => Pos: (31 to 32)  SpanInfo: {"start":31,"length":1}
+    >}
+    >:=> (line 4, col 0) to (line 4, col 1)
+--------------------------------
+5  >import a = m.c;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (33 to 48)  SpanInfo: {"start":33,"length":14}
+    >import a = m.c
+    >:=> (line 5, col 0) to (line 5, col 14)
+--------------------------------
+6  >export import b = m.c;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (49 to 71)  SpanInfo: {"start":49,"length":21}
+    >export import b = m.c
+    >:=> (line 6, col 0) to (line 6, col 21)
+--------------------------------
+7  >var x = new a();
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (72 to 88)  SpanInfo: {"start":72,"length":15}
+    >var x = new a()
+    >:=> (line 7, col 0) to (line 7, col 15)
+--------------------------------
+8  >var y = new b();
+    ~~~~~~~~~~~~~~~~                              => Pos: (89 to 104)  SpanInfo: {"start":89,"length":15}
+    >var y = new b()
+    >:=> (line 8, col 0) to (line 8, col 15)

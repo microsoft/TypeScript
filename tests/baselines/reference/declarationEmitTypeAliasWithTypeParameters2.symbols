@@ -1,0 +1,29 @@
+=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters2.ts ===
+export type Bar<X, Y, Z> = () => [X, Y, Z];
+>Bar : Symbol(Bar, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 0))
+>X : Symbol(X, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 16))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 18))
+>Z : Symbol(Z, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 21))
+>X : Symbol(X, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 16))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 18))
+>Z : Symbol(Z, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 21))
+
+export type Baz<M, N> = Bar<M, string, N>;
+>Baz : Symbol(Baz, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 43))
+>M : Symbol(M, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 16))
+>N : Symbol(N, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 18))
+>Bar : Symbol(Bar, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 0))
+>M : Symbol(M, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 16))
+>N : Symbol(N, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 18))
+
+export type Baa<Y> = Baz<boolean, Y>;
+>Baa : Symbol(Baa, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 42))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 2, 16))
+>Baz : Symbol(Baz, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 0, 43))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 2, 16))
+
+export const y = (x: Baa<number>) => 1
+>y : Symbol(y, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 3, 12))
+>x : Symbol(x, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 3, 18))
+>Baa : Symbol(Baa, Decl(declarationEmitTypeAliasWithTypeParameters2.ts, 1, 42))
+

@@ -1,0 +1,34 @@
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(6,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(11,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(14,5): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(17,1): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts (4 errors) ====
+    "use strict";
+    function foo(a: number) {
+        if (a === 10) {
+            function foo() { }
+            foo();
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        else {
+            function foo() { } 
+            foo();
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        foo(10);
+        foo(); // not ok
+        ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts:2:14: An argument for 'a' was not provided.
+    }
+    foo(10);
+    foo(); // not ok - needs number
+    ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts:2:14: An argument for 'a' was not provided.

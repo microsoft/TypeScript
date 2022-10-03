@@ -1,0 +1,20 @@
+{
+    "scenario": "Verify that JavaScript modules are not resolved if too many hops",
+    "projectRoot": "tests/cases/projects/NodeModulesSearch",
+    "baselineCheck": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "project": "maxDepthExceeded",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "maxDepthExceeded/node_modules/m1/index.js",
+        "maxDepthExceeded/root.ts",
+        "maxDepthExceeded/node_modules/m2/entry.js",
+        "maxDepthExceeded/node_modules/m1/relative.js"
+    ],
+    "emittedFiles": [
+        "maxDepthExceeded/built/node_modules/m1/index.js",
+        "maxDepthExceeded/built/root.js",
+        "maxDepthExceeded/built/node_modules/m1/relative.js"
+    ]
+}

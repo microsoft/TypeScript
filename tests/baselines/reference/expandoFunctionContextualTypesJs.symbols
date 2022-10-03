@@ -1,0 +1,89 @@
+=== tests/cases/compiler/input.js ===
+/** @typedef {{ color: "red" | "blue" }} MyComponentProps */
+
+/**
+ * @template P 
+ * @typedef {{ (): any; defaultProps?: Partial<P> }} StatelessComponent */
+
+ /**
+  * @type {StatelessComponent<MyComponentProps>}
+  */
+const MyComponent = () => /* @type {any} */(null);
+>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
+
+MyComponent.defaultProps = {
+>MyComponent.defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
+>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
+>defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
+
+    color: "red"
+>color : Symbol(color, Decl(input.js, 11, 28))
+
+};
+
+const MyComponent2 = () => null;
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
+
+/**
+ * @type {MyComponentProps}
+ */
+MyComponent2.defaultProps = {
+>MyComponent2.defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
+>defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
+
+    color: "red"
+>color : Symbol(color, Decl(input.js, 20, 29))
+}
+
+/**
+  * @type {StatelessComponent<MyComponentProps>}
+ */
+const check = MyComponent2;
+>check : Symbol(check, Decl(input.js, 27, 5))
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
+
+/**
+ * 
+ * @param {{ props: MyComponentProps }} p 
+ */
+function expectLiteral(p) {}
+>expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
+>p : Symbol(p, Decl(input.js, 33, 23))
+
+function foo() {
+>foo : Symbol(foo, Decl(input.js, 33, 28))
+
+    /**
+     * @type {MyComponentProps}
+     */
+    this.props = { color: "red" };
+>this.props : Symbol(foo.props, Decl(input.js, 35, 16))
+>this : Symbol(foo, Decl(input.js, 33, 28))
+>props : Symbol(foo.props, Decl(input.js, 35, 16))
+>color : Symbol(color, Decl(input.js, 39, 18))
+
+    expectLiteral(this);
+>expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
+>this : Symbol(foo, Decl(input.js, 33, 28))
+}
+
+/**
+ * @type {MyComponentProps}
+ */
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
+>module : Symbol(export=, Decl(input.js, 42, 1))
+>exports : Symbol(export=, Decl(input.js, 42, 1))
+
+    color: "red"
+>color : Symbol(color, Decl(input.js, 47, 18))
+}
+
+expectLiteral({ props: module.exports });
+>expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
+>props : Symbol(props, Decl(input.js, 51, 15))
+>module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
+>module : Symbol(module, Decl(input.js, 42, 1), Decl(input.js, 51, 22))
+>exports : Symbol(module.exports, Decl(input.js, 0, 0))
+

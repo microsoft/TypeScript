@@ -1,0 +1,14 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of25.ts ===
+var a = [1, 2, 3];
+>a : Symbol(a, Decl(ES5For-of25.ts, 0, 3))
+
+for (var v of a) {
+>v : Symbol(v, Decl(ES5For-of25.ts, 1, 8))
+>a : Symbol(a, Decl(ES5For-of25.ts, 0, 3))
+
+    v;
+>v : Symbol(v, Decl(ES5For-of25.ts, 1, 8))
+
+    a;
+>a : Symbol(a, Decl(ES5For-of25.ts, 0, 3))
+}

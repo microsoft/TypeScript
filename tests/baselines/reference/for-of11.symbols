@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of11.ts ===
+var v: string;
+>v : Symbol(v, Decl(for-of11.ts, 0, 3))
+
+for (v of [0, ""]) { }
+>v : Symbol(v, Decl(for-of11.ts, 0, 3))
+

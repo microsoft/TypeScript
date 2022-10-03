@@ -1,0 +1,90 @@
+=== tests/cases/conformance/expressions/functionCalls/functionCalls.ts ===
+// Invoke function call on value of type 'any' with no type arguments
+var anyVar: any;
+>anyVar : any
+
+anyVar(0);
+>anyVar(0) : any
+>anyVar : any
+>0 : 0
+
+anyVar('');
+>anyVar('') : any
+>anyVar : any
+>'' : ""
+
+// Invoke function call on value of type 'any' with type arguments
+// These should be errors
+anyVar<string>('hello');
+>anyVar<string>('hello') : any
+>anyVar : any
+>'hello' : "hello"
+
+anyVar<number>();
+>anyVar<number>() : any
+>anyVar : any
+
+anyVar<Window>(undefined);
+>anyVar<Window>(undefined) : any
+>anyVar : any
+>undefined : undefined
+
+
+// Invoke function call on value of a subtype of Function with no call signatures with no type arguments
+interface SubFunc extends Function {
+    prop: number;
+>prop : number
+}
+var subFunc: SubFunc;
+>subFunc : SubFunc
+
+subFunc(0);
+>subFunc(0) : any
+>subFunc : SubFunc
+>0 : 0
+
+subFunc('');
+>subFunc('') : any
+>subFunc : SubFunc
+>'' : ""
+
+subFunc();
+>subFunc() : any
+>subFunc : SubFunc
+
+
+// Invoke function call on value of a subtype of Function with no call signatures with type arguments
+// These should be errors
+subFunc<number>(0);
+>subFunc<number>(0) : any
+>subFunc : SubFunc
+>0 : 0
+
+subFunc<string>('');
+>subFunc<string>('') : any
+>subFunc : SubFunc
+>'' : ""
+
+subFunc<any>();
+>subFunc<any>() : any
+>subFunc : SubFunc
+
+// Invoke function call on value of type Function with no call signatures with type arguments
+// These should be errors
+var func: Function;
+>func : Function
+
+func<number>(0);
+>func<number>(0) : any
+>func : Function
+>0 : 0
+
+func<string>('');
+>func<string>('') : any
+>func : Function
+>'' : ""
+
+func<any>();
+>func<any>() : any
+>func : Function
+

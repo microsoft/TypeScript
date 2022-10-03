@@ -1,0 +1,353 @@
+=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts ===
+import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
+>exporter : typeof exporter
+
+export class publicClassWithWithPrivatePropertyTypes {
+>publicClassWithWithPrivatePropertyTypes : publicClassWithWithPrivatePropertyTypes
+
+    static myPublicStaticProperty = exporter.createExportedWidget1(); // Error
+>myPublicStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    private static myPrivateStaticProperty = exporter.createExportedWidget1();
+>myPrivateStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    myPublicProperty = exporter.createExportedWidget1(); // Error
+>myPublicProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    private myPrivateProperty = exporter.createExportedWidget1();
+>myPrivateProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    static myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
+>myPublicStaticProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    private static myPrivateStaticProperty1 = exporter.createExportedWidget3();
+>myPrivateStaticProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    myPublicProperty1 = exporter.createExportedWidget3(); // Error
+>myPublicProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    private myPrivateProperty1 = exporter.createExportedWidget3();
+>myPrivateProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+}
+
+class privateClassWithWithPrivatePropertyTypes {
+>privateClassWithWithPrivatePropertyTypes : privateClassWithWithPrivatePropertyTypes
+
+    static myPublicStaticProperty = exporter.createExportedWidget1(); 
+>myPublicStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    private static myPrivateStaticProperty = exporter.createExportedWidget1();
+>myPrivateStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    myPublicProperty = exporter.createExportedWidget1(); 
+>myPublicProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    private myPrivateProperty = exporter.createExportedWidget1();
+>myPrivateProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+    static myPublicStaticProperty1 = exporter.createExportedWidget3(); 
+>myPublicStaticProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    private static myPrivateStaticProperty1 = exporter.createExportedWidget3();
+>myPrivateStaticProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    myPublicProperty1 = exporter.createExportedWidget3(); 
+>myPublicProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+    private myPrivateProperty1 = exporter.createExportedWidget3();
+>myPrivateProperty1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+}
+
+export var publicVarWithPrivatePropertyTypes= exporter.createExportedWidget1(); // Error
+>publicVarWithPrivatePropertyTypes : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+var privateVarWithPrivatePropertyTypes= exporter.createExportedWidget1();
+>privateVarWithPrivatePropertyTypes : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+>exporter : typeof exporter
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+
+export var publicVarWithPrivatePropertyTypes1 = exporter.createExportedWidget3(); // Error
+>publicVarWithPrivatePropertyTypes1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+var privateVarWithPrivatePropertyTypes1 = exporter.createExportedWidget3();
+>privateVarWithPrivatePropertyTypes1 : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+>exporter : typeof exporter
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
+
+export class publicClassWithPrivateModulePropertyTypes {
+>publicClassWithPrivateModulePropertyTypes : publicClassWithPrivateModulePropertyTypes
+
+    static myPublicStaticProperty= exporter.createExportedWidget2(); // Error
+>myPublicStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+    myPublicProperty = exporter.createExportedWidget2(); // Error
+>myPublicProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+    static myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
+>myPublicStaticProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+    myPublicProperty1 = exporter.createExportedWidget4(); // Error
+>myPublicProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+}
+export var publicVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2(); // Error
+>publicVarWithPrivateModulePropertyTypes : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+export var publicVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4(); // Error
+>publicVarWithPrivateModulePropertyTypes1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+class privateClassWithPrivateModulePropertyTypes {
+>privateClassWithPrivateModulePropertyTypes : privateClassWithPrivateModulePropertyTypes
+
+    static myPublicStaticProperty= exporter.createExportedWidget2();
+>myPublicStaticProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+    myPublicProperty= exporter.createExportedWidget2();
+>myPublicProperty : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+    static myPublicStaticProperty1 = exporter.createExportedWidget4();
+>myPublicStaticProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+    myPublicProperty1 = exporter.createExportedWidget4();
+>myPublicProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+}
+var privateVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2();
+>privateVarWithPrivateModulePropertyTypes : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter : typeof exporter
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+
+var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
+>privateVarWithPrivateModulePropertyTypes1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter : typeof exporter
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+
+=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts ===
+declare module "GlobalWidgets" {
+>"GlobalWidgets" : typeof import("GlobalWidgets")
+
+    export class Widget3 {
+>Widget3 : Widget3
+
+        name: string;
+>name : string
+    }
+    export function createWidget3(): Widget3;
+>createWidget3 : () => Widget3
+
+    export module SpecializedGlobalWidget {
+>SpecializedGlobalWidget : typeof SpecializedGlobalWidget
+
+        export class Widget4 {
+>Widget4 : Widget4
+
+            name: string;
+>name : string
+        }
+        function createWidget4(): Widget4;
+>createWidget4 : () => Widget4
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets.ts ===
+export class Widget1 {
+>Widget1 : Widget1
+
+    name = 'one';
+>name : string
+>'one' : "one"
+}
+export function createWidget1() {
+>createWidget1 : () => Widget1
+
+    return new Widget1();
+>new Widget1() : Widget1
+>Widget1 : typeof Widget1
+}
+
+export module SpecializedWidget {
+>SpecializedWidget : typeof SpecializedWidget
+
+    export class Widget2 {
+>Widget2 : Widget2
+
+        name = 'one';
+>name : string
+>'one' : "one"
+    }
+    export function createWidget2() {
+>createWidget2 : () => Widget2
+
+        return new Widget2();
+>new Widget2() : Widget2
+>Widget2 : typeof Widget2
+    }
+}
+
+=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_exporter.ts ===
+///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
+import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
+>Widgets : typeof Widgets
+
+import Widgets1 = require("GlobalWidgets");
+>Widgets1 : typeof Widgets1
+
+export function createExportedWidget1() {
+>createExportedWidget1 : () => Widgets.Widget1
+
+    return Widgets.createWidget1();
+>Widgets.createWidget1() : Widgets.Widget1
+>Widgets.createWidget1 : () => Widgets.Widget1
+>Widgets : typeof Widgets
+>createWidget1 : () => Widgets.Widget1
+}
+export function createExportedWidget2() {
+>createExportedWidget2 : () => Widgets.SpecializedWidget.Widget2
+
+    return Widgets.SpecializedWidget.createWidget2();
+>Widgets.SpecializedWidget.createWidget2() : Widgets.SpecializedWidget.Widget2
+>Widgets.SpecializedWidget.createWidget2 : () => Widgets.SpecializedWidget.Widget2
+>Widgets.SpecializedWidget : typeof Widgets.SpecializedWidget
+>Widgets : typeof Widgets
+>SpecializedWidget : typeof Widgets.SpecializedWidget
+>createWidget2 : () => Widgets.SpecializedWidget.Widget2
+}
+export function createExportedWidget3() {
+>createExportedWidget3 : () => Widgets1.Widget3
+
+    return Widgets1.createWidget3();
+>Widgets1.createWidget3() : Widgets1.Widget3
+>Widgets1.createWidget3 : () => Widgets1.Widget3
+>Widgets1 : typeof Widgets1
+>createWidget3 : () => Widgets1.Widget3
+}
+export function createExportedWidget4() {
+>createExportedWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+
+    return Widgets1.SpecializedGlobalWidget.createWidget4();
+>Widgets1.SpecializedGlobalWidget.createWidget4() : Widgets1.SpecializedGlobalWidget.Widget4
+>Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+>Widgets1.SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+>Widgets1 : typeof Widgets1
+>SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+>createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+}
+

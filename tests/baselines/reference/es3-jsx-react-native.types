@@ -1,0 +1,12 @@
+=== tests/cases/compiler/es3-jsx-react-native.tsx ===
+const React: any = null;
+>React : any
+>null : null
+
+const elem = <div></div>;
+>elem : error
+><div></div> : error
+>div : any
+>div : any
+
+

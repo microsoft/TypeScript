@@ -1,0 +1,14 @@
+[
+    "======== Resolving module 'some-library' from '/index.ts'. ========",
+    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Loading module 'some-library' from 'node_modules' folder, target file type 'TypeScript'.",
+    "File '/node_modules/some-library/package.json' does not exist.",
+    "File '/node_modules/some-library.ios.ts' does not exist.",
+    "File '/node_modules/some-library.ios.tsx' does not exist.",
+    "File '/node_modules/some-library.ios.d.ts' does not exist.",
+    "File '/node_modules/some-library/index.ios.ts' does not exist.",
+    "File '/node_modules/some-library/index.ios.tsx' does not exist.",
+    "File '/node_modules/some-library/index.ios.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/some-library/index.ios.d.ts', result '/node_modules/some-library/index.ios.d.ts'.",
+    "======== Module name 'some-library' was successfully resolved to '/node_modules/some-library/index.ios.d.ts'. ========"
+]

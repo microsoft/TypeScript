@@ -1,0 +1,60 @@
+=== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts ===
+// string indexer tests
+interface A {
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 0, 0))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 2, 5))
+}
+interface B {
+>B : Symbol(B, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 3, 1))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 5, 5))
+}
+interface C extends A, B { } // ok
+>C : Symbol(C, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 6, 1))
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 0, 0))
+>B : Symbol(B, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 3, 1))
+
+interface D {
+>D : Symbol(D, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 7, 28))
+
+    [s: string]: string;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 10, 5))
+}
+interface E extends A, D { } // error
+>E : Symbol(E, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 11, 1))
+>A : Symbol(A, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 0, 0))
+>D : Symbol(D, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 7, 28))
+
+
+// Same tests for number indexer
+interface A2 {
+>A2 : Symbol(A2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 12, 28))
+
+    [s: number]: number;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 17, 5))
+}
+interface B2 {
+>B2 : Symbol(B2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 18, 1))
+
+    [s: number]: number;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 20, 5))
+}
+interface C2 extends A2, B2 { } // ok
+>C2 : Symbol(C2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 21, 1))
+>A2 : Symbol(A2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 12, 28))
+>B2 : Symbol(B2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 18, 1))
+
+interface D2 {
+>D2 : Symbol(D2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 22, 31))
+
+    [s: number]: string;
+>s : Symbol(s, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 25, 5))
+}
+interface E2 extends A2, D2 { } // error
+>E2 : Symbol(E2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 26, 1))
+>A2 : Symbol(A2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 12, 28))
+>D2 : Symbol(D2, Decl(inheritedStringIndexersFromDifferentBaseTypes.ts, 22, 31))
+

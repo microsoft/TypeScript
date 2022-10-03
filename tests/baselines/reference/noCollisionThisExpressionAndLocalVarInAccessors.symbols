@@ -1,0 +1,94 @@
+=== tests/cases/compiler/noCollisionThisExpressionAndLocalVarInAccessors.ts ===
+class class1 {
+>class1 : Symbol(class1, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 0, 0))
+
+    get a(): number {
+>a : Symbol(class1.a, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 2, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 2, 18))
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 3, 22))
+
+                var _this = 2;
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 4, 19))
+
+                return callback(_this);
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 3, 22))
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 4, 19))
+            }
+        }
+
+        return 10;
+    }
+    set a(val: number) {
+>a : Symbol(class1.a, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
+>val : Symbol(val, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 11, 10))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 12, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 12, 18))
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 13, 22))
+
+                var _this = 2;
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 14, 19))
+
+                return callback(_this);
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 13, 22))
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 14, 19))
+            }
+        }
+
+    }
+}
+
+class class2 {
+>class2 : Symbol(class2, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 20, 1))
+
+    get a(): number {
+>a : Symbol(class2.a, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
+
+        var _this = 2;
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 24, 11))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 25, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 25, 18))
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 26, 22))
+
+                return callback(_this);
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 26, 22))
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 24, 11))
+            }
+        }
+
+        return 10;
+    }
+    set a(val: number) {
+>a : Symbol(class2.a, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
+>val : Symbol(val, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 33, 10))
+
+        var _this = 2;
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 34, 11))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 35, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 35, 18))
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 36, 22))
+
+                return callback(_this);
+>callback : Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 36, 22))
+>_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInAccessors.ts, 34, 11))
+            }
+        }
+
+    }
+}

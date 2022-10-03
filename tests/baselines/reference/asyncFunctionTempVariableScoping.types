@@ -1,0 +1,13 @@
+=== tests/cases/compiler/asyncFunctionTempVariableScoping.ts ===
+// https://github.com/Microsoft/TypeScript/issues/19187
+
+async ({ foo, bar, ...rest }) => bar(await foo);
+>async ({ foo, bar, ...rest }) => bar(await foo) : ({ foo, bar, ...rest }: { [x: string]: any; foo: any; bar: any; }) => Promise<any>
+>foo : any
+>bar : any
+>rest : { [x: string]: any; }
+>bar(await foo) : any
+>bar : any
+>await foo : any
+>foo : any
+

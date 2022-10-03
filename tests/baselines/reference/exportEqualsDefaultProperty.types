@@ -1,0 +1,29 @@
+=== tests/cases/compiler/exp.ts ===
+var x = {
+>x : { greeting: string; default: number; }
+>{    "greeting": "hello, world",    "default": 42} : { greeting: string; default: number; }
+
+    "greeting": "hello, world",
+>"greeting" : string
+>"hello, world" : "hello, world"
+
+    "default": 42
+>"default" : number
+>42 : 42
+
+};
+
+export = x
+>x : { greeting: string; default: number; }
+
+=== tests/cases/compiler/imp.ts ===
+import foo from "./exp";
+>foo : number
+
+foo.toExponential(2);
+>foo.toExponential(2) : string
+>foo.toExponential : (fractionDigits?: number) => string
+>foo : number
+>toExponential : (fractionDigits?: number) => string
+>2 : 2
+

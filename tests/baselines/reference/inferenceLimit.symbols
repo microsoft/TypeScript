@@ -1,0 +1,101 @@
+=== tests/cases/compiler/file1.ts ===
+"use strict";
+import * as MyModule from "./mymodule";
+>MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
+
+export class BrokenClass {
+>BrokenClass : Symbol(BrokenClass, Decl(file1.ts, 1, 39))
+
+  constructor() {}
+
+  public brokenMethod(field: string, value: string) {
+>brokenMethod : Symbol(BrokenClass.brokenMethod, Decl(file1.ts, 5, 18))
+>field : Symbol(field, Decl(file1.ts, 7, 22))
+>value : Symbol(value, Decl(file1.ts, 7, 36))
+
+  return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
+>MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
+>resolve : Symbol(resolve, Decl(file1.ts, 8, 47))
+>reject : Symbol(reject, Decl(file1.ts, 8, 55))
+
+    let result: Array<MyModule.MyModel> = [];
+>result : Symbol(result, Decl(file1.ts, 10, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
+>MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
+
+    let populateItems = (order) => {
+>populateItems : Symbol(populateItems, Decl(file1.ts, 12, 7))
+>order : Symbol(order, Decl(file1.ts, 12, 25))
+
+      return new Promise((resolve, reject) => {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(file1.ts, 13, 26))
+>reject : Symbol(reject, Decl(file1.ts, 13, 34))
+
+        this.doStuff(order.id)
+>this.doStuff(order.id)          .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>this.doStuff : Symbol(BrokenClass.doStuff, Decl(file1.ts, 27, 3))
+>this : Symbol(BrokenClass, Decl(file1.ts, 1, 39))
+>doStuff : Symbol(BrokenClass.doStuff, Decl(file1.ts, 27, 3))
+>order : Symbol(order, Decl(file1.ts, 12, 25))
+
+          .then((items) => {
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(file1.ts, 15, 17))
+
+            order.items = items;
+>order : Symbol(order, Decl(file1.ts, 12, 25))
+>items : Symbol(items, Decl(file1.ts, 15, 17))
+
+            resolve(order);
+>resolve : Symbol(resolve, Decl(file1.ts, 13, 26))
+>order : Symbol(order, Decl(file1.ts, 12, 25))
+
+          });
+      });
+    };
+
+    return Promise.all(result.map(populateItems))
+>Promise.all(result.map(populateItems))      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>result.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(file1.ts, 10, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>populateItems : Symbol(populateItems, Decl(file1.ts, 12, 7))
+
+      .then((orders: Array<MyModule.MyModel>) => {
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>orders : Symbol(orders, Decl(file1.ts, 23, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
+>MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
+
+        resolve(orders);
+>resolve : Symbol(resolve, Decl(file1.ts, 8, 47))
+>orders : Symbol(orders, Decl(file1.ts, 23, 13))
+
+      });
+    });
+  }
+
+  public async doStuff(id: number) {
+>doStuff : Symbol(BrokenClass.doStuff, Decl(file1.ts, 27, 3))
+>id : Symbol(id, Decl(file1.ts, 29, 23))
+
+    return;
+  }
+}
+
+=== tests/cases/compiler/mymodule.ts ===
+export interface MyModel {
+>MyModel : Symbol(MyModel, Decl(mymodule.ts, 0, 0))
+
+    id: number;
+>id : Symbol(MyModel.id, Decl(mymodule.ts, 0, 26))
+}

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
+var s = Symbol();
+>s : Symbol(s, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+var t = {};
+>t : Symbol(t, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 1, 3))
+
+var p = new Proxy(t, {});
+>p : Symbol(p, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 2, 3))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --))
+>t : Symbol(t, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 1, 3))
+
+Reflect.ownKeys({});
+>Reflect.ownKeys : Symbol(Reflect.ownKeys, Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>ownKeys : Symbol(Reflect.ownKeys, Decl(lib.es2015.reflect.d.ts, --, --))
+
+function* idGen() {
+>idGen : Symbol(idGen, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 4, 20))
+
+    let i = 10;
+>i : Symbol(i, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 7, 7))
+
+    while (i < 20) {
+>i : Symbol(i, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 7, 7))
+
+        yield i + 2;
+>i : Symbol(i, Decl(modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts, 7, 7))
+    }
+}
+

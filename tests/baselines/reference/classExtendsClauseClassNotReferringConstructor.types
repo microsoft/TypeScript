@@ -1,0 +1,18 @@
+=== tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts ===
+class A { a: number; }
+>A : A
+>a : number
+
+module Foo {
+>Foo : typeof Foo
+
+    var A = 1;
+>A : number
+>1 : 1
+
+    class B extends A { b: string; }
+>B : B
+>A : number
+>b : string
+}
+

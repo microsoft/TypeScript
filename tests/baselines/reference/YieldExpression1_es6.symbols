@@ -1,0 +1,3 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression1_es6.ts ===
+yield;
+No type information for this code.

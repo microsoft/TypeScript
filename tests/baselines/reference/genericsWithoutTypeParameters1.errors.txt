@@ -1,0 +1,81 @@
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(9,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(10,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(11,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(12,11): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(14,17): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(14,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(15,20): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(15,29): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(17,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(18,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(21,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(22,8): error TS2314: Generic type 'D<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(26,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(27,8): error TS2314: Generic type 'J<T>' requires 1 type argument(s).
+tests/cases/compiler/genericsWithoutTypeParameters1.ts(31,22): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/genericsWithoutTypeParameters1.ts (15 errors) ====
+    class C<T> {
+        foo(): T { return null }
+    }
+    
+    interface I<T> {
+        bar(): T;
+    }
+    
+    var c1: C;
+            ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+    var i1: I;
+            ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+    var c2: C<I>;
+              ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+    var i2: I<C>;
+              ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+    
+    function foo(x: C, y: I) { }
+                    ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+                          ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+    function foo2(x: C<I>, y: I<C>) { }
+                       ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+                                ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+    
+    var x: { a: C } = { a: new C<number>() };
+                ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+    var x2: { a: I } = { a: { bar() { return 1 } } };
+                 ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+    
+    class D<T> {
+        x: C;
+           ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+        y: D;
+           ~
+!!! error TS2314: Generic type 'D<T>' requires 1 type argument(s).
+    }
+    
+    interface J<T> {
+        x: I;
+           ~
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+        y: J;
+           ~
+!!! error TS2314: Generic type 'J<T>' requires 1 type argument(s).
+    }
+    
+    class A<T> { }
+    function f<T>(x: T): A {
+                         ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+        return null;
+    }

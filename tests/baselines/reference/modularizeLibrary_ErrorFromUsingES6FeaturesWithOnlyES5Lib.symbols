@@ -1,0 +1,99 @@
+=== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts ===
+// All will be error from using ES6 features but only include ES5 library
+// Using Es6 array
+function f(x: number, y: number, z: number) {
+>f : Symbol(f, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 0, 0))
+>x : Symbol(x, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 2, 11))
+>y : Symbol(y, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 2, 21))
+>z : Symbol(z, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 2, 32))
+
+    return Array.from(arguments);
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+f(1, 2, 3);  // no error
+>f : Symbol(f, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 0, 0))
+
+// Using ES6 collection
+var m = new Map<string, number>();
+>m : Symbol(m, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 9, 3))
+
+m.clear();
+>m : Symbol(m, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 9, 3))
+
+// Using ES6 iterable
+m.keys();
+>m : Symbol(m, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 9, 3))
+
+// Using ES6 function
+function Baz() { }
+>Baz : Symbol(Baz, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 12, 9))
+
+Baz.name;
+>Baz : Symbol(Baz, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 12, 9))
+
+// Using ES6 math
+Math.sign(1);
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Using ES6 object
+var o = {
+>o : Symbol(o, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 3))
+
+    a: 2,
+>a : Symbol(a, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 9))
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 23, 9))
+>value : Symbol(value, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 24, 25))
+
+        return false;
+    }
+};
+o.hasOwnProperty(Symbol.hasInstance);
+>o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 3))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+// Using Es6 proxy
+var t = {}
+>t : Symbol(t, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 31, 3))
+
+var p = new Proxy(t, {});
+>p : Symbol(p, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 32, 3))
+>t : Symbol(t, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 31, 3))
+
+// Using ES6 reflect
+Reflect.isExtensible({});
+
+// Using Es6 regexp
+var reg = new RegExp("/s");
+>reg : Symbol(reg, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 38, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+reg.flags;
+>reg : Symbol(reg, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 38, 3))
+
+// Using ES6 string
+var str = "Hello world";
+>str : Symbol(str, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 42, 3))
+
+str.includes("hello", 0);
+>str : Symbol(str, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 42, 3))
+
+// Using ES6 symbol
+var s = Symbol();
+>s : Symbol(s, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 46, 3))
+
+// Using ES6 wellknown-symbol
+const o1 = {
+>o1 : Symbol(o1, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 49, 5))
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 49, 12))
+>value : Symbol(value, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 50, 25))
+
+        return false;
+    }
+}

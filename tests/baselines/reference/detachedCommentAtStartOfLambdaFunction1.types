@@ -1,0 +1,26 @@
+=== tests/cases/compiler/detachedCommentAtStartOfLambdaFunction1.ts ===
+class TestFile {
+>TestFile : TestFile
+
+    name: string;
+>name : string
+
+    foo(message: string): () => string {
+>foo : (message: string) => () => string
+>message : string
+
+        return (...x: string[]) =>
+>(...x: string[]) =>            /// <summary>Test summary</summary>            /// <param name="message" type="String" />            /// <returns type="Function" />            message + this.name : (...x: string[]) => string
+>x : string[]
+
+            /// <summary>Test summary</summary>
+            /// <param name="message" type="String" />
+            /// <returns type="Function" />
+            message + this.name;
+>message + this.name : string
+>message : string
+>this.name : string
+>this : this
+>name : string
+    }
+}

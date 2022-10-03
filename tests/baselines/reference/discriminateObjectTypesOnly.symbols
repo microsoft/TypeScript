@@ -1,0 +1,34 @@
+=== tests/cases/compiler/discriminateObjectTypesOnly.ts ===
+type Thing = number | object;
+>Thing : Symbol(Thing, Decl(discriminateObjectTypesOnly.ts, 0, 0))
+
+const k: Thing = { toFixed: null }; // OK, satisfies object
+>k : Symbol(k, Decl(discriminateObjectTypesOnly.ts, 1, 5))
+>Thing : Symbol(Thing, Decl(discriminateObjectTypesOnly.ts, 0, 0))
+>toFixed : Symbol(toFixed, Decl(discriminateObjectTypesOnly.ts, 1, 18))
+
+type Thing2 = number | { toFixed: null } | object;
+>Thing2 : Symbol(Thing2, Decl(discriminateObjectTypesOnly.ts, 1, 35))
+>toFixed : Symbol(toFixed, Decl(discriminateObjectTypesOnly.ts, 3, 24))
+
+const q: Thing2 = { toFixed: null };
+>q : Symbol(q, Decl(discriminateObjectTypesOnly.ts, 4, 5))
+>Thing2 : Symbol(Thing2, Decl(discriminateObjectTypesOnly.ts, 1, 35))
+>toFixed : Symbol(toFixed, Decl(discriminateObjectTypesOnly.ts, 4, 19))
+
+const h: Thing2 = { toString: null }; // OK, satisfies object
+>h : Symbol(h, Decl(discriminateObjectTypesOnly.ts, 5, 5))
+>Thing2 : Symbol(Thing2, Decl(discriminateObjectTypesOnly.ts, 1, 35))
+>toString : Symbol(toString, Decl(discriminateObjectTypesOnly.ts, 5, 19))
+
+type Thing3 = number | { toFixed: null, toString: undefined } | object;
+>Thing3 : Symbol(Thing3, Decl(discriminateObjectTypesOnly.ts, 5, 37))
+>toFixed : Symbol(toFixed, Decl(discriminateObjectTypesOnly.ts, 7, 24))
+>toString : Symbol(toString, Decl(discriminateObjectTypesOnly.ts, 7, 39))
+
+const l: Thing3 = { toString: undefined }; // error, toFixed isn't null
+>l : Symbol(l, Decl(discriminateObjectTypesOnly.ts, 8, 5))
+>Thing3 : Symbol(Thing3, Decl(discriminateObjectTypesOnly.ts, 5, 37))
+>toString : Symbol(toString, Decl(discriminateObjectTypesOnly.ts, 8, 19))
+>undefined : Symbol(undefined)
+

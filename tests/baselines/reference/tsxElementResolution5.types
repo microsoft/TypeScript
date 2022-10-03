@@ -1,0 +1,11 @@
+=== tests/cases/conformance/jsx/file1.tsx ===
+declare module JSX {
+	interface Element { }
+}
+
+// OK, but implicit any
+<div n='x' />;
+><div n='x' /> : JSX.Element
+>div : any
+>n : string
+

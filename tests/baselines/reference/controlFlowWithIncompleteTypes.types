@@ -1,0 +1,71 @@
+=== tests/cases/compiler/controlFlowWithIncompleteTypes.ts ===
+// Repro from #11000
+
+declare var cond: boolean;
+>cond : boolean
+
+function foo1() {
+>foo1 : () => void
+
+    let x: string | number | boolean = 0;
+>x : string | number | boolean
+>0 : 0
+
+    while (cond) {
+>cond : boolean
+
+        if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+            x = x.slice();
+>x = x.slice() : string
+>x : string | number | boolean
+>x.slice() : string
+>x.slice : (start?: number, end?: number) => string
+>x : string
+>slice : (start?: number, end?: number) => string
+        }
+        else {
+            x = "abc";
+>x = "abc" : "abc"
+>x : string | number | boolean
+>"abc" : "abc"
+        }
+    }
+}
+
+function foo2() {
+>foo2 : () => void
+
+    let x: string | number | boolean = 0;
+>x : string | number | boolean
+>0 : 0
+
+    while (cond) {
+>cond : boolean
+
+        if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"number" : "number"
+
+            x = "abc";
+>x = "abc" : "abc"
+>x : string | number | boolean
+>"abc" : "abc"
+        }
+        else {
+            x = x.slice();
+>x = x.slice() : string
+>x : string | number | boolean
+>x.slice() : string
+>x.slice : (start?: number, end?: number) => string
+>x : string
+>slice : (start?: number, end?: number) => string
+        }
+    }
+}

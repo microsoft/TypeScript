@@ -1,0 +1,7 @@
+
+1  >module Bar {
+
+    ~~~~~~~~~~~~~                                 => Pos: (0 to 12)  SpanInfo: undefined
+--------------------------------
+2  >}
+    ~                                             => Pos: (13 to 13)  SpanInfo: undefined

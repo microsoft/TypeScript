@@ -1,0 +1,156 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts ===
+class C1 {
+>C1 : C1
+
+    constructor(private k: number, private [a, b, c]: [number, string, boolean]) {
+>k : number
+>a : number
+>b : string
+>c : boolean
+
+        if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+>(b === undefined && c === undefined) || (this.b === undefined && this.c === undefined) : boolean
+>(b === undefined && c === undefined) : boolean
+>b === undefined && c === undefined : boolean
+>b === undefined : boolean
+>b : string
+>undefined : undefined
+>c === undefined : boolean
+>c : boolean
+>undefined : undefined
+>(this.b === undefined && this.c === undefined) : boolean
+>this.b === undefined && this.c === undefined : boolean
+>this.b === undefined : boolean
+>this.b : any
+>this : this
+>b : any
+>undefined : undefined
+>this.c === undefined : boolean
+>this.c : any
+>this : this
+>c : any
+>undefined : undefined
+
+            this.a = a || k;
+>this.a = a || k : number
+>this.a : any
+>this : this
+>a : any
+>a || k : number
+>a : number
+>k : number
+        }
+    }
+
+    public getA() {
+>getA : () => any
+
+        return this.a
+>this.a : any
+>this : this
+>a : any
+    }
+
+    public getB() {
+>getB : () => any
+
+        return this.b
+>this.b : any
+>this : this
+>b : any
+    }
+
+    public getC() {
+>getC : () => any
+
+        return this.c;
+>this.c : any
+>this : this
+>c : any
+    }
+}
+
+var x = new C1(undefined, [0, undefined, ""]);
+>x : C1
+>new C1(undefined, [0, undefined, ""]) : C1
+>C1 : typeof C1
+>undefined : undefined
+>[0, undefined, ""] : [number, undefined, string]
+>0 : 0
+>undefined : undefined
+>"" : ""
+
+var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
+>x_a : any
+>x_b : any
+>x_c : any
+>[x.getA(), x.getB(), x.getC()] : [any, any, any]
+>x.getA() : any
+>x.getA : () => any
+>x : C1
+>getA : () => any
+>x.getB() : any
+>x.getB : () => any
+>x : C1
+>getB : () => any
+>x.getC() : any
+>x.getC : () => any
+>x : C1
+>getC : () => any
+
+var y = new C1(10, [0, "", true]);
+>y : C1
+>new C1(10, [0, "", true]) : C1
+>C1 : typeof C1
+>10 : 10
+>[0, "", true] : [number, string, true]
+>0 : 0
+>"" : ""
+>true : true
+
+var [y_a, y_b, y_c] = [y.getA(), y.getB(), y.getC()];
+>y_a : any
+>y_b : any
+>y_c : any
+>[y.getA(), y.getB(), y.getC()] : [any, any, any]
+>y.getA() : any
+>y.getA : () => any
+>y : C1
+>getA : () => any
+>y.getB() : any
+>y.getB : () => any
+>y : C1
+>getB : () => any
+>y.getC() : any
+>y.getC : () => any
+>y : C1
+>getC : () => any
+
+var z = new C1(10, [undefined, "", null]);
+>z : C1
+>new C1(10, [undefined, "", null]) : C1
+>C1 : typeof C1
+>10 : 10
+>[undefined, "", null] : [undefined, string, null]
+>undefined : undefined
+>"" : ""
+>null : null
+
+var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
+>z_a : any
+>z_b : any
+>z_c : any
+>[z.getA(), z.getB(), z.getC()] : [any, any, any]
+>z.getA() : any
+>z.getA : () => any
+>z : C1
+>getA : () => any
+>z.getB() : any
+>z.getB : () => any
+>z : C1
+>getB : () => any
+>z.getC() : any
+>z.getC : () => any
+>z : C1
+>getC : () => any
+

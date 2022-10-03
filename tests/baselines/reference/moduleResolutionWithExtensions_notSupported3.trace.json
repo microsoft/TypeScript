@@ -1,0 +1,13 @@
+[
+    "======== Resolving module './jsx' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/jsx', target file type 'TypeScript'.",
+    "File '/jsx.ts' does not exist.",
+    "File '/jsx.tsx' does not exist.",
+    "File '/jsx.d.ts' does not exist.",
+    "Directory '/jsx' does not exist, skipping all lookups in it.",
+    "Loading module as file / folder, candidate module location '/jsx', target file type 'JavaScript'.",
+    "File '/jsx.js' does not exist.",
+    "File '/jsx.jsx' exist - use it as a name resolution result.",
+    "======== Module name './jsx' was successfully resolved to '/jsx.jsx'. ========"
+]

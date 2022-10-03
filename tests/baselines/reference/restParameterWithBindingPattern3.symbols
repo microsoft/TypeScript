@@ -1,0 +1,27 @@
+=== tests/cases/compiler/restParameterWithBindingPattern3.ts ===
+function a(...[a = 1, b = true]: string[]) { }
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 0, 0))
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 0, 15))
+>b : Symbol(b, Decl(restParameterWithBindingPattern3.ts, 0, 21))
+
+function b(...[...foo = []]: string[]) { }
+>b : Symbol(b, Decl(restParameterWithBindingPattern3.ts, 0, 46))
+>foo : Symbol(foo, Decl(restParameterWithBindingPattern3.ts, 2, 15))
+
+function c(...{0: a, length, 3: d}: [boolean, string, number]) { }
+>c : Symbol(c, Decl(restParameterWithBindingPattern3.ts, 2, 42))
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 4, 15))
+>length : Symbol(length, Decl(restParameterWithBindingPattern3.ts, 4, 20))
+>d : Symbol(d, Decl(restParameterWithBindingPattern3.ts, 4, 28))
+
+function d(...[a, , , d]: [boolean, string, number]) { }
+>d : Symbol(d, Decl(restParameterWithBindingPattern3.ts, 4, 66))
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 6, 15))
+>d : Symbol(d, Decl(restParameterWithBindingPattern3.ts, 6, 21))
+
+function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
+>e : Symbol(e, Decl(restParameterWithBindingPattern3.ts, 6, 56))
+>a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 8, 15))
+>b : Symbol(b, Decl(restParameterWithBindingPattern3.ts, 8, 24))
+>rest : Symbol(rest, Decl(restParameterWithBindingPattern3.ts, 8, 37))
+

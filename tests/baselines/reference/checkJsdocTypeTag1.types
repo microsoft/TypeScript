@@ -1,0 +1,102 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/** @type {String} */
+var S = "hello world";
+>S : string
+>"hello world" : "hello world"
+
+/** @type {number} */
+var n = 10;
+>n : number
+>10 : 10
+
+/** @type {*} */
+var anyT = 2;
+>anyT : any
+>2 : 2
+
+anyT = "hello";
+>anyT = "hello" : "hello"
+>anyT : any
+>"hello" : "hello"
+
+/** @type {?} */
+var anyT1 = 2;
+>anyT1 : any
+>2 : 2
+
+anyT1 = "hi";
+>anyT1 = "hi" : "hi"
+>anyT1 : any
+>"hi" : "hi"
+
+/** @type {Function} */
+const x = (a) => a + 1;
+>x : Function
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x(1);
+>x(1) : any
+>x : Function
+>1 : 1
+
+/** @type {function} */
+const y = (a) => a + 1;
+>y : Function
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+y(1);
+>y(1) : any
+>y : Function
+>1 : 1
+
+/** @type {function (number)} */
+const x1 = (a) => a + 1;
+>x1 : (arg0: number) => any
+>(a) => a + 1 : (a: number) => any
+>a : number
+>a + 1 : number
+>a : number
+>1 : 1
+
+x1(0);
+>x1(0) : any
+>x1 : (arg0: number) => any
+>0 : 0
+
+/** @type {function (number): number} */
+const x2 = (a) => a + 1;
+>x2 : (arg0: number) => number
+>(a) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
+>1 : 1
+
+x2(0);
+>x2(0) : number
+>x2 : (arg0: number) => number
+>0 : 0
+
+/**
+ * @type {object}
+ */
+var props = {};
+>props : any
+>{} : {}
+
+/**
+ * @type {Object}
+ */
+var props = {};
+>props : any
+>{} : {}
+

@@ -1,0 +1,67 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+export module A {
+>A : typeof A
+
+    export interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+
+    export module Utils {
+>Utils : typeof Utils
+
+        export function mirror<T extends Point>(p: T) {
+>mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>p : T
+
+            return { x: p.y, y: p.x };
+>{ x: p.y, y: p.x } : { x: number; y: number; }
+>x : number
+>p.y : number
+>p : T
+>y : number
+>y : number
+>p.x : number
+>p : T
+>x : number
+        }
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+export module A {
+>A : typeof A
+
+    // collision with 'Origin' var in other part of merged module
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    export module Utils {
+>Utils : typeof Utils
+
+        export class Plane {
+>Plane : Plane
+
+            constructor(public tl: Point, public br: Point) { }
+>tl : Point
+>br : Point
+        }
+    }
+}
+

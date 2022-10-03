@@ -1,0 +1,31 @@
+=== tests/cases/conformance/decorators/class/constructor/0.ts ===
+export class base { }
+>base : Symbol(base, Decl(0.ts, 0, 0))
+
+export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
+>foo : Symbol(foo, Decl(0.ts, 0, 21))
+>target : Symbol(target, Decl(0.ts, 1, 20))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propertyKey : Symbol(propertyKey, Decl(0.ts, 1, 35))
+>parameterIndex : Symbol(parameterIndex, Decl(0.ts, 1, 65))
+
+=== tests/cases/conformance/decorators/class/constructor/2.ts ===
+import {base} from "./0"
+>base : Symbol(base, Decl(2.ts, 0, 8))
+
+import {foo} from "./0"
+>foo : Symbol(foo, Decl(2.ts, 1, 8))
+
+/* Comment on the Class Declaration */
+export class C  extends base{
+>C : Symbol(C, Decl(2.ts, 1, 23))
+>base : Symbol(base, Decl(2.ts, 0, 8))
+
+    constructor(@foo prop: any) {
+>foo : Symbol(foo, Decl(2.ts, 1, 8))
+>prop : Symbol(prop, Decl(2.ts, 5, 16))
+
+        super();
+>super : Symbol(base, Decl(0.ts, 0, 0))
+    }
+}

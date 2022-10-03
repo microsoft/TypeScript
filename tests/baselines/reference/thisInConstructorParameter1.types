@@ -1,0 +1,13 @@
+=== tests/cases/compiler/thisInConstructorParameter1.ts ===
+class Foo {
+>Foo : Foo
+
+    public y;
+>y : any
+
+    constructor(x = this.y) { }
+>x : any
+>this.y : any
+>this : this
+>y : any
+}

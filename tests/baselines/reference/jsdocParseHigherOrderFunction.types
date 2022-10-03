@@ -1,0 +1,11 @@
+=== tests/cases/conformance/jsdoc/paren.js ===
+/** @type {function((string), function((string)): string): string} */
+var x = (s, id) => id(s)
+>x : (arg0: string, arg1: (arg0: string) => string) => string
+>(s, id) => id(s) : (s: string, id: (arg0: string) => string) => string
+>s : string
+>id : (arg0: string) => string
+>id(s) : string
+>id : (arg0: string) => string
+>s : string
+

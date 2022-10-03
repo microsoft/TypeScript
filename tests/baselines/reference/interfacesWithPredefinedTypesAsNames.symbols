@@ -1,0 +1,20 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts ===
+interface any { }
+>any : Symbol(any, Decl(interfacesWithPredefinedTypesAsNames.ts, 0, 0))
+
+interface number { }
+>number : Symbol(number, Decl(interfacesWithPredefinedTypesAsNames.ts, 0, 17))
+
+interface string { }
+>string : Symbol(string, Decl(interfacesWithPredefinedTypesAsNames.ts, 1, 20))
+
+interface boolean { }
+>boolean : Symbol(boolean, Decl(interfacesWithPredefinedTypesAsNames.ts, 2, 20))
+
+interface void {}
+interface unknown {}
+>unknown : Symbol(unknown, Decl(interfacesWithPredefinedTypesAsNames.ts, 4, 17))
+
+interface never {}
+>never : Symbol(never, Decl(interfacesWithPredefinedTypesAsNames.ts, 5, 20))
+

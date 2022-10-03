@@ -1,0 +1,223 @@
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(id: string): any;
+>require : (id: string) => any
+>id : string
+
+declare var module: any, exports: any;
+>module : any
+>exports : any
+
+=== tests/cases/conformance/salsa/a-ext.js ===
+exports.A = function () {
+>exports.A = function () {    this.x = 1;} : typeof A
+>exports.A : typeof A
+>exports : typeof import("tests/cases/conformance/salsa/a-ext")
+>A : typeof A
+>function () {    this.x = 1;} : typeof A
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+};
+
+=== tests/cases/conformance/salsa/a.js ===
+const { A } = require("./a-ext");
+>A : typeof A
+>require("./a-ext") : typeof import("tests/cases/conformance/salsa/a-ext")
+>require : (id: string) => any
+>"./a-ext" : "./a-ext"
+
+/** @param {A} p */
+function a(p) { p.x; }
+>a : (p: A) => void
+>p : A
+>p.x : number
+>p : A
+>x : number
+
+=== tests/cases/conformance/salsa/b-ext.js ===
+exports.B = class {
+>exports.B = class {    constructor() {        this.x = 1;    }} : typeof B
+>exports.B : typeof B
+>exports : typeof import("tests/cases/conformance/salsa/b-ext")
+>B : typeof B
+>class {    constructor() {        this.x = 1;    }} : typeof B
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+};
+
+=== tests/cases/conformance/salsa/b.js ===
+const { B } = require("./b-ext");
+>B : typeof B
+>require("./b-ext") : typeof import("tests/cases/conformance/salsa/b-ext")
+>require : (id: string) => any
+>"./b-ext" : "./b-ext"
+
+/** @param {B} p */
+function b(p) { p.x; }
+>b : (p: B) => void
+>p : B
+>p.x : number
+>p : B
+>x : number
+
+=== tests/cases/conformance/salsa/c-ext.js ===
+export function C() {
+>C : typeof C
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+}
+
+=== tests/cases/conformance/salsa/c.js ===
+const { C } = require("./c-ext");
+>C : typeof C
+>require("./c-ext") : typeof import("tests/cases/conformance/salsa/c-ext")
+>require : (id: string) => any
+>"./c-ext" : "./c-ext"
+
+/** @param {C} p */
+function c(p) { p.x; }
+>c : (p: C) => void
+>p : C
+>p.x : number
+>p : C
+>x : number
+
+=== tests/cases/conformance/salsa/d-ext.js ===
+export var D = function() {
+>D : typeof D
+>function() {    this.x = 1;} : typeof D
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+};
+
+=== tests/cases/conformance/salsa/d.js ===
+const { D } = require("./d-ext");
+>D : typeof D
+>require("./d-ext") : typeof import("tests/cases/conformance/salsa/d-ext")
+>require : (id: string) => any
+>"./d-ext" : "./d-ext"
+
+/** @param {D} p */
+function d(p) { p.x; }
+>d : (p: D) => void
+>p : D
+>p.x : number
+>p : D
+>x : number
+
+=== tests/cases/conformance/salsa/e-ext.js ===
+export class E {
+>E : E
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+}
+
+=== tests/cases/conformance/salsa/e.js ===
+const { E } = require("./e-ext");
+>E : typeof E
+>require("./e-ext") : typeof import("tests/cases/conformance/salsa/e-ext")
+>require : (id: string) => any
+>"./e-ext" : "./e-ext"
+
+/** @param {E} p */
+function e(p) { p.x; }
+>e : (p: E) => void
+>p : E
+>p.x : number
+>p : E
+>x : number
+
+=== tests/cases/conformance/salsa/f.js ===
+var F = function () {
+>F : typeof F
+>function () {    this.x = 1;} : typeof F
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+};
+
+/** @param {F} p */
+function f(p) { p.x; }
+>f : (p: F) => void
+>p : F
+>p.x : number
+>p : F
+>x : number
+
+=== tests/cases/conformance/salsa/g.js ===
+function G() {
+>G : typeof G
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+}
+
+/** @param {G} p */
+function g(p) { p.x; }
+>g : (p: G) => void
+>p : G
+>p.x : number
+>p : G
+>x : number
+
+=== tests/cases/conformance/salsa/h.js ===
+class H {
+>H : H
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+}
+
+/** @param {H} p */
+function h(p) { p.x; }
+>h : (p: H) => void
+>p : H
+>p.x : number
+>p : H
+>x : number
+

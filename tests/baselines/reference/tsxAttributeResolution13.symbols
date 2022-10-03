@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+function Test() { }
+>Test : Symbol(Test, Decl(test.tsx, 0, 0))
+
+<Test></Test>
+>Test : Symbol(Test, Decl(test.tsx, 0, 0))
+>Test : Symbol(Test, Decl(test.tsx, 0, 0))
+

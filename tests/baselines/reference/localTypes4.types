@@ -1,0 +1,84 @@
+=== tests/cases/conformance/types/localTypes/localTypes4.ts ===
+function f1() {
+>f1 : () => void
+
+    // Type parameters are in scope in parameters and return types
+    function f<T>(x: T): T {
+>f : <T>(x: T) => T
+>x : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+function f2() {
+>f2 : () => void
+
+    // Local types are not in scope in parameters and return types
+    function f(x: T): T {
+>f : (x: T) => T
+>x : T
+
+        interface T { }
+        return undefined;
+>undefined : undefined
+    }
+}
+
+function f3() {
+>f3 : () => void
+
+    // Type parameters and top-level local types are in same declaration space
+    function f<T>() {
+>f : <T>() => any
+
+        interface T { }
+        return undefined;
+>undefined : undefined
+    }
+}
+
+function f4() {
+>f4 : () => void
+
+    // Local types are block scoped
+    interface T { x: number }
+>x : number
+
+    let v: T;
+>v : T
+
+    v.x = 10;
+>v.x = 10 : 10
+>v.x : number
+>v : T
+>x : number
+>10 : 10
+
+    if (true) {
+>true : true
+
+        interface T { x: string }
+>x : string
+
+        let v: T;
+>v : T
+
+        v.x = "hello";
+>v.x = "hello" : "hello"
+>v.x : string
+>v : T
+>x : string
+>"hello" : "hello"
+    }
+    else {
+        v.x = 20;
+>v.x = 20 : 20
+>v.x : number
+>v : T
+>x : number
+>20 : 20
+    }
+}
+

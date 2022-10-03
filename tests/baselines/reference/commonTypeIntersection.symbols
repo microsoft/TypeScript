@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/intersection/commonTypeIntersection.ts ===
+declare let x1: { __typename?: 'TypeTwo' } & { a: boolean };
+>x1 : Symbol(x1, Decl(commonTypeIntersection.ts, 0, 11))
+>__typename : Symbol(__typename, Decl(commonTypeIntersection.ts, 0, 17))
+>a : Symbol(a, Decl(commonTypeIntersection.ts, 0, 46))
+
+let y1: { __typename?: 'TypeOne' } & { a: boolean} = x1;  // should error here
+>y1 : Symbol(y1, Decl(commonTypeIntersection.ts, 1, 3))
+>__typename : Symbol(__typename, Decl(commonTypeIntersection.ts, 1, 9))
+>a : Symbol(a, Decl(commonTypeIntersection.ts, 1, 38))
+>x1 : Symbol(x1, Decl(commonTypeIntersection.ts, 0, 11))
+
+declare let x2: { __typename?: 'TypeTwo' } & string;
+>x2 : Symbol(x2, Decl(commonTypeIntersection.ts, 2, 11))
+>__typename : Symbol(__typename, Decl(commonTypeIntersection.ts, 2, 17))
+
+let y2: { __typename?: 'TypeOne' } & string = x2;  // should error here
+>y2 : Symbol(y2, Decl(commonTypeIntersection.ts, 3, 3))
+>__typename : Symbol(__typename, Decl(commonTypeIntersection.ts, 3, 9))
+>x2 : Symbol(x2, Decl(commonTypeIntersection.ts, 2, 11))
+

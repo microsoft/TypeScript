@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of30.ts ===
+class StringIterator {
+>StringIterator : StringIterator
+
+    next() {
+>next : () => { done: boolean; value: string; }
+
+        return {
+>{            done: false,            value: ""        } : { done: boolean; value: string; }
+
+            done: false,
+>done : boolean
+>false : false
+
+            value: ""
+>value : string
+>"" : ""
+        }
+    }
+
+    return = 0;
+>return : number
+>0 : 0
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+for (var v of new StringIterator) { }
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

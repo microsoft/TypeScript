@@ -1,0 +1,63 @@
+=== tests/cases/compiler/typeArgInference2.ts ===
+interface Item {
+    name: string;
+>name : string
+}
+
+declare function foo<T extends Item>(x?: T, y?: T): T;
+>foo : <T extends Item>(x?: T, y?: T) => T
+>x : T
+>y : T
+
+var z1 = foo(null);                   // any
+>z1 : any
+>foo(null) : any
+>foo : <T extends Item>(x?: T, y?: T) => T
+>null : null
+
+var z2 = foo();                       // Item
+>z2 : Item
+>foo() : Item
+>foo : <T extends Item>(x?: T, y?: T) => T
+
+var z3 = foo({ name: null });         // { name: any }
+>z3 : { name: any; }
+>foo({ name: null }) : { name: any; }
+>foo : <T extends Item>(x?: T, y?: T) => T
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+var z4 = foo({ name: "abc" });        // { name: string }
+>z4 : { name: string; }
+>foo({ name: "abc" }) : { name: string; }
+>foo : <T extends Item>(x?: T, y?: T) => T
+>{ name: "abc" } : { name: string; }
+>name : string
+>"abc" : "abc"
+
+var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
+>z5 : { name: string; a: number; }
+>foo({ name: "abc", a: 5 }) : { name: string; a: number; }
+>foo : <T extends Item>(x?: T, y?: T) => T
+>{ name: "abc", a: 5 } : { name: string; a: number; }
+>name : string
+>"abc" : "abc"
+>a : number
+>5 : 5
+
+var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
+>z6 : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
+>foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
+>foo : <T extends Item>(x?: T, y?: T) => T
+>{ name: "abc", a: 5 } : { name: string; a: number; }
+>name : string
+>"abc" : "abc"
+>a : number
+>5 : 5
+>{ name: "def", b: 5 } : { name: string; b: number; }
+>name : string
+>"def" : "def"
+>b : number
+>5 : 5
+

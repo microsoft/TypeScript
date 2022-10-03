@@ -1,0 +1,10 @@
+tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts(1,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts(1,23): error TS2664: Invalid module name in augmentation, module 'M' cannot be found.
+
+
+==== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts (2 errors) ====
+    export declare module "M" { }
+    ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+                          ~~~
+!!! error TS2664: Invalid module name in augmentation, module 'M' cannot be found.

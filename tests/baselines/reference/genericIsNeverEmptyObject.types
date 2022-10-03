@@ -1,0 +1,36 @@
+=== tests/cases/compiler/genericIsNeverEmptyObject.ts ===
+// Repro from #29067
+
+function test<T extends { a: string }>(obj: T) {
+>test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
+>a : string
+>obj : T
+
+    let { a, ...rest } = obj;
+>a : string
+>rest : Omit<T, "a">
+>obj : T
+
+    return { ...rest, b: a };
+>{ ...rest, b: a } : Omit<T, "a"> & { b: string; }
+>rest : Omit<T, "a">
+>b : string
+>a : string
+}
+
+let o1 = { a: 'hello', x: 42 };
+>o1 : { a: string; x: number; }
+>{ a: 'hello', x: 42 } : { a: string; x: number; }
+>a : string
+>'hello' : "hello"
+>x : number
+>42 : 42
+
+let o2: { b: string, x: number } = test(o1);
+>o2 : { b: string; x: number; }
+>b : string
+>x : number
+>test(o1) : Omit<{ a: string; x: number; }, "a"> & { b: string; }
+>test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
+>o1 : { a: string; x: number; }
+

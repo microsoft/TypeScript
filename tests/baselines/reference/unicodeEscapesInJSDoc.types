@@ -1,0 +1,39 @@
+=== tests/cases/compiler/file.js ===
+/**
+ * @param {number} \u0061
+ * @param {number} a\u0061
+ */
+function foo(a, aa) {
+>foo : (a: number, aa: number) => void
+>a : number
+>aa : number
+
+    console.log(a + aa);
+>console.log(a + aa) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a + aa : number
+>a : number
+>aa : number
+}
+
+/**
+ * @param {number} \u{0061}
+ * @param {number} a\u{0061}
+ */
+function bar(a, aa) {
+>bar : (a: number, aa: number) => void
+>a : number
+>aa : number
+
+    console.log(a + aa);
+>console.log(a + aa) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a + aa : number
+>a : number
+>aa : number
+}
+

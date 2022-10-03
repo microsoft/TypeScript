@@ -1,0 +1,644 @@
+=== tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+
+interface REACT_STATICS {
+>REACT_STATICS : Symbol(REACT_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 31))
+
+    childContextTypes: true;
+>childContextTypes : Symbol(REACT_STATICS.childContextTypes, Decl(styledComponentsInstantiaionLimitNotReached.ts, 3, 25))
+
+    contextType: true;
+>contextType : Symbol(REACT_STATICS.contextType, Decl(styledComponentsInstantiaionLimitNotReached.ts, 4, 28))
+
+    contextTypes: true;
+>contextTypes : Symbol(REACT_STATICS.contextTypes, Decl(styledComponentsInstantiaionLimitNotReached.ts, 5, 22))
+
+    defaultProps: true;
+>defaultProps : Symbol(REACT_STATICS.defaultProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 6, 23))
+
+    displayName: true;
+>displayName : Symbol(REACT_STATICS.displayName, Decl(styledComponentsInstantiaionLimitNotReached.ts, 7, 23))
+
+    getDefaultProps: true;
+>getDefaultProps : Symbol(REACT_STATICS.getDefaultProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 8, 22))
+
+    getDerivedStateFromError: true;
+>getDerivedStateFromError : Symbol(REACT_STATICS.getDerivedStateFromError, Decl(styledComponentsInstantiaionLimitNotReached.ts, 9, 26))
+
+    getDerivedStateFromProps: true;
+>getDerivedStateFromProps : Symbol(REACT_STATICS.getDerivedStateFromProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 10, 35))
+
+    mixins: true;
+>mixins : Symbol(REACT_STATICS.mixins, Decl(styledComponentsInstantiaionLimitNotReached.ts, 11, 35))
+
+    propTypes: true;
+>propTypes : Symbol(REACT_STATICS.propTypes, Decl(styledComponentsInstantiaionLimitNotReached.ts, 12, 17))
+
+    type: true;
+>type : Symbol(REACT_STATICS.type, Decl(styledComponentsInstantiaionLimitNotReached.ts, 13, 20))
+}
+
+interface KNOWN_STATICS {
+>KNOWN_STATICS : Symbol(KNOWN_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 15, 1))
+
+    name: true;
+>name : Symbol(KNOWN_STATICS.name, Decl(styledComponentsInstantiaionLimitNotReached.ts, 17, 25))
+
+    length: true;
+>length : Symbol(KNOWN_STATICS.length, Decl(styledComponentsInstantiaionLimitNotReached.ts, 18, 15))
+
+    prototype: true;
+>prototype : Symbol(KNOWN_STATICS.prototype, Decl(styledComponentsInstantiaionLimitNotReached.ts, 19, 17))
+
+    caller: true;
+>caller : Symbol(KNOWN_STATICS.caller, Decl(styledComponentsInstantiaionLimitNotReached.ts, 20, 20))
+
+    callee: true;
+>callee : Symbol(KNOWN_STATICS.callee, Decl(styledComponentsInstantiaionLimitNotReached.ts, 21, 17))
+
+    arguments: true;
+>arguments : Symbol(KNOWN_STATICS.arguments, Decl(styledComponentsInstantiaionLimitNotReached.ts, 22, 17))
+
+    arity: true;
+>arity : Symbol(KNOWN_STATICS.arity, Decl(styledComponentsInstantiaionLimitNotReached.ts, 23, 20))
+}
+
+interface MEMO_STATICS {
+>MEMO_STATICS : Symbol(MEMO_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 25, 1))
+
+    '$$typeof': true;
+>'$$typeof' : Symbol(MEMO_STATICS['$$typeof'], Decl(styledComponentsInstantiaionLimitNotReached.ts, 27, 24))
+
+    compare: true;
+>compare : Symbol(MEMO_STATICS.compare, Decl(styledComponentsInstantiaionLimitNotReached.ts, 28, 21))
+
+    defaultProps: true;
+>defaultProps : Symbol(MEMO_STATICS.defaultProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 29, 18))
+
+    displayName: true;
+>displayName : Symbol(MEMO_STATICS.displayName, Decl(styledComponentsInstantiaionLimitNotReached.ts, 30, 23))
+
+    propTypes: true;
+>propTypes : Symbol(MEMO_STATICS.propTypes, Decl(styledComponentsInstantiaionLimitNotReached.ts, 31, 22))
+
+    type: true;
+>type : Symbol(MEMO_STATICS.type, Decl(styledComponentsInstantiaionLimitNotReached.ts, 32, 20))
+}
+
+interface FORWARD_REF_STATICS {
+>FORWARD_REF_STATICS : Symbol(FORWARD_REF_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 34, 1))
+
+    '$$typeof': true;
+>'$$typeof' : Symbol(FORWARD_REF_STATICS['$$typeof'], Decl(styledComponentsInstantiaionLimitNotReached.ts, 36, 31))
+
+    render: true;
+>render : Symbol(FORWARD_REF_STATICS.render, Decl(styledComponentsInstantiaionLimitNotReached.ts, 37, 21))
+
+    defaultProps: true;
+>defaultProps : Symbol(FORWARD_REF_STATICS.defaultProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 38, 17))
+
+    displayName: true;
+>displayName : Symbol(FORWARD_REF_STATICS.displayName, Decl(styledComponentsInstantiaionLimitNotReached.ts, 39, 23))
+
+    propTypes: true;
+>propTypes : Symbol(FORWARD_REF_STATICS.propTypes, Decl(styledComponentsInstantiaionLimitNotReached.ts, 40, 22))
+}
+
+
+type NonReactStatics<
+>NonReactStatics : Symbol(NonReactStatics, Decl(styledComponentsInstantiaionLimitNotReached.ts, 42, 1))
+
+    S extends React.ComponentType<any>,
+>S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    C extends {
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 46, 39))
+
+        [key: string]: true
+>key : Symbol(key, Decl(styledComponentsInstantiaionLimitNotReached.ts, 48, 9))
+
+    } = {}
+    > = {
+        [key in Exclude<
+>key : Symbol(key, Decl(styledComponentsInstantiaionLimitNotReached.ts, 51, 9))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+
+            keyof S,
+>S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
+
+            S extends React.MemoExoticComponent<any>
+>S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>MemoExoticComponent : Symbol(React.MemoExoticComponent, Decl(react16.d.ts, 2440, 47))
+
+            ? keyof MEMO_STATICS | keyof C
+>MEMO_STATICS : Symbol(MEMO_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 25, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 46, 39))
+
+            : S extends React.ForwardRefExoticComponent<any>
+>S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
+
+            ? keyof FORWARD_REF_STATICS | keyof C
+>FORWARD_REF_STATICS : Symbol(FORWARD_REF_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 34, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 46, 39))
+
+            : keyof REACT_STATICS | keyof KNOWN_STATICS | keyof C
+>REACT_STATICS : Symbol(REACT_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 31))
+>KNOWN_STATICS : Symbol(KNOWN_STATICS, Decl(styledComponentsInstantiaionLimitNotReached.ts, 15, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 46, 39))
+
+        >]: S[key]
+>S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
+>key : Symbol(key, Decl(styledComponentsInstantiaionLimitNotReached.ts, 51, 9))
+
+    };
+
+export type AnyStyledComponent = StyledComponent<any, any, any, any> | StyledComponent<any, any, any>;
+>AnyStyledComponent : Symbol(AnyStyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 59, 6))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+
+export type StyledComponent<
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+
+    C extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 62, 28))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    T extends object,
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 63, 69))
+
+    O extends object = {},
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 64, 21))
+
+    A extends keyof any = never
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 65, 26))
+
+    > = // the "string" allows this to be used as an object key
+    // I really want to avoid this if possible but it's the only way to use nesting with object styles...
+    string &
+    StyledComponentBase<C, T, O, A> &
+>StyledComponentBase : Symbol(StyledComponentBase, Decl(styledComponentsInstantiaionLimitNotReached.ts, 152, 12))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 62, 28))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 63, 69))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 64, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 65, 26))
+
+    NonReactStatics<C extends React.ComponentType<any> ? C : never>;
+>NonReactStatics : Symbol(NonReactStatics, Decl(styledComponentsInstantiaionLimitNotReached.ts, 42, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 62, 28))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 62, 28))
+
+export type StyledComponentProps<
+>StyledComponentProps : Symbol(StyledComponentProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 71, 68))
+
+    // The Component from whose props are derived
+    C extends string | React.ComponentType<any>,
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    // The Theme from the current context
+    T extends object,
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 75, 48))
+
+    // The other props added by the template
+    O extends object,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 77, 21))
+
+    // The props that are made optional by .attrs
+    A extends keyof any
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 79, 21))
+
+    > =
+    // Distribute O if O is a union type
+    O extends object
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 77, 21))
+
+    ? WithOptionalTheme<
+>WithOptionalTheme : Symbol(WithOptionalTheme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 125, 64))
+
+        Omit<
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+
+            ReactDefaultizedProps<
+>ReactDefaultizedProps : Symbol(ReactDefaultizedProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 116, 12))
+
+                C,
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+
+                React.ComponentPropsWithRef<
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+
+                    C extends IntrinsicElementsKeys | React.ComponentType<any> ? C : never
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+>IntrinsicElementsKeys : Symbol(IntrinsicElementsKeys, Decl(styledComponentsInstantiaionLimitNotReached.ts, 124, 9))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+
+                >
+            > &
+            O,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 77, 21))
+
+            A
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 79, 21))
+
+        > &
+        Partial<
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+
+            Pick<
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+                React.ComponentPropsWithRef<
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+
+                    C extends IntrinsicElementsKeys | React.ComponentType<any> ? C : never
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+>IntrinsicElementsKeys : Symbol(IntrinsicElementsKeys, Decl(styledComponentsInstantiaionLimitNotReached.ts, 124, 9))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+
+                > &
+                O,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 77, 21))
+
+                A
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 79, 21))
+
+            >
+        >,
+        T
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 75, 48))
+
+    > &
+    WithChildrenIfReactComponentClass<C>
+>WithChildrenIfReactComponentClass : Symbol(WithChildrenIfReactComponentClass, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 94))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 73, 33))
+
+    : never;
+
+type Defaultize<P, D> = P extends any
+>Defaultize : Symbol(Defaultize, Decl(styledComponentsInstantiaionLimitNotReached.ts, 108, 12))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+
+    ? string extends keyof P
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+
+    ? P
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+
+    : Pick<P, Exclude<keyof P, keyof D>> &
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
+
+    Partial<Pick<P, Extract<keyof P, keyof D>>> &
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
+
+    Partial<Pick<D, Exclude<keyof D, keyof P>>>
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
+
+    : never;
+
+type ReactDefaultizedProps<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
+>ReactDefaultizedProps : Symbol(ReactDefaultizedProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 116, 12))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 27))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 29))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 27))
+>defaultProps : Symbol(defaultProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 46))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 66))
+>Defaultize : Symbol(Defaultize, Decl(styledComponentsInstantiaionLimitNotReached.ts, 108, 12))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 29))
+>D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 66))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 29))
+
+type WithChildrenIfReactComponentClass<C extends string | React.ComponentType<any>> = C extends React.ComponentClass<
+>WithChildrenIfReactComponentClass : Symbol(WithChildrenIfReactComponentClass, Decl(styledComponentsInstantiaionLimitNotReached.ts, 118, 94))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 120, 39))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 120, 39))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+
+    any
+>
+    ? { children?: React.ReactNode }
+>children : Symbol(children, Decl(styledComponentsInstantiaionLimitNotReached.ts, 123, 7))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ReactNode : Symbol(React.ReactNode, Decl(react16.d.ts, 216, 49))
+
+    : {};
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+>IntrinsicElementsKeys : Symbol(IntrinsicElementsKeys, Decl(styledComponentsInstantiaionLimitNotReached.ts, 124, 9))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+
+type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
+>WithOptionalTheme : Symbol(WithOptionalTheme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 125, 64))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 23))
+>theme : Symbol(theme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 34))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 47))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 47))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 23))
+
+    theme?: T;
+>theme : Symbol(theme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 73))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 47))
+
+};
+
+type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>;
+>ForwardRefExoticBase : Symbol(ForwardRefExoticBase, Decl(styledComponentsInstantiaionLimitNotReached.ts, 128, 2))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 26))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
+>P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 26))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
+
+type StyledComponentPropsWithAs<
+>StyledComponentPropsWithAs : Symbol(StyledComponentPropsWithAs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 116))
+
+    C extends string | React.ComponentType<any>,
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 132, 32))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    T extends object,
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 133, 48))
+
+    O extends object,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 134, 21))
+
+    A extends keyof any,
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 135, 21))
+
+    F extends string | React.ComponentType<any> = C
+>F : Symbol(F, Decl(styledComponentsInstantiaionLimitNotReached.ts, 136, 24))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 132, 32))
+
+    > = StyledComponentProps<C, T, O, A> & { as?: C; forwardedAs?: F };
+>StyledComponentProps : Symbol(StyledComponentProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 71, 68))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 132, 32))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 133, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 134, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 135, 21))
+>as : Symbol(as, Decl(styledComponentsInstantiaionLimitNotReached.ts, 138, 44))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 132, 32))
+>forwardedAs : Symbol(forwardedAs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 138, 52))
+>F : Symbol(F, Decl(styledComponentsInstantiaionLimitNotReached.ts, 136, 24))
+
+export type StyledComponentInnerOtherProps<C extends AnyStyledComponent> = C extends StyledComponent<
+>StyledComponentInnerOtherProps : Symbol(StyledComponentInnerOtherProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 138, 71))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 140, 43))
+>AnyStyledComponent : Symbol(AnyStyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 59, 6))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 140, 43))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+
+    any,
+    any,
+    infer O,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 143, 9))
+
+    any
+>
+    ? O
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 143, 9))
+
+    : C extends StyledComponent<any, any, infer O>
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 140, 43))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 147, 47))
+
+    ? O
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 147, 47))
+
+    : never;
+export type StyledComponentInnerAttrs<C extends AnyStyledComponent> = C extends StyledComponent<any, any, any, infer A>
+>StyledComponentInnerAttrs : Symbol(StyledComponentInnerAttrs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 149, 12))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 150, 38))
+>AnyStyledComponent : Symbol(AnyStyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 59, 6))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 150, 38))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 150, 116))
+
+    ? A
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 150, 116))
+
+    : never;
+
+export interface StyledComponentBase<
+>StyledComponentBase : Symbol(StyledComponentBase, Decl(styledComponentsInstantiaionLimitNotReached.ts, 152, 12))
+
+    C extends string | React.ComponentType<any>,
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 154, 37))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    T extends object,
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+
+    O extends object = {},
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+
+    A extends keyof any = never
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+
+    > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
+>ForwardRefExoticBase : Symbol(ForwardRefExoticBase, Decl(styledComponentsInstantiaionLimitNotReached.ts, 128, 2))
+>StyledComponentProps : Symbol(StyledComponentProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 71, 68))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 154, 37))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+
+    // add our own fake call signature to implement the polymorphic 'as' prop
+    (props: StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never }): React.ReactElement<
+>props : Symbol(props, Decl(styledComponentsInstantiaionLimitNotReached.ts, 161, 5))
+>StyledComponentProps : Symbol(StyledComponentProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 71, 68))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 154, 37))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+>as : Symbol(as, Decl(styledComponentsInstantiaionLimitNotReached.ts, 161, 48))
+>forwardedAs : Symbol(forwardedAs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 161, 60))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+        StyledComponentProps<C, T, O, A>
+>StyledComponentProps : Symbol(StyledComponentProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 71, 68))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 154, 37))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+
+    >;
+    <AsC extends string | React.ComponentType<any> = C, FAsC extends string | React.ComponentType<any> = AsC>(
+>AsC : Symbol(AsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 5))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 154, 37))
+>FAsC : Symbol(FAsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 55))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>AsC : Symbol(AsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 5))
+
+        props: StyledComponentPropsWithAs<AsC, T, O, A, FAsC>,
+>props : Symbol(props, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 110))
+>StyledComponentPropsWithAs : Symbol(StyledComponentPropsWithAs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 116))
+>AsC : Symbol(AsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 5))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+>FAsC : Symbol(FAsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 55))
+
+    ): React.ReactElement<StyledComponentPropsWithAs<AsC, T, O, A, FAsC>>;
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+>StyledComponentPropsWithAs : Symbol(StyledComponentPropsWithAs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 116))
+>AsC : Symbol(AsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 5))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+>FAsC : Symbol(FAsC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 164, 55))
+
+    withComponent<WithC extends AnyStyledComponent>(
+>withComponent : Symbol(StyledComponentBase.withComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 166, 74), Decl(styledComponentsInstantiaionLimitNotReached.ts, 175, 6))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 18))
+>AnyStyledComponent : Symbol(AnyStyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 59, 6))
+
+        component: WithC,
+>component : Symbol(component, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 52))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 18))
+
+    ): StyledComponent<
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+
+        StyledComponentInnerComponent<WithC>,
+>StyledComponentInnerComponent : Symbol(StyledComponentInnerComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 179, 1))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 18))
+
+        T,
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+
+        O & StyledComponentInnerOtherProps<WithC>,
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>StyledComponentInnerOtherProps : Symbol(StyledComponentInnerOtherProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 138, 71))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 18))
+
+        A | StyledComponentInnerAttrs<WithC>
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+>StyledComponentInnerAttrs : Symbol(StyledComponentInnerAttrs, Decl(styledComponentsInstantiaionLimitNotReached.ts, 149, 12))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 168, 18))
+
+    >;
+    withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
+>withComponent : Symbol(StyledComponentBase.withComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 166, 74), Decl(styledComponentsInstantiaionLimitNotReached.ts, 175, 6))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 176, 18))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+        component: WithC,
+>component : Symbol(component, Decl(styledComponentsInstantiaionLimitNotReached.ts, 176, 88))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 176, 18))
+
+    ): StyledComponent<WithC, T, O, A>;
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+>WithC : Symbol(WithC, Decl(styledComponentsInstantiaionLimitNotReached.ts, 176, 18))
+>T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 155, 48))
+>O : Symbol(O, Decl(styledComponentsInstantiaionLimitNotReached.ts, 156, 21))
+>A : Symbol(A, Decl(styledComponentsInstantiaionLimitNotReached.ts, 157, 26))
+}
+
+export type StyledComponentInnerComponent<C extends React.ComponentType<any>> = C extends StyledComponent<
+>StyledComponentInnerComponent : Symbol(StyledComponentInnerComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 179, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 181, 42))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 181, 42))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+
+    infer I,
+>I : Symbol(I, Decl(styledComponentsInstantiaionLimitNotReached.ts, 182, 9))
+
+    any,
+    any,
+    any
+>
+    ? I
+>I : Symbol(I, Decl(styledComponentsInstantiaionLimitNotReached.ts, 182, 9))
+
+    : C extends StyledComponent<infer I, any, any>
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 181, 42))
+>StyledComponent : Symbol(StyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 61, 102))
+>I : Symbol(I, Decl(styledComponentsInstantiaionLimitNotReached.ts, 188, 37))
+
+    ? I
+>I : Symbol(I, Decl(styledComponentsInstantiaionLimitNotReached.ts, 188, 37))
+
+    : C;
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 181, 42))
+
+export type StyledComponentPropsWithRef<
+>StyledComponentPropsWithRef : Symbol(StyledComponentPropsWithRef, Decl(styledComponentsInstantiaionLimitNotReached.ts, 190, 8))
+
+    C extends keyof JSX.IntrinsicElements | React.ComponentType<any>
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 191, 40))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+
+    > = C extends AnyStyledComponent
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 191, 40))
+>AnyStyledComponent : Symbol(AnyStyledComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 59, 6))
+
+    ? React.ComponentPropsWithRef<StyledComponentInnerComponent<C>> // shouldn't have an instantiation limit error
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+>StyledComponentInnerComponent : Symbol(StyledComponentInnerComponent, Decl(styledComponentsInstantiaionLimitNotReached.ts, 179, 1))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 191, 40))
+
+    : React.ComponentPropsWithRef<C>;
+>React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+>C : Symbol(C, Decl(styledComponentsInstantiaionLimitNotReached.ts, 191, 40))
+

@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName3.ts ===
+var v = { [e]() { } };
+>v : Symbol(v, Decl(parserComputedPropertyName3.ts, 0, 3))
+>[e] : Symbol([e], Decl(parserComputedPropertyName3.ts, 0, 9))
+

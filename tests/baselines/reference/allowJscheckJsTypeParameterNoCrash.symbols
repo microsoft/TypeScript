@@ -1,0 +1,51 @@
+=== tests/cases/compiler/func.ts ===
+interface ComponentOptions<V> {
+>ComponentOptions : Symbol(ComponentOptions, Decl(func.ts, 0, 0))
+>V : Symbol(V, Decl(func.ts, 0, 27))
+
+    watch: Record<string, WatchHandler<any>>;
+>watch : Symbol(ComponentOptions.watch, Decl(func.ts, 0, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>WatchHandler : Symbol(WatchHandler, Decl(func.ts, 2, 1))
+}
+type WatchHandler<T> = (val: T) => void;
+>WatchHandler : Symbol(WatchHandler, Decl(func.ts, 2, 1))
+>T : Symbol(T, Decl(func.ts, 3, 18))
+>val : Symbol(val, Decl(func.ts, 3, 24))
+>T : Symbol(T, Decl(func.ts, 3, 18))
+
+declare function extend(options: ComponentOptions<{}>): void;
+>extend : Symbol(extend, Decl(func.ts, 3, 40))
+>options : Symbol(options, Decl(func.ts, 4, 24))
+>ComponentOptions : Symbol(ComponentOptions, Decl(func.ts, 0, 0))
+
+export var vextend = extend;
+>vextend : Symbol(vextend, Decl(func.ts, 5, 10))
+>extend : Symbol(extend, Decl(func.ts, 3, 40))
+
+=== tests/cases/compiler/app.js ===
+import {vextend} from './func';
+>vextend : Symbol(vextend, Decl(app.js, 0, 8))
+
+// hover on vextend
+export var a = vextend({
+>a : Symbol(a, Decl(app.js, 2, 10))
+>vextend : Symbol(vextend, Decl(app.js, 0, 8))
+
+  watch: {
+>watch : Symbol(watch, Decl(app.js, 2, 24))
+
+    data1(val) {
+>data1 : Symbol(data1, Decl(app.js, 3, 10))
+>val : Symbol(val, Decl(app.js, 4, 10))
+
+      this.data2 = 1;
+>this : Symbol(__type, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(app.js, 4, 16), Decl(app.js, 6, 6))
+
+    },
+    data2(val) { },
+>data2 : Symbol(data2, Decl(app.js, 4, 16), Decl(app.js, 6, 6))
+>val : Symbol(val, Decl(app.js, 7, 10))
+  }
+});

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/0.ts ===
+{
+    type Data = string | boolean;
+>Data : string | boolean
+
+    let obj: Data = true;
+>obj : string | boolean
+>true : true
+}
+export { }
+
+=== tests/cases/compiler/1.ts ===
+var x = "hi" || 5;
+>x : string | number
+>"hi" || 5 : "hi" | 5
+>"hi" : "hi"
+>5 : 5
+
+export default x;
+>x : string | number
+

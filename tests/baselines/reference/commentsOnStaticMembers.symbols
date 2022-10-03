@@ -1,0 +1,28 @@
+=== tests/cases/compiler/commentsOnStaticMembers.ts ===
+class test {
+>test : Symbol(test, Decl(commentsOnStaticMembers.ts, 0, 0))
+
+    /**
+     * p1 comment appears in output
+     */
+    public static p1: string = "";
+>p1 : Symbol(test.p1, Decl(commentsOnStaticMembers.ts, 0, 12))
+
+    /**
+     * p2 comment does not appear in output
+     */
+    public static p2: string;
+>p2 : Symbol(test.p2, Decl(commentsOnStaticMembers.ts, 4, 34))
+
+    /**
+     * p3 comment appears in output
+     */
+    private static p3: string = "";
+>p3 : Symbol(test.p3, Decl(commentsOnStaticMembers.ts, 8, 29))
+
+    /**
+     * p4 comment does not appear in output
+     */
+    private static p4: string;
+>p4 : Symbol(test.p4, Decl(commentsOnStaticMembers.ts, 13, 35))
+}

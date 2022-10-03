@@ -1,0 +1,37 @@
+=== tests/cases/compiler/classImplementsClass3.ts ===
+class A { foo(): number { return 1; } }
+>A : Symbol(A, Decl(classImplementsClass3.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(classImplementsClass3.ts, 0, 9))
+
+class C implements A {
+>C : Symbol(C, Decl(classImplementsClass3.ts, 0, 39))
+>A : Symbol(A, Decl(classImplementsClass3.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(classImplementsClass3.ts, 1, 22))
+
+        return 1;
+    }
+}
+
+class C2 extends A {}
+>C2 : Symbol(C2, Decl(classImplementsClass3.ts, 5, 1))
+>A : Symbol(A, Decl(classImplementsClass3.ts, 0, 0))
+
+// no errors
+var c: C;
+>c : Symbol(c, Decl(classImplementsClass3.ts, 10, 3))
+>C : Symbol(C, Decl(classImplementsClass3.ts, 0, 39))
+
+var c2: C2;
+>c2 : Symbol(c2, Decl(classImplementsClass3.ts, 11, 3))
+>C2 : Symbol(C2, Decl(classImplementsClass3.ts, 5, 1))
+
+c = c2;
+>c : Symbol(c, Decl(classImplementsClass3.ts, 10, 3))
+>c2 : Symbol(c2, Decl(classImplementsClass3.ts, 11, 3))
+
+c2 = c;
+>c2 : Symbol(c2, Decl(classImplementsClass3.ts, 11, 3))
+>c : Symbol(c, Decl(classImplementsClass3.ts, 10, 3))
+

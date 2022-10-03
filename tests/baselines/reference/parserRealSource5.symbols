@@ -1,0 +1,203 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource5.ts, 0, 0))
+
+    // TODO: refactor indent logic for use in emit
+    export class PrintContext {
+>PrintContext : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+
+        public builder = "";
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+
+        public indent1 = "  ";
+>indent1 : Symbol(PrintContext.indent1, Decl(parserRealSource5.ts, 8, 28))
+
+        public indentStrings: string[] = [];
+>indentStrings : Symbol(PrintContext.indentStrings, Decl(parserRealSource5.ts, 9, 30))
+
+        public indentAmt = 0;
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+
+        constructor (public outfile: ITextWriter, public parser: Parser) {
+>outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>ITextWriter : Symbol(ITextWriter, Decl(lib.scripthost.d.ts, --, --))
+>parser : Symbol(PrintContext.parser, Decl(parserRealSource5.ts, 13, 49))
+>Parser : Symbol(Parser)
+        }
+
+        public increaseIndent() {
+>increaseIndent : Symbol(PrintContext.increaseIndent, Decl(parserRealSource5.ts, 14, 9))
+
+            this.indentAmt++;
+>this.indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+        }
+
+        public decreaseIndent() {
+>decreaseIndent : Symbol(PrintContext.decreaseIndent, Decl(parserRealSource5.ts, 18, 9))
+
+            this.indentAmt--;
+>this.indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+        }
+
+        public startLine() {
+>startLine : Symbol(PrintContext.startLine, Decl(parserRealSource5.ts, 22, 9))
+
+            if (this.builder.length > 0) {
+>this.builder.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+                CompilerDiagnostics.Alert(this.builder);
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+            }
+            var indentString = this.indentStrings[this.indentAmt];
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+>this.indentStrings : Symbol(PrintContext.indentStrings, Decl(parserRealSource5.ts, 9, 30))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentStrings : Symbol(PrintContext.indentStrings, Decl(parserRealSource5.ts, 9, 30))
+>this.indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+
+            if (indentString === undefined) {
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+>undefined : Symbol(undefined)
+
+                indentString = "";
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+
+                for (var i = 0; i < this.indentAmt; i++) {
+>i : Symbol(i, Decl(parserRealSource5.ts, 31, 24))
+>i : Symbol(i, Decl(parserRealSource5.ts, 31, 24))
+>this.indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>i : Symbol(i, Decl(parserRealSource5.ts, 31, 24))
+
+                    indentString += this.indent1;
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+>this.indent1 : Symbol(PrintContext.indent1, Decl(parserRealSource5.ts, 8, 28))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indent1 : Symbol(PrintContext.indent1, Decl(parserRealSource5.ts, 8, 28))
+                }
+                this.indentStrings[this.indentAmt] = indentString;
+>this.indentStrings : Symbol(PrintContext.indentStrings, Decl(parserRealSource5.ts, 9, 30))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentStrings : Symbol(PrintContext.indentStrings, Decl(parserRealSource5.ts, 9, 30))
+>this.indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>indentAmt : Symbol(PrintContext.indentAmt, Decl(parserRealSource5.ts, 10, 44))
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+            }
+            this.builder += indentString;
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>indentString : Symbol(indentString, Decl(parserRealSource5.ts, 28, 15))
+        }
+
+        public write(s) {
+>write : Symbol(PrintContext.write, Decl(parserRealSource5.ts, 37, 9))
+>s : Symbol(s, Decl(parserRealSource5.ts, 39, 21))
+
+            this.builder += s;
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>s : Symbol(s, Decl(parserRealSource5.ts, 39, 21))
+        }
+
+        public writeLine(s) {
+>writeLine : Symbol(PrintContext.writeLine, Decl(parserRealSource5.ts, 41, 9))
+>s : Symbol(s, Decl(parserRealSource5.ts, 43, 25))
+
+            this.builder += s;
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>s : Symbol(s, Decl(parserRealSource5.ts, 43, 25))
+
+            this.outfile.WriteLine(this.builder);
+>this.outfile.WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.scripthost.d.ts, --, --))
+>this.outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.scripthost.d.ts, --, --))
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+
+            this.builder = "";
+>this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+>this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
+        }
+
+    }
+
+    export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
+>prePrintAST : Symbol(prePrintAST, Decl(parserRealSource5.ts, 49, 5))
+>ast : Symbol(ast, Decl(parserRealSource5.ts, 51, 32))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource5.ts, 51, 41))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource5.ts, 51, 54))
+>IAstWalker : Symbol(IAstWalker)
+
+        var pc: PrintContext = <PrintContext>walker.state;
+>pc : Symbol(pc, Decl(parserRealSource5.ts, 52, 11))
+>PrintContext : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>PrintContext : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>walker : Symbol(walker, Decl(parserRealSource5.ts, 51, 54))
+
+        ast.print(pc);
+>ast : Symbol(ast, Decl(parserRealSource5.ts, 51, 32))
+>pc : Symbol(pc, Decl(parserRealSource5.ts, 52, 11))
+
+        pc.increaseIndent();
+>pc.increaseIndent : Symbol(PrintContext.increaseIndent, Decl(parserRealSource5.ts, 14, 9))
+>pc : Symbol(pc, Decl(parserRealSource5.ts, 52, 11))
+>increaseIndent : Symbol(PrintContext.increaseIndent, Decl(parserRealSource5.ts, 14, 9))
+
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource5.ts, 51, 32))
+    }
+
+
+    export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
+>postPrintAST : Symbol(postPrintAST, Decl(parserRealSource5.ts, 57, 5))
+>ast : Symbol(ast, Decl(parserRealSource5.ts, 60, 33))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource5.ts, 60, 42))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource5.ts, 60, 55))
+>IAstWalker : Symbol(IAstWalker)
+
+        var pc: PrintContext = <PrintContext>walker.state;
+>pc : Symbol(pc, Decl(parserRealSource5.ts, 61, 11))
+>PrintContext : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>PrintContext : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
+>walker : Symbol(walker, Decl(parserRealSource5.ts, 60, 55))
+
+        pc.decreaseIndent();
+>pc.decreaseIndent : Symbol(PrintContext.decreaseIndent, Decl(parserRealSource5.ts, 18, 9))
+>pc : Symbol(pc, Decl(parserRealSource5.ts, 61, 11))
+>decreaseIndent : Symbol(PrintContext.decreaseIndent, Decl(parserRealSource5.ts, 18, 9))
+
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource5.ts, 60, 33))
+    }
+}

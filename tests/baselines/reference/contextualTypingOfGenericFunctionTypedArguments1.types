@@ -1,0 +1,61 @@
+=== tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts ===
+interface Collection<T> {
+    length: number;
+>length : number
+
+    add(x: T): void;
+>add : (x: T) => void
+>x : T
+
+    remove(x: T): boolean;
+>remove : (x: T) => boolean
+>x : T
+}
+
+interface Combinators {
+    forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>c : Collection<T>
+>f : (x: T) => Date
+>x : T
+}
+
+var c2: Collection<number>;
+>c2 : Collection<number>
+
+var _: Combinators;
+>_ : Combinators
+
+// errors on all 3 lines, bug was that r5 was the only line with errors
+var f = (x: number) => { return x.toFixed() };
+>f : (x: number) => string
+>(x: number) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+var r5 = _.forEach<number>(c2, f); 
+>r5 : void
+>_.forEach<number>(c2, f) : void
+>_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>_ : Combinators
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>c2 : Collection<number>
+>f : (x: number) => string
+
+var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
+>r6 : void
+>_.forEach<number>(c2, (x) => { return x.toFixed() }) : void
+>_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>_ : Combinators
+>forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
+>c2 : Collection<number>
+>(x) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+

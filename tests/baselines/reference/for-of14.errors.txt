@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/for-ofStatements/for-of14.ts(8,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/conformance/es6/for-ofStatements/for-of14.ts (1 errors) ====
+    class StringIterator {
+        next() {
+            return "";
+        }
+    }
+    
+    var v: string;
+    for (v of new StringIterator) { } // Should fail because the iterator is not iterable
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

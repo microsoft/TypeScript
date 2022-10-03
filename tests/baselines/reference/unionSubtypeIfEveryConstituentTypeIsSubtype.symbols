@@ -1,0 +1,340 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts ===
+enum e {
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+
+    e1,
+>e1 : Symbol(e.e1, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 8))
+
+    e2
+>e2 : Symbol(e.e2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 1, 7))
+}
+
+// A union type U is a subtype of a type T if each type in U is a subtype of T
+interface I {
+>I : Symbol(I, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 3, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 7, 5))
+
+    foo: string | number; // ok
+>foo : Symbol(I.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 7, 21))
+
+    foo2: e | number; // ok
+>foo2 : Symbol(I.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 8, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+interface I2 {
+>I2 : Symbol(I2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 10, 1))
+
+    [x: string]: number;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 12, 5))
+
+    // S is union type and each constituent type of S is a subtype of T
+    foo: string | number; // error string is not subtype of number
+>foo : Symbol(I2.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 12, 24))
+
+    foo2: e | number; // ok e and number both subtype of number
+>foo2 : Symbol(I2.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 14, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+interface I3 {
+>I3 : Symbol(I3, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 16, 1))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 19, 5))
+
+    foo: string | number; // error numer is not subtype of string
+>foo : Symbol(I3.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 19, 24))
+
+    foo2: e | number; // error e and number both not subtype of string
+>foo2 : Symbol(I3.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 20, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+// error cases
+interface I4 {
+>I4 : Symbol(I4, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 22, 1))
+
+    [x: string]: boolean;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 26, 5))
+
+    foo: string | number;
+>foo : Symbol(I4.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 26, 25))
+
+    foo2: e | number;
+>foo2 : Symbol(I4.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 27, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I5 {
+>I5 : Symbol(I5, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 29, 1))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: string | number;
+>foo : Symbol(I5.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 33, 22))
+
+    foo2: e | number;
+>foo2 : Symbol(I5.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 34, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I6 {
+>I6 : Symbol(I6, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 36, 1))
+
+    [x: string]: RegExp;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 40, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: string | number;
+>foo : Symbol(I6.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 40, 24))
+
+    foo2: e | number;
+>foo2 : Symbol(I6.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 41, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I7 {
+>I7 : Symbol(I7, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 43, 1))
+
+    [x: string]: { bar: number };
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 47, 5))
+>bar : Symbol(bar, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 47, 18))
+
+    foo: string | number;
+>foo : Symbol(I7.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 47, 33))
+
+    foo2: e | number;
+>foo2 : Symbol(I7.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 48, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I8 {
+>I8 : Symbol(I8, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 50, 1))
+
+    [x: string]: number[];
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 54, 5))
+
+    foo: string | number;
+>foo : Symbol(I8.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 54, 26))
+
+    foo2: e | number;
+>foo2 : Symbol(I8.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 55, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I9 {
+>I9 : Symbol(I9, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 57, 1))
+
+    [x: string]: I8;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 61, 5))
+>I8 : Symbol(I8, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 50, 1))
+
+    foo: string | number;
+>foo : Symbol(I9.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 61, 20))
+
+    foo2: e | number;
+>foo2 : Symbol(I9.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 62, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+class A { foo: number; }
+>A : Symbol(A, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 64, 1))
+>foo : Symbol(A.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 66, 9))
+
+interface I10 {
+>I10 : Symbol(I10, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 66, 24))
+
+    [x: string]: A;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 68, 5))
+>A : Symbol(A, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 64, 1))
+
+    foo: string | number;
+>foo : Symbol(I10.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 68, 19))
+
+    foo2: e | number;
+>foo2 : Symbol(I10.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 69, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+class A2<T> { foo: T; }
+>A2 : Symbol(A2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 71, 1))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 73, 9))
+>foo : Symbol(A2.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 73, 13))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 73, 9))
+
+interface I11 {
+>I11 : Symbol(I11, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 73, 23))
+
+    [x: string]: A2<number>;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 75, 5))
+>A2 : Symbol(A2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 71, 1))
+
+    foo: string | number;
+>foo : Symbol(I11.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 75, 28))
+
+    foo2: e | number;
+>foo2 : Symbol(I11.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 76, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I12 {
+>I12 : Symbol(I12, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 78, 1))
+
+    [x: string]: (x) => number;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 82, 5))
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 82, 18))
+
+    foo: string | number;
+>foo : Symbol(I12.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 82, 31))
+
+    foo2: e | number;
+>foo2 : Symbol(I12.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 83, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I13 {
+>I13 : Symbol(I13, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 85, 1))
+
+    [x: string]: <T>(x: T) => T;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 5))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 18))
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 21))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 18))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 18))
+
+    foo: string | number;
+>foo : Symbol(I13.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 89, 32))
+
+    foo2: e | number;
+>foo2 : Symbol(I13.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 90, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+enum E2 { A }
+>E2 : Symbol(E2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 92, 1))
+>A : Symbol(E2.A, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 95, 9))
+
+interface I14 {
+>I14 : Symbol(I14, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 95, 13))
+
+    [x: string]: E2;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 97, 5))
+>E2 : Symbol(E2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 92, 1))
+
+    foo: string | number;
+>foo : Symbol(I14.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 97, 20))
+
+    foo2: e | number;
+>foo2 : Symbol(I14.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 98, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+function f() { }
+>f : Symbol(f, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 100, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 103, 16))
+
+module f {
+>f : Symbol(f, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 100, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 103, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 105, 14))
+}
+interface I15 {
+>I15 : Symbol(I15, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 106, 1))
+
+    [x: string]: typeof f;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 108, 5))
+>f : Symbol(f, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 100, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 103, 16))
+
+    foo: string | number;
+>foo : Symbol(I15.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 108, 26))
+
+    foo2: e | number;
+>foo2 : Symbol(I15.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 109, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+class c { baz: string }
+>c : Symbol(c, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 111, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 114, 23))
+>baz : Symbol(c.baz, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 114, 9))
+
+module c {
+>c : Symbol(c, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 111, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 114, 23))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 116, 14))
+}
+interface I16 {
+>I16 : Symbol(I16, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 117, 1))
+
+    [x: string]: typeof c;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 119, 5))
+>c : Symbol(c, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 111, 1), Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 114, 23))
+
+    foo: string | number;
+>foo : Symbol(I16.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 119, 26))
+
+    foo2: e | number;
+>foo2 : Symbol(I16.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 120, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I17<T> {
+>I17 : Symbol(I17, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 122, 1))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 125, 14))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 126, 5))
+>T : Symbol(T, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 125, 14))
+
+    foo: string | number;
+>foo : Symbol(I17.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 126, 19))
+
+    foo2: e | number;
+>foo2 : Symbol(I17.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 127, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+interface I19 {
+>I19 : Symbol(I19, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 129, 1))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 132, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: string | number;
+>foo : Symbol(I19.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 132, 24))
+
+    foo2: e | number;
+>foo2 : Symbol(I19.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 133, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}
+
+
+interface I20 {
+>I20 : Symbol(I20, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 135, 1))
+
+    [x: string]: {};
+>x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 139, 5))
+
+    foo: string | number;
+>foo : Symbol(I20.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 139, 20))
+
+    foo2: e | number;
+>foo2 : Symbol(I20.foo2, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 140, 25))
+>e : Symbol(e, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 0, 0))
+}

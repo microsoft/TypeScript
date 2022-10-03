@@ -1,0 +1,42 @@
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(6,1): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(s: string): number', gave the following error.
+    Argument of type '(s: string) => {}' is not assignable to parameter of type 'string'.
+  Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
+    Type '{}' is missing the following properties from type '{ a: number; b: number; }': a, b
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(7,17): error TS2304: Cannot find name 'blah'.
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,1): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(s: string): number', gave the following error.
+    Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.
+  Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
+    Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
+tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
+
+
+==== tests/cases/compiler/overloadsWithProvisionalErrors.ts (4 errors) ====
+    var func: {
+        (s: string): number;
+        (lambda: (s: string) => { a: number; b: number }): string;
+    };
+    
+    func(s => ({})); // Error for no applicable overload (object type is missing a and b)
+    ~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(s: string): number', gave the following error.
+!!! error TS2769:     Argument of type '(s: string) => {}' is not assignable to parameter of type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
+!!! error TS2769:     Type '{}' is missing the following properties from type '{ a: number; b: number; }': a, b
+!!! related TS6502 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:14: The expected type comes from the return type of this signature.
+    func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outside (since it would be applicable if not for the provisional error)
+                    ~~~~
+!!! error TS2304: Cannot find name 'blah'.
+    func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(s: string): number', gave the following error.
+!!! error TS2769:     Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
+!!! error TS2769:     Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
+!!! related TS2728 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:42: 'b' is declared here.
+!!! related TS6502 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:14: The expected type comes from the return type of this signature.
+                    ~~~~
+!!! error TS2304: Cannot find name 'blah'.

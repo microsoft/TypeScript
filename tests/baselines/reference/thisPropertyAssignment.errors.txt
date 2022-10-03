@@ -1,0 +1,43 @@
+tests/cases/conformance/salsa/a.js(9,8): error TS2339: Property 'y' does not exist on type '{}'.
+tests/cases/conformance/salsa/a.js(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"z"' can't be used to index type '{}'.
+  Property 'z' does not exist on type '{}'.
+tests/cases/conformance/salsa/a.js(16,10): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/salsa/a.js(18,3): error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{}'.
+  Property 'c' does not exist on type '{}'.
+
+
+==== tests/cases/conformance/salsa/a.js (4 errors) ====
+    // This test is asserting that a single property/element access
+    // on `this` is a special assignment declaration, but chaining
+    // off that does not create additional declarations. I’m not sure
+    // if it needs to be that way in JavaScript; the test simply
+    // ensures no accidental changes were introduced while allowing
+    // element access assignments to create declarations.
+    
+    this.x = {};
+    this.x.y = {};
+           ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+    this["y"] = {};
+    this["y"]["z"] = {};
+    ~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"z"' can't be used to index type '{}'.
+!!! error TS7053:   Property 'z' does not exist on type '{}'.
+    
+    /** @constructor */
+    function F() {
+      this.a = {};
+      this.a.b = {};
+             ~
+!!! error TS2339: Property 'b' does not exist on type '{}'.
+      this["b"] = {};
+      this["b"]["c"] = {};
+      ~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{}'.
+!!! error TS7053:   Property 'c' does not exist on type '{}'.
+    }
+    
+    const f = new F();
+    f.a;
+    f.b;
+    

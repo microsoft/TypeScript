@@ -1,0 +1,22 @@
+tests/cases/compiler/noErrorTruncation.ts(10,7): error TS2322: Type 'number' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
+
+
+==== tests/cases/compiler/noErrorTruncation.ts (1 errors) ====
+    // @noErrorTruncation
+    
+    type SomeLongOptionA = { someLongOptionA: string }
+    type SomeLongOptionB = { someLongOptionB: string }
+    type SomeLongOptionC = { someLongOptionC: string }
+    type SomeLongOptionD = { someLongOptionD: string }
+    type SomeLongOptionE = { someLongOptionE: string }
+    type SomeLongOptionF = { someLongOptionF: string }
+    
+    const x: SomeLongOptionA
+          ~
+!!! error TS2322: Type 'number' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
+           | SomeLongOptionB
+           | SomeLongOptionC
+           | SomeLongOptionD
+           | SomeLongOptionE
+           | SomeLongOptionF = 42;
+    

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsdoc/bug27346.js ===
+/**
+ * @type {MyClass}
+ */
+function MyClass() { }
+>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0), Decl(bug27346.js, 3, 22))
+
+MyClass.prototype = {};
+>MyClass.prototype : Symbol(MyClass.prototype, Decl(bug27346.js, 3, 22))
+>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0), Decl(bug27346.js, 3, 22))
+>prototype : Symbol(MyClass.prototype, Decl(bug27346.js, 3, 22))
+

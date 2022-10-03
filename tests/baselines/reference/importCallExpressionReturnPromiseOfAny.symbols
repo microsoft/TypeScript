@@ -1,0 +1,90 @@
+=== tests/cases/conformance/dynamicImport/defaultPath.ts ===
+export class C {}
+>C : Symbol(C, Decl(defaultPath.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+import * as defaultModule from "./defaultPath";
+>defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+
+declare function getSpecifier(): string;
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+
+declare function ValidSomeCondition(): boolean;
+>ValidSomeCondition : Symbol(ValidSomeCondition, Decl(1.ts, 1, 40))
+
+declare var whatToLoad: boolean;
+>whatToLoad : Symbol(whatToLoad, Decl(1.ts, 3, 11))
+
+declare const directory: string;
+>directory : Symbol(directory, Decl(1.ts, 4, 13))
+
+declare const moduleFile: number;
+>moduleFile : Symbol(moduleFile, Decl(1.ts, 5, 13))
+
+import(`${directory}\\${moduleFile}`);
+>directory : Symbol(directory, Decl(1.ts, 4, 13))
+>moduleFile : Symbol(moduleFile, Decl(1.ts, 5, 13))
+
+import(getSpecifier());
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+
+var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
+>p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
+>ValidSomeCondition : Symbol(ValidSomeCondition, Decl(1.ts, 1, 40))
+
+var p1: Promise<any> = import(getSpecifier());
+>p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+
+var p11: Promise<typeof defaultModule> = import(getSpecifier());
+>p11 : Symbol(p11, Decl(1.ts, 12, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+
+const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;
+>p2 : Symbol(p2, Decl(1.ts, 13, 5))
+>whatToLoad : Symbol(whatToLoad, Decl(1.ts, 3, 11))
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+
+p1.then(zero => {
+>p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>zero : Symbol(zero, Decl(1.ts, 14, 8))
+
+    return zero.foo();  // ok, zero is any
+>zero : Symbol(zero, Decl(1.ts, 14, 8))
+
+});
+
+let j: string;
+>j : Symbol(j, Decl(1.ts, 18, 3))
+
+var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
+>p3 : Symbol(p3, Decl(1.ts, 19, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+>j : Symbol(j, Decl(1.ts, 18, 3))
+>getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+
+function * loadModule(directories: string[]) {
+>loadModule : Symbol(loadModule, Decl(1.ts, 19, 65))
+>directories : Symbol(directories, Decl(1.ts, 21, 22))
+
+    for (const directory of directories) {
+>directory : Symbol(directory, Decl(1.ts, 22, 14))
+>directories : Symbol(directories, Decl(1.ts, 21, 22))
+
+        const path = `${directory}\\moduleFile`;
+>path : Symbol(path, Decl(1.ts, 23, 13))
+>directory : Symbol(directory, Decl(1.ts, 22, 14))
+
+        import(yield path);
+>path : Symbol(path, Decl(1.ts, 23, 13))
+    }
+}
+

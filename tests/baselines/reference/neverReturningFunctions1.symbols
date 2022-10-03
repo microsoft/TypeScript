@@ -1,0 +1,668 @@
+=== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
+function fail(message?: string): never {
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
+
+    throw new Error(message);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
+}
+
+function f01(x: string | undefined) {
+>f01 : Symbol(f01, Decl(neverReturningFunctions1.ts, 2, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 4, 13))
+
+    if (x === undefined) fail("undefined argument");
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 4, 13))
+>undefined : Symbol(undefined)
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+    x.length;  // string
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 4, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function f02(x: number): number {
+>f02 : Symbol(f02, Decl(neverReturningFunctions1.ts, 7, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 9, 13))
+
+    if (x >= 0) return x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 9, 13))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 9, 13))
+
+    fail("negative number");
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 9, 13))
+}
+
+function f03(x: string) {
+>f03 : Symbol(f03, Decl(neverReturningFunctions1.ts, 13, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 15, 13))
+
+    x;  // string
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 15, 13))
+
+    fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 15, 13))
+}
+
+function f11(x: string | undefined, fail: (message?: string) => never) {
+>f11 : Symbol(f11, Decl(neverReturningFunctions1.ts, 19, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 21, 13))
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 21, 35))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 21, 43))
+
+    if (x === undefined) fail("undefined argument");
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 21, 13))
+>undefined : Symbol(undefined)
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 21, 35))
+
+    x.length;  // string
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 21, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function f12(x: number, fail: (message?: string) => never): number {
+>f12 : Symbol(f12, Decl(neverReturningFunctions1.ts, 24, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 26, 13))
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 26, 23))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 26, 31))
+
+    if (x >= 0) return x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 26, 13))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 26, 13))
+
+    fail("negative number");
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 26, 23))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 26, 13))
+}
+
+function f13(x: string, fail: (message?: string) => never) {
+>f13 : Symbol(f13, Decl(neverReturningFunctions1.ts, 30, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 32, 13))
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 32, 23))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 32, 31))
+
+    x;  // string
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 32, 13))
+
+    fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 32, 23))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 32, 13))
+}
+
+namespace Debug {
+>Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
+
+    export declare function fail(message?: string): never;
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 39, 33))
+}
+
+function f21(x: string | undefined) {
+>f21 : Symbol(f21, Decl(neverReturningFunctions1.ts, 40, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 42, 13))
+
+    if (x === undefined) Debug.fail("undefined argument");
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 42, 13))
+>undefined : Symbol(undefined)
+>Debug.fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
+>fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+
+    x.length;  // string
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 42, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+function f22(x: number): number {
+>f22 : Symbol(f22, Decl(neverReturningFunctions1.ts, 45, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 47, 13))
+
+    if (x >= 0) return x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 47, 13))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 47, 13))
+
+    Debug.fail("negative number");
+>Debug.fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
+>fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 47, 13))
+}
+
+function f23(x: string) {
+>f23 : Symbol(f23, Decl(neverReturningFunctions1.ts, 51, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 53, 13))
+
+    x;  // string
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 53, 13))
+
+    Debug.fail();
+>Debug.fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
+>fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 53, 13))
+}
+
+function f24(x: string) {
+>f24 : Symbol(f24, Decl(neverReturningFunctions1.ts, 57, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 59, 13))
+
+    x;  // string
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 59, 13))
+
+    ((Debug).fail)();
+>(Debug).fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
+>fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 59, 13))
+}
+
+class Test {
+>Test : Symbol(Test, Decl(neverReturningFunctions1.ts, 63, 1))
+
+    fail(message?: string): never {
+>fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
+
+        throw new Error(message);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
+    }
+    f1(x: string | undefined) {
+>f1 : Symbol(Test.f1, Decl(neverReturningFunctions1.ts, 68, 5))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 69, 7))
+
+        if (x === undefined) this.fail("undefined argument");
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 69, 7))
+>undefined : Symbol(undefined)
+>this.fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+>this : Symbol(Test, Decl(neverReturningFunctions1.ts, 63, 1))
+>fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+
+        x.length;  // string
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 69, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    f2(x: number): number {
+>f2 : Symbol(Test.f2, Decl(neverReturningFunctions1.ts, 72, 5))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 73, 7))
+
+        if (x >= 0) return x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 73, 7))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 73, 7))
+
+        this.fail("negative number");
+>this.fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+>this : Symbol(Test, Decl(neverReturningFunctions1.ts, 63, 1))
+>fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 73, 7))
+    }
+    f3(x: string) {
+>f3 : Symbol(Test.f3, Decl(neverReturningFunctions1.ts, 77, 5))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 78, 7))
+
+        x;  // string
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 78, 7))
+
+        this.fail();
+>this.fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+>this : Symbol(Test, Decl(neverReturningFunctions1.ts, 63, 1))
+>fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 78, 7))
+    }
+}
+
+function f30(x: string | number | undefined) {
+>f30 : Symbol(f30, Decl(neverReturningFunctions1.ts, 83, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+    }
+    else {
+        x;  // number | undefined
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+
+        if (x !== undefined) {
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+>undefined : Symbol(undefined)
+
+            x;  // number
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+
+            fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+            x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+        }
+        else {
+            x;  // undefined
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+
+            fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+            x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+        }
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+    }
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 85, 13))
+}
+
+function f31(x: { a: string | number }) {
+>f31 : Symbol(f31, Decl(neverReturningFunctions1.ts, 105, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+>a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+
+    if (typeof x.a === "string") {
+>x.a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+>a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;    // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+
+        x.a;  // Unreachable
+>x.a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+>a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+    }
+    x;    // { a: string | number }
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+
+    x.a;  // number
+>x.a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 107, 13))
+>a : Symbol(a, Decl(neverReturningFunctions1.ts, 107, 17))
+}
+
+function f40(x: number) {
+>f40 : Symbol(f40, Decl(neverReturningFunctions1.ts, 115, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+
+    try {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+    }
+    finally {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+    }
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 117, 13))
+}
+
+function f41(x: number) {
+>f41 : Symbol(f41, Decl(neverReturningFunctions1.ts, 129, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 131, 13))
+
+    try {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 131, 13))
+    }
+    finally {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 131, 13))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 131, 13))
+    }
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 131, 13))
+}
+
+function f42(x: number) {
+>f42 : Symbol(f42, Decl(neverReturningFunctions1.ts, 141, 1))
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
+
+    try {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
+
+        fail();
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
+    }
+    finally {
+        x;
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
+    }
+    x;  // Unreachable
+>x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
+}
+
+function f43() {
+>f43 : Symbol(f43, Decl(neverReturningFunctions1.ts, 153, 1))
+
+    const fail = (): never => { throw new Error(); };
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    const f = [fail];
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+
+    fail();  // No effect (missing type annotation)
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+
+    f[0]();  // No effect (not a dotted name)
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+
+    f;
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+}
+
+// Repro from #33582
+
+export interface Component<T extends object = any> {
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
+
+	attrName?: string;
+>attrName : Symbol(Component.attrName, Decl(neverReturningFunctions1.ts, 165, 52))
+
+	data: T;
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
+
+	dependencies?: string[];
+>dependencies : Symbol(Component.dependencies, Decl(neverReturningFunctions1.ts, 167, 9))
+
+	el: any;
+>el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
+
+	id: string;
+>id : Symbol(Component.id, Decl(neverReturningFunctions1.ts, 169, 9))
+
+	multiple?: boolean;
+>multiple : Symbol(Component.multiple, Decl(neverReturningFunctions1.ts, 170, 12))
+
+	name: string;
+>name : Symbol(Component.name, Decl(neverReturningFunctions1.ts, 171, 20))
+
+	schema: unknown;
+>schema : Symbol(Component.schema, Decl(neverReturningFunctions1.ts, 172, 14))
+
+	system: any;
+>system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
+
+	init(data?: T): void;
+>init : Symbol(Component.init, Decl(neverReturningFunctions1.ts, 174, 13))
+>data : Symbol(data, Decl(neverReturningFunctions1.ts, 176, 6))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
+
+	pause(): void;
+>pause : Symbol(Component.pause, Decl(neverReturningFunctions1.ts, 176, 22))
+
+	play(): void;
+>play : Symbol(Component.play, Decl(neverReturningFunctions1.ts, 177, 15))
+
+	remove(): void;
+>remove : Symbol(Component.remove, Decl(neverReturningFunctions1.ts, 178, 14))
+
+	tick?(time: number, timeDelta: number): void;
+>tick : Symbol(Component.tick, Decl(neverReturningFunctions1.ts, 179, 16))
+>time : Symbol(time, Decl(neverReturningFunctions1.ts, 180, 7))
+>timeDelta : Symbol(timeDelta, Decl(neverReturningFunctions1.ts, 180, 20))
+
+	update(oldData: T): void;
+>update : Symbol(Component.update, Decl(neverReturningFunctions1.ts, 180, 46))
+>oldData : Symbol(oldData, Decl(neverReturningFunctions1.ts, 181, 8))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
+
+	updateSchema?(): void;
+>updateSchema : Symbol(Component.updateSchema, Decl(neverReturningFunctions1.ts, 181, 26))
+
+	extendSchema(update: unknown): void;
+>extendSchema : Symbol(Component.extendSchema, Decl(neverReturningFunctions1.ts, 182, 23))
+>update : Symbol(update, Decl(neverReturningFunctions1.ts, 184, 14))
+
+	flushToDOM(): void;
+>flushToDOM : Symbol(Component.flushToDOM, Decl(neverReturningFunctions1.ts, 184, 37))
+}
+
+export interface ComponentConstructor<T extends object> {
+>ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 186, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
+
+	new (el: unknown, attrValue: string, id: string): T & Component;
+>el : Symbol(el, Decl(neverReturningFunctions1.ts, 189, 6))
+>attrValue : Symbol(attrValue, Decl(neverReturningFunctions1.ts, 189, 18))
+>id : Symbol(id, Decl(neverReturningFunctions1.ts, 189, 37))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
+
+	prototype: T & {
+>prototype : Symbol(ComponentConstructor.prototype, Decl(neverReturningFunctions1.ts, 189, 65))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
+
+		name: string;
+>name : Symbol(name, Decl(neverReturningFunctions1.ts, 190, 17))
+
+		system: unknown;
+>system : Symbol(system, Decl(neverReturningFunctions1.ts, 191, 15))
+
+		play(): void;
+>play : Symbol(play, Decl(neverReturningFunctions1.ts, 192, 18))
+
+		pause(): void;
+>pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 193, 15))
+
+	};
+}
+
+declare function registerComponent<T extends object>(
+>registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 196, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
+
+    name: string,
+>name : Symbol(name, Decl(neverReturningFunctions1.ts, 198, 53))
+
+    component: ComponentDefinition<T>
+>component : Symbol(component, Decl(neverReturningFunctions1.ts, 199, 17))
+>ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 201, 27))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
+
+): ComponentConstructor<T>;
+>ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 186, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
+
+export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
+>ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 201, 27))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
+
+const Component = registerComponent('test-component', {
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1), Decl(neverReturningFunctions1.ts, 205, 5))
+>registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 196, 1))
+
+	schema: {
+>schema : Symbol(schema, Decl(neverReturningFunctions1.ts, 205, 55))
+
+		myProperty: {
+>myProperty : Symbol(myProperty, Decl(neverReturningFunctions1.ts, 206, 10))
+
+			default: [],
+>default : Symbol(default, Decl(neverReturningFunctions1.ts, 207, 15))
+
+			parse() {
+>parse : Symbol(parse, Decl(neverReturningFunctions1.ts, 208, 15))
+
+				return [true];
+			}
+		},
+		string: { type: 'string' },
+>string : Symbol(string, Decl(neverReturningFunctions1.ts, 212, 4))
+>type : Symbol(type, Decl(neverReturningFunctions1.ts, 213, 11))
+
+		num: 0
+>num : Symbol(num, Decl(neverReturningFunctions1.ts, 213, 29))
+
+	},
+	init() {
+>init : Symbol(init, Decl(neverReturningFunctions1.ts, 215, 3))
+
+		this.data.num = 0;
+>this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+
+		this.el.setAttribute('custom-attribute', 'custom-value');
+>this.el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
+>el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
+
+	},
+	update() {},
+>update : Symbol(update, Decl(neverReturningFunctions1.ts, 219, 3))
+
+	tick() {},
+>tick : Symbol(tick, Decl(neverReturningFunctions1.ts, 220, 13))
+
+	remove() {},
+>remove : Symbol(remove, Decl(neverReturningFunctions1.ts, 221, 11))
+
+	pause() {},
+>pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 222, 13))
+
+	play() {},
+>play : Symbol(play, Decl(neverReturningFunctions1.ts, 223, 12))
+
+	multiply(f: number) {
+>multiply : Symbol(multiply, Decl(neverReturningFunctions1.ts, 224, 11))
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 226, 10))
+
+		// Reference to system because both were registered with the same name.
+		return f * this.data.num * this.system!.data.counter;
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 226, 10))
+>this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>this.system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
+>system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
+	}
+});
+
+// Repro from #36147
+
+class MyThrowable {
+>MyThrowable : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+
+    throw(): never {
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+>SuperThrowable : Symbol(SuperThrowable, Decl(neverReturningFunctions1.ts, 238, 1))
+>MyThrowable : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+
+    err(msg: string): never {
+>err : Symbol(SuperThrowable.err, Decl(neverReturningFunctions1.ts, 240, 42))
+>msg : Symbol(msg, Decl(neverReturningFunctions1.ts, 241, 8))
+
+        super.throw()
+>super.throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+>super : Symbol(MyThrowable, Decl(neverReturningFunctions1.ts, 230, 3))
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+    }
+    ok(): never {
+>ok : Symbol(SuperThrowable.ok, Decl(neverReturningFunctions1.ts, 243, 5))
+
+        this.throw()
+>this.throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+>this : Symbol(SuperThrowable, Decl(neverReturningFunctions1.ts, 238, 1))
+>throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
+    }
+}
+
+// Repro from #40346
+
+interface Services {
+>Services : Symbol(Services, Decl(neverReturningFunctions1.ts, 247, 1))
+
+    panic(message: string): never;
+>panic : Symbol(Services.panic, Decl(neverReturningFunctions1.ts, 251, 20))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 252, 10))
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+>foo : Symbol(foo, Decl(neverReturningFunctions1.ts, 253, 1))
+>services : Symbol(services, Decl(neverReturningFunctions1.ts, 255, 13))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Services : Symbol(Services, Decl(neverReturningFunctions1.ts, 247, 1))
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+
+    if (s === null) {
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+
+        services.panic("ouch");
+>services.panic : Symbol(panic, Decl(neverReturningFunctions1.ts, 251, 20))
+>services : Symbol(services, Decl(neverReturningFunctions1.ts, 255, 13))
+>panic : Symbol(panic, Decl(neverReturningFunctions1.ts, 251, 20))
+
+    } else {
+        return s;
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+    }
+}
+

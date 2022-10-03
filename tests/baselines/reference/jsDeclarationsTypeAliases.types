@@ -1,0 +1,76 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export {}; // flag file as module
+No type information for this code./**
+No type information for this code. * @typedef {string | number | symbol} PropName 
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * Callback
+No type information for this code. *
+No type information for this code. * @callback NumberToStringCb
+No type information for this code. * @param {number} a
+No type information for this code. * @returns {string}
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * @template T
+No type information for this code. * @typedef {T & {name: string}} MixinName 
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * Identity function
+No type information for this code. *
+No type information for this code. * @template T
+No type information for this code. * @callback Identity
+No type information for this code. * @param {T} x
+No type information for this code. * @returns {T}
+No type information for this code. */
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsdoc/declarations/mixed.js ===
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+>doTheThing : (x: number) => SomeType
+>x : number
+
+    return {x: ""+x};
+>{x: ""+x} : { x: string; }
+>x : string
+>""+x : string
+>"" : ""
+>x : number
+}
+class ExportedThing {
+>ExportedThing : ExportedThing
+
+    z = "ok"
+>z : string
+>"ok" : "ok"
+}
+module.exports = {
+>module.exports = {    doTheThing,    ExportedThing,} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+
+    doTheThing,
+>doTheThing : (x: number) => SomeType
+
+    ExportedThing,
+>ExportedThing : typeof ExportedThing
+
+};
+class LocalThing {
+>LocalThing : LocalThing
+
+    y = "ok"
+>y : string
+>"ok" : "ok"
+}
+

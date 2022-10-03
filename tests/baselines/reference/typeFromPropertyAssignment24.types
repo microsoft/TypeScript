@@ -1,0 +1,54 @@
+=== tests/cases/conformance/salsa/usage.js ===
+// note that usage is first in the compilation
+Outer.Inner.Message = function() {
+>Outer.Inner.Message = function() {} : () => void
+>Outer.Inner.Message : () => void
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>Message : () => void
+>function() {} : () => void
+
+};
+
+var y = new Outer.Inner()
+>y : Inner
+>new Outer.Inner() : Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+
+y.name
+>y.name : () => string
+>y : Inner
+>name : () => string
+
+/** @type {Outer.Inner} should be instance type, not static type */
+var x;
+>x : Inner
+
+x.name
+>x.name : () => string
+>x : Inner
+>name : () => string
+
+=== tests/cases/conformance/salsa/def.js ===
+var Outer = {}
+>Outer : typeof Outer
+>{} : {}
+
+Outer.Inner = class {
+>Outer.Inner = class {  name() {    return 'hi'  }} : typeof Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>class {  name() {    return 'hi'  }} : typeof Inner
+
+  name() {
+>name : () => string
+
+    return 'hi'
+>'hi' : "hi"
+  }
+}
+

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 6))
+
+class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
+>MyComponent : Symbol(MyComponent, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 26))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>dataSource : Symbol(dataSource, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 43))
+>onClick : Symbol(onClick, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 64))
+
+    render() {
+>render : Symbol(MyComponent.render, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 86))
+
+        return (<div {...this.props} className="ok"></div>);
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>this : Symbol(MyComponent, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 26))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>className : Symbol(className, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 6, 36))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+    }
+}
+

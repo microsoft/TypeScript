@@ -1,0 +1,22 @@
+=== tests/cases/compiler/blockScopedBindingsInDownlevelGenerator.ts ===
+function* a() {
+>a : () => Generator<number, void, unknown>
+
+  for (const i of [1,2,3]) {
+>i : number
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    (() => i)()
+>(() => i)() : number
+>(() => i) : () => number
+>() => i : () => number
+>i : number
+
+    yield i
+>yield i : any
+>i : number
+  }
+}

@@ -1,0 +1,56 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeInference2.ts ===
+declare function f<T>(x: { prop: T }): T;
+>f : Symbol(f, Decl(intersectionTypeInference2.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 0, 19))
+>x : Symbol(x, Decl(intersectionTypeInference2.ts, 0, 22))
+>prop : Symbol(prop, Decl(intersectionTypeInference2.ts, 0, 26))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 0, 19))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 0, 19))
+
+declare const a: { prop: string } & { prop: number };
+>a : Symbol(a, Decl(intersectionTypeInference2.ts, 2, 13))
+>prop : Symbol(prop, Decl(intersectionTypeInference2.ts, 2, 18))
+>prop : Symbol(prop, Decl(intersectionTypeInference2.ts, 2, 37))
+
+declare const b: { prop: string & number };
+>b : Symbol(b, Decl(intersectionTypeInference2.ts, 3, 13))
+>prop : Symbol(prop, Decl(intersectionTypeInference2.ts, 3, 18))
+
+f(a);  // never
+>f : Symbol(f, Decl(intersectionTypeInference2.ts, 0, 0))
+>a : Symbol(a, Decl(intersectionTypeInference2.ts, 2, 13))
+
+f(b);  // never
+>f : Symbol(f, Decl(intersectionTypeInference2.ts, 0, 0))
+>b : Symbol(b, Decl(intersectionTypeInference2.ts, 3, 13))
+
+// Repro from #18354
+
+declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Key): T[Key];
+>f2 : Symbol(f2, Decl(intersectionTypeInference2.ts, 6, 5))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 10, 20))
+>Key : Symbol(Key, Decl(intersectionTypeInference2.ts, 10, 22))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 10, 20))
+>obj : Symbol(obj, Decl(intersectionTypeInference2.ts, 10, 44))
+>K : Symbol(K, Decl(intersectionTypeInference2.ts, 10, 51))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 10, 20))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 10, 20))
+>K : Symbol(K, Decl(intersectionTypeInference2.ts, 10, 51))
+>key : Symbol(key, Decl(intersectionTypeInference2.ts, 10, 72))
+>Key : Symbol(Key, Decl(intersectionTypeInference2.ts, 10, 22))
+>T : Symbol(T, Decl(intersectionTypeInference2.ts, 10, 20))
+>Key : Symbol(Key, Decl(intersectionTypeInference2.ts, 10, 22))
+
+declare const obj: { a: string } & { b: string };
+>obj : Symbol(obj, Decl(intersectionTypeInference2.ts, 12, 13))
+>a : Symbol(a, Decl(intersectionTypeInference2.ts, 12, 20))
+>b : Symbol(b, Decl(intersectionTypeInference2.ts, 12, 36))
+
+f2(obj, 'a');
+>f2 : Symbol(f2, Decl(intersectionTypeInference2.ts, 6, 5))
+>obj : Symbol(obj, Decl(intersectionTypeInference2.ts, 12, 13))
+
+f2(obj, 'b');
+>f2 : Symbol(f2, Decl(intersectionTypeInference2.ts, 6, 5))
+>obj : Symbol(obj, Decl(intersectionTypeInference2.ts, 12, 13))
+

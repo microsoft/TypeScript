@@ -1,0 +1,81 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInCall8.ts ===
+class Foo<T> {
+>Foo : Foo<T>
+
+    constructor(...s: T[]) { }
+>s : T[]
+}
+
+class SymbolIterator {
+>SymbolIterator : SymbolIterator
+
+    next() {
+>next : () => { value: symbol; done: boolean; }
+
+        return {
+>{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+
+            value: Symbol(),
+>value : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+class _StringIterator {
+>_StringIterator : _StringIterator
+
+    next() {
+>next : () => { value: string; done: boolean; }
+
+        return {
+>{            value: "",            done: false        } : { value: string; done: boolean; }
+
+            value: "",
+>value : string
+>"" : ""
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+new Foo(...new SymbolIterator, ...new _StringIterator);
+>new Foo(...new SymbolIterator, ...new _StringIterator) : Foo<symbol>
+>Foo : typeof Foo
+>...new SymbolIterator : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+>...new _StringIterator : string
+>new _StringIterator : _StringIterator
+>_StringIterator : typeof _StringIterator
+

@@ -1,0 +1,88 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts ===
+declare function f1<T>(x: T | string): T;
+>f1 : <T>(x: T | string) => T
+>x : string | T
+
+var a1: string;
+>a1 : string
+
+var b1: string | string[];
+>b1 : string | string[]
+
+var c1: string[] | string;
+>c1 : string | string[]
+
+var d1: string | { name: string };
+>d1 : string | { name: string; }
+>name : string
+
+var e1: number | string | boolean;
+>e1 : string | number | boolean
+
+f1(a1); // string
+>f1(a1) : string
+>f1 : <T>(x: string | T) => T
+>a1 : string
+
+f1(b1); // string[]
+>f1(b1) : string[]
+>f1 : <T>(x: string | T) => T
+>b1 : string | string[]
+
+f1(c1); // string[]
+>f1(c1) : string[]
+>f1 : <T>(x: string | T) => T
+>c1 : string | string[]
+
+f1(d1); // { name: string }
+>f1(d1) : { name: string; }
+>f1 : <T>(x: string | T) => T
+>d1 : string | { name: string; }
+
+f1(e1); // number | boolean
+>f1(e1) : number | boolean
+>f1 : <T>(x: string | T) => T
+>e1 : string | number | boolean
+
+declare function f2<T>(x: T & { name: string }): T;
+>f2 : <T>(x: T & {    name: string;}) => T
+>x : T & { name: string; }
+>name : string
+
+var a2: string & { name: string };
+>a2 : string & { name: string; }
+>name : string
+
+var b2: { name: string } & string[];
+>b2 : { name: string; } & string[]
+>name : string
+
+var c2: string & { name: string } & number;
+>c2 : never
+>name : string
+
+var d2: string & { name: string } & number & { name: string };
+>d2 : never
+>name : string
+>name : string
+
+f2(a2); // string
+>f2(a2) : string
+>f2 : <T>(x: T & { name: string; }) => T
+>a2 : string & { name: string; }
+
+f2(b2); // string[]
+>f2(b2) : string[]
+>f2 : <T>(x: T & { name: string; }) => T
+>b2 : { name: string; } & string[]
+
+f2(c2); // never
+>f2(c2) : never
+>f2 : <T>(x: T & { name: string; }) => T
+>c2 : never
+
+f2(d2); // never
+>f2(d2) : never
+>f2 : <T>(x: T & { name: string; }) => T
+>d2 : never
+

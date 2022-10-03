@@ -1,0 +1,13 @@
+tests/cases/compiler/staticsNotInScopeInClodule.ts(6,13): error TS2304: Cannot find name 'x'.
+
+
+==== tests/cases/compiler/staticsNotInScopeInClodule.ts (1 errors) ====
+    class Clod {
+        static x = 10;
+    }
+    
+    module Clod {
+        var p = x; // x isn't in scope here
+                ~
+!!! error TS2304: Cannot find name 'x'.
+    }

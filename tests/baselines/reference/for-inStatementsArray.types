@@ -1,0 +1,137 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts ===
+let a: Date[];
+>a : Date[]
+
+let b: boolean[];
+>b : boolean[]
+
+for (let x in a) {
+>x : string
+>a : Date[]
+
+    let a1 = a[x];
+>a1 : Date
+>a[x] : Date
+>a : Date[]
+>x : string
+
+    let a2 = a[(x)];
+>a2 : Date
+>a[(x)] : Date
+>a : Date[]
+>(x) : string
+>x : string
+
+    let a3 = a[+x];
+>a3 : Date
+>a[+x] : Date
+>a : Date[]
+>+x : number
+>x : string
+
+    let b1 = b[x];
+>b1 : boolean
+>b[x] : boolean
+>b : boolean[]
+>x : string
+
+    let b2 = b[(x)];
+>b2 : boolean
+>b[(x)] : boolean
+>b : boolean[]
+>(x) : string
+>x : string
+
+    let b3 = b[+x];
+>b3 : boolean
+>b[+x] : boolean
+>b : boolean[]
+>+x : number
+>x : string
+}
+
+for (let x in a) {
+>x : string
+>a : Date[]
+
+    for (let y in a) {
+>y : string
+>a : Date[]
+
+        for (let z in a) {
+>z : string
+>a : Date[]
+
+            let a1 = a[x];
+>a1 : Date
+>a[x] : Date
+>a : Date[]
+>x : string
+
+            let a2 = a[y];
+>a2 : Date
+>a[y] : Date
+>a : Date[]
+>y : string
+
+            let a3 = a[z];
+>a3 : Date
+>a[z] : Date
+>a : Date[]
+>z : string
+        }
+    }
+}
+
+let i: string;
+>i : string
+
+let j: string;
+>j : string
+
+for (i in a) {
+>i : string
+>a : Date[]
+
+    for (j in b) {
+>j : string
+>b : boolean[]
+
+        let a1 = a[i];
+>a1 : Date
+>a[i] : Date
+>a : Date[]
+>i : string
+
+        let a2 = a[j];
+>a2 : Date
+>a[j] : Date
+>a : Date[]
+>j : string
+    }
+}
+
+var s: string;
+>s : string
+
+for (var s in a) {
+>s : string
+>a : Date[]
+
+    let a1 = a[s];
+>a1 : Date
+>a[s] : Date
+>a : Date[]
+>s : string
+}
+for (s in a) {
+>s : string
+>a : Date[]
+
+    let a1 = a[s];
+>a1 : Date
+>a[s] : Date
+>a : Date[]
+>s : string
+}
+

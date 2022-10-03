@@ -1,0 +1,90 @@
+=== tests/cases/compiler/a.ts ===
+declare var dec: any;
+>dec : any
+
+@dec export class A {
+>dec : any
+>A : A
+
+    #x: number = 1;
+>#x : number
+>1 : 1
+
+    async f() { this.#x = await this.#x; }
+>f : () => Promise<void>
+>this.#x = await this.#x : number
+>this.#x : number
+>this : this
+>await this.#x : number
+>this.#x : number
+>this : this
+
+    g(u) { return #x in u; }
+>g : (u: any) => boolean
+>u : any
+>#x in u : boolean
+>#x : any
+>u : any
+}
+
+const o = { a: 1 };
+>o : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const y = { ...o };
+>y : { a: number; }
+>{ ...o } : { a: number; }
+>o : { a: number; }
+
+=== tests/cases/compiler/tslib.d.ts ===
+export declare function __extends(d: Function, b: Function): void;
+>__extends : (d: Function, b: Function) => void
+>d : Function
+>b : Function
+
+export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+>__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
+>decorators : Function[]
+>target : any
+>key : string | symbol
+>desc : any
+
+export declare function __param(paramIndex: number, decorator: Function): Function;
+>__param : (paramIndex: number, decorator: Function) => Function
+>paramIndex : number
+>decorator : Function
+
+export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+>__metadata : (metadataKey: any, metadataValue: any) => Function
+>metadataKey : any
+>metadataValue : any
+
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+>__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
+>thisArg : any
+>_arguments : any
+>P : Function
+>generator : Function
+
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+>__classPrivateFieldGet : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
+>__classPrivateFieldSet : (a: any, b: any, c: any, d: any, e: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+
+export declare function __classPrivateFieldIn(a: any, b: any): boolean;
+>__classPrivateFieldIn : (a: any, b: any) => boolean
+>a : any
+>b : any
+

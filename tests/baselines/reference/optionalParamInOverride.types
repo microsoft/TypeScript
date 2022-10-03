@@ -1,0 +1,16 @@
+=== tests/cases/compiler/optionalParamInOverride.ts ===
+class Z {
+>Z : Z
+
+    public func(): void { }
+>func : () => void
+}
+class Y extends Z {
+>Y : Y
+>Z : Z
+
+    public func(value?: any): void { }
+>func : (value?: any) => void
+>value : any
+}
+

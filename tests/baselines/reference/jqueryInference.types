@@ -1,0 +1,32 @@
+=== tests/cases/compiler/jqueryInference.ts ===
+// #22362
+interface MyPromise<T, U> {
+    then(cb: (t: T) => void): void;
+>then : (cb: (t: T) => void) => void
+>cb : (t: T) => void
+>t : T
+
+    thenUnion(cb: (t: T | U) => void): this;
+>thenUnion : (cb: (t: T | U) => void) => this
+>cb : (t: T | U) => void
+>t : T | U
+}
+
+interface DoNothingAlias<T, U> extends MyPromise<T, U> { }
+
+declare function shouldBeIdentity<T, U>(p: DoNothingAlias<T, U>): MyPromise<T, U>;
+>shouldBeIdentity : <T, U>(p: DoNothingAlias<T, U>) => MyPromise<T, U>
+>p : DoNothingAlias<T, U>
+
+declare const p1: MyPromise<boolean, any>;
+>p1 : MyPromise<boolean, any>
+
+var p2 = shouldBeIdentity(p1);
+>p2 : MyPromise<boolean, any>
+>shouldBeIdentity(p1) : MyPromise<boolean, any>
+>shouldBeIdentity : <T, U>(p: DoNothingAlias<T, U>) => MyPromise<T, U>
+>p1 : MyPromise<boolean, any>
+
+var p2: MyPromise<boolean, any>;
+>p2 : MyPromise<boolean, any>
+

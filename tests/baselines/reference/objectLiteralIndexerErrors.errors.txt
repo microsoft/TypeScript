@@ -1,0 +1,26 @@
+tests/cases/compiler/objectLiteralIndexerErrors.ts(13,54): error TS2741: Property 'y' is missing in type 'A' but required in type 'B'.
+tests/cases/compiler/objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A' is not assignable to type 'B'.
+
+
+==== tests/cases/compiler/objectLiteralIndexerErrors.ts (2 errors) ====
+    interface A {
+        x: number;
+    }
+    
+    interface B extends A {
+        y: string;
+    }
+    
+    var a: A;
+    var b: B;
+    var c: any;
+    
+    var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
+                                                         ~
+!!! error TS2741: Property 'y' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/objectLiteralIndexerErrors.ts:6:5: 'y' is declared here.
+!!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.
+    o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
+                 ~
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.

@@ -1,0 +1,16 @@
+tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts(9,15): error TS2558: Expected 2 type arguments, but got 1.
+
+
+==== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts (1 errors) ====
+    class D<T, U> {
+    
+       x: T
+    
+       y: U
+    
+    }
+     
+    var d = new D<number>();
+                  ~~~~~~
+!!! error TS2558: Expected 2 type arguments, but got 1.
+    

@@ -1,0 +1,23 @@
+{
+    "scenario": "non-relative",
+    "projectRoot": "tests/cases/projects/non-relative",
+    "inputFiles": [
+        "consume.ts"
+    ],
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "decl.ts",
+        "lib/foo/b.ts",
+        "lib/foo/a.ts",
+        "lib/bar/a.ts",
+        "consume.ts"
+    ],
+    "emittedFiles": [
+        "decl.js",
+        "lib/foo/b.js",
+        "lib/foo/a.js",
+        "lib/bar/a.js",
+        "consume.js"
+    ]
+}

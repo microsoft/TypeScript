@@ -1,0 +1,206 @@
+=== tests/cases/compiler/commentsAfterSpread.ts ===
+const identity = (a) => a;
+>identity : (a: any) => any
+>(a) => a : (a: any) => any
+>a : any
+>a : any
+
+const a = {
+>a : any
+>{  .../*#__PURE__*/identity({    b: 1  })} : any
+
+  .../*#__PURE__*/identity({
+>identity({    b: 1  }) : any
+>identity : (a: any) => any
+>{    b: 1  } : { b: number; }
+
+    b: 1
+>b : number
+>1 : 1
+
+  })
+};
+
+const b = {
+>b : any
+>{  ...  /*#__PURE__*/identity({    b: 1  })} : any
+
+  ...
+  /*#__PURE__*/identity({
+>identity({    b: 1  }) : any
+>identity : (a: any) => any
+>{    b: 1  } : { b: number; }
+
+    b: 1
+>b : number
+>1 : 1
+
+  })
+};
+
+const c = {
+>c : any
+>{  ...  /*#__PURE__*/  identity({    b: 1  })} : any
+
+  ...
+  /*#__PURE__*/
+  identity({
+>identity({    b: 1  }) : any
+>identity : (a: any) => any
+>{    b: 1  } : { b: number; }
+
+    b: 1
+>b : number
+>1 : 1
+
+  })
+};
+
+const d = {
+>d : any
+>{  .../*#__PURE__*/  identity({    b: 1  })} : any
+
+  .../*#__PURE__*/
+  identity({
+>identity({    b: 1  }) : any
+>identity : (a: any) => any
+>{    b: 1  } : { b: number; }
+
+    b: 1
+>b : number
+>1 : 1
+
+  })
+};
+
+function e (.../* comment e */args) {
+>e : (...args: any[]) => number
+>args : any[]
+
+  const [ea, eb] = [.../* comment eab */args];
+>ea : any
+>eb : any
+>[.../* comment eab */args] : any[]
+>.../* comment eab */args : any
+>args : any[]
+
+  return args.length;
+>args.length : number
+>args : any[]
+>length : number
+}
+
+function f (
+>f : (first: any, ...rest: any[]) => number
+
+  first,
+>first : any
+
+  .../* comment f */rest
+>rest : any[]
+
+) {
+  return rest.length;
+>rest.length : number
+>rest : any[]
+>length : number
+}
+
+function g (
+>g : (first: any, ...rest: any[]) => number
+
+  first,
+>first : any
+
+  .../* comment g */
+  rest
+>rest : any[]
+
+) {
+  const [ga, gb] = [.../* comment gab */
+>ga : any
+>gb : any
+>[.../* comment gab */    rest  ] : any[]
+>.../* comment gab */    rest : any
+
+    rest
+>rest : any[]
+
+  ]
+  return rest.length;
+>rest.length : number
+>rest : any[]
+>length : number
+}
+
+const h = (.../* comment h */args) => args.length;
+>h : (...args: any[]) => number
+>(.../* comment h */args) => args.length : (...args: any[]) => number
+>args : any[]
+>args.length : number
+>args : any[]
+>length : number
+
+const i = (
+>i : (first: any, ...rest: any[]) => number
+>(  first, .../* comment i */rest) => rest.length : (first: any, ...rest: any[]) => number
+
+  first, .../* comment i */rest
+>first : any
+>rest : any[]
+
+) => rest.length;
+>rest.length : number
+>rest : any[]
+>length : number
+
+const j = (
+>j : (first: any, ...rest: any[]) => number
+>(  first,  .../* comment j */  rest) => rest.length : (first: any, ...rest: any[]) => number
+
+  first,
+>first : any
+
+  .../* comment j */
+  rest
+>rest : any[]
+
+) => rest.length;
+>rest.length : number
+>rest : any[]
+>length : number
+
+function k ({
+>k : ({ first, ...rest }: { [x: string]: any; first: any; }) => { [x: string]: any; }
+
+  first,
+>first : any
+
+  .../* comment k */rest
+>rest : { [x: string]: any; }
+
+}) {
+  const { ka, kb, .../* comment kr */remaining } = rest;
+>ka : any
+>kb : any
+>remaining : { [x: string]: any; }
+>rest : { [x: string]: any; }
+
+  const {
+    kc,
+>kc : any
+
+    kd,
+>kd : any
+
+    .../* comment kr2 */
+    remaining2
+>remaining2 : { [x: string]: any; }
+
+  } = rest;
+>rest : { [x: string]: any; }
+
+  return { .../* comment return k */ remaining };
+>{ .../* comment return k */ remaining } : { [x: string]: any; }
+>remaining : { [x: string]: any; }
+}

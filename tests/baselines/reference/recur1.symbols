@@ -1,0 +1,16 @@
+=== tests/cases/compiler/recur1.ts ===
+var salt:any = new salt.pepper();   
+>salt : Symbol(salt, Decl(recur1.ts, 0, 3))
+>salt : Symbol(salt, Decl(recur1.ts, 0, 3))
+
+salt.pepper = function() {}
+>salt : Symbol(salt, Decl(recur1.ts, 0, 3))
+
+var cobalt = new cobalt.pitch();   
+>cobalt : Symbol(cobalt, Decl(recur1.ts, 3, 3))
+>cobalt : Symbol(cobalt, Decl(recur1.ts, 3, 3))
+
+cobalt.pitch = function() {}
+>cobalt : Symbol(cobalt, Decl(recur1.ts, 3, 3))
+ 
+

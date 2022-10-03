@@ -1,0 +1,21 @@
+{
+    "scenario": "[Sourcemap]: outputdir_simple: specify outputFile",
+    "projectRoot": "tests/cases/projects/outputdir_simple",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/test.js",
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m1.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "bin/test.js.map",
+        "bin/test.js",
+        "bin/test.d.ts"
+    ]
+}

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts ===
+class EventAggregator
+>EventAggregator : Symbol(EventAggregator, Decl(overloadErrorMatchesImplementationElaboaration.ts, 0, 0))
+{
+    publish(event: string, data?: any): void;
+>publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
+>event : Symbol(event, Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 12))
+>data : Symbol(data, Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 26))
+
+    publish<T>(event: T): void {}
+>publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
+>T : Symbol(T, Decl(overloadErrorMatchesImplementationElaboaration.ts, 3, 12))
+>event : Symbol(event, Decl(overloadErrorMatchesImplementationElaboaration.ts, 3, 15))
+>T : Symbol(T, Decl(overloadErrorMatchesImplementationElaboaration.ts, 3, 12))
+}
+
+var ea: EventAggregator;
+>ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 3))
+>EventAggregator : Symbol(EventAggregator, Decl(overloadErrorMatchesImplementationElaboaration.ts, 0, 0))
+
+ea.publish([1,2,3]);
+>ea.publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
+>ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 3))
+>publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
+

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/jsxCallbackWithDestructuring.tsx ===
+// minimal component
+interface Component<P = {}, S = {}> { }
+declare class Component<P, S> {
+>Component : Component<P, S>
+
+    constructor(props: P, context?: any);
+>props : P
+>context : any
+
+    render(): {};
+>render : () => {}
+
+    props: Readonly<{ children?: {} }> & Readonly<P>;
+>props : Readonly<{ children?: {} | undefined; }> & Readonly<P>
+>children : {} | undefined
+}
+
+declare global {
+>global : any
+
+    namespace JSX {
+        interface Element  { }
+        interface ElementClass  {
+            render(): {};
+>render : () => {}
+        }
+        interface ElementAttributesProperty { props: {}; }
+>props : {}
+
+        interface ElementChildrenAttribute { children: {}; }
+>children : {}
+
+        interface IntrinsicAttributes  { }
+        interface IntrinsicClassAttributes<T> { }
+    }
+}
+
+export interface RouteProps {
+    children?: (props: { x: number }) => any;
+>children : ((props: {    x: number;}) => any) | undefined
+>props : { x: number; }
+>x : number
+}
+export class MyComponent<T extends RouteProps = RouteProps> extends Component<T> { }
+>MyComponent : MyComponent<T>
+>Component : Component<T, {}>
+
+<MyComponent children={({ x }) => {}}/>
+><MyComponent children={({ x }) => {}}/> : JSX.Element
+>MyComponent : typeof MyComponent
+>children : ({ x }: { x: number; }) => void
+>({ x }) => {} : ({ x }: { x: number; }) => void
+>x : number
+

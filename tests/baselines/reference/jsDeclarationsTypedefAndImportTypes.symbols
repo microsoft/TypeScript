@@ -1,0 +1,62 @@
+=== tests/cases/conformance/jsdoc/declarations/conn.js ===
+/**
+ * @typedef {string | number} Whatever
+ */
+
+class Conn {
+>Conn : Symbol(Conn, Decl(conn.js, 0, 0))
+
+    constructor() {}
+    item = 3;
+>item : Symbol(Conn.item, Decl(conn.js, 5, 20))
+
+    method() {}
+>method : Symbol(Conn.method, Decl(conn.js, 6, 13))
+}
+
+module.exports = Conn;
+>module.exports : Symbol(module.exports, Decl(conn.js, 0, 0))
+>module : Symbol(export=, Decl(conn.js, 8, 1))
+>exports : Symbol(export=, Decl(conn.js, 8, 1))
+>Conn : Symbol(Conn, Decl(conn.js, 0, 0))
+
+=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+/**
+ * @typedef {import("./conn")} Conn
+ */
+
+class Wrap {
+>Wrap : Symbol(Wrap, Decl(usage.js, 0, 0))
+
+    /**
+     * @param {Conn} c
+     */
+    constructor(c) {
+>c : Symbol(c, Decl(usage.js, 8, 16))
+
+        this.connItem = c.item;
+>this.connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
+>this : Symbol(Wrap, Decl(usage.js, 0, 0))
+>connItem : Symbol(Wrap.connItem, Decl(usage.js, 8, 20))
+>c.item : Symbol(Conn.item, Decl(conn.js, 5, 20))
+>c : Symbol(c, Decl(usage.js, 8, 16))
+>item : Symbol(Conn.item, Decl(conn.js, 5, 20))
+
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
+>this.another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
+>this : Symbol(Wrap, Decl(usage.js, 0, 0))
+>another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
+    }
+}
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(usage.js, 0, 0))
+>module : Symbol(module, Decl(usage.js, 13, 1))
+>exports : Symbol(module.exports, Decl(usage.js, 0, 0))
+
+    Wrap
+>Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))
+
+};
+

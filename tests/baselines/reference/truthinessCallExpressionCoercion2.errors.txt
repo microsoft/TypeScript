@@ -1,0 +1,160 @@
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(11,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(14,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(44,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(48,11): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(65,46): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(76,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(79,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(99,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(109,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/truthinessCallExpressionCoercion2.ts (11 errors) ====
+    declare class A {
+        static from(): string;
+    }
+    
+    declare class B {
+        static from(): string;
+    }
+    
+    function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
+        // error
+        required1 && console.log('required');
+        ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // error
+        1 && required1 && console.log('required');
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // ok
+        required1 && required1();
+    
+        // ok
+        required1 && 1 && required1();
+    
+        // ok
+        optional && console.log('optional');
+    
+        // ok
+        1 && optional && console.log('optional');
+    
+        // ok
+        !!required1 && console.log('not required');
+    
+        // ok
+        required1() && console.log('required call');
+    
+        // ok
+        required1 && required2 && required1() && required2();
+    
+        // ok
+        [].forEach((f: () => void) => f && f.apply(parent, []));
+    
+        // error
+        required1 && required2 && required1() && console.log('foo');
+                     ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // error
+        if (required1 && b) {
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (((required1 && b))) {
+              ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // ok
+        if (required1 && b) {
+            required1();
+        }
+    
+        // ok
+        if (((required1 && b))) {
+            required1();
+        }
+    }
+    
+    function checksConsole() {
+        // error
+        typeof window !== 'undefined' && window.console &&
+            ((window.console as any).firebug || (window.console.error && window.console.table));
+                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    }
+    
+    function checksPropertyAccess() {
+        const x = {
+            foo: {
+                bar() { return true; }
+            }
+        }
+    
+        // error
+        x.foo.bar && console.log('x.foo.bar');
+        ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // error
+        1 && x.foo.bar && console.log('x.foo.bar');
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // ok
+        x.foo.bar && x.foo.bar();
+    
+        // ok
+        x.foo.bar && 1 && x.foo.bar();
+    
+        // ok
+        const y = A.from && (A.from as Function) !== B.from ? true : false;
+        y;
+    
+        const x1 = {
+            a: { b: { c: () => {} } }
+        }
+        const x2 = {
+            a: { b: { c: () => {} } }
+        }
+    
+        // error
+        x1.a.b.c && x2.a.b.c();
+        ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    }
+    
+    class Foo {
+        optional?: () => boolean;
+        required() {
+            return true;
+        }
+        test() {
+            // error
+            this.required && console.log('required');
+            ~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+            // error
+            1 && this.required && console.log('required');
+                 ~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+            // ok
+            this.required && this.required();
+    
+            // ok
+            this.required && 1 && this.required();
+    
+            // ok
+            1 && this.optional && console.log('optional');
+        }
+    }
+    

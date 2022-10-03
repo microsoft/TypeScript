@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES6.ts ===
+var v: {
+>v : {}
+
+    ["" + ""](): void;
+>["" + ""] : () => void
+>"" + "" : string
+>"" : ""
+>"" : ""
+}

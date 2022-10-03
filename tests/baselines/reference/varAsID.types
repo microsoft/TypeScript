@@ -1,0 +1,37 @@
+=== tests/cases/compiler/varAsID.ts ===
+class Foo {
+>Foo : Foo
+
+    var; // ok
+>var : any
+
+    x=1;
+>x : number
+>1 : 1
+}
+
+var f = new Foo();
+>f : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+
+class Foo2 {
+>Foo2 : Foo2
+
+    var // not an error, because of ASI.
+>var : any
+
+    x=1;
+>x : number
+>1 : 1
+}
+
+var f2 = new Foo2();
+>f2 : Foo2
+>new Foo2() : Foo2
+>Foo2 : typeof Foo2
+
+
+
+

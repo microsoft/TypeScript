@@ -1,0 +1,176 @@
+=== tests/cases/compiler/statics.ts ===
+module M {
+>M : typeof M
+
+    export class C {
+>C : C
+
+        x: number;
+>x : number
+
+        constructor(public c1: number, public c2: number, c3: number) {
+>c1 : number
+>c2 : number
+>c3 : number
+
+            this.x = C.y+this.c1+this.c2+c3;
+>this.x = C.y+this.c1+this.c2+c3 : number
+>this.x : number
+>this : this
+>x : number
+>C.y+this.c1+this.c2+c3 : number
+>C.y+this.c1+this.c2 : number
+>C.y+this.c1 : number
+>C.y : number
+>C : typeof C
+>y : number
+>this.c1 : number
+>this : this
+>c1 : number
+>this.c2 : number
+>this : this
+>c2 : number
+>c3 : number
+
+            this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
+>this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
+>this.g : any
+>this : this
+>g : any
+>(v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
+>v : number
+>C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : string
+>C.f : (n: number) => string
+>C : typeof C
+>f : (n: number) => string
+>this.x+C.y+v+this.c1+this.c2+C.pub : number
+>this.x+C.y+v+this.c1+this.c2 : number
+>this.x+C.y+v+this.c1 : number
+>this.x+C.y+v : number
+>this.x+C.y : number
+>this.x : number
+>this : this
+>x : number
+>C.y : number
+>C : typeof C
+>y : number
+>v : number
+>this.c1 : number
+>this : this
+>c1 : number
+>this.c2 : number
+>this : this
+>c2 : number
+>C.pub : number
+>C : typeof C
+>pub : number
+        }
+
+        static priv=2;
+>priv : number
+>2 : 2
+
+        static pub=3;
+>pub : number
+>3 : 3
+
+        static y=C.priv;
+>y : number
+>C.priv : number
+>C : typeof C
+>priv : number
+
+        static f(n:number) {
+>f : (n: number) => string
+>n : number
+
+            return "wow: "+(n+C.y+C.pub+C.priv);
+>"wow: "+(n+C.y+C.pub+C.priv) : string
+>"wow: " : "wow: "
+>(n+C.y+C.pub+C.priv) : number
+>n+C.y+C.pub+C.priv : number
+>n+C.y+C.pub : number
+>n+C.y : number
+>n : number
+>C.y : number
+>C : typeof C
+>y : number
+>C.pub : number
+>C : typeof C
+>pub : number
+>C.priv : number
+>C : typeof C
+>priv : number
+
+        }        
+    }
+    var c=C.y;
+>c : number
+>C.y : number
+>C : typeof C
+>y : number
+
+    export function f() {
+>f : () => string
+
+        var result="";
+>result : string
+>"" : ""
+
+        result+=(c);
+>result+=(c) : string
+>result : string
+>(c) : number
+>c : number
+
+        result+=(new C(0,1,2).x);
+>result+=(new C(0,1,2).x) : string
+>result : string
+>(new C(0,1,2).x) : number
+>new C(0,1,2).x : number
+>new C(0,1,2) : C
+>C : typeof C
+>0 : 0
+>1 : 1
+>2 : 2
+>x : number
+
+        result+=(C.f(10));
+>result+=(C.f(10)) : string
+>result : string
+>(C.f(10)) : string
+>C.f(10) : string
+>C.f : (n: number) => string
+>C : typeof C
+>f : (n: number) => string
+>10 : 10
+
+        result+=(new C(5,10,20).g(C.y));
+>result+=(new C(5,10,20).g(C.y)) : string
+>result : string
+>(new C(5,10,20).g(C.y)) : any
+>new C(5,10,20).g(C.y) : any
+>new C(5,10,20).g : any
+>new C(5,10,20) : C
+>C : typeof C
+>5 : 5
+>10 : 10
+>20 : 20
+>g : any
+>C.y : number
+>C : typeof C
+>y : number
+
+        return result;
+>result : string
+    }
+}
+
+M.f();
+>M.f() : string
+>M.f : () => string
+>M : typeof M
+>f : () => string
+
+
+

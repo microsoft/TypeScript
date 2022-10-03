@@ -1,0 +1,76 @@
+=== tests/cases/compiler/invariantGenericErrorElaboration.ts ===
+// Repro from #19746
+
+const wat: Runtype<any> = Num;
+>wat : Symbol(wat, Decl(invariantGenericErrorElaboration.ts, 2, 5))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+
+const Foo = Obj({ foo: Num })
+>Foo : Symbol(Foo, Decl(invariantGenericErrorElaboration.ts, 3, 5))
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>foo : Symbol(foo, Decl(invariantGenericErrorElaboration.ts, 3, 17))
+>Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+
+interface Runtype<A> {
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 5, 18))
+
+  constraint: Constraint<this>
+>constraint : Symbol(Runtype.constraint, Decl(invariantGenericErrorElaboration.ts, 5, 22))
+>Constraint : Symbol(Constraint, Decl(invariantGenericErrorElaboration.ts, 16, 81))
+
+  witness: A
+>witness : Symbol(Runtype.witness, Decl(invariantGenericErrorElaboration.ts, 6, 30))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 5, 18))
+}
+
+interface Num extends Runtype<number> {
+>Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+
+  tag: 'number'
+>tag : Symbol(Num.tag, Decl(invariantGenericErrorElaboration.ts, 10, 39))
+}
+declare const Num: Num
+>Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+>Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+
+interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 15, 14))
+>_ : Symbol(_, Decl(invariantGenericErrorElaboration.ts, 15, 27))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>K : Symbol(K, Decl(invariantGenericErrorElaboration.ts, 15, 75))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 15, 14))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 15, 14))
+>K : Symbol(K, Decl(invariantGenericErrorElaboration.ts, 15, 75))
+
+declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
+>_ : Symbol(_, Decl(invariantGenericErrorElaboration.ts, 16, 34))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>fields : Symbol(fields, Decl(invariantGenericErrorElaboration.ts, 16, 62))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
+
+interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
+>Constraint : Symbol(Constraint, Decl(invariantGenericErrorElaboration.ts, 16, 81))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+
+  underlying: A,
+>underlying : Symbol(Constraint.underlying, Decl(invariantGenericErrorElaboration.ts, 18, 76))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+
+  check: (x: A['witness']) => void,
+>check : Symbol(Constraint.check, Decl(invariantGenericErrorElaboration.ts, 19, 16))
+>x : Symbol(x, Decl(invariantGenericErrorElaboration.ts, 20, 10))
+>A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+}
+

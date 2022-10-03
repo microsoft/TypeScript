@@ -1,0 +1,34 @@
+tests/cases/conformance/jsdoc/declarations/bar.js(1,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/bar.js(2,1): error TS8003: 'export =' can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/bin.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/conformance/jsdoc/declarations/globalNs.js(2,1): error TS1315: Global module exports may only appear in declaration files.
+
+
+==== tests/cases/conformance/jsdoc/declarations/cls.js (0 errors) ====
+    export class Foo {}
+    
+==== tests/cases/conformance/jsdoc/declarations/bar.js (2 errors) ====
+    import ns = require("./cls");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+    export = ns; // TS Only
+    ~~~~~~~~~~~~
+!!! error TS8003: 'export =' can only be used in TypeScript files.
+    
+==== tests/cases/conformance/jsdoc/declarations/bin.js (1 errors) ====
+    import * as ns from "./cls";
+    module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== tests/cases/conformance/jsdoc/declarations/globalNs.js (1 errors) ====
+    export * from "./cls";
+    export as namespace GLO; // TS Only
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1315: Global module exports may only appear in declaration files.
+    
+==== tests/cases/conformance/jsdoc/declarations/includeAll.js (0 errors) ====
+    import "./bar";
+    import "./bin";
+    import "./globalNs";
+    

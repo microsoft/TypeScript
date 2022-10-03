@@ -1,0 +1,11 @@
+tests/cases/compiler/arrowFunctionInConstructorArgument1.ts(4,30): error TS2304: Cannot find name 'asdf'.
+
+
+==== tests/cases/compiler/arrowFunctionInConstructorArgument1.ts (1 errors) ====
+    class C {
+        constructor(x: () => void) { }
+    }
+    var c = new C(() => { return asdf; } ) // should error
+                                 ~~~~
+!!! error TS2304: Cannot find name 'asdf'.
+    

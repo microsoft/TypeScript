@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.js ===
+function F<T>() { }
+>F : <T>() => void
+

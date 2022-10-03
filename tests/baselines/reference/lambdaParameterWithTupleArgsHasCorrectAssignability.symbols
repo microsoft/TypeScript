@@ -1,0 +1,72 @@
+=== tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts ===
+type MyTupleItem = {};
+>MyTupleItem : Symbol(MyTupleItem, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 0))
+
+type MyTuple = [MyTupleItem, ...MyTupleItem[]];
+>MyTuple : Symbol(MyTuple, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 22))
+>MyTupleItem : Symbol(MyTupleItem, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 0))
+>MyTupleItem : Symbol(MyTupleItem, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 0))
+
+type GenericFunction<T extends MyTuple> = (...fromArgs: T) => void;
+>GenericFunction : Symbol(GenericFunction, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 1, 47))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 21))
+>MyTuple : Symbol(MyTuple, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 22))
+>fromArgs : Symbol(fromArgs, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 43))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 21))
+
+class GenericClass<T extends MyTuple> {
+>GenericClass : Symbol(GenericClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 67))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 19))
+>MyTuple : Symbol(MyTuple, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 22))
+
+    from: GenericFunction<T> | undefined;
+>from : Symbol(GenericClass.from, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 39))
+>GenericFunction : Symbol(GenericFunction, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 1, 47))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 19))
+}
+
+function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> {
+>createClass : Symbol(createClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 7, 1))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 9, 21))
+>MyTuple : Symbol(MyTuple, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 22))
+>f : Symbol(f, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 9, 40))
+>GenericFunction : Symbol(GenericFunction, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 1, 47))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 9, 21))
+>GenericClass : Symbol(GenericClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 67))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 9, 21))
+
+    return new GenericClass<T>(/* ... use f */);
+>GenericClass : Symbol(GenericClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 67))
+>T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 9, 21))
+}
+
+function consumeClass(c: GenericClass<[string, boolean]>) { }
+>consumeClass : Symbol(consumeClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 11, 1))
+>c : Symbol(c, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 13, 22))
+>GenericClass : Symbol(GenericClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 3, 67))
+
+// should work
+consumeClass(createClass(str => console.log(str.length)));
+>consumeClass : Symbol(consumeClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 11, 1))
+>createClass : Symbol(createClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 7, 1))
+>str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 16, 25))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 16, 25))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+// should work
+consumeClass(createClass((str, _unused_num) => console.log(str.length)));
+>consumeClass : Symbol(consumeClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 11, 1))
+>createClass : Symbol(createClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 7, 1))
+>str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 26))
+>_unused_num : Symbol(_unused_num, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 30))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 26))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

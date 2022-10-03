@@ -1,0 +1,35 @@
+=== tests/cases/compiler/castOfAwait.ts ===
+async function f() {
+>f : () => Promise<void>
+
+    <number> await 0;
+><number> await 0 : number
+>await 0 : 0
+>0 : 0
+
+    typeof await 0;
+>typeof await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>await 0 : 0
+>0 : 0
+
+    void await 0;
+>void await 0 : undefined
+>await 0 : 0
+>0 : 0
+
+    await void <string> typeof <number> void await 0;
+>await void <string> typeof <number> void await 0 : undefined
+>void <string> typeof <number> void await 0 : undefined
+><string> typeof <number> void await 0 : string
+>typeof <number> void await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+><number> void await 0 : number
+>void await 0 : undefined
+>await 0 : 0
+>0 : 0
+
+    await await 0;
+>await await 0 : 0
+>await 0 : 0
+>0 : 0
+}
+

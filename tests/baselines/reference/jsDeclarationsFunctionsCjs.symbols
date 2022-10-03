@@ -1,0 +1,197 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+module.exports.a = function a() {}
+>module.exports.a : Symbol(a, Decl(index.js, 0, 0))
+>module.exports : Symbol(a, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>a : Symbol(a, Decl(index.js, 0, 0))
+>a : Symbol(a, Decl(index.js, 0, 18))
+
+module.exports.b = function b() {}
+>module.exports.b : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
+>module.exports : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>b : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
+>b : Symbol(b, Decl(index.js, 2, 18))
+
+module.exports.b.cat = "cat";
+>module.exports.b.cat : Symbol(b.cat, Decl(index.js, 2, 34))
+>module.exports.b : Symbol(b.cat, Decl(index.js, 2, 34))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>b : Symbol(b, Decl(index.js, 0, 34), Decl(index.js, 3, 15))
+>cat : Symbol(b.cat, Decl(index.js, 2, 34))
+
+module.exports.c = function c() {}
+>module.exports.c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
+>module.exports : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
+>c : Symbol(c, Decl(index.js, 5, 18))
+
+module.exports.c.Cls = class {}
+>module.exports.c.Cls : Symbol(c.Cls, Decl(index.js, 5, 34))
+>module.exports.c : Symbol(c.Cls, Decl(index.js, 5, 34))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
+>Cls : Symbol(c.Cls, Decl(index.js, 5, 34))
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+module.exports.d = function d(a, b) { return /** @type {*} */(null); }
+>module.exports.d : Symbol(d, Decl(index.js, 6, 31))
+>module.exports : Symbol(d, Decl(index.js, 6, 31))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>d : Symbol(d, Decl(index.js, 6, 31))
+>d : Symbol(d, Decl(index.js, 13, 18))
+>a : Symbol(a, Decl(index.js, 13, 30))
+>b : Symbol(b, Decl(index.js, 13, 32))
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+module.exports.e = function e(a, b) { return /** @type {*} */(null); }
+>module.exports.e : Symbol(e, Decl(index.js, 13, 70))
+>module.exports : Symbol(e, Decl(index.js, 13, 70))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>e : Symbol(e, Decl(index.js, 13, 70))
+>e : Symbol(e, Decl(index.js, 21, 18))
+>a : Symbol(a, Decl(index.js, 21, 30))
+>b : Symbol(b, Decl(index.js, 21, 32))
+
+/**
+ * @template T
+ * @param {T} a
+ */
+module.exports.f = function f(a) {
+>module.exports.f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+>module.exports : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+>f : Symbol(f, Decl(index.js, 27, 18))
+>a : Symbol(a, Decl(index.js, 27, 30))
+
+    return a;
+>a : Symbol(a, Decl(index.js, 27, 30))
+}
+module.exports.f.self = module.exports.f;
+>module.exports.f.self : Symbol(f.self, Decl(index.js, 29, 1))
+>module.exports.f : Symbol(f.self, Decl(index.js, 29, 1))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+>self : Symbol(f.self, Decl(index.js, 29, 1))
+>module.exports.f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>f : Symbol(f, Decl(index.js, 21, 70), Decl(index.js, 30, 15))
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function g(a, b) {
+>g : Symbol(g, Decl(index.js, 30, 41))
+>a : Symbol(a, Decl(index.js, 36, 11))
+>b : Symbol(b, Decl(index.js, 36, 13))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 33, 12))
+>a : Symbol(a, Decl(index.js, 36, 11))
+>x : Symbol(x, Decl(index.js, 33, 12))
+>b.y : Symbol(y, Decl(index.js, 34, 12))
+>b : Symbol(b, Decl(index.js, 36, 13))
+>y : Symbol(y, Decl(index.js, 34, 12))
+}
+
+module.exports.g = g;
+>module.exports.g : Symbol(g, Decl(index.js, 38, 1))
+>module.exports : Symbol(g, Decl(index.js, 38, 1))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>g : Symbol(g, Decl(index.js, 38, 1))
+>g : Symbol(g, Decl(index.js, 30, 41))
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function hh(a, b) {
+>hh : Symbol(hh, Decl(index.js, 40, 21))
+>a : Symbol(a, Decl(index.js, 46, 12))
+>b : Symbol(b, Decl(index.js, 46, 14))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 43, 12))
+>a : Symbol(a, Decl(index.js, 46, 12))
+>x : Symbol(x, Decl(index.js, 43, 12))
+>b.y : Symbol(y, Decl(index.js, 44, 12))
+>b : Symbol(b, Decl(index.js, 46, 14))
+>y : Symbol(y, Decl(index.js, 44, 12))
+}
+
+module.exports.h = hh;
+>module.exports.h : Symbol(h, Decl(index.js, 48, 1))
+>module.exports : Symbol(h, Decl(index.js, 48, 1))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>h : Symbol(h, Decl(index.js, 48, 1))
+>hh : Symbol(hh, Decl(index.js, 40, 21))
+
+module.exports.i = function i() {}
+>module.exports.i : Symbol(i, Decl(index.js, 50, 22))
+>module.exports : Symbol(i, Decl(index.js, 50, 22))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>i : Symbol(i, Decl(index.js, 50, 22))
+>i : Symbol(i, Decl(index.js, 52, 18))
+
+module.exports.ii = module.exports.i;
+>module.exports.ii : Symbol(ii, Decl(index.js, 52, 34))
+>module.exports : Symbol(ii, Decl(index.js, 52, 34))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>ii : Symbol(ii, Decl(index.js, 52, 34))
+>module.exports.i : Symbol(i, Decl(index.js, 50, 22))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>i : Symbol(i, Decl(index.js, 50, 22))
+
+// note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
+module.exports.jj = module.exports.j;
+>module.exports.jj : Symbol(jj, Decl(index.js, 53, 37))
+>module.exports : Symbol(jj, Decl(index.js, 53, 37))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>jj : Symbol(jj, Decl(index.js, 53, 37))
+>module.exports.j : Symbol(j, Decl(index.js, 56, 37))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>j : Symbol(j, Decl(index.js, 56, 37))
+
+module.exports.j = function j() {}
+>module.exports.j : Symbol(j, Decl(index.js, 56, 37))
+>module.exports : Symbol(j, Decl(index.js, 56, 37))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>j : Symbol(j, Decl(index.js, 56, 37))
+>j : Symbol(j, Decl(index.js, 57, 18))
+

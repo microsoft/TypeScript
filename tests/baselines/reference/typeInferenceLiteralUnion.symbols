@@ -1,0 +1,79 @@
+=== tests/cases/compiler/typeInferenceLiteralUnion.ts ===
+// Repro from #10901
+/**
+ * Administrivia: JavaScript primitive types and Date
+ */
+export type Primitive = number | string | boolean | Date;
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+/**
+ * Administrivia: anything with a valueOf(): number method is comparable, so we allow it in numeric operations
+ */
+interface Numeric {
+>Numeric : Symbol(Numeric, Decl(typeInferenceLiteralUnion.ts, 4, 57))
+
+    valueOf(): number;
+>valueOf : Symbol(Numeric.valueOf, Decl(typeInferenceLiteralUnion.ts, 9, 19))
+}
+
+// Not very useful, but meets Numeric
+class NumCoercible {
+>NumCoercible : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+
+    public a: number;
+>a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+
+    constructor(a: number) {
+>a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 17, 16))
+
+        this.a = a;
+>this.a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+>this : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+>a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+>a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 17, 16))
+    }
+    public valueOf() {
+>valueOf : Symbol(NumCoercible.valueOf, Decl(typeInferenceLiteralUnion.ts, 19, 5))
+
+        return this.a;
+>this.a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+>this : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+>a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+    }
+}
+
+/**
+ * Return the min and max simultaneously.
+ */
+export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
+>extent : Symbol(extent, Decl(typeInferenceLiteralUnion.ts, 23, 1))
+>T : Symbol(T, Decl(typeInferenceLiteralUnion.ts, 28, 23))
+>Numeric : Symbol(Numeric, Decl(typeInferenceLiteralUnion.ts, 4, 57))
+>array : Symbol(array, Decl(typeInferenceLiteralUnion.ts, 28, 42))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(typeInferenceLiteralUnion.ts, 28, 23))
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceLiteralUnion.ts, 28, 23))
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceLiteralUnion.ts, 28, 23))
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+
+    return [undefined, undefined];
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+}
+
+
+let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
+>extentMixed : Symbol(extentMixed, Decl(typeInferenceLiteralUnion.ts, 33, 3))
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+>NumCoercible : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+>Primitive : Symbol(Primitive, Decl(typeInferenceLiteralUnion.ts, 0, 0))
+>NumCoercible : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+
+extentMixed = extent([new NumCoercible(10), 13, '12', true]);
+>extentMixed : Symbol(extentMixed, Decl(typeInferenceLiteralUnion.ts, 33, 3))
+>extent : Symbol(extent, Decl(typeInferenceLiteralUnion.ts, 23, 1))
+>NumCoercible : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+

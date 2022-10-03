@@ -1,0 +1,14 @@
+=== tests/cases/compiler/anyDeclare.ts ===
+declare var x: any;
+>x : Symbol(x, Decl(anyDeclare.ts, 0, 11))
+
+module myMod {
+>myMod : Symbol(myMod, Decl(anyDeclare.ts, 0, 19))
+
+    var myFn;
+>myFn : Symbol(myFn, Decl(anyDeclare.ts, 2, 7))
+
+    function myFn() {  }
+>myFn : Symbol(myFn, Decl(anyDeclare.ts, 2, 13))
+}
+

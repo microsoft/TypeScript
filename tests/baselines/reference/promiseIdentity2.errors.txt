@@ -1,0 +1,18 @@
+tests/cases/compiler/promiseIdentity2.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<any, string>'.
+
+
+==== tests/cases/compiler/promiseIdentity2.ts (1 errors) ====
+    export interface IPromise<T, V> {
+        then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+    }
+    export interface Promise<T, V> {
+        then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
+    }
+    
+    // error because T is string in the first declaration, and T is boolean in the second
+    // Return type and callback return type are ok because T is any in this particular Promise
+    var x: IPromise<string, number>;
+    var x: Promise<any, string>;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<any, string>'.
+!!! related TS6203 tests/cases/compiler/promiseIdentity2.ts:10:5: 'x' was also declared here.

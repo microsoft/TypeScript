@@ -1,0 +1,50 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target.ts ===
+export class C {
+>C : C
+
+    static s = 0;
+>s : number
+>0 : 0
+
+    p = 1;
+>p : number
+>1 : 1
+
+    method() { }
+>method : () => void
+}
+export { C as C2 };
+>C : typeof C
+>C2 : typeof C
+
+declare function foo(...args: any[]): any;
+>foo : (...args: any[]) => any
+>args : any[]
+
+@foo
+>foo : (...args: any[]) => any
+
+export class D {
+>D : D
+
+    static s = 0;
+>s : number
+>0 : 0
+
+    p = 1;
+>p : number
+>1 : 1
+
+    method() { }
+>method : () => void
+}
+export { D as D2 };
+>D : typeof D
+>D2 : typeof D
+
+class E { }
+>E : E
+
+export {E};
+>E : typeof E
+

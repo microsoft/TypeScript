@@ -1,0 +1,73 @@
+=== tests/cases/compiler/typeParameterExtendsPrimitive.ts ===
+// #14473
+function f<T extends number>() {
+>f : <T extends number>() => number
+
+    var t: T;
+>t : T
+
+    var v = {
+>v : { [x: number]: number; }
+>{        [t]: 0    } : { [x: number]: number; }
+
+        [t]: 0
+>[t] : number
+>t : T
+>0 : 0
+    }
+    return t + t;
+>t + t : number
+>t : T
+>t : T
+}
+
+// #15501
+interface I { x: number }
+>x : number
+
+type IdMap<T> = { [P in keyof T]: T[P] };
+>IdMap : IdMap<T>
+
+function g<T extends I>(i: IdMap<T>) {
+>g : <T extends I>(i: IdMap<T>) => number
+>i : IdMap<T>
+
+    const n: number = i.x;
+>n : number
+>i.x : T["x"]
+>i : IdMap<T>
+>x : T["x"]
+
+    return i.x * 2;
+>i.x * 2 : number
+>i.x : T["x"]
+>i : IdMap<T>
+>x : T["x"]
+>2 : 2
+}
+
+// #17069
+function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
+>h : <T extends Record<K, number>, K extends string>(array: T[], prop: K) => number
+>array : T[]
+>prop : K
+
+    let result = 0;
+>result : number
+>0 : 0
+
+    for (const v of array) {
+>v : T
+>array : T[]
+
+        result += v[prop];
+>result += v[prop] : number
+>result : number
+>v[prop] : T[K]
+>v : T
+>prop : K
+    }
+    return result;
+>result : number
+}
+

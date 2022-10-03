@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target8.ts ===
+export const c = 0;
+>c : Symbol(c, Decl(es6modulekindWithES5Target8.ts, 0, 12))
+
+export let l = 1;
+>l : Symbol(l, Decl(es6modulekindWithES5Target8.ts, 1, 10))
+

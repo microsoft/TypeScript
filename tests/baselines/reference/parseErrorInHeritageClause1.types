@@ -1,0 +1,5 @@
+=== tests/cases/compiler/parseErrorInHeritageClause1.ts ===
+class C extends A ¬ {
+>C : C
+>A : any
+}

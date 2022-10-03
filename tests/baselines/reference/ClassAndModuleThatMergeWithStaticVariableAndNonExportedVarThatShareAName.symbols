@@ -1,0 +1,47 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts ===
+class Point {
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 4, 1))
+
+    constructor(public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 1, 16))
+>y : Symbol(Point.y, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 1, 33))
+
+    static Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Point.Origin, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 1, 55))
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 4, 1))
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 3, 28))
+>y : Symbol(y, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 3, 34))
+}
+
+module Point {
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 0, 0), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 4, 1))
+
+    var Origin = ""; // not an error, since not exported
+>Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 7, 7))
+}
+
+
+module A {
+>A : Symbol(A, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 8, 1))
+
+    export class Point {
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 16, 5))
+
+        constructor(public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 13, 20))
+>y : Symbol(Point.y, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 13, 37))
+
+        static Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Point.Origin, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 13, 59))
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 16, 5))
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 15, 32))
+>y : Symbol(y, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 15, 38))
+    }
+
+    export module Point {
+>Point : Symbol(Point, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 11, 10), Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 16, 5))
+
+        var Origin = ""; // not an error since not exported
+>Origin : Symbol(Origin, Decl(ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts, 19, 11))
+    }
+}

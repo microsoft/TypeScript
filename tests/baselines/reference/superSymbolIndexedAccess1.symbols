@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess1.ts ===
+var symbol = Symbol.for('myThing');
+>symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(superSymbolIndexedAccess1.ts, 0, 35))
+
+    [symbol]() {
+>[symbol] : Symbol(Foo[symbol], Decl(superSymbolIndexedAccess1.ts, 2, 11))
+>symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
+
+        return 0;
+    }
+}
+
+class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(superSymbolIndexedAccess1.ts, 6, 1))
+>Foo : Symbol(Foo, Decl(superSymbolIndexedAccess1.ts, 0, 35))
+
+    [symbol]() {
+>[symbol] : Symbol(Bar[symbol], Decl(superSymbolIndexedAccess1.ts, 8, 23))
+>symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
+
+        return super[symbol]();
+>super : Symbol(Foo, Decl(superSymbolIndexedAccess1.ts, 0, 35))
+>symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
+    }
+}

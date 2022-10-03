@@ -1,0 +1,162 @@
+=== tests/cases/compiler/one.ts ===
+export {};
+// When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
+const two: { a: string } = { a: 'two' };
+>two : Symbol(two, Decl(one.ts, 2, 5))
+>a : Symbol(a, Decl(one.ts, 2, 12))
+>a : Symbol(a, Decl(one.ts, 2, 28))
+
+const one: { readonly a: string } = { a: 'one' };
+>one : Symbol(one, Decl(one.ts, 3, 5))
+>a : Symbol(a, Decl(one.ts, 3, 12))
+>a : Symbol(a, Decl(one.ts, 3, 37))
+
+function doSomething(condition: boolean) {
+>doSomething : Symbol(doSomething, Decl(one.ts, 3, 49))
+>condition : Symbol(condition, Decl(one.ts, 5, 21))
+
+    // when `one` comes first in the conditional check, the return type of `doSomething` is inferred as `a` is readonly, but `a` is
+    // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
+    const three = (condition) ? one : two;
+>three : Symbol(three, Decl(one.ts, 8, 9))
+>condition : Symbol(condition, Decl(one.ts, 5, 21))
+>one : Symbol(one, Decl(one.ts, 3, 5))
+>two : Symbol(two, Decl(one.ts, 2, 5))
+
+    three.a = 'foo';
+>three.a : Symbol(a, Decl(one.ts, 3, 12))
+>three : Symbol(three, Decl(one.ts, 8, 9))
+>a : Symbol(a, Decl(one.ts, 3, 12))
+
+    // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
+    // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
+    three.a = 'foo2';
+>three.a : Symbol(a, Decl(one.ts, 3, 12))
+>three : Symbol(three, Decl(one.ts, 8, 9))
+>a : Symbol(a, Decl(one.ts, 3, 12))
+
+    return three;
+>three : Symbol(three, Decl(one.ts, 8, 9))
+}
+=== tests/cases/compiler/two.ts ===
+export {};
+// When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
+const two: { a: string } = { a: 'two' };
+>two : Symbol(two, Decl(two.ts, 2, 5))
+>a : Symbol(a, Decl(two.ts, 2, 12))
+>a : Symbol(a, Decl(two.ts, 2, 28))
+
+const one: { readonly a: string } = { a: 'one' };
+>one : Symbol(one, Decl(two.ts, 3, 5))
+>a : Symbol(a, Decl(two.ts, 3, 12))
+>a : Symbol(a, Decl(two.ts, 3, 37))
+
+function doSomething(condition: boolean) {
+>doSomething : Symbol(doSomething, Decl(two.ts, 3, 49))
+>condition : Symbol(condition, Decl(two.ts, 5, 21))
+
+    // when `two` comes first in the conditional check, the return type of `doSomething` is inferred as not readonly but produces the same diagnostics as above
+    // based on the declaration order of `one` and `two`
+    const three = (condition) ? two : one;
+>three : Symbol(three, Decl(two.ts, 8, 9))
+>condition : Symbol(condition, Decl(two.ts, 5, 21))
+>two : Symbol(two, Decl(two.ts, 2, 5))
+>one : Symbol(one, Decl(two.ts, 3, 5))
+
+    three.a = 'foo';
+>three.a : Symbol(a, Decl(two.ts, 3, 12))
+>three : Symbol(three, Decl(two.ts, 8, 9))
+>a : Symbol(a, Decl(two.ts, 3, 12))
+
+    // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
+    // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
+    three.a = 'foo2';
+>three.a : Symbol(a, Decl(two.ts, 3, 12))
+>three : Symbol(three, Decl(two.ts, 8, 9))
+>a : Symbol(a, Decl(two.ts, 3, 12))
+
+    return three;
+>three : Symbol(three, Decl(two.ts, 8, 9))
+}
+
+=== tests/cases/compiler/three.ts ===
+export {};
+// When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
+const one: { readonly a: string } = { a: 'one' };
+>one : Symbol(one, Decl(three.ts, 2, 5))
+>a : Symbol(a, Decl(three.ts, 2, 12))
+>a : Symbol(a, Decl(three.ts, 2, 37))
+
+const two: { a: string } = { a: 'two' };
+>two : Symbol(two, Decl(three.ts, 3, 5))
+>a : Symbol(a, Decl(three.ts, 3, 12))
+>a : Symbol(a, Decl(three.ts, 3, 28))
+
+function doSomething(condition: boolean) {
+>doSomething : Symbol(doSomething, Decl(three.ts, 3, 40))
+>condition : Symbol(condition, Decl(three.ts, 5, 21))
+
+    // when `one` comes first in the conditional check, the return type of `doSomething` is inferred as `a` is readonly, but `a` is
+    // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
+    const three = (condition) ? one : two;
+>three : Symbol(three, Decl(three.ts, 8, 9))
+>condition : Symbol(condition, Decl(three.ts, 5, 21))
+>one : Symbol(one, Decl(three.ts, 2, 5))
+>two : Symbol(two, Decl(three.ts, 3, 5))
+
+    three.a = 'foo';
+>three.a : Symbol(a, Decl(three.ts, 2, 12))
+>three : Symbol(three, Decl(three.ts, 8, 9))
+>a : Symbol(a, Decl(three.ts, 2, 12))
+
+    // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
+    // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
+    three.a = 'foo2';
+>three.a : Symbol(a, Decl(three.ts, 2, 12))
+>three : Symbol(three, Decl(three.ts, 8, 9))
+>a : Symbol(a, Decl(three.ts, 2, 12))
+
+    return three;
+>three : Symbol(three, Decl(three.ts, 8, 9))
+}
+
+=== tests/cases/compiler/four.ts ===
+export {};
+// When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
+const one: { readonly a: string } = { a: 'one' };
+>one : Symbol(one, Decl(four.ts, 2, 5))
+>a : Symbol(a, Decl(four.ts, 2, 12))
+>a : Symbol(a, Decl(four.ts, 2, 37))
+
+const two: { a: string } = { a: 'two' };
+>two : Symbol(two, Decl(four.ts, 3, 5))
+>a : Symbol(a, Decl(four.ts, 3, 12))
+>a : Symbol(a, Decl(four.ts, 3, 28))
+
+function doSomething(condition: boolean) {
+>doSomething : Symbol(doSomething, Decl(four.ts, 3, 40))
+>condition : Symbol(condition, Decl(four.ts, 5, 21))
+
+    // when `two` comes first in the conditional check, the return type of `doSomething` is inferred as not readonly but produces the same diagnostics as above
+    // based on the declaration order of `one` and `two`
+    const three = (condition) ? two : one;
+>three : Symbol(three, Decl(four.ts, 8, 9))
+>condition : Symbol(condition, Decl(four.ts, 5, 21))
+>two : Symbol(two, Decl(four.ts, 3, 5))
+>one : Symbol(one, Decl(four.ts, 2, 5))
+
+    three.a = 'foo';
+>three.a : Symbol(a, Decl(four.ts, 2, 12))
+>three : Symbol(three, Decl(four.ts, 8, 9))
+>a : Symbol(a, Decl(four.ts, 2, 12))
+
+    // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
+    // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
+    three.a = 'foo2';
+>three.a : Symbol(a, Decl(four.ts, 2, 12))
+>three : Symbol(three, Decl(four.ts, 8, 9))
+>a : Symbol(a, Decl(four.ts, 2, 12))
+
+    return three;
+>three : Symbol(three, Decl(four.ts, 8, 9))
+}

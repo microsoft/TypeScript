@@ -1,0 +1,213 @@
+=== tests/cases/conformance/enums/enumBasics.ts ===
+// Enum without initializers have first member = 0 and successive members = N + 1
+enum E1 {
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+
+    A,
+>A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+
+    B,
+>B : Symbol(E1.B, Decl(enumBasics.ts, 2, 6))
+
+    C
+>C : Symbol(E1.C, Decl(enumBasics.ts, 3, 6))
+}
+
+// Enum type is a subtype of Number
+var x: number = E1.A;
+>x : Symbol(x, Decl(enumBasics.ts, 8, 3))
+>E1.A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+
+// Enum object type is anonymous with properties of the enum type and numeric indexer
+var e = E1;
+>e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+
+var e: {
+>e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
+
+    readonly A: E1.A;
+>A : Symbol(A, Decl(enumBasics.ts, 12, 8))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+
+    readonly B: E1.B;
+>B : Symbol(B, Decl(enumBasics.ts, 13, 21))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>B : Symbol(E1.B, Decl(enumBasics.ts, 2, 6))
+
+    readonly C: E1.C;
+>C : Symbol(C, Decl(enumBasics.ts, 14, 21))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>C : Symbol(E1.C, Decl(enumBasics.ts, 3, 6))
+
+    readonly [n: number]: string;
+>n : Symbol(n, Decl(enumBasics.ts, 16, 14))
+
+};
+var e: typeof E1;
+>e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+
+// Reverse mapping of enum returns string name of property 
+var s = E1[e.A];
+>s : Symbol(s, Decl(enumBasics.ts, 21, 3), Decl(enumBasics.ts, 22, 3))
+>E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>e.A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+>e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
+>A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
+
+var s: string;
+>s : Symbol(s, Decl(enumBasics.ts, 21, 3), Decl(enumBasics.ts, 22, 3))
+
+
+// Enum with only constant members
+enum E2 {
+>E2 : Symbol(E2, Decl(enumBasics.ts, 22, 14))
+
+    A = 1, B = 2, C = 3
+>A : Symbol(E2.A, Decl(enumBasics.ts, 26, 9))
+>B : Symbol(E2.B, Decl(enumBasics.ts, 27, 10))
+>C : Symbol(E2.C, Decl(enumBasics.ts, 27, 17))
+}
+
+// Enum with only computed members
+enum E3 {
+>E3 : Symbol(E3, Decl(enumBasics.ts, 28, 1))
+
+    X = 'foo'.length, Y = 4 + 3, Z = +'foo'
+>X : Symbol(E3.X, Decl(enumBasics.ts, 31, 9))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>Y : Symbol(E3.Y, Decl(enumBasics.ts, 32, 21))
+>Z : Symbol(E3.Z, Decl(enumBasics.ts, 32, 32))
+}
+
+// Enum with constant members followed by computed members
+enum E4 {
+>E4 : Symbol(E4, Decl(enumBasics.ts, 33, 1))
+
+    X = 0, Y, Z = 'foo'.length
+>X : Symbol(E4.X, Decl(enumBasics.ts, 36, 9))
+>Y : Symbol(E4.Y, Decl(enumBasics.ts, 37, 10))
+>Z : Symbol(E4.Z, Decl(enumBasics.ts, 37, 13))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+// Enum with > 2 constant members with no initializer for first member, non zero initializer for second element
+enum E5 {
+>E5 : Symbol(E5, Decl(enumBasics.ts, 38, 1))
+
+    A,
+>A : Symbol(E5.A, Decl(enumBasics.ts, 41, 9))
+
+    B = 3,
+>B : Symbol(E5.B, Decl(enumBasics.ts, 42, 6))
+
+    C // 4
+>C : Symbol(E5.C, Decl(enumBasics.ts, 43, 10))
+}
+
+enum E6 {
+>E6 : Symbol(E6, Decl(enumBasics.ts, 45, 1))
+
+    A,
+>A : Symbol(E6.A, Decl(enumBasics.ts, 47, 9))
+
+    B = 0,
+>B : Symbol(E6.B, Decl(enumBasics.ts, 48, 6))
+
+    C // 1
+>C : Symbol(E6.C, Decl(enumBasics.ts, 49, 10))
+}
+
+// Enum with computed member initializer of type 'any'
+enum E7 {
+>E7 : Symbol(E7, Decl(enumBasics.ts, 51, 1))
+
+    A = 'foo'['foo']
+>A : Symbol(E7.A, Decl(enumBasics.ts, 54, 9))
+}
+
+// Enum with computed member initializer of type number
+enum E8 {
+>E8 : Symbol(E8, Decl(enumBasics.ts, 56, 1))
+
+    B = 'foo'['foo']
+>B : Symbol(E8.B, Decl(enumBasics.ts, 59, 9))
+}
+
+//Enum with computed member intializer of same enum type
+enum E9 {
+>E9 : Symbol(E9, Decl(enumBasics.ts, 61, 1))
+
+    A,
+>A : Symbol(E9.A, Decl(enumBasics.ts, 64, 9))
+
+    B = A
+>B : Symbol(E9.B, Decl(enumBasics.ts, 65, 6))
+>A : Symbol(E9.A, Decl(enumBasics.ts, 64, 9))
+}
+
+// (refer to .js to validate)
+// Enum constant members are propagated
+var doNotPropagate = [
+>doNotPropagate : Symbol(doNotPropagate, Decl(enumBasics.ts, 71, 3))
+
+    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
+>E8.B : Symbol(E8.B, Decl(enumBasics.ts, 59, 9))
+>E8 : Symbol(E8, Decl(enumBasics.ts, 56, 1))
+>B : Symbol(E8.B, Decl(enumBasics.ts, 59, 9))
+>E7.A : Symbol(E7.A, Decl(enumBasics.ts, 54, 9))
+>E7 : Symbol(E7, Decl(enumBasics.ts, 51, 1))
+>A : Symbol(E7.A, Decl(enumBasics.ts, 54, 9))
+>E4.Z : Symbol(E4.Z, Decl(enumBasics.ts, 37, 13))
+>E4 : Symbol(E4, Decl(enumBasics.ts, 33, 1))
+>Z : Symbol(E4.Z, Decl(enumBasics.ts, 37, 13))
+>E3.X : Symbol(E3.X, Decl(enumBasics.ts, 31, 9))
+>E3 : Symbol(E3, Decl(enumBasics.ts, 28, 1))
+>X : Symbol(E3.X, Decl(enumBasics.ts, 31, 9))
+>E3.Y : Symbol(E3.Y, Decl(enumBasics.ts, 32, 21))
+>E3 : Symbol(E3, Decl(enumBasics.ts, 28, 1))
+>Y : Symbol(E3.Y, Decl(enumBasics.ts, 32, 21))
+>E3.Z : Symbol(E3.Z, Decl(enumBasics.ts, 32, 32))
+>E3 : Symbol(E3, Decl(enumBasics.ts, 28, 1))
+>Z : Symbol(E3.Z, Decl(enumBasics.ts, 32, 32))
+
+];
+// Enum computed members are not propagated
+var doPropagate = [
+>doPropagate : Symbol(doPropagate, Decl(enumBasics.ts, 75, 3))
+
+    E9.A, E9.B, E6.B, E6.C, E6.A, E5.A, E5.B, E5.C
+>E9.A : Symbol(E9.A, Decl(enumBasics.ts, 64, 9))
+>E9 : Symbol(E9, Decl(enumBasics.ts, 61, 1))
+>A : Symbol(E9.A, Decl(enumBasics.ts, 64, 9))
+>E9.B : Symbol(E9.B, Decl(enumBasics.ts, 65, 6))
+>E9 : Symbol(E9, Decl(enumBasics.ts, 61, 1))
+>B : Symbol(E9.B, Decl(enumBasics.ts, 65, 6))
+>E6.B : Symbol(E6.B, Decl(enumBasics.ts, 48, 6))
+>E6 : Symbol(E6, Decl(enumBasics.ts, 45, 1))
+>B : Symbol(E6.B, Decl(enumBasics.ts, 48, 6))
+>E6.C : Symbol(E6.C, Decl(enumBasics.ts, 49, 10))
+>E6 : Symbol(E6, Decl(enumBasics.ts, 45, 1))
+>C : Symbol(E6.C, Decl(enumBasics.ts, 49, 10))
+>E6.A : Symbol(E6.A, Decl(enumBasics.ts, 47, 9))
+>E6 : Symbol(E6, Decl(enumBasics.ts, 45, 1))
+>A : Symbol(E6.A, Decl(enumBasics.ts, 47, 9))
+>E5.A : Symbol(E5.A, Decl(enumBasics.ts, 41, 9))
+>E5 : Symbol(E5, Decl(enumBasics.ts, 38, 1))
+>A : Symbol(E5.A, Decl(enumBasics.ts, 41, 9))
+>E5.B : Symbol(E5.B, Decl(enumBasics.ts, 42, 6))
+>E5 : Symbol(E5, Decl(enumBasics.ts, 38, 1))
+>B : Symbol(E5.B, Decl(enumBasics.ts, 42, 6))
+>E5.C : Symbol(E5.C, Decl(enumBasics.ts, 43, 10))
+>E5 : Symbol(E5, Decl(enumBasics.ts, 38, 1))
+>C : Symbol(E5.C, Decl(enumBasics.ts, 43, 10))
+
+];
+
+

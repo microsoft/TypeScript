@@ -1,0 +1,169 @@
+=== tests/cases/conformance/jsdoc/a.ts ===
+var W: string;
+>W : Symbol(W, Decl(a.ts, 0, 3), Decl(b.js, 1, 3), Decl(b.js, 3, 3))
+
+=== tests/cases/conformance/jsdoc/b.js ===
+// @ts-check
+var W = /** @type {string} */(/** @type {*} */ (4));
+>W : Symbol(W, Decl(a.ts, 0, 3), Decl(b.js, 1, 3), Decl(b.js, 3, 3))
+
+var W = /** @type {string} */(4); // Error
+>W : Symbol(W, Decl(a.ts, 0, 3), Decl(b.js, 1, 3), Decl(b.js, 3, 3))
+
+/** @type {*} */
+var a;
+>a : Symbol(a, Decl(b.js, 6, 3), Decl(b.js, 11, 3))
+
+/** @type {string} */
+var s;
+>s : Symbol(s, Decl(b.js, 9, 3), Decl(b.js, 12, 3))
+
+var a = /** @type {*} */("" + 4);
+>a : Symbol(a, Decl(b.js, 6, 3), Decl(b.js, 11, 3))
+
+var s = "" + /** @type {*} */(4);
+>s : Symbol(s, Decl(b.js, 9, 3), Decl(b.js, 12, 3))
+
+class SomeBase {
+>SomeBase : Symbol(SomeBase, Decl(b.js, 12, 33))
+
+    constructor() {
+        this.p = 42;
+>this.p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
+>this : Symbol(SomeBase, Decl(b.js, 12, 33))
+>p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
+    }
+}
+class SomeDerived extends SomeBase {
+>SomeDerived : Symbol(SomeDerived, Decl(b.js, 18, 1))
+>SomeBase : Symbol(SomeBase, Decl(b.js, 12, 33))
+
+    constructor() {
+        super();
+>super : Symbol(SomeBase, Decl(b.js, 12, 33))
+
+        this.x = 42;
+>this.x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
+>this : Symbol(SomeDerived, Decl(b.js, 18, 1))
+>x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
+    }
+}
+class SomeOther {
+>SomeOther : Symbol(SomeOther, Decl(b.js, 24, 1))
+
+    constructor() {
+        this.q = 42;
+>this.q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
+>this : Symbol(SomeOther, Decl(b.js, 24, 1))
+>q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
+    }
+}
+
+function SomeFakeClass() {
+>SomeFakeClass : Symbol(SomeFakeClass, Decl(b.js, 29, 1))
+
+    /** @type {string|number} */
+    this.p = "bar";
+>this.p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
+>this : Symbol(SomeFakeClass, Decl(b.js, 29, 1))
+>p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
+}
+
+// Type assertion should check for assignability in either direction
+var someBase = new SomeBase();
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>SomeBase : Symbol(SomeBase, Decl(b.js, 12, 33))
+
+var someDerived = new SomeDerived();
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>SomeDerived : Symbol(SomeDerived, Decl(b.js, 18, 1))
+
+var someOther = new SomeOther();
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>SomeOther : Symbol(SomeOther, Decl(b.js, 24, 1))
+
+var someFakeClass = new SomeFakeClass();
+>someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
+>SomeFakeClass : Symbol(SomeFakeClass, Decl(b.js, 29, 1))
+
+someBase = /** @type {SomeBase} */(someDerived);
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+
+someBase = /** @type {SomeBase} */(someBase);
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+
+someBase = /** @type {SomeBase} */(someOther); // Error
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+
+someDerived = /** @type {SomeDerived} */(someDerived);
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+
+someDerived = /** @type {SomeDerived} */(someBase);
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+
+someDerived = /** @type {SomeDerived} */(someOther); // Error
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+
+someOther = /** @type {SomeOther} */(someDerived); // Error
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+
+someOther = /** @type {SomeOther} */(someBase); // Error
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+
+someOther = /** @type {SomeOther} */(someOther);
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>someOther : Symbol(someOther, Decl(b.js, 39, 3))
+
+someFakeClass = someBase;
+>someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+
+someFakeClass = someDerived;
+>someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
+>someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+
+someBase = someFakeClass; // Error
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
+
+someBase = /** @type {SomeBase} */(someFakeClass);
+>someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
+
+// Type assertion cannot be a type-predicate type
+/** @type {number | string} */
+var numOrStr;
+>numOrStr : Symbol(numOrStr, Decl(b.js, 62, 3))
+
+/** @type {string} */
+var str;
+>str : Symbol(str, Decl(b.js, 64, 3))
+
+if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
+>numOrStr : Symbol(numOrStr, Decl(b.js, 62, 3))
+>undefined : Symbol(undefined)
+
+	str = numOrStr; // Error, no narrowing occurred
+>str : Symbol(str, Decl(b.js, 64, 3))
+>numOrStr : Symbol(numOrStr, Decl(b.js, 62, 3))
+}
+
+
+var asConst1 = /** @type {const} */(1);
+>asConst1 : Symbol(asConst1, Decl(b.js, 70, 3))
+
+var asConst2 = /** @type {const} */({
+>asConst2 : Symbol(asConst2, Decl(b.js, 71, 3))
+
+    x: 1
+>x : Symbol(x, Decl(b.js, 71, 37))
+
+});

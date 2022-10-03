@@ -1,0 +1,7 @@
+{
+    "scenario": "relative - global - ref",
+    "projectRoot": "tests/cases/projects/relative-global-ref",
+    "inputFiles": [
+        "consume.ts"
+    ]
+}

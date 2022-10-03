@@ -1,0 +1,92 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts ===
+abstract class CM {}
+>CM : CM
+
+module CM {}
+
+module MC {}
+abstract class MC {}
+>MC : MC
+
+abstract class CI {}
+>CI : CI
+
+interface CI {}
+
+interface IC {}
+abstract class IC {}
+>IC : IC
+
+abstract class CC1 {}
+>CC1 : CC1
+
+class CC1 {}
+>CC1 : CC1
+
+class CC2 {}
+>CC2 : CC2
+
+abstract class CC2 {}
+>CC2 : CC2
+
+declare abstract class DCI {}
+>DCI : DCI
+
+interface DCI {}
+
+interface DIC {}
+declare abstract class DIC {}
+>DIC : DIC
+
+declare abstract class DCC1 {}
+>DCC1 : DCC1
+
+declare class DCC1 {}
+>DCC1 : DCC1
+
+declare class DCC2 {}
+>DCC2 : DCC2
+
+declare abstract class DCC2 {}
+>DCC2 : DCC2
+
+new CM;
+>new CM : any
+>CM : typeof CM
+
+new MC;
+>new MC : any
+>MC : typeof MC
+
+new CI;
+>new CI : any
+>CI : typeof CI
+
+new IC;
+>new IC : any
+>IC : typeof IC
+
+new CC1;
+>new CC1 : any
+>CC1 : typeof CC1
+
+new CC2;
+>new CC2 : CC2
+>CC2 : typeof CC2
+
+new DCI;
+>new DCI : any
+>DCI : typeof DCI
+
+new DIC;
+>new DIC : any
+>DIC : typeof DIC
+
+new DCC1;
+>new DCC1 : any
+>DCC1 : typeof DCC1
+
+new DCC2;
+>new DCC2 : DCC2
+>DCC2 : typeof DCC2
+

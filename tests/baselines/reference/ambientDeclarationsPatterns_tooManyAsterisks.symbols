@@ -1,0 +1,4 @@
+=== tests/cases/conformance/ambient/ambientDeclarationsPatterns_tooManyAsterisks.ts ===
+declare module "too*many*asterisks" { }
+>"too*many*asterisks" : Symbol("too*many*asterisks", Decl(ambientDeclarationsPatterns_tooManyAsterisks.ts, 0, 0))
+

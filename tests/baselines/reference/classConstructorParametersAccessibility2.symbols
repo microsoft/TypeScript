@@ -1,0 +1,66 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(classConstructorParametersAccessibility2.ts, 0, 0))
+
+    constructor(public x?: number) { }
+>x : Symbol(C1.x, Decl(classConstructorParametersAccessibility2.ts, 1, 16))
+}
+var c1: C1;
+>c1 : Symbol(c1, Decl(classConstructorParametersAccessibility2.ts, 3, 3))
+>C1 : Symbol(C1, Decl(classConstructorParametersAccessibility2.ts, 0, 0))
+
+c1.x // OK
+>c1.x : Symbol(C1.x, Decl(classConstructorParametersAccessibility2.ts, 1, 16))
+>c1 : Symbol(c1, Decl(classConstructorParametersAccessibility2.ts, 3, 3))
+>x : Symbol(C1.x, Decl(classConstructorParametersAccessibility2.ts, 1, 16))
+
+
+class C2 {
+>C2 : Symbol(C2, Decl(classConstructorParametersAccessibility2.ts, 4, 4))
+
+    constructor(private p?: number) { }
+>p : Symbol(C2.p, Decl(classConstructorParametersAccessibility2.ts, 8, 16))
+}
+var c2: C2;
+>c2 : Symbol(c2, Decl(classConstructorParametersAccessibility2.ts, 10, 3))
+>C2 : Symbol(C2, Decl(classConstructorParametersAccessibility2.ts, 4, 4))
+
+c2.p // private, error
+>c2.p : Symbol(C2.p, Decl(classConstructorParametersAccessibility2.ts, 8, 16))
+>c2 : Symbol(c2, Decl(classConstructorParametersAccessibility2.ts, 10, 3))
+>p : Symbol(C2.p, Decl(classConstructorParametersAccessibility2.ts, 8, 16))
+
+
+class C3 {
+>C3 : Symbol(C3, Decl(classConstructorParametersAccessibility2.ts, 11, 4))
+
+    constructor(protected p?: number) { }
+>p : Symbol(C3.p, Decl(classConstructorParametersAccessibility2.ts, 15, 16))
+}
+var c3: C3;
+>c3 : Symbol(c3, Decl(classConstructorParametersAccessibility2.ts, 17, 3))
+>C3 : Symbol(C3, Decl(classConstructorParametersAccessibility2.ts, 11, 4))
+
+c3.p // protected, error
+>c3.p : Symbol(C3.p, Decl(classConstructorParametersAccessibility2.ts, 15, 16))
+>c3 : Symbol(c3, Decl(classConstructorParametersAccessibility2.ts, 17, 3))
+>p : Symbol(C3.p, Decl(classConstructorParametersAccessibility2.ts, 15, 16))
+
+class Derived extends C3 {
+>Derived : Symbol(Derived, Decl(classConstructorParametersAccessibility2.ts, 18, 4))
+>C3 : Symbol(C3, Decl(classConstructorParametersAccessibility2.ts, 11, 4))
+
+    constructor(p: number) {
+>p : Symbol(p, Decl(classConstructorParametersAccessibility2.ts, 20, 16))
+
+        super(p);
+>super : Symbol(C3, Decl(classConstructorParametersAccessibility2.ts, 11, 4))
+>p : Symbol(p, Decl(classConstructorParametersAccessibility2.ts, 20, 16))
+
+        this.p; // OK
+>this.p : Symbol(C3.p, Decl(classConstructorParametersAccessibility2.ts, 15, 16))
+>this : Symbol(Derived, Decl(classConstructorParametersAccessibility2.ts, 18, 4))
+>p : Symbol(C3.p, Decl(classConstructorParametersAccessibility2.ts, 15, 16))
+    }
+}
+

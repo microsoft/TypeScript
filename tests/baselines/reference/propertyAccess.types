@@ -1,0 +1,428 @@
+=== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts ===
+class A {
+>A : A
+
+    a: number;
+>a : number
+}
+class B extends A {
+>B : B
+>A : A
+
+    b: number;
+>b : number
+}
+enum Compass {
+>Compass : Compass
+
+    North, South, East, West
+>North : Compass.North
+>South : Compass.South
+>East : Compass.East
+>West : Compass.West
+}
+
+var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
+>numIndex : { [n: number]: string; }
+>n : number
+>{ 3: 'three', 'three': 'three' } : { 3: string; three: string; }
+>3 : string
+>'three' : "three"
+>'three' : string
+>'three' : "three"
+
+var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
+>strIndex : { [n: string]: Compass; }
+>n : string
+>{ 'N': Compass.North, 'E': Compass.East } : { N: Compass.North; E: Compass.East; }
+>'N' : Compass.North
+>Compass.North : Compass.North
+>Compass : typeof Compass
+>North : Compass.North
+>'E' : Compass.East
+>Compass.East : Compass.East
+>Compass : typeof Compass
+>East : Compass.East
+
+var bothIndex:
+>bothIndex : { [n: string]: A; [m: number]: B; }
+    {
+        [n: string]: A;
+>n : string
+
+        [m: number]: B;
+>m : number
+
+    };
+
+function noIndex() { }
+>noIndex : () => void
+
+var obj = {
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>{    10: 'ten',    x: 'hello',    y: 32,    z: { n: 'world', m: 15, o: () => false },    'literal property': 100} : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+
+    10: 'ten',
+>10 : string
+>'ten' : "ten"
+
+    x: 'hello',
+>x : string
+>'hello' : "hello"
+
+    y: 32,
+>y : number
+>32 : 32
+
+    z: { n: 'world', m: 15, o: () => false },
+>z : { n: string; m: number; o: () => boolean; }
+>{ n: 'world', m: 15, o: () => false } : { n: string; m: number; o: () => boolean; }
+>n : string
+>'world' : "world"
+>m : number
+>15 : 15
+>o : () => boolean
+>() => false : () => boolean
+>false : false
+
+    'literal property': 100
+>'literal property' : number
+>100 : 100
+
+};
+var anyVar: any = {};
+>anyVar : any
+>{} : {}
+
+var stringOrNumber: string | number;
+>stringOrNumber : string | number
+
+var someObject: { name: string };
+>someObject : { name: string; }
+>name : string
+
+// Assign to a property access
+obj.y = 4;
+>obj.y = 4 : 4
+>obj.y : number
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>y : number
+>4 : 4
+
+// Property access on value of type 'any'
+anyVar.x = anyVar.y = obj.x = anyVar.z;
+>anyVar.x = anyVar.y = obj.x = anyVar.z : any
+>anyVar.x : any
+>anyVar : any
+>x : any
+>anyVar.y = obj.x = anyVar.z : any
+>anyVar.y : any
+>anyVar : any
+>y : any
+>obj.x = anyVar.z : any
+>obj.x : string
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>x : string
+>anyVar.z : any
+>anyVar : any
+>z : any
+
+// Dotted property access of property that exists
+var aa = obj.x;
+>aa : string
+>obj.x : string
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>x : string
+
+// Dotted property access of property that exists on value's apparent type
+var bb = obj.hasOwnProperty;
+>bb : (v: PropertyKey) => boolean
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>hasOwnProperty : (v: PropertyKey) => boolean
+
+// Dotted property access of property that doesn't exist on value's apparent type
+var cc = obj.qqq; // error
+>cc : any
+>obj.qqq : any
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>qqq : any
+
+// Bracket notation property access using string literal value on type with property of that literal name
+var dd = obj['literal property'];
+>dd : number
+>obj['literal property'] : number
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>'literal property' : "literal property"
+
+var dd: number;
+>dd : number
+
+// Bracket notation property access using string literal value on type without property of that literal name
+var ee = obj['wa wa wa wa wa'];
+>ee : any
+>obj['wa wa wa wa wa'] : any
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>'wa wa wa wa wa' : "wa wa wa wa wa"
+
+var ee: any;
+>ee : any
+
+// Bracket notation property access using numeric string literal value on type with property of that literal name
+var ff = obj['10'];
+>ff : string
+>obj['10'] : string
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>'10' : "10"
+
+var ff: string;
+>ff : string
+
+// Bracket notation property access using numeric string literal value on type without property of that literal name
+var gg = obj['1'];
+>gg : any
+>obj['1'] : any
+>obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
+>'1' : "1"
+
+var gg: any;
+>gg : any
+
+// Bracket notation property access using numeric value on type with numeric index signature
+var hh = numIndex[3.0];
+>hh : string
+>numIndex[3.0] : string
+>numIndex : { [n: number]: string; }
+>3.0 : 3
+
+var hh: string;
+>hh : string
+
+// Bracket notation property access using enum value on type with numeric index signature
+var ii = numIndex[Compass.South];
+>ii : string
+>numIndex[Compass.South] : string
+>numIndex : { [n: number]: string; }
+>Compass.South : Compass.South
+>Compass : typeof Compass
+>South : Compass.South
+
+var ii: string;
+>ii : string
+
+// Bracket notation property access using value of type 'any' on type with numeric index signature
+var jj = numIndex[anyVar];
+>jj : string
+>numIndex[anyVar] : string
+>numIndex : { [n: number]: string; }
+>anyVar : any
+
+var jj: string;
+>jj : string
+
+// Bracket notation property access using string value on type with numeric index signature
+var kk = numIndex['what'];
+>kk : any
+>numIndex['what'] : any
+>numIndex : { [n: number]: string; }
+>'what' : "what"
+
+var kk: any;
+>kk : any
+
+// Bracket notation property access using value of other type on type with numeric index signature and no string index signature
+var ll = numIndex[someObject]; // Error
+>ll : any
+>numIndex[someObject] : any
+>numIndex : { [n: number]: string; }
+>someObject : { name: string; }
+
+// Bracket notation property access using string value on type with string index signature and no numeric index signature
+var mm = strIndex['N'];
+>mm : Compass
+>strIndex['N'] : Compass
+>strIndex : { [n: string]: Compass; }
+>'N' : "N"
+
+var mm: Compass;
+>mm : Compass
+
+var mm2 = strIndex['zzz'];
+>mm2 : Compass
+>strIndex['zzz'] : Compass
+>strIndex : { [n: string]: Compass; }
+>'zzz' : "zzz"
+
+var mm2: Compass;
+>mm2 : Compass
+
+// Bracket notation property access using numeric value on type with string index signature and no numeric index signature
+var nn = strIndex[10];
+>nn : Compass
+>strIndex[10] : Compass
+>strIndex : { [n: string]: Compass; }
+>10 : 10
+
+var nn: Compass;
+>nn : Compass
+
+// Bracket notation property access using enum value on type with string index signature and no numeric index signature
+var oo = strIndex[Compass.East];
+>oo : Compass
+>strIndex[Compass.East] : Compass
+>strIndex : { [n: string]: Compass; }
+>Compass.East : Compass.East
+>Compass : typeof Compass
+>East : Compass.East
+
+var oo: Compass;
+>oo : Compass
+
+// Bracket notation property access using value of type 'any' on type with string index signature and no numeric index signature
+var pp = strIndex[<any>null];
+>pp : Compass
+>strIndex[<any>null] : Compass
+>strIndex : { [n: string]: Compass; }
+><any>null : any
+>null : null
+
+var pp: Compass;
+>pp : Compass
+
+// Bracket notation property access using numeric value on type with no index signatures
+var qq = noIndex[123];
+>qq : any
+>noIndex[123] : any
+>noIndex : () => void
+>123 : 123
+
+var qq: any;
+>qq : any
+
+// Bracket notation property access using string value on type with no index signatures
+var rr = noIndex['zzzz'];
+>rr : any
+>noIndex['zzzz'] : any
+>noIndex : () => void
+>'zzzz' : "zzzz"
+
+var rr: any;
+>rr : any
+
+// Bracket notation property access using enum value on type with no index signatures
+var ss = noIndex[Compass.South];
+>ss : any
+>noIndex[Compass.South] : any
+>noIndex : () => void
+>Compass.South : Compass.South
+>Compass : typeof Compass
+>South : Compass.South
+
+var ss: any;
+>ss : any
+
+// Bracket notation property access using value of type 'any' on type with no index signatures
+var tt = noIndex[<any>null];
+>tt : any
+>noIndex[<any>null] : any
+>noIndex : () => void
+><any>null : any
+>null : null
+
+var tt: any;
+>tt : any
+
+// Bracket notation property access using values of other types on type with no index signatures
+var uu = noIndex[someObject]; // Error
+>uu : any
+>noIndex[someObject] : any
+>noIndex : () => void
+>someObject : { name: string; }
+
+// Bracket notation property access using numeric value on type with numeric index signature and string index signature
+var vv = noIndex[32];
+>vv : any
+>noIndex[32] : any
+>noIndex : () => void
+>32 : 32
+
+var vv: any;
+>vv : any
+
+// Bracket notation property access using enum value on type with numeric index signature and string index signature
+var ww = bothIndex[Compass.East];
+>ww : B
+>bothIndex[Compass.East] : B
+>bothIndex : { [n: string]: A; [m: number]: B; }
+>Compass.East : Compass.East
+>Compass : typeof Compass
+>East : Compass.East
+
+var ww: B;
+>ww : B
+
+// Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
+var xx = bothIndex[<any>null];
+>xx : B
+>bothIndex[<any>null] : B
+>bothIndex : { [n: string]: A; [m: number]: B; }
+><any>null : any
+>null : null
+
+var xx: B;
+>xx : B
+
+// Bracket notation property access using string value on type with numeric index signature and string index signature
+var yy = bothIndex['foo'];
+>yy : A
+>bothIndex['foo'] : A
+>bothIndex : { [n: string]: A; [m: number]: B; }
+>'foo' : "foo"
+
+var yy: A;
+>yy : A
+
+// Bracket notation property access using numeric string value on type with numeric index signature and string index signature
+var zz = bothIndex['1.0'];
+>zz : A
+>bothIndex['1.0'] : A
+>bothIndex : { [n: string]: A; [m: number]: B; }
+>'1.0' : "1.0"
+
+var zz: A;
+>zz : A
+
+// Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
+var zzzz = bothIndex[someObject]; // Error
+>zzzz : any
+>bothIndex[someObject] : any
+>bothIndex : { [n: string]: A; [m: number]: B; }
+>someObject : { name: string; }
+
+var x1 = numIndex[stringOrNumber];
+>x1 : any
+>numIndex[stringOrNumber] : any
+>numIndex : { [n: number]: string; }
+>stringOrNumber : string | number
+
+var x1: any;
+>x1 : any
+
+var x2 = strIndex[stringOrNumber];
+>x2 : Compass
+>strIndex[stringOrNumber] : Compass
+>strIndex : { [n: string]: Compass; }
+>stringOrNumber : string | number
+
+var x2: Compass;
+>x2 : Compass
+
+var x3 = bothIndex[stringOrNumber];
+>x3 : A | B
+>bothIndex[stringOrNumber] : A | B
+>bothIndex : { [n: string]: A; [m: number]: B; }
+>stringOrNumber : string | number
+
+var x3: A;
+>x3 : A | B
+

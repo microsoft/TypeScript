@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors8.ts(1,15): error TS1049: A 'set' accessor must have exactly one parameter.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors8.ts (1 errors) ====
+    var v = { set foo() { } }
+                  ~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.

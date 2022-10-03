@@ -1,0 +1,18 @@
+tests/cases/compiler/exportDeclareClass1.ts(2,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/exportDeclareClass1.ts(3,31): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== tests/cases/compiler/exportDeclareClass1.ts (2 errors) ====
+        export declare class eaC {
+            static tF() { };
+                        ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+            static tsF(param:any) { };
+                                  ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        };
+    	
+    	export declare class eaC2 {
+            static tF();
+            static tsF(param:any);
+        };

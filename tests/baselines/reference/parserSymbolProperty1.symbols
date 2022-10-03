@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty1.ts ===
+interface I {
+>I : Symbol(I, Decl(parserSymbolProperty1.ts, 0, 0))
+
+    [Symbol.iterator]: string;
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(parserSymbolProperty1.ts, 0, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+}

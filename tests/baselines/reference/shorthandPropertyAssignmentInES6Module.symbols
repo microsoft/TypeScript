@@ -1,0 +1,28 @@
+=== tests/cases/compiler/existingModule.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(existingModule.ts, 0, 10))
+
+=== tests/cases/compiler/test.ts ===
+import {x} from './existingModule';
+>x : Symbol(x, Decl(test.ts, 0, 8))
+
+import {foo} from './missingModule';
+>foo : Symbol(foo, Decl(test.ts, 1, 8))
+
+declare function use(a: any): void;
+>use : Symbol(use, Decl(test.ts, 1, 36))
+>a : Symbol(a, Decl(test.ts, 3, 21))
+
+const test = { x, foo };
+>test : Symbol(test, Decl(test.ts, 5, 5))
+>x : Symbol(x, Decl(test.ts, 5, 14))
+>foo : Symbol(foo, Decl(test.ts, 5, 17))
+
+use(x);
+>use : Symbol(use, Decl(test.ts, 1, 36))
+>x : Symbol(x, Decl(test.ts, 0, 8))
+
+use(foo);
+>use : Symbol(use, Decl(test.ts, 1, 36))
+>foo : Symbol(foo, Decl(test.ts, 1, 8))
+

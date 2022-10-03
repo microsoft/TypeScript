@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts ===
+class D extends null {
+>D : D
+>null : null
+
+    private _t;
+>_t : any
+
+    constructor() {
+        this._t;
+>this._t : any
+>this : this
+>_t : any
+
+        super();
+>super() : void
+>super : any
+    }
+}
+
+class E extends null {
+>E : E
+>null : null
+
+    private _t;
+>_t : any
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+
+        this._t;
+>this._t : any
+>this : this
+>_t : any
+    }
+}

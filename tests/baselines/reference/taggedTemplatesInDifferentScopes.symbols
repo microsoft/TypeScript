@@ -1,0 +1,36 @@
+=== tests/cases/compiler/taggedTemplatesInDifferentScopes.ts ===
+export function tag(parts: TemplateStringsArray, ...values: any[]) {
+>tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
+>parts : Symbol(parts, Decl(taggedTemplatesInDifferentScopes.ts, 0, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(taggedTemplatesInDifferentScopes.ts, 0, 48))
+
+    return parts[0];
+>parts : Symbol(parts, Decl(taggedTemplatesInDifferentScopes.ts, 0, 20))
+}
+function foo() {
+>foo : Symbol(foo, Decl(taggedTemplatesInDifferentScopes.ts, 2, 1))
+
+    tag `foo`;
+>tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
+
+    tag `foo2`;
+>tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
+}
+
+function bar() {
+>bar : Symbol(bar, Decl(taggedTemplatesInDifferentScopes.ts, 6, 1))
+
+    tag `bar`;
+>tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
+
+    tag `bar2`;
+>tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
+}
+
+foo();
+>foo : Symbol(foo, Decl(taggedTemplatesInDifferentScopes.ts, 2, 1))
+
+bar();
+>bar : Symbol(bar, Decl(taggedTemplatesInDifferentScopes.ts, 6, 1))
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/conditionalExpression1.ts ===
+var x: boolean = (true ? 1 : ""); // should be an error
+>x : boolean
+>(true ? 1 : "") : "" | 1
+>true ? 1 : "" : "" | 1
+>true : true
+>1 : 1
+>"" : ""
+

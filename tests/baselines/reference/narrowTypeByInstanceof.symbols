@@ -1,0 +1,72 @@
+=== tests/cases/compiler/narrowTypeByInstanceof.ts ===
+    class Match {
+>Match : Symbol(Match, Decl(narrowTypeByInstanceof.ts, 0, 0))
+
+        public range(): any {
+>range : Symbol(Match.range, Decl(narrowTypeByInstanceof.ts, 0, 17))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+    }
+
+    class FileMatch {
+>FileMatch : Symbol(FileMatch, Decl(narrowTypeByInstanceof.ts, 4, 5))
+
+        public resource(): any {
+>resource : Symbol(FileMatch.resource, Decl(narrowTypeByInstanceof.ts, 6, 21))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+    }
+
+type FileMatchOrMatch = FileMatch | Match;
+>FileMatchOrMatch : Symbol(FileMatchOrMatch, Decl(narrowTypeByInstanceof.ts, 10, 5))
+>FileMatch : Symbol(FileMatch, Decl(narrowTypeByInstanceof.ts, 4, 5))
+>Match : Symbol(Match, Decl(narrowTypeByInstanceof.ts, 0, 0))
+
+
+let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;
+>elementA : Symbol(elementA, Decl(narrowTypeByInstanceof.ts, 15, 3))
+>FileMatchOrMatch : Symbol(FileMatchOrMatch, Decl(narrowTypeByInstanceof.ts, 10, 5))
+>elementB : Symbol(elementB, Decl(narrowTypeByInstanceof.ts, 15, 31))
+>FileMatchOrMatch : Symbol(FileMatchOrMatch, Decl(narrowTypeByInstanceof.ts, 10, 5))
+
+if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
+>elementA : Symbol(elementA, Decl(narrowTypeByInstanceof.ts, 15, 3))
+>FileMatch : Symbol(FileMatch, Decl(narrowTypeByInstanceof.ts, 4, 5))
+>elementB : Symbol(elementB, Decl(narrowTypeByInstanceof.ts, 15, 31))
+>FileMatch : Symbol(FileMatch, Decl(narrowTypeByInstanceof.ts, 4, 5))
+
+    let a = elementA.resource().path;
+>a : Symbol(a, Decl(narrowTypeByInstanceof.ts, 18, 7))
+>elementA.resource : Symbol(FileMatch.resource, Decl(narrowTypeByInstanceof.ts, 6, 21))
+>elementA : Symbol(elementA, Decl(narrowTypeByInstanceof.ts, 15, 3))
+>resource : Symbol(FileMatch.resource, Decl(narrowTypeByInstanceof.ts, 6, 21))
+
+    let b = elementB.resource().path;
+>b : Symbol(b, Decl(narrowTypeByInstanceof.ts, 19, 7))
+>elementB.resource : Symbol(FileMatch.resource, Decl(narrowTypeByInstanceof.ts, 6, 21))
+>elementB : Symbol(elementB, Decl(narrowTypeByInstanceof.ts, 15, 31))
+>resource : Symbol(FileMatch.resource, Decl(narrowTypeByInstanceof.ts, 6, 21))
+
+} else if (elementA instanceof Match && elementB instanceof Match) {
+>elementA : Symbol(elementA, Decl(narrowTypeByInstanceof.ts, 15, 3))
+>Match : Symbol(Match, Decl(narrowTypeByInstanceof.ts, 0, 0))
+>elementB : Symbol(elementB, Decl(narrowTypeByInstanceof.ts, 15, 31))
+>Match : Symbol(Match, Decl(narrowTypeByInstanceof.ts, 0, 0))
+
+    let a = elementA.range();
+>a : Symbol(a, Decl(narrowTypeByInstanceof.ts, 21, 7))
+>elementA.range : Symbol(Match.range, Decl(narrowTypeByInstanceof.ts, 0, 17))
+>elementA : Symbol(elementA, Decl(narrowTypeByInstanceof.ts, 15, 3))
+>range : Symbol(Match.range, Decl(narrowTypeByInstanceof.ts, 0, 17))
+
+    let b = elementB.range();
+>b : Symbol(b, Decl(narrowTypeByInstanceof.ts, 22, 7))
+>elementB.range : Symbol(Match.range, Decl(narrowTypeByInstanceof.ts, 0, 17))
+>elementB : Symbol(elementB, Decl(narrowTypeByInstanceof.ts, 15, 31))
+>range : Symbol(Match.range, Decl(narrowTypeByInstanceof.ts, 0, 17))
+}
+

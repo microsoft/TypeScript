@@ -1,0 +1,33 @@
+tests/cases/compiler/deleteReadonly.ts(8,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+tests/cases/compiler/deleteReadonly.ts(18,8): error TS2542: Index signature in type 'B' only permits reading.
+tests/cases/compiler/deleteReadonly.ts(20,12): error TS2542: Index signature in type 'B' only permits reading.
+
+
+==== tests/cases/compiler/deleteReadonly.ts (3 errors) ====
+    interface A {
+      readonly b
+    }
+    var a: A = {
+      b: 123
+    };
+    
+    delete a.b;
+           ~~~
+!!! error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+    
+    interface B {
+      readonly [k: string]: string
+    }
+    
+    var b: B = {
+      'test': 'test'
+    };
+    
+    delete b['test'];
+           ~~~~~~~~~
+!!! error TS2542: Index signature in type 'B' only permits reading.
+    
+    delete ((((b['test']))));
+               ~~~~~~~~~
+!!! error TS2542: Index signature in type 'B' only permits reading.
+    

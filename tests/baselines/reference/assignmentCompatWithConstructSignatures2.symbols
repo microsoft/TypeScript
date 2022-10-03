@@ -1,0 +1,123 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts ===
+// void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+
+interface T {
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures2.ts, 0, 0))
+
+    f: new (x: number) => void;
+>f : Symbol(T.f, Decl(assignmentCompatWithConstructSignatures2.ts, 2, 13))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 3, 12))
+}
+var t: T;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures2.ts, 0, 0))
+
+var a: { f: new (x: number) => void };
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>f : Symbol(f, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 8))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 17))
+
+t = a;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+
+a = t;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+
+interface S {
+>S : Symbol(S, Decl(assignmentCompatWithConstructSignatures2.ts, 9, 6))
+
+    f: new (x: number) => string;
+>f : Symbol(S.f, Decl(assignmentCompatWithConstructSignatures2.ts, 11, 13))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 12, 12))
+}
+var s: S;
+>s : Symbol(s, Decl(assignmentCompatWithConstructSignatures2.ts, 14, 3))
+>S : Symbol(S, Decl(assignmentCompatWithConstructSignatures2.ts, 9, 6))
+
+var a2: { f: new (x: number) => string };
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures2.ts, 15, 3))
+>f : Symbol(f, Decl(assignmentCompatWithConstructSignatures2.ts, 15, 9))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 15, 18))
+
+t = s;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>s : Symbol(s, Decl(assignmentCompatWithConstructSignatures2.ts, 14, 3))
+
+t = a2;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures2.ts, 15, 3))
+
+a = s;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>s : Symbol(s, Decl(assignmentCompatWithConstructSignatures2.ts, 14, 3))
+
+a = a2;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures2.ts, 15, 3))
+
+// errors
+t = () => 1;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+
+t = function (x: number) { return ''; }
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 23, 14))
+
+a = () => 1;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+
+a = function (x: number) { return ''; }
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 25, 14))
+
+interface S2 {
+>S2 : Symbol(S2, Decl(assignmentCompatWithConstructSignatures2.ts, 25, 39))
+
+    f(x: string): void;
+>f : Symbol(S2.f, Decl(assignmentCompatWithConstructSignatures2.ts, 27, 14))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 28, 6))
+}
+var s2: S2;
+>s2 : Symbol(s2, Decl(assignmentCompatWithConstructSignatures2.ts, 30, 3))
+>S2 : Symbol(S2, Decl(assignmentCompatWithConstructSignatures2.ts, 25, 39))
+
+var a3: { f(x: string): void };
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures2.ts, 31, 3))
+>f : Symbol(f, Decl(assignmentCompatWithConstructSignatures2.ts, 31, 9))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 31, 12))
+
+// these are errors
+t = s2;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>s2 : Symbol(s2, Decl(assignmentCompatWithConstructSignatures2.ts, 30, 3))
+
+t = a3;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures2.ts, 31, 3))
+
+t = (x: string) => 1;
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 35, 5))
+
+t = function (x: string) { return ''; }
+>t : Symbol(t, Decl(assignmentCompatWithConstructSignatures2.ts, 5, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 36, 14))
+
+a = s2;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>s2 : Symbol(s2, Decl(assignmentCompatWithConstructSignatures2.ts, 30, 3))
+
+a = a3;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures2.ts, 31, 3))
+
+a = (x: string) => 1;
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 39, 5))
+
+a = function (x: string) { return ''; }
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures2.ts, 6, 3))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures2.ts, 40, 14))
+

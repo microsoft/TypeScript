@@ -1,0 +1,252 @@
+===================================================================
+JsFile: sourceMapValidationImport.js
+mapUrl: sourceMapValidationImport.js.map
+sourceRoot: 
+sources: sourceMapValidationImport.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationImport.js
+sourceFile:sourceMapValidationImport.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>exports.__esModule = true;
+>>>exports.b = exports.m = void 0;
+>>>var m;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^^^^^^^^->
+1 >
+2 >export module 
+3 >    m
+4 >      {
+  >         export class c {
+  >         }
+  >     }
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(1, 15) + SourceIndex(0)
+3 >Emitted(4, 6) Source(1, 16) + SourceIndex(0)
+4 >Emitted(4, 7) Source(4, 2) + SourceIndex(0)
+---
+>>>(function (m) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >export module 
+3 >           m
+1->Emitted(5, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(5, 12) Source(1, 15) + SourceIndex(0)
+3 >Emitted(5, 13) Source(1, 16) + SourceIndex(0)
+---
+>>>    var c = /** @class */ (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
+1->Emitted(6, 5) Source(2, 5) + SourceIndex(0)
+---
+>>>        function c() {
+1->^^^^^^^^
+2 >        ^^->
+1->
+1->Emitted(7, 9) Source(2, 5) + SourceIndex(0)
+---
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1->export class c {
+  >    
+2 >        }
+1->Emitted(8, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(8, 10) Source(3, 6) + SourceIndex(0)
+---
+>>>        return c;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(9, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(9, 17) Source(3, 6) + SourceIndex(0)
+---
+>>>    }());
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^^^
+5 >         ^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class c {
+  >         }
+1 >Emitted(10, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(3, 6) + SourceIndex(0)
+3 >Emitted(10, 6) Source(2, 5) + SourceIndex(0)
+4 >Emitted(10, 10) Source(3, 6) + SourceIndex(0)
+---
+>>>    m.c = c;
+1->^^^^
+2 >    ^^^
+3 >       ^^^^
+4 >           ^
+5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >    c
+3 >        {
+  >           }
+4 >           
+1->Emitted(11, 5) Source(2, 18) + SourceIndex(0)
+2 >Emitted(11, 8) Source(2, 19) + SourceIndex(0)
+3 >Emitted(11, 12) Source(3, 6) + SourceIndex(0)
+4 >Emitted(11, 13) Source(3, 6) + SourceIndex(0)
+---
+>>>})(m = exports.m || (exports.m = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^
+6 >       ^^^^^^^^^
+7 >                ^^^^^
+8 >                     ^^^^^^^^^
+9 >                              ^^^^^^^^
+1->
+  >
+2 >}
+3 > 
+4 >   m
+5 >    
+6 >       m
+7 >                
+8 >                     m
+9 >                               {
+  >                                  export class c {
+  >                                  }
+  >                              }
+1->Emitted(12, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(12, 4) Source(1, 15) + SourceIndex(0)
+4 >Emitted(12, 5) Source(1, 16) + SourceIndex(0)
+5 >Emitted(12, 8) Source(1, 15) + SourceIndex(0)
+6 >Emitted(12, 17) Source(1, 16) + SourceIndex(0)
+7 >Emitted(12, 22) Source(1, 15) + SourceIndex(0)
+8 >Emitted(12, 31) Source(1, 16) + SourceIndex(0)
+9 >Emitted(12, 39) Source(4, 2) + SourceIndex(0)
+---
+>>>var a = m.c;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^
+8 >           ^
+9 >            ^^^^^->
+1 >
+  >
+2 >import 
+3 >    a
+4 >      = 
+5 >        m
+6 >         .
+7 >          c
+8 >           ;
+1 >Emitted(13, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(13, 5) Source(5, 8) + SourceIndex(0)
+3 >Emitted(13, 6) Source(5, 9) + SourceIndex(0)
+4 >Emitted(13, 9) Source(5, 12) + SourceIndex(0)
+5 >Emitted(13, 10) Source(5, 13) + SourceIndex(0)
+6 >Emitted(13, 11) Source(5, 14) + SourceIndex(0)
+7 >Emitted(13, 12) Source(5, 15) + SourceIndex(0)
+8 >Emitted(13, 13) Source(5, 16) + SourceIndex(0)
+---
+>>>exports.b = m.c;
+1->
+2 >^^^^^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^
+6 >             ^
+7 >              ^
+8 >               ^
+9 >                ^->
+1->
+  >export import 
+2 >
+3 >        b
+4 >          = 
+5 >            m
+6 >             .
+7 >              c
+8 >               ;
+1->Emitted(14, 1) Source(6, 15) + SourceIndex(0)
+2 >Emitted(14, 9) Source(6, 15) + SourceIndex(0)
+3 >Emitted(14, 10) Source(6, 16) + SourceIndex(0)
+4 >Emitted(14, 13) Source(6, 19) + SourceIndex(0)
+5 >Emitted(14, 14) Source(6, 20) + SourceIndex(0)
+6 >Emitted(14, 15) Source(6, 21) + SourceIndex(0)
+7 >Emitted(14, 16) Source(6, 22) + SourceIndex(0)
+8 >Emitted(14, 17) Source(6, 23) + SourceIndex(0)
+---
+>>>var x = new a();
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^^
+6 >            ^
+7 >             ^^
+8 >               ^
+9 >                ^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    x
+4 >      = 
+5 >        new 
+6 >            a
+7 >             ()
+8 >               ;
+1->Emitted(15, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(15, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(15, 6) Source(7, 6) + SourceIndex(0)
+4 >Emitted(15, 9) Source(7, 9) + SourceIndex(0)
+5 >Emitted(15, 13) Source(7, 13) + SourceIndex(0)
+6 >Emitted(15, 14) Source(7, 14) + SourceIndex(0)
+7 >Emitted(15, 16) Source(7, 16) + SourceIndex(0)
+8 >Emitted(15, 17) Source(7, 17) + SourceIndex(0)
+---
+>>>var y = new exports.b();
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^^
+6 >            ^^^^^^^^^
+7 >                     ^^
+8 >                       ^
+9 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    y
+4 >      = 
+5 >        new 
+6 >            b
+7 >                     ()
+8 >                       ;
+1->Emitted(16, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(16, 6) Source(8, 6) + SourceIndex(0)
+4 >Emitted(16, 9) Source(8, 9) + SourceIndex(0)
+5 >Emitted(16, 13) Source(8, 13) + SourceIndex(0)
+6 >Emitted(16, 22) Source(8, 14) + SourceIndex(0)
+7 >Emitted(16, 24) Source(8, 16) + SourceIndex(0)
+8 >Emitted(16, 25) Source(8, 17) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationImport.js.map

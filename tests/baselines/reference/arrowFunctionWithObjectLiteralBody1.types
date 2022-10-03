@@ -1,0 +1,8 @@
+=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody1.ts ===
+var v = a => <any>{}
+>v : (a: any) => any
+>a => <any>{} : (a: any) => any
+>a : any
+><any>{} : any
+>{} : {}
+

@@ -1,0 +1,19 @@
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export enum E1 {
+>E1 : Symbol(E1, Decl(foo_0.ts, 0, 0))
+
+	A,B,C
+>A : Symbol(E1.A, Decl(foo_0.ts, 0, 16))
+>B : Symbol(E1.B, Decl(foo_0.ts, 1, 3))
+>C : Symbol(E1.C, Decl(foo_0.ts, 1, 5))
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(foo_0.ts, 2, 1))
+
+}
+
+// Invalid, as there is already an exported member.
+export = C1;
+>C1 : Symbol(C1, Decl(foo_0.ts, 2, 1))
+

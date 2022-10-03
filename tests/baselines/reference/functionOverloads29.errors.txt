@@ -1,0 +1,12 @@
+tests/cases/compiler/functionOverloads29.ts(4,9): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/functionOverloads29.ts (1 errors) ====
+    function foo(bar:string):string;
+    function foo(bar:number):number;
+    function foo(bar:any):any{ return bar }
+    var x = foo();
+            ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/functionOverloads29.ts:1:14: An argument for 'bar' was not provided.
+    

@@ -1,0 +1,25 @@
+tests/cases/conformance/jsx/file.tsx(16,7): error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
+  Property 'q' does not exist on type '{ m: string; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    	    div: { n: string; };
+    	    span: { m: string; };
+    	}
+    }
+    
+    // OK
+    <div n='x' />;
+    
+    // OK
+    <span m='ok' />;
+    
+    // Error
+    <span q='' />;
+          ~
+!!! error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
+!!! error TS2322:   Property 'q' does not exist on type '{ m: string; }'.
+    

@@ -1,0 +1,53 @@
+tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+  Type '{ x: number; }' is not assignable to type 'Attribs1'.
+    Types of property 'x' are incompatible.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+  Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		test1: Attribs1;
+    		test2: Attribs2;
+    	}
+    }
+    interface Attribs1 {
+    	x: string;
+    }
+    
+    interface Attribs2 {
+    	toString(): string;
+    }
+    
+    function make1<T extends {x: string}> (obj: T) {
+    	return <test1 {...obj} />; // OK
+    }
+    
+    function make2<T extends {x: number}> (obj: T) {
+    	return <test1 {...obj} />; // Error (x is number, not string)
+    	        ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Type '{ x: number; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:     Types of property 'x' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+    }
+    
+    function make3<T extends {y: string}> (obj: T) {
+    	return <test1 {...obj} />; // Error, missing x
+    	        ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
+    }
+    
+    
+    <test1 {...{}} />; // Error, missing x
+     ~~~~~
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
+    <test2 {...{}} />; // Error, missing toString
+    

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js ===
+var middlewarify = module.exports = {};
+>middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
+>module.exports : Symbol(module.exports, Decl(exportedAliasedEnumTag.js, 0, 0))
+>module : Symbol(module, Decl(exportedAliasedEnumTag.js, 0, 18))
+>exports : Symbol(module.exports, Decl(exportedAliasedEnumTag.js, 0, 0))
+
+/** @enum */
+middlewarify.Type = {
+>middlewarify.Type : Symbol(Type, Decl(exportedAliasedEnumTag.js, 0, 39), Decl(exportedAliasedEnumTag.js, 3, 13), Decl(exportedAliasedEnumTag.js, 2, 4))
+>middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
+>Type : Symbol(Type, Decl(exportedAliasedEnumTag.js, 0, 39), Decl(exportedAliasedEnumTag.js, 3, 13), Decl(exportedAliasedEnumTag.js, 2, 4))
+
+  BEFORE: 'before'
+>BEFORE : Symbol(BEFORE, Decl(exportedAliasedEnumTag.js, 3, 21))
+
+};
+

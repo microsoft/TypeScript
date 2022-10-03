@@ -1,0 +1,75 @@
+=== tests/cases/conformance/salsa/mod.js ===
+exports.n = {};
+>exports.n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+>exports : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+>n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+
+exports.n.K = function () {
+>exports.n.K : Symbol(n.K, Decl(mod.js, 0, 15))
+>exports.n : Symbol(n.K, Decl(mod.js, 0, 15))
+>exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+>K : Symbol(n.K, Decl(mod.js, 0, 15))
+
+    this.x = 10;
+>this.x : Symbol(K.x, Decl(mod.js, 1, 27))
+>this : Symbol(K, Decl(mod.js, 1, 13))
+>x : Symbol(K.x, Decl(mod.js, 1, 27))
+}
+exports.Classic = class {
+>exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+>exports : Symbol(Classic, Decl(mod.js, 3, 1))
+>Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+
+    constructor() {
+        this.p = 1
+>this.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>this : Symbol(Classic, Decl(mod.js, 4, 17))
+>p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+    }
+}
+
+=== tests/cases/conformance/salsa/use.js ===
+import * as s from './mod'
+>s : Symbol(s, Decl(use.js, 0, 6))
+
+var k = new s.n.K()
+>k : Symbol(k, Decl(use.js, 2, 3))
+>s.n.K : Symbol(s.n.K, Decl(mod.js, 0, 15))
+>s.n : Symbol(s.n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+>s : Symbol(s, Decl(use.js, 0, 6))
+>n : Symbol(s.n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
+>K : Symbol(s.n.K, Decl(mod.js, 0, 15))
+
+k.x
+>k.x : Symbol(K.x, Decl(mod.js, 1, 27))
+>k : Symbol(k, Decl(use.js, 2, 3))
+>x : Symbol(K.x, Decl(mod.js, 1, 27))
+
+var classic = new s.Classic()
+>classic : Symbol(classic, Decl(use.js, 4, 3))
+>s.Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
+>s : Symbol(s, Decl(use.js, 0, 6))
+>Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
+
+
+/** @param {s.n.K} c
+    @param {s.Classic} classic */
+function f(c, classic) {
+>f : Symbol(f, Decl(use.js, 4, 29))
+>c : Symbol(c, Decl(use.js, 9, 11))
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+
+    c.x
+>c.x : Symbol(K.x, Decl(mod.js, 1, 27))
+>c : Symbol(c, Decl(use.js, 9, 11))
+>x : Symbol(K.x, Decl(mod.js, 1, 27))
+
+    classic.p
+>classic.p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+>p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
+}
+
+
+

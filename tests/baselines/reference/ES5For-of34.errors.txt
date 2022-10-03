@@ -1,0 +1,12 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-of34.ts(4,6): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-of34.ts (1 errors) ====
+    function foo() {
+        return { x: 0 };
+    }
+    for (foo().x of ['a', 'b', 'c']) {
+         ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+        var p = foo().x;
+    }

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/a.d.ts ===
+declare var a: number;
+>a : Symbol(a, Decl(a.d.ts, 0, 11))
+
+export = a;  // OK, in ambient context
+>a : Symbol(a, Decl(a.d.ts, 0, 11))
+
+=== tests/cases/compiler/b.ts ===
+import * as a from "a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+

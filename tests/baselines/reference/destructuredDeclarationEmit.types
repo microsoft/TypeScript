@@ -1,0 +1,103 @@
+=== tests/cases/compiler/foo.ts ===
+const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
+>foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>{ bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } } : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>bar : string
+>'hello' : "hello"
+>bat : string
+>'world' : "world"
+>bam : { bork: { bar: string; baz: string; }; }
+>{ bork: { bar: 'a', baz: 'b' } } : { bork: { bar: string; baz: string; }; }
+>bork : { bar: string; baz: string; }
+>{ bar: 'a', baz: 'b' } : { bar: string; baz: string; }
+>bar : string
+>'a' : "a"
+>baz : string
+>'b' : "b"
+
+const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]];
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: 'def'; }, { sec: 'sec'; }]]]
+>def : "def"
+>sec : "sec"
+>[0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+>0 : 0
+>1 : 1
+>2 : 2
+>['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]] : ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+>[{def: 'def'}, {sec: 'sec'}] : [{ def: "def"; }, { sec: "sec"; }]
+>{def: 'def'} : { def: "def"; }
+>def : "def"
+>'def' : "def"
+>{sec: 'sec'} : { sec: "sec"; }
+>sec : "sec"
+>'sec' : "sec"
+
+export { foo, arr };
+>foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+
+=== tests/cases/compiler/index.ts ===
+import { foo, arr } from './foo';
+>foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+
+export { foo, arr };
+>foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+
+const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
+>bar : any
+>baz : string
+>bat : string
+>bam : any
+>bork : any
+>bar : any
+>ibar : string
+>baz : any
+>ibaz : string
+>foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
+
+export { baz, ibaz };
+>baz : string
+>ibaz : string
+
+const [ , one, , [, bee, , [, {sec} ]]] = arr;
+> : undefined
+>one : 1
+> : undefined
+> : undefined
+>bee : "b"
+> : undefined
+> : undefined
+>sec : "sec"
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+
+export { one, bee, sec };
+>one : 1
+>bee : "b"
+>sec : "sec"
+
+const getFoo = () => ({
+>getFoo : () => { foo: string; }
+>() => ({    foo: 'foo'}) : () => { foo: string; }
+>({    foo: 'foo'}) : { foo: string; }
+>{    foo: 'foo'} : { foo: string; }
+
+    foo: 'foo'
+>foo : string
+>'foo' : "foo"
+
+});
+
+const { foo: foo2 } = getFoo();
+>foo : any
+>foo2 : string
+>getFoo() : { foo: string; }
+>getFoo : () => { foo: string; }
+
+export { foo2 };
+>foo2 : string
+

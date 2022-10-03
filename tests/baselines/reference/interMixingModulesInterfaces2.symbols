@@ -1,0 +1,31 @@
+=== tests/cases/compiler/interMixingModulesInterfaces2.ts ===
+module A {
+>A : Symbol(A, Decl(interMixingModulesInterfaces2.ts, 0, 0))
+
+    export interface B {
+>B : Symbol(B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
+
+        name: string;
+>name : Symbol(A.B.name, Decl(interMixingModulesInterfaces2.ts, 2, 24))
+
+        value: number;
+>value : Symbol(A.B.value, Decl(interMixingModulesInterfaces2.ts, 3, 21))
+    }
+
+    module B {
+>B : Symbol(B, Decl(interMixingModulesInterfaces2.ts, 0, 10), Decl(interMixingModulesInterfaces2.ts, 5, 5))
+
+        export function createB(): B {
+>createB : Symbol(createB, Decl(interMixingModulesInterfaces2.ts, 7, 14))
+>B : Symbol(B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
+
+            return null;
+        }
+    }
+}
+
+var x: A.B = null;
+>x : Symbol(x, Decl(interMixingModulesInterfaces2.ts, 14, 3))
+>A : Symbol(A, Decl(interMixingModulesInterfaces2.ts, 0, 0))
+>B : Symbol(A.B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
+

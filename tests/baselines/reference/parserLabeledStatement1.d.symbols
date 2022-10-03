@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserLabeledStatement1.d.ts ===
+foo:
+No type information for this code.  bar();
+No type information for this code.

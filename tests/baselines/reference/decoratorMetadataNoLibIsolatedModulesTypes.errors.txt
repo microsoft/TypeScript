@@ -1,0 +1,30 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts(2,6): error TS2304: Cannot find name 'Decorate'.
+tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts(3,13): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+==== tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts (2 errors) ====
+    export class B {
+        @Decorate
+         ~~~~~~~~
+!!! error TS2304: Cannot find name 'Decorate'.
+        member: Map<string, number>;
+                ~~~
+!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    

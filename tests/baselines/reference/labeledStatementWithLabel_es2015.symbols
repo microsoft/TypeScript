@@ -1,0 +1,37 @@
+=== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts ===
+label: function fn() { }
+>fn : Symbol(fn, Decl(labeledStatementWithLabel_es2015.ts, 0, 6))
+
+label: function* gen() { }
+>gen : Symbol(gen, Decl(labeledStatementWithLabel_es2015.ts, 1, 6))
+
+label: async function gen1() { }
+>gen1 : Symbol(gen1, Decl(labeledStatementWithLabel_es2015.ts, 2, 6))
+
+label: enum E {}
+>E : Symbol(E, Decl(labeledStatementWithLabel_es2015.ts, 3, 6))
+
+label: interface I {}
+>I : Symbol(I, Decl(labeledStatementWithLabel_es2015.ts, 4, 6))
+
+label: class C { }
+>C : Symbol(C, Decl(labeledStatementWithLabel_es2015.ts, 5, 6))
+
+label: var a = 1;
+>a : Symbol(a, Decl(labeledStatementWithLabel_es2015.ts, 6, 10))
+
+label: let b = 1;
+>b : Symbol(b, Decl(labeledStatementWithLabel_es2015.ts, 7, 10))
+
+label: const c = 1;
+>c : Symbol(c, Decl(labeledStatementWithLabel_es2015.ts, 8, 12))
+
+label: module M { }
+>M : Symbol(M, Decl(labeledStatementWithLabel_es2015.ts, 10, 6))
+
+label: namespace N {}
+>N : Symbol(N, Decl(labeledStatementWithLabel_es2015.ts, 11, 6))
+
+label: type T = {}
+>T : Symbol(T, Decl(labeledStatementWithLabel_es2015.ts, 12, 6))
+

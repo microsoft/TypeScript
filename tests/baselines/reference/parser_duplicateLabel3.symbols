@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel3.ts ===
+target:
+while (true) {
+  function f() {
+>f : Symbol(f, Decl(parser_duplicateLabel3.ts, 1, 14))
+
+    target:
+    while (true) {
+    }
+  }
+}

@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/Symbols/symbolProperty52.ts(2,13): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
+tests/cases/conformance/es6/Symbols/symbolProperty52.ts(7,12): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty52.ts (2 errors) ====
+    var obj = {
+        [Symbol.nonsense]: 0
+                ~~~~~~~~
+!!! error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
+    };
+    
+    obj = {};
+    
+    obj[Symbol.nonsense];
+               ~~~~~~~~
+!!! error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts ===
+// this should be an error
+var x;                   // no error, control flow typed
+>x : Symbol(x, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 1, 3))
+
+var y;                   // error because captured
+>y : Symbol(y, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 2, 3))
+
+declare var foo;         // error at "foo"
+>foo : Symbol(foo, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 3, 11))
+
+function func(k) { y };  // error at "k"
+>func : Symbol(func, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 3, 16))
+>k : Symbol(k, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 4, 14))
+>y : Symbol(y, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 2, 3))
+
+func(x);
+>func : Symbol(func, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 3, 16))
+>x : Symbol(x, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 1, 3))
+
+// this shouldn't be an error
+var bar = 3;            
+>bar : Symbol(bar, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 8, 3))
+
+var bar1: any;          
+>bar1 : Symbol(bar1, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 9, 3))
+
+declare var bar2: any; 
+>bar2 : Symbol(bar2, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 10, 11))
+
+var x1: any; var y1 = new x1;
+>x1 : Symbol(x1, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 11, 3))
+>y1 : Symbol(y1, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 11, 16))
+>x1 : Symbol(x1, Decl(implicitAnyDeclareVariablesWithoutTypeAndInit.ts, 11, 3))
+

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts ===
+// #17847
+function sum<T extends { [P in T]: number }, K extends keyof T>(n: number, v: T, k: K) {
+>sum : <T, K extends keyof T>(n: number, v: T, k: K) => void
+>n : number
+>v : T
+>k : K
+
+    n += v[k];
+>n += v[k] : any
+>n : number
+>v[k] : T[K]
+>v : T
+>k : K
+}
+

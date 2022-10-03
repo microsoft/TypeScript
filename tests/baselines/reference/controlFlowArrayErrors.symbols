@@ -1,0 +1,172 @@
+=== tests/cases/compiler/controlFlowArrayErrors.ts ===
+declare function cond(): boolean;
+>cond : Symbol(cond, Decl(controlFlowArrayErrors.ts, 0, 0))
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowArrayErrors.ts, 0, 33))
+
+    let x = [];  // Implicit any[] error in some locations
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+
+    let y = x;   // Implicit any[] error
+>y : Symbol(y, Decl(controlFlowArrayErrors.ts, 4, 7))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    let z = x;
+>z : Symbol(z, Decl(controlFlowArrayErrors.ts, 6, 7))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowArrayErrors.ts, 7, 1))
+
+    let x;       // Implicit any[] error in some locations
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+
+    x = [];
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+
+    let y = x;   // Implicit any[] error
+>y : Symbol(y, Decl(controlFlowArrayErrors.ts, 12, 7))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    let z = x;
+>z : Symbol(z, Decl(controlFlowArrayErrors.ts, 14, 7))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowArrayErrors.ts, 15, 1))
+
+    let x = [];  // Implicit any[] error in some locations
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 18, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 18, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    function g() {
+>g : Symbol(g, Decl(controlFlowArrayErrors.ts, 19, 14))
+
+        x;       // Implicit any[] error
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 18, 7))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowArrayErrors.ts, 23, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 26, 7))
+
+    x = [5, "hello"];  // Non-evolving array
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 26, 7))
+
+    x.push(true);      // Error
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 26, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowArrayErrors.ts, 29, 1))
+
+    let x = [5, "hello"];  // Non-evolving array
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 32, 7))
+
+    x.push(true);          // Error
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 32, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowArrayErrors.ts, 34, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrayErrors.ts, 0, 0))
+
+        x = [];
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+
+        x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        x = [true];  // Non-evolving array
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+    }
+    x;           // boolean[] | (string | number)[]
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+
+    x.push(99);  // Error
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(controlFlowArrayErrors.ts, 48, 1))
+
+    let x = [];       // x has evolving array value
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    let y = x;        // y has non-evolving array value
+>y : Symbol(y, Decl(controlFlowArrayErrors.ts, 53, 7))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+
+    x.push("hello");  // Ok
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    y.push("hello");  // Error
+>y.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(controlFlowArrayErrors.ts, 53, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function f8() {
+>f8 : Symbol(f8, Decl(controlFlowArrayErrors.ts, 56, 1))
+
+    const x = [];  // Implicit any[] error in some locations
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 59, 9))
+
+    x.push(5);
+>x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 59, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    function g() {
+>g : Symbol(g, Decl(controlFlowArrayErrors.ts, 60, 14))
+
+        x;  // Implicit any[] error
+>x : Symbol(x, Decl(controlFlowArrayErrors.ts, 59, 9))
+    }
+}

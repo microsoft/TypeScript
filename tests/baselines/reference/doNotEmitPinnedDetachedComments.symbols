@@ -1,0 +1,39 @@
+=== tests/cases/compiler/doNotEmitPinnedDetachedComments.ts ===
+var x = 10;
+>x : Symbol(x, Decl(doNotEmitPinnedDetachedComments.ts, 0, 3))
+
+/*! Single Line comment */
+
+function baz() { }
+>baz : Symbol(baz, Decl(doNotEmitPinnedDetachedComments.ts, 0, 11))
+
+
+/*!
+    multi-line comment
+
+*/
+
+
+//========================
+
+
+function bar() {
+>bar : Symbol(bar, Decl(doNotEmitPinnedDetachedComments.ts, 4, 18))
+
+    /*!
+        Remove this comment
+    */
+
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(doNotEmitPinnedDetachedComments.ts, 21, 1))
+
+    /*! Remove this */
+
+    return 0;
+}
+
+
+//========================
+

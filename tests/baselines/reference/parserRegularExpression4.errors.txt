@@ -1,0 +1,55 @@
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,5): error TS2304: Cannot find name 'Ca'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,13): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,24): error TS2304: Cannot find name 'Ba'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,32): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,64): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,93): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,132): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,144): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,177): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,189): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,221): error TS2304: Cannot find name 'W'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,231): error TS2304: Cannot find name 'W'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,244): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,248): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,252): error TS2304: Cannot find name 'd'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,274): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts(1,291): error TS2304: Cannot find name 'b'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts (17 errors) ====
+    if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href)) / (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j"), /(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)), b = !0;
+        ~~
+!!! error TS2304: Cannot find name 'Ca'.
+                ~
+!!! error TS2304: Cannot find name 'c'.
+                           ~~
+!!! error TS2304: Cannot find name 'Ba'.
+                                   ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                   ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                                                ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                                                                                       ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                                                                                                   ~
+!!! error TS2304: Cannot find name 'd'.
+                                                                                                                                                                                    ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                                                                                                                                                ~
+!!! error TS2304: Cannot find name 'd'.
+                                                                                                                                                                                                                                ~
+!!! error TS2304: Cannot find name 'W'.
+                                                                                                                                                                                                                                          ~
+!!! error TS2304: Cannot find name 'W'.
+                                                                                                                                                                                                                                                       ~
+!!! error TS2304: Cannot find name 'A'.
+                                                                                                                                                                                                                                                           ~
+!!! error TS2304: Cannot find name 'd'.
+                                                                                                                                                                                                                                                               ~
+!!! error TS2304: Cannot find name 'd'.
+                                                                                                                                                                                                                                                                                     ~
+!!! error TS2304: Cannot find name 'c'.
+                                                                                                                                                                                                                                                                                                      ~
+!!! error TS2304: Cannot find name 'b'.

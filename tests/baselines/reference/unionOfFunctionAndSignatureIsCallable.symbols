@@ -1,0 +1,38 @@
+=== tests/cases/compiler/unionOfFunctionAndSignatureIsCallable.ts ===
+function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
+>f1 : Symbol(f1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 0))
+>c1 : Symbol(c1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 12))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>c2 : Symbol(c2, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 25))
+>callable : Symbol(callable, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 43))
+>c1 : Symbol(c1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 12))
+>c2 : Symbol(c2, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 25))
+
+    const a = c1();
+>a : Symbol(a, Decl(unionOfFunctionAndSignatureIsCallable.ts, 1, 9))
+>c1 : Symbol(c1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 12))
+
+    const b = c2();
+>b : Symbol(b, Decl(unionOfFunctionAndSignatureIsCallable.ts, 2, 9))
+>c2 : Symbol(c2, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 25))
+
+    const c = callable();
+>c : Symbol(c, Decl(unionOfFunctionAndSignatureIsCallable.ts, 3, 9))
+>callable : Symbol(callable, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 43))
+}
+
+function f2(fetcherParams: object | (() => object)) {
+>f2 : Symbol(f2, Decl(unionOfFunctionAndSignatureIsCallable.ts, 4, 1))
+>fetcherParams : Symbol(fetcherParams, Decl(unionOfFunctionAndSignatureIsCallable.ts, 6, 12))
+
+    const data = typeof fetcherParams === 'function'
+>data : Symbol(data, Decl(unionOfFunctionAndSignatureIsCallable.ts, 7, 9))
+>fetcherParams : Symbol(fetcherParams, Decl(unionOfFunctionAndSignatureIsCallable.ts, 6, 12))
+
+        ? fetcherParams()
+>fetcherParams : Symbol(fetcherParams, Decl(unionOfFunctionAndSignatureIsCallable.ts, 6, 12))
+
+        : fetcherParams
+>fetcherParams : Symbol(fetcherParams, Decl(unionOfFunctionAndSignatureIsCallable.ts, 6, 12))
+}
+

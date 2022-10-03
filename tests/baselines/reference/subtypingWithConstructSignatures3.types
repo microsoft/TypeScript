@@ -1,0 +1,468 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures3.ts ===
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// error cases, so function calls will all result in 'any'
+
+module Errors {
+>Errors : typeof Errors
+
+    class Base { foo: string; }
+>Base : Base
+>foo : string
+
+    class Derived extends Base { bar: string; }
+>Derived : Derived
+>Base : Base
+>bar : string
+
+    class Derived2 extends Derived { baz: string; }
+>Derived2 : Derived2
+>Derived : Derived
+>baz : string
+
+    class OtherDerived extends Base { bing: string; }
+>OtherDerived : OtherDerived
+>Base : Base
+>bing : string
+
+    declare function foo2(a2: new (x: number) => string[]): typeof a2;
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
+>a2 : new (x: number) => string[]
+>x : number
+>a2 : new (x: number) => string[]
+
+    declare function foo2(a2: any): any;
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
+>a2 : any
+
+    declare function foo7(a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): typeof a2;
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
+>a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+>x : new (arg: Base) => Derived
+>arg : Base
+>r : Base
+>a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+
+    declare function foo7(a2: any): any;
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
+>a2 : any
+
+    declare function foo8(a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a2;
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
+>a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+>x : new (arg: Base) => Derived
+>arg : Base
+>y : new (arg2: Base) => Derived
+>arg2 : Base
+>r : Base
+>a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+
+    declare function foo8(a2: any): any;
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
+>a2 : any
+
+    declare function foo10(a2: new (...x: Base[]) => Base): typeof a2;
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
+>a2 : new (...x: Base[]) => Base
+>x : Base[]
+>a2 : new (...x: Base[]) => Base
+
+    declare function foo10(a2: any): any;
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
+>a2 : any
+
+    declare function foo11(a2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
+>foo11 : { (a2: new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base): new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base; (a2: any): any; }
+>a2 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>x : { foo: string; }
+>foo : string
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+>a2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+
+    declare function foo11(a2: any): any;
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
+>a2 : any
+
+    declare function foo12(a2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2;
+>foo12 : { (a2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>; (a2: any): any; }
+>a2 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>x : Base[]
+>y : Derived2[]
+>a2 : new (x: Base[], y: Derived2[]) => Derived[]
+
+    declare function foo12(a2: any): any;
+>foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
+>a2 : any
+
+    declare function foo15(a2: new (x: { a: string; b: number }) => number): typeof a2;
+>foo15 : { (a2: new (x: {    a: string;    b: number;}) => number): new (x: {    a: string;    b: number;}) => number; (a2: any): any; }
+>a2 : new (x: {    a: string;    b: number;}) => number
+>x : { a: string; b: number; }
+>a : string
+>b : number
+>a2 : new (x: { a: string; b: number; }) => number
+
+    declare function foo15(a2: any): any;
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
+>a2 : any
+
+    declare function foo16(a2: {
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+
+        // type of parameter is overload set which means we can't do inference based on this type
+        new (x: {
+>x : { new (a: number): number; new (a?: number): number; }
+
+            new (a: number): number;
+>a : number
+
+            new (a?: number): number;
+>a : number
+
+        }): number[];
+        new (x: {
+>x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
+
+            new (a: boolean): boolean;
+>a : boolean
+
+            new (a?: boolean): boolean;
+>a : boolean
+
+        }): boolean[];
+    }): typeof a2;
+>a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+
+    declare function foo16(a2: any): any;
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>a2 : any
+
+    declare function foo17(a2: {
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
+>a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+
+        new (x: {
+>x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
+
+            new <T extends Derived>(a: T): T;
+>a : T
+
+            new <T extends Base>(a: T): T;
+>a : T
+
+        }): any[];
+        new (x: {
+>x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
+
+            new <T extends Derived2>(a: T): T;
+>a : T
+
+            new <T extends Base>(a: T): T;
+>a : T
+
+        }): any[];
+    }): typeof a2;
+>a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+
+    declare function foo17(a2: any): any;
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
+>a2 : any
+
+    var r1arg1: new <T, U>(x: T) => U[];
+>r1arg1 : new <T, U>(x: T) => U[]
+>x : T
+
+    var r1arg2: new (x: number) => string[]; 
+>r1arg2 : new (x: number) => string[]
+>x : number
+
+    var r1 = foo2(r1arg1); // any
+>r1 : new (x: number) => string[]
+>foo2(r1arg1) : new (x: number) => string[]
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
+>r1arg1 : new <T, U>(x: T) => U[]
+
+    var r1a = [r1arg2, r1arg1];
+>r1a : (new (x: number) => string[])[]
+>[r1arg2, r1arg1] : (new (x: number) => string[])[]
+>r1arg2 : new (x: number) => string[]
+>r1arg1 : new <T, U>(x: T) => U[]
+
+    var r1b = [r1arg1, r1arg2];
+>r1b : (new (x: number) => string[])[]
+>[r1arg1, r1arg2] : (new (x: number) => string[])[]
+>r1arg1 : new <T, U>(x: T) => U[]
+>r1arg2 : new (x: number) => string[]
+
+    var r2arg1: new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V;
+>r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
+>x : new (arg: T) => U
+>arg : T
+>r : T
+
+    var r2arg2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2;
+>r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+>x : new (arg: Base) => Derived
+>arg : Base
+>r : Base
+
+    var r2 = foo7(r2arg1); // any
+>r2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+>foo7(r2arg1) : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
+>r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
+
+    var r2a = [r2arg2, r2arg1];
+>r2a : (new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2)[]
+>[r2arg2, r2arg1] : (new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2)[]
+>r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+>r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
+
+    var r2b = [r2arg1, r2arg2];
+>r2b : (new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2)[]
+>[r2arg1, r2arg2] : (new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2)[]
+>r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
+>r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
+
+    var r3arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U;
+>r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: {    foo: number;}) => U) => new (r: T) => U
+>x : new (arg: T) => U
+>arg : T
+>y : (arg2: {    foo: number;}) => U
+>arg2 : { foo: number; }
+>foo : number
+>r : T
+
+    var r3arg2: new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived;
+>r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+>x : (arg: Base) => Derived
+>arg : Base
+>y : new (arg2: Base) => Derived
+>arg2 : Base
+>r : Base
+
+    var r3 = foo8(r3arg1); // any
+>r3 : any
+>foo8(r3arg1) : any
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
+>r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
+
+    var r3a = [r3arg2, r3arg1];
+>r3a : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>[r3arg2, r3arg1] : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+>r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
+
+    var r3b = [r3arg1, r3arg2];
+>r3b : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>[r3arg1, r3arg2] : ((new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U) | (new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived))[]
+>r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
+>r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+
+    var r4arg1: new <T extends Derived>(...x: T[]) => T;
+>r4arg1 : new <T extends Derived>(...x: T[]) => T
+>x : T[]
+
+    var r4arg2: new (...x: Base[]) => Base;
+>r4arg2 : new (...x: Base[]) => Base
+>x : Base[]
+
+    var r4 = foo10(r4arg1); // any
+>r4 : new (...x: Base[]) => Base
+>foo10(r4arg1) : new (...x: Base[]) => Base
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
+>r4arg1 : new <T extends Derived>(...x: T[]) => T
+
+    var r4a = [r4arg2, r4arg1];
+>r4a : (new (...x: Base[]) => Base)[]
+>[r4arg2, r4arg1] : (new (...x: Base[]) => Base)[]
+>r4arg2 : new (...x: Base[]) => Base
+>r4arg1 : new <T extends Derived>(...x: T[]) => T
+
+    var r4b = [r4arg1, r4arg2];
+>r4b : (new (...x: Base[]) => Base)[]
+>[r4arg1, r4arg2] : (new (...x: Base[]) => Base)[]
+>r4arg1 : new <T extends Derived>(...x: T[]) => T
+>r4arg2 : new (...x: Base[]) => Base
+
+    var r5arg1: new <T extends Derived>(x: T, y: T) => T;
+>r5arg1 : new <T extends Derived>(x: T, y: T) => T
+>x : T
+>y : T
+
+    var r5arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+>r5arg2 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>x : { foo: string; }
+>foo : string
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+
+    var r5 = foo11(r5arg1); // any
+>r5 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>foo11(r5arg1) : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
+>r5arg1 : new <T extends Derived>(x: T, y: T) => T
+
+    var r5a = [r5arg2, r5arg1];
+>r5a : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>[r5arg2, r5arg1] : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>r5arg1 : new <T extends Derived>(x: T, y: T) => T
+
+    var r5b = [r5arg1, r5arg2];
+>r5b : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>[r5arg1, r5arg2] : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5arg1 : new <T extends Derived>(x: T, y: T) => T
+>r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+
+    var r6arg1: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+>r6arg1 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>x : Base[]
+>y : Derived2[]
+
+    var r6arg2: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T;
+>r6arg2 : new <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
+>x : Base[]
+>y : Base[]
+
+    var r6 = foo12(r6arg1); // new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>r6 : new (x: Base[], y: Derived2[]) => Derived[]
+>foo12(r6arg1) : new (x: Base[], y: Derived2[]) => Derived[]
+>foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
+>r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
+
+    var r6a = [r6arg2, r6arg1];
+>r6a : (new (x: Base[], y: Derived2[]) => Derived[])[]
+>[r6arg2, r6arg1] : (new (x: Base[], y: Derived2[]) => Derived[])[]
+>r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
+>r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
+
+    var r6b = [r6arg1, r6arg2];
+>r6b : (new (x: Base[], y: Derived2[]) => Derived[])[]
+>[r6arg1, r6arg2] : (new (x: Base[], y: Derived2[]) => Derived[])[]
+>r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
+>r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
+
+    var r7arg1: new <T>(x: { a: T; b: T }) => T;
+>r7arg1 : new <T>(x: { a: T; b: T; }) => T
+>x : { a: T; b: T; }
+>a : T
+>b : T
+
+    var r7arg2: new (x: { a: string; b: number }) => number;
+>r7arg2 : new (x: {    a: string;    b: number;}) => number
+>x : { a: string; b: number; }
+>a : string
+>b : number
+
+    var r7 = foo15(r7arg1); // (x: { a: string; b: number }) => number): number;
+>r7 : any
+>foo15(r7arg1) : any
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
+>r7arg1 : new <T>(x: { a: T; b: T; }) => T
+
+    var r7a = [r7arg2, r7arg1];
+>r7a : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => number))[]
+>[r7arg2, r7arg1] : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => number))[]
+>r7arg2 : new (x: { a: string; b: number; }) => number
+>r7arg1 : new <T>(x: { a: T; b: T; }) => T
+
+    var r7b = [r7arg1, r7arg2];
+>r7b : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => number))[]
+>[r7arg1, r7arg2] : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => number))[]
+>r7arg1 : new <T>(x: { a: T; b: T; }) => T
+>r7arg2 : new (x: { a: string; b: number; }) => number
+
+    var r7arg3: new <T extends Base>(x: { a: T; b: T }) => number;
+>r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+>x : { a: T; b: T; }
+>a : T
+>b : T
+
+    var r7c = foo15(r7arg3); // any
+>r7c : any
+>foo15(r7arg3) : any
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
+>r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+
+    var r7d = [r7arg2, r7arg3];
+>r7d : ((new (x: { a: string; b: number; }) => number) | (new <T extends Base>(x: { a: T; b: T; }) => number))[]
+>[r7arg2, r7arg3] : ((new (x: { a: string; b: number; }) => number) | (new <T extends Base>(x: { a: T; b: T; }) => number))[]
+>r7arg2 : new (x: { a: string; b: number; }) => number
+>r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+
+    var r7e = [r7arg3, r7arg2];
+>r7e : ((new (x: { a: string; b: number; }) => number) | (new <T extends Base>(x: { a: T; b: T; }) => number))[]
+>[r7arg3, r7arg2] : ((new (x: { a: string; b: number; }) => number) | (new <T extends Base>(x: { a: T; b: T; }) => number))[]
+>r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+>r7arg2 : new (x: { a: string; b: number; }) => number
+
+    var r8arg: new <T>(x: new (a: T) => T) => T[];
+>r8arg : new <T>(x: new (a: T) => T) => T[]
+>x : new (a: T) => T
+>a : T
+
+    var r8 = foo16(r8arg); // any
+>r8 : any
+>foo16(r8arg) : any
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>r8arg : new <T>(x: new (a: T) => T) => T[]
+
+    var r9arg: new <T>(x: new (a: T) => T) => any[];
+>r9arg : new <T>(x: new (a: T) => T) => any[]
+>x : new (a: T) => T
+>a : T
+
+    var r9 = foo17(r9arg); // // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
+>r9 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>foo17(r9arg) : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
+>r9arg : new <T>(x: new (a: T) => T) => any[]
+}
+
+module WithGenericSignaturesInBaseType {
+>WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
+
+    declare function foo2(a2: new <T>(x: T) => T[]): typeof a2;
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
+>a2 : new <T>(x: T) => T[]
+>x : T
+>a2 : new <T>(x: T) => T[]
+
+    declare function foo2(a2: any): any;
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
+>a2 : any
+
+    var r2arg2: new <T>(x: T) => string[];
+>r2arg2 : new <T>(x: T) => string[]
+>x : T
+
+    var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
+>r2 : any
+>foo2(r2arg2) : any
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
+>r2arg2 : new <T>(x: T) => string[]
+
+    declare function foo3(a2: new <T>(x: T) => string[]): typeof a2;
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
+>a2 : new <T>(x: T) => string[]
+>x : T
+>a2 : new <T>(x: T) => string[]
+
+    declare function foo3(a2: any): any;
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
+>a2 : any
+
+    var r3arg2: new <T>(x: T) => T[];
+>r3arg2 : new <T>(x: T) => T[]
+>x : T
+
+    var r3 = foo3(r3arg2); // any
+>r3 : any
+>foo3(r3arg2) : any
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
+>r3arg2 : new <T>(x: T) => T[]
+}

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/typeParameterAsBaseClass.ts ===
+class C<T> extends T {}
+>C : Symbol(C, Decl(typeParameterAsBaseClass.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterAsBaseClass.ts, 0, 8))
+
+class C2<T> implements T {}
+>C2 : Symbol(C2, Decl(typeParameterAsBaseClass.ts, 0, 23))
+>T : Symbol(T, Decl(typeParameterAsBaseClass.ts, 1, 9))
+>T : Symbol(T, Decl(typeParameterAsBaseClass.ts, 1, 9))
+

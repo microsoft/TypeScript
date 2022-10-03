@@ -1,0 +1,38 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const Obj = require("./obj");
+>Obj : Symbol(Obj, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./obj" : Symbol("tests/cases/conformance/jsdoc/declarations/obj", Decl(obj.js, 0, 0))
+
+class Container {
+>Container : Symbol(Container, Decl(index.js, 0, 29))
+
+    constructor() {
+        this.usage = new Obj();
+>this.usage : Symbol(Container.usage, Decl(index.js, 3, 19))
+>this : Symbol(Container, Decl(index.js, 0, 29))
+>usage : Symbol(Container.usage, Decl(index.js, 3, 19))
+>Obj : Symbol(Obj, Decl(index.js, 0, 5))
+    }
+}
+
+module.exports = Container;
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 6, 1))
+>exports : Symbol(export=, Decl(index.js, 6, 1))
+>Container : Symbol(Container, Decl(index.js, 0, 29))
+
+=== tests/cases/conformance/jsdoc/declarations/obj.js ===
+module.exports = class Obj {
+>module.exports : Symbol(module.exports, Decl(obj.js, 0, 0))
+>module : Symbol(export=, Decl(obj.js, 0, 0))
+>exports : Symbol(export=, Decl(obj.js, 0, 0))
+>Obj : Symbol(Obj, Decl(obj.js, 0, 16))
+
+    constructor() {
+        this.x = 12;
+>this.x : Symbol(Obj.x, Decl(obj.js, 1, 19))
+>this : Symbol(Obj, Decl(obj.js, 0, 16))
+>x : Symbol(Obj.x, Decl(obj.js, 1, 19))
+    }
+}

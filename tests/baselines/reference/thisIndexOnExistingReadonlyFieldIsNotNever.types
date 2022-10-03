@@ -1,0 +1,57 @@
+=== tests/cases/compiler/thisIndexOnExistingReadonlyFieldIsNotNever.ts ===
+declare class Component<P, S = {}> {
+>Component : Component<P, S>
+
+    readonly props: Readonly<{ children?: unknown }> & Readonly<P>;
+>props : Readonly<{ children?: unknown; }> & Readonly<P>
+>children : unknown
+
+    state: Readonly<S>;
+>state : Readonly<S>
+}
+interface CoachMarkAnchorProps<C> {
+    anchorRef?: (anchor: C) => void;
+>anchorRef : ((anchor: C) => void) | undefined
+>anchor : C
+}
+type AnchorType<P> = Component<P>;
+>AnchorType : AnchorType<P>
+
+class CoachMarkAnchorDecorator {
+>CoachMarkAnchorDecorator : CoachMarkAnchorDecorator
+
+    decorateComponent<P>(anchor: P) {
+>decorateComponent : <P>(anchor: P) => typeof CoachMarkAnchor
+>anchor : P
+
+        return class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {
+>class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {            private _onAnchorRef = (anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            }        } : typeof CoachMarkAnchor
+>CoachMarkAnchor : typeof CoachMarkAnchor
+>Component : Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}>
+
+            private _onAnchorRef = (anchor: AnchorType<P>) => {
+>_onAnchorRef : (anchor: AnchorType<P>) => void
+>(anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            } : (anchor: AnchorType<P>) => void
+>anchor : AnchorType<P>
+
+                const anchorRef = this.props.anchorRef;
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>this.props.anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+>this : this
+>props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+
+                if (anchorRef) {
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+
+                    anchorRef(anchor);
+>anchorRef(anchor) : void
+>anchorRef : (anchor: AnchorType<P>) => void
+>anchor : AnchorType<P>
+                }
+            }
+        };
+    }
+}
+

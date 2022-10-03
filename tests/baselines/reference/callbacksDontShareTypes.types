@@ -1,0 +1,88 @@
+=== tests/cases/compiler/callbacksDontShareTypes.ts ===
+interface Collection<T> {
+    length: number;
+>length : number
+
+    add(x: T): void;
+>add : (x: T) => void
+>x : T
+
+    remove(x: T): boolean;
+>remove : (x: T) => boolean
+>x : T
+}
+interface Combinators {
+    map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c : Collection<T>
+>f : (x: T) => U
+>x : T
+
+    map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c : Collection<T>
+>f : (x: T) => any
+>x : T
+}
+
+var _: Combinators;
+>_ : Combinators
+
+var c2: Collection<number>;
+>c2 : Collection<number>
+
+var rf1 = (x: number) => { return x.toFixed() };
+>rf1 : (x: number) => string
+>(x: number) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+var r1a = _.map(c2, (x) => { return x.toFixed() });
+>r1a : Collection<string>
+>_.map(c2, (x) => { return x.toFixed() }) : Collection<string>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_ : Combinators
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c2 : Collection<number>
+>(x) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
+>r1b : Collection<string>
+>_.map(c2, rf1) : Collection<string>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_ : Combinators
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c2 : Collection<number>
+>rf1 : (x: number) => string
+
+var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
+>r5a : Collection<string>
+>_.map<number, string>(c2, (x) => { return x.toFixed() }) : Collection<string>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_ : Combinators
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c2 : Collection<number>
+>(x) => { return x.toFixed() } : (x: number) => string
+>x : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+var r5b = _.map<number, string>(c2, rf1);
+>r5b : Collection<string>
+>_.map<number, string>(c2, rf1) : Collection<string>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_ : Combinators
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>c2 : Collection<number>
+>rf1 : (x: number) => string
+

@@ -1,0 +1,60 @@
+=== tests/cases/conformance/es6/Symbols/symbolType3.ts ===
+var s = Symbol();
+>s : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+delete Symbol.iterator;
+>delete Symbol.iterator : boolean
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+void Symbol.toPrimitive;
+>void Symbol.toPrimitive : undefined
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+
+typeof Symbol.toStringTag;
+>typeof Symbol.toStringTag : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+++s;
+>++s : number
+>s : symbol
+
+--s;
+>--s : number
+>s : symbol
+
++ Symbol();
+>+ Symbol() : number
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+- Symbol();
+>- Symbol() : number
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+~ Symbol();
+>~ Symbol() : number
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+! Symbol();
+>! Symbol() : boolean
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
++(Symbol() || 0);
+>+(Symbol() || 0) : number
+>(Symbol() || 0) : symbol | 0
+>Symbol() || 0 : symbol | 0
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+>0 : 0
+

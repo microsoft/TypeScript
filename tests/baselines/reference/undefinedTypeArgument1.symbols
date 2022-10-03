@@ -1,0 +1,6 @@
+=== tests/cases/compiler/undefinedTypeArgument1.ts ===
+var cats = new Array<WAWA>();
+>cats : Symbol(cats, Decl(undefinedTypeArgument1.ts, 0, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>WAWA : Symbol(WAWA)
+

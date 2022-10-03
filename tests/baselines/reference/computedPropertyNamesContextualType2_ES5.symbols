@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType2_ES5.ts ===
+interface I {
+>I : Symbol(I, Decl(computedPropertyNamesContextualType2_ES5.ts, 0, 0))
+
+    [s: string]: (x: any) => number; // Doesn't get hit
+>s : Symbol(s, Decl(computedPropertyNamesContextualType2_ES5.ts, 1, 5))
+>x : Symbol(x, Decl(computedPropertyNamesContextualType2_ES5.ts, 1, 18))
+
+    [s: number]: (x: string) => number;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType2_ES5.ts, 2, 5))
+>x : Symbol(x, Decl(computedPropertyNamesContextualType2_ES5.ts, 2, 18))
+}
+
+var o: I = {
+>o : Symbol(o, Decl(computedPropertyNamesContextualType2_ES5.ts, 5, 3))
+>I : Symbol(I, Decl(computedPropertyNamesContextualType2_ES5.ts, 0, 0))
+
+    [+"foo"](y) { return y.length; },
+>[+"foo"] : Symbol([+"foo"], Decl(computedPropertyNamesContextualType2_ES5.ts, 5, 12))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES5.ts, 6, 13))
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES5.ts, 6, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    [+"bar"]: y => y.length
+>[+"bar"] : Symbol([+"bar"], Decl(computedPropertyNamesContextualType2_ES5.ts, 6, 37))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES5.ts, 7, 13))
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES5.ts, 7, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}

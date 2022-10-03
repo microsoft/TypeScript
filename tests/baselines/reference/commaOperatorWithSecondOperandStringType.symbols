@@ -1,0 +1,120 @@
+=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandStringType.ts ===
+var ANY: any;
+>ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+
+var BOOLEAN: boolean;
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+
+var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+
+var STRING: string;
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var OBJECT: Object;
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var resultIsString: string;
+>resultIsString : Symbol(resultIsString, Decl(commaOperatorWithSecondOperandStringType.ts, 6, 3))
+
+//The second operand is string
+ANY, STRING;
+>ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+BOOLEAN, STRING;
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+NUMBER, STRING;
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+STRING, STRING;
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+OBJECT, STRING;
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+//Return type is string
+var resultIsString1 = (ANY, STRING);
+>resultIsString1 : Symbol(resultIsString1, Decl(commaOperatorWithSecondOperandStringType.ts, 16, 3))
+>ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString2 = (BOOLEAN, STRING);
+>resultIsString2 : Symbol(resultIsString2, Decl(commaOperatorWithSecondOperandStringType.ts, 17, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString3 = (NUMBER, STRING);
+>resultIsString3 : Symbol(resultIsString3, Decl(commaOperatorWithSecondOperandStringType.ts, 18, 3))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString4 = (STRING, STRING);
+>resultIsString4 : Symbol(resultIsString4, Decl(commaOperatorWithSecondOperandStringType.ts, 19, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString5 = (OBJECT, STRING);
+>resultIsString5 : Symbol(resultIsString5, Decl(commaOperatorWithSecondOperandStringType.ts, 20, 3))
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+//Literal and expression
+null, STRING;
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+ANY = new Date(), STRING;
+>ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+true, "";
+BOOLEAN == undefined, "";
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>undefined : Symbol(undefined)
+
+["a", "b"], NUMBER.toString();
+>NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+OBJECT = new Object, STRING + "string";
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString6 = (null, STRING);
+>resultIsString6 : Symbol(resultIsString6, Decl(commaOperatorWithSecondOperandStringType.ts, 30, 3))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString7 = (ANY = new Date(), STRING);
+>resultIsString7 : Symbol(resultIsString7, Decl(commaOperatorWithSecondOperandStringType.ts, 31, 3))
+>ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+
+var resultIsString8 = (true, "");
+>resultIsString8 : Symbol(resultIsString8, Decl(commaOperatorWithSecondOperandStringType.ts, 32, 3))
+
+var resultIsString9 = (BOOLEAN == undefined, "");
+>resultIsString9 : Symbol(resultIsString9, Decl(commaOperatorWithSecondOperandStringType.ts, 33, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>undefined : Symbol(undefined)
+
+var resultIsString10 = (["a", "b"], NUMBER.toString());
+>resultIsString10 : Symbol(resultIsString10, Decl(commaOperatorWithSecondOperandStringType.ts, 34, 3))
+>NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var resultIsString11 = (new Object, STRING + "string");
+>resultIsString11 : Symbol(resultIsString11, Decl(commaOperatorWithSecondOperandStringType.ts, 35, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+

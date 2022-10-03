@@ -1,0 +1,22 @@
+tests/cases/compiler/assignToEnum.ts(2,1): error TS2628: Cannot assign to 'A' because it is an enum.
+tests/cases/compiler/assignToEnum.ts(3,1): error TS2628: Cannot assign to 'A' because it is an enum.
+tests/cases/compiler/assignToEnum.ts(4,3): error TS2540: Cannot assign to 'foo' because it is a read-only property.
+tests/cases/compiler/assignToEnum.ts(5,3): error TS2540: Cannot assign to 'foo' because it is a read-only property.
+
+
+==== tests/cases/compiler/assignToEnum.ts (4 errors) ====
+    enum A { foo, bar }
+    A = undefined;  // invalid LHS
+    ~
+!!! error TS2628: Cannot assign to 'A' because it is an enum.
+    A = A.bar;      // invalid LHS
+    ~
+!!! error TS2628: Cannot assign to 'A' because it is an enum.
+    A.foo = 1;      // invalid LHS
+      ~~~
+!!! error TS2540: Cannot assign to 'foo' because it is a read-only property.
+    A.foo = A.bar;  // invalid LHS
+      ~~~
+!!! error TS2540: Cannot assign to 'foo' because it is a read-only property.
+    
+    

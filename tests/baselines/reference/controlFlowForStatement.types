@@ -1,0 +1,151 @@
+=== tests/cases/conformance/controlFlow/controlFlowForStatement.ts ===
+let cond: boolean;
+>cond : boolean
+
+function a() {
+>a : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    for (x = ""; cond; x = 5) {
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+>cond : boolean
+>x = 5 : 5
+>x : string | number | boolean
+>5 : 5
+
+        x; // string | number
+>x : string | number
+    }
+}
+function b() {
+>b : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    for (x = 5; cond; x = x.length) {
+>x = 5 : 5
+>x : string | number | boolean
+>5 : 5
+>cond : boolean
+>x = x.length : number
+>x : string | number | boolean
+>x.length : number
+>x : string
+>length : number
+
+        x; // number
+>x : number
+
+        x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+    }
+}
+function c() {
+>c : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    for (x = 5; x = x.toExponential(); x = 5) {
+>x = 5 : 5
+>x : string | number | boolean
+>5 : 5
+>x = x.toExponential() : string
+>x : string | number | boolean
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+>x = 5 : 5
+>x : string | number | boolean
+>5 : 5
+
+        x; // string
+>x : string
+    }
+}
+function d() {
+>d : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    for (x = ""; typeof x === "string"; x = 5) {
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+>x = 5 : 5
+>x : string | number | boolean
+>5 : 5
+
+        x; // string
+>x : string
+    }
+}
+function e() {
+>e : () => void
+
+    let x: string | number | boolean | RegExp;
+>x : string | number | boolean | RegExp
+
+    for (x = "" || 0; typeof x !== "string"; x = "" || true) {
+>x = "" || 0 : 0
+>x : string | number | boolean | RegExp
+>"" || 0 : 0
+>"" : ""
+>0 : 0
+>typeof x !== "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : number | true
+>"string" : "string"
+>x = "" || true : true
+>x : string | number | boolean | RegExp
+>"" || true : true
+>"" : ""
+>true : true
+
+        x; // number | boolean
+>x : number | true
+    }
+}
+function f() {
+>f : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    for (; typeof x !== "string";) {
+>typeof x !== "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number | boolean
+>"string" : "string"
+
+        x; // number | boolean
+>x : number | boolean
+
+        if (typeof x === "number") break;
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : number | boolean
+>"number" : "number"
+
+        x = undefined;
+>x = undefined : undefined
+>x : string | number | boolean
+>undefined : undefined
+    }
+    x; // string | number
+>x : string | number
+}
+

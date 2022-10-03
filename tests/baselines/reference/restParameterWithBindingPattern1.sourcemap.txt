@@ -1,0 +1,96 @@
+===================================================================
+JsFile: restParameterWithBindingPattern1.js
+mapUrl: restParameterWithBindingPattern1.js.map
+sourceRoot: 
+sources: restParameterWithBindingPattern1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/restParameterWithBindingPattern1.js
+sourceFile:restParameterWithBindingPattern1.ts
+-------------------------------------------------------------------
+>>>function a() {
+1 >
+2 >^^^^^^^^^
+3 >         ^
+4 >          ^^^^^^^->
+1 >
+2 >function 
+3 >         a
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>    var _a = [];
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->(
+2 >    ...{a, b}
+1->Emitted(2, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(2, 17) Source(1, 21) + SourceIndex(0)
+---
+>>>    for (var _i = 0; _i < arguments.length; _i++) {
+1->^^^^^^^^^
+2 >         ^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^^^^^^^^^
+5 >                                          ^^
+6 >                                            ^^^^
+1->
+2 >         ...{a, b}
+3 >                   
+4 >                     ...{a, b}
+5 >                                          
+6 >                                            ...{a, b}
+1->Emitted(3, 10) Source(1, 12) + SourceIndex(0)
+2 >Emitted(3, 20) Source(1, 21) + SourceIndex(0)
+3 >Emitted(3, 22) Source(1, 12) + SourceIndex(0)
+4 >Emitted(3, 43) Source(1, 21) + SourceIndex(0)
+5 >Emitted(3, 45) Source(1, 12) + SourceIndex(0)
+6 >Emitted(3, 49) Source(1, 21) + SourceIndex(0)
+---
+>>>        _a[_i] = arguments[_i];
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >        ...{a, b}
+1 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 32) Source(1, 21) + SourceIndex(0)
+---
+>>>    }
+>>>    var a = _a.a, b = _a.b;
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^^^^
+5 >                ^^
+6 >                  ^
+7 >                   ^^^^^^^
+8 >                          ^
+1 >
+2 >    ...{
+3 >        a
+4 >         
+5 >                , 
+6 >                  b
+7 >                   
+8 >                          }
+1 >Emitted(6, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(6, 9) Source(1, 16) + SourceIndex(0)
+3 >Emitted(6, 10) Source(1, 17) + SourceIndex(0)
+4 >Emitted(6, 17) Source(1, 17) + SourceIndex(0)
+5 >Emitted(6, 19) Source(1, 19) + SourceIndex(0)
+6 >Emitted(6, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(6, 27) Source(1, 20) + SourceIndex(0)
+8 >Emitted(6, 28) Source(1, 21) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >) { 
+2 >}
+1 >Emitted(7, 1) Source(1, 25) + SourceIndex(0)
+2 >Emitted(7, 2) Source(1, 26) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=restParameterWithBindingPattern1.js.map

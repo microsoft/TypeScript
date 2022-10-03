@@ -1,0 +1,147 @@
+=== tests/cases/compiler/collisionArgumentsClassMethod.ts ===
+class c1 {
+>c1 : c1
+
+    public foo(i: number, ...arguments) { //arguments is error
+>foo : (i: number, ...arguments: any[]) => void
+>i : number
+>arguments : any[]
+
+        var arguments: any[]; // no error
+>arguments : any[]
+    }
+    public foo1(arguments: number, ...rest) { //arguments is error
+>foo1 : (arguments: number, ...rest: any[]) => void
+>arguments : number
+>rest : any[]
+
+        var arguments = 10; // no error
+>arguments : number
+>10 : 10
+    }
+    public fooNoError(arguments: number) { // no error
+>fooNoError : (arguments: number) => void
+>arguments : number
+
+        var arguments = 10; // no error
+>arguments : number
+>10 : 10
+    }
+    public f4(i: number, ...arguments); // no codegen no error
+>f4 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
+>i : number
+>arguments : any[]
+
+    public f4(i: string, ...arguments); // no codegen no error
+>f4 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
+>i : string
+>arguments : any[]
+
+    public f4(i: any, ...arguments) { // error
+>f4 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
+>i : any
+>arguments : any[]
+
+        var arguments: any[]; // no error
+>arguments : any[]
+    }
+    public f41(arguments: number, ...rest); // no codegen no error
+>f41 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
+>arguments : number
+>rest : any[]
+
+    public f41(arguments: string, ...rest); // no codegen no error
+>f41 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
+>arguments : string
+>rest : any[]
+
+    public f41(arguments: any, ...rest) { // error
+>f41 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
+>arguments : any
+>rest : any[]
+
+        var arguments: any; // no error
+>arguments : any
+    }
+    public f4NoError(arguments: number); // no error
+>f4NoError : { (arguments: number): any; (arguments: string): any; }
+>arguments : number
+
+    public f4NoError(arguments: string); // no error
+>f4NoError : { (arguments: number): any; (arguments: string): any; }
+>arguments : string
+
+    public f4NoError(arguments: any) { // no error
+>f4NoError : { (arguments: number): any; (arguments: string): any; }
+>arguments : any
+
+        var arguments: any; // no error
+>arguments : any
+    }
+}
+
+declare class c2 {
+>c2 : c2
+
+    public foo(i: number, ...arguments); // No error - no code gen
+>foo : (i: number, ...arguments: any[]) => any
+>i : number
+>arguments : any[]
+
+    public foo1(arguments: number, ...rest); // No error - no code gen
+>foo1 : (arguments: number, ...rest: any[]) => any
+>arguments : number
+>rest : any[]
+
+    public fooNoError(arguments: number); // No error - no code gen
+>fooNoError : (arguments: number) => any
+>arguments : number
+
+    public f4(i: number, ...arguments); // no codegen no error
+>f4 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
+>i : number
+>arguments : any[]
+
+    public f4(i: string, ...arguments); // no codegen no error
+>f4 : { (i: number, ...arguments: any[]): any; (i: string, ...arguments: any[]): any; }
+>i : string
+>arguments : any[]
+
+    public f41(arguments: number, ...rest); // no codegen no error
+>f41 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
+>arguments : number
+>rest : any[]
+
+    public f41(arguments: string, ...rest); // no codegen no error
+>f41 : { (arguments: number, ...rest: any[]): any; (arguments: string, ...rest: any[]): any; }
+>arguments : string
+>rest : any[]
+
+    public f4NoError(arguments: number); // no error
+>f4NoError : { (arguments: number): any; (arguments: string): any; }
+>arguments : number
+
+    public f4NoError(arguments: string); // no error
+>f4NoError : { (arguments: number): any; (arguments: string): any; }
+>arguments : string
+}
+
+class c3 {
+>c3 : c3
+
+    public foo(...restParameters) {
+>foo : (...restParameters: any[]) => void
+>restParameters : any[]
+
+        var arguments = 10; // no error
+>arguments : number
+>10 : 10
+    }
+    public fooNoError() {
+>fooNoError : () => void
+
+        var arguments = 10; // no error
+>arguments : number
+>10 : 10
+    }
+}

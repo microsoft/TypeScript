@@ -1,0 +1,56 @@
+=== tests/cases/compiler/server.ts ===
+class a { }
+>a : Symbol(a, Decl(server.ts, 0, 0))
+
+export default a;
+>a : Symbol(a, Decl(server.ts, 0, 0))
+
+=== tests/cases/compiler/client.ts ===
+import defaultBinding1, { } from "./server";
+>defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 6))
+
+export var x1 = new defaultBinding1();
+>x1 : Symbol(x1, Decl(client.ts, 1, 10))
+>defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 6))
+
+import defaultBinding2, { a } from "./server";
+>defaultBinding2 : Symbol(defaultBinding2, Decl(client.ts, 2, 6))
+>a : Symbol(a, Decl(client.ts, 2, 25))
+
+export var x2 = new defaultBinding2();
+>x2 : Symbol(x2, Decl(client.ts, 3, 10))
+>defaultBinding2 : Symbol(defaultBinding2, Decl(client.ts, 2, 6))
+
+import defaultBinding3, { a as b } from "./server";
+>defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 4, 6))
+>b : Symbol(b, Decl(client.ts, 4, 25))
+
+export var x3 = new defaultBinding3();
+>x3 : Symbol(x3, Decl(client.ts, 5, 10))
+>defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 4, 6))
+
+import defaultBinding4, { x, a as y } from "./server";
+>defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 6, 6))
+>x : Symbol(x, Decl(client.ts, 6, 25))
+>y : Symbol(y, Decl(client.ts, 6, 28))
+
+export var x4 = new defaultBinding4();
+>x4 : Symbol(x4, Decl(client.ts, 7, 10))
+>defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 6, 6))
+
+import defaultBinding5, { x as z,  } from "./server";
+>defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 6))
+>z : Symbol(z, Decl(client.ts, 8, 25))
+
+export var x5 = new defaultBinding5();
+>x5 : Symbol(x5, Decl(client.ts, 9, 10))
+>defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 6))
+
+import defaultBinding6, { m,  } from "./server";
+>defaultBinding6 : Symbol(defaultBinding6, Decl(client.ts, 10, 6))
+>m : Symbol(m, Decl(client.ts, 10, 25))
+
+export var x6 = new defaultBinding6();
+>x6 : Symbol(x6, Decl(client.ts, 11, 10))
+>defaultBinding6 : Symbol(defaultBinding6, Decl(client.ts, 10, 6))
+

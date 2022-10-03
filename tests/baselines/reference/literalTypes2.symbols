@@ -1,0 +1,602 @@
+=== tests/cases/conformance/types/literal/literalTypes2.ts ===
+enum E {
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+
+    A, B, C
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>B : Symbol(E.B, Decl(literalTypes2.ts, 1, 6))
+>C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
+}
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+function f1(p1 = 1, p2 = "abc", p3 = true, p4 = E.A) {
+>f1 : Symbol(f1, Decl(literalTypes2.ts, 4, 18))
+>p1 : Symbol(p1, Decl(literalTypes2.ts, 6, 12))
+>p2 : Symbol(p2, Decl(literalTypes2.ts, 6, 19))
+>p3 : Symbol(p3, Decl(literalTypes2.ts, 6, 31))
+>p4 : Symbol(p4, Decl(literalTypes2.ts, 6, 42))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    var v1 = 1;
+>v1 : Symbol(v1, Decl(literalTypes2.ts, 7, 7))
+
+    var v2 = -123;
+>v2 : Symbol(v2, Decl(literalTypes2.ts, 8, 7))
+
+    var v3 = 3 + 4;
+>v3 : Symbol(v3, Decl(literalTypes2.ts, 9, 7))
+
+    var v4 = "abc";
+>v4 : Symbol(v4, Decl(literalTypes2.ts, 10, 7))
+
+    var v5 = "";
+>v5 : Symbol(v5, Decl(literalTypes2.ts, 11, 7))
+
+    var v6 = "abc" + "def";
+>v6 : Symbol(v6, Decl(literalTypes2.ts, 12, 7))
+
+    var v7 = true;
+>v7 : Symbol(v7, Decl(literalTypes2.ts, 13, 7))
+
+    var v8 = E.A;
+>v8 : Symbol(v8, Decl(literalTypes2.ts, 14, 7))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    let x1 = 1;
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 15, 7))
+
+    let x2 = -123;
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 16, 7))
+
+    let x3 = 3 + 4;
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 17, 7))
+
+    let x4 = "abc";
+>x4 : Symbol(x4, Decl(literalTypes2.ts, 18, 7))
+
+    let x5 = "";
+>x5 : Symbol(x5, Decl(literalTypes2.ts, 19, 7))
+
+    let x6 = "abc" + "def";
+>x6 : Symbol(x6, Decl(literalTypes2.ts, 20, 7))
+
+    let x7 = true;
+>x7 : Symbol(x7, Decl(literalTypes2.ts, 21, 7))
+
+    var x8 = E.A;
+>x8 : Symbol(x8, Decl(literalTypes2.ts, 22, 7))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    const c1 = 1;
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 23, 9))
+
+    const c2 = -123;
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 24, 9))
+
+    const c3 = 3 + 4;
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 25, 9))
+
+    const c4 = "abc";
+>c4 : Symbol(c4, Decl(literalTypes2.ts, 26, 9))
+
+    const c5 = "";
+>c5 : Symbol(c5, Decl(literalTypes2.ts, 27, 9))
+
+    const c6 = "abc" + "def";
+>c6 : Symbol(c6, Decl(literalTypes2.ts, 28, 9))
+
+    const c7 = true;
+>c7 : Symbol(c7, Decl(literalTypes2.ts, 29, 9))
+
+    const c8 = E.A;
+>c8 : Symbol(c8, Decl(literalTypes2.ts, 30, 9))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+}
+
+function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
+>f2 : Symbol(f2, Decl(literalTypes2.ts, 31, 1))
+>p1 : Symbol(p1, Decl(literalTypes2.ts, 33, 12))
+>p2 : Symbol(p2, Decl(literalTypes2.ts, 33, 22))
+>p3 : Symbol(p3, Decl(literalTypes2.ts, 33, 41))
+>p4 : Symbol(p4, Decl(literalTypes2.ts, 33, 58))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    var v1: 1 = 1;
+>v1 : Symbol(v1, Decl(literalTypes2.ts, 34, 7))
+
+    var v2: -123 = -123;
+>v2 : Symbol(v2, Decl(literalTypes2.ts, 35, 7))
+
+    var v3: "abc" = "abc";
+>v3 : Symbol(v3, Decl(literalTypes2.ts, 36, 7))
+
+    var v4: true = true;
+>v4 : Symbol(v4, Decl(literalTypes2.ts, 37, 7))
+
+    var v5: E.A = E.A;
+>v5 : Symbol(v5, Decl(literalTypes2.ts, 38, 7))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    let x1: 1 = 1;
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 39, 7))
+
+    let x2: -123 = -123;
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 40, 7))
+
+    let x3: "abc" = "abc";
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 41, 7))
+
+    let x4: true = true;
+>x4 : Symbol(x4, Decl(literalTypes2.ts, 42, 7))
+
+    let x5: E.A = E.A;
+>x5 : Symbol(x5, Decl(literalTypes2.ts, 43, 7))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(literalTypes2.ts, 44, 1))
+
+    const c1 = cond ? 1 : 2;
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 47, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+    const c2 = cond ? 1 : "two";
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 48, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+    const c3 = cond ? E.A : cond ? true : 123;
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 49, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+    const c4 = cond ? "abc" : null;
+>c4 : Symbol(c4, Decl(literalTypes2.ts, 50, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+    const c5 = cond ? 456 : undefined;
+>c5 : Symbol(c5, Decl(literalTypes2.ts, 51, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+    const c6: { kind: 123 } = { kind: 123 };
+>c6 : Symbol(c6, Decl(literalTypes2.ts, 52, 9))
+>kind : Symbol(kind, Decl(literalTypes2.ts, 52, 15))
+>kind : Symbol(kind, Decl(literalTypes2.ts, 52, 31))
+
+    const c7: [1 | 2, "foo" | "bar"] = [1, "bar"];
+>c7 : Symbol(c7, Decl(literalTypes2.ts, 53, 9))
+
+    const c8 = cond ? c6 : cond ? c7 : "hello";
+>c8 : Symbol(c8, Decl(literalTypes2.ts, 54, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+>c6 : Symbol(c6, Decl(literalTypes2.ts, 52, 9))
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+>c7 : Symbol(c7, Decl(literalTypes2.ts, 53, 9))
+
+    let x1 = c1;
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 55, 7))
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 47, 9))
+
+    let x2 = c2;
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 56, 7))
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 48, 9))
+
+    let x3 = c3;
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 57, 7))
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 49, 9))
+
+    let x4 = c4;
+>x4 : Symbol(x4, Decl(literalTypes2.ts, 58, 7))
+>c4 : Symbol(c4, Decl(literalTypes2.ts, 50, 9))
+
+    let x5 = c5;
+>x5 : Symbol(x5, Decl(literalTypes2.ts, 59, 7))
+>c5 : Symbol(c5, Decl(literalTypes2.ts, 51, 9))
+
+    let x6 = c6;
+>x6 : Symbol(x6, Decl(literalTypes2.ts, 60, 7))
+>c6 : Symbol(c6, Decl(literalTypes2.ts, 52, 9))
+
+    let x7 = c7;
+>x7 : Symbol(x7, Decl(literalTypes2.ts, 61, 7))
+>c7 : Symbol(c7, Decl(literalTypes2.ts, 53, 9))
+
+    let x8 = c8;
+>x8 : Symbol(x8, Decl(literalTypes2.ts, 62, 7))
+>c8 : Symbol(c8, Decl(literalTypes2.ts, 54, 9))
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(literalTypes2.ts, 63, 1))
+
+    x1 = 1;
+>x1 : Symbol(C1.x1, Decl(literalTypes2.ts, 65, 10))
+
+    x2 = -123;
+>x2 : Symbol(C1.x2, Decl(literalTypes2.ts, 66, 11))
+
+    x3 = 3 + 4;
+>x3 : Symbol(C1.x3, Decl(literalTypes2.ts, 67, 14))
+
+    x4 = "abc";
+>x4 : Symbol(C1.x4, Decl(literalTypes2.ts, 68, 15))
+
+    x5 = "";
+>x5 : Symbol(C1.x5, Decl(literalTypes2.ts, 69, 15))
+
+    x6 = "abc" + "def";
+>x6 : Symbol(C1.x6, Decl(literalTypes2.ts, 70, 12))
+
+    x7 = true;
+>x7 : Symbol(C1.x7, Decl(literalTypes2.ts, 71, 23))
+
+    x8 = E.A;
+>x8 : Symbol(C1.x8, Decl(literalTypes2.ts, 72, 14))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+
+    readonly c1 = 1;
+>c1 : Symbol(C1.c1, Decl(literalTypes2.ts, 73, 13))
+
+    readonly c2 = -123;
+>c2 : Symbol(C1.c2, Decl(literalTypes2.ts, 74, 20))
+
+    readonly c3 = 3 + 4;
+>c3 : Symbol(C1.c3, Decl(literalTypes2.ts, 75, 23))
+
+    readonly c4 = "abc";
+>c4 : Symbol(C1.c4, Decl(literalTypes2.ts, 76, 24))
+
+    readonly c5 = "";
+>c5 : Symbol(C1.c5, Decl(literalTypes2.ts, 77, 24))
+
+    readonly c6 = "abc" + "def";
+>c6 : Symbol(C1.c6, Decl(literalTypes2.ts, 78, 21))
+
+    readonly c7 = true;
+>c7 : Symbol(C1.c7, Decl(literalTypes2.ts, 79, 32))
+
+    readonly c8 = E.A;
+>c8 : Symbol(C1.c8, Decl(literalTypes2.ts, 80, 23))
+>E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(literalTypes2.ts, 82, 1))
+
+    const c1 = { a: 1, b: "foo" };
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 85, 9))
+>a : Symbol(a, Decl(literalTypes2.ts, 85, 16))
+>b : Symbol(b, Decl(literalTypes2.ts, 85, 22))
+
+    const c2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 86, 9))
+>a : Symbol(a, Decl(literalTypes2.ts, 86, 15))
+>b : Symbol(b, Decl(literalTypes2.ts, 86, 26))
+>a : Symbol(a, Decl(literalTypes2.ts, 86, 49))
+>b : Symbol(b, Decl(literalTypes2.ts, 86, 55))
+
+    let x1 = { a: 1, b: "foo" };
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 87, 7))
+>a : Symbol(a, Decl(literalTypes2.ts, 87, 14))
+>b : Symbol(b, Decl(literalTypes2.ts, 87, 20))
+
+    let x2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 88, 7))
+>a : Symbol(a, Decl(literalTypes2.ts, 88, 13))
+>b : Symbol(b, Decl(literalTypes2.ts, 88, 24))
+>a : Symbol(a, Decl(literalTypes2.ts, 88, 47))
+>b : Symbol(b, Decl(literalTypes2.ts, 88, 53))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(literalTypes2.ts, 89, 1))
+
+    const c1 = [1, "foo"];
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 92, 9))
+
+    const c2: (1 | "foo")[] = [1, "foo"];
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 93, 9))
+
+    const c3: [1, "foo"] = [1, "foo"];
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 94, 9))
+
+    let x1 = [1, "foo"];
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 95, 7))
+
+    let x2: (1 | "foo")[] = [1, "foo"];
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 96, 7))
+
+    let x3: [1, "foo"] = [1, "foo"];
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 97, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(literalTypes2.ts, 98, 1))
+
+    const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 101, 11))
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 101, 22))
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 101, 30))
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 101, 47))
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 101, 58))
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 101, 65))
+
+    let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 102, 9))
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 102, 20))
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 102, 28))
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 102, 45))
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 102, 56))
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 102, 63))
+}
+
+function f10() {
+>f10 : Symbol(f10, Decl(literalTypes2.ts, 103, 1))
+
+    return "hello";
+}
+
+function f11() {
+>f11 : Symbol(f11, Decl(literalTypes2.ts, 107, 1))
+
+    return cond ? 1 : "two";
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+}
+
+function f12() {
+>f12 : Symbol(f12, Decl(literalTypes2.ts, 111, 1))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+
+        return 1;
+    }
+    else {
+        return "two";
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(literalTypes2.ts, 120, 1))
+
+    foo() {
+>foo : Symbol(C2.foo, Decl(literalTypes2.ts, 122, 10))
+
+        return 0;
+    }
+    bar() {
+>bar : Symbol(C2.bar, Decl(literalTypes2.ts, 125, 5))
+
+        return cond ? 0 : 1;
+>cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+    }
+}
+
+function f20() {
+>f20 : Symbol(f20, Decl(literalTypes2.ts, 129, 1))
+
+    const f1 = () => 0;
+>f1 : Symbol(f1, Decl(literalTypes2.ts, 132, 9))
+
+    const f2 = () => "hello";
+>f2 : Symbol(f2, Decl(literalTypes2.ts, 133, 9))
+
+    const f3 = () => true;
+>f3 : Symbol(f3, Decl(literalTypes2.ts, 134, 9))
+
+    const f4 = () => E.C;
+>f4 : Symbol(f4, Decl(literalTypes2.ts, 135, 9))
+>E.C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
+>E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+>C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
+
+    const f5 = (): "foo" => "foo";
+>f5 : Symbol(f5, Decl(literalTypes2.ts, 136, 9))
+
+    const f6: () => "foo" | "bar" = () => "bar";
+>f6 : Symbol(f6, Decl(literalTypes2.ts, 137, 9))
+
+    const f7: (() => "foo") | (() => "bar") = () => "bar";
+>f7 : Symbol(f7, Decl(literalTypes2.ts, 138, 9))
+}
+
+declare function g1<T>(x: T): T;
+>g1 : Symbol(g1, Decl(literalTypes2.ts, 139, 1))
+>T : Symbol(T, Decl(literalTypes2.ts, 141, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 141, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 141, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 141, 20))
+
+declare function g2<T>(x: T, y: T): T;
+>g2 : Symbol(g2, Decl(literalTypes2.ts, 141, 32))
+>T : Symbol(T, Decl(literalTypes2.ts, 142, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 142, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 142, 20))
+>y : Symbol(y, Decl(literalTypes2.ts, 142, 28))
+>T : Symbol(T, Decl(literalTypes2.ts, 142, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 142, 20))
+
+declare function g3<T, U>(x: T, y: U): T | U;
+>g3 : Symbol(g3, Decl(literalTypes2.ts, 142, 38))
+>T : Symbol(T, Decl(literalTypes2.ts, 143, 20))
+>U : Symbol(U, Decl(literalTypes2.ts, 143, 22))
+>x : Symbol(x, Decl(literalTypes2.ts, 143, 26))
+>T : Symbol(T, Decl(literalTypes2.ts, 143, 20))
+>y : Symbol(y, Decl(literalTypes2.ts, 143, 31))
+>U : Symbol(U, Decl(literalTypes2.ts, 143, 22))
+>T : Symbol(T, Decl(literalTypes2.ts, 143, 20))
+>U : Symbol(U, Decl(literalTypes2.ts, 143, 22))
+
+declare function g4<T>(x: T): T[];
+>g4 : Symbol(g4, Decl(literalTypes2.ts, 143, 45))
+>T : Symbol(T, Decl(literalTypes2.ts, 144, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 144, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 144, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 144, 20))
+
+declare function g5<T extends number>(x: T, y: T): T[];
+>g5 : Symbol(g5, Decl(literalTypes2.ts, 144, 34))
+>T : Symbol(T, Decl(literalTypes2.ts, 145, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 145, 38))
+>T : Symbol(T, Decl(literalTypes2.ts, 145, 20))
+>y : Symbol(y, Decl(literalTypes2.ts, 145, 43))
+>T : Symbol(T, Decl(literalTypes2.ts, 145, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 145, 20))
+
+declare function g6<T>(x: T[]): T;
+>g6 : Symbol(g6, Decl(literalTypes2.ts, 145, 55))
+>T : Symbol(T, Decl(literalTypes2.ts, 146, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 146, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 146, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 146, 20))
+
+declare function g7<T>(x: T[]): T[];
+>g7 : Symbol(g7, Decl(literalTypes2.ts, 146, 34))
+>T : Symbol(T, Decl(literalTypes2.ts, 147, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 147, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 147, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 147, 20))
+
+declare function g8<T>(x: T, f: (p: T) => T): T;
+>g8 : Symbol(g8, Decl(literalTypes2.ts, 147, 36))
+>T : Symbol(T, Decl(literalTypes2.ts, 148, 20))
+>x : Symbol(x, Decl(literalTypes2.ts, 148, 23))
+>T : Symbol(T, Decl(literalTypes2.ts, 148, 20))
+>f : Symbol(f, Decl(literalTypes2.ts, 148, 28))
+>p : Symbol(p, Decl(literalTypes2.ts, 148, 33))
+>T : Symbol(T, Decl(literalTypes2.ts, 148, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 148, 20))
+>T : Symbol(T, Decl(literalTypes2.ts, 148, 20))
+
+const a: (1 | 2)[] = [1, 2];
+>a : Symbol(a, Decl(literalTypes2.ts, 150, 5))
+
+const x1 = g1(1);  // Type 1
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 152, 5))
+>g1 : Symbol(g1, Decl(literalTypes2.ts, 139, 1))
+
+const x2 = g2(1, 1);  // Type 1
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 153, 5))
+>g2 : Symbol(g2, Decl(literalTypes2.ts, 141, 32))
+
+const x3 = g2(1, 2);  // Type 1 | 2
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 154, 5))
+>g2 : Symbol(g2, Decl(literalTypes2.ts, 141, 32))
+
+const x4 = g3(1, "two");  // Type 1 | "two"
+>x4 : Symbol(x4, Decl(literalTypes2.ts, 155, 5))
+>g3 : Symbol(g3, Decl(literalTypes2.ts, 142, 38))
+
+const x5 = g4(1);  // Type number[]
+>x5 : Symbol(x5, Decl(literalTypes2.ts, 156, 5))
+>g4 : Symbol(g4, Decl(literalTypes2.ts, 143, 45))
+
+const x6 = g5(1, 2);  // Type (1 | 2)[]
+>x6 : Symbol(x6, Decl(literalTypes2.ts, 157, 5))
+>g5 : Symbol(g5, Decl(literalTypes2.ts, 144, 34))
+
+const x7 = g6([1, 2]);  // Type number
+>x7 : Symbol(x7, Decl(literalTypes2.ts, 158, 5))
+>g6 : Symbol(g6, Decl(literalTypes2.ts, 145, 55))
+
+const x8 = g6(a);  // Type 1 | 2
+>x8 : Symbol(x8, Decl(literalTypes2.ts, 159, 5))
+>g6 : Symbol(g6, Decl(literalTypes2.ts, 145, 55))
+>a : Symbol(a, Decl(literalTypes2.ts, 150, 5))
+
+const x9 = g7(a);  // Type (1 | 2)[]
+>x9 : Symbol(x9, Decl(literalTypes2.ts, 160, 5))
+>g7 : Symbol(g7, Decl(literalTypes2.ts, 146, 34))
+>a : Symbol(a, Decl(literalTypes2.ts, 150, 5))
+
+const x10 = g8(1, x => x);  // Type number
+>x10 : Symbol(x10, Decl(literalTypes2.ts, 161, 5))
+>g8 : Symbol(g8, Decl(literalTypes2.ts, 147, 36))
+>x : Symbol(x, Decl(literalTypes2.ts, 161, 17))
+>x : Symbol(x, Decl(literalTypes2.ts, 161, 17))
+
+const x11 = g8(1, x => x + 1);  // Type number
+>x11 : Symbol(x11, Decl(literalTypes2.ts, 162, 5))
+>g8 : Symbol(g8, Decl(literalTypes2.ts, 147, 36))
+>x : Symbol(x, Decl(literalTypes2.ts, 162, 17))
+>x : Symbol(x, Decl(literalTypes2.ts, 162, 17))
+
+function makeArray<T>(x: T): T[] {
+>makeArray : Symbol(makeArray, Decl(literalTypes2.ts, 162, 30))
+>T : Symbol(T, Decl(literalTypes2.ts, 164, 19))
+>x : Symbol(x, Decl(literalTypes2.ts, 164, 22))
+>T : Symbol(T, Decl(literalTypes2.ts, 164, 19))
+>T : Symbol(T, Decl(literalTypes2.ts, 164, 19))
+
+    return [x];
+>x : Symbol(x, Decl(literalTypes2.ts, 164, 22))
+}
+
+function append<T>(a: T[], x: T): T[] {
+>append : Symbol(append, Decl(literalTypes2.ts, 166, 1))
+>T : Symbol(T, Decl(literalTypes2.ts, 168, 16))
+>a : Symbol(a, Decl(literalTypes2.ts, 168, 19))
+>T : Symbol(T, Decl(literalTypes2.ts, 168, 16))
+>x : Symbol(x, Decl(literalTypes2.ts, 168, 26))
+>T : Symbol(T, Decl(literalTypes2.ts, 168, 16))
+>T : Symbol(T, Decl(literalTypes2.ts, 168, 16))
+
+    let result = a.slice();
+>result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
+>a.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(literalTypes2.ts, 168, 19))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+
+    result.push(x);
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(literalTypes2.ts, 168, 26))
+
+    return result;
+>result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
+}
+
+type Bit = 0 | 1;
+>Bit : Symbol(Bit, Decl(literalTypes2.ts, 172, 1))
+
+let aa = makeArray<Bit>(0);
+>aa : Symbol(aa, Decl(literalTypes2.ts, 176, 3))
+>makeArray : Symbol(makeArray, Decl(literalTypes2.ts, 162, 30))
+>Bit : Symbol(Bit, Decl(literalTypes2.ts, 172, 1))
+
+aa = append(aa, 1);
+>aa : Symbol(aa, Decl(literalTypes2.ts, 176, 3))
+>append : Symbol(append, Decl(literalTypes2.ts, 166, 1))
+>aa : Symbol(aa, Decl(literalTypes2.ts, 176, 3))
+

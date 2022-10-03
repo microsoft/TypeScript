@@ -1,0 +1,136 @@
+=== tests/cases/compiler/externModule.ts ===
+declare module {
+    export class XDate {
+>XDate : Symbol(XDate, Decl(externModule.ts, 0, 16))
+
+		public getDay():number;
+>getDay : Symbol(XDate.getDay, Decl(externModule.ts, 1, 24))
+
+		public getXDate():number;
+>getXDate : Symbol(XDate.getXDate, Decl(externModule.ts, 2, 25))
+
+		// etc.
+
+	    // Called as a function
+	    // Not supported anymore? public (): string;
+	    
+	    // Called as a constructor
+	    constructor(year: number, month: number);
+>year : Symbol(year, Decl(externModule.ts, 10, 17))
+>month : Symbol(month, Decl(externModule.ts, 10, 30))
+
+	    constructor(year: number, month: number, date: number);
+>year : Symbol(year, Decl(externModule.ts, 11, 17))
+>month : Symbol(month, Decl(externModule.ts, 11, 30))
+>date : Symbol(date, Decl(externModule.ts, 11, 45))
+
+	    constructor(year: number, month: number, date: number, hours: number);
+>year : Symbol(year, Decl(externModule.ts, 12, 17))
+>month : Symbol(month, Decl(externModule.ts, 12, 30))
+>date : Symbol(date, Decl(externModule.ts, 12, 45))
+>hours : Symbol(hours, Decl(externModule.ts, 12, 59))
+
+	    constructor(year: number, month: number, date: number, hours: number, minutes: number);
+>year : Symbol(year, Decl(externModule.ts, 13, 17))
+>month : Symbol(month, Decl(externModule.ts, 13, 30))
+>date : Symbol(date, Decl(externModule.ts, 13, 45))
+>hours : Symbol(hours, Decl(externModule.ts, 13, 59))
+>minutes : Symbol(minutes, Decl(externModule.ts, 13, 74))
+
+	    constructor(year: number, month: number, date: number, hours: number, minutes: number, seconds: number);
+>year : Symbol(year, Decl(externModule.ts, 14, 17))
+>month : Symbol(month, Decl(externModule.ts, 14, 30))
+>date : Symbol(date, Decl(externModule.ts, 14, 45))
+>hours : Symbol(hours, Decl(externModule.ts, 14, 59))
+>minutes : Symbol(minutes, Decl(externModule.ts, 14, 74))
+>seconds : Symbol(seconds, Decl(externModule.ts, 14, 91))
+
+	    constructor(year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number);
+>year : Symbol(year, Decl(externModule.ts, 15, 17))
+>month : Symbol(month, Decl(externModule.ts, 15, 30))
+>date : Symbol(date, Decl(externModule.ts, 15, 45))
+>hours : Symbol(hours, Decl(externModule.ts, 15, 59))
+>minutes : Symbol(minutes, Decl(externModule.ts, 15, 74))
+>seconds : Symbol(seconds, Decl(externModule.ts, 15, 91))
+>ms : Symbol(ms, Decl(externModule.ts, 15, 108))
+
+	    constructor(value: number);
+>value : Symbol(value, Decl(externModule.ts, 16, 17))
+
+	    constructor();
+	    
+	    static parse(string: string): number;
+>parse : Symbol(XDate.parse, Decl(externModule.ts, 17, 19))
+>string : Symbol(string, Decl(externModule.ts, 19, 18))
+
+	    static UTC(year: number, month: number): number;
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 20, 16))
+>month : Symbol(month, Decl(externModule.ts, 20, 29))
+
+	    static UTC(year: number, month: number, date: number): number;
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 21, 16))
+>month : Symbol(month, Decl(externModule.ts, 21, 29))
+>date : Symbol(date, Decl(externModule.ts, 21, 44))
+
+	    static UTC(year: number, month: number, date: number, hours: number): number;
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 22, 16))
+>month : Symbol(month, Decl(externModule.ts, 22, 29))
+>date : Symbol(date, Decl(externModule.ts, 22, 44))
+>hours : Symbol(hours, Decl(externModule.ts, 22, 58))
+
+	    static UTC(year: number, month: number, date: number, hours: number, minutes: number): number;
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 23, 16))
+>month : Symbol(month, Decl(externModule.ts, 23, 29))
+>date : Symbol(date, Decl(externModule.ts, 23, 44))
+>hours : Symbol(hours, Decl(externModule.ts, 23, 58))
+>minutes : Symbol(minutes, Decl(externModule.ts, 23, 73))
+
+	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number;
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 24, 16))
+>month : Symbol(month, Decl(externModule.ts, 24, 29))
+>date : Symbol(date, Decl(externModule.ts, 24, 44))
+>hours : Symbol(hours, Decl(externModule.ts, 24, 58))
+>minutes : Symbol(minutes, Decl(externModule.ts, 24, 73))
+>seconds : Symbol(seconds, Decl(externModule.ts, 24, 90))
+
+	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number,
+>UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+>year : Symbol(year, Decl(externModule.ts, 25, 16))
+>month : Symbol(month, Decl(externModule.ts, 25, 29))
+>date : Symbol(date, Decl(externModule.ts, 25, 44))
+>hours : Symbol(hours, Decl(externModule.ts, 25, 58))
+>minutes : Symbol(minutes, Decl(externModule.ts, 25, 73))
+>seconds : Symbol(seconds, Decl(externModule.ts, 25, 90))
+
+		         ms: number): number;
+>ms : Symbol(ms, Decl(externModule.ts, 25, 107))
+
+	    static now(): number;
+>now : Symbol(XDate.now, Decl(externModule.ts, 26, 31))
+    }
+}
+
+var d=new XDate();
+>d : Symbol(d, Decl(externModule.ts, 31, 3))
+
+d.getDay();
+>d : Symbol(d, Decl(externModule.ts, 31, 3))
+
+d=new XDate(1978,2);
+>d : Symbol(d, Decl(externModule.ts, 31, 3))
+
+d.getXDate();
+>d : Symbol(d, Decl(externModule.ts, 31, 3))
+
+var n=XDate.parse("3/2/2004");
+>n : Symbol(n, Decl(externModule.ts, 35, 3))
+
+n=XDate.UTC(1964,2,1);
+>n : Symbol(n, Decl(externModule.ts, 35, 3))
+
+

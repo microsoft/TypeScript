@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.ts ===
+export {}
+interface Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 9))
+
+=== tests/cases/compiler/b.ts ===
+import { Foo } from './a';
+>Foo : Symbol(Foo, Decl(b.ts, 0, 8))
+

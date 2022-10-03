@@ -1,0 +1,10 @@
+trailing identifier(1,4): error TS1012: Unexpected token.
+trailing identifier(1,8): error TS1005: '}' expected.
+
+
+==== trailing identifier (2 errors) ====
+    {} blah
+       ~~~~
+!!! error TS1012: Unexpected token.
+           
+!!! error TS1005: '}' expected.

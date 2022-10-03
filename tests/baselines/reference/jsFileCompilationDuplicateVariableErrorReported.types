@@ -1,0 +1,10 @@
+=== tests/cases/compiler/b.js ===
+var x = "hello";
+>x : string
+>"hello" : "hello"
+
+=== tests/cases/compiler/a.ts ===
+var x = 10; // Error reported
+>x : string
+>10 : 10
+

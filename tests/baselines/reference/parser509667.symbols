@@ -1,0 +1,19 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509667.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(parser509667.ts, 0, 0))
+
+   f1() {
+>f1 : Symbol(Foo.f1, Decl(parser509667.ts, 0, 11))
+
+      if (this.
+>this : Symbol(Foo, Decl(parser509667.ts, 0, 0))
+   }
+
+   f2() {
+>f2 : Symbol(Foo.f2, Decl(parser509667.ts, 3, 4))
+   }
+
+   f3() {
+>f3 : Symbol(Foo.f3, Decl(parser509667.ts, 6, 4))
+   }
+}

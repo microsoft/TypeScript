@@ -1,0 +1,67 @@
+=== tests/cases/conformance/types/literal/literalTypesAndDestructuring.ts ===
+declare let x: { a: 0 | 1 | undefined };
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+
+let { a: a1 } = x;
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>a1 : Symbol(a1, Decl(literalTypesAndDestructuring.ts, 2, 5))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+
+let { a: a2 = 0 } = x;
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>a2 : Symbol(a2, Decl(literalTypesAndDestructuring.ts, 3, 5))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+
+let { a: a3 = 2 } = x;
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>a3 : Symbol(a3, Decl(literalTypesAndDestructuring.ts, 4, 5))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+
+let { a: a4 = 2 as const } = x;
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>a4 : Symbol(a4, Decl(literalTypesAndDestructuring.ts, 5, 5))
+>const : Symbol(const)
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+
+let b1 = x.a;
+>b1 : Symbol(b1, Decl(literalTypesAndDestructuring.ts, 7, 3))
+>x.a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+
+let b2 = x.a ?? 0;
+>b2 : Symbol(b2, Decl(literalTypesAndDestructuring.ts, 8, 3))
+>x.a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+
+let b3 = x.a ?? 2;
+>b3 : Symbol(b3, Decl(literalTypesAndDestructuring.ts, 9, 3))
+>x.a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+
+let b4 = x.a ?? 2 as const;
+>b4 : Symbol(b4, Decl(literalTypesAndDestructuring.ts, 10, 3))
+>x.a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
+>a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>const : Symbol(const)
+
+// Repro from #35693
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(literalTypesAndDestructuring.ts, 10, 27))
+
+  bar: 'yo' | 'ha' | undefined;
+>bar : Symbol(Foo.bar, Decl(literalTypesAndDestructuring.ts, 14, 15))
+}
+
+let { bar = 'yo' } = {} as Foo;
+>bar : Symbol(bar, Decl(literalTypesAndDestructuring.ts, 18, 5))
+>Foo : Symbol(Foo, Decl(literalTypesAndDestructuring.ts, 10, 27))
+
+bar;  // "yo" | "ha"
+>bar : Symbol(bar, Decl(literalTypesAndDestructuring.ts, 18, 5))
+

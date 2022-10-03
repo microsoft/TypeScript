@@ -1,0 +1,25 @@
+=== tests/cases/compiler/namespaces1.ts ===
+module X {
+>X : Symbol(X, Decl(namespaces1.ts, 0, 0))
+
+    export module Y {
+>Y : Symbol(Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
+
+        export interface Z { }
+>Z : Symbol(Z, Decl(namespaces1.ts, 1, 21))
+    }
+    export interface Y { }
+>Y : Symbol(Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
+}
+
+var x: X.Y.Z;
+>x : Symbol(x, Decl(namespaces1.ts, 7, 3))
+>X : Symbol(X, Decl(namespaces1.ts, 0, 0))
+>Y : Symbol(X.Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
+>Z : Symbol(X.Y.Z, Decl(namespaces1.ts, 1, 21))
+
+var x2: X.Y;
+>x2 : Symbol(x2, Decl(namespaces1.ts, 8, 3))
+>X : Symbol(X, Decl(namespaces1.ts, 0, 0))
+>Y : Symbol(X.Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
+

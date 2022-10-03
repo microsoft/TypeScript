@@ -1,0 +1,52 @@
+=== tests/cases/compiler/autolift3.ts ===
+class B {
+>B : Symbol(B, Decl(autolift3.ts, 0, 0))
+
+    constructor() {
+        function foo() {  }
+>foo : Symbol(foo, Decl(autolift3.ts, 2, 19))
+
+        foo();
+>foo : Symbol(foo, Decl(autolift3.ts, 2, 19))
+
+        var a = 0;
+>a : Symbol(a, Decl(autolift3.ts, 7, 11))
+
+        var inner: any = (function() {
+>inner : Symbol(inner, Decl(autolift3.ts, 8, 11))
+
+            var CScriptIO = (function() {
+>CScriptIO : Symbol(CScriptIO, Decl(autolift3.ts, 9, 15))
+
+                var fso = 0
+>fso : Symbol(fso, Decl(autolift3.ts, 10, 19))
+
+                return {
+                    readFile: function(path: string): string {
+>readFile : Symbol(readFile, Decl(autolift3.ts, 12, 24))
+>path : Symbol(path, Decl(autolift3.ts, 13, 39))
+
+                        return fso.toString();
+>fso.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>fso : Symbol(fso, Decl(autolift3.ts, 10, 19))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+                    }
+                }
+            })();
+            return inner;
+>inner : Symbol(inner, Decl(autolift3.ts, 8, 11))
+
+        })();
+    }
+}
+
+var b = new B();
+>b : Symbol(b, Decl(autolift3.ts, 23, 3))
+>B : Symbol(B, Decl(autolift3.ts, 0, 0))
+
+b.foo();
+>b : Symbol(b, Decl(autolift3.ts, 23, 3))
+
+
+
+

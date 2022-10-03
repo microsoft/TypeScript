@@ -1,0 +1,30 @@
+=== tests/cases/conformance/decorators/class/constructor/0.ts ===
+export class base { }
+>base : base
+
+export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
+>foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>target : Object
+>propertyKey : string | symbol
+>parameterIndex : number
+
+=== tests/cases/conformance/decorators/class/constructor/2.ts ===
+import {base} from "./0.ts"
+>base : any
+
+import {foo} from "./0.ts"
+>foo : any
+
+export class C  extends base{
+>C : C
+>base : any
+
+    constructor(@foo prop: any) {
+>foo : any
+>prop : any
+
+        super();
+>super() : void
+>super : any
+    }
+}

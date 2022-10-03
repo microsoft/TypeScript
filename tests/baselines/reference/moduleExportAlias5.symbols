@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/bug24754.js ===
+// #24754
+const webpack = function (){
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))
+}
+exports = module.exports = webpack;
+>exports : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(bug24754.js, 0, 0))
+>module : Symbol(export=, Decl(bug24754.js, 3, 9))
+>exports : Symbol(export=, Decl(bug24754.js, 3, 9))
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))
+
+exports.version = 1001;
+>exports.version : Symbol(version, Decl(bug24754.js, 3, 35))
+>exports : Symbol(version, Decl(bug24754.js, 3, 35))
+>version : Symbol(version, Decl(bug24754.js, 3, 35))
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack.WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))
+>WebpackOptionsDefaulter : Symbol(webpack.WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+

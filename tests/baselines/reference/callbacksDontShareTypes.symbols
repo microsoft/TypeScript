@@ -1,0 +1,100 @@
+=== tests/cases/compiler/callbacksDontShareTypes.ts ===
+interface Collection<T> {
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
+
+    length: number;
+>length : Symbol(Collection.length, Decl(callbacksDontShareTypes.ts, 0, 25))
+
+    add(x: T): void;
+>add : Symbol(Collection.add, Decl(callbacksDontShareTypes.ts, 1, 19))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 2, 8))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
+
+    remove(x: T): boolean;
+>remove : Symbol(Collection.remove, Decl(callbacksDontShareTypes.ts, 2, 20))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 3, 11))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
+}
+interface Combinators {
+>Combinators : Symbol(Combinators, Decl(callbacksDontShareTypes.ts, 4, 1))
+
+    map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>U : Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
+>c : Symbol(c, Decl(callbacksDontShareTypes.ts, 6, 14))
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>f : Symbol(f, Decl(callbacksDontShareTypes.ts, 6, 31))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 6, 36))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>U : Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>U : Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
+
+    map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>c : Symbol(c, Decl(callbacksDontShareTypes.ts, 7, 11))
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>f : Symbol(f, Decl(callbacksDontShareTypes.ts, 7, 28))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 7, 33))
+>T : Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+}
+
+var _: Combinators;
+>_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>Combinators : Symbol(Combinators, Decl(callbacksDontShareTypes.ts, 4, 1))
+
+var c2: Collection<number>;
+>c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+
+var rf1 = (x: number) => { return x.toFixed() };
+>rf1 : Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r1a = _.map(c2, (x) => { return x.toFixed() });
+>r1a : Symbol(r1a, Decl(callbacksDontShareTypes.ts, 14, 3))
+>_.map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
+>r1b : Symbol(r1b, Decl(callbacksDontShareTypes.ts, 15, 3))
+>_.map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>rf1 : Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
+
+var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
+>r5a : Symbol(r5a, Decl(callbacksDontShareTypes.ts, 16, 3))
+>_.map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r5b = _.map<number, string>(c2, rf1);
+>r5b : Symbol(r5b, Decl(callbacksDontShareTypes.ts, 17, 3))
+>_.map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>rf1 : Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
+

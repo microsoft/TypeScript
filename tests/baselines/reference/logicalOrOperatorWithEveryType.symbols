@@ -1,0 +1,518 @@
+=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts ===
+// The || operator permits the operands to be of any type.
+// If the || expression is not contextually typed, the right operand is contextually typed
+// by the type of the left operand and the result is of the best common type of the two
+// operand types.
+
+enum E { a, b, c }
+>E : Symbol(E, Decl(logicalOrOperatorWithEveryType.ts, 0, 0))
+>a : Symbol(E.a, Decl(logicalOrOperatorWithEveryType.ts, 5, 8))
+>b : Symbol(E.b, Decl(logicalOrOperatorWithEveryType.ts, 5, 11))
+>c : Symbol(E.c, Decl(logicalOrOperatorWithEveryType.ts, 5, 14))
+
+var a1: any;
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var a2: boolean;
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var a3: number
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var a4: string;
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var a5: void;
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var a6: E;
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>E : Symbol(E, Decl(logicalOrOperatorWithEveryType.ts, 0, 0))
+
+var a7: {a: string};
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a : Symbol(a, Decl(logicalOrOperatorWithEveryType.ts, 13, 9))
+
+var a8: string[];
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ra1 = a1 || a1;         // any       || any is any
+>ra1 : Symbol(ra1, Decl(logicalOrOperatorWithEveryType.ts, 16, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra2 = a2 || a1;         // boolean   || any is any
+>ra2 : Symbol(ra2, Decl(logicalOrOperatorWithEveryType.ts, 17, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra3 = a3 || a1;         // number    || any is any
+>ra3 : Symbol(ra3, Decl(logicalOrOperatorWithEveryType.ts, 18, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra4 = a4 || a1;         // string    || any is any
+>ra4 : Symbol(ra4, Decl(logicalOrOperatorWithEveryType.ts, 19, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra5 = a5 || a1;         // void      || any is any
+>ra5 : Symbol(ra5, Decl(logicalOrOperatorWithEveryType.ts, 20, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra6 = a6 || a1;         // enum      || any is any
+>ra6 : Symbol(ra6, Decl(logicalOrOperatorWithEveryType.ts, 21, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra7 = a7 || a1;         // object    || any is any
+>ra7 : Symbol(ra7, Decl(logicalOrOperatorWithEveryType.ts, 22, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra8 = a8 || a1;         // array     || any is any
+>ra8 : Symbol(ra8, Decl(logicalOrOperatorWithEveryType.ts, 23, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra9 = null || a1;       // null      || any is any
+>ra9 : Symbol(ra9, Decl(logicalOrOperatorWithEveryType.ts, 24, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var ra10 = undefined || a1; // undefined || any is any
+>ra10 : Symbol(ra10, Decl(logicalOrOperatorWithEveryType.ts, 25, 3))
+>undefined : Symbol(undefined)
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var rb1 = a1 || a2;         // any       || boolean is any
+>rb1 : Symbol(rb1, Decl(logicalOrOperatorWithEveryType.ts, 27, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb2 = a2 || a2;         // boolean   || boolean is boolean
+>rb2 : Symbol(rb2, Decl(logicalOrOperatorWithEveryType.ts, 28, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb3 = a3 || a2;         // number    || boolean is number | boolean
+>rb3 : Symbol(rb3, Decl(logicalOrOperatorWithEveryType.ts, 29, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb4 = a4 || a2;         // string    || boolean is string | boolean
+>rb4 : Symbol(rb4, Decl(logicalOrOperatorWithEveryType.ts, 30, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb5 = a5 || a2;         // void      || boolean is void | boolean
+>rb5 : Symbol(rb5, Decl(logicalOrOperatorWithEveryType.ts, 31, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb6 = a6 || a2;         // enum      || boolean is E | boolean
+>rb6 : Symbol(rb6, Decl(logicalOrOperatorWithEveryType.ts, 32, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb7 = a7 || a2;         // object    || boolean is object | boolean
+>rb7 : Symbol(rb7, Decl(logicalOrOperatorWithEveryType.ts, 33, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb8 = a8 || a2;         // array     || boolean is array | boolean
+>rb8 : Symbol(rb8, Decl(logicalOrOperatorWithEveryType.ts, 34, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb9 = null || a2;       // null      || boolean is boolean
+>rb9 : Symbol(rb9, Decl(logicalOrOperatorWithEveryType.ts, 35, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rb10= undefined || a2;  // undefined || boolean is boolean
+>rb10 : Symbol(rb10, Decl(logicalOrOperatorWithEveryType.ts, 36, 3))
+>undefined : Symbol(undefined)
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rc1 = a1 || a3;         // any       || number is any
+>rc1 : Symbol(rc1, Decl(logicalOrOperatorWithEveryType.ts, 38, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc2 = a2 || a3;         // boolean   || number is boolean | number
+>rc2 : Symbol(rc2, Decl(logicalOrOperatorWithEveryType.ts, 39, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc3 = a3 || a3;         // number    || number is number
+>rc3 : Symbol(rc3, Decl(logicalOrOperatorWithEveryType.ts, 40, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc4 = a4 || a3;         // string    || number is string | number
+>rc4 : Symbol(rc4, Decl(logicalOrOperatorWithEveryType.ts, 41, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc5 = a5 || a3;         // void      || number is void | number
+>rc5 : Symbol(rc5, Decl(logicalOrOperatorWithEveryType.ts, 42, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc6 = a6 || a3;         // enum      || number is number
+>rc6 : Symbol(rc6, Decl(logicalOrOperatorWithEveryType.ts, 43, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc7 = a7 || a3;         // object    || number is object | number
+>rc7 : Symbol(rc7, Decl(logicalOrOperatorWithEveryType.ts, 44, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc8 = a8 || a3;         // array     || number is array | number
+>rc8 : Symbol(rc8, Decl(logicalOrOperatorWithEveryType.ts, 45, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc9 = null || a3;       // null      || number is number
+>rc9 : Symbol(rc9, Decl(logicalOrOperatorWithEveryType.ts, 46, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rc10 = undefined || a3; // undefined || number is number
+>rc10 : Symbol(rc10, Decl(logicalOrOperatorWithEveryType.ts, 47, 3))
+>undefined : Symbol(undefined)
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rd1 = a1 || a4;         // any       || string is any
+>rd1 : Symbol(rd1, Decl(logicalOrOperatorWithEveryType.ts, 49, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd2 = a2 || a4;         // boolean   || string is boolean | string
+>rd2 : Symbol(rd2, Decl(logicalOrOperatorWithEveryType.ts, 50, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd3 = a3 || a4;         // number    || string is number | string
+>rd3 : Symbol(rd3, Decl(logicalOrOperatorWithEveryType.ts, 51, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd4 = a4 || a4;         // string    || string is string
+>rd4 : Symbol(rd4, Decl(logicalOrOperatorWithEveryType.ts, 52, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd5 = a5 || a4;         // void      || string is void | string
+>rd5 : Symbol(rd5, Decl(logicalOrOperatorWithEveryType.ts, 53, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd6 = a6 || a4;         // enum      || string is enum | string
+>rd6 : Symbol(rd6, Decl(logicalOrOperatorWithEveryType.ts, 54, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd7 = a7 || a4;         // object    || string is object | string
+>rd7 : Symbol(rd7, Decl(logicalOrOperatorWithEveryType.ts, 55, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd8 = a8 || a4;         // array     || string is array | string
+>rd8 : Symbol(rd8, Decl(logicalOrOperatorWithEveryType.ts, 56, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd9 = null || a4;       // null      || string is string
+>rd9 : Symbol(rd9, Decl(logicalOrOperatorWithEveryType.ts, 57, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rd10 = undefined || a4; // undefined || string is string
+>rd10 : Symbol(rd10, Decl(logicalOrOperatorWithEveryType.ts, 58, 3))
+>undefined : Symbol(undefined)
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var re1 = a1 || a5;         // any       || void is any
+>re1 : Symbol(re1, Decl(logicalOrOperatorWithEveryType.ts, 60, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re2 = a2 || a5;         // boolean   || void is boolean | void
+>re2 : Symbol(re2, Decl(logicalOrOperatorWithEveryType.ts, 61, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re3 = a3 || a5;         // number    || void is number | void
+>re3 : Symbol(re3, Decl(logicalOrOperatorWithEveryType.ts, 62, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re4 = a4 || a5;         // string    || void is string | void
+>re4 : Symbol(re4, Decl(logicalOrOperatorWithEveryType.ts, 63, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re5 = a5 || a5;         // void      || void is void
+>re5 : Symbol(re5, Decl(logicalOrOperatorWithEveryType.ts, 64, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re6 = a6 || a5;         // enum      || void is enum | void
+>re6 : Symbol(re6, Decl(logicalOrOperatorWithEveryType.ts, 65, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re7 = a7 || a5;         // object    || void is object | void
+>re7 : Symbol(re7, Decl(logicalOrOperatorWithEveryType.ts, 66, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re8 = a8 || a5;         // array     || void is array | void
+>re8 : Symbol(re8, Decl(logicalOrOperatorWithEveryType.ts, 67, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re9 = null || a5;       // null      || void is void
+>re9 : Symbol(re9, Decl(logicalOrOperatorWithEveryType.ts, 68, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var re10 = undefined || a5; // undefined || void is void
+>re10 : Symbol(re10, Decl(logicalOrOperatorWithEveryType.ts, 69, 3))
+>undefined : Symbol(undefined)
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var rg1 = a1 || a6;         // any       || enum is any
+>rg1 : Symbol(rg1, Decl(logicalOrOperatorWithEveryType.ts, 71, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg2 = a2 || a6;         // boolean   || enum is boolean | enum
+>rg2 : Symbol(rg2, Decl(logicalOrOperatorWithEveryType.ts, 72, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg3 = a3 || a6;         // number    || enum is number
+>rg3 : Symbol(rg3, Decl(logicalOrOperatorWithEveryType.ts, 73, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg4 = a4 || a6;         // string    || enum is string | enum
+>rg4 : Symbol(rg4, Decl(logicalOrOperatorWithEveryType.ts, 74, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg5 = a5 || a6;         // void      || enum is void | enum
+>rg5 : Symbol(rg5, Decl(logicalOrOperatorWithEveryType.ts, 75, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg6 = a6 || a6;         // enum      || enum is E
+>rg6 : Symbol(rg6, Decl(logicalOrOperatorWithEveryType.ts, 76, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg7 = a7 || a6;         // object    || enum is object | enum
+>rg7 : Symbol(rg7, Decl(logicalOrOperatorWithEveryType.ts, 77, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg8 = a8 || a6;         // array     || enum is array | enum
+>rg8 : Symbol(rg8, Decl(logicalOrOperatorWithEveryType.ts, 78, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg9 = null || a6;       // null      || enum is E
+>rg9 : Symbol(rg9, Decl(logicalOrOperatorWithEveryType.ts, 79, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rg10 = undefined || a6; // undefined || enum is E
+>rg10 : Symbol(rg10, Decl(logicalOrOperatorWithEveryType.ts, 80, 3))
+>undefined : Symbol(undefined)
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rh1 = a1 || a7;         // any       || object is any
+>rh1 : Symbol(rh1, Decl(logicalOrOperatorWithEveryType.ts, 82, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh2 = a2 || a7;         // boolean   || object is boolean | object
+>rh2 : Symbol(rh2, Decl(logicalOrOperatorWithEveryType.ts, 83, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh3 = a3 || a7;         // number    || object is number | object
+>rh3 : Symbol(rh3, Decl(logicalOrOperatorWithEveryType.ts, 84, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh4 = a4 || a7;         // string    || object is string | object
+>rh4 : Symbol(rh4, Decl(logicalOrOperatorWithEveryType.ts, 85, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh5 = a5 || a7;         // void      || object is void | object
+>rh5 : Symbol(rh5, Decl(logicalOrOperatorWithEveryType.ts, 86, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh6 = a6 || a7;         // enum      || object is enum | object
+>rh6 : Symbol(rh6, Decl(logicalOrOperatorWithEveryType.ts, 87, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh7 = a7 || a7;         // object    || object is object
+>rh7 : Symbol(rh7, Decl(logicalOrOperatorWithEveryType.ts, 88, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh8 = a8 || a7;         // array     || object is array | object
+>rh8 : Symbol(rh8, Decl(logicalOrOperatorWithEveryType.ts, 89, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh9 = null || a7;       // null      || object is object
+>rh9 : Symbol(rh9, Decl(logicalOrOperatorWithEveryType.ts, 90, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rh10 = undefined || a7; // undefined || object is object
+>rh10 : Symbol(rh10, Decl(logicalOrOperatorWithEveryType.ts, 91, 3))
+>undefined : Symbol(undefined)
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var ri1 = a1 || a8;         // any       || array is any
+>ri1 : Symbol(ri1, Decl(logicalOrOperatorWithEveryType.ts, 93, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri2 = a2 || a8;         // boolean   || array is boolean | array
+>ri2 : Symbol(ri2, Decl(logicalOrOperatorWithEveryType.ts, 94, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri3 = a3 || a8;         // number    || array is number | array
+>ri3 : Symbol(ri3, Decl(logicalOrOperatorWithEveryType.ts, 95, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri4 = a4 || a8;         // string    || array is string | array
+>ri4 : Symbol(ri4, Decl(logicalOrOperatorWithEveryType.ts, 96, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri5 = a5 || a8;         // void      || array is void | array
+>ri5 : Symbol(ri5, Decl(logicalOrOperatorWithEveryType.ts, 97, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri6 = a6 || a8;         // enum      || array is enum | array
+>ri6 : Symbol(ri6, Decl(logicalOrOperatorWithEveryType.ts, 98, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri7 = a7 || a8;         // object    || array is object | array
+>ri7 : Symbol(ri7, Decl(logicalOrOperatorWithEveryType.ts, 99, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri8 = a8 || a8;         // array     || array is array
+>ri8 : Symbol(ri8, Decl(logicalOrOperatorWithEveryType.ts, 100, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri9 = null || a8;       // null      || array is array
+>ri9 : Symbol(ri9, Decl(logicalOrOperatorWithEveryType.ts, 101, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var ri10 = undefined || a8; // undefined || array is array
+>ri10 : Symbol(ri10, Decl(logicalOrOperatorWithEveryType.ts, 102, 3))
+>undefined : Symbol(undefined)
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var rj1 = a1 || null;         // any       || null is any
+>rj1 : Symbol(rj1, Decl(logicalOrOperatorWithEveryType.ts, 104, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+
+var rj2 = a2 || null;         // boolean   || null is boolean
+>rj2 : Symbol(rj2, Decl(logicalOrOperatorWithEveryType.ts, 105, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+
+var rj3 = a3 || null;         // number    || null is number
+>rj3 : Symbol(rj3, Decl(logicalOrOperatorWithEveryType.ts, 106, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+
+var rj4 = a4 || null;         // string    || null is string
+>rj4 : Symbol(rj4, Decl(logicalOrOperatorWithEveryType.ts, 107, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+
+var rj5 = a5 || null;         // void      || null is void
+>rj5 : Symbol(rj5, Decl(logicalOrOperatorWithEveryType.ts, 108, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+
+var rj6 = a6 || null;         // enum      || null is E
+>rj6 : Symbol(rj6, Decl(logicalOrOperatorWithEveryType.ts, 109, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+
+var rj7 = a7 || null;         // object    || null is object
+>rj7 : Symbol(rj7, Decl(logicalOrOperatorWithEveryType.ts, 110, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+
+var rj8 = a8 || null;         // array     || null is array
+>rj8 : Symbol(rj8, Decl(logicalOrOperatorWithEveryType.ts, 111, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+
+var rj9 = null || null;       // null      || null is any
+>rj9 : Symbol(rj9, Decl(logicalOrOperatorWithEveryType.ts, 112, 3))
+
+var rj10 = undefined || null; // undefined || null is any
+>rj10 : Symbol(rj10, Decl(logicalOrOperatorWithEveryType.ts, 113, 3))
+>undefined : Symbol(undefined)
+
+var rf1 = a1 || undefined;         // any       || undefined is any
+>rf1 : Symbol(rf1, Decl(logicalOrOperatorWithEveryType.ts, 115, 3))
+>a1 : Symbol(a1, Decl(logicalOrOperatorWithEveryType.ts, 7, 3))
+>undefined : Symbol(undefined)
+
+var rf2 = a2 || undefined;         // boolean   || undefined is boolean
+>rf2 : Symbol(rf2, Decl(logicalOrOperatorWithEveryType.ts, 116, 3))
+>a2 : Symbol(a2, Decl(logicalOrOperatorWithEveryType.ts, 8, 3))
+>undefined : Symbol(undefined)
+
+var rf3 = a3 || undefined;         // number    || undefined is number
+>rf3 : Symbol(rf3, Decl(logicalOrOperatorWithEveryType.ts, 117, 3))
+>a3 : Symbol(a3, Decl(logicalOrOperatorWithEveryType.ts, 9, 3))
+>undefined : Symbol(undefined)
+
+var rf4 = a4 || undefined;         // string    || undefined is string
+>rf4 : Symbol(rf4, Decl(logicalOrOperatorWithEveryType.ts, 118, 3))
+>a4 : Symbol(a4, Decl(logicalOrOperatorWithEveryType.ts, 10, 3))
+>undefined : Symbol(undefined)
+
+var rf5 = a5 || undefined;         // void      || undefined is void
+>rf5 : Symbol(rf5, Decl(logicalOrOperatorWithEveryType.ts, 119, 3))
+>a5 : Symbol(a5, Decl(logicalOrOperatorWithEveryType.ts, 11, 3))
+>undefined : Symbol(undefined)
+
+var rf6 = a6 || undefined;         // enum      || undefined is E
+>rf6 : Symbol(rf6, Decl(logicalOrOperatorWithEveryType.ts, 120, 3))
+>a6 : Symbol(a6, Decl(logicalOrOperatorWithEveryType.ts, 12, 3))
+>undefined : Symbol(undefined)
+
+var rf7 = a7 || undefined;         // object    || undefined is object
+>rf7 : Symbol(rf7, Decl(logicalOrOperatorWithEveryType.ts, 121, 3))
+>a7 : Symbol(a7, Decl(logicalOrOperatorWithEveryType.ts, 13, 3))
+>undefined : Symbol(undefined)
+
+var rf8 = a8 || undefined;         // array     || undefined is array
+>rf8 : Symbol(rf8, Decl(logicalOrOperatorWithEveryType.ts, 122, 3))
+>a8 : Symbol(a8, Decl(logicalOrOperatorWithEveryType.ts, 14, 3))
+>undefined : Symbol(undefined)
+
+var rf9 = null || undefined;       // null      || undefined is any
+>rf9 : Symbol(rf9, Decl(logicalOrOperatorWithEveryType.ts, 123, 3))
+>undefined : Symbol(undefined)
+
+var rf10 = undefined || undefined; // undefined || undefined is any
+>rf10 : Symbol(rf10, Decl(logicalOrOperatorWithEveryType.ts, 124, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+

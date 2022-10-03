@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/** @type {boolean} */
+var /** @type {string} */ x,
+>x : Symbol(x, Decl(foo.js, 1, 3))
+
+    /** @type {number} */ y;
+>y : Symbol(y, Decl(foo.js, 1, 28))
+

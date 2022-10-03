@@ -1,0 +1,26 @@
+=== tests/cases/compiler/staticMismatchBecauseOfPrototype.ts ===
+interface A {
+>A : Symbol(A, Decl(staticMismatchBecauseOfPrototype.ts, 0, 0), Decl(staticMismatchBecauseOfPrototype.ts, 3, 11))
+
+    n: number;
+>n : Symbol(A.n, Decl(staticMismatchBecauseOfPrototype.ts, 0, 13))
+}
+declare var A: {
+>A : Symbol(A, Decl(staticMismatchBecauseOfPrototype.ts, 0, 0), Decl(staticMismatchBecauseOfPrototype.ts, 3, 11))
+
+    prototype: A;
+>prototype : Symbol(prototype, Decl(staticMismatchBecauseOfPrototype.ts, 3, 16))
+>A : Symbol(A, Decl(staticMismatchBecauseOfPrototype.ts, 0, 0), Decl(staticMismatchBecauseOfPrototype.ts, 3, 11))
+
+    new(): A;
+>A : Symbol(A, Decl(staticMismatchBecauseOfPrototype.ts, 0, 0), Decl(staticMismatchBecauseOfPrototype.ts, 3, 11))
+
+};
+
+class B extends A {
+>B : Symbol(B, Decl(staticMismatchBecauseOfPrototype.ts, 6, 2))
+>A : Symbol(A, Decl(staticMismatchBecauseOfPrototype.ts, 0, 0), Decl(staticMismatchBecauseOfPrototype.ts, 3, 11))
+
+    n = "";
+>n : Symbol(B.n, Decl(staticMismatchBecauseOfPrototype.ts, 8, 19))
+}

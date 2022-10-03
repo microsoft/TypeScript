@@ -1,0 +1,113 @@
+=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithStringType.ts ===
+// - operator on string type
+var STRING: string;
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : Symbol(STRING1, Decl(negateOperatorWithStringType.ts, 2, 3))
+
+function foo(): string { return "abc"; }
+>foo : Symbol(foo, Decl(negateOperatorWithStringType.ts, 2, 36))
+
+class A {
+>A : Symbol(A, Decl(negateOperatorWithStringType.ts, 4, 40))
+
+    public a: string;
+>a : Symbol(A.a, Decl(negateOperatorWithStringType.ts, 6, 9))
+
+    static foo() { return ""; }
+>foo : Symbol(A.foo, Decl(negateOperatorWithStringType.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(negateOperatorWithStringType.ts, 9, 1))
+
+    export var n: string;
+>n : Symbol(n, Decl(negateOperatorWithStringType.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(negateOperatorWithStringType.ts, 14, 3))
+>A : Symbol(A, Decl(negateOperatorWithStringType.ts, 4, 40))
+
+// string type var
+var ResultIsNumber1 = -STRING;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(negateOperatorWithStringType.ts, 17, 3))
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+
+var ResultIsNumber2 = -STRING1;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(negateOperatorWithStringType.ts, 18, 3))
+>STRING1 : Symbol(STRING1, Decl(negateOperatorWithStringType.ts, 2, 3))
+
+// string type literal
+var ResultIsNumber3 = -"";
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(negateOperatorWithStringType.ts, 21, 3))
+
+var ResultIsNumber4 = -{ x: "", y: "" };
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(negateOperatorWithStringType.ts, 22, 3))
+>x : Symbol(x, Decl(negateOperatorWithStringType.ts, 22, 24))
+>y : Symbol(y, Decl(negateOperatorWithStringType.ts, 22, 31))
+
+var ResultIsNumber5 = -{ x: "", y: (s: string) => { return s; } };
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(negateOperatorWithStringType.ts, 23, 3))
+>x : Symbol(x, Decl(negateOperatorWithStringType.ts, 23, 24))
+>y : Symbol(y, Decl(negateOperatorWithStringType.ts, 23, 31))
+>s : Symbol(s, Decl(negateOperatorWithStringType.ts, 23, 36))
+>s : Symbol(s, Decl(negateOperatorWithStringType.ts, 23, 36))
+
+// string type expressions
+var ResultIsNumber6 = -objA.a;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(negateOperatorWithStringType.ts, 26, 3))
+>objA.a : Symbol(A.a, Decl(negateOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(negateOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(negateOperatorWithStringType.ts, 6, 9))
+
+var ResultIsNumber7 = -M.n;
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(negateOperatorWithStringType.ts, 27, 3))
+>M.n : Symbol(M.n, Decl(negateOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(negateOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(negateOperatorWithStringType.ts, 11, 14))
+
+var ResultIsNumber8 = -STRING1[0];
+>ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(negateOperatorWithStringType.ts, 28, 3))
+>STRING1 : Symbol(STRING1, Decl(negateOperatorWithStringType.ts, 2, 3))
+
+var ResultIsNumber9 = -foo();
+>ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(negateOperatorWithStringType.ts, 29, 3))
+>foo : Symbol(foo, Decl(negateOperatorWithStringType.ts, 2, 36))
+
+var ResultIsNumber10 = -A.foo();
+>ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(negateOperatorWithStringType.ts, 30, 3))
+>A.foo : Symbol(A.foo, Decl(negateOperatorWithStringType.ts, 7, 21))
+>A : Symbol(A, Decl(negateOperatorWithStringType.ts, 4, 40))
+>foo : Symbol(A.foo, Decl(negateOperatorWithStringType.ts, 7, 21))
+
+var ResultIsNumber11 = -(STRING + STRING);
+>ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(negateOperatorWithStringType.ts, 31, 3))
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+
+var ResultIsNumber12 = -STRING.charAt(0);
+>ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(negateOperatorWithStringType.ts, 32, 3))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+// miss assignment operators
+-"";
+-STRING;
+>STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))
+
+-STRING1;
+>STRING1 : Symbol(STRING1, Decl(negateOperatorWithStringType.ts, 2, 3))
+
+-foo();
+>foo : Symbol(foo, Decl(negateOperatorWithStringType.ts, 2, 36))
+
+-objA.a,M.n;
+>objA.a : Symbol(A.a, Decl(negateOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(negateOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(negateOperatorWithStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(negateOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(negateOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(negateOperatorWithStringType.ts, 11, 14))
+

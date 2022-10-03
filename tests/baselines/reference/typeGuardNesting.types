@@ -1,0 +1,124 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNesting.ts ===
+let strOrBool: string|boolean;
+>strOrBool : string | boolean
+
+if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string') {
+>(typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string' : boolean
+>(typeof strOrBool === 'boolean' && !strOrBool) : boolean
+>typeof strOrBool === 'boolean' && !strOrBool : boolean
+>typeof strOrBool === 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'boolean' : "boolean"
+>!strOrBool : boolean
+>strOrBool : boolean
+>typeof strOrBool === 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | true
+>'string' : "string"
+
+	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
+>label : string
+>(typeof strOrBool === 'string') ? strOrBool : "string" : string
+>(typeof strOrBool === 'string') : boolean
+>typeof strOrBool === 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'string' : "string"
+>strOrBool : string
+>"string" : "string"
+
+	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
+>bool : boolean
+>(typeof strOrBool === 'boolean') ? strOrBool : false : boolean
+>(typeof strOrBool === 'boolean') : boolean
+>typeof strOrBool === 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'boolean' : "boolean"
+>strOrBool : boolean
+>false : false
+
+	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
+>label2 : string
+>(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string
+>(typeof strOrBool !== 'boolean') : boolean
+>typeof strOrBool !== 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'boolean' : "boolean"
+>strOrBool : string
+>"string" : "string"
+
+	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
+>bool2 : boolean
+>(typeof strOrBool !== 'string') ? strOrBool : false : boolean
+>(typeof strOrBool !== 'string') : boolean
+>typeof strOrBool !== 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'string' : "string"
+>strOrBool : boolean
+>false : false
+}
+
+if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boolean') {
+>(typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boolean' : boolean
+>(typeof strOrBool !== 'string' && !strOrBool) : boolean
+>typeof strOrBool !== 'string' && !strOrBool : boolean
+>typeof strOrBool !== 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'string' : "string"
+>!strOrBool : boolean
+>strOrBool : boolean
+>typeof strOrBool !== 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | true
+>'boolean' : "boolean"
+
+	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
+>label : string
+>(typeof strOrBool === 'string') ? strOrBool : "string" : string
+>(typeof strOrBool === 'string') : boolean
+>typeof strOrBool === 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'string' : "string"
+>strOrBool : string
+>"string" : "string"
+
+	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
+>bool : boolean
+>(typeof strOrBool === 'boolean') ? strOrBool : false : boolean
+>(typeof strOrBool === 'boolean') : boolean
+>typeof strOrBool === 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'boolean' : "boolean"
+>strOrBool : boolean
+>false : false
+
+	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
+>label2 : string
+>(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string
+>(typeof strOrBool !== 'boolean') : boolean
+>typeof strOrBool !== 'boolean' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'boolean' : "boolean"
+>strOrBool : string
+>"string" : "string"
+
+	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
+>bool2 : boolean
+>(typeof strOrBool !== 'string') ? strOrBool : false : boolean
+>(typeof strOrBool !== 'string') : boolean
+>typeof strOrBool !== 'string' : boolean
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrBool : string | boolean
+>'string' : "string"
+>strOrBool : boolean
+>false : false
+}
+

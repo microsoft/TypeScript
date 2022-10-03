@@ -1,0 +1,8 @@
+=== tests/cases/compiler/FunctionDeclaration6.ts ===
+{
+    function foo();
+>foo : () => any
+
+    function bar() { }
+>bar : () => void
+}

@@ -1,0 +1,18 @@
+tests/cases/compiler/commentsOnObjectLiteral2.ts(1,14): error TS2304: Cannot find name 'makeClass'.
+
+
+==== tests/cases/compiler/commentsOnObjectLiteral2.ts (1 errors) ====
+    var Person = makeClass( 
+                 ~~~~~~~~~
+!!! error TS2304: Cannot find name 'makeClass'.
+       { 
+           /** 
+            This is just another way to define a constructor. 
+            @constructs 
+            @param {string} name The name of the person. 
+            */ 
+           initialize: function(name) { 
+               this.name = name; 
+           } /* trailing comment 1*/, 
+       } 
+    );

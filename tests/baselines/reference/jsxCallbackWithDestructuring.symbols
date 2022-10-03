@@ -1,0 +1,81 @@
+=== tests/cases/compiler/jsxCallbackWithDestructuring.tsx ===
+// minimal component
+interface Component<P = {}, S = {}> { }
+>Component : Symbol(Component, Decl(jsxCallbackWithDestructuring.tsx, 0, 0), Decl(jsxCallbackWithDestructuring.tsx, 1, 39))
+>P : Symbol(P, Decl(jsxCallbackWithDestructuring.tsx, 1, 20), Decl(jsxCallbackWithDestructuring.tsx, 2, 24))
+>S : Symbol(S, Decl(jsxCallbackWithDestructuring.tsx, 1, 27), Decl(jsxCallbackWithDestructuring.tsx, 2, 26))
+
+declare class Component<P, S> {
+>Component : Symbol(Component, Decl(jsxCallbackWithDestructuring.tsx, 0, 0), Decl(jsxCallbackWithDestructuring.tsx, 1, 39))
+>P : Symbol(P, Decl(jsxCallbackWithDestructuring.tsx, 1, 20), Decl(jsxCallbackWithDestructuring.tsx, 2, 24))
+>S : Symbol(S, Decl(jsxCallbackWithDestructuring.tsx, 1, 27), Decl(jsxCallbackWithDestructuring.tsx, 2, 26))
+
+    constructor(props: P, context?: any);
+>props : Symbol(props, Decl(jsxCallbackWithDestructuring.tsx, 3, 16))
+>P : Symbol(P, Decl(jsxCallbackWithDestructuring.tsx, 1, 20), Decl(jsxCallbackWithDestructuring.tsx, 2, 24))
+>context : Symbol(context, Decl(jsxCallbackWithDestructuring.tsx, 3, 25))
+
+    render(): {};
+>render : Symbol(Component.render, Decl(jsxCallbackWithDestructuring.tsx, 3, 41))
+
+    props: Readonly<{ children?: {} }> & Readonly<P>;
+>props : Symbol(Component.props, Decl(jsxCallbackWithDestructuring.tsx, 4, 17))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(jsxCallbackWithDestructuring.tsx, 5, 21))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(jsxCallbackWithDestructuring.tsx, 1, 20), Decl(jsxCallbackWithDestructuring.tsx, 2, 24))
+}
+
+declare global {
+>global : Symbol(global, Decl(jsxCallbackWithDestructuring.tsx, 6, 1))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxCallbackWithDestructuring.tsx, 8, 16))
+
+        interface Element  { }
+>Element : Symbol(Element, Decl(jsxCallbackWithDestructuring.tsx, 9, 19))
+
+        interface ElementClass  {
+>ElementClass : Symbol(ElementClass, Decl(jsxCallbackWithDestructuring.tsx, 10, 30))
+
+            render(): {};
+>render : Symbol(ElementClass.render, Decl(jsxCallbackWithDestructuring.tsx, 11, 33))
+        }
+        interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxCallbackWithDestructuring.tsx, 13, 9))
+>props : Symbol(ElementAttributesProperty.props, Decl(jsxCallbackWithDestructuring.tsx, 14, 45))
+
+        interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxCallbackWithDestructuring.tsx, 14, 58))
+>children : Symbol(ElementChildrenAttribute.children, Decl(jsxCallbackWithDestructuring.tsx, 15, 44))
+
+        interface IntrinsicAttributes  { }
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(jsxCallbackWithDestructuring.tsx, 15, 60))
+
+        interface IntrinsicClassAttributes<T> { }
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(jsxCallbackWithDestructuring.tsx, 16, 42))
+>T : Symbol(T, Decl(jsxCallbackWithDestructuring.tsx, 17, 43))
+    }
+}
+
+export interface RouteProps {
+>RouteProps : Symbol(RouteProps, Decl(jsxCallbackWithDestructuring.tsx, 19, 1))
+
+    children?: (props: { x: number }) => any;
+>children : Symbol(RouteProps.children, Decl(jsxCallbackWithDestructuring.tsx, 21, 29))
+>props : Symbol(props, Decl(jsxCallbackWithDestructuring.tsx, 22, 16))
+>x : Symbol(x, Decl(jsxCallbackWithDestructuring.tsx, 22, 24))
+}
+export class MyComponent<T extends RouteProps = RouteProps> extends Component<T> { }
+>MyComponent : Symbol(MyComponent, Decl(jsxCallbackWithDestructuring.tsx, 23, 1))
+>T : Symbol(T, Decl(jsxCallbackWithDestructuring.tsx, 24, 25))
+>RouteProps : Symbol(RouteProps, Decl(jsxCallbackWithDestructuring.tsx, 19, 1))
+>RouteProps : Symbol(RouteProps, Decl(jsxCallbackWithDestructuring.tsx, 19, 1))
+>Component : Symbol(Component, Decl(jsxCallbackWithDestructuring.tsx, 0, 0), Decl(jsxCallbackWithDestructuring.tsx, 1, 39))
+>T : Symbol(T, Decl(jsxCallbackWithDestructuring.tsx, 24, 25))
+
+<MyComponent children={({ x }) => {}}/>
+>MyComponent : Symbol(MyComponent, Decl(jsxCallbackWithDestructuring.tsx, 23, 1))
+>children : Symbol(children, Decl(jsxCallbackWithDestructuring.tsx, 25, 12))
+>x : Symbol(x, Decl(jsxCallbackWithDestructuring.tsx, 25, 25))
+

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsNotContextuallyTyped.ts ===
+// The || operator permits the operands to be of any type.
+// If the || expression is not contextually typed, the right operand is contextually typed
+// by the type of the left operand and the result is of the best common type of the two
+// operand types.
+
+
+var a: (a: string) => string;
+>a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 3))
+>a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 8))
+
+// bug 786110
+var r = a || ((a) => a.toLowerCase());
+>r : Symbol(r, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 3))
+>a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 3))
+>a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 15))
+>a.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 15))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

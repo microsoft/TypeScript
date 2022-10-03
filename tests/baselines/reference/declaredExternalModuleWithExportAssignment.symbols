@@ -1,0 +1,46 @@
+=== tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts ===
+declare module 'connect' {
+>'connect' : Symbol("connect", Decl(declaredExternalModuleWithExportAssignment.ts, 0, 0))
+
+    interface connectModule {
+>connectModule : Symbol(connectModule, Decl(declaredExternalModuleWithExportAssignment.ts, 0, 26))
+
+        (res, req, next): void;
+>res : Symbol(res, Decl(declaredExternalModuleWithExportAssignment.ts, 2, 9))
+>req : Symbol(req, Decl(declaredExternalModuleWithExportAssignment.ts, 2, 13))
+>next : Symbol(next, Decl(declaredExternalModuleWithExportAssignment.ts, 2, 18))
+    }
+
+    interface connectExport {
+>connectExport : Symbol(connectExport, Decl(declaredExternalModuleWithExportAssignment.ts, 3, 5))
+
+        use: (mod: connectModule) => connectExport;
+>use : Symbol(connectExport.use, Decl(declaredExternalModuleWithExportAssignment.ts, 5, 29))
+>mod : Symbol(mod, Decl(declaredExternalModuleWithExportAssignment.ts, 6, 14))
+>connectModule : Symbol(connectModule, Decl(declaredExternalModuleWithExportAssignment.ts, 0, 26))
+>connectExport : Symbol(connectExport, Decl(declaredExternalModuleWithExportAssignment.ts, 3, 5))
+
+        listen: (port: number) => void;
+>listen : Symbol(connectExport.listen, Decl(declaredExternalModuleWithExportAssignment.ts, 6, 51))
+>port : Symbol(port, Decl(declaredExternalModuleWithExportAssignment.ts, 7, 17))
+    }
+
+    var server: {
+>server : Symbol(server, Decl(declaredExternalModuleWithExportAssignment.ts, 10, 7))
+
+        (): connectExport;
+>connectExport : Symbol(connectExport, Decl(declaredExternalModuleWithExportAssignment.ts, 3, 5))
+
+        test1: connectModule;
+>test1 : Symbol(test1, Decl(declaredExternalModuleWithExportAssignment.ts, 11, 26))
+>connectModule : Symbol(connectModule, Decl(declaredExternalModuleWithExportAssignment.ts, 0, 26))
+
+        test2(): connectModule;
+>test2 : Symbol(test2, Decl(declaredExternalModuleWithExportAssignment.ts, 12, 29))
+>connectModule : Symbol(connectModule, Decl(declaredExternalModuleWithExportAssignment.ts, 0, 26))
+
+    };
+    export = server;
+>server : Symbol(server, Decl(declaredExternalModuleWithExportAssignment.ts, 10, 7))
+}
+

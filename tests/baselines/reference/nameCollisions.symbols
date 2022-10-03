@@ -1,0 +1,91 @@
+=== tests/cases/compiler/nameCollisions.ts ===
+module T {
+>T : Symbol(T, Decl(nameCollisions.ts, 0, 0))
+
+    var x = 2;
+>x : Symbol(x, Decl(nameCollisions.ts, 1, 7))
+
+    module x { // error
+>x : Symbol(x, Decl(nameCollisions.ts, 1, 14))
+
+        export class Bar {
+>Bar : Symbol(Bar, Decl(nameCollisions.ts, 3, 14))
+
+            test: number;
+>test : Symbol(Bar.test, Decl(nameCollisions.ts, 4, 26))
+        }
+    }
+
+    module z {
+>z : Symbol(z, Decl(nameCollisions.ts, 7, 5))
+
+        var t;
+>t : Symbol(t, Decl(nameCollisions.ts, 10, 11))
+    }
+    var z; // error
+>z : Symbol(z, Decl(nameCollisions.ts, 12, 7))
+
+    module y {
+>y : Symbol(y, Decl(nameCollisions.ts, 12, 10), Decl(nameCollisions.ts, 16, 5))
+
+        var b;
+>b : Symbol(b, Decl(nameCollisions.ts, 15, 11))
+    }
+
+    class y { } // error
+>y : Symbol(y, Decl(nameCollisions.ts, 12, 10), Decl(nameCollisions.ts, 16, 5))
+
+    var w;
+>w : Symbol(w, Decl(nameCollisions.ts, 20, 7), Decl(nameCollisions.ts, 20, 10))
+
+    module w { } //ok
+>w : Symbol(w, Decl(nameCollisions.ts, 20, 7), Decl(nameCollisions.ts, 20, 10))
+
+    var f;
+>f : Symbol(f, Decl(nameCollisions.ts, 23, 7))
+
+    function f() { } //error
+>f : Symbol(f, Decl(nameCollisions.ts, 23, 10))
+
+    function f2() { }
+>f2 : Symbol(f2, Decl(nameCollisions.ts, 24, 20))
+
+    var f2; // error
+>f2 : Symbol(f2, Decl(nameCollisions.ts, 27, 7))
+
+    var i;
+>i : Symbol(i, Decl(nameCollisions.ts, 29, 7), Decl(nameCollisions.ts, 29, 10))
+
+    interface i { } //ok
+>i : Symbol(i, Decl(nameCollisions.ts, 29, 7), Decl(nameCollisions.ts, 29, 10))
+
+    class C { }
+>C : Symbol(C, Decl(nameCollisions.ts, 32, 15), Decl(nameCollisions.ts, 30, 19))
+
+    function C() { } // error
+>C : Symbol(C, Decl(nameCollisions.ts, 32, 15), Decl(nameCollisions.ts, 30, 19))
+
+    function C2() { }
+>C2 : Symbol(C2, Decl(nameCollisions.ts, 33, 20), Decl(nameCollisions.ts, 35, 21))
+
+    class C2 { } // error
+>C2 : Symbol(C2, Decl(nameCollisions.ts, 33, 20), Decl(nameCollisions.ts, 35, 21))
+
+    function fi() { }
+>fi : Symbol(fi, Decl(nameCollisions.ts, 36, 16), Decl(nameCollisions.ts, 38, 21))
+
+    interface fi { } // ok
+>fi : Symbol(fi, Decl(nameCollisions.ts, 36, 16), Decl(nameCollisions.ts, 38, 21))
+
+    class cli { }
+>cli : Symbol(cli, Decl(nameCollisions.ts, 39, 20), Decl(nameCollisions.ts, 41, 17))
+
+    interface cli { }
+>cli : Symbol(cli, Decl(nameCollisions.ts, 39, 20), Decl(nameCollisions.ts, 41, 17))
+
+    interface cli2 { }
+>cli2 : Symbol(cli2, Decl(nameCollisions.ts, 42, 21), Decl(nameCollisions.ts, 44, 22))
+
+    class cli2 { }
+>cli2 : Symbol(cli2, Decl(nameCollisions.ts, 42, 21), Decl(nameCollisions.ts, 44, 22))
+}

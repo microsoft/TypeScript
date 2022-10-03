@@ -1,0 +1,76 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : typeof React
+
+declare function Component<U>(l: U): JSX.Element;
+>Component : <U>(l: U) => JSX.Element
+>l : U
+>JSX : any
+
+function createComponent<T extends { prop: number }>(arg: T) {
+>createComponent : <T extends { prop: number; }>(arg: T) => void
+>prop : number
+>arg : T
+
+    let a1 = <Component {...arg} />;
+>a1 : JSX.Element
+><Component {...arg} /> : JSX.Element
+>Component : <U>(l: U) => JSX.Element
+>arg : T
+
+    let a2 = <Component {...arg} prop1 />;
+>a2 : JSX.Element
+><Component {...arg} prop1 /> : JSX.Element
+>Component : <U>(l: U) => JSX.Element
+>arg : T
+>prop1 : true
+}
+
+declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
+>ComponentSpecific : <U>(l: {    prop: U;}) => JSX.Element
+>l : { prop: U; }
+>prop : U
+>JSX : any
+
+declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
+>ComponentSpecific1 : <U>(l: {    prop: U;    "ignore-prop": number;}) => JSX.Element
+>l : { prop: U; "ignore-prop": number; }
+>prop : U
+>"ignore-prop" : number
+>JSX : any
+
+function Bar<T extends { prop: number }>(arg: T) {
+>Bar : <T extends { prop: number; }>(arg: T) => void
+>prop : number
+>arg : T
+
+    let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
+>a1 : JSX.Element
+><ComponentSpecific {...arg} ignore-prop="hi" /> : JSX.Element
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>arg : T
+>ignore-prop : string
+
+    let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
+>a2 : JSX.Element
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
+>arg : T
+>ignore-prop : number
+>10 : 10
+
+    let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
+>a3 : JSX.Element
+><ComponentSpecific {...arg} prop="hello" /> : JSX.Element
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>arg : T
+>prop : string
+
+    let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
+>a4 : JSX.Element
+><ComponentSpecific {...arg} prop1="hello" /> : JSX.Element
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>arg : T
+>prop1 : string
+}
+

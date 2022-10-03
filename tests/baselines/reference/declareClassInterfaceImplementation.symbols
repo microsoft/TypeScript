@@ -1,0 +1,14 @@
+=== tests/cases/compiler/declareClassInterfaceImplementation.ts ===
+interface IBuffer {
+>IBuffer : Symbol(IBuffer, Decl(declareClassInterfaceImplementation.ts, 0, 0))
+
+    [index: number]: number;
+>index : Symbol(index, Decl(declareClassInterfaceImplementation.ts, 1, 5))
+}
+
+declare class Buffer implements IBuffer {
+>Buffer : Symbol(Buffer, Decl(declareClassInterfaceImplementation.ts, 2, 1))
+>IBuffer : Symbol(IBuffer, Decl(declareClassInterfaceImplementation.ts, 0, 0))
+
+}
+

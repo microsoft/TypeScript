@@ -1,0 +1,291 @@
+=== tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts ===
+class SomeBase {
+>SomeBase : SomeBase
+
+    private n;
+>n : any
+
+    public s: string;
+>s : string
+}
+class SomeDerived1 extends SomeBase {
+>SomeDerived1 : SomeDerived1
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+class SomeDerived2 extends SomeBase {
+>SomeDerived2 : SomeDerived2
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+class SomeDerived3 extends SomeBase {
+>SomeDerived3 : SomeDerived3
+>SomeBase : SomeBase
+
+    private m;
+>m : any
+}
+
+
+// Ambiguous call picks the first overload in declaration order
+class fn1 {
+>fn1 : fn1
+
+    constructor(s: string);
+>s : string
+
+    constructor(s: number);
+>s : number
+
+    constructor() { }
+}
+
+new fn1(undefined);
+>new fn1(undefined) : fn1
+>fn1 : typeof fn1
+>undefined : undefined
+
+// No candidate overloads found
+new fn1({}); // Error
+>new fn1({}) : fn1
+>fn1 : typeof fn1
+>{} : {}
+
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
+class fn2<T> {
+>fn2 : fn2<T>
+
+    constructor(s: string, n: number);
+>s : string
+>n : number
+
+    constructor(n: number, t: T);
+>n : number
+>t : T
+
+    constructor() { }
+}
+
+var d = new fn2<Date>(0, undefined);
+>d : fn2<Date>
+>new fn2<Date>(0, undefined) : fn2<Date>
+>fn2 : typeof fn2
+>0 : 0
+>undefined : undefined
+
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
+var s = new fn2(0, '');
+>s : fn2<string>
+>new fn2(0, '') : fn2<string>
+>fn2 : typeof fn2
+>0 : 0
+>'' : ""
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
+new fn2<Date>('', 0); // OK
+>new fn2<Date>('', 0) : fn2<Date>
+>fn2 : typeof fn2
+>'' : ""
+>0 : 0
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
+new fn2('', 0); // OK
+>new fn2('', 0) : fn2<unknown>
+>fn2 : typeof fn2
+>'' : ""
+>0 : 0
+
+// Generic overloads with differing arity called without type arguments
+class fn3<T, U, V> {
+>fn3 : fn3<T, U, V>
+
+    constructor(n: T);
+>n : T
+
+    constructor(s: string, t: T, u: U);
+>s : string
+>t : T
+>u : U
+
+    constructor(v: V, u: U, t: T);
+>v : V
+>u : U
+>t : T
+
+    constructor() { }
+}
+
+new fn3(3);
+>new fn3(3) : fn3<number, unknown, unknown>
+>fn3 : typeof fn3
+>3 : 3
+
+new fn3('', 3, '');
+>new fn3('', 3, '') : fn3<number, string, unknown>
+>fn3 : typeof fn3
+>'' : ""
+>3 : 3
+>'' : ""
+
+new fn3(5, 5, 5);
+>new fn3(5, 5, 5) : fn3<number, number, number>
+>fn3 : typeof fn3
+>5 : 5
+>5 : 5
+>5 : 5
+
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
+new fn3<number>(4); // Error
+>new fn3<number>(4) : fn3<number, unknown, unknown>
+>fn3 : typeof fn3
+>4 : 4
+
+new fn3<string, string>('', '', '');  // Error
+>new fn3<string, string>('', '', '') : fn3<string, string, unknown>
+>fn3 : typeof fn3
+>'' : ""
+>'' : ""
+>'' : ""
+
+new fn3<number, string, string>('', '', 3);
+>new fn3<number, string, string>('', '', 3) : fn3<number, string, string>
+>fn3 : typeof fn3
+>'' : ""
+>'' : ""
+>3 : 3
+
+// Generic overloads with differing arity called with type argument count that doesn't match any overload
+new fn3<number, number, number, number>(); // Error
+>new fn3<number, number, number, number>() : fn3<number, number, number>
+>fn3 : typeof fn3
+
+// Generic overloads with constraints called with type arguments that satisfy the constraints
+class fn4<T extends string, U extends number> {
+>fn4 : fn4<T, U>
+
+    constructor(n: T, m: U);
+>n : T
+>m : U
+
+    constructor() { }
+}
+new fn4<string, number>('', 3);
+>new fn4<string, number>('', 3) : fn4<string, number>
+>fn4 : typeof fn4
+>'' : ""
+>3 : 3
+
+new fn4<string, number>(3, ''); // Error
+>new fn4<string, number>(3, '') : fn4<string, number>
+>fn4 : typeof fn4
+>3 : 3
+>'' : ""
+
+new fn4<number, string>('', 3); // Error
+>new fn4<number, string>('', 3) : fn4<number, string>
+>fn4 : typeof fn4
+>'' : ""
+>3 : 3
+
+new fn4<number, string>(3, ''); // Error
+>new fn4<number, string>(3, '') : fn4<number, string>
+>fn4 : typeof fn4
+>3 : 3
+>'' : ""
+
+// Generic overloads with constraints called without type arguments but with types that satisfy the constraints
+new fn4('', 3);
+>new fn4('', 3) : fn4<"", 3>
+>fn4 : typeof fn4
+>'' : ""
+>3 : 3
+
+new fn4(3, ''); // Error
+>new fn4(3, '') : fn4<string, number>
+>fn4 : typeof fn4
+>3 : 3
+>'' : ""
+
+new fn4(3, undefined); // Error
+>new fn4(3, undefined) : fn4<string, any>
+>fn4 : typeof fn4
+>3 : 3
+>undefined : undefined
+
+new fn4('', null);
+>new fn4('', null) : fn4<"", any>
+>fn4 : typeof fn4
+>'' : ""
+>null : null
+
+// Generic overloads with constraints called with type arguments that do not satisfy the constraints
+new fn4<boolean, Date>(null, null); // Error
+>new fn4<boolean, Date>(null, null) : fn4<boolean, Date>
+>fn4 : typeof fn4
+>null : null
+>null : null
+
+// Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
+new fn4(true, null); // Error
+>new fn4(true, null) : fn4<string, any>
+>fn4 : typeof fn4
+>true : true
+>null : null
+
+new fn4(null, true); // Error
+>new fn4(null, true) : fn4<any, number>
+>fn4 : typeof fn4
+>null : null
+>true : true
+
+// Non - generic overloads where contextual typing of function arguments has errors
+class fn5 {
+>fn5 : fn5
+
+    constructor(f: (n: string) => void);
+>f : (n: string) => void
+>n : string
+
+    constructor(f: (n: number) => void);
+>f : (n: number) => void
+>n : number
+
+    constructor() { return undefined; }
+>undefined : undefined
+}
+new fn5((n) => n.toFixed());
+>new fn5((n) => n.toFixed()) : fn5
+>fn5 : typeof fn5
+>(n) => n.toFixed() : (n: string) => any
+>n : string
+>n.toFixed() : any
+>n.toFixed : any
+>n : string
+>toFixed : any
+
+new fn5((n) => n.substr(0));
+>new fn5((n) => n.substr(0)) : fn5
+>fn5 : typeof fn5
+>(n) => n.substr(0) : (n: string) => string
+>n : string
+>n.substr(0) : string
+>n.substr : (from: number, length?: number) => string
+>n : string
+>substr : (from: number, length?: number) => string
+>0 : 0
+
+new fn5((n) => n.blah); // Error
+>new fn5((n) => n.blah) : fn5
+>fn5 : typeof fn5
+>(n) => n.blah : (n: string) => any
+>n : string
+>n.blah : any
+>n : string
+>blah : any
+
+
+

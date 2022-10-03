@@ -1,0 +1,20 @@
+{
+    "scenario": "declarations_ImportedInPrivate",
+    "projectRoot": "tests/cases/projects/declarations_ImportedInPrivate",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "private_m4.ts",
+        "useModule.ts"
+    ],
+    "emittedFiles": [
+        "private_m4.js",
+        "private_m4.d.ts",
+        "useModule.js",
+        "useModule.d.ts"
+    ]
+}

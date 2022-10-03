@@ -1,0 +1,44 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTwoOperandsAreAny.ts ===
+var a: any;
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r1 = a < a;
+>r1 : Symbol(r1, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 2, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r2 = a > a;
+>r2 : Symbol(r2, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 3, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r3 = a <= a;
+>r3 : Symbol(r3, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 4, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r4 = a >= a;
+>r4 : Symbol(r4, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 5, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r5 = a == a;
+>r5 : Symbol(r5, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 6, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r6 = a != a;
+>r6 : Symbol(r6, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 7, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r7 = a === a;
+>r7 : Symbol(r7, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 8, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+
+var r8 = a !== a;
+>r8 : Symbol(r8, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 9, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithTwoOperandsAreAny.ts, 0, 3))
+

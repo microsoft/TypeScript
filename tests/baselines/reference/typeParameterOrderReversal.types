@@ -1,0 +1,30 @@
+=== tests/cases/compiler/typeParameterOrderReversal.ts ===
+interface X<T> {
+    n: T;
+>n : T
+}
+
+// Only difference here is order of type parameters
+function uFirst<U extends X<T>, T>(x: U) { }
+>uFirst : <U extends X<T>, T>(x: U) => void
+>x : U
+
+function tFirst<T, U extends X<T>>(x: U) { }
+>tFirst : <T, U extends X<T>>(x: U) => void
+>x : U
+
+var z: X<number> = null;
+>z : X<number>
+>null : null
+
+// Both of these should be allowed
+uFirst(z);
+>uFirst(z) : void
+>uFirst : <U extends X<T>, T>(x: U) => void
+>z : X<number>
+
+tFirst(z);
+>tFirst(z) : void
+>tFirst : <T, U extends X<T>>(x: U) => void
+>z : X<number>
+

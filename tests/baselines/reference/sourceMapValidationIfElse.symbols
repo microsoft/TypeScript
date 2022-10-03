@@ -1,0 +1,35 @@
+=== tests/cases/compiler/sourceMapValidationIfElse.ts ===
+var i = 10;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+if (i == 10) {
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+    i++;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+} else
+{
+}
+if (i == 10)
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+{
+    i++;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+}
+else if (i == 20) {
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+    i--;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+} else if (i == 30) {
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+    i += 70;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+
+} else {
+    i--;
+>i : Symbol(i, Decl(sourceMapValidationIfElse.ts, 0, 3))
+}

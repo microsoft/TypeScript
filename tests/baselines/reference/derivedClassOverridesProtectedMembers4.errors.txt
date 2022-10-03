@@ -1,0 +1,22 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(12,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
+  Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
+
+
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts (1 errors) ====
+    var x: { foo: string; }
+    var y: { foo: string; bar: string; }
+    
+    class Base {
+        protected a: typeof x;
+    }
+    
+    class Derived1 extends Base {
+        public a: typeof x;
+    }
+    
+    class Derived2 extends Derived1 {
+          ~~~~~~~~
+!!! error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
+!!! error TS2415:   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
+        protected a: typeof x; // Error, parent was public
+    }

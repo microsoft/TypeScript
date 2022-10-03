@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts ===
+({...{}} = {});
+>({...{}} = {}) : {}
+>{...{}} = {} : {}
+>{...{}} : {}
+>{} : {}
+>{} : {}
+
+({...({})} = {});
+>({...({})} = {}) : {}
+>{...({})} = {} : {}
+>{...({})} : {}
+>({}) : {}
+>{} : {}
+>{} : {}
+
+({...[]} = {});
+>({...[]} = {}) : {}
+>{...[]} = {} : {}
+>{...[]} : { [n: number]: never; length: 0; toString(): string; toLocaleString(): string; pop(): never; push(...items: never[]): number; concat(...items: ConcatArray<never>[]): never[]; concat(...items: ConcatArray<never>[]): never[]; join(separator?: string): string; reverse(): never[]; shift(): never; slice(start?: number, end?: number): never[]; sort(compareFn?: (a: never, b: never) => number): []; splice(start: number, deleteCount?: number): never[]; splice(start: number, deleteCount: number, ...items: never[]): never[]; unshift(...items: never[]): number; indexOf(searchElement: never, fromIndex?: number): number; lastIndexOf(searchElement: never, fromIndex?: number): number; every<S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; some(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any): U[]; filter<S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): never[]; reduce(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never): never; reduce(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never, initialValue: never): never; reduce<U>(callbackfn: (previousValue: U, currentValue: never, currentIndex: number, array: never[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never): never; reduceRight(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never, initialValue: never): never; reduceRight<U>(callbackfn: (previousValue: U, currentValue: never, currentIndex: number, array: never[]) => U, initialValue: U): U; }
+>[] : []
+>{} : {}
+
+({...([])} = {});
+>({...([])} = {}) : {}
+>{...([])} = {} : {}
+>{...([])} : { [n: number]: never; length: 0; toString(): string; toLocaleString(): string; pop(): never; push(...items: never[]): number; concat(...items: ConcatArray<never>[]): never[]; concat(...items: ConcatArray<never>[]): never[]; join(separator?: string): string; reverse(): never[]; shift(): never; slice(start?: number, end?: number): never[]; sort(compareFn?: (a: never, b: never) => number): []; splice(start: number, deleteCount?: number): never[]; splice(start: number, deleteCount: number, ...items: never[]): never[]; unshift(...items: never[]): number; indexOf(searchElement: never, fromIndex?: number): number; lastIndexOf(searchElement: never, fromIndex?: number): number; every<S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; some(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any): U[]; filter<S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): never[]; reduce(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never): never; reduce(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never, initialValue: never): never; reduce<U>(callbackfn: (previousValue: U, currentValue: never, currentIndex: number, array: never[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never): never; reduceRight(callbackfn: (previousValue: never, currentValue: never, currentIndex: number, array: never[]) => never, initialValue: never): never; reduceRight<U>(callbackfn: (previousValue: U, currentValue: never, currentIndex: number, array: never[]) => U, initialValue: U): U; }
+>([]) : []
+>[] : []
+>{} : {}
+

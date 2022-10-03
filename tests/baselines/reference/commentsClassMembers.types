@@ -1,0 +1,773 @@
+=== tests/cases/compiler/commentsClassMembers.ts ===
+/** This is comment for c1*/
+class c1 {
+>c1 : c1
+
+    /** p1 is property of c1*/
+    public p1: number;
+>p1 : number
+
+    /** sum with property*/
+    public p2(/** number to add*/b: number) {
+>p2 : (b: number) => number
+>b : number
+
+        return this.p1 + b;
+>this.p1 + b : number
+>this.p1 : number
+>this : this
+>p1 : number
+>b : number
+
+    } /* trailing comment of method*/
+    /** getter property*/
+    public get p3() {
+>p3 : number
+
+        return this.p2(this.p1);
+>this.p2(this.p1) : number
+>this.p2 : (b: number) => number
+>this : this
+>p2 : (b: number) => number
+>this.p1 : number
+>this : this
+>p1 : number
+
+    }// trailing comment Getter
+    /** setter property*/
+    public set p3(/** this is value*/value: number) {
+>p3 : number
+>value : number
+
+        this.p1 = this.p2(value);
+>this.p1 = this.p2(value) : number
+>this.p1 : number
+>this : this
+>p1 : number
+>this.p2(value) : number
+>this.p2 : (b: number) => number
+>this : this
+>p2 : (b: number) => number
+>value : number
+
+    }// trailing comment Setter
+    /** pp1 is property of c1*/
+    private pp1: number;
+>pp1 : number
+
+    /** sum with property*/
+    private pp2(/** number to add*/b: number) {
+>pp2 : (b: number) => number
+>b : number
+
+        return this.p1 + b;
+>this.p1 + b : number
+>this.p1 : number
+>this : this
+>p1 : number
+>b : number
+
+    } // trailing comment of method
+    /** getter property*/
+    private get pp3() {
+>pp3 : number
+
+        return this.pp2(this.pp1);
+>this.pp2(this.pp1) : number
+>this.pp2 : (b: number) => number
+>this : this
+>pp2 : (b: number) => number
+>this.pp1 : number
+>this : this
+>pp1 : number
+    }
+    /** setter property*/
+    private set pp3( /** this is value*/value: number) {
+>pp3 : number
+>value : number
+
+        this.pp1 = this.pp2(value);
+>this.pp1 = this.pp2(value) : number
+>this.pp1 : number
+>this : this
+>pp1 : number
+>this.pp2(value) : number
+>this.pp2 : (b: number) => number
+>this : this
+>pp2 : (b: number) => number
+>value : number
+    }
+    /** Constructor method*/
+    constructor() {
+    }
+    /** s1 is static property of c1*/
+    static s1: number;
+>s1 : number
+
+    /** static sum with property*/
+    static s2(/** number to add*/b: number) {
+>s2 : (b: number) => number
+>b : number
+
+        return c1.s1 + b;
+>c1.s1 + b : number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+>b : number
+    }
+    /** static getter property*/
+    static get s3() {
+>s3 : number
+
+        return c1.s2(c1.s1);
+>c1.s2(c1.s1) : number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+
+    } /*trailing comment 1 getter*/
+    /** setter property*/
+    static set s3( /** this is value*/value: number) {
+>s3 : number
+>value : number
+
+        c1.s1 = c1.s2(value);
+>c1.s1 = c1.s2(value) : number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+>c1.s2(value) : number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+>value : number
+
+    }/*trailing comment 2 */ /*setter*/
+    public nc_p1: number;
+>nc_p1 : number
+
+    public nc_p2(b: number) {
+>nc_p2 : (b: number) => number
+>b : number
+
+        return this.nc_p1 + b;
+>this.nc_p1 + b : number
+>this.nc_p1 : number
+>this : this
+>nc_p1 : number
+>b : number
+    }
+    public get nc_p3() {
+>nc_p3 : number
+
+        return this.nc_p2(this.nc_p1);
+>this.nc_p2(this.nc_p1) : number
+>this.nc_p2 : (b: number) => number
+>this : this
+>nc_p2 : (b: number) => number
+>this.nc_p1 : number
+>this : this
+>nc_p1 : number
+    }
+    public set nc_p3(value: number) {
+>nc_p3 : number
+>value : number
+
+        this.nc_p1 = this.nc_p2(value);
+>this.nc_p1 = this.nc_p2(value) : number
+>this.nc_p1 : number
+>this : this
+>nc_p1 : number
+>this.nc_p2(value) : number
+>this.nc_p2 : (b: number) => number
+>this : this
+>nc_p2 : (b: number) => number
+>value : number
+    }
+    private nc_pp1: number;
+>nc_pp1 : number
+
+    private nc_pp2(b: number) {
+>nc_pp2 : (b: number) => number
+>b : number
+
+        return this.nc_pp1 + b;
+>this.nc_pp1 + b : number
+>this.nc_pp1 : number
+>this : this
+>nc_pp1 : number
+>b : number
+    }
+    private get nc_pp3() {
+>nc_pp3 : number
+
+        return this.nc_pp2(this.nc_pp1);
+>this.nc_pp2(this.nc_pp1) : number
+>this.nc_pp2 : (b: number) => number
+>this : this
+>nc_pp2 : (b: number) => number
+>this.nc_pp1 : number
+>this : this
+>nc_pp1 : number
+    }
+    private set nc_pp3(value: number) {
+>nc_pp3 : number
+>value : number
+
+        this.nc_pp1 = this.nc_pp2(value);
+>this.nc_pp1 = this.nc_pp2(value) : number
+>this.nc_pp1 : number
+>this : this
+>nc_pp1 : number
+>this.nc_pp2(value) : number
+>this.nc_pp2 : (b: number) => number
+>this : this
+>nc_pp2 : (b: number) => number
+>value : number
+    }
+    static nc_s1: number;
+>nc_s1 : number
+
+    static nc_s2(b: number) {
+>nc_s2 : (b: number) => number
+>b : number
+
+        return c1.nc_s1 + b;
+>c1.nc_s1 + b : number
+>c1.nc_s1 : number
+>c1 : typeof c1
+>nc_s1 : number
+>b : number
+    }
+    static get nc_s3() {
+>nc_s3 : number
+
+        return c1.nc_s2(c1.nc_s1);
+>c1.nc_s2(c1.nc_s1) : number
+>c1.nc_s2 : (b: number) => number
+>c1 : typeof c1
+>nc_s2 : (b: number) => number
+>c1.nc_s1 : number
+>c1 : typeof c1
+>nc_s1 : number
+    }
+    static set nc_s3(value: number) {
+>nc_s3 : number
+>value : number
+
+        c1.nc_s1 = c1.nc_s2(value);
+>c1.nc_s1 = c1.nc_s2(value) : number
+>c1.nc_s1 : number
+>c1 : typeof c1
+>nc_s1 : number
+>c1.nc_s2(value) : number
+>c1.nc_s2 : (b: number) => number
+>c1 : typeof c1
+>nc_s2 : (b: number) => number
+>value : number
+    }
+
+    // p1 is property of c1
+    public a_p1: number;
+>a_p1 : number
+
+    // sum with property
+    public a_p2(b: number) {
+>a_p2 : (b: number) => number
+>b : number
+
+        return this.a_p1 + b;
+>this.a_p1 + b : number
+>this.a_p1 : number
+>this : this
+>a_p1 : number
+>b : number
+    }
+    // getter property
+    public get a_p3() {
+>a_p3 : number
+
+        return this.a_p2(this.a_p1);
+>this.a_p2(this.a_p1) : number
+>this.a_p2 : (b: number) => number
+>this : this
+>a_p2 : (b: number) => number
+>this.a_p1 : number
+>this : this
+>a_p1 : number
+    }
+    // setter property
+    public set a_p3(value: number) {
+>a_p3 : number
+>value : number
+
+        this.a_p1 = this.a_p2(value);
+>this.a_p1 = this.a_p2(value) : number
+>this.a_p1 : number
+>this : this
+>a_p1 : number
+>this.a_p2(value) : number
+>this.a_p2 : (b: number) => number
+>this : this
+>a_p2 : (b: number) => number
+>value : number
+    }
+    // pp1 is property of c1
+    private a_pp1: number;
+>a_pp1 : number
+
+    // sum with property
+    private a_pp2(b: number) {
+>a_pp2 : (b: number) => number
+>b : number
+
+        return this.a_p1 + b;
+>this.a_p1 + b : number
+>this.a_p1 : number
+>this : this
+>a_p1 : number
+>b : number
+    }
+    // getter property
+    private get a_pp3() {
+>a_pp3 : number
+
+        return this.a_pp2(this.a_pp1);
+>this.a_pp2(this.a_pp1) : number
+>this.a_pp2 : (b: number) => number
+>this : this
+>a_pp2 : (b: number) => number
+>this.a_pp1 : number
+>this : this
+>a_pp1 : number
+    }
+    // setter property
+    private set a_pp3(value: number) {
+>a_pp3 : number
+>value : number
+
+        this.a_pp1 = this.a_pp2(value);
+>this.a_pp1 = this.a_pp2(value) : number
+>this.a_pp1 : number
+>this : this
+>a_pp1 : number
+>this.a_pp2(value) : number
+>this.a_pp2 : (b: number) => number
+>this : this
+>a_pp2 : (b: number) => number
+>value : number
+    }
+    
+    // s1 is static property of c1
+    static a_s1: number;
+>a_s1 : number
+
+    // static sum with property
+    static a_s2(b: number) {
+>a_s2 : (b: number) => number
+>b : number
+
+        return c1.a_s1 + b;
+>c1.a_s1 + b : number
+>c1.a_s1 : number
+>c1 : typeof c1
+>a_s1 : number
+>b : number
+    }
+    // static getter property
+    static get a_s3() {
+>a_s3 : number
+
+        return c1.s2(c1.s1);
+>c1.s2(c1.s1) : number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+    }
+    
+    // setter property
+    static set a_s3(value: number) {
+>a_s3 : number
+>value : number
+
+        c1.a_s1 = c1.a_s2(value);
+>c1.a_s1 = c1.a_s2(value) : number
+>c1.a_s1 : number
+>c1 : typeof c1
+>a_s1 : number
+>c1.a_s2(value) : number
+>c1.a_s2 : (b: number) => number
+>c1 : typeof c1
+>a_s2 : (b: number) => number
+>value : number
+    }
+
+    /** p1 is property of c1 */
+    public b_p1: number;
+>b_p1 : number
+
+    /** sum with property */
+    public b_p2(b: number) {
+>b_p2 : (b: number) => number
+>b : number
+
+        return this.b_p1 + b;
+>this.b_p1 + b : number
+>this.b_p1 : number
+>this : this
+>b_p1 : number
+>b : number
+    }
+    /** getter property */
+    public get b_p3() {
+>b_p3 : number
+
+        return this.b_p2(this.b_p1);
+>this.b_p2(this.b_p1) : number
+>this.b_p2 : (b: number) => number
+>this : this
+>b_p2 : (b: number) => number
+>this.b_p1 : number
+>this : this
+>b_p1 : number
+    }
+    /** setter property */
+    public set b_p3(value: number) {
+>b_p3 : number
+>value : number
+
+        this.b_p1 = this.b_p2(value);
+>this.b_p1 = this.b_p2(value) : number
+>this.b_p1 : number
+>this : this
+>b_p1 : number
+>this.b_p2(value) : number
+>this.b_p2 : (b: number) => number
+>this : this
+>b_p2 : (b: number) => number
+>value : number
+    }
+    /** pp1 is property of c1 */
+    private b_pp1: number;
+>b_pp1 : number
+
+    /** sum with property */
+    private b_pp2(b: number) {
+>b_pp2 : (b: number) => number
+>b : number
+
+        return this.b_p1 + b;
+>this.b_p1 + b : number
+>this.b_p1 : number
+>this : this
+>b_p1 : number
+>b : number
+    }
+    /** getter property */
+    private get b_pp3() {
+>b_pp3 : number
+
+        return this.b_pp2(this.b_pp1);
+>this.b_pp2(this.b_pp1) : number
+>this.b_pp2 : (b: number) => number
+>this : this
+>b_pp2 : (b: number) => number
+>this.b_pp1 : number
+>this : this
+>b_pp1 : number
+    }
+    /** setter property */
+    private set b_pp3(value: number) {
+>b_pp3 : number
+>value : number
+
+        this.b_pp1 = this.b_pp2(value);
+>this.b_pp1 = this.b_pp2(value) : number
+>this.b_pp1 : number
+>this : this
+>b_pp1 : number
+>this.b_pp2(value) : number
+>this.b_pp2 : (b: number) => number
+>this : this
+>b_pp2 : (b: number) => number
+>value : number
+    }
+    
+    /** s1 is static property of c1 */
+    static b_s1: number;
+>b_s1 : number
+
+    /** static sum with property */
+    static b_s2(b: number) {
+>b_s2 : (b: number) => number
+>b : number
+
+        return c1.b_s1 + b;
+>c1.b_s1 + b : number
+>c1.b_s1 : number
+>c1 : typeof c1
+>b_s1 : number
+>b : number
+    }
+    /** static getter property 
+    */
+    static get b_s3() {
+>b_s3 : number
+
+        return c1.s2(c1.s1);
+>c1.s2(c1.s1) : number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+    }
+    
+    /** setter property 
+    */
+    static set b_s3(value: number) {
+>b_s3 : number
+>value : number
+
+        /** setter */
+        c1.b_s1 = c1.b_s2(value);
+>c1.b_s1 = c1.b_s2(value) : number
+>c1.b_s1 : number
+>c1 : typeof c1
+>b_s1 : number
+>c1.b_s2(value) : number
+>c1.b_s2 : (b: number) => number
+>c1 : typeof c1
+>b_s2 : (b: number) => number
+>value : number
+    }
+}
+var i1 = new c1();
+>i1 : c1
+>new c1() : c1
+>c1 : typeof c1
+
+var i1_p = i1.p1;
+>i1_p : number
+>i1.p1 : number
+>i1 : c1
+>p1 : number
+
+var i1_f = i1.p2;
+>i1_f : (b: number) => number
+>i1.p2 : (b: number) => number
+>i1 : c1
+>p2 : (b: number) => number
+
+var i1_r = i1.p2(20);
+>i1_r : number
+>i1.p2(20) : number
+>i1.p2 : (b: number) => number
+>i1 : c1
+>p2 : (b: number) => number
+>20 : 20
+
+var i1_prop = i1.p3;
+>i1_prop : number
+>i1.p3 : number
+>i1 : c1
+>p3 : number
+
+i1.p3 = i1_prop;
+>i1.p3 = i1_prop : number
+>i1.p3 : number
+>i1 : c1
+>p3 : number
+>i1_prop : number
+
+var i1_nc_p = i1.nc_p1;
+>i1_nc_p : number
+>i1.nc_p1 : number
+>i1 : c1
+>nc_p1 : number
+
+var i1_ncf = i1.nc_p2;
+>i1_ncf : (b: number) => number
+>i1.nc_p2 : (b: number) => number
+>i1 : c1
+>nc_p2 : (b: number) => number
+
+var i1_ncr = i1.nc_p2(20);
+>i1_ncr : number
+>i1.nc_p2(20) : number
+>i1.nc_p2 : (b: number) => number
+>i1 : c1
+>nc_p2 : (b: number) => number
+>20 : 20
+
+var i1_ncprop = i1.nc_p3;
+>i1_ncprop : number
+>i1.nc_p3 : number
+>i1 : c1
+>nc_p3 : number
+
+i1.nc_p3 = i1_ncprop;
+>i1.nc_p3 = i1_ncprop : number
+>i1.nc_p3 : number
+>i1 : c1
+>nc_p3 : number
+>i1_ncprop : number
+
+var i1_s_p = c1.s1;
+>i1_s_p : number
+>c1.s1 : number
+>c1 : typeof c1
+>s1 : number
+
+var i1_s_f = c1.s2;
+>i1_s_f : (b: number) => number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+
+var i1_s_r = c1.s2(20);
+>i1_s_r : number
+>c1.s2(20) : number
+>c1.s2 : (b: number) => number
+>c1 : typeof c1
+>s2 : (b: number) => number
+>20 : 20
+
+var i1_s_prop = c1.s3;
+>i1_s_prop : number
+>c1.s3 : number
+>c1 : typeof c1
+>s3 : number
+
+c1.s3 = i1_s_prop;
+>c1.s3 = i1_s_prop : number
+>c1.s3 : number
+>c1 : typeof c1
+>s3 : number
+>i1_s_prop : number
+
+var i1_s_nc_p = c1.nc_s1;
+>i1_s_nc_p : number
+>c1.nc_s1 : number
+>c1 : typeof c1
+>nc_s1 : number
+
+var i1_s_ncf = c1.nc_s2;
+>i1_s_ncf : (b: number) => number
+>c1.nc_s2 : (b: number) => number
+>c1 : typeof c1
+>nc_s2 : (b: number) => number
+
+var i1_s_ncr = c1.nc_s2(20);
+>i1_s_ncr : number
+>c1.nc_s2(20) : number
+>c1.nc_s2 : (b: number) => number
+>c1 : typeof c1
+>nc_s2 : (b: number) => number
+>20 : 20
+
+var i1_s_ncprop = c1.nc_s3;
+>i1_s_ncprop : number
+>c1.nc_s3 : number
+>c1 : typeof c1
+>nc_s3 : number
+
+c1.nc_s3 = i1_s_ncprop;
+>c1.nc_s3 = i1_s_ncprop : number
+>c1.nc_s3 : number
+>c1 : typeof c1
+>nc_s3 : number
+>i1_s_ncprop : number
+
+var i1_c = c1;
+>i1_c : typeof c1
+>c1 : typeof c1
+
+class cProperties {
+>cProperties : cProperties
+
+    private val: number;
+>val : number
+
+    /** getter only property*/
+    public get p1() {
+>p1 : number
+
+        return this.val;
+>this.val : number
+>this : this
+>val : number
+
+    } // trailing comment of only getter
+    public get nc_p1() {
+>nc_p1 : number
+
+        return this.val;
+>this.val : number
+>this : this
+>val : number
+    }
+    /**setter only property*/
+    public set p2(value: number) {
+>p2 : number
+>value : number
+
+        this.val = value;
+>this.val = value : number
+>this.val : number
+>this : this
+>val : number
+>value : number
+    }
+    public set nc_p2(value: number) {
+>nc_p2 : number
+>value : number
+
+        this.val = value;
+>this.val = value : number
+>this.val : number
+>this : this
+>val : number
+>value : number
+
+    } /* trailing comment of setter only*/
+
+    public x = 10; /*trailing comment for property*/
+>x : number
+>10 : 10
+
+    private y = 10; // trailing comment of // style
+>y : number
+>10 : 10
+}
+var cProperties_i = new cProperties();
+>cProperties_i : cProperties
+>new cProperties() : cProperties
+>cProperties : typeof cProperties
+
+cProperties_i.p2 = cProperties_i.p1;
+>cProperties_i.p2 = cProperties_i.p1 : number
+>cProperties_i.p2 : number
+>cProperties_i : cProperties
+>p2 : number
+>cProperties_i.p1 : number
+>cProperties_i : cProperties
+>p1 : number
+
+cProperties_i.nc_p2 = cProperties_i.nc_p1;
+>cProperties_i.nc_p2 = cProperties_i.nc_p1 : number
+>cProperties_i.nc_p2 : number
+>cProperties_i : cProperties
+>nc_p2 : number
+>cProperties_i.nc_p1 : number
+>cProperties_i : cProperties
+>nc_p1 : number
+

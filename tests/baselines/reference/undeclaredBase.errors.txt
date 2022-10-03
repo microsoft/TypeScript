@@ -1,0 +1,9 @@
+tests/cases/compiler/undeclaredBase.ts(1,37): error TS2339: Property 'I' does not exist on type 'typeof M'.
+
+
+==== tests/cases/compiler/undeclaredBase.ts (1 errors) ====
+    module M { export class C extends M.I { } }
+                                        ~
+!!! error TS2339: Property 'I' does not exist on type 'typeof M'.
+    
+    

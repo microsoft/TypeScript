@@ -1,0 +1,29 @@
+=== tests/cases/compiler/decoratorMetadataPromise.ts ===
+declare const decorator: MethodDecorator;
+>decorator : MethodDecorator
+
+class A {
+>A : A
+
+    @decorator
+>decorator : MethodDecorator
+
+    async foo() {}
+>foo : () => Promise<void>
+
+    @decorator
+>decorator : MethodDecorator
+
+    async bar(): Promise<number> { return 0; }
+>bar : () => Promise<number>
+>0 : 0
+
+    @decorator
+>decorator : MethodDecorator
+
+    baz(n: Promise<number>): Promise<number> { return n; }
+>baz : (n: Promise<number>) => Promise<number>
+>n : Promise<number>
+>n : Promise<number>
+}
+

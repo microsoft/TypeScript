@@ -1,0 +1,48 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = function O() {
+>Outer : typeof O
+>function O() {    this.y = 2} : typeof O
+>O : typeof O
+
+    this.y = 2
+>this.y = 2 : 2
+>this.y : any
+>this : this
+>y : any
+>2 : 2
+}
+Outer.Inner = class I {
+>Outer.Inner = class I {    constructor() {        this.x = 1    }} : typeof I
+>Outer.Inner : typeof I
+>Outer : typeof O
+>Inner : typeof I
+>class I {    constructor() {        this.x = 1    }} : typeof I
+>I : typeof I
+
+    constructor() {
+        this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+}
+/** @type {Outer} */
+var ja
+>ja : O
+
+ja.y
+>ja.y : number
+>ja : O
+>y : number
+
+/** @type {Outer.Inner} */
+var da
+>da : I
+
+da.x
+>da.x : number
+>da : I
+>x : number
+

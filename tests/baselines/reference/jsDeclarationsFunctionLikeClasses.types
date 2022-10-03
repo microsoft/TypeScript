@@ -1,0 +1,67 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+export function Point(x, y) {
+>Point : typeof Point
+>x : number
+>y : number
+
+    if (!(this instanceof Point)) {
+>!(this instanceof Point) : boolean
+>(this instanceof Point) : boolean
+>this instanceof Point : boolean
+>this : this
+>Point : typeof Point
+
+        return new Point(x, y);
+>new Point(x, y) : Point
+>Point : typeof Point
+>x : number
+>y : number
+    }
+    this.x = x;
+>this.x = x : number
+>this.x : any
+>this : this
+>x : any
+>x : number
+
+    this.y = y;
+>this.y = y : number
+>this.y : any
+>this : this
+>y : any
+>y : number
+}
+
+=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+import {Point} from "./source";
+>Point : typeof Point
+
+/**
+ * @param {Point} p
+ */
+export function magnitude(p) {
+>magnitude : (p: Point) => number
+>p : Point
+
+    return Math.sqrt(p.x ** 2 + p.y ** 2);
+>Math.sqrt(p.x ** 2 + p.y ** 2) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>p.x ** 2 + p.y ** 2 : number
+>p.x ** 2 : number
+>p.x : number
+>p : Point
+>x : number
+>2 : 2
+>p.y ** 2 : number
+>p.y : number
+>p : Point
+>y : number
+>2 : 2
+}
+

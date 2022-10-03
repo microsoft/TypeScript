@@ -1,0 +1,69 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts ===
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
+
+var a: boolean;
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var b: string;
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var c: Object;
+>c : Symbol(c, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// operator **
+var r1a1 = undefined ** a;
+>r1a1 : Symbol(r1a1, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 8, 3))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+
+var r1a2 = undefined ** b;
+>r1a2 : Symbol(r1a2, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 9, 3))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+
+var r1a3 = undefined ** c;
+>r1a3 : Symbol(r1a3, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 10, 3))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+
+var r1b1 = a ** undefined;
+>r1b1 : Symbol(r1b1, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 12, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var r1b2 = b ** undefined;
+>r1b2 : Symbol(r1b2, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 13, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+var r1b3 = c ** undefined;
+>r1b3 : Symbol(r1b3, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 14, 3))
+>c : Symbol(c, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var r1c1 = undefined ** true;
+>r1c1 : Symbol(r1c1, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 16, 3))
+>undefined : Symbol(undefined)
+
+var r1c2 = undefined ** '';
+>r1c2 : Symbol(r1c2, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 17, 3))
+>undefined : Symbol(undefined)
+
+var r1c3 = undefined ** {};
+>r1c3 : Symbol(r1c3, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 18, 3))
+>undefined : Symbol(undefined)
+
+var r1d1 = true ** undefined;
+>r1d1 : Symbol(r1d1, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 20, 3))
+>undefined : Symbol(undefined)
+
+var r1d2 = '' ** undefined;
+>r1d2 : Symbol(r1d2, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 21, 3))
+>undefined : Symbol(undefined)
+
+var r1d3 = {} ** undefined;
+>r1d3 : Symbol(r1d3, Decl(exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts, 22, 3))
+>undefined : Symbol(undefined)
+

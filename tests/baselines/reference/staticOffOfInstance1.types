@@ -1,0 +1,16 @@
+=== tests/cases/compiler/staticOffOfInstance1.ts ===
+class List {
+>List : List
+
+  public Blah() {
+>Blah : () => void
+
+    this.Foo();
+>this.Foo() : any
+>this.Foo : any
+>this : this
+>Foo : any
+  }
+  public static Foo() {}
+>Foo : () => void
+}

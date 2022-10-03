@@ -1,0 +1,34 @@
+=== tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts ===
+class LanguageSpec_section_4_5_error_cases {
+>LanguageSpec_section_4_5_error_cases : Symbol(LanguageSpec_section_4_5_error_cases, Decl(accessors_spec_section-4.5_error-cases.ts, 0, 0))
+
+    public set AnnotatedSetter_SetterFirst(a: number) { }
+>AnnotatedSetter_SetterFirst : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedSetter_SetterFirst, Decl(accessors_spec_section-4.5_error-cases.ts, 0, 44), Decl(accessors_spec_section-4.5_error-cases.ts, 1, 57))
+>a : Symbol(a, Decl(accessors_spec_section-4.5_error-cases.ts, 1, 43))
+
+    public get AnnotatedSetter_SetterFirst() { return ""; }
+>AnnotatedSetter_SetterFirst : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedSetter_SetterFirst, Decl(accessors_spec_section-4.5_error-cases.ts, 0, 44), Decl(accessors_spec_section-4.5_error-cases.ts, 1, 57))
+
+    public get AnnotatedSetter_SetterLast() { return ""; }
+>AnnotatedSetter_SetterLast : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedSetter_SetterLast, Decl(accessors_spec_section-4.5_error-cases.ts, 2, 59), Decl(accessors_spec_section-4.5_error-cases.ts, 4, 58))
+
+    public set AnnotatedSetter_SetterLast(a: number) { }
+>AnnotatedSetter_SetterLast : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedSetter_SetterLast, Decl(accessors_spec_section-4.5_error-cases.ts, 2, 59), Decl(accessors_spec_section-4.5_error-cases.ts, 4, 58))
+>a : Symbol(a, Decl(accessors_spec_section-4.5_error-cases.ts, 5, 42))
+
+    public get AnnotatedGetter_GetterFirst(): string { return ""; }
+>AnnotatedGetter_GetterFirst : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedGetter_GetterFirst, Decl(accessors_spec_section-4.5_error-cases.ts, 5, 56), Decl(accessors_spec_section-4.5_error-cases.ts, 7, 67))
+
+    public set AnnotatedGetter_GetterFirst(aStr) { aStr = 0; }
+>AnnotatedGetter_GetterFirst : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedGetter_GetterFirst, Decl(accessors_spec_section-4.5_error-cases.ts, 5, 56), Decl(accessors_spec_section-4.5_error-cases.ts, 7, 67))
+>aStr : Symbol(aStr, Decl(accessors_spec_section-4.5_error-cases.ts, 8, 43))
+>aStr : Symbol(aStr, Decl(accessors_spec_section-4.5_error-cases.ts, 8, 43))
+
+    public set AnnotatedGetter_GetterLast(aStr) { aStr = 0; }
+>AnnotatedGetter_GetterLast : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedGetter_GetterLast, Decl(accessors_spec_section-4.5_error-cases.ts, 8, 62), Decl(accessors_spec_section-4.5_error-cases.ts, 10, 61))
+>aStr : Symbol(aStr, Decl(accessors_spec_section-4.5_error-cases.ts, 10, 42))
+>aStr : Symbol(aStr, Decl(accessors_spec_section-4.5_error-cases.ts, 10, 42))
+
+    public get AnnotatedGetter_GetterLast(): string { return ""; }
+>AnnotatedGetter_GetterLast : Symbol(LanguageSpec_section_4_5_error_cases.AnnotatedGetter_GetterLast, Decl(accessors_spec_section-4.5_error-cases.ts, 8, 62), Decl(accessors_spec_section-4.5_error-cases.ts, 10, 61))
+}

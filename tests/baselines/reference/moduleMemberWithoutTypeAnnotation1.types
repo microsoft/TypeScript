@@ -1,0 +1,112 @@
+=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts ===
+module TypeScript.Parser {
+>TypeScript : typeof TypeScript
+>Parser : typeof Parser
+
+    class SyntaxCursor {
+>SyntaxCursor : SyntaxCursor
+
+        public currentNode(): SyntaxNode {
+>currentNode : () => SyntaxNode
+
+            return null;
+>null : null
+        }
+    }
+}
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    export interface ISyntaxElement { };
+    export interface ISyntaxToken { };
+
+    export class PositionedElement {
+>PositionedElement : PositionedElement
+
+        public childIndex(child: ISyntaxElement) {
+>childIndex : (child: ISyntaxElement) => void
+>child : ISyntaxElement
+
+            return Syntax.childIndex();
+>Syntax.childIndex() : void
+>Syntax.childIndex : () => void
+>Syntax : typeof Syntax
+>childIndex : () => void
+        }
+    }
+
+    export class PositionedToken {
+>PositionedToken : PositionedToken
+
+        constructor(parent: PositionedElement, token: ISyntaxToken, fullStart: number) {
+>parent : PositionedElement
+>token : ISyntaxToken
+>fullStart : number
+        }
+    }
+}
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    export class SyntaxNode {
+>SyntaxNode : SyntaxNode
+
+        public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
+>findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
+>position : number
+>includeSkippedTokens : boolean
+>false : false
+
+            var positionedToken = this.findTokenInternal(null, position, 0);
+>positionedToken : any
+>this.findTokenInternal(null, position, 0) : any
+>this.findTokenInternal : (x: any, y: any, z: any) => any
+>this : this
+>findTokenInternal : (x: any, y: any, z: any) => any
+>null : null
+>position : number
+>0 : 0
+
+            return null;
+>null : null
+        }
+        findTokenInternal(x, y, z) {
+>findTokenInternal : (x: any, y: any, z: any) => any
+>x : any
+>y : any
+>z : any
+
+            return null;
+>null : null
+        }
+    }
+}
+
+module TypeScript.Syntax {
+>TypeScript : typeof TypeScript
+>Syntax : typeof Syntax
+
+    export function childIndex() { }
+>childIndex : () => void
+
+    export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
+>VariableWidthTokenWithTrailingTrivia : VariableWidthTokenWithTrailingTrivia
+
+        private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
+>findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken
+>parent : PositionedElement
+>position : number
+>fullStart : number
+
+            return new PositionedToken(parent, this, fullStart);
+>new PositionedToken(parent, this, fullStart) : PositionedToken
+>PositionedToken : typeof PositionedToken
+>parent : PositionedElement
+>this : this
+>fullStart : number
+        }
+    }
+}
+

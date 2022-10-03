@@ -1,0 +1,30 @@
+tests/cases/compiler/constDeclarations-ambient-errors.ts(2,29): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/constDeclarations-ambient-errors.ts(3,28): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/constDeclarations-ambient-errors.ts(4,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+tests/cases/compiler/constDeclarations-ambient-errors.ts(4,39): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/constDeclarations-ambient-errors.ts(4,53): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/constDeclarations-ambient-errors.ts(8,24): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+==== tests/cases/compiler/constDeclarations-ambient-errors.ts (6 errors) ====
+    // error: no intialization expected in ambient declarations
+    declare const c1: boolean = true;
+                                ~~~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    declare const c2: number = 0;
+                               ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    declare const c3 = null, c4 :string = "", c5: any = 0;
+                       ~~~~
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+                                          ~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+                                                        ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    
+    declare module M {
+        const c6 = 0;
+        const c7: number = 7;
+                           ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    }

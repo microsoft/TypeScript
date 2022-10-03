@@ -1,0 +1,57 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
+
+    #name;
+>#name : Symbol(Foo.#name, Decl(privateNameComputedPropertyName3.ts, 0, 11))
+
+    constructor(name) {
+>name : Symbol(name, Decl(privateNameComputedPropertyName3.ts, 3, 16))
+
+        this.#name = name;
+>this.#name : Symbol(Foo.#name, Decl(privateNameComputedPropertyName3.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
+>name : Symbol(name, Decl(privateNameComputedPropertyName3.ts, 3, 16))
+    }
+
+    getValue(x) {
+>getValue : Symbol(Foo.getValue, Decl(privateNameComputedPropertyName3.ts, 5, 5))
+>x : Symbol(x, Decl(privateNameComputedPropertyName3.ts, 7, 13))
+
+        const obj = this;
+>obj : Symbol(obj, Decl(privateNameComputedPropertyName3.ts, 8, 13))
+>this : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
+
+        class Bar {
+>Bar : Symbol(Bar, Decl(privateNameComputedPropertyName3.ts, 8, 25))
+
+            #y = 100;
+>#y : Symbol(Bar.#y, Decl(privateNameComputedPropertyName3.ts, 10, 19))
+
+            [obj.#name]() {
+>[obj.#name] : Symbol(Bar[obj.#name], Decl(privateNameComputedPropertyName3.ts, 11, 21))
+>obj.#name : Symbol(Foo.#name, Decl(privateNameComputedPropertyName3.ts, 0, 11))
+>obj : Symbol(obj, Decl(privateNameComputedPropertyName3.ts, 8, 13))
+
+                return x + this.#y;
+>x : Symbol(x, Decl(privateNameComputedPropertyName3.ts, 7, 13))
+>this.#y : Symbol(Bar.#y, Decl(privateNameComputedPropertyName3.ts, 10, 19))
+>this : Symbol(Bar, Decl(privateNameComputedPropertyName3.ts, 8, 25))
+            }
+        }
+
+        return new Bar()[obj.#name]();
+>Bar : Symbol(Bar, Decl(privateNameComputedPropertyName3.ts, 8, 25))
+>obj.#name : Symbol(Foo.#name, Decl(privateNameComputedPropertyName3.ts, 0, 11))
+>obj : Symbol(obj, Decl(privateNameComputedPropertyName3.ts, 8, 13))
+    }
+}
+
+console.log(new Foo("NAME").getValue(100));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>new Foo("NAME").getValue : Symbol(Foo.getValue, Decl(privateNameComputedPropertyName3.ts, 5, 5))
+>Foo : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
+>getValue : Symbol(Foo.getValue, Decl(privateNameComputedPropertyName3.ts, 5, 5))
+

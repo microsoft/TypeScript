@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty53.ts ===
+var obj = {
+>obj : {}
+>{    [Symbol.for]: 0} : {}
+
+    [Symbol.for]: 0
+>[Symbol.for] : number
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+>0 : 0
+
+};
+
+obj[Symbol.for];
+>obj[Symbol.for] : any
+>obj : {}
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+

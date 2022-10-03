@@ -1,0 +1,5 @@
+=== tests/cases/compiler/unaryOperators1.ts ===
++foo;
+No type information for this code.-bar;
+No type information for this code.~quux;
+No type information for this code.

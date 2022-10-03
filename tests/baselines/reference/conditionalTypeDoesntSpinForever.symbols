@@ -1,0 +1,489 @@
+=== tests/cases/compiler/conditionalTypeDoesntSpinForever.ts ===
+// A *self-contained* demonstration of the problem follows...
+// Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
+
+export enum PubSubRecordIsStoredInRedisAsA {
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+
+    redisHash = "redisHash",
+>redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
+
+    jsonEncodedRedisString = "jsonEncodedRedisString"
+>jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
+  }
+  
+  export interface PubSubRecord<NAME extends string, RECORD, IDENTIFIER extends Partial<RECORD>> {
+>PubSubRecord : Symbol(PubSubRecord, Decl(conditionalTypeDoesntSpinForever.ts, 6, 3))
+>NAME : Symbol(NAME, Decl(conditionalTypeDoesntSpinForever.ts, 8, 32))
+>RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
+>IDENTIFIER : Symbol(IDENTIFIER, Decl(conditionalTypeDoesntSpinForever.ts, 8, 60))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
+
+    name: NAME;
+>name : Symbol(PubSubRecord.name, Decl(conditionalTypeDoesntSpinForever.ts, 8, 98))
+>NAME : Symbol(NAME, Decl(conditionalTypeDoesntSpinForever.ts, 8, 32))
+
+    record: RECORD;
+>record : Symbol(PubSubRecord.record, Decl(conditionalTypeDoesntSpinForever.ts, 9, 15))
+>RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
+
+    identifier: IDENTIFIER;
+>identifier : Symbol(PubSubRecord.identifier, Decl(conditionalTypeDoesntSpinForever.ts, 10, 19))
+>IDENTIFIER : Symbol(IDENTIFIER, Decl(conditionalTypeDoesntSpinForever.ts, 8, 60))
+
+    storedAs: PubSubRecordIsStoredInRedisAsA;
+>storedAs : Symbol(PubSubRecord.storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 11, 27))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+
+    maxMsToWaitBeforePublishing: number;
+>maxMsToWaitBeforePublishing : Symbol(PubSubRecord.maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 12, 45))
+  }
+  
+  type NameFieldConstructor<SO_FAR> =
+>NameFieldConstructor : Symbol(NameFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 14, 3))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 16, 28))
+
+    SO_FAR extends {name: any} ? {} : {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 16, 28))
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 17, 20))
+
+      name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 17, 39))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 18, 13))
+>t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 18, 19))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 18, 13))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 16, 28))
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 18, 64))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 18, 13))
+    }
+  
+  const buildNameFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
+>buildNameFieldConstructor : Symbol(buildNameFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 21, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 21, 37))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 21, 45))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 21, 37))
+
+    "name" in soFar ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 21, 45))
+
+      name: <TYPE>(instance: TYPE = undefined) =>
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 22, 28))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 23, 13))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 23, 19))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 23, 13))
+>undefined : Symbol(undefined)
+
+        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 21, 45))
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 24, 56))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 23, 19))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 23, 13))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 21, 37))
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 24, 94))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 23, 13))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 21, 37))
+>name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 24, 142))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 23, 13))
+    }
+  );
+  
+  type StoredAsConstructor<SO_FAR> =
+>StoredAsConstructor : Symbol(StoredAsConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 26, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 28, 27))
+
+    SO_FAR extends {storedAs: any} ? {} : {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 28, 27))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 29, 20))
+
+      storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>;
+>storedAsJsonEncodedRedisString : Symbol(storedAsJsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 29, 43))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 28, 27))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 30, 76))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
+
+      storedRedisHash: () => BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>;
+>storedRedisHash : Symbol(storedRedisHash, Decl(conditionalTypeDoesntSpinForever.ts, 30, 142))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 28, 27))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 31, 61))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
+    }
+  
+  const buildStoredAsConstructor = <SO_FAR>(soFar: SO_FAR) => (
+>buildStoredAsConstructor : Symbol(buildStoredAsConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 34, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 34, 36))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 34, 36))
+
+    "storedAs" in soFar ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
+
+      storedAsJsonEncodedRedisString: () =>
+>storedAsJsonEncodedRedisString : Symbol(storedAsJsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 35, 32))
+
+        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 37, 56))
+>PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
+
+          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 34, 36))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 38, 42))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
+
+      storedAsRedisHash: () =>
+>storedAsRedisHash : Symbol(storedAsRedisHash, Decl(conditionalTypeDoesntSpinForever.ts, 38, 108))
+
+        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 40, 56))
+>PubSubRecordIsStoredInRedisAsA.redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
+
+          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 34, 36))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 41, 42))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+>redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
+    }
+  );
+  
+  type IdentifierFieldConstructor<SO_FAR> =
+>IdentifierFieldConstructor : Symbol(IdentifierFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 43, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
+
+    SO_FAR extends {identifier: any} ? {} :
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 46, 20))
+
+    SO_FAR extends {record: any} ? {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 47, 20))
+
+      identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 47, 36))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
+>t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 48, 59))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 48, 104))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
+
+    } : {}
+  
+  const buildIdentifierFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
+>buildIdentifierFieldConstructor : Symbol(buildIdentifierFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 51, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 51, 43))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 51, 43))
+
+    "identifier" in soFar || (!("record" in soFar)) ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
+
+      identifier: <TYPE>(instance: TYPE = undefined) =>
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 52, 60))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 53, 19))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 53, 25))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 53, 19))
+>undefined : Symbol(undefined)
+
+        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 54, 56))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 53, 25))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 53, 19))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 51, 43))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 54, 100))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 53, 19))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 51, 43))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 54, 154))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 53, 19))
+    }
+  );
+  
+  type RecordFieldConstructor<SO_FAR> =
+>RecordFieldConstructor : Symbol(RecordFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 56, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 58, 30))
+
+    SO_FAR extends {record: any} ? {} : {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 58, 30))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 59, 20))
+
+      record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 59, 41))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 60, 15))
+>t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 60, 21))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 60, 15))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 58, 30))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 60, 66))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 60, 15))
+    }
+  
+  const buildRecordFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
+>buildRecordFieldConstructor : Symbol(buildRecordFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 63, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 63, 39))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 63, 47))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 63, 39))
+
+    "record" in soFar ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 63, 47))
+
+      record: <TYPE>(instance: TYPE = undefined) =>
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 64, 30))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 65, 15))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 65, 21))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 65, 15))
+>undefined : Symbol(undefined)
+
+        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 63, 47))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 66, 56))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 65, 21))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 65, 15))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 63, 39))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 66, 96))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 65, 15))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 63, 39))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 66, 146))
+>TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 65, 15))
+    }
+  );
+  
+  type MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> =
+>MaxMsToWaitBeforePublishingFieldConstructor : Symbol(MaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 68, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 70, 51))
+
+    SO_FAR extends {maxMsToWaitBeforePublishing: any} ? {} : {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 70, 51))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 71, 20))
+
+      maxMsToWaitBeforePublishing: (t: number) => BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 71, 62))
+>t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 72, 36))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 70, 51))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 72, 82))
+
+      neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
+>neverDelayPublishing : Symbol(neverDelayPublishing, Decl(conditionalTypeDoesntSpinForever.ts, 72, 120))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 70, 51))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 73, 66))
+    }
+  
+  const buildMaxMsToWaitBeforePublishingFieldConstructor = <SO_FAR>(soFar: SO_FAR): MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> => (
+>buildMaxMsToWaitBeforePublishingFieldConstructor : Symbol(buildMaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 76, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+>MaxMsToWaitBeforePublishingFieldConstructor : Symbol(MaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 68, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+
+    "maxMsToWaitBeforePublishing" in soFar ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
+
+      maxMsToWaitBeforePublishing: (instance: number = 0) =>
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 77, 51))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 78, 36))
+
+        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 79, 56))
+>instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 78, 36))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 79, 132))
+
+      neverDelayPublishing: () =>
+>neverDelayPublishing : Symbol(neverDelayPublishing, Decl(conditionalTypeDoesntSpinForever.ts, 79, 170))
+
+        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 81, 56))
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 81, 125))
+    }
+  ) as MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>;
+>MaxMsToWaitBeforePublishingFieldConstructor : Symbol(MaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 68, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 76, 60))
+  
+  type TypeConstructor<SO_FAR> =
+>TypeConstructor : Symbol(TypeConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 83, 59))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
+
+    SO_FAR extends {identifier: any, record: any, maxMsToWaitBeforePublishing: number, storedAs: PubSubRecordIsStoredInRedisAsA} ? {
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
+>identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 86, 20))
+>record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 86, 36))
+>maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 86, 49))
+>storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 86, 86))
+>PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
+
+      type: SO_FAR,
+>type : Symbol(type, Decl(conditionalTypeDoesntSpinForever.ts, 86, 132))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
+
+      fields: Set<keyof SO_FAR>,
+>fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 87, 19))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
+
+      hasField: (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
+>hasField : Symbol(hasField, Decl(conditionalTypeDoesntSpinForever.ts, 88, 32))
+>fieldName : Symbol(fieldName, Decl(conditionalTypeDoesntSpinForever.ts, 89, 17))
+>fieldName : Symbol(fieldName, Decl(conditionalTypeDoesntSpinForever.ts, 89, 17))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
+
+    } : {}
+  
+  const buildType = <SO_FAR>(soFar: SO_FAR) => (
+>buildType : Symbol(buildType, Decl(conditionalTypeDoesntSpinForever.ts, 92, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
+
+    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+
+      type: soFar,
+>type : Symbol(type, Decl(conditionalTypeDoesntSpinForever.ts, 93, 142))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+
+      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
+>fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 94, 18))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
+
+      hasField: (fieldName: string | number | symbol) => fieldName in soFar
+>hasField : Symbol(hasField, Decl(conditionalTypeDoesntSpinForever.ts, 95, 68))
+>fieldName : Symbol(fieldName, Decl(conditionalTypeDoesntSpinForever.ts, 96, 17))
+>fieldName : Symbol(fieldName, Decl(conditionalTypeDoesntSpinForever.ts, 96, 17))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
+    }
+  );
+  
+  type BuildPubSubRecordType<SO_FAR> =
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    NameFieldConstructor<SO_FAR> &
+>NameFieldConstructor : Symbol(NameFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 14, 3))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    IdentifierFieldConstructor<SO_FAR> &
+>IdentifierFieldConstructor : Symbol(IdentifierFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 43, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    RecordFieldConstructor<SO_FAR> &
+>RecordFieldConstructor : Symbol(RecordFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 56, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    StoredAsConstructor<SO_FAR> & // infinite loop goes away when you comment out this line
+>StoredAsConstructor : Symbol(StoredAsConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 26, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> &
+>MaxMsToWaitBeforePublishingFieldConstructor : Symbol(MaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 68, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+
+    TypeConstructor<SO_FAR>
+>TypeConstructor : Symbol(TypeConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 83, 59))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 100, 29))
+  
+  const buildPubSubRecordType = <SO_FAR>(soFar: SO_FAR) => Object.assign(
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+    {},
+    buildNameFieldConstructor(soFar),
+>buildNameFieldConstructor : Symbol(buildNameFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 21, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+    buildIdentifierFieldConstructor(soFar),
+>buildIdentifierFieldConstructor : Symbol(buildIdentifierFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 51, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+    buildRecordFieldConstructor(soFar),
+>buildRecordFieldConstructor : Symbol(buildRecordFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 63, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+    buildStoredAsConstructor(soFar),
+>buildStoredAsConstructor : Symbol(buildStoredAsConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 34, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),
+>buildMaxMsToWaitBeforePublishingFieldConstructor : Symbol(buildMaxMsToWaitBeforePublishingFieldConstructor, Decl(conditionalTypeDoesntSpinForever.ts, 76, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+    buildType(soFar)
+>buildType : Symbol(buildType, Decl(conditionalTypeDoesntSpinForever.ts, 92, 7))
+>soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
+
+  ) as BuildPubSubRecordType<SO_FAR>;
+>BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
+>SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
+
+  const PubSubRecordType = buildPubSubRecordType({});
+>PubSubRecordType : Symbol(PubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 117, 7))
+>buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+

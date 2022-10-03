@@ -1,0 +1,49 @@
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(2,7): error TS2537: Type '{ prop: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(13,7): error TS2537: Type '{ [idx: number]: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(21,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(23,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(25,7): error TS2538: Type 'symbol' cannot be used as an index type.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(27,7): error TS2538: Type 'symbol' cannot be used as an index type.
+
+
+==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (6 errors) ====
+    let named = "foo";
+    let {[named]: prop} = {prop: "foo"};
+          ~~~~~
+!!! error TS2537: Type '{ prop: string; }' has no matching index signature for type 'string'.
+    void prop;
+    
+    const numIndexed: {[idx: number]: string} = null as any;
+    const strIndexed: {[idx: string]: string} = null as any;
+    
+    let numed = 6;
+    
+    const symed = Symbol();
+    let symed2 = Symbol();
+    
+    let {[named]: prop2} = numIndexed;
+          ~~~~~
+!!! error TS2537: Type '{ [idx: number]: string; }' has no matching index signature for type 'string'.
+    void prop2;
+    let {[numed]: prop3} = numIndexed;
+    void prop3;
+    let {[named]: prop4} = strIndexed;
+    void prop4;
+    let {[numed]: prop5} = strIndexed;
+    void prop5;
+    let {[symed]: prop6} = numIndexed;
+          ~~~~~
+!!! error TS2538: Type 'unique symbol' cannot be used as an index type.
+    void prop6;
+    let {[symed]: prop7} = strIndexed;
+          ~~~~~
+!!! error TS2538: Type 'unique symbol' cannot be used as an index type.
+    void prop7;
+    let {[symed2]: prop8} = numIndexed;
+          ~~~~~~
+!!! error TS2538: Type 'symbol' cannot be used as an index type.
+    void prop8;
+    let {[symed2]: prop9} = strIndexed;
+          ~~~~~~
+!!! error TS2538: Type 'symbol' cannot be used as an index type.
+    void prop9;

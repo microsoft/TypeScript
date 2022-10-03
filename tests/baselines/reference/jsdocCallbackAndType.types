@@ -1,0 +1,18 @@
+=== /a.js ===
+/**
+ * @template T
+ * @callback B
+ */
+/** @type {B<string>} */
+let b;
+>b : B<string>
+
+b();
+>b() : any
+>b : B<string>
+
+b(1);
+>b(1) : any
+>b : B<string>
+>1 : 1
+

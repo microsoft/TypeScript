@@ -1,0 +1,143 @@
+=== tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts ===
+declare const o1: undefined | { b: string };
+>o1 : Symbol(o1, Decl(deleteChain.ts, 0, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 0, 31))
+
+delete o1?.b;
+>o1?.b : Symbol(b, Decl(deleteChain.ts, 0, 31))
+>o1 : Symbol(o1, Decl(deleteChain.ts, 0, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 0, 31))
+
+delete (o1?.b);
+>o1?.b : Symbol(b, Decl(deleteChain.ts, 0, 31))
+>o1 : Symbol(o1, Decl(deleteChain.ts, 0, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 0, 31))
+
+declare const o2: undefined | { b: { c: string } };
+>o2 : Symbol(o2, Decl(deleteChain.ts, 4, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 4, 31))
+>c : Symbol(c, Decl(deleteChain.ts, 4, 36))
+
+delete o2?.b.c;
+>o2?.b.c : Symbol(c, Decl(deleteChain.ts, 4, 36))
+>o2?.b : Symbol(b, Decl(deleteChain.ts, 4, 31))
+>o2 : Symbol(o2, Decl(deleteChain.ts, 4, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 4, 31))
+>c : Symbol(c, Decl(deleteChain.ts, 4, 36))
+
+delete (o2?.b.c);
+>o2?.b.c : Symbol(c, Decl(deleteChain.ts, 4, 36))
+>o2?.b : Symbol(b, Decl(deleteChain.ts, 4, 31))
+>o2 : Symbol(o2, Decl(deleteChain.ts, 4, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 4, 31))
+>c : Symbol(c, Decl(deleteChain.ts, 4, 36))
+
+declare const o3: { b: undefined | { c: string } };
+>o3 : Symbol(o3, Decl(deleteChain.ts, 8, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 8, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 8, 36))
+
+delete o3.b?.c;
+>o3.b?.c : Symbol(c, Decl(deleteChain.ts, 8, 36))
+>o3.b : Symbol(b, Decl(deleteChain.ts, 8, 19))
+>o3 : Symbol(o3, Decl(deleteChain.ts, 8, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 8, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 8, 36))
+
+delete (o3.b?.c);
+>o3.b?.c : Symbol(c, Decl(deleteChain.ts, 8, 36))
+>o3.b : Symbol(b, Decl(deleteChain.ts, 8, 19))
+>o3 : Symbol(o3, Decl(deleteChain.ts, 8, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 8, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 8, 36))
+
+declare const o4: { b?: { c: { d?: { e: string } } } };
+>o4 : Symbol(o4, Decl(deleteChain.ts, 12, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+
+delete o4.b?.c.d?.e;
+>o4.b?.c.d?.e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+>o4.b?.c.d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>o4.b?.c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>o4.b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>o4 : Symbol(o4, Decl(deleteChain.ts, 12, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+
+delete (o4.b?.c.d)?.e;
+>(o4.b?.c.d)?.e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+>o4.b?.c.d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>o4.b?.c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>o4.b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>o4 : Symbol(o4, Decl(deleteChain.ts, 12, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+
+delete (o4.b?.c.d?.e);
+>o4.b?.c.d?.e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+>o4.b?.c.d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>o4.b?.c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>o4.b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>o4 : Symbol(o4, Decl(deleteChain.ts, 12, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 12, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 12, 25))
+>d : Symbol(d, Decl(deleteChain.ts, 12, 30))
+>e : Symbol(e, Decl(deleteChain.ts, 12, 36))
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+>o5 : Symbol(o5, Decl(deleteChain.ts, 17, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 17, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 17, 27))
+>d : Symbol(d, Decl(deleteChain.ts, 17, 32))
+>e : Symbol(e, Decl(deleteChain.ts, 17, 38))
+
+delete o5.b?.().c.d?.e;
+>o5.b?.().c.d?.e : Symbol(e, Decl(deleteChain.ts, 17, 38))
+>o5.b?.().c.d : Symbol(d, Decl(deleteChain.ts, 17, 32))
+>o5.b?.().c : Symbol(c, Decl(deleteChain.ts, 17, 27))
+>o5.b : Symbol(b, Decl(deleteChain.ts, 17, 19))
+>o5 : Symbol(o5, Decl(deleteChain.ts, 17, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 17, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 17, 27))
+>d : Symbol(d, Decl(deleteChain.ts, 17, 32))
+>e : Symbol(e, Decl(deleteChain.ts, 17, 38))
+
+delete (o5.b?.().c.d?.e);
+>o5.b?.().c.d?.e : Symbol(e, Decl(deleteChain.ts, 17, 38))
+>o5.b?.().c.d : Symbol(d, Decl(deleteChain.ts, 17, 32))
+>o5.b?.().c : Symbol(c, Decl(deleteChain.ts, 17, 27))
+>o5.b : Symbol(b, Decl(deleteChain.ts, 17, 19))
+>o5 : Symbol(o5, Decl(deleteChain.ts, 17, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 17, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 17, 27))
+>d : Symbol(d, Decl(deleteChain.ts, 17, 32))
+>e : Symbol(e, Decl(deleteChain.ts, 17, 38))
+
+declare const o6: { b?: { c: { d?: { e: string } } } };
+>o6 : Symbol(o6, Decl(deleteChain.ts, 21, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 21, 19))
+>c : Symbol(c, Decl(deleteChain.ts, 21, 25))
+>d : Symbol(d, Decl(deleteChain.ts, 21, 30))
+>e : Symbol(e, Decl(deleteChain.ts, 21, 36))
+
+delete o6.b?.['c'].d?.['e'];
+>o6.b?.['c'].d : Symbol(d, Decl(deleteChain.ts, 21, 30))
+>o6.b : Symbol(b, Decl(deleteChain.ts, 21, 19))
+>o6 : Symbol(o6, Decl(deleteChain.ts, 21, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 21, 19))
+>d : Symbol(d, Decl(deleteChain.ts, 21, 30))
+
+delete (o6.b?.['c'].d?.['e']);
+>o6.b?.['c'].d : Symbol(d, Decl(deleteChain.ts, 21, 30))
+>o6.b : Symbol(b, Decl(deleteChain.ts, 21, 19))
+>o6 : Symbol(o6, Decl(deleteChain.ts, 21, 13))
+>b : Symbol(b, Decl(deleteChain.ts, 21, 19))
+>d : Symbol(d, Decl(deleteChain.ts, 21, 30))
+

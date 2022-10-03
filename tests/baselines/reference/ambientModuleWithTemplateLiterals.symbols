@@ -1,0 +1,65 @@
+=== tests/cases/compiler/ambientModuleWithTemplateLiterals.ts ===
+declare module Foo {
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+
+    enum Bar {
+>Bar : Symbol(Bar, Decl(ambientModuleWithTemplateLiterals.ts, 0, 20))
+
+        a = `1`,
+>a : Symbol(Bar.a, Decl(ambientModuleWithTemplateLiterals.ts, 1, 14))
+
+        b = '2',
+>b : Symbol(Bar.b, Decl(ambientModuleWithTemplateLiterals.ts, 2, 16))
+
+        c = '3'
+>c : Symbol(Bar.c, Decl(ambientModuleWithTemplateLiterals.ts, 3, 16))
+    }
+
+    export const a = 'string';
+>a : Symbol(a, Decl(ambientModuleWithTemplateLiterals.ts, 7, 16))
+
+    export const b = `template`;
+>b : Symbol(b, Decl(ambientModuleWithTemplateLiterals.ts, 8, 16))
+
+    export const c = Bar.a;
+>c : Symbol(c, Decl(ambientModuleWithTemplateLiterals.ts, 10, 16))
+>Bar.a : Symbol(Bar.a, Decl(ambientModuleWithTemplateLiterals.ts, 1, 14))
+>Bar : Symbol(Bar, Decl(ambientModuleWithTemplateLiterals.ts, 0, 20))
+>a : Symbol(Bar.a, Decl(ambientModuleWithTemplateLiterals.ts, 1, 14))
+
+    export const d = Bar['b'];
+>d : Symbol(d, Decl(ambientModuleWithTemplateLiterals.ts, 11, 16))
+>Bar : Symbol(Bar, Decl(ambientModuleWithTemplateLiterals.ts, 0, 20))
+>'b' : Symbol(Bar.b, Decl(ambientModuleWithTemplateLiterals.ts, 2, 16))
+
+    export const e = Bar[`c`];
+>e : Symbol(e, Decl(ambientModuleWithTemplateLiterals.ts, 12, 16))
+>Bar : Symbol(Bar, Decl(ambientModuleWithTemplateLiterals.ts, 0, 20))
+>`c` : Symbol(Bar.c, Decl(ambientModuleWithTemplateLiterals.ts, 3, 16))
+}
+
+Foo.a;
+>Foo.a : Symbol(Foo.a, Decl(ambientModuleWithTemplateLiterals.ts, 7, 16))
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(ambientModuleWithTemplateLiterals.ts, 7, 16))
+
+Foo.b;
+>Foo.b : Symbol(Foo.b, Decl(ambientModuleWithTemplateLiterals.ts, 8, 16))
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+>b : Symbol(Foo.b, Decl(ambientModuleWithTemplateLiterals.ts, 8, 16))
+
+Foo.c;
+>Foo.c : Symbol(Foo.c, Decl(ambientModuleWithTemplateLiterals.ts, 10, 16))
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+>c : Symbol(Foo.c, Decl(ambientModuleWithTemplateLiterals.ts, 10, 16))
+
+Foo.d;
+>Foo.d : Symbol(Foo.d, Decl(ambientModuleWithTemplateLiterals.ts, 11, 16))
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+>d : Symbol(Foo.d, Decl(ambientModuleWithTemplateLiterals.ts, 11, 16))
+
+Foo.e;
+>Foo.e : Symbol(Foo.e, Decl(ambientModuleWithTemplateLiterals.ts, 12, 16))
+>Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
+>e : Symbol(Foo.e, Decl(ambientModuleWithTemplateLiterals.ts, 12, 16))
+

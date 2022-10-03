@@ -1,0 +1,15 @@
+=== tests/cases/conformance/types/primitives/boolean/booleanPropertyAccess.ts ===
+var x = true;
+>x : Symbol(x, Decl(booleanPropertyAccess.ts, 0, 3))
+
+var a = x.toString();
+>a : Symbol(a, Decl(booleanPropertyAccess.ts, 2, 3))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(booleanPropertyAccess.ts, 0, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var b = x['toString']();
+>b : Symbol(b, Decl(booleanPropertyAccess.ts, 3, 3))
+>x : Symbol(x, Decl(booleanPropertyAccess.ts, 0, 3))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+

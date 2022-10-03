@@ -1,0 +1,52 @@
+=== tests/cases/compiler/unusedTypeParameters9.ts ===
+// clas + interface
+class C1<T> { }
+>C1 : Symbol(C1, Decl(unusedTypeParameters9.ts, 0, 0), Decl(unusedTypeParameters9.ts, 1, 15))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 1, 9), Decl(unusedTypeParameters9.ts, 2, 13))
+
+interface C1<T> { a: T; }
+>C1 : Symbol(C1, Decl(unusedTypeParameters9.ts, 0, 0), Decl(unusedTypeParameters9.ts, 1, 15))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 1, 9), Decl(unusedTypeParameters9.ts, 2, 13))
+>a : Symbol(C1.a, Decl(unusedTypeParameters9.ts, 2, 17))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 1, 9), Decl(unusedTypeParameters9.ts, 2, 13))
+
+// interface + class
+class C2<T> { a: T; }
+>C2 : Symbol(C2, Decl(unusedTypeParameters9.ts, 2, 25), Decl(unusedTypeParameters9.ts, 5, 21))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 5, 9), Decl(unusedTypeParameters9.ts, 6, 13))
+>a : Symbol(C2.a, Decl(unusedTypeParameters9.ts, 5, 13))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 5, 9), Decl(unusedTypeParameters9.ts, 6, 13))
+
+interface C2<T> { }
+>C2 : Symbol(C2, Decl(unusedTypeParameters9.ts, 2, 25), Decl(unusedTypeParameters9.ts, 5, 21))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 5, 9), Decl(unusedTypeParameters9.ts, 6, 13))
+
+// interfaces
+interface C3<T> { a(c: (p: T) => void): void; }
+>C3 : Symbol(C3, Decl(unusedTypeParameters9.ts, 6, 19), Decl(unusedTypeParameters9.ts, 9, 47), Decl(unusedTypeParameters9.ts, 10, 30), Decl(unusedTypeParameters9.ts, 11, 30), Decl(unusedTypeParameters9.ts, 12, 32))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+>a : Symbol(C3.a, Decl(unusedTypeParameters9.ts, 9, 17))
+>c : Symbol(c, Decl(unusedTypeParameters9.ts, 9, 20))
+>p : Symbol(p, Decl(unusedTypeParameters9.ts, 9, 24))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+
+interface C3<T> { b: string; }
+>C3 : Symbol(C3, Decl(unusedTypeParameters9.ts, 6, 19), Decl(unusedTypeParameters9.ts, 9, 47), Decl(unusedTypeParameters9.ts, 10, 30), Decl(unusedTypeParameters9.ts, 11, 30), Decl(unusedTypeParameters9.ts, 12, 32))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+>b : Symbol(C3.b, Decl(unusedTypeParameters9.ts, 10, 17))
+
+interface C3<T> { c: number; }
+>C3 : Symbol(C3, Decl(unusedTypeParameters9.ts, 6, 19), Decl(unusedTypeParameters9.ts, 9, 47), Decl(unusedTypeParameters9.ts, 10, 30), Decl(unusedTypeParameters9.ts, 11, 30), Decl(unusedTypeParameters9.ts, 12, 32))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+>c : Symbol(C3.c, Decl(unusedTypeParameters9.ts, 11, 17))
+
+interface C3<T> { d: boolean;  }
+>C3 : Symbol(C3, Decl(unusedTypeParameters9.ts, 6, 19), Decl(unusedTypeParameters9.ts, 9, 47), Decl(unusedTypeParameters9.ts, 10, 30), Decl(unusedTypeParameters9.ts, 11, 30), Decl(unusedTypeParameters9.ts, 12, 32))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+>d : Symbol(C3.d, Decl(unusedTypeParameters9.ts, 12, 17))
+
+interface C3<T> { e: any; }
+>C3 : Symbol(C3, Decl(unusedTypeParameters9.ts, 6, 19), Decl(unusedTypeParameters9.ts, 9, 47), Decl(unusedTypeParameters9.ts, 10, 30), Decl(unusedTypeParameters9.ts, 11, 30), Decl(unusedTypeParameters9.ts, 12, 32))
+>T : Symbol(T, Decl(unusedTypeParameters9.ts, 9, 13), Decl(unusedTypeParameters9.ts, 10, 13), Decl(unusedTypeParameters9.ts, 11, 13), Decl(unusedTypeParameters9.ts, 12, 13), Decl(unusedTypeParameters9.ts, 13, 13))
+>e : Symbol(C3.e, Decl(unusedTypeParameters9.ts, 13, 17))
+

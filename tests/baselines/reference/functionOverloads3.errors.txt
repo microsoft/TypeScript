@@ -1,0 +1,7 @@
+tests/cases/compiler/functionOverloads3.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/compiler/functionOverloads3.ts (1 errors) ====
+    function foo():string;
+             ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.

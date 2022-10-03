@@ -1,0 +1,16 @@
+=== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts ===
+import { yield } from "somemodule"; // Allowed
+>yield : Symbol(yield, Decl(es6ImportNamedImportIdentifiersParsing.ts, 0, 8))
+
+import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier
+>default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 1, 8))
+
+import { yield as default } from "somemodule"; // error to use default as binding name
+>default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 2, 8))
+
+import { default as yield } from "somemodule"; // no error 
+>yield : Symbol(yield, Decl(es6ImportNamedImportIdentifiersParsing.ts, 3, 8))
+
+import { default as default } from "somemodule"; // default as is ok, error of default binding name
+>default : Symbol(default, Decl(es6ImportNamedImportIdentifiersParsing.ts, 4, 8))
+

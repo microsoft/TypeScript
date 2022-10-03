@@ -1,0 +1,194 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/everyTypeAssignableToAny.ts ===
+var a: any;
+>a : any
+
+class C {
+>C : C
+
+    foo: string;
+>foo : string
+}
+var ac: C;
+>ac : C
+
+interface I {
+    foo: string;
+>foo : string
+}
+var ai: I;
+>ai : I
+
+enum E { A }
+>E : E
+>A : E.A
+
+var ae: E;
+>ae : E
+
+var b: number;
+>b : number
+
+var c: string;
+>c : string
+
+var d: boolean;
+>d : boolean
+
+var e: Date;
+>e : Date
+
+var f: any;
+>f : any
+
+var g: void;
+>g : void
+
+var h: Object;
+>h : Object
+
+var i: {};
+>i : {}
+
+var j: () => {};
+>j : () => {}
+
+var k: Function;
+>k : Function
+
+var l: (x: number) => string;
+>l : (x: number) => string
+>x : number
+
+var m: number[];
+>m : number[]
+
+var n: { foo: string };
+>n : { foo: string; }
+>foo : string
+
+var o: <T>(x: T) => T;
+>o : <T>(x: T) => T
+>x : T
+
+var p: Number;
+>p : Number
+
+var q: String;
+>q : String
+
+a = b;
+>a = b : number
+>a : any
+>b : number
+
+a = c;
+>a = c : string
+>a : any
+>c : string
+
+a = d;
+>a = d : boolean
+>a : any
+>d : boolean
+
+a = e;
+>a = e : Date
+>a : any
+>e : Date
+
+a = f;
+>a = f : any
+>a : any
+>f : any
+
+a = g;
+>a = g : void
+>a : any
+>g : void
+
+a = h;
+>a = h : Object
+>a : any
+>h : Object
+
+a = i;
+>a = i : {}
+>a : any
+>i : {}
+
+a = j;
+>a = j : () => {}
+>a : any
+>j : () => {}
+
+a = k;
+>a = k : Function
+>a : any
+>k : Function
+
+a = l;
+>a = l : (x: number) => string
+>a : any
+>l : (x: number) => string
+
+a = m;
+>a = m : number[]
+>a : any
+>m : number[]
+
+a = o;
+>a = o : <T>(x: T) => T
+>a : any
+>o : <T>(x: T) => T
+
+a = p; 
+>a = p : Number
+>a : any
+>p : Number
+
+a = q;
+>a = q : String
+>a : any
+>q : String
+
+a = ac;
+>a = ac : C
+>a : any
+>ac : C
+
+a = ai;
+>a = ai : I
+>a : any
+>ai : I
+
+a = ae;
+>a = ae : E
+>a : any
+>ae : E
+
+function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
+>foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
+>x : T
+>y : U
+>z : V
+
+    a = x;
+>a = x : T
+>a : any
+>x : T
+
+    a = y;
+>a = y : U
+>a : any
+>y : U
+
+    a = z;
+>a = z : V
+>a : any
+>z : V
+}
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    a = x;
+//    a = y;
+//    a = z;
+//}

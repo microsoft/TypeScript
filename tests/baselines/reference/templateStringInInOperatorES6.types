@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/templates/templateStringInInOperatorES6.ts ===
+var x = `${ "hi" }` in { hi: 10, hello: 20};
+>x : boolean
+>`${ "hi" }` in { hi: 10, hello: 20} : boolean
+>`${ "hi" }` : string
+>"hi" : "hi"
+>{ hi: 10, hello: 20} : { hi: number; hello: number; }
+>hi : number
+>10 : 10
+>hello : number
+>20 : 20
+

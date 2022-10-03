@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts ===
+class C1 extends Object { }
+>C1 : Symbol(C1, Decl(classExtendingBuiltinType.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C2 extends Function { }
+>C2 : Symbol(C2, Decl(classExtendingBuiltinType.ts, 0, 27))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C3 extends String { }
+>C3 : Symbol(C3, Decl(classExtendingBuiltinType.ts, 1, 29))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C4 extends Boolean { }
+>C4 : Symbol(C4, Decl(classExtendingBuiltinType.ts, 2, 27))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C5 extends Number { }
+>C5 : Symbol(C5, Decl(classExtendingBuiltinType.ts, 3, 28))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C6 extends Date { }
+>C6 : Symbol(C6, Decl(classExtendingBuiltinType.ts, 4, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+class C7 extends RegExp { }
+>C7 : Symbol(C7, Decl(classExtendingBuiltinType.ts, 5, 25))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C8 extends Error { }
+>C8 : Symbol(C8, Decl(classExtendingBuiltinType.ts, 6, 27))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C9 extends Array { }
+>C9 : Symbol(C9, Decl(classExtendingBuiltinType.ts, 7, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C10 extends Array<number> { }
+>C10 : Symbol(C10, Decl(classExtendingBuiltinType.ts, 8, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

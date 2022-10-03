@@ -1,0 +1,39 @@
+tests/cases/compiler/createArray.ts(1,12): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/compiler/createArray.ts(1,19): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/createArray.ts(6,7): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/createArray.ts(7,12): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+tests/cases/compiler/createArray.ts(7,20): error TS1011: An element access expression should take an argument.
+tests/cases/compiler/createArray.ts(8,12): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/createArray.ts(8,19): error TS1011: An element access expression should take an argument.
+
+
+==== tests/cases/compiler/createArray.ts (7 errors) ====
+    var na=new number[];
+               ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                      
+!!! error TS1011: An element access expression should take an argument.
+    
+    class C {
+    }
+    
+    new C[];
+          
+!!! error TS1011: An element access expression should take an argument.
+    var ba=new boolean[];
+               ~~~~~~~
+!!! error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+                       
+!!! error TS1011: An element access expression should take an argument.
+    var sa=new string[];
+               ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                      
+!!! error TS1011: An element access expression should take an argument.
+    function f(s:string):number { return 0;
+    }
+    if (ba[14]) {
+        na[2]=f(sa[3]);
+    }
+    
+    new C[1]; // not an error

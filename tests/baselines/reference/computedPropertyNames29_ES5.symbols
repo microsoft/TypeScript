@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames29_ES5.ts ===
+class C {
+>C : Symbol(C, Decl(computedPropertyNames29_ES5.ts, 0, 0))
+
+    bar() {
+>bar : Symbol(C.bar, Decl(computedPropertyNames29_ES5.ts, 0, 9))
+
+        () => {
+            var obj = {
+>obj : Symbol(obj, Decl(computedPropertyNames29_ES5.ts, 3, 15))
+
+                [this.bar()]() { } // needs capture
+>[this.bar()] : Symbol([this.bar()], Decl(computedPropertyNames29_ES5.ts, 3, 23))
+>this.bar : Symbol(C.bar, Decl(computedPropertyNames29_ES5.ts, 0, 9))
+>this : Symbol(C, Decl(computedPropertyNames29_ES5.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(computedPropertyNames29_ES5.ts, 0, 9))
+
+            };
+        }
+        return 0;
+    }
+}

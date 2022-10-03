@@ -1,0 +1,100 @@
+tests/cases/compiler/constDeclarations-access3.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(7,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(8,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(9,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(10,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(11,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(12,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(13,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(14,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(15,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(16,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(17,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(19,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(20,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(21,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(22,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(24,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/compiler/constDeclarations-access3.ts(26,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+
+
+==== tests/cases/compiler/constDeclarations-access3.ts (18 errors) ====
+    module M {
+        export const x = 0;
+    }
+    
+    // Errors
+    M.x = 1;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x += 2;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x -= 3;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x *= 4;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x /= 5;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x %= 6;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x <<= 7;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x >>= 8;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x >>>= 9;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x &= 10;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x |= 11;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x ^= 12;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    
+    M.x++;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    M.x--;
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    ++M.x;
+        ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    --M.x;
+        ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    
+    ++((M.x));
+          ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    
+    M["x"] = 0;
+      ~~~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    
+    // OK
+    var a = M.x + 1;
+    
+    function f(v: number) { }
+    f(M.x);
+    
+    if (M.x) { }
+    
+    M.x;
+    (M.x);
+    
+    -M.x;
+    +M.x;
+    
+    M.x.toString();
+    

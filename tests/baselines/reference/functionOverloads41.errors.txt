@@ -1,0 +1,21 @@
+tests/cases/compiler/functionOverloads41.ts(4,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+    Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+  Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+    Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
+
+
+==== tests/cases/compiler/functionOverloads41.ts (1 errors) ====
+    function foo(bar:{a:number;}[]):string;
+    function foo(bar:{a:boolean;}[]):number;
+    function foo(bar:{a:any;}[]):any{ return bar }
+    var x = foo([{}]);
+                 ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+!!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+!!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
+!!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:1:19: 'a' is declared here.
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:2:19: 'a' is declared here.
+    

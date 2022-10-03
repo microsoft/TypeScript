@@ -1,0 +1,8 @@
+=== /a/ts3.1/index.d.ts ===
+export const a = 0;
+>a : Symbol(a, Decl(index.d.ts, 0, 12))
+
+=== /b/user.ts ===
+import { a } from "a";
+>a : Symbol(a, Decl(user.ts, 0, 8))
+

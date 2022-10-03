@@ -1,0 +1,23 @@
+=== tests/cases/compiler/library_StringSlice.ts ===
+// String.prototype.slice can have zero, one, or two arguments
+String.prototype.slice();
+>String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+String.prototype.slice(0);
+>String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+String.prototype.slice(0,1);
+>String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+

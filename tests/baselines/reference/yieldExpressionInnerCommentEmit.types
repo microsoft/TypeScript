@@ -1,0 +1,27 @@
+=== tests/cases/compiler/yieldExpressionInnerCommentEmit.ts ===
+function * foo2() {
+>foo2 : () => Generator<number, void, undefined>
+
+    /*comment1*/ yield 1;
+>yield 1 : any
+>1 : 1
+
+    yield /*comment2*/ 2;
+>yield /*comment2*/ 2 : any
+>2 : 2
+
+    yield 3 /*comment3*/
+>yield 3 : any
+>3 : 3
+
+    yield */*comment4*/ [4];
+>yield */*comment4*/ [4] : any
+>[4] : number[]
+>4 : 4
+
+    yield /*comment5*/* [5];
+>yield /*comment5*/* [5] : any
+>[5] : number[]
+>5 : 5
+}
+

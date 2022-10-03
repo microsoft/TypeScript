@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const Strings = {
+>Strings : Symbol(Strings, Decl(index.js, 0, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(index.js, 0, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(index.js, 1, 11))
+
+};
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 3, 2))
+>exports : Symbol(export=, Decl(index.js, 3, 2))
+
+    thing: "ok",
+>thing : Symbol(thing, Decl(index.js, 4, 18))
+
+    also: "ok",
+>also : Symbol(also, Decl(index.js, 5, 16))
+
+    desc: {
+>desc : Symbol(desc, Decl(index.js, 6, 15))
+
+        item: "ok"
+>item : Symbol(item, Decl(index.js, 7, 11))
+    }
+};
+module.exports.Strings = Strings;
+>module.exports.Strings : Symbol(Strings, Decl(index.js, 10, 2))
+>module.exports : Symbol(Strings, Decl(index.js, 10, 2))
+>module : Symbol(module, Decl(index.js, 3, 2))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>Strings : Symbol(Strings, Decl(index.js, 10, 2))
+>Strings : Symbol(Strings, Decl(index.js, 0, 5))
+

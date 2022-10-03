@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts ===
+function *g() {
+>g : () => Generator<any, void, undefined>
+
+    yield * [];
+>yield * [] : any
+>[] : undefined[]
+}

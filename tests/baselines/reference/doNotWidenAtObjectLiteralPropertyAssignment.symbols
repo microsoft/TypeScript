@@ -1,0 +1,27 @@
+=== tests/cases/compiler/doNotWidenAtObjectLiteralPropertyAssignment.ts ===
+interface ITestEventInterval {
+>ITestEventInterval : Symbol(ITestEventInterval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 0))
+
+    begin: number;
+>begin : Symbol(ITestEventInterval.begin, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 30))
+}
+
+interface IIntervalTreeNode {
+>IIntervalTreeNode : Symbol(IIntervalTreeNode, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 2, 1))
+
+    interval: ITestEventInterval;
+>interval : Symbol(IIntervalTreeNode.interval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 4, 29))
+>ITestEventInterval : Symbol(ITestEventInterval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 0))
+
+    children?: IIntervalTreeNode[];
+>children : Symbol(IIntervalTreeNode.children, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 5, 33))
+>IIntervalTreeNode : Symbol(IIntervalTreeNode, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 2, 1))
+}
+
+var test: IIntervalTreeNode[] = [{ interval: { begin: 0 }, children: null }]; // was error here because best common type is {}
+>test : Symbol(test, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 9, 3))
+>IIntervalTreeNode : Symbol(IIntervalTreeNode, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 2, 1))
+>interval : Symbol(interval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 9, 34))
+>begin : Symbol(begin, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 9, 46))
+>children : Symbol(children, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 9, 58))
+

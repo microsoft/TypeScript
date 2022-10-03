@@ -1,0 +1,12 @@
+tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts(3,10): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts(3,10): error TS2615: Type of property 'M' circularly references itself in mapped type '{ [P in "M"]: any; }'.
+
+
+==== tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts (2 errors) ====
+    type N<T, K extends string> = T | { [P in K]: N<T, K> }[K];
+    
+    type M = N<number, "M">;
+             ~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+             ~~~~~~~~~~~~~~
+!!! error TS2615: Type of property 'M' circularly references itself in mapped type '{ [P in "M"]: any; }'.

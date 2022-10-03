@@ -1,0 +1,33 @@
+=== tests/cases/compiler/transitiveTypeArgumentInference1.ts ===
+interface I1<T, U> {
+>I1 : Symbol(I1, Decl(transitiveTypeArgumentInference1.ts, 0, 0))
+>T : Symbol(T, Decl(transitiveTypeArgumentInference1.ts, 0, 13))
+>U : Symbol(U, Decl(transitiveTypeArgumentInference1.ts, 0, 15))
+
+	m(value: T): U;
+>m : Symbol(I1.m, Decl(transitiveTypeArgumentInference1.ts, 0, 20))
+>value : Symbol(value, Decl(transitiveTypeArgumentInference1.ts, 1, 3))
+>T : Symbol(T, Decl(transitiveTypeArgumentInference1.ts, 0, 13))
+>U : Symbol(U, Decl(transitiveTypeArgumentInference1.ts, 0, 15))
+}
+
+var i: I1<boolean, string> = null;
+>i : Symbol(i, Decl(transitiveTypeArgumentInference1.ts, 4, 3))
+>I1 : Symbol(I1, Decl(transitiveTypeArgumentInference1.ts, 0, 0))
+
+class C<T> {
+>C : Symbol(C, Decl(transitiveTypeArgumentInference1.ts, 4, 34))
+>T : Symbol(T, Decl(transitiveTypeArgumentInference1.ts, 6, 8))
+
+	constructor(p: I1<boolean, T>) {
+>p : Symbol(p, Decl(transitiveTypeArgumentInference1.ts, 7, 13))
+>I1 : Symbol(I1, Decl(transitiveTypeArgumentInference1.ts, 0, 0))
+>T : Symbol(T, Decl(transitiveTypeArgumentInference1.ts, 6, 8))
+	}
+}
+
+var c = new C(i);
+>c : Symbol(c, Decl(transitiveTypeArgumentInference1.ts, 11, 3))
+>C : Symbol(C, Decl(transitiveTypeArgumentInference1.ts, 4, 34))
+>i : Symbol(i, Decl(transitiveTypeArgumentInference1.ts, 4, 3))
+

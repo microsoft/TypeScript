@@ -1,0 +1,20 @@
+tests/cases/conformance/jsdoc/a.js(5,18): error TS1016: A required parameter cannot follow an optional parameter.
+
+
+==== tests/cases/conformance/jsdoc/a.js (1 errors) ====
+    /**
+     * @param {string=} `args`
+     * @param `bwarg` {?number?}
+     */
+    function f(args, bwarg) {
+                     ~~~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    }
+    
+==== tests/cases/conformance/jsdoc/ts.ts (0 errors) ====
+    /**
+     * @param `arg` - this is fine
+     */
+    function g(arg: string) {
+    }
+    

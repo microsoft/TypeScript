@@ -1,0 +1,10 @@
+tests/cases/compiler/file2.ts(1,1): error TS2588: Cannot assign to 'x' because it is a constant.
+
+
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    const x = 0
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    x++;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.

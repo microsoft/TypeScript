@@ -1,0 +1,190 @@
+=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.3.ts ===
+declare const obj: any;
+>obj : any
+
+obj?.["a"]++;
+>obj?.["a"]++ : number
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+
+obj?.a["b"]++;
+>obj?.a["b"]++ : number
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+
+obj?.["a"]--;
+>obj?.["a"]-- : number
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+
+obj?.a["b"]--;
+>obj?.a["b"]-- : number
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+
+++obj?.["a"];
+>++obj?.["a"] : number
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+
+++obj?.a["b"];
+>++obj?.a["b"] : number
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+
+--obj?.["a"];
+>--obj?.["a"] : number
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+
+--obj?.a["b"];
+>--obj?.a["b"] : number
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+
+obj?.["a"] = 1;
+>obj?.["a"] = 1 : 1
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>1 : 1
+
+obj?.a["b"] = 1;
+>obj?.a["b"] = 1 : 1
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>1 : 1
+
+obj?.["a"] += 1;
+>obj?.["a"] += 1 : any
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>1 : 1
+
+obj?.a["b"] += 1;
+>obj?.a["b"] += 1 : any
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>1 : 1
+
+for (obj?.["a"] in {});
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>{} : {}
+
+for (obj?.a["b"] in {});
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>{} : {}
+
+for (obj?.["a"] of []);
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>[] : never[]
+
+for (obj?.a["b"] of []);
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>[] : never[]
+
+({ a: obj?.["a"] } = { a: 1 });
+>({ a: obj?.["a"] } = { a: 1 }) : { a: number; }
+>{ a: obj?.["a"] } = { a: 1 } : { a: number; }
+>{ a: obj?.["a"] } : { a: any; }
+>a : any
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+({ a: obj?.a["b"] } = { a: 1 });
+>({ a: obj?.a["b"] } = { a: 1 }) : { a: number; }
+>{ a: obj?.a["b"] } = { a: 1 } : { a: number; }
+>{ a: obj?.a["b"] } : { a: any; }
+>a : any
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+({ ...obj?.["a"] } = { a: 1 });
+>({ ...obj?.["a"] } = { a: 1 }) : { a: number; }
+>{ ...obj?.["a"] } = { a: 1 } : { a: number; }
+>{ ...obj?.["a"] } : any
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+({ ...obj?.a["b"] } = { a: 1 });
+>({ ...obj?.a["b"] } = { a: 1 }) : { a: number; }
+>{ ...obj?.a["b"] } = { a: 1 } : { a: number; }
+>{ ...obj?.a["b"] } : any
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+[...obj?.["a"]] = [];
+>[...obj?.["a"]] = [] : never[]
+>[...obj?.["a"]] : any[]
+>...obj?.["a"] : any
+>obj?.["a"] : any
+>obj : any
+>"a" : "a"
+>[] : never[]
+
+[...obj?.a["b"]] = [];
+>[...obj?.a["b"]] = [] : never[]
+>[...obj?.a["b"]] : any[]
+>...obj?.a["b"] : any
+>obj?.a["b"] : any
+>obj?.a : any
+>obj : any
+>a : any
+>"b" : "b"
+>[] : never[]
+

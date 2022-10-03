@@ -1,0 +1,44 @@
+=== tests/cases/compiler/objectLiteralArraySpecialization.ts ===
+declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
+>create : Symbol(create, Decl(objectLiteralArraySpecialization.ts, 0, 0))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 0, 24))
+>initialValues : Symbol(initialValues, Decl(objectLiteralArraySpecialization.ts, 0, 27))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 0, 24))
+>MyArrayWrapper : Symbol(MyArrayWrapper, Decl(objectLiteralArraySpecialization.ts, 0, 67))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 0, 24))
+
+interface MyArrayWrapper<T> {
+>MyArrayWrapper : Symbol(MyArrayWrapper, Decl(objectLiteralArraySpecialization.ts, 0, 67))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
+
+	constructor(initialItems?: T[]);
+>constructor : Symbol(MyArrayWrapper.constructor, Decl(objectLiteralArraySpecialization.ts, 1, 29))
+>initialItems : Symbol(initialItems, Decl(objectLiteralArraySpecialization.ts, 2, 13))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
+
+	doSomething(predicate: (x: T, y: T) => boolean): void;
+>doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
+>predicate : Symbol(predicate, Decl(objectLiteralArraySpecialization.ts, 3, 13))
+>x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 3, 25))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
+>y : Symbol(y, Decl(objectLiteralArraySpecialization.ts, 3, 30))
+>T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
+}
+var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // should not error
+>thing : Symbol(thing, Decl(objectLiteralArraySpecialization.ts, 5, 3))
+>create : Symbol(create, Decl(objectLiteralArraySpecialization.ts, 0, 0))
+>name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
+>id : Symbol(id, Decl(objectLiteralArraySpecialization.ts, 5, 35))
+>name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 47))
+>id : Symbol(id, Decl(objectLiteralArraySpecialization.ts, 5, 61))
+
+thing.doSomething((x, y) => x.name === "bob"); // should not error
+>thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
+>thing : Symbol(thing, Decl(objectLiteralArraySpecialization.ts, 5, 3))
+>doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
+>x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 6, 19))
+>y : Symbol(y, Decl(objectLiteralArraySpecialization.ts, 6, 21))
+>x.name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
+>x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 6, 19))
+>name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
+

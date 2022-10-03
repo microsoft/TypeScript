@@ -1,0 +1,19 @@
+tests/cases/compiler/functionOverloads2.ts(4,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(bar: string): string', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
+  Overload 2 of 2, '(bar: number): number', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/compiler/functionOverloads2.ts (1 errors) ====
+    function foo(bar: string): string;
+    function foo(bar: number): number;
+    function foo(bar: any): any { return bar };
+    var x = foo(true);
+                ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(bar: string): string', gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(bar: number): number', gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
+!!! related TS2793 tests/cases/compiler/functionOverloads2.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

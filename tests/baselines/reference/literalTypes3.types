@@ -1,0 +1,176 @@
+=== tests/cases/conformance/types/literal/literalTypes3.ts ===
+function f1(s: string) {
+>f1 : (s: string) => void
+>s : string
+
+    if (s === "foo") {
+>s === "foo" : boolean
+>s : string
+>"foo" : "foo"
+
+        s;  // "foo"
+>s : "foo"
+    }
+    if (s === "foo" || s === "bar") {
+>s === "foo" || s === "bar" : boolean
+>s === "foo" : boolean
+>s : string
+>"foo" : "foo"
+>s === "bar" : boolean
+>s : string
+>"bar" : "bar"
+
+        s;  // "foo" | "bar"
+>s : "foo" | "bar"
+    }
+}
+
+function f2(s: string) {
+>f2 : (s: string) => void
+>s : string
+
+    switch (s) {
+>s : string
+
+        case "foo":
+>"foo" : "foo"
+
+        case "bar":
+>"bar" : "bar"
+
+            s;  // "foo" | "bar"
+>s : "foo" | "bar"
+
+        case "baz":
+>"baz" : "baz"
+
+            s;  // "foo" | "bar" | "baz"
+>s : "foo" | "bar" | "baz"
+
+            break;
+        default:
+            s;  // string
+>s : string
+    }
+}
+
+function f3(s: string) {
+>f3 : (s: string) => "foo" | "bar" | undefined
+>s : string
+
+    return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
+>s === "foo" || s === "bar" ? s : undefined : "foo" | "bar" | undefined
+>s === "foo" || s === "bar" : boolean
+>s === "foo" : boolean
+>s : string
+>"foo" : "foo"
+>s === "bar" : boolean
+>s : string
+>"bar" : "bar"
+>s : "foo" | "bar"
+>undefined : undefined
+}
+
+function f4(x: number) {
+>f4 : (x: number) => 1 | 2
+>x : number
+
+    if (x === 1 || x === 2) {
+>x === 1 || x === 2 : boolean
+>x === 1 : boolean
+>x : number
+>1 : 1
+>x === 2 : boolean
+>x : number
+>2 : 2
+
+        return x;  // 1 | 2
+>x : 1 | 2
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+function f5(x: number, y: 1 | 2) {
+>f5 : (x: number, y: 1 | 2) => void
+>x : number
+>y : 1 | 2
+
+    if (x === 0 || x === y) {
+>x === 0 || x === y : boolean
+>x === 0 : boolean
+>x : number
+>0 : 0
+>x === y : boolean
+>x : number
+>y : 1 | 2
+
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+}
+
+function f6(x: number, y: 1 | 2) {
+>f6 : (x: number, y: 1 | 2) => void
+>x : number
+>y : 1 | 2
+
+    if (y === x || 0 === x) {
+>y === x || 0 === x : boolean
+>y === x : boolean
+>y : 1 | 2
+>x : number
+>0 === x : boolean
+>0 : 0
+>x : number
+
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+}
+
+function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
+>f7 : (x: number | "foo" | "bar", y: 1 | 2 | string) => void
+>x : number | "foo" | "bar"
+>y : string | 1 | 2
+
+    if (x === y) {
+>x === y : boolean
+>x : number | "foo" | "bar"
+>y : string | 1 | 2
+
+        x;  // "foo" | "bar" | 1 | 2
+>x : "foo" | "bar" | 1 | 2
+    }
+}
+
+function f8(x: number | "foo" | "bar") {
+>f8 : (x: number | "foo" | "bar") => void
+>x : number | "foo" | "bar"
+
+    switch (x) {
+>x : number | "foo" | "bar"
+
+        case 1:
+>1 : 1
+
+        case 2:
+>2 : 2
+
+            x;  // 1 | 2
+>x : 1 | 2
+
+            break;
+        case "foo":
+>"foo" : "foo"
+
+            x;  // "foo"
+>x : "foo"
+
+            break;
+        default:
+            x;  // number | "bar"
+>x : number | "bar"
+    }
+}

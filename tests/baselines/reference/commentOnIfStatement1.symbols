@@ -1,0 +1,5 @@
+=== tests/cases/compiler/commentOnIfStatement1.ts ===
+// Test
+No type information for this code.if (true) {
+No type information for this code.}
+No type information for this code.

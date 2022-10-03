@@ -1,0 +1,15 @@
+tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts(8,12): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts (1 errors) ====
+    class EventAggregator
+    {
+        publish(event: string, data?: any): void;
+        publish<T>(event: T): void {}
+    }
+    
+    var ea: EventAggregator;
+    ea.publish([1,2,3]);
+               ~~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string'.
+!!! related TS2793 tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts:4:5: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

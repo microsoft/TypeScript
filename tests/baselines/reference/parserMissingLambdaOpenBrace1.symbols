@@ -1,0 +1,32 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts ===
+class C {
+>C : Symbol(C, Decl(parserMissingLambdaOpenBrace1.ts, 0, 0))
+
+    where(filter: Iterator<T, boolean>): Query<T> {
+>where : Symbol(C.where, Decl(parserMissingLambdaOpenBrace1.ts, 0, 9))
+>filter : Symbol(filter, Decl(parserMissingLambdaOpenBrace1.ts, 1, 10))
+>Iterator : Symbol(Iterator)
+>T : Symbol(T)
+>Query : Symbol(Query)
+>T : Symbol(T)
+
+        return fromDoWhile(test =>
+>test : Symbol(test, Decl(parserMissingLambdaOpenBrace1.ts, 2, 27))
+
+            var index = 0;
+>index : Symbol(index, Decl(parserMissingLambdaOpenBrace1.ts, 3, 15))
+
+            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
+>this : Symbol(C, Decl(parserMissingLambdaOpenBrace1.ts, 0, 0))
+>item : Symbol(item, Decl(parserMissingLambdaOpenBrace1.ts, 4, 33))
+>i : Symbol(i, Decl(parserMissingLambdaOpenBrace1.ts, 4, 38))
+>filter : Symbol(filter, Decl(parserMissingLambdaOpenBrace1.ts, 1, 10))
+>item : Symbol(item, Decl(parserMissingLambdaOpenBrace1.ts, 4, 33))
+>i : Symbol(i, Decl(parserMissingLambdaOpenBrace1.ts, 4, 38))
+>test : Symbol(test, Decl(parserMissingLambdaOpenBrace1.ts, 2, 27))
+>item : Symbol(item, Decl(parserMissingLambdaOpenBrace1.ts, 4, 33))
+>index : Symbol(index, Decl(parserMissingLambdaOpenBrace1.ts, 3, 15))
+
+        });
+    }
+}

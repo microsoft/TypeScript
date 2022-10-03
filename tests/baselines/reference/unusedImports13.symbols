@@ -1,0 +1,33 @@
+=== tests/cases/compiler/foo.tsx ===
+import React = require("react");
+>React : Symbol(React, Decl(foo.tsx, 0, 0))
+
+export const FooComponent = <div></div>
+>FooComponent : Symbol(FooComponent, Decl(foo.tsx, 2, 12))
+
+=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+export as namespace React;
+>React : Symbol(React, Decl(index.d.ts, 0, 15))
+
+declare namespace React {
+>React : Symbol(React, Decl(index.d.ts, 1, 26))
+
+    function createClass<P, S>(spec);
+>createClass : Symbol(createClass, Decl(index.d.ts, 3, 25))
+>P : Symbol(P, Decl(index.d.ts, 4, 25))
+>S : Symbol(S, Decl(index.d.ts, 4, 27))
+>spec : Symbol(spec, Decl(index.d.ts, 4, 31))
+}
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 5, 1))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 6, 16))
+    }
+}
+
+
+

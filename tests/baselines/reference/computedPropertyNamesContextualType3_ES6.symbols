@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType3_ES6.ts ===
+interface I {
+>I : Symbol(I, Decl(computedPropertyNamesContextualType3_ES6.ts, 0, 0))
+
+    [s: string]: (x: string) => number;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType3_ES6.ts, 1, 5))
+>x : Symbol(x, Decl(computedPropertyNamesContextualType3_ES6.ts, 1, 18))
+}
+
+var o: I = {
+>o : Symbol(o, Decl(computedPropertyNamesContextualType3_ES6.ts, 4, 3))
+>I : Symbol(I, Decl(computedPropertyNamesContextualType3_ES6.ts, 0, 0))
+
+    [+"foo"](y) { return y.length; },
+>[+"foo"] : Symbol([+"foo"], Decl(computedPropertyNamesContextualType3_ES6.ts, 4, 12))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType3_ES6.ts, 5, 13))
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType3_ES6.ts, 5, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    [+"bar"]: y => y.length
+>[+"bar"] : Symbol([+"bar"], Decl(computedPropertyNamesContextualType3_ES6.ts, 5, 37))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType3_ES6.ts, 6, 13))
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(computedPropertyNamesContextualType3_ES6.ts, 6, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}

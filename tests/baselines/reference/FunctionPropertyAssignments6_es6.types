@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts ===
+var v = { *<T>() { } }
+>v : { ""<T>(): Generator<never, void, unknown>; }
+>{ *<T>() { } } : { ""<T>(): Generator<never, void, unknown>; }
+> : <T>() => Generator<never, void, unknown>
+

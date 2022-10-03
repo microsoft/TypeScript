@@ -1,0 +1,35 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5for-of32.ts ===
+var array = [1,2,3];
+>array : number[]
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+var sum = 0;
+>sum : number
+>0 : 0
+
+for (let num of array) {
+>num : number
+>array : number[]
+
+    if (sum === 0) {
+>sum === 0 : boolean
+>sum : number
+>0 : 0
+
+        array = [4,5,6]
+>array = [4,5,6] : number[]
+>array : number[]
+>[4,5,6] : number[]
+>4 : 4
+>5 : 5
+>6 : 6
+    }
+    
+    sum += num;
+>sum += num : number
+>sum : number
+>num : number
+}

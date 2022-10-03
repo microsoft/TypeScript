@@ -1,0 +1,25 @@
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+0o00_
+>0o00_ : 0
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+0o_110
+>0o_110 : 72
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+0_O0101
+>0_ : 0
+>O0101 : any
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+0o01__11
+>0o01__11 : 73
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+0O0110_0110__
+>0O0110_0110__ : 294984
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+0o___0111010_0101_1
+>0o___0111010_0101_1 : 1224999433
+

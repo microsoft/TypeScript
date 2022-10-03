@@ -1,0 +1,276 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfAny.ts ===
+// every type is a subtype of any, no errors expected
+
+interface I {
+>I : Symbol(I, Decl(subtypesOfAny.ts, 0, 0))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 3, 5))
+
+    foo: any;
+>foo : Symbol(I.foo, Decl(subtypesOfAny.ts, 3, 21))
+}
+
+
+interface I2 {
+>I2 : Symbol(I2, Decl(subtypesOfAny.ts, 5, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 9, 5))
+
+    foo: number;
+>foo : Symbol(I2.foo, Decl(subtypesOfAny.ts, 9, 21))
+}
+
+
+interface I3 {
+>I3 : Symbol(I3, Decl(subtypesOfAny.ts, 11, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 15, 5))
+
+    foo: string;
+>foo : Symbol(I3.foo, Decl(subtypesOfAny.ts, 15, 21))
+}
+
+
+interface I4 {
+>I4 : Symbol(I4, Decl(subtypesOfAny.ts, 17, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 21, 5))
+
+    foo: boolean;
+>foo : Symbol(I4.foo, Decl(subtypesOfAny.ts, 21, 21))
+}
+
+
+interface I5 {
+>I5 : Symbol(I5, Decl(subtypesOfAny.ts, 23, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 27, 5))
+
+    foo: Date;
+>foo : Symbol(I5.foo, Decl(subtypesOfAny.ts, 27, 21))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+
+interface I6 {
+>I6 : Symbol(I6, Decl(subtypesOfAny.ts, 29, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 33, 5))
+
+    foo: RegExp;
+>foo : Symbol(I6.foo, Decl(subtypesOfAny.ts, 33, 21))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+
+interface I7 {
+>I7 : Symbol(I7, Decl(subtypesOfAny.ts, 35, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 39, 5))
+
+    foo: { bar: number };
+>foo : Symbol(I7.foo, Decl(subtypesOfAny.ts, 39, 21))
+>bar : Symbol(bar, Decl(subtypesOfAny.ts, 40, 10))
+}
+
+
+interface I8 {
+>I8 : Symbol(I8, Decl(subtypesOfAny.ts, 41, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 45, 5))
+
+    foo: number[];
+>foo : Symbol(I8.foo, Decl(subtypesOfAny.ts, 45, 21))
+}
+
+
+interface I9 {
+>I9 : Symbol(I9, Decl(subtypesOfAny.ts, 47, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 51, 5))
+
+    foo: I8;
+>foo : Symbol(I9.foo, Decl(subtypesOfAny.ts, 51, 21))
+>I8 : Symbol(I8, Decl(subtypesOfAny.ts, 41, 1))
+}
+
+class A { foo: number; }
+>A : Symbol(A, Decl(subtypesOfAny.ts, 53, 1))
+>foo : Symbol(A.foo, Decl(subtypesOfAny.ts, 55, 9))
+
+interface I10 {
+>I10 : Symbol(I10, Decl(subtypesOfAny.ts, 55, 24))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 57, 5))
+
+    foo: A;
+>foo : Symbol(I10.foo, Decl(subtypesOfAny.ts, 57, 21))
+>A : Symbol(A, Decl(subtypesOfAny.ts, 53, 1))
+}
+
+class A2<T> { foo: T; }
+>A2 : Symbol(A2, Decl(subtypesOfAny.ts, 59, 1))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 61, 9))
+>foo : Symbol(A2.foo, Decl(subtypesOfAny.ts, 61, 13))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 61, 9))
+
+interface I11 {
+>I11 : Symbol(I11, Decl(subtypesOfAny.ts, 61, 23))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 63, 5))
+
+    foo: A2<number>;
+>foo : Symbol(I11.foo, Decl(subtypesOfAny.ts, 63, 21))
+>A2 : Symbol(A2, Decl(subtypesOfAny.ts, 59, 1))
+}
+
+
+interface I12 {
+>I12 : Symbol(I12, Decl(subtypesOfAny.ts, 65, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 69, 5))
+
+    foo: (x) => number;
+>foo : Symbol(I12.foo, Decl(subtypesOfAny.ts, 69, 21))
+>x : Symbol(x, Decl(subtypesOfAny.ts, 70, 10))
+}
+
+
+interface I13 {
+>I13 : Symbol(I13, Decl(subtypesOfAny.ts, 71, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 75, 5))
+
+    foo: <T>(x:T) => T;
+>foo : Symbol(I13.foo, Decl(subtypesOfAny.ts, 75, 21))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 76, 10))
+>x : Symbol(x, Decl(subtypesOfAny.ts, 76, 13))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 76, 10))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 76, 10))
+}
+
+
+enum E { A }
+>E : Symbol(E, Decl(subtypesOfAny.ts, 77, 1))
+>A : Symbol(E.A, Decl(subtypesOfAny.ts, 80, 8))
+
+interface I14 {
+>I14 : Symbol(I14, Decl(subtypesOfAny.ts, 80, 12))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 82, 5))
+
+    foo: E;
+>foo : Symbol(I14.foo, Decl(subtypesOfAny.ts, 82, 21))
+>E : Symbol(E, Decl(subtypesOfAny.ts, 77, 1))
+}
+
+
+function f() { }
+>f : Symbol(f, Decl(subtypesOfAny.ts, 84, 1), Decl(subtypesOfAny.ts, 87, 16))
+
+module f {
+>f : Symbol(f, Decl(subtypesOfAny.ts, 84, 1), Decl(subtypesOfAny.ts, 87, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfAny.ts, 89, 14))
+}
+interface I15 {
+>I15 : Symbol(I15, Decl(subtypesOfAny.ts, 90, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 92, 5))
+
+    foo: typeof f;
+>foo : Symbol(I15.foo, Decl(subtypesOfAny.ts, 92, 21))
+>f : Symbol(f, Decl(subtypesOfAny.ts, 84, 1), Decl(subtypesOfAny.ts, 87, 16))
+}
+
+
+class c { baz: string }
+>c : Symbol(c, Decl(subtypesOfAny.ts, 94, 1), Decl(subtypesOfAny.ts, 97, 23))
+>baz : Symbol(c.baz, Decl(subtypesOfAny.ts, 97, 9))
+
+module c {
+>c : Symbol(c, Decl(subtypesOfAny.ts, 94, 1), Decl(subtypesOfAny.ts, 97, 23))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfAny.ts, 99, 14))
+}
+interface I16 {
+>I16 : Symbol(I16, Decl(subtypesOfAny.ts, 100, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 102, 5))
+
+    foo: typeof c;
+>foo : Symbol(I16.foo, Decl(subtypesOfAny.ts, 102, 21))
+>c : Symbol(c, Decl(subtypesOfAny.ts, 94, 1), Decl(subtypesOfAny.ts, 97, 23))
+}
+
+
+interface I17<T> {
+>I17 : Symbol(I17, Decl(subtypesOfAny.ts, 104, 1))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 107, 14))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 108, 5))
+
+    foo: T;
+>foo : Symbol(I17.foo, Decl(subtypesOfAny.ts, 108, 21))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 107, 14))
+}
+
+
+interface I18<T, U> {
+>I18 : Symbol(I18, Decl(subtypesOfAny.ts, 110, 1))
+>T : Symbol(T, Decl(subtypesOfAny.ts, 113, 14))
+>U : Symbol(U, Decl(subtypesOfAny.ts, 113, 16))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 114, 5))
+
+    foo: U;
+>foo : Symbol(I18.foo, Decl(subtypesOfAny.ts, 114, 21))
+>U : Symbol(U, Decl(subtypesOfAny.ts, 113, 16))
+}
+//interface I18<T, U extends T> {
+//    [x: string]: any;
+//    foo: U;
+//}
+
+
+interface I19 {
+>I19 : Symbol(I19, Decl(subtypesOfAny.ts, 116, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 124, 5))
+
+    foo: Object;
+>foo : Symbol(I19.foo, Decl(subtypesOfAny.ts, 124, 21))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+
+interface I20 {
+>I20 : Symbol(I20, Decl(subtypesOfAny.ts, 126, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(subtypesOfAny.ts, 130, 5))
+
+    foo: {};
+>foo : Symbol(I20.foo, Decl(subtypesOfAny.ts, 130, 21))
+}

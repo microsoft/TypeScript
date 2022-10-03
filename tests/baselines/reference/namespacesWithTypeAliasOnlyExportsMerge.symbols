@@ -1,0 +1,128 @@
+=== tests/cases/compiler/constAndNS.ts ===
+type A = number;
+>A : Symbol(A, Decl(constAndNS.ts, 0, 0))
+
+declare const Q: number;
+>Q : Symbol(Q, Decl(constAndNS.ts, 1, 13), Decl(constAndNS.ts, 1, 24))
+
+declare namespace Q {
+>Q : Symbol(Q, Decl(constAndNS.ts, 1, 13), Decl(constAndNS.ts, 1, 24))
+
+    export { A };
+>A : Symbol(A, Decl(constAndNS.ts, 3, 12))
+}
+declare const try1: Q.A;
+>try1 : Symbol(try1, Decl(constAndNS.ts, 5, 13))
+>Q : Symbol(Q, Decl(constAndNS.ts, 1, 13), Decl(constAndNS.ts, 1, 24))
+>A : Symbol(Q.A, Decl(constAndNS.ts, 3, 12))
+
+declare namespace Q2 {
+>Q2 : Symbol(Q2, Decl(constAndNS.ts, 5, 24))
+
+    export { Q }
+>Q : Symbol(Q, Decl(constAndNS.ts, 7, 12))
+}
+declare const try2: Q2.Q.A;
+>try2 : Symbol(try2, Decl(constAndNS.ts, 9, 13))
+>Q2 : Symbol(Q2, Decl(constAndNS.ts, 5, 24))
+>Q : Symbol(Q2.Q, Decl(constAndNS.ts, 7, 12))
+>A : Symbol(Q.A, Decl(constAndNS.ts, 3, 12))
+
+declare namespace Q3 {
+>Q3 : Symbol(Q3, Decl(constAndNS.ts, 9, 27))
+
+    export {A as B};
+>A : Symbol(A, Decl(constAndNS.ts, 0, 0))
+>B : Symbol(B, Decl(constAndNS.ts, 11, 12))
+}
+declare const try3: Q3.B;
+>try3 : Symbol(try3, Decl(constAndNS.ts, 13, 13))
+>Q3 : Symbol(Q3, Decl(constAndNS.ts, 9, 27))
+>B : Symbol(Q3.B, Decl(constAndNS.ts, 11, 12))
+
+declare namespace Q4 {
+>Q4 : Symbol(Q4, Decl(constAndNS.ts, 13, 25))
+
+    export { Q as default };
+>Q : Symbol(Q, Decl(constAndNS.ts, 1, 13), Decl(constAndNS.ts, 1, 24))
+>default : Symbol(default, Decl(constAndNS.ts, 15, 12))
+}
+declare const try4: Q4.default.A;
+>try4 : Symbol(try4, Decl(constAndNS.ts, 17, 13))
+>Q4 : Symbol(Q4, Decl(constAndNS.ts, 13, 25))
+>default : Symbol(Q4.default, Decl(constAndNS.ts, 15, 12))
+>A : Symbol(Q.A, Decl(constAndNS.ts, 3, 12))
+
+export {};
+=== tests/cases/compiler/circular.ts ===
+declare namespace NS1 {
+>NS1 : Symbol(NS1, Decl(circular.ts, 0, 0))
+
+    export { NS2 };
+>NS2 : Symbol(NS2, Decl(circular.ts, 1, 12))
+}
+declare namespace NS2 {
+>NS2 : Symbol(NS2, Decl(circular.ts, 2, 1))
+
+    export { NS1 };
+>NS1 : Symbol(NS1, Decl(circular.ts, 4, 12))
+}
+export {};
+=== tests/cases/compiler/circularWithUses.ts ===
+type A = string;
+>A : Symbol(A, Decl(circularWithUses.ts, 0, 0))
+
+type B = number;
+>B : Symbol(B, Decl(circularWithUses.ts, 0, 16))
+
+declare namespace NS1 {
+>NS1 : Symbol(NS1, Decl(circularWithUses.ts, 1, 16))
+
+    export { NS2, A };
+>NS2 : Symbol(NS2, Decl(circularWithUses.ts, 3, 12))
+>A : Symbol(A, Decl(circularWithUses.ts, 3, 17))
+}
+declare namespace NS2 {
+>NS2 : Symbol(NS2, Decl(circularWithUses.ts, 4, 1))
+
+    export { NS1, B };
+>NS1 : Symbol(NS1, Decl(circularWithUses.ts, 6, 12))
+>B : Symbol(B, Decl(circularWithUses.ts, 6, 17))
+}
+export {};
+declare const try1: NS1.A;
+>try1 : Symbol(try1, Decl(circularWithUses.ts, 9, 13))
+>NS1 : Symbol(NS1, Decl(circularWithUses.ts, 1, 16))
+>A : Symbol(NS1.A, Decl(circularWithUses.ts, 3, 17))
+
+declare const try2: NS2.B;
+>try2 : Symbol(try2, Decl(circularWithUses.ts, 10, 13))
+>NS2 : Symbol(NS2, Decl(circularWithUses.ts, 4, 1))
+>B : Symbol(NS2.B, Decl(circularWithUses.ts, 6, 17))
+
+declare const try3: NS1.NS2.B;
+>try3 : Symbol(try3, Decl(circularWithUses.ts, 11, 13))
+>NS1 : Symbol(NS1, Decl(circularWithUses.ts, 1, 16))
+>NS2 : Symbol(NS1.NS2, Decl(circularWithUses.ts, 3, 12))
+>B : Symbol(NS2.B, Decl(circularWithUses.ts, 6, 17))
+
+declare const try4: NS2.NS1.A;
+>try4 : Symbol(try4, Decl(circularWithUses.ts, 12, 13))
+>NS2 : Symbol(NS2, Decl(circularWithUses.ts, 4, 1))
+>NS1 : Symbol(NS2.NS1, Decl(circularWithUses.ts, 6, 12))
+>A : Symbol(NS1.A, Decl(circularWithUses.ts, 3, 17))
+
+declare const try5: NS1.NS2.NS1.A;
+>try5 : Symbol(try5, Decl(circularWithUses.ts, 13, 13))
+>NS1 : Symbol(NS1, Decl(circularWithUses.ts, 1, 16))
+>NS2 : Symbol(NS1.NS2, Decl(circularWithUses.ts, 3, 12))
+>NS1 : Symbol(NS2.NS1, Decl(circularWithUses.ts, 6, 12))
+>A : Symbol(NS1.A, Decl(circularWithUses.ts, 3, 17))
+
+declare const try6: NS2.NS1.NS2.B;
+>try6 : Symbol(try6, Decl(circularWithUses.ts, 14, 13))
+>NS2 : Symbol(NS2, Decl(circularWithUses.ts, 4, 1))
+>NS1 : Symbol(NS2.NS1, Decl(circularWithUses.ts, 6, 12))
+>NS2 : Symbol(NS1.NS2, Decl(circularWithUses.ts, 3, 12))
+>B : Symbol(NS2.B, Decl(circularWithUses.ts, 6, 17))
+

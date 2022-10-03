@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of9.ts ===
+var v: string;
+>v : Symbol(v, Decl(for-of9.ts, 0, 3))
+
+for (v of ["hello"]) { }
+>v : Symbol(v, Decl(for-of9.ts, 0, 3))
+
+for (v of "hello") { }
+>v : Symbol(v, Decl(for-of9.ts, 0, 3))
+

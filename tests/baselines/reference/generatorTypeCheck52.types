@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck52.ts ===
+class Foo { x: number }
+>Foo : Foo
+>x : number
+
+class Baz { z: number }
+>Baz : Baz
+>z : number
+
+function* g() {
+>g : () => Generator<Foo | Baz, void, unknown>
+
+    yield new Foo;
+>yield new Foo : any
+>new Foo : Foo
+>Foo : typeof Foo
+
+    yield new Baz;
+>yield new Baz : any
+>new Baz : Baz
+>Baz : typeof Baz
+}

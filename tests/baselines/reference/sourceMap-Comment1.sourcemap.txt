@@ -1,0 +1,20 @@
+===================================================================
+JsFile: sourceMap-Comment1.js
+mapUrl: sourceMap-Comment1.js.map
+sourceRoot: 
+sources: sourceMap-Comment1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMap-Comment1.js
+sourceFile:sourceMap-Comment1.ts
+-------------------------------------------------------------------
+>>>// Comment
+1 >
+2 >^^^^^^^^^^
+3 >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >// Comment
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMap-Comment1.js.map

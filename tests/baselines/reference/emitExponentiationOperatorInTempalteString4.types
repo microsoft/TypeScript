@@ -1,0 +1,232 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTempalteString4.ts ===
+var t1 = 10;
+>t1 : number
+>10 : 10
+
+var t2 = 10;
+>t2 : number
+>10 : 10
+
+var s;
+>s : any
+
+// With TemplateTail
+`${t1 ** -t2} world`;
+>`${t1 ** -t2} world` : string
+>t1 ** -t2 : number
+>t1 : number
+>-t2 : number
+>t2 : number
+
+`${(-t1) ** t2 - t1} world`;
+>`${(-t1) ** t2 - t1} world` : string
+>(-t1) ** t2 - t1 : number
+>(-t1) ** t2 : number
+>(-t1) : number
+>-t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`${(-++t1) ** t2 - t1} world`;
+>`${(-++t1) ** t2 - t1} world` : string
+>(-++t1) ** t2 - t1 : number
+>(-++t1) ** t2 : number
+>(-++t1) : number
+>-++t1 : number
+>++t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`${(-t1++) ** t2 - t1} world`;
+>`${(-t1++) ** t2 - t1} world` : string
+>(-t1++) ** t2 - t1 : number
+>(-t1++) ** t2 : number
+>(-t1++) : number
+>-t1++ : number
+>t1++ : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`${(~t1) ** t2 ** --t1 } world`;
+>`${(~t1) ** t2 ** --t1 } world` : string
+>(~t1) ** t2 ** --t1 : number
+>(~t1) : number
+>~t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+
+`${typeof (t1 ** t2 ** t1) } world`;
+>`${typeof (t1 ** t2 ** t1) } world` : string
+>typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(t1 ** t2 ** t1) : number
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+// TempateHead & TemplateTail are empt
+`${t1 ** -t2} hello world ${t1 ** -t2}`;
+>`${t1 ** -t2} hello world ${t1 ** -t2}` : string
+>t1 ** -t2 : number
+>t1 : number
+>-t2 : number
+>t2 : number
+>t1 ** -t2 : number
+>t1 : number
+>-t2 : number
+>t2 : number
+
+`${(-t1) ** t2 - t1} hello world ${(-t1) ** t2 - t1}`;
+>`${(-t1) ** t2 - t1} hello world ${(-t1) ** t2 - t1}` : string
+>(-t1) ** t2 - t1 : number
+>(-t1) ** t2 : number
+>(-t1) : number
+>-t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+>(-t1) ** t2 - t1 : number
+>(-t1) ** t2 : number
+>(-t1) : number
+>-t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`${(-++t1) ** t2 - t1} hello world ${t1 ** (-++t1) **- t1}`;
+>`${(-++t1) ** t2 - t1} hello world ${t1 ** (-++t1) **- t1}` : string
+>(-++t1) ** t2 - t1 : number
+>(-++t1) ** t2 : number
+>(-++t1) : number
+>-++t1 : number
+>++t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+>t1 ** (-++t1) **- t1 : number
+>t1 : number
+>(-++t1) **- t1 : number
+>(-++t1) : number
+>-++t1 : number
+>++t1 : number
+>t1 : number
+>- t1 : number
+>t1 : number
+
+`${(-t1++) ** t2 - t1} hello world ${t2 ** (-t1++) **  - t1}`;
+>`${(-t1++) ** t2 - t1} hello world ${t2 ** (-t1++) **  - t1}` : string
+>(-t1++) ** t2 - t1 : number
+>(-t1++) ** t2 : number
+>(-t1++) : number
+>-t1++ : number
+>t1++ : number
+>t1 : number
+>t2 : number
+>t1 : number
+>t2 ** (-t1++) **  - t1 : number
+>t2 : number
+>(-t1++) **  - t1 : number
+>(-t1++) : number
+>-t1++ : number
+>t1++ : number
+>t1 : number
+>- t1 : number
+>t1 : number
+
+`${(~t1) ** t2 ** --t1 } hello world ${(~t1) ** t2 ** --t1 }`;
+>`${(~t1) ** t2 ** --t1 } hello world ${(~t1) ** t2 ** --t1 }` : string
+>(~t1) ** t2 ** --t1 : number
+>(~t1) : number
+>~t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+>(~t1) ** t2 ** --t1 : number
+>(~t1) : number
+>~t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+
+`${typeof (t1 ** t2 ** t1)} hello world ${typeof (t1 ** t2 ** t1)}`;
+>`${typeof (t1 ** t2 ** t1)} hello world ${typeof (t1 ** t2 ** t1)}` : string
+>typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(t1 ** t2 ** t1) : number
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+>typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(t1 ** t2 ** t1) : number
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+
+// With templateHead
+`hello ${(-t1) ** t2 - t1}`;
+>`hello ${(-t1) ** t2 - t1}` : string
+>(-t1) ** t2 - t1 : number
+>(-t1) ** t2 : number
+>(-t1) : number
+>-t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`hello ${(-++t1) ** t2 - t1}`;
+>`hello ${(-++t1) ** t2 - t1}` : string
+>(-++t1) ** t2 - t1 : number
+>(-++t1) ** t2 : number
+>(-++t1) : number
+>-++t1 : number
+>++t1 : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`hello ${(-t1++) ** t2 - t1}`;
+>`hello ${(-t1++) ** t2 - t1}` : string
+>(-t1++) ** t2 - t1 : number
+>(-t1++) ** t2 : number
+>(-t1++) : number
+>-t1++ : number
+>t1++ : number
+>t1 : number
+>t2 : number
+>t1 : number
+
+`hello ${(~t1) ** t2 ** --t1 }`;
+>`hello ${(~t1) ** t2 ** --t1 }` : string
+>(~t1) ** t2 ** --t1 : number
+>(~t1) : number
+>~t1 : number
+>t1 : number
+>t2 ** --t1 : number
+>t2 : number
+>--t1 : number
+>t1 : number
+
+`hello ${typeof (t1 ** t2 ** t1)}`;
+>`hello ${typeof (t1 ** t2 ** t1)}` : string
+>typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(t1 ** t2 ** t1) : number
+>t1 ** t2 ** t1 : number
+>t1 : number
+>t2 ** t1 : number
+>t2 : number
+>t1 : number
+

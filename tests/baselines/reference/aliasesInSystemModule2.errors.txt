@@ -1,0 +1,20 @@
+tests/cases/compiler/aliasesInSystemModule2.ts(1,21): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/aliasesInSystemModule2.ts (1 errors) ====
+    import {alias} from "foo";
+                        ~~~~~
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import cls = alias.Class;
+    export import cls2 = alias.Class;
+    
+    let x = new alias.Class();
+    let y = new cls();
+    let z = new cls2();
+    
+    module M {
+      export import cls = alias.Class;
+      let x = new alias.Class();
+      let y = new cls(); 
+      let z = new cls2();
+    }

@@ -1,0 +1,53 @@
+=== tests/cases/conformance/salsa/index.js ===
+/// <reference path='node.d.ts' />
+const C = require("./semver")
+>C : Symbol(C, Decl(index.js, 1, 5))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./semver" : Symbol("tests/cases/conformance/salsa/semver", Decl(semver.js, 0, 0))
+
+var two = C.f(1)
+>two : Symbol(two, Decl(index.js, 2, 3))
+>C.f : Symbol(C.f, Decl(semver.js, 1, 28))
+>C : Symbol(C, Decl(index.js, 1, 5))
+>f : Symbol(C.f, Decl(semver.js, 1, 28))
+
+var c = new C
+>c : Symbol(c, Decl(index.js, 3, 3))
+>C : Symbol(C, Decl(index.js, 1, 5))
+
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(name: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>name : Symbol(name, Decl(node.d.ts, 0, 25))
+
+declare var exports: any;
+>exports : Symbol(exports, Decl(node.d.ts, 1, 11))
+
+declare var module: { exports: any };
+>module : Symbol(module, Decl(node.d.ts, 2, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 2, 21))
+
+=== tests/cases/conformance/salsa/semver.js ===
+/// <reference path='node.d.ts' />
+exports = module.exports = C
+>exports : Symbol("tests/cases/conformance/salsa/semver", Decl(semver.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(semver.js, 0, 0))
+>module : Symbol(export=, Decl(semver.js, 1, 9))
+>exports : Symbol(export=, Decl(semver.js, 1, 9))
+>C : Symbol(C, Decl(semver.js, 2, 22))
+
+exports.f = n => n + 1
+>exports.f : Symbol(f, Decl(semver.js, 1, 28))
+>exports : Symbol(f, Decl(semver.js, 1, 28))
+>f : Symbol(f, Decl(semver.js, 1, 28))
+>n : Symbol(n, Decl(semver.js, 2, 11))
+>n : Symbol(n, Decl(semver.js, 2, 11))
+
+function C() {
+>C : Symbol(C, Decl(semver.js, 2, 22))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(semver.js, 3, 14))
+>this : Symbol(C, Decl(semver.js, 2, 22))
+>p : Symbol(C.p, Decl(semver.js, 3, 14))
+}

@@ -1,0 +1,54 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export class B {
+>B : B
+
+    print() { return "I am B"}
+>print : () => string
+>"I am B" : "I am B"
+}
+
+export function foo() { return "foo" }
+>foo : () => string
+>"foo" : "foo"
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+export function backup() { return "backup"; }
+>backup : () => string
+>"backup" : "backup"
+
+=== tests/cases/conformance/dynamicImport/2.ts ===
+declare function bar(): boolean;
+>bar : () => boolean
+
+const specify = bar() ? "./0" : undefined;
+>specify : "./0" | undefined
+>bar() ? "./0" : undefined : "./0" | undefined
+>bar() : boolean
+>bar : () => boolean
+>"./0" : "./0"
+>undefined : undefined
+
+let myModule = import(specify);
+>myModule : Promise<any>
+>import(specify) : Promise<any>
+>specify : "./0" | undefined
+
+let myModule1 = import(undefined);
+>myModule1 : Promise<any>
+>import(undefined) : Promise<any>
+>undefined : undefined
+
+let myModule2 = import(bar() ? "./1" : null);
+>myModule2 : Promise<any>
+>import(bar() ? "./1" : null) : Promise<any>
+>bar() ? "./1" : null : "./1" | null
+>bar() : boolean
+>bar : () => boolean
+>"./1" : "./1"
+>null : null
+
+let myModule3 = import(null);
+>myModule3 : Promise<any>
+>import(null) : Promise<any>
+>null : null
+

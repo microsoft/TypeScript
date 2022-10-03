@@ -1,0 +1,43 @@
+=== tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts ===
+class A {
+>A : A
+
+    static readonly p1 = Symbol();
+>p1 : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+    static readonly p2 = Symbol();
+>p2 : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+    // All of the below should be out of scope or TDZ - `A` has not finished being constructed as they are executed
+    static readonly [A.p1] = 0;
+>[A.p1] : 0
+>A.p1 : unique symbol
+>A : typeof A
+>p1 : unique symbol
+>0 : 0
+
+    static [A.p2]() { return 0 };
+>[A.p2] : () => number
+>A.p2 : unique symbol
+>A : typeof A
+>p2 : unique symbol
+>0 : 0
+
+    [A.p1]() { }
+>[A.p1] : () => void
+>A.p1 : unique symbol
+>A : typeof A
+>p1 : unique symbol
+
+    [A.p2] = 0
+>[A.p2] : number
+>A.p2 : unique symbol
+>A : typeof A
+>p2 : unique symbol
+>0 : 0
+}
+

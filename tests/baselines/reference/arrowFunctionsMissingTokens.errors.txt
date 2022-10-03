@@ -1,0 +1,140 @@
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(2,16): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(4,22): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(6,17): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(8,36): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(10,42): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(15,23): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(17,29): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(19,24): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(21,43): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(23,49): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(25,23): error TS1005: '{' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(29,23): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(31,29): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(33,24): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(35,43): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(37,49): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(39,23): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(40,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(41,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(44,14): error TS1109: Expression expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(46,21): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(48,14): error TS2304: Cannot find name 'x'.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(50,35): error TS1005: '=>' expected.
+tests/cases/compiler/arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
+
+
+==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (24 errors) ====
+    module missingArrowsWithCurly {
+        var a = () { };
+                   ~
+!!! error TS1005: '=>' expected.
+    
+        var b = (): void { }
+                         ~
+!!! error TS1005: '=>' expected.
+    
+        var c = (x) { };
+                    ~
+!!! error TS1005: '=>' expected.
+    
+        var d = (x: number, y: string) { };
+                                       ~
+!!! error TS1005: '=>' expected.
+    
+        var e = (x: number, y: string): void { };
+                                             ~
+!!! error TS1005: '=>' expected.
+    }
+    
+    module missingCurliesWithArrow {
+        module withStatement {
+            var a = () => var k = 10;};
+                          ~~~
+!!! error TS1005: '{' expected.
+    
+            var b = (): void => var k = 10;}
+                                ~~~
+!!! error TS1005: '{' expected.
+    
+            var c = (x) => var k = 10;};
+                           ~~~
+!!! error TS1005: '{' expected.
+    
+            var d = (x: number, y: string) => var k = 10;};
+                                              ~~~
+!!! error TS1005: '{' expected.
+    
+            var e = (x: number, y: string): void => var k = 10;};
+                                                    ~~~
+!!! error TS1005: '{' expected.
+    
+            var f = () => var k = 10;}
+                          ~~~
+!!! error TS1005: '{' expected.
+        }
+    
+        module withoutStatement {
+            var a = () => };
+                          ~
+!!! error TS1109: Expression expected.
+    
+            var b = (): void => }
+                                ~
+!!! error TS1109: Expression expected.
+    
+            var c = (x) => };
+                           ~
+!!! error TS1109: Expression expected.
+    
+            var d = (x: number, y: string) => };
+                                              ~
+!!! error TS1109: Expression expected.
+    
+            var e = (x: number, y: string): void => };
+                                                    ~
+!!! error TS1109: Expression expected.
+    
+            var f = () => }
+                          ~
+!!! error TS1109: Expression expected.
+        }
+        ~
+!!! error TS1128: Declaration or statement expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    module ce_nEst_pas_une_arrow_function {
+        var a = ();
+                 ~
+!!! error TS1109: Expression expected.
+    
+        var b = (): void;
+                        ~
+!!! error TS1005: '=>' expected.
+    
+        var c = (x);
+                 ~
+!!! error TS2304: Cannot find name 'x'.
+    
+        var d = (x: number, y: string);
+                                      ~
+!!! error TS1005: '=>' expected.
+    
+        var e = (x: number, y: string): void;
+                                            ~
+!!! error TS1005: '=>' expected.
+    }
+    
+    module okay {
+        var a = () => { };
+    
+        var b = (): void => { }
+    
+        var c = (x) => { };
+    
+        var d = (x: number, y: string) => { };
+    
+        var e = (x: number, y: string): void => { };
+    }

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts ===
+{
+   declare var x = this;
+>x : Symbol(x, Decl(parserModifierOnStatementInBlock2.ts, 1, 14))
+>this : Symbol(globalThis)
+}
+

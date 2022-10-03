@@ -1,0 +1,42 @@
+=== tests/cases/compiler/server.ts ===
+export interface I {
+>I : Symbol(I, Decl(server.ts, 0, 0))
+
+    prop: string;
+>prop : Symbol(I.prop, Decl(server.ts, 0, 20))
+}
+export interface I2 {
+>I2 : Symbol(I2, Decl(server.ts, 2, 1))
+
+    prop2: string;
+>prop2 : Symbol(I2.prop2, Decl(server.ts, 3, 21))
+}
+export class C implements I {
+>C : Symbol(C, Decl(server.ts, 5, 1))
+>I : Symbol(I, Decl(server.ts, 0, 0))
+
+    prop = "hello";
+>prop : Symbol(C.prop, Decl(server.ts, 6, 29))
+}
+export class C2 implements I2 {
+>C2 : Symbol(C2, Decl(server.ts, 8, 1))
+>I2 : Symbol(I2, Decl(server.ts, 2, 1))
+
+    prop2 = "world";
+>prop2 : Symbol(C2.prop2, Decl(server.ts, 9, 31))
+}
+
+=== tests/cases/compiler/client.ts ===
+import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+>C : Symbol(C, Decl(client.ts, 0, 8))
+>I : Symbol(I, Decl(client.ts, 0, 11))
+>C2 : Symbol(C2, Decl(client.ts, 0, 14))
+
+export type cValInterface = I;
+>cValInterface : Symbol(cValInterface, Decl(client.ts, 0, 36))
+>I : Symbol(I, Decl(client.ts, 0, 11))
+
+export var cVal = new C();
+>cVal : Symbol(cVal, Decl(client.ts, 2, 10))
+>C : Symbol(C, Decl(client.ts, 0, 8))
+

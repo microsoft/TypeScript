@@ -1,0 +1,40 @@
+=== tests/cases/compiler/nonExportedElementsOfMergedModules.ts ===
+module One {
+>One : typeof One
+
+    enum A { X }
+>A : A
+>X : A.X
+
+    module B {
+>B : typeof B
+
+        export var x;
+>x : any
+    }
+}
+
+module One {
+>One : typeof One
+
+    enum A { Y }
+>A : A
+>Y : A.Y
+
+    module B {
+>B : typeof B
+
+        export var y;
+>y : any
+    }
+    B.x;
+>B.x : any
+>B : typeof B
+>x : any
+
+    B.y;
+>B.y : any
+>B : typeof B
+>y : any
+}
+

@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames52.js ===
+const array = [];
+>array : Symbol(array, Decl(computedPropertyNames52.js, 0, 5))
+
+for (let i = 0; i < 10; ++i) {
+>i : Symbol(i, Decl(computedPropertyNames52.js, 1, 8))
+>i : Symbol(i, Decl(computedPropertyNames52.js, 1, 8))
+>i : Symbol(i, Decl(computedPropertyNames52.js, 1, 8))
+
+    array.push(class C {
+>array.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(computedPropertyNames52.js, 0, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(computedPropertyNames52.js, 2, 15))
+
+        [i] = () => C;
+>[i] : Symbol(C[i], Decl(computedPropertyNames52.js, 2, 24))
+>i : Symbol(i, Decl(computedPropertyNames52.js, 1, 8))
+>C : Symbol(C, Decl(computedPropertyNames52.js, 2, 15))
+
+        static [i] = 100;
+>[i] : Symbol(C[i], Decl(computedPropertyNames52.js, 3, 22))
+>i : Symbol(i, Decl(computedPropertyNames52.js, 1, 8))
+
+    })
+}
+

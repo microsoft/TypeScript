@@ -1,0 +1,14 @@
+tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts(7,11): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts (1 errors) ====
+    interface Foo<T> {
+       x: T;
+    }
+    function foo(a) {
+       return null;
+    }
+    foo((arg: Foo) => { return arg.x; });
+              ~~~
+!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+    

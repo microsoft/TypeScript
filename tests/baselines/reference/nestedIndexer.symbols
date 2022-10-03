@@ -1,0 +1,11 @@
+=== tests/cases/compiler/nestedIndexer.ts ===
+function then(x) {
+>then : Symbol(then, Decl(nestedIndexer.ts, 0, 0))
+>x : Symbol(x, Decl(nestedIndexer.ts, 0, 14))
+
+var match: { [index: number]: string; }
+>match : Symbol(match, Decl(nestedIndexer.ts, 2, 3))
+>index : Symbol(index, Decl(nestedIndexer.ts, 2, 14))
+
+}
+

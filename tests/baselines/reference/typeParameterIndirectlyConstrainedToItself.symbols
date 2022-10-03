@@ -1,0 +1,105 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts ===
+class C<U extends T, T extends U> { }
+>C : Symbol(C, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 0))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 8))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 20))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 20))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 8))
+
+class C2<T extends U, U extends V, V extends T> { }
+>C2 : Symbol(C2, Decl(typeParameterIndirectlyConstrainedToItself.ts, 0, 37))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 9))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 21))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 21))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 34))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 34))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 9))
+
+interface I<U extends T, T extends U> { }
+>I : Symbol(I, Decl(typeParameterIndirectlyConstrainedToItself.ts, 1, 51))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 3, 12))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 3, 24))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 3, 24))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 3, 12))
+
+interface I2<T extends U, U extends V, V extends T> { }
+>I2 : Symbol(I2, Decl(typeParameterIndirectlyConstrainedToItself.ts, 3, 41))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 13))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 25))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 25))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 38))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 38))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 13))
+
+function f<U extends T, T extends U>() { }
+>f : Symbol(f, Decl(typeParameterIndirectlyConstrainedToItself.ts, 4, 55))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 6, 11))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 6, 23))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 6, 23))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 6, 11))
+
+function f2<T extends U, U extends V, V extends T>() { }
+>f2 : Symbol(f2, Decl(typeParameterIndirectlyConstrainedToItself.ts, 6, 42))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 12))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 24))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 24))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 37))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 37))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 7, 12))
+
+var a: {
+>a : Symbol(a, Decl(typeParameterIndirectlyConstrainedToItself.ts, 9, 3))
+
+    <U extends T, T extends U>(): void;
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 10, 5))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 10, 17))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 10, 17))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 10, 5))
+
+    <T extends U, U extends V, V extends T>(): void;
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 5))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 17))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 17))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 30))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 30))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 11, 5))
+}
+
+var b = <U extends T, T extends U>() => { }
+>b : Symbol(b, Decl(typeParameterIndirectlyConstrainedToItself.ts, 14, 3))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 14, 9))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 14, 21))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 14, 21))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 14, 9))
+
+var b2 = <T extends U, U extends V, V extends T>() => { }
+>b2 : Symbol(b2, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 3))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 10))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 22))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 22))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 35))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 35))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 10))
+
+class D<U extends T, T extends V, V extends T> { }
+>D : Symbol(D, Decl(typeParameterIndirectlyConstrainedToItself.ts, 15, 57))
+>U : Symbol(U, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 8))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 20))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 20))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 33))
+>V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 33))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 20))
+
+// Repro from #25740
+
+type Foo<T> = [T] extends [number] ? {} : {};
+>Foo : Symbol(Foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 50))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 9))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 9))
+
+function foo<S extends Foo<S>>() {}
+>foo : Symbol(foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 45))
+>S : Symbol(S, Decl(typeParameterIndirectlyConstrainedToItself.ts, 22, 13))
+>Foo : Symbol(Foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 50))
+>S : Symbol(S, Decl(typeParameterIndirectlyConstrainedToItself.ts, 22, 13))
+

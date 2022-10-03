@@ -1,0 +1,3 @@
+=== tests/cases/compiler/pi.ts ===
+export default 3.14159;
+No type information for this code.

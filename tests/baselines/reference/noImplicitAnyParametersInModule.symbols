@@ -1,0 +1,93 @@
+=== tests/cases/compiler/noImplicitAnyParametersInModule.ts ===
+module M {
+>M : Symbol(M, Decl(noImplicitAnyParametersInModule.ts, 0, 0))
+
+    // No implicit-'any' errors.
+    function m_f1(): void { }
+>m_f1 : Symbol(m_f1, Decl(noImplicitAnyParametersInModule.ts, 0, 10))
+
+    // Implicit-'any' error for x.
+    function m_f2(x): void { }
+>m_f2 : Symbol(m_f2, Decl(noImplicitAnyParametersInModule.ts, 2, 29))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 5, 18))
+
+    // No implicit-'any' errors.
+    function m_f3(x: any): void { }
+>m_f3 : Symbol(m_f3, Decl(noImplicitAnyParametersInModule.ts, 5, 30))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 8, 18))
+
+    // Implicit-'any' errors for x, y, and z.
+    function m_f4(x, y, z): void { }
+>m_f4 : Symbol(m_f4, Decl(noImplicitAnyParametersInModule.ts, 8, 35))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 11, 18))
+>y : Symbol(y, Decl(noImplicitAnyParametersInModule.ts, 11, 20))
+>z : Symbol(z, Decl(noImplicitAnyParametersInModule.ts, 11, 23))
+
+    // Implicit-'any' errors for x and z.
+    function m_f5(x, y: any, z): void { }
+>m_f5 : Symbol(m_f5, Decl(noImplicitAnyParametersInModule.ts, 11, 36))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 14, 18))
+>y : Symbol(y, Decl(noImplicitAnyParametersInModule.ts, 14, 20))
+>z : Symbol(z, Decl(noImplicitAnyParametersInModule.ts, 14, 28))
+
+    // Implicit-'any[]' error for r.
+    function m_f6(...r): void { }
+>m_f6 : Symbol(m_f6, Decl(noImplicitAnyParametersInModule.ts, 14, 41))
+>r : Symbol(r, Decl(noImplicitAnyParametersInModule.ts, 17, 18))
+
+    // Implicit-'any'/'any[]' errors for x and r.
+    function m_f7(x, ...r): void { }
+>m_f7 : Symbol(m_f7, Decl(noImplicitAnyParametersInModule.ts, 17, 33))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 20, 18))
+>r : Symbol(r, Decl(noImplicitAnyParametersInModule.ts, 20, 20))
+
+    // Implicit-'any' errors for x1, y2, x3, and y3.
+    function m_f8(x1, y1: number): any;
+>m_f8 : Symbol(m_f8, Decl(noImplicitAnyParametersInModule.ts, 20, 36), Decl(noImplicitAnyParametersInModule.ts, 23, 39), Decl(noImplicitAnyParametersInModule.ts, 24, 39))
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInModule.ts, 23, 18))
+>y1 : Symbol(y1, Decl(noImplicitAnyParametersInModule.ts, 23, 21))
+
+    function m_f8(x2: string, y2): any;
+>m_f8 : Symbol(m_f8, Decl(noImplicitAnyParametersInModule.ts, 20, 36), Decl(noImplicitAnyParametersInModule.ts, 23, 39), Decl(noImplicitAnyParametersInModule.ts, 24, 39))
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInModule.ts, 24, 18))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInModule.ts, 24, 29))
+
+    function m_f8(x3, y3): any { }
+>m_f8 : Symbol(m_f8, Decl(noImplicitAnyParametersInModule.ts, 20, 36), Decl(noImplicitAnyParametersInModule.ts, 23, 39), Decl(noImplicitAnyParametersInModule.ts, 24, 39))
+>x3 : Symbol(x3, Decl(noImplicitAnyParametersInModule.ts, 25, 18))
+>y3 : Symbol(y3, Decl(noImplicitAnyParametersInModule.ts, 25, 21))
+
+    // No implicit-'any' errors.
+    var m_f9 = () => "";
+>m_f9 : Symbol(m_f9, Decl(noImplicitAnyParametersInModule.ts, 28, 7))
+
+    // Implicit-'any' error for x.
+    var m_f10 = (x) => "";
+>m_f10 : Symbol(m_f10, Decl(noImplicitAnyParametersInModule.ts, 31, 7))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 31, 17))
+
+    // Implicit-'any' errors for x, y, and z.
+    var m_f11 = (x, y, z) => "";
+>m_f11 : Symbol(m_f11, Decl(noImplicitAnyParametersInModule.ts, 34, 7))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 34, 17))
+>y : Symbol(y, Decl(noImplicitAnyParametersInModule.ts, 34, 19))
+>z : Symbol(z, Decl(noImplicitAnyParametersInModule.ts, 34, 22))
+
+    // Implicit-'any' errors for x and z.
+    var m_f12 = (x, y: any, z) => "";
+>m_f12 : Symbol(m_f12, Decl(noImplicitAnyParametersInModule.ts, 37, 7))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 37, 17))
+>y : Symbol(y, Decl(noImplicitAnyParametersInModule.ts, 37, 19))
+>z : Symbol(z, Decl(noImplicitAnyParametersInModule.ts, 37, 27))
+
+    // Implicit-'any[]' errors for r.
+    var m_f13 = (...r) => "";
+>m_f13 : Symbol(m_f13, Decl(noImplicitAnyParametersInModule.ts, 40, 7))
+>r : Symbol(r, Decl(noImplicitAnyParametersInModule.ts, 40, 17))
+
+    // Implicit-'any'/'any[]' errors for x and r.
+    var m_f14 = (x, ...r) => "";
+>m_f14 : Symbol(m_f14, Decl(noImplicitAnyParametersInModule.ts, 43, 7))
+>x : Symbol(x, Decl(noImplicitAnyParametersInModule.ts, 43, 17))
+>r : Symbol(r, Decl(noImplicitAnyParametersInModule.ts, 43, 19))
+}

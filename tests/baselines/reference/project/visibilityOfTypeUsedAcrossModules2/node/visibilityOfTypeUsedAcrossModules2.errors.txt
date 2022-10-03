@@ -1,0 +1,15 @@
+main.ts(1,22): error TS1006: A file cannot have a reference to itself.
+main.ts(2,22): error TS6053: File 'nonExistingFile1.ts' not found.
+main.ts(3,22): error TS6053: File 'nonExistingFile2.ts' not found.
+
+
+==== main.ts (3 errors) ====
+    /// <reference path="main.ts" />
+                         ~~~~~~~
+!!! error TS1006: A file cannot have a reference to itself.
+    /// <reference path="nonExistingFile1.ts" />
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File 'nonExistingFile1.ts' not found.
+    /// <reference path="nonExistingFile2.ts" />
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File 'nonExistingFile2.ts' not found.

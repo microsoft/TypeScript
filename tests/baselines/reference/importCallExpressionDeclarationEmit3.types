@@ -1,0 +1,34 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : () => string
+>"foo" : "foo"
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+declare function getPath(): string;
+>getPath : () => string
+
+import * as Zero from "./0";
+>Zero : typeof Zero
+
+import("./0");
+>import("./0") : Promise<typeof Zero>
+>"./0" : "./0"
+
+export var p0: Promise<typeof Zero> = import(getPath());
+>p0 : Promise<typeof Zero>
+>Zero : typeof Zero
+>import(getPath()) : Promise<any>
+>getPath() : string
+>getPath : () => string
+
+export var p1: Promise<typeof Zero> = import("./0");
+>p1 : Promise<typeof Zero>
+>Zero : typeof Zero
+>import("./0") : Promise<typeof Zero>
+>"./0" : "./0"
+
+export var p2: Promise<any> = import("./0");
+>p2 : Promise<any>
+>import("./0") : Promise<typeof Zero>
+>"./0" : "./0"
+

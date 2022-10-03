@@ -1,0 +1,92 @@
+=== tests/cases/compiler/genericClasses4.ts ===
+// once caused stack overflow
+class Vec2_T<A>
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+{
+    constructor(public x: A, public y: A) { }
+>x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+>A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+>y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+>A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+
+    fmap<B>(f: (a: A) => B): Vec2_T<B> {
+>fmap : Symbol(Vec2_T.fmap, Decl(genericClasses4.ts, 3, 45))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+>f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+>a : Symbol(a, Decl(genericClasses4.ts, 4, 16))
+>A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+
+        var x:B = f(this.x);
+>x : Symbol(x, Decl(genericClasses4.ts, 5, 11))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+>f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+>this.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+>this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+
+        var y:B = f(this.y);
+>y : Symbol(y, Decl(genericClasses4.ts, 6, 11))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+>f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+>this.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+>this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+
+        var retval: Vec2_T<B> = new Vec2_T(x, y);
+>retval : Symbol(retval, Decl(genericClasses4.ts, 7, 11))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>x : Symbol(x, Decl(genericClasses4.ts, 5, 11))
+>y : Symbol(y, Decl(genericClasses4.ts, 6, 11))
+
+        return retval;
+>retval : Symbol(retval, Decl(genericClasses4.ts, 7, 11))
+    }
+    apply<B>(f: Vec2_T<(a: A) => B>): Vec2_T<B> {
+>apply : Symbol(Vec2_T.apply, Decl(genericClasses4.ts, 9, 5))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+>f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>a : Symbol(a, Decl(genericClasses4.ts, 10, 24))
+>A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+
+        var x:B = f.x(this.x);
+>x : Symbol(x, Decl(genericClasses4.ts, 11, 11))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+>f.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+>f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+>x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+>this.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+>this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+
+        var y:B = f.y(this.y);
+>y : Symbol(y, Decl(genericClasses4.ts, 12, 11))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+>f.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+>f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+>y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+>this.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+>this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+
+        var retval: Vec2_T<B> = new Vec2_T(x, y);
+>retval : Symbol(retval, Decl(genericClasses4.ts, 13, 11))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+>Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+>x : Symbol(x, Decl(genericClasses4.ts, 11, 11))
+>y : Symbol(y, Decl(genericClasses4.ts, 12, 11))
+
+        return retval;
+>retval : Symbol(retval, Decl(genericClasses4.ts, 13, 11))
+    }
+}

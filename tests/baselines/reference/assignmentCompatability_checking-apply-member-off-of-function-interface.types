@@ -1,0 +1,77 @@
+=== tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts ===
+// 3.8.4 Assignment Compatibility 
+
+interface Applicable {
+    apply(blah: any); // also works for 'apply'
+>apply : (blah: any) => any
+>blah : any
+}
+
+var x: Applicable;
+>x : Applicable
+
+// Should fail
+x = '';
+>x = '' : ""
+>x : Applicable
+>'' : ""
+
+x = [''];
+>x = [''] : string[]
+>x : Applicable
+>[''] : string[]
+>'' : ""
+
+x = 4;
+>x = 4 : 4
+>x : Applicable
+>4 : 4
+
+x = {};
+>x = {} : {}
+>x : Applicable
+>{} : {}
+
+// Should work
+function f() { };
+>f : () => void
+
+x = f;
+>x = f : () => void
+>x : Applicable
+>f : () => void
+
+function fn(c: Applicable) { }
+>fn : (c: Applicable) => void
+>c : Applicable
+
+// Should Fail
+fn('');
+>fn('') : void
+>fn : (c: Applicable) => void
+>'' : ""
+
+fn(['']);
+>fn(['']) : void
+>fn : (c: Applicable) => void
+>[''] : string[]
+>'' : ""
+
+fn(4);
+>fn(4) : void
+>fn : (c: Applicable) => void
+>4 : 4
+
+fn({});
+>fn({}) : void
+>fn : (c: Applicable) => void
+>{} : {}
+
+
+// Should work
+fn(a => { });
+>fn(a => { }) : void
+>fn : (c: Applicable) => void
+>a => { } : (a: any) => void
+>a : any
+

@@ -1,0 +1,235 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/undefinedIsSubtypeOfEverything.ts ===
+// undefined is a subtype of every other types, no errors expected below
+
+class Base {
+>Base : Base
+
+    foo: typeof undefined;
+>foo : any
+>undefined : undefined
+} 
+
+class D0 extends Base {
+>D0 : D0
+>Base : Base
+
+    foo: any;
+>foo : any
+}
+
+class DA extends Base {
+>DA : DA
+>Base : Base
+
+    foo: typeof undefined; 
+>foo : any
+>undefined : undefined
+}
+
+class D1 extends Base {
+>D1 : D1
+>Base : Base
+
+    foo: string;
+>foo : string
+}
+
+class D1A extends Base {
+>D1A : D1A
+>Base : Base
+
+    foo: String;
+>foo : String
+}
+
+
+class D2 extends Base {
+>D2 : D2
+>Base : Base
+
+    foo: number;
+>foo : number
+}
+
+class D2A extends Base {
+>D2A : D2A
+>Base : Base
+
+    foo: Number;
+>foo : Number
+}
+
+
+class D3 extends Base {
+>D3 : D3
+>Base : Base
+
+    foo: boolean;
+>foo : boolean
+}
+
+class D3A extends Base {
+>D3A : D3A
+>Base : Base
+
+    foo: Boolean;
+>foo : Boolean
+}
+
+
+class D4 extends Base {
+>D4 : D4
+>Base : Base
+
+    foo: RegExp;
+>foo : RegExp
+}
+
+class D5 extends Base {
+>D5 : D5
+>Base : Base
+
+    foo: Date;
+>foo : Date
+}
+
+
+class D6 extends Base {
+>D6 : D6
+>Base : Base
+
+    foo: number[];
+>foo : number[]
+}
+
+class D7 extends Base {
+>D7 : D7
+>Base : Base
+
+    foo: { bar: number };
+>foo : { bar: number; }
+>bar : number
+}
+
+
+class D8 extends Base {
+>D8 : D8
+>Base : Base
+
+    foo: D7;
+>foo : D7
+}
+
+interface I1 {
+    bar: string;
+>bar : string
+}
+class D9 extends Base {
+>D9 : D9
+>Base : Base
+
+    foo: I1;
+>foo : I1
+}
+
+
+class D10 extends Base {
+>D10 : D10
+>Base : Base
+
+    foo: () => number;
+>foo : () => number
+}
+
+enum E { A }
+>E : E
+>A : E.A
+
+class D11 extends Base {
+>D11 : D11
+>Base : Base
+
+    foo: E;
+>foo : E
+}
+
+function f() { }
+>f : typeof f
+
+module f {
+>f : typeof f
+
+    export var bar = 1;
+>bar : number
+>1 : 1
+}
+class D12 extends Base {
+>D12 : D12
+>Base : Base
+
+    foo: typeof f;
+>foo : typeof f
+>f : typeof f
+}
+
+
+class c { baz: string }
+>c : c
+>baz : string
+
+module c {
+>c : typeof c
+
+    export var bar = 1;
+>bar : number
+>1 : 1
+}
+class D13 extends Base {
+>D13 : D13
+>Base : Base
+
+    foo: typeof c;
+>foo : typeof c
+>c : typeof c
+}
+
+
+class D14<T> extends Base {
+>D14 : D14<T>
+>Base : Base
+
+    foo: T;
+>foo : T
+}
+
+
+class D15<T, U> extends Base {
+>D15 : D15<T, U>
+>Base : Base
+
+    foo: U;
+>foo : U
+}
+
+//class D15<T, U extends T> extends Base {
+//    foo: U;
+//}
+
+
+class D16 extends Base {
+>D16 : D16
+>Base : Base
+
+    foo: Object;
+>foo : Object
+}
+
+
+class D17 extends Base {
+>D17 : D17
+>Base : Base
+
+    foo: {};
+>foo : {}
+}
+

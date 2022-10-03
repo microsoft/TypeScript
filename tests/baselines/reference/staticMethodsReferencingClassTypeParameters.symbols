@@ -1,0 +1,11 @@
+=== tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts ===
+class C<T> {
+>C : Symbol(C, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 8))
+
+    static s(p: T) { return p; }
+>s : Symbol(C.s, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 12))
+>p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))
+>T : Symbol(T)
+>p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))
+}

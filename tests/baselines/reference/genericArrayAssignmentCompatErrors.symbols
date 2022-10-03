@@ -1,0 +1,68 @@
+=== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts ===
+var myCars=new Array(); 
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var myCars2 = new [];
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+
+var myCars3 = new Array({});
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var myCars4: Array; // error
+>myCars4 : Symbol(myCars4, Decl(genericArrayAssignmentCompatErrors.ts, 3, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var myCars5: Array<any>[];
+>myCars5 : Symbol(myCars5, Decl(genericArrayAssignmentCompatErrors.ts, 4, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+myCars = myCars2;
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+
+myCars = myCars3;
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+
+myCars = myCars4;
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+>myCars4 : Symbol(myCars4, Decl(genericArrayAssignmentCompatErrors.ts, 3, 3))
+
+myCars = myCars5;
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+>myCars5 : Symbol(myCars5, Decl(genericArrayAssignmentCompatErrors.ts, 4, 3))
+ 
+myCars2 = myCars;
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+
+myCars2 = myCars3;
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+
+myCars2 = myCars4;
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+>myCars4 : Symbol(myCars4, Decl(genericArrayAssignmentCompatErrors.ts, 3, 3))
+
+myCars2 = myCars5;
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+>myCars5 : Symbol(myCars5, Decl(genericArrayAssignmentCompatErrors.ts, 4, 3))
+ 
+myCars3 = myCars;
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+>myCars : Symbol(myCars, Decl(genericArrayAssignmentCompatErrors.ts, 0, 3))
+
+myCars3 = myCars2;
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+>myCars2 : Symbol(myCars2, Decl(genericArrayAssignmentCompatErrors.ts, 1, 3))
+
+myCars3 = myCars4;
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+>myCars4 : Symbol(myCars4, Decl(genericArrayAssignmentCompatErrors.ts, 3, 3))
+
+myCars3 = myCars5;   
+>myCars3 : Symbol(myCars3, Decl(genericArrayAssignmentCompatErrors.ts, 2, 3))
+>myCars5 : Symbol(myCars5, Decl(genericArrayAssignmentCompatErrors.ts, 4, 3))
+

@@ -1,0 +1,58 @@
+tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; }' is not assignable to type 'Attribs1'.
+  Types of property 'x' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(23,2): error TS2741: Property 'x' is missing in type '{ y: number; }' but required in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		test1: Attribs1;
+    	}
+    }
+    interface Attribs1 {
+    	x: string;
+    	y?: number;
+    	z?: string;
+    }
+    
+    // OK
+    var obj1 = { x: 'foo' };
+    <test1 {...obj1} />
+    
+    // Error, x is not string
+    var obj2 = { x: 32 };
+    <test1 {...obj2} />
+     ~~~~~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    // Error, x is missing
+    var obj3 = { y: 32 };
+    <test1 {...obj3} />
+     ~~~~~
+!!! error TS2741: Property 'x' is missing in type '{ y: number; }' but required in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:8:2: 'x' is declared here.
+    
+    // OK
+    var obj4 = { x: 32, y: 32 };
+    <test1 {...obj4} x="ok" />
+    
+    // Error
+    var obj5 = { x: 32, y: 32 };
+    <test1 x="ok" {...obj5} />
+           ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:8:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'
+    
+    // Ok
+    var obj6 = { x: 'ok', y: 32, extra: 100 };
+    <test1 {...obj6} />
+    
+    // OK (spread override)
+    var obj7 = { x: 'foo' };
+    <test1 x={32} {...obj7} />
+    

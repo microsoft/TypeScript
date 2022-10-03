@@ -1,0 +1,203 @@
+=== tests/cases/compiler/downlevelLetConst15.ts ===
+'use strict'
+>'use strict' : "use strict"
+
+declare function use(a: any);
+>use : (a: any) => any
+>a : any
+
+var x = 10;
+>x : number
+>10 : 10
+
+var z0, z1, z2, z3;
+>z0 : any
+>z1 : any
+>z2 : any
+>z3 : any
+{
+    const x = 20;
+>x : 20
+>20 : 20
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : 20
+
+    const [z0] = [1];
+>z0 : number
+>[1] : [number]
+>1 : 1
+
+    use(z0);
+>use(z0) : any
+>use : (a: any) => any
+>z0 : number
+
+    const [{a: z1}] = [{a: 1}]
+>a : any
+>z1 : number
+>[{a: 1}] : [{ a: number; }]
+>{a: 1} : { a: number; }
+>a : number
+>1 : 1
+
+    use(z1);
+>use(z1) : any
+>use : (a: any) => any
+>z1 : number
+
+    const {a: z2} = { a: 1 };
+>a : any
+>z2 : number
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+    use(z2);
+>use(z2) : any
+>use : (a: any) => any
+>z2 : number
+
+    const {a: {b: z3}} = { a: {b: 1} };
+>a : any
+>b : any
+>z3 : number
+>{ a: {b: 1} } : { a: { b: number; }; }
+>a : { b: number; }
+>{b: 1} : { b: number; }
+>b : number
+>1 : 1
+
+    use(z3);
+>use(z3) : any
+>use : (a: any) => any
+>z3 : number
+}
+use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : number
+
+use(z0);
+>use(z0) : any
+>use : (a: any) => any
+>z0 : any
+
+use(z1);
+>use(z1) : any
+>use : (a: any) => any
+>z1 : any
+
+use(z2);
+>use(z2) : any
+>use : (a: any) => any
+>z2 : any
+
+use(z3);
+>use(z3) : any
+>use : (a: any) => any
+>z3 : any
+
+var z6;
+>z6 : any
+
+var y = true;
+>y : boolean
+>true : true
+{
+    const y = "";
+>y : ""
+>"" : ""
+
+    const [z6] = [true]
+>z6 : boolean
+>[true] : [boolean]
+>true : true
+    {
+        const y = 1;
+>y : 1
+>1 : 1
+
+        const {a: z6} = { a: 1 }
+>a : any
+>z6 : number
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+        use(y);
+>use(y) : any
+>use : (a: any) => any
+>y : 1
+
+        use(z6);
+>use(z6) : any
+>use : (a: any) => any
+>z6 : number
+    }
+    use(y);
+>use(y) : any
+>use : (a: any) => any
+>y : ""
+
+    use(z6);
+>use(z6) : any
+>use : (a: any) => any
+>z6 : boolean
+}
+use(y);
+>use(y) : any
+>use : (a: any) => any
+>y : true
+
+use(z6);
+>use(z6) : any
+>use : (a: any) => any
+>z6 : any
+
+var z = false;
+>z : boolean
+>false : false
+
+var z5 = 1;
+>z5 : number
+>1 : 1
+{
+    const z = "";
+>z : ""
+>"" : ""
+
+    const [z5] = [5];
+>z5 : number
+>[5] : [number]
+>5 : 5
+    {
+        const _z = 1;
+>_z : 1
+>1 : 1
+
+        const {a: _z5} = { a: 1 };
+>a : any
+>_z5 : number
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+        // try to step on generated name
+        use(_z);
+>use(_z) : any
+>use : (a: any) => any
+>_z : 1
+    }
+    use(z);
+>use(z) : any
+>use : (a: any) => any
+>z : ""
+}
+use(y);
+>use(y) : any
+>use : (a: any) => any
+>y : true
+

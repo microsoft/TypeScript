@@ -1,0 +1,65 @@
+=== tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts ===
+class C {
+>C : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
+
+    cProp = 10;
+>cProp : Symbol(C.cProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 9))
+
+    foo() { return "this never gets used."; }
+>foo : Symbol(C.foo, Decl(derivedClassConstructorWithExplicitReturns01.ts, 1, 15))
+
+    constructor(value: number) {
+>value : Symbol(value, Decl(derivedClassConstructorWithExplicitReturns01.ts, 5, 16))
+
+        return {
+            cProp: value,
+>cProp : Symbol(cProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 6, 16))
+>value : Symbol(value, Decl(derivedClassConstructorWithExplicitReturns01.ts, 5, 16))
+
+            foo() {
+>foo : Symbol(foo, Decl(derivedClassConstructorWithExplicitReturns01.ts, 7, 25))
+
+                return "well this looks kinda C-ish.";
+            }
+        }
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(derivedClassConstructorWithExplicitReturns01.ts, 13, 1))
+>C : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
+
+    dProp = () => this;
+>dProp : Symbol(D.dProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 15, 19))
+>this : Symbol(D, Decl(derivedClassConstructorWithExplicitReturns01.ts, 13, 1))
+
+    constructor(a = 100) {
+>a : Symbol(a, Decl(derivedClassConstructorWithExplicitReturns01.ts, 18, 16))
+
+        super(a);
+>super : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
+>a : Symbol(a, Decl(derivedClassConstructorWithExplicitReturns01.ts, 18, 16))
+
+        if (Math.random() < 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            "You win!"
+            return {
+                cProp: 1,
+>cProp : Symbol(cProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 23, 20))
+
+                dProp: () => this,
+>dProp : Symbol(dProp, Decl(derivedClassConstructorWithExplicitReturns01.ts, 24, 25))
+>this : Symbol(D, Decl(derivedClassConstructorWithExplicitReturns01.ts, 13, 1))
+
+                foo() { return "You win!!!!!" }
+>foo : Symbol(foo, Decl(derivedClassConstructorWithExplicitReturns01.ts, 25, 34))
+
+            };
+        }
+        else
+            return null;
+    }
+}

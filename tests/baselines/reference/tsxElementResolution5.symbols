@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsx/file1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file1.tsx, 0, 20))
+}
+
+// OK, but implicit any
+<div n='x' />;
+>n : Symbol(n, Decl(file1.tsx, 5, 4))
+

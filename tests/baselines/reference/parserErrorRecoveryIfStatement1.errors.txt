@@ -1,0 +1,15 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement1.ts(4,3): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement1.ts (1 errors) ====
+    class Foo {
+      f1() {
+        if (
+      }
+      ~
+!!! error TS1109: Expression expected.
+      f2() {
+      }
+      f3() {
+      }
+    }

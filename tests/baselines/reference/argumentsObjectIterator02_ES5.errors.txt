@@ -1,0 +1,17 @@
+tests/cases/compiler/argumentsObjectIterator02_ES5.ts(2,26): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== tests/cases/compiler/argumentsObjectIterator02_ES5.ts (1 errors) ====
+    function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
+        let blah = arguments[Symbol.iterator];
+                             ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    
+        let result = [];
+        for (let arg of blah()) {
+            result.push(arg + arg);
+        }
+        return <[any, any, any]>result;
+    }
+    
+    

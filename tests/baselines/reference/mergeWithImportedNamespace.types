@@ -1,0 +1,14 @@
+=== tests/cases/compiler/f1.ts ===
+export namespace N { export var x = 1; }
+>N : typeof N
+>x : number
+>1 : 1
+
+=== tests/cases/compiler/f2.ts ===
+import {N} from "./f1";
+>N : typeof N
+
+export namespace N {
+    export interface I {x: any}
+>x : any
+}

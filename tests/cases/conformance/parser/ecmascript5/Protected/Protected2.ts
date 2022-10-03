@@ -1,0 +1,2 @@
+protected module M {
+}

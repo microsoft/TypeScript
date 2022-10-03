@@ -1,0 +1,44 @@
+=== tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts ===
+// Should be error to use 'T' in all declarations within Foo.
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(genericClassWithStaticsUsingTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(genericClassWithStaticsUsingTypeArguments.ts, 1, 10))
+
+    static a = (n: T) => { };
+>a : Symbol(Foo.a, Decl(genericClassWithStaticsUsingTypeArguments.ts, 1, 14))
+>n : Symbol(n, Decl(genericClassWithStaticsUsingTypeArguments.ts, 2, 16))
+>T : Symbol(T)
+
+    static b: T;
+>b : Symbol(Foo.b, Decl(genericClassWithStaticsUsingTypeArguments.ts, 2, 29))
+>T : Symbol(T)
+
+    static c: T[] = [];
+>c : Symbol(Foo.c, Decl(genericClassWithStaticsUsingTypeArguments.ts, 4, 16))
+>T : Symbol(T)
+
+    static d = false || ((x: T) => x || undefined)(null)
+>d : Symbol(Foo.d, Decl(genericClassWithStaticsUsingTypeArguments.ts, 6, 23))
+>x : Symbol(x, Decl(genericClassWithStaticsUsingTypeArguments.ts, 8, 26))
+>T : Symbol(T)
+>x : Symbol(x, Decl(genericClassWithStaticsUsingTypeArguments.ts, 8, 26))
+>undefined : Symbol(undefined)
+
+    static e = function (x: T) { return null; }
+>e : Symbol(Foo.e, Decl(genericClassWithStaticsUsingTypeArguments.ts, 8, 56))
+>x : Symbol(x, Decl(genericClassWithStaticsUsingTypeArguments.ts, 10, 25))
+>T : Symbol(T)
+
+    static f(xs: T[]): T[] {
+>f : Symbol(Foo.f, Decl(genericClassWithStaticsUsingTypeArguments.ts, 10, 47))
+>xs : Symbol(xs, Decl(genericClassWithStaticsUsingTypeArguments.ts, 12, 13))
+>T : Symbol(T)
+>T : Symbol(T)
+
+        return xs.reverse();
+>xs.reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
+>xs : Symbol(xs, Decl(genericClassWithStaticsUsingTypeArguments.ts, 12, 13))
+>reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

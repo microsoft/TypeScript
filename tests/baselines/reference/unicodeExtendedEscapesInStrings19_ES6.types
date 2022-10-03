@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings19_ES6.ts ===
+var x = "\u{}";
+>x : string
+>"\u{}" : ""
+

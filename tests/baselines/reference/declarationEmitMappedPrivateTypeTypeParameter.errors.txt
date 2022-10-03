@@ -1,0 +1,15 @@
+/FromFactor.ts(2,15): error TS2304: Cannot find name 'StringKeyOf'.
+/FromFactor.ts(2,15): error TS4103: Type parameter 'TName' of exported mapped object type is using private name 'StringKeyOf'.
+
+
+==== /Helpers.ts (0 errors) ====
+    export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+    
+==== /FromFactor.ts (2 errors) ====
+    export type RowToColumns<TColumns> = {
+        [TName in StringKeyOf<TColumns>]: any;
+                  ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringKeyOf'.
+                  ~~~~~~~~~~~
+!!! error TS4103: Type parameter 'TName' of exported mapped object type is using private name 'StringKeyOf'.
+    }

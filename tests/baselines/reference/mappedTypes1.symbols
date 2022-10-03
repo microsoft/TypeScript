@@ -1,0 +1,164 @@
+=== tests/cases/conformance/types/mapped/mappedTypes1.ts ===
+type Item = { a: string, b: number, c: boolean };
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>a : Symbol(a, Decl(mappedTypes1.ts, 0, 13))
+>b : Symbol(b, Decl(mappedTypes1.ts, 0, 24))
+>c : Symbol(c, Decl(mappedTypes1.ts, 0, 35))
+
+type T00 = { [P in "x" | "y"]: number };
+>T00 : Symbol(T00, Decl(mappedTypes1.ts, 0, 49))
+>P : Symbol(P, Decl(mappedTypes1.ts, 2, 14))
+
+type T01 = { [P in "x" | "y"]: P };
+>T01 : Symbol(T01, Decl(mappedTypes1.ts, 2, 40))
+>P : Symbol(P, Decl(mappedTypes1.ts, 3, 14))
+>P : Symbol(P, Decl(mappedTypes1.ts, 3, 14))
+
+type T02 = { [P in "a" | "b"]: Item[P]; }
+>T02 : Symbol(T02, Decl(mappedTypes1.ts, 3, 35))
+>P : Symbol(P, Decl(mappedTypes1.ts, 4, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 4, 14))
+
+type T03 = { [P in keyof Item]: Date };
+>T03 : Symbol(T03, Decl(mappedTypes1.ts, 4, 41))
+>P : Symbol(P, Decl(mappedTypes1.ts, 5, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+type T10 = { [P in keyof Item]: Item[P] };
+>T10 : Symbol(T10, Decl(mappedTypes1.ts, 5, 39))
+>P : Symbol(P, Decl(mappedTypes1.ts, 7, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 7, 14))
+
+type T11 = { [P in keyof Item]?: Item[P] };
+>T11 : Symbol(T11, Decl(mappedTypes1.ts, 7, 42))
+>P : Symbol(P, Decl(mappedTypes1.ts, 8, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 8, 14))
+
+type T12 = { readonly [P in keyof Item]: Item[P] };
+>T12 : Symbol(T12, Decl(mappedTypes1.ts, 8, 43))
+>P : Symbol(P, Decl(mappedTypes1.ts, 9, 23))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 9, 23))
+
+type T13 = { readonly [P in keyof Item]?: Item[P] };
+>T13 : Symbol(T13, Decl(mappedTypes1.ts, 9, 51))
+>P : Symbol(P, Decl(mappedTypes1.ts, 10, 23))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 10, 23))
+
+type T20 = { [P in keyof Item]: Item[P] | null };
+>T20 : Symbol(T20, Decl(mappedTypes1.ts, 10, 52))
+>P : Symbol(P, Decl(mappedTypes1.ts, 12, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 12, 14))
+
+type T21 = { [P in keyof Item]: Array<Item[P]> };
+>T21 : Symbol(T21, Decl(mappedTypes1.ts, 12, 49))
+>P : Symbol(P, Decl(mappedTypes1.ts, 13, 14))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
+>P : Symbol(P, Decl(mappedTypes1.ts, 13, 14))
+
+type T30 = { [P in keyof any]: void };
+>T30 : Symbol(T30, Decl(mappedTypes1.ts, 13, 49))
+>P : Symbol(P, Decl(mappedTypes1.ts, 15, 14))
+
+type T31 = { [P in keyof string]: void };
+>T31 : Symbol(T31, Decl(mappedTypes1.ts, 15, 38))
+>P : Symbol(P, Decl(mappedTypes1.ts, 16, 14))
+
+type T32 = { [P in keyof number]: void };
+>T32 : Symbol(T32, Decl(mappedTypes1.ts, 16, 41))
+>P : Symbol(P, Decl(mappedTypes1.ts, 17, 14))
+
+type T33 = { [P in keyof boolean]: void };
+>T33 : Symbol(T33, Decl(mappedTypes1.ts, 17, 41))
+>P : Symbol(P, Decl(mappedTypes1.ts, 18, 14))
+
+type T34 = { [P in keyof undefined]: void };
+>T34 : Symbol(T34, Decl(mappedTypes1.ts, 18, 42))
+>P : Symbol(P, Decl(mappedTypes1.ts, 19, 14))
+
+type T35 = { [P in keyof null]: void };
+>T35 : Symbol(T35, Decl(mappedTypes1.ts, 19, 44))
+>P : Symbol(P, Decl(mappedTypes1.ts, 20, 14))
+
+type T36 = { [P in keyof void]: void };
+>T36 : Symbol(T36, Decl(mappedTypes1.ts, 20, 39))
+>P : Symbol(P, Decl(mappedTypes1.ts, 21, 14))
+
+type T37 = { [P in keyof symbol]: void };
+>T37 : Symbol(T37, Decl(mappedTypes1.ts, 21, 39))
+>P : Symbol(P, Decl(mappedTypes1.ts, 22, 14))
+
+type T38 = { [P in keyof never]: void };
+>T38 : Symbol(T38, Decl(mappedTypes1.ts, 22, 41))
+>P : Symbol(P, Decl(mappedTypes1.ts, 23, 14))
+
+type T40 = { [P in string]: void };
+>T40 : Symbol(T40, Decl(mappedTypes1.ts, 23, 40))
+>P : Symbol(P, Decl(mappedTypes1.ts, 25, 14))
+
+type T43 = { [P in "a" | "b"]: void };
+>T43 : Symbol(T43, Decl(mappedTypes1.ts, 25, 35))
+>P : Symbol(P, Decl(mappedTypes1.ts, 26, 14))
+
+type T44 = { [P in "a" | "b" | "0" | "1"]: void };
+>T44 : Symbol(T44, Decl(mappedTypes1.ts, 26, 38))
+>P : Symbol(P, Decl(mappedTypes1.ts, 27, 14))
+
+type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
+>T47 : Symbol(T47, Decl(mappedTypes1.ts, 27, 50))
+>P : Symbol(P, Decl(mappedTypes1.ts, 28, 14))
+
+declare function f1<T1>(): { [P in keyof T1]: void };
+>f1 : Symbol(f1, Decl(mappedTypes1.ts, 28, 59))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 30, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 30, 30))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 30, 20))
+
+declare function f2<T1 extends string>(): { [P in keyof T1]: void };
+>f2 : Symbol(f2, Decl(mappedTypes1.ts, 30, 53))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 31, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 31, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 31, 20))
+
+declare function f3<T1 extends number>(): { [P in keyof T1]: void };
+>f3 : Symbol(f3, Decl(mappedTypes1.ts, 31, 68))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 32, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 32, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 32, 20))
+
+declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
+>f4 : Symbol(f4, Decl(mappedTypes1.ts, 32, 68))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypes1.ts, 33, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
+
+let x1 = f1();
+>x1 : Symbol(x1, Decl(mappedTypes1.ts, 35, 3))
+>f1 : Symbol(f1, Decl(mappedTypes1.ts, 28, 59))
+
+let x2 = f2();
+>x2 : Symbol(x2, Decl(mappedTypes1.ts, 36, 3))
+>f2 : Symbol(f2, Decl(mappedTypes1.ts, 30, 53))
+
+let x3 = f3();
+>x3 : Symbol(x3, Decl(mappedTypes1.ts, 37, 3))
+>f3 : Symbol(f3, Decl(mappedTypes1.ts, 31, 68))
+
+let x4 = f4();
+>x4 : Symbol(x4, Decl(mappedTypes1.ts, 38, 3))
+>f4 : Symbol(f4, Decl(mappedTypes1.ts, 32, 68))
+

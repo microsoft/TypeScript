@@ -1,0 +1,50 @@
+=== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts ===
+// Illegal attempts to define optional methods
+
+var a: {
+>a : { x(): any; number: any; }
+
+    x()?: number; // error
+>x : () => any
+>number : any
+}
+
+interface I {
+    x()?: number; // error
+>x : () => any
+>number : any
+}
+
+class C {
+>C : C
+
+    x()?: number; // error
+>x : () => any
+>number : any
+}
+
+interface I2<T> {
+    x()?: T; // error
+>x : () => any
+>T : any
+}
+
+class C2<T> {
+>C2 : C2<T>
+
+    x()?: T; // error
+>x : () => any
+>T : any
+}
+
+
+var b = {
+>b : { x(): any; 1: any; }
+>{    x()?: 1 // error} : { x(): any; 1: any; }
+
+    x()?: 1 // error
+>x : () => any
+>1 : any
+}
+> : any
+

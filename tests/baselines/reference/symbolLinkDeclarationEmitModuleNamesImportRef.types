@@ -1,0 +1,18 @@
+=== tests/cases/compiler/Folder/monorepo/core/index.ts ===
+import { styles } from "package-a";
+>styles : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+
+export function getStyles() {
+>getStyles : () => import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+
+	return styles;
+>styles : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+}
+
+=== tests/cases/compiler/Folder/monorepo/package-a/index.d.ts ===
+export declare const styles: import("styled-components").InterpolationValue[];
+>styles : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+
+=== tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components.d.ts ===
+export interface InterpolationValue {}
+No type information for this code.

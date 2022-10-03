@@ -1,0 +1,14 @@
+tests/cases/compiler/ambientEnum1.ts(7,13): error TS1066: In ambient enum declarations member initializer must be constant expression.
+
+
+==== tests/cases/compiler/ambientEnum1.ts (1 errors) ====
+        declare enum E1 {
+            y = 4.23
+        }
+        
+        // Ambient enum with computer member
+        declare enum E2 {
+            x = 'foo'.length
+                ~~~~~~~~~~~~
+!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
+        }

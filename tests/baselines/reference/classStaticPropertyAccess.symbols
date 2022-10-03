@@ -1,0 +1,38 @@
+=== tests/cases/compiler/classStaticPropertyAccess.ts ===
+class A {
+>A : Symbol(A, Decl(classStaticPropertyAccess.ts, 0, 0))
+
+    public static "\""() {}
+>"\"" : Symbol(A["\""], Decl(classStaticPropertyAccess.ts, 0, 9))
+
+    public static x: number = 1;
+>x : Symbol(A.x, Decl(classStaticPropertyAccess.ts, 1, 27))
+
+    public static y: number = 1;
+>y : Symbol(A.y, Decl(classStaticPropertyAccess.ts, 2, 32))
+
+    private static _b: number = 2;
+>_b : Symbol(A._b, Decl(classStaticPropertyAccess.ts, 3, 32))
+}
+
+const a = new A();
+>a : Symbol(a, Decl(classStaticPropertyAccess.ts, 7, 5))
+>A : Symbol(A, Decl(classStaticPropertyAccess.ts, 0, 0))
+
+a["\""] // Error
+>a : Symbol(a, Decl(classStaticPropertyAccess.ts, 7, 5))
+
+a['y']  // Error
+>a : Symbol(a, Decl(classStaticPropertyAccess.ts, 7, 5))
+
+a.y     // Error
+>a : Symbol(a, Decl(classStaticPropertyAccess.ts, 7, 5))
+
+A._b    // Error
+>A._b : Symbol(A._b, Decl(classStaticPropertyAccess.ts, 3, 32))
+>A : Symbol(A, Decl(classStaticPropertyAccess.ts, 0, 0))
+>_b : Symbol(A._b, Decl(classStaticPropertyAccess.ts, 3, 32))
+
+A.a
+>A : Symbol(A, Decl(classStaticPropertyAccess.ts, 0, 0))
+

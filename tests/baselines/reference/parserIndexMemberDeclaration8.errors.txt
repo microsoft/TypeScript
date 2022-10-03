@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration8.ts(2,4): error TS1071: 'private' modifier cannot appear on an index signature.
+
+
+==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration8.ts (1 errors) ====
+    class C {
+       private [x: string]: string;
+       ~~~~~~~
+!!! error TS1071: 'private' modifier cannot appear on an index signature.
+    }

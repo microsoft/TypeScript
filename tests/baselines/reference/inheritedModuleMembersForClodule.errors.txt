@@ -1,0 +1,31 @@
+tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
+  The types returned by 'foo()' are incompatible between these types.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/inheritedModuleMembersForClodule.ts (1 errors) ====
+    class C {
+        static foo(): string {
+            return "123";
+        }
+    }
+    
+    class D extends C {
+          ~
+!!! error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
+!!! error TS2417:   The types returned by 'foo()' are incompatible between these types.
+!!! error TS2417:     Type 'number' is not assignable to type 'string'.
+    }
+    
+    module D {
+        export function foo(): number {
+            return 0;
+        };
+    }
+    
+    class E extends D {
+        static bar() {
+            return this.foo();
+        }
+    }
+    

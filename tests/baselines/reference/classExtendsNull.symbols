@@ -1,0 +1,23 @@
+=== tests/cases/compiler/classExtendsNull.ts ===
+class C extends null {
+>C : Symbol(C, Decl(classExtendsNull.ts, 0, 0))
+
+    constructor() {
+        super();
+        return Object.create(null);
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class D extends null {
+>D : Symbol(D, Decl(classExtendsNull.ts, 5, 1))
+
+    constructor() {
+        return Object.create(null);
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}

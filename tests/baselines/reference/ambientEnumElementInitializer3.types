@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ambientEnumElementInitializer3.ts ===
+declare enum E {
+>E : E
+
+ e = 3.3 // Decimal
+>e : E.e
+>3.3 : 3.3
+}

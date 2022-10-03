@@ -1,0 +1,77 @@
+=== tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts ===
+function map<T, U>(xs: T[], f: (x: T) => U) {
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>T : Symbol(T, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 13))
+>U : Symbol(U, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 15))
+>xs : Symbol(xs, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 19))
+>T : Symbol(T, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 13))
+>f : Symbol(f, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 27))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 32))
+>T : Symbol(T, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 13))
+>U : Symbol(U, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 15))
+
+    var ys: U[] = [];
+>ys : Symbol(ys, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 1, 7))
+>U : Symbol(U, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 15))
+
+    xs.forEach(x => ys.push(f(x)));
+>xs.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>xs : Symbol(xs, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 19))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 2, 15))
+>ys.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ys : Symbol(ys, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 1, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 27))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 2, 15))
+
+    return ys;
+>ys : Symbol(ys, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 1, 7))
+}
+
+var r0 = map([1, ""], (x) => x.toString());
+>r0 : Symbol(r0, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 6, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 6, 23))
+>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 6, 23))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var r5 = map<any, any>([1, ""], (x) => x.toString());
+>r5 : Symbol(r5, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 7, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 7, 33))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 7, 33))
+
+var r6 = map<Object, Object>([1, ""], (x) => x.toString());
+>r6 : Symbol(r6, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 8, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 8, 39))
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 8, 39))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
+>r7 : Symbol(r7, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 39))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 39))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var r7b = map<number>([1, ""], (x) => x.toString()); // error
+>r7b : Symbol(r7b, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 32))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 32))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var r8 = map<any, string>([1, ""], (x) => x.toString());
+>r8 : Symbol(r8, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 11, 3))
+>map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 11, 36))
+>x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 11, 36))
+

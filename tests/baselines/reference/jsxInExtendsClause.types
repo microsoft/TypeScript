@@ -1,0 +1,34 @@
+=== tests/cases/compiler/jsxInExtendsClause.tsx ===
+// https://github.com/Microsoft/TypeScript/issues/13157
+declare namespace React {
+>React : typeof React
+
+  interface ComponentClass<P> { new (): Component<P, {}>; }
+  class Component<A, B> {}
+>Component : Component<A, B>
+}
+declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
+>createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
+>factory : () => React.ComponentClass<P>
+>React : any
+>React : any
+
+class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
+>Foo : Foo
+>createComponentClass(() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }}) : React.Component<unknown, {}>
+>createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
+>() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : () => typeof (Anonymous class)
+>class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : typeof (Anonymous class)
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+  render() {
+>render : () => any
+
+    return <span>Hello, world!</span>;
+><span>Hello, world!</span> : error
+>span : any
+>span : any
+  }
+}) {}

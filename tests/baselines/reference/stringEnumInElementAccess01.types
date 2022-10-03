@@ -1,0 +1,40 @@
+=== tests/cases/conformance/expressions/elementAccess/stringEnumInElementAccess01.ts ===
+enum E {
+>E : E
+
+    A = "a",
+>A : E.A
+>"a" : "a"
+
+    B = "b",
+>B : E.B
+>"b" : "b"
+
+    C = "c",
+>C : E.C
+>"c" : "c"
+}
+
+interface Item {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+    c: boolean;
+>c : boolean
+}
+
+declare const item: Item;
+>item : Item
+
+declare const e: E;
+>e : E
+
+const snb: string | number | boolean = item[e];
+>snb : string | number | boolean
+>item[e] : string | number | boolean
+>item : Item
+>e : E
+

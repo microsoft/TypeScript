@@ -1,0 +1,98 @@
+tests/cases/compiler/weakType.ts(15,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+tests/cases/compiler/weakType.ts(16,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+tests/cases/compiler/weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
+tests/cases/compiler/weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+  Types of property 'properties' are incompatible.
+    Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+
+
+==== tests/cases/compiler/weakType.ts (8 errors) ====
+    interface Settings {
+        timeout?: number;
+        onError?(): void;
+    }
+    
+    function getDefaultSettings() {
+        return { timeout: 1000 };
+    }
+    interface CtorOnly {
+        new(s: string): { timeout: 1000 }
+    }
+    
+    function doSomething(settings: Settings) { /* ... */ }
+    // forgot to call `getDefaultSettings`
+    doSomething(getDefaultSettings);
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6212 tests/cases/compiler/weakType.ts:15:13: Did you mean to call this expression?
+    doSomething(() => ({ timeout: 1000 }));
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6212 tests/cases/compiler/weakType.ts:16:13: Did you mean to call this expression?
+    doSomething(null as CtorOnly);
+                ~~~~~~~~~~~~~~~~
+!!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6213 tests/cases/compiler/weakType.ts:17:13: Did you mean to use 'new' with this expression?
+    doSomething(12);
+                ~~
+!!! error TS2559: Type '12' has no properties in common with type 'Settings'.
+    doSomething('completely wrong');
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
+    doSomething(false);
+                ~~~~~
+!!! error TS2559: Type 'false' has no properties in common with type 'Settings'.
+    
+    // this is an oddly popular way of defining settings
+    // this example is from services/textChanges.ts
+    type ConfigurableStart = { useStart?: boolean }
+    type ConfigurableEnd = { useEnd?: boolean }
+    type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
+    interface InsertOptions {
+        prefix?: string
+        suffix?: string
+    }
+    type ChangeOptions = ConfigurableStartEnd & InsertOptions;
+    
+    function del(options: ConfigurableStartEnd = {},
+                 error: { error?: number } = {}) {
+        let changes: ChangeOptions[];
+        changes.push(options);
+        changes.push(error);
+                     ~~~~~
+!!! error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+    }
+    
+    class K {
+        constructor(s: string) { }
+    }
+    // Ctor isn't a weak type because it has a construct signature
+    interface Ctor {
+        new (s: string): K
+        n?: number
+    }
+    let ctor: Ctor = K
+    
+    type Spoiler = { nope?: string }
+    type Weak = {
+        a?: number
+        properties?: {
+            b?: number
+        }
+    }
+    declare let propertiesWrong: {
+        properties: {
+            wrong: string
+        }
+    }
+    let weak: Weak & Spoiler = propertiesWrong
+        ~~~~
+!!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+!!! error TS2322:   Types of property 'properties' are incompatible.
+!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+    
+    

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts ===
+enum E { A }
+>E : E
+>A : E.A
+
+var n: number;
+>n : number
+
+var e: E;
+>e : E
+
+e = n;
+>e = n : number
+>e : E
+>n : number
+
+n = e;
+>n = e : E
+>n : number
+>e : E
+

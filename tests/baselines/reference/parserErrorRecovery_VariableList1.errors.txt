@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserErrorRecovery_VariableList1.ts(1,6): error TS1009: Trailing comma not allowed.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserErrorRecovery_VariableList1.ts(2,1): error TS1108: A 'return' statement can only be used within a function body.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserErrorRecovery_VariableList1.ts (2 errors) ====
+    var a,
+         ~
+!!! error TS1009: Trailing comma not allowed.
+    return;
+    ~~~~~~
+!!! error TS1108: A 'return' statement can only be used within a function body.

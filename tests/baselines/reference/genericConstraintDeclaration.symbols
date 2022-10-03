@@ -1,0 +1,16 @@
+=== tests/cases/compiler/genericConstraintDeclaration.ts ===
+class List<T extends {}>{
+>List : Symbol(List, Decl(genericConstraintDeclaration.ts, 0, 0))
+>T : Symbol(T, Decl(genericConstraintDeclaration.ts, 0, 11))
+
+    static empty<T extends {}>(): List<T>{return null;}
+>empty : Symbol(List.empty, Decl(genericConstraintDeclaration.ts, 0, 25))
+>T : Symbol(T, Decl(genericConstraintDeclaration.ts, 1, 17))
+>List : Symbol(List, Decl(genericConstraintDeclaration.ts, 0, 0))
+>T : Symbol(T, Decl(genericConstraintDeclaration.ts, 1, 17))
+}
+
+
+
+
+

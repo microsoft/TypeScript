@@ -1,0 +1,12 @@
+tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+
+
+==== tests/cases/compiler/server.ts (0 errors) ====
+    var a = 10;
+    export default a;
+    
+==== tests/cases/compiler/client.ts (1 errors) ====
+    export import defaultBinding, * as nameSpaceBinding  from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+    export var x: number = defaultBinding;

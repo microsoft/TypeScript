@@ -1,0 +1,5 @@
+{
+    "cloneUrl": "https://github.com/gruntjs/grunt.git",
+    "branch": "main",
+    "types": ["node"]
+}

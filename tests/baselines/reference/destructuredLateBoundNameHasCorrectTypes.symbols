@@ -1,0 +1,29 @@
+=== tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts ===
+let { [Symbol.iterator]: destructured } = [];
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>destructured : Symbol(destructured, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 0, 5))
+
+void destructured;
+>destructured : Symbol(destructured, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 0, 5))
+
+const named = "prop";
+>named : Symbol(named, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 3, 5))
+
+let { [named]: computed } = { prop: "b" };
+>named : Symbol(named, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 3, 5))
+>computed : Symbol(computed, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 5, 5))
+>prop : Symbol(prop, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 5, 29))
+
+void computed;
+>computed : Symbol(computed, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 5, 5))
+
+const notPresent = "prop2";
+>notPresent : Symbol(notPresent, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 8, 5))
+
+let { [notPresent]: computed2 } = { prop: "b" };
+>notPresent : Symbol(notPresent, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 8, 5))
+>computed2 : Symbol(computed2, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 10, 5))
+>prop : Symbol(prop, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 10, 35))
+

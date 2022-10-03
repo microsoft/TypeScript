@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty4.ts ===
+var x = {
+>x : Symbol(x, Decl(symbolProperty4.ts, 0, 3))
+
+    [Symbol()]: 0,
+>[Symbol()] : Symbol([Symbol()], Decl(symbolProperty4.ts, 0, 9))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [Symbol()]() { },
+>[Symbol()] : Symbol([Symbol()], Decl(symbolProperty4.ts, 1, 18))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    get [Symbol()]() {
+>[Symbol()] : Symbol([Symbol()], Decl(symbolProperty4.ts, 2, 21))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        return 0;
+    }
+}

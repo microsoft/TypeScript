@@ -1,0 +1,50 @@
+tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
+tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
+    Argument of type '"um"' is not assignable to parameter of type '"hi"'.
+  Overload 2 of 2, '(x: "bye", items: string[]): E', gave the following error.
+    Argument of type '"um"' is not assignable to parameter of type '"bye"'.
+tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/compiler/overloadingOnConstants2.ts (3 errors) ====
+    class C {
+       private x = 1;
+    }
+    class D extends C {}
+    class E { 
+       private y = 1;
+    }
+    function foo(x: "hi", items: string[]): D;
+    function foo(x: "bye", items: string[]): E;
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/overloadingOnConstants2.ts:10:10: The implementation signature is declared here.
+    function foo(x: string, items: string[]): C {
+       return null;
+    }
+    var a: D = foo("hi", []); // D
+    var b: E = foo("bye", []); // E 
+    var c = foo("um", []); // error
+                ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
+!!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"hi"'.
+!!! error TS2769:   Overload 2 of 2, '(x: "bye", items: string[]): E', gave the following error.
+!!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"bye"'.
+!!! related TS2793 tests/cases/compiler/overloadingOnConstants2.ts:10:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    
+    
+    //function bar(x: "hi", items: string[]): D;
+    function bar(x: "bye", items: string[]): E;
+             ~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/compiler/overloadingOnConstants2.ts:21:10: The implementation signature is declared here.
+    function bar(x: string, items: string[]): C;
+    function bar(x: string, items: string[]): C {
+       return null;
+    }
+    
+    var d: D = bar("hi", []); // D
+    var e: E = bar("bye", []); // E 
+    var f: C = bar("um", []); // C

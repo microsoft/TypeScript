@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts ===
+class Base {
+>Base : Symbol(Base, Decl(privateNameNestedClassFieldShadowing.ts, 0, 0))
+
+    #x;
+>#x : Symbol(Base.#x, Decl(privateNameNestedClassFieldShadowing.ts, 0, 12))
+
+    constructor() {
+        class Derived {
+>Derived : Symbol(Derived, Decl(privateNameNestedClassFieldShadowing.ts, 2, 19))
+
+            #x;
+>#x : Symbol(Derived.#x, Decl(privateNameNestedClassFieldShadowing.ts, 3, 23))
+
+            testBase(x: Base) {
+>testBase : Symbol(Derived.testBase, Decl(privateNameNestedClassFieldShadowing.ts, 4, 15))
+>x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 5, 21))
+>Base : Symbol(Base, Decl(privateNameNestedClassFieldShadowing.ts, 0, 0))
+
+                console.log(x.#x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 5, 21))
+            }
+            testDerived(x: Derived) {
+>testDerived : Symbol(Derived.testDerived, Decl(privateNameNestedClassFieldShadowing.ts, 7, 13))
+>x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 8, 24))
+>Derived : Symbol(Derived, Decl(privateNameNestedClassFieldShadowing.ts, 2, 19))
+
+                console.log(x.#x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x.#x : Symbol(Derived.#x, Decl(privateNameNestedClassFieldShadowing.ts, 3, 23))
+>x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 8, 24))
+            }
+        }
+    }
+}
+

@@ -1,0 +1,65 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts ===
+class C<T> {
+>C : Symbol(C, Decl(typeParametersAvailableInNestedScope.ts, 0, 0))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+
+    data: T;
+>data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+
+    x = <U>(a: U) => {
+>x : Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+>U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 3, 12))
+>U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
+
+        var y: T;
+>y : Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 4, 11))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+
+        return y;
+>y : Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 4, 11))
+    }
+
+    foo() {
+>foo : Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
+
+        function temp<U>(a: U) {
+>temp : Symbol(temp, Decl(typeParametersAvailableInNestedScope.ts, 8, 11))
+>U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 9, 22))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 9, 25))
+>U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 9, 22))
+
+            var y: T;
+>y : Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 10, 15))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+
+            return y;
+>y : Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 10, 15))
+        }
+        return temp(<T>null);
+>temp : Symbol(temp, Decl(typeParametersAvailableInNestedScope.ts, 8, 11))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+    }
+}
+
+var c = new C<number>();
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>C : Symbol(C, Decl(typeParametersAvailableInNestedScope.ts, 0, 0))
+
+c.data = c.x(null);
+>c.data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c.x : Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>x : Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+
+c.data = c.foo();
+>c.data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c.foo : Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>foo : Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
+

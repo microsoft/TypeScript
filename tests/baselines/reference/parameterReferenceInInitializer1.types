@@ -1,0 +1,38 @@
+=== tests/cases/compiler/parameterReferenceInInitializer1.ts ===
+function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
+>fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
+>y : Y
+>set : (y: Y, x: number) => void
+>y : Y
+>x : number
+
+    return undefined;
+>undefined : undefined
+}
+interface Y { x: number }
+>x : number
+
+class C {
+>C : C
+
+    constructor(
+        y: Y,
+>y : Y
+
+        public x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
+>x : unknown
+>fn(y, (y, x) => y.x = x) : unknown
+>fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
+>y : Y
+>(y, x) => y.x = x : (y: Y, x: number) => number
+>y : Y
+>x : number
+>y.x = x : number
+>y.x : number
+>y : Y
+>x : number
+>x : number
+
+    ) {
+    }
+}

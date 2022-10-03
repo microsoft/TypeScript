@@ -1,0 +1,280 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts ===
+// Generic functions used as arguments for function typed parameters are not used to make inferences from
+// Using function arguments, no errors expected
+
+module ImmediatelyFix {
+>ImmediatelyFix : typeof ImmediatelyFix
+
+    class C<T> {
+>C : C<T>
+
+        foo<T>(x: (a: T) => T) {
+>foo : <T>(x: (a: T) => T) => T
+>x : (a: T) => T
+>a : T
+
+            return x(null);
+>x(null) : T
+>x : (a: T) => T
+>null : null
+        }
+    }
+
+    var c = new C<number>();
+>c : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+    var r = c.foo(<U>(x: U) => ''); // {}
+>r : unknown
+>c.foo(<U>(x: U) => '') : unknown
+>c.foo : <T>(x: (a: T) => T) => T
+>c : C<number>
+>foo : <T>(x: (a: T) => T) => T
+><U>(x: U) => '' : <U>(x: U) => string
+>x : U
+>'' : ""
+
+    var r2 = c.foo<string>(<U>(x: U) => ''); // string 
+>r2 : string
+>c.foo<string>(<U>(x: U) => '') : string
+>c.foo : <T>(x: (a: T) => T) => T
+>c : C<number>
+>foo : <T>(x: (a: T) => T) => T
+><U>(x: U) => '' : <U>(x: U) => string
+>x : U
+>'' : ""
+
+    var r3 = c.foo(x => ''); // {}
+>r3 : unknown
+>c.foo(x => '') : unknown
+>c.foo : <T>(x: (a: T) => T) => T
+>c : C<number>
+>foo : <T>(x: (a: T) => T) => T
+>x => '' : (x: unknown) => string
+>x : unknown
+>'' : ""
+
+    class C2<T> {
+>C2 : C2<T>
+
+        foo(x: (a: T) => T) {
+>foo : (x: (a: T) => T) => T
+>x : (a: T) => T
+>a : T
+
+            return x(null);
+>x(null) : T
+>x : (a: T) => T
+>null : null
+        }
+    }
+
+    var c2 = new C2<number>();
+>c2 : C2<number>
+>new C2<number>() : C2<number>
+>C2 : typeof C2
+
+    var ra = c2.foo(<U>(x: U) => 1); // number
+>ra : number
+>c2.foo(<U>(x: U) => 1) : number
+>c2.foo : (x: (a: number) => number) => number
+>c2 : C2<number>
+>foo : (x: (a: number) => number) => number
+><U>(x: U) => 1 : <U>(x: U) => number
+>x : U
+>1 : 1
+
+    var r3a = c2.foo(x => 1); // number
+>r3a : number
+>c2.foo(x => 1) : number
+>c2.foo : (x: (a: number) => number) => number
+>c2 : C2<number>
+>foo : (x: (a: number) => number) => number
+>x => 1 : (x: number) => number
+>x : number
+>1 : 1
+}
+
+module WithCandidates {
+>WithCandidates : typeof WithCandidates
+
+    class C<T> {
+>C : C<T>
+
+        foo2<T, U>(x: T, cb: (a: T) => U) {
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>x : T
+>cb : (a: T) => U
+>a : T
+
+            return cb(x);
+>cb(x) : U
+>cb : (a: T) => U
+>x : T
+        }
+    }
+
+    var c: C<number>;
+>c : C<number>
+
+    var r4 = c.foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
+>r4 : string
+>c.foo2(1, function <Z>(a: Z) { return '' }) : string
+>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>c : C<number>
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>1 : 1
+>function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
+>a : Z
+>'' : ""
+
+    var r5 = c.foo2(1, (a) => ''); // string
+>r5 : string
+>c.foo2(1, (a) => '') : string
+>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>c : C<number>
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>1 : 1
+>(a) => '' : (a: number) => string
+>a : number
+>'' : ""
+
+    var r6 = c.foo2<string, number>('', <Z>(a: Z) => 1); // number
+>r6 : number
+>c.foo2<string, number>('', <Z>(a: Z) => 1) : number
+>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>c : C<number>
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>'' : ""
+><Z>(a: Z) => 1 : <Z>(a: Z) => number
+>a : Z
+>1 : 1
+
+    class C2<T, U> {
+>C2 : C2<T, U>
+
+        foo3(x: T, cb: (a: T) => U, y: U) {
+>foo3 : (x: T, cb: (a: T) => U, y: U) => U
+>x : T
+>cb : (a: T) => U
+>a : T
+>y : U
+
+            return cb(x);
+>cb(x) : U
+>cb : (a: T) => U
+>x : T
+        }
+    }
+
+    var c2: C2<number, string>;
+>c2 : C2<number, string>
+
+    var r7 = c2.foo3(1, <Z>(a: Z) => '', ''); // string
+>r7 : string
+>c2.foo3(1, <Z>(a: Z) => '', '') : string
+>c2.foo3 : (x: number, cb: (a: number) => string, y: string) => string
+>c2 : C2<number, string>
+>foo3 : (x: number, cb: (a: number) => string, y: string) => string
+>1 : 1
+><Z>(a: Z) => '' : <Z>(a: Z) => string
+>a : Z
+>'' : ""
+>'' : ""
+
+    var r8 = c2.foo3(1, function (a) { return '' }, ''); // string
+>r8 : string
+>c2.foo3(1, function (a) { return '' }, '') : string
+>c2.foo3 : (x: number, cb: (a: number) => string, y: string) => string
+>c2 : C2<number, string>
+>foo3 : (x: number, cb: (a: number) => string, y: string) => string
+>1 : 1
+>function (a) { return '' } : (a: number) => string
+>a : number
+>'' : ""
+>'' : ""
+
+    class C3<T, U> {
+>C3 : C3<T, U>
+
+        foo3<T,U>(x: T, cb: (a: T) => U, y: U) {
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>x : T
+>cb : (a: T) => U
+>a : T
+>y : U
+
+            return cb(x);
+>cb(x) : U
+>cb : (a: T) => U
+>x : T
+        }
+    }
+    var c3: C3<number, string>;
+>c3 : C3<number, string>
+
+    function other<T, U>(t: T, u: U) {
+>other : <T, U>(t: T, u: U) => void
+>t : T
+>u : U
+
+        var r10 = c.foo2(1, (x: T) => ''); // error
+>r10 : string
+>c.foo2(1, (x: T) => '') : string
+>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>c : C<number>
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>1 : 1
+>(x: T) => '' : (x: T) => string
+>x : T
+>'' : ""
+
+        var r10 = c.foo2(1, (x) => ''); // string
+>r10 : string
+>c.foo2(1, (x) => '') : string
+>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>c : C<number>
+>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>1 : 1
+>(x) => '' : (x: number) => string
+>x : number
+>'' : ""
+
+        var r11 = c3.foo3(1, (x: T) => '', ''); // error
+>r11 : string
+>c3.foo3(1, (x: T) => '', '') : string
+>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>c3 : C3<number, string>
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>1 : 1
+>(x: T) => '' : (x: T) => string
+>x : T
+>'' : ""
+>'' : ""
+
+        var r11b = c3.foo3(1, (x: T) => '', 1); // error
+>r11b : string
+>c3.foo3(1, (x: T) => '', 1) : string
+>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>c3 : C3<number, string>
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>1 : 1
+>(x: T) => '' : (x: T) => string
+>x : T
+>'' : ""
+>1 : 1
+
+        var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
+>r12 : number
+>c3.foo3(1, function (a) { return '' }, 1) : 1
+>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>c3 : C3<number, string>
+>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>1 : 1
+>function (a) { return '' } : (a: number) => string
+>a : number
+>'' : ""
+>1 : 1
+    }
+}

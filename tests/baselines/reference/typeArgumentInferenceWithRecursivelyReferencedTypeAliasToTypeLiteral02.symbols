@@ -1,0 +1,36 @@
+=== tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts ===
+type TreeNode = {
+>TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 0, 0))
+
+    name: string;
+>name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 0, 17))
+
+    parent: TreeNode;
+>parent : Symbol(parent, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 1, 17))
+>TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 0, 0))
+}
+
+type TreeNodeMiddleman = {
+>TreeNodeMiddleman : Symbol(TreeNodeMiddleman, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 3, 1))
+
+    name: string;
+>name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 5, 26))
+
+    parent: TreeNode;
+>parent : Symbol(parent, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 6, 17))
+>TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 0, 0))
+}
+
+var nodes: TreeNodeMiddleman[];
+>nodes : Symbol(nodes, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 10, 3))
+>TreeNodeMiddleman : Symbol(TreeNodeMiddleman, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 3, 1))
+
+nodes.map(n => n.name);
+>nodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>nodes : Symbol(nodes, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 10, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 11, 10))
+>n.name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 5, 26))
+>n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 11, 10))
+>name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 5, 26))
+

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts ===
+declare const A: any;
+>A : any
+
+declare const B: any;
+>B : any
+
+declare const C: any;
+>C : any
+
+const x = (A / 2);
+>x : number
+>(A / 2) : number
+>A / 2 : number
+>A : any
+>2 : 2
+
+B(
+>B(    C(),    () => { },    () => { }) : any
+>B : any
+
+    C(),
+>C() : any
+>C : any
+
+    () => { },
+>() => { } : () => void
+
+    () => { }
+>() => { } : () => void
+
+);
+

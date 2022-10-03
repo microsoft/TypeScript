@@ -1,0 +1,260 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures.ts ===
+var numOrDate: number | Date;
+>numOrDate : Symbol(numOrDate, Decl(unionTypeCallSignatures.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var strOrBoolean: string | boolean;
+>strOrBoolean : Symbol(strOrBoolean, Decl(unionTypeCallSignatures.ts, 1, 3))
+
+var strOrNum: string | number;
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+
+// If each type in U has call signatures and the sets of call signatures are identical ignoring return types, 
+// U has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in U.
+var unionOfDifferentReturnType: { (a: number): number; } | { (a: number): Date; };
+>unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeCallSignatures.ts, 6, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 6, 35))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 6, 62))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+numOrDate = unionOfDifferentReturnType(10);
+>numOrDate : Symbol(numOrDate, Decl(unionTypeCallSignatures.ts, 0, 3))
+>unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeCallSignatures.ts, 6, 3))
+
+strOrBoolean = unionOfDifferentReturnType("hello"); // error 
+>strOrBoolean : Symbol(strOrBoolean, Decl(unionTypeCallSignatures.ts, 1, 3))
+>unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeCallSignatures.ts, 6, 3))
+
+unionOfDifferentReturnType1(true); // error in type of parameter
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+
+var unionOfDifferentReturnType1: { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; };
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 11, 36))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 11, 57))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 11, 84))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 11, 103))
+
+numOrDate = unionOfDifferentReturnType1(10);
+>numOrDate : Symbol(numOrDate, Decl(unionTypeCallSignatures.ts, 0, 3))
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+
+strOrBoolean = unionOfDifferentReturnType1("hello");
+>strOrBoolean : Symbol(strOrBoolean, Decl(unionTypeCallSignatures.ts, 1, 3))
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+
+unionOfDifferentReturnType1(true); // error in type of parameter
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+
+unionOfDifferentReturnType1(); // error missing parameter
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(unionTypeCallSignatures.ts, 11, 3))
+
+var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
+>unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeCallSignatures.ts, 17, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 17, 39))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 17, 66))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+unionOfDifferentParameterTypes(10);// error - no call signatures
+>unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeCallSignatures.ts, 17, 3))
+
+unionOfDifferentParameterTypes("hello");// error - no call signatures
+>unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeCallSignatures.ts, 17, 3))
+
+unionOfDifferentParameterTypes();// error - no call signatures
+>unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeCallSignatures.ts, 17, 3))
+
+var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
+>unionOfDifferentNumberOfSignatures : Symbol(unionOfDifferentNumberOfSignatures, Decl(unionTypeCallSignatures.ts, 22, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 22, 43))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 22, 70))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 22, 89))
+
+unionOfDifferentNumberOfSignatures(); // error - no call signatures
+>unionOfDifferentNumberOfSignatures : Symbol(unionOfDifferentNumberOfSignatures, Decl(unionTypeCallSignatures.ts, 22, 3))
+
+unionOfDifferentNumberOfSignatures(10); // error - no call signatures
+>unionOfDifferentNumberOfSignatures : Symbol(unionOfDifferentNumberOfSignatures, Decl(unionTypeCallSignatures.ts, 22, 3))
+
+unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
+>unionOfDifferentNumberOfSignatures : Symbol(unionOfDifferentNumberOfSignatures, Decl(unionTypeCallSignatures.ts, 22, 3))
+
+var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
+>unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeCallSignatures.ts, 27, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 27, 41))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 27, 68))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 27, 78))
+
+unionWithDifferentParameterCount();// needs more args
+>unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeCallSignatures.ts, 27, 3))
+
+unionWithDifferentParameterCount("hello");// needs more args
+>unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeCallSignatures.ts, 27, 3))
+
+unionWithDifferentParameterCount("hello", 10);// OK
+>unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeCallSignatures.ts, 27, 3))
+
+var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
+>unionWithOptionalParameter1 : Symbol(unionWithOptionalParameter1, Decl(unionTypeCallSignatures.ts, 32, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 32, 36))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 32, 46))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 32, 75))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 32, 85))
+
+strOrNum = unionWithOptionalParameter1('hello');
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter1 : Symbol(unionWithOptionalParameter1, Decl(unionTypeCallSignatures.ts, 32, 3))
+
+strOrNum = unionWithOptionalParameter1('hello', 10);
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter1 : Symbol(unionWithOptionalParameter1, Decl(unionTypeCallSignatures.ts, 32, 3))
+
+strOrNum = unionWithOptionalParameter1('hello', "hello"); // error in parameter type
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter1 : Symbol(unionWithOptionalParameter1, Decl(unionTypeCallSignatures.ts, 32, 3))
+
+strOrNum = unionWithOptionalParameter1(); // error
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter1 : Symbol(unionWithOptionalParameter1, Decl(unionTypeCallSignatures.ts, 32, 3))
+
+var unionWithOptionalParameter2: { (a: string, b?: number): string; } | { (a: string, b: number): number };
+>unionWithOptionalParameter2 : Symbol(unionWithOptionalParameter2, Decl(unionTypeCallSignatures.ts, 38, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 38, 36))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 38, 46))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 38, 75))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 38, 85))
+
+strOrNum = unionWithOptionalParameter2('hello'); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter2 : Symbol(unionWithOptionalParameter2, Decl(unionTypeCallSignatures.ts, 38, 3))
+
+strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter2 : Symbol(unionWithOptionalParameter2, Decl(unionTypeCallSignatures.ts, 38, 3))
+
+strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter2 : Symbol(unionWithOptionalParameter2, Decl(unionTypeCallSignatures.ts, 38, 3))
+
+strOrNum = unionWithOptionalParameter2(); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter2 : Symbol(unionWithOptionalParameter2, Decl(unionTypeCallSignatures.ts, 38, 3))
+
+var unionWithOptionalParameter3: { (a: string, b?: number): string; } | { (a: string): number; };
+>unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeCallSignatures.ts, 44, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 44, 36))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 44, 46))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 44, 75))
+
+strOrNum = unionWithOptionalParameter3('hello');
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeCallSignatures.ts, 44, 3))
+
+strOrNum = unionWithOptionalParameter3('hello', 10); // ok
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeCallSignatures.ts, 44, 3))
+
+strOrNum = unionWithOptionalParameter3('hello', "hello"); // wrong argument type
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeCallSignatures.ts, 44, 3))
+
+strOrNum = unionWithOptionalParameter3(); // needs more args
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeCallSignatures.ts, 44, 3))
+
+var unionWithRestParameter1: { (a: string, ...b: number[]): string; } | { (a: string, ...b: number[]): number };
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 50, 32))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 50, 42))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 50, 75))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 50, 85))
+
+strOrNum = unionWithRestParameter1('hello');
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+
+strOrNum = unionWithRestParameter1('hello', 10);
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+
+strOrNum = unionWithRestParameter1('hello', 10, 11);
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+
+strOrNum = unionWithRestParameter1('hello', "hello"); // error in parameter type
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+
+strOrNum = unionWithRestParameter1(); // error
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter1 : Symbol(unionWithRestParameter1, Decl(unionTypeCallSignatures.ts, 50, 3))
+
+var unionWithRestParameter2: { (a: string, ...b: number[]): string; } | { (a: string, b: number): number };
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 57, 32))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 57, 42))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 57, 75))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 57, 85))
+
+strOrNum = unionWithRestParameter2('hello'); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+
+strOrNum = unionWithRestParameter2('hello', 10); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+
+strOrNum = unionWithRestParameter2('hello', 10, 11); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+
+strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+
+strOrNum = unionWithRestParameter2(); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter2 : Symbol(unionWithRestParameter2, Decl(unionTypeCallSignatures.ts, 57, 3))
+
+var unionWithRestParameter3: { (a: string, ...b: number[]): string; } | { (a: string): number };
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 64, 32))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 64, 42))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 64, 75))
+
+strOrNum = unionWithRestParameter3('hello');
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+
+strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+
+strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+
+strOrNum = unionWithRestParameter3('hello', "hello"); // wrong argument type
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+
+strOrNum = unionWithRestParameter3(); // error no call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeCallSignatures.ts, 64, 3))
+
+var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
+>unionWithRestParameter4 : Symbol(unionWithRestParameter4, Decl(unionTypeCallSignatures.ts, 71, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 71, 32))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 71, 64))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 71, 74))
+
+strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter4 : Symbol(unionWithRestParameter4, Decl(unionTypeCallSignatures.ts, 71, 3))
+
+strOrNum = unionWithRestParameter4("hello", "world");
+>strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
+>unionWithRestParameter4 : Symbol(unionWithRestParameter4, Decl(unionTypeCallSignatures.ts, 71, 3))
+

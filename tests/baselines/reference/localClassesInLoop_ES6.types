@@ -1,0 +1,46 @@
+=== tests/cases/compiler/localClassesInLoop_ES6.ts ===
+declare function use(a: any);
+>use : (a: any) => any
+>a : any
+
+"use strict"
+>"use strict" : "use strict"
+
+var data = [];
+>data : any[]
+>[] : undefined[]
+
+for (let x = 0; x < 2; ++x) {
+>x : number
+>0 : 0
+>x < 2 : boolean
+>x : number
+>2 : 2
+>++x : number
+>x : number
+
+    class C { }
+>C : C
+
+    data.push(() => C);
+>data.push(() => C) : number
+>data.push : (...items: any[]) => number
+>data : any[]
+>push : (...items: any[]) => number
+>() => C : () => typeof C
+>C : typeof C
+}
+
+use(data[0]() === data[1]());
+>use(data[0]() === data[1]()) : any
+>use : (a: any) => any
+>data[0]() === data[1]() : boolean
+>data[0]() : any
+>data[0] : any
+>data : any[]
+>0 : 0
+>data[1]() : any
+>data[1] : any
+>data : any[]
+>1 : 1
+

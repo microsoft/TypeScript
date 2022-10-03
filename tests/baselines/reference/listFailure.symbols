@@ -1,0 +1,120 @@
+=== tests/cases/compiler/listFailure.ts ===
+module Editor {
+>Editor : Symbol(Editor, Decl(listFailure.ts, 0, 0))
+
+    export class Buffer {
+>Buffer : Symbol(Buffer, Decl(listFailure.ts, 0, 15))
+
+    	lines: List<Line> = ListMakeHead<Line>();
+>lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+>ListMakeHead : Symbol(ListMakeHead, Decl(listFailure.ts, 16, 5))
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+        
+        addLine(lineText: string): List<Line> {
+>addLine : Symbol(Buffer.addLine, Decl(listFailure.ts, 3, 46))
+>lineText : Symbol(lineText, Decl(listFailure.ts, 5, 16))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+            
+            var line: Line = new Line();
+>line : Symbol(line, Decl(listFailure.ts, 7, 15))
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+
+            var lineEntry = this.lines.add(line);
+>lineEntry : Symbol(lineEntry, Decl(listFailure.ts, 8, 15))
+>this.lines.add : Symbol(List.add, Decl(listFailure.ts, 27, 29))
+>this.lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
+>this : Symbol(Buffer, Decl(listFailure.ts, 0, 15))
+>lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
+>add : Symbol(List.add, Decl(listFailure.ts, 27, 29))
+>line : Symbol(line, Decl(listFailure.ts, 7, 15))
+
+            return lineEntry;
+>lineEntry : Symbol(lineEntry, Decl(listFailure.ts, 8, 15))
+        }    
+    }
+    
+    export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
+>ListRemoveEntry : Symbol(ListRemoveEntry, Decl(listFailure.ts, 12, 5))
+>U : Symbol(U, Decl(listFailure.ts, 14, 36))
+>entry : Symbol(entry, Decl(listFailure.ts, 14, 39))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : Symbol(U, Decl(listFailure.ts, 14, 36))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : Symbol(U, Decl(listFailure.ts, 14, 36))
+
+    	return entry;
+>entry : Symbol(entry, Decl(listFailure.ts, 14, 39))
+    }
+
+    export function ListMakeHead<U>(): List<U> {
+>ListMakeHead : Symbol(ListMakeHead, Decl(listFailure.ts, 16, 5))
+>U : Symbol(U, Decl(listFailure.ts, 18, 33))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : Symbol(U, Decl(listFailure.ts, 18, 33))
+
+		return null;
+    }
+
+    export function ListMakeEntry<U>(data: U): List<U> {
+>ListMakeEntry : Symbol(ListMakeEntry, Decl(listFailure.ts, 20, 5))
+>U : Symbol(U, Decl(listFailure.ts, 22, 34))
+>data : Symbol(data, Decl(listFailure.ts, 22, 37))
+>U : Symbol(U, Decl(listFailure.ts, 22, 34))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : Symbol(U, Decl(listFailure.ts, 22, 34))
+
+		return null;
+    }    
+
+    class List<T> { 
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+
+        public next: List<T>; 
+>next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+
+        add(data: T): List<T> {
+>add : Symbol(List.add, Decl(listFailure.ts, 27, 29))
+>data : Symbol(data, Decl(listFailure.ts, 29, 12))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+
+            this.next = ListMakeEntry(data);
+>this.next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+>this : Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+>ListMakeEntry : Symbol(ListMakeEntry, Decl(listFailure.ts, 20, 5))
+>data : Symbol(data, Decl(listFailure.ts, 29, 12))
+
+            return this.next;
+>this.next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+>this : Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+        }
+
+        popEntry(head: List<T>): List<T> {
+>popEntry : Symbol(List.popEntry, Decl(listFailure.ts, 32, 9))
+>head : Symbol(head, Decl(listFailure.ts, 34, 17))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+>List : Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : Symbol(T, Decl(listFailure.ts, 26, 15))
+
+            return (ListRemoveEntry(this.next));
+>ListRemoveEntry : Symbol(ListRemoveEntry, Decl(listFailure.ts, 12, 5))
+>this.next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+>this : Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : Symbol(List.next, Decl(listFailure.ts, 26, 19))
+        }      
+    }
+
+	export class Line {}
+>Line : Symbol(Line, Decl(listFailure.ts, 37, 5))
+}

@@ -1,0 +1,77 @@
+=== tests/cases/conformance/scanner/ecmascript5/file1.ts ===
+var \u0061wait = 12; // ok
+>\u0061wait : number
+>12 : 12
+
+async function main() {
+>main : () => Promise<void>
+
+    \u0061wait 12; // not ok
+>\u0061wait 12 : 12
+>12 : 12
+}
+
+var \u0079ield = 12; // ok
+>\u0079ield : number
+>12 : 12
+
+function *gen() {
+>gen : () => Generator<number, void, unknown>
+
+    \u0079ield 12; //not ok
+>\u0079ield 12 : any
+>12 : 12
+}
+
+type typ\u0065 = 12; // ok
+>typ\u0065 : 12
+
+typ\u0065 notok = 0; // not ok
+>notok : 0
+
+export {};
+=== tests/cases/conformance/scanner/ecmascript5/file2.ts ===
+\u{0076}ar x = "hello"; // not ok
+>x : string
+>"hello" : "hello"
+
+var \u{0061}wait = 12; // ok
+>\u{0061}wait : number
+>12 : 12
+
+async function main() {
+>main : () => Promise<void>
+
+    \u{0061}wait 12; // not ok
+>\u{0061}wait 12 : 12
+>12 : 12
+}
+
+var \u{0079}ield = 12; // ok
+>\u{0079}ield : number
+>12 : 12
+
+function *gen() {
+>gen : () => Generator<number, void, unknown>
+
+    \u{0079}ield 12; //not ok
+>\u{0079}ield 12 : any
+>12 : 12
+}
+
+type typ\u{0065} = 12; // ok
+>typ\u{0065} : 12
+
+typ\u{0065} notok = 0; // not ok
+>notok : 0
+
+export {};
+
+const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
+>a : { default: number; }
+>{def\u0061ult: 12} : { default: number; }
+>def\u0061ult : number
+>12 : 12
+
+// chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
+

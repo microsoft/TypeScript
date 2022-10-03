@@ -1,0 +1,12 @@
+=== tests/cases/compiler/index.js ===
+module.exports = {}
+>module.exports = {} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{} : {}
+
+var x = 1
+>x : number
+>1 : 1
+

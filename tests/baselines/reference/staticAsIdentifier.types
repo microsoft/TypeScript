@@ -1,0 +1,62 @@
+=== tests/cases/compiler/staticAsIdentifier.ts ===
+class C1 {
+>C1 : C1
+
+    static static
+>static : any
+
+    [x: string]: string;
+>x : string
+}
+
+class C2 {
+>C2 : C2
+
+    static static
+>static : any
+
+    m() {}
+>m : () => void
+}
+
+class C3 {
+>C3 : C3
+
+    static static p: string;
+>static : any
+>p : string
+}
+
+class C4 {
+>C4 : C4
+
+    static static foo() {}
+>static : any
+>foo : () => void
+}
+
+class C5 {
+>C5 : C5
+
+    static static
+>static : any
+}
+
+class C6 {
+>C6 : C6
+
+    static 
+    static
+>static : any
+}
+
+class C7 extends C6 {
+>C7 : C7
+>C6 : C6
+
+    static override static
+>static : any
+}
+
+
+

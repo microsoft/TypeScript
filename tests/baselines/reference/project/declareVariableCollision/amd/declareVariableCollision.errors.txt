@@ -1,0 +1,27 @@
+in1.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
+in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
+
+
+==== decl.d.ts (0 errors) ====
+    // bug 535531: duplicate identifier error reported for "import" declarations in separate files
+    
+    declare module A
+    {
+    
+        class MyRoot { }
+    
+        export module B
+        {
+            class MyClass{ }
+        }
+    }
+==== in1.d.ts (1 errors) ====
+    import a = A;
+           ~
+!!! error TS2300: Duplicate identifier 'a'.
+!!! related TS6203 in2.d.ts:1:8: 'a' was also declared here.
+==== in2.d.ts (1 errors) ====
+    import a = A;
+           ~
+!!! error TS2300: Duplicate identifier 'a'.
+!!! related TS6203 in1.d.ts:1:8: 'a' was also declared here.

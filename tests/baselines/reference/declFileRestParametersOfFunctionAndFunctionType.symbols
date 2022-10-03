@@ -1,0 +1,30 @@
+=== tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
+function f1(...args) { }
+>f1 : Symbol(f1, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 0))
+>args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 12))
+
+function f2(x: (...args) => void) { }
+>f2 : Symbol(f2, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 24))
+>x : Symbol(x, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 1, 12))
+>args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 1, 16))
+
+function f3(x: { (...args): void }) { }
+>f3 : Symbol(f3, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 1, 37))
+>x : Symbol(x, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 12))
+>args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 18))
+
+function f4<T extends (...args) => void>() { }
+>f4 : Symbol(f4, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 39))
+>T : Symbol(T, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 12))
+>args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 23))
+
+function f5<T extends { (...args): void }>() { }
+>f5 : Symbol(f5, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 46))
+>T : Symbol(T, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 4, 12))
+>args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 4, 25))
+
+var f6 = () => { return [<any>10]; }
+>f6 : Symbol(f6, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 5, 3))
+
+
+

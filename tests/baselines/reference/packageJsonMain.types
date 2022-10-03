@@ -1,0 +1,17 @@
+=== /a.ts ===
+import foo = require("foo");
+>foo : any
+
+import bar = require("bar");
+>bar : any
+
+import baz = require("baz");
+>baz : any
+
+foo + bar + baz;
+>foo + bar + baz : error
+>foo + bar : error
+>foo : error
+>bar : error
+>baz : error
+

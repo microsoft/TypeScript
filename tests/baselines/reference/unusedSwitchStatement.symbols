@@ -1,0 +1,27 @@
+=== tests/cases/compiler/unusedSwitchStatement.ts ===
+switch (1) {
+    case 0:
+        let x;
+>x : Symbol(x, Decl(unusedSwitchStatement.ts, 2, 11))
+
+        break;
+    case 1:
+        const c = 1;
+>c : Symbol(c, Decl(unusedSwitchStatement.ts, 5, 13))
+
+        break;
+    default:
+        let z = 2;
+>z : Symbol(z, Decl(unusedSwitchStatement.ts, 8, 11))
+}
+
+
+switch (2) {
+    case 0:
+        let x;
+>x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
+
+    case 1:
+        x++;
+>x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
+}

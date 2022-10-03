@@ -1,0 +1,26 @@
+=== tests/cases/compiler/a.ts ===
+export default class { }
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/b.ts ===
+export { default } from "./a";
+>default : Symbol(default, Decl(b.ts, 0, 8))
+
+export { default as a } from "./a";
+>default : Symbol(b, Decl(a.ts, 0, 0))
+>a : Symbol(a, Decl(b.ts, 1, 8))
+
+import { default as b } from "./a";
+>default : Symbol(b, Decl(a.ts, 0, 0))
+>b : Symbol(b, Decl(b.ts, 2, 8))
+
+void b;
+>b : Symbol(b, Decl(b.ts, 2, 8))
+
+=== tests/cases/compiler/tslib.d.ts ===
+declare module "tslib" {
+>"tslib" : Symbol("tslib", Decl(tslib.d.ts, --, --))
+
+    function __importDefault(m: any): void;
+>__importDefault : Symbol(__importDefault, Decl(tslib.d.ts, --, --))
+>m : Symbol(m, Decl(tslib.d.ts, --, --))
+}

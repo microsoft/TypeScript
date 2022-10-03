@@ -1,0 +1,21 @@
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,12): error TS1433: Decorators may not be applied to 'this' parameters.
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(8,29): error TS1433: Decorators may not be applied to 'this' parameters.
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(8,30): error TS2680: A 'this' parameter must be the first parameter.
+
+
+==== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts (3 errors) ====
+    declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
+    
+    class C {
+        method(@dec this: C) {}
+               ~~~~
+!!! error TS1433: Decorators may not be applied to 'this' parameters.
+    }
+    
+    class C2 {
+        method(@dec allowed: C2, @dec this: C2) {}
+                                ~~~~~
+!!! error TS1433: Decorators may not be applied to 'this' parameters.
+                                 ~~~~~~~~~~~~~
+!!! error TS2680: A 'this' parameter must be the first parameter.
+    }

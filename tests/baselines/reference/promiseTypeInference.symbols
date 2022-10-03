@@ -1,0 +1,50 @@
+=== tests/cases/compiler/promiseTypeInference.ts ===
+declare class CPromise<T> {
+>CPromise : Symbol(CPromise, Decl(promiseTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(promiseTypeInference.ts, 0, 23))
+
+    then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
+>then : Symbol(CPromise.then, Decl(promiseTypeInference.ts, 0, 27))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
+>success : Symbol(success, Decl(promiseTypeInference.ts, 1, 12))
+>value : Symbol(value, Decl(promiseTypeInference.ts, 1, 23))
+>T : Symbol(T, Decl(promiseTypeInference.ts, 0, 23))
+>CPromise : Symbol(CPromise, Decl(promiseTypeInference.ts, 0, 0))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
+>CPromise : Symbol(CPromise, Decl(promiseTypeInference.ts, 0, 0))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
+}
+interface IPromise<T> {
+>IPromise : Symbol(IPromise, Decl(promiseTypeInference.ts, 2, 1))
+>T : Symbol(T, Decl(promiseTypeInference.ts, 3, 19))
+
+    then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
+>then : Symbol(IPromise.then, Decl(promiseTypeInference.ts, 3, 23))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 4, 9))
+>success : Symbol(success, Decl(promiseTypeInference.ts, 4, 12))
+>value : Symbol(value, Decl(promiseTypeInference.ts, 4, 23))
+>T : Symbol(T, Decl(promiseTypeInference.ts, 3, 19))
+>IPromise : Symbol(IPromise, Decl(promiseTypeInference.ts, 2, 1))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 4, 9))
+>IPromise : Symbol(IPromise, Decl(promiseTypeInference.ts, 2, 1))
+>U : Symbol(U, Decl(promiseTypeInference.ts, 4, 9))
+}
+declare function load(name: string): CPromise<string>;
+>load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
+>name : Symbol(name, Decl(promiseTypeInference.ts, 6, 22))
+>CPromise : Symbol(CPromise, Decl(promiseTypeInference.ts, 0, 0))
+
+declare function convert(s: string): IPromise<number>;
+>convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 54))
+>s : Symbol(s, Decl(promiseTypeInference.ts, 7, 25))
+>IPromise : Symbol(IPromise, Decl(promiseTypeInference.ts, 2, 1))
+
+var $$x = load("something").then(s => convert(s));
+>$$x : Symbol($$x, Decl(promiseTypeInference.ts, 9, 3))
+>load("something").then : Symbol(CPromise.then, Decl(promiseTypeInference.ts, 0, 27))
+>load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
+>then : Symbol(CPromise.then, Decl(promiseTypeInference.ts, 0, 27))
+>s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))
+>convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 54))
+>s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))
+

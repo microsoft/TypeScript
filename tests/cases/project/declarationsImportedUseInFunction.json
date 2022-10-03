@@ -1,0 +1,9 @@
+{
+    "scenario": "declarations_ImportedUseInFunction",
+    "projectRoot": "tests/cases/projects/declarations_ImportedUseInFunction",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true
+}

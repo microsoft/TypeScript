@@ -1,0 +1,52 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
+/**
+ * @param {number} p
+ */
+module.exports = function (p) {
+>module.exports = function (p) {    this.t = 12 + p;} : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>function (p) {    this.t = 12 + p;} : typeof exports
+>p : number
+
+    this.t = 12 + p;
+>this.t = 12 + p : number
+>this.t : any
+>this : this
+>t : any
+>12 + p : number
+>12 : 12
+>p : number
+}
+module.exports.Sub = function() {
+>module.exports.Sub = function() {    this.instance = new module.exports(10);} : typeof Sub
+>module.exports.Sub : typeof Sub
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>Sub : typeof Sub
+>function() {    this.instance = new module.exports(10);} : typeof Sub
+
+    this.instance = new module.exports(10);
+>this.instance = new module.exports(10) : exports
+>this.instance : any
+>this : this
+>instance : any
+>new module.exports(10) : exports
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>10 : 10
+}
+module.exports.Sub.prototype = { }
+>module.exports.Sub.prototype = { } : {}
+>module.exports.Sub.prototype : {}
+>module.exports.Sub : typeof Sub
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>Sub : typeof Sub
+>prototype : {}
+>{ } : {}
+

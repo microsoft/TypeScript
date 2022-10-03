@@ -1,0 +1,81 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts ===
+module A {
+>A : typeof globalThis.A
+
+    export class A {
+>A : A
+
+        id: number;
+>id : number
+
+        name: string;
+>name : string
+    }
+
+    export class AG<T, U>{
+>AG : AG<T, U>
+
+        id: T;
+>id : T
+
+        name: U;
+>name : U
+    }
+
+    class A2 {
+>A2 : A2
+
+        id: number;
+>id : number
+
+        name: string;
+>name : string
+    }
+
+    class AG2<T, U>{
+>AG2 : AG2<T, U>
+
+        id: T;
+>id : T
+
+        name: U;
+>name : U
+    }
+}
+
+// no errors expected, these are all exported
+var a: { id: number; name: string };
+>a : { id: number; name: string; }
+>id : number
+>name : string
+
+var a = new A.A();
+>a : { id: number; name: string; }
+>new A.A() : A.A
+>A.A : typeof A.A
+>A : typeof A
+>A : typeof A.A
+
+var AG = new A.AG<number, string>()
+>AG : A.AG<number, string>
+>new A.AG<number, string>() : A.AG<number, string>
+>A.AG : typeof A.AG
+>A : typeof A
+>AG : typeof A.AG
+
+// errors expected, these are not exported
+var a2 = new A.A2();
+>a2 : any
+>new A.A2() : any
+>A.A2 : any
+>A : typeof A
+>A2 : any
+
+var ag2 = new A.A2<string, number>();
+>ag2 : any
+>new A.A2<string, number>() : any
+>A.A2 : any
+>A : typeof A
+>A2 : any
+
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/es6ImportWithoutFromClause_0.ts ===
+export var a = 10;
+>a : Symbol(a, Decl(es6ImportWithoutFromClause_0.ts, 0, 10))
+
+=== tests/cases/compiler/es6ImportWithoutFromClause_1.ts ===
+import "es6ImportWithoutFromClause_0";
+No type information for this code.
+No type information for this code.

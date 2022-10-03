@@ -1,0 +1,127 @@
+=== tests/cases/compiler/duplicateLocalVariable2.ts ===
+export class TestCase {
+>TestCase : TestCase
+
+    constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
+>name : string
+>test : () => boolean
+>errorMessageRegEx : string
+    }
+}
+export class TestRunner { 
+>TestRunner : TestRunner
+
+    static arrayCompare(arg1: any[], arg2: any[]): boolean {
+>arrayCompare : (arg1: any[], arg2: any[]) => boolean
+>arg1 : any[]
+>arg2 : any[]
+
+        return false;
+>false : false
+    }
+
+    public addTest(test: TestCase) {
+>addTest : (test: TestCase) => void
+>test : TestCase
+    }
+}
+
+export var tests: TestRunner = (function () {
+>tests : TestRunner
+>(function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;})() : TestRunner
+>(function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;}) : () => TestRunner
+>function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;} : () => TestRunner
+
+    var testRunner = new TestRunner();
+>testRunner : TestRunner
+>new TestRunner() : TestRunner
+>TestRunner : typeof TestRunner
+
+    testRunner.addTest(new TestCase("Check UTF8 encoding",
+>testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        })) : void
+>testRunner.addTest : (test: TestCase) => void
+>testRunner : TestRunner
+>addTest : (test: TestCase) => void
+>new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }) : TestCase
+>TestCase : typeof TestCase
+>"Check UTF8 encoding" : "Check UTF8 encoding"
+
+        function () {
+>function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        } : () => boolean
+
+            var fb: any;
+>fb : any
+
+            fb.writeUtf8Bom();
+>fb.writeUtf8Bom() : any
+>fb.writeUtf8Bom : any
+>fb : any
+>writeUtf8Bom : any
+
+            var chars = [0x0054];
+>chars : number[]
+>[0x0054] : number[]
+>0x0054 : 84
+
+            for (var i in chars) {
+>i : string
+>chars : number[]
+
+                fb.writeUtf8CodePoint(chars[i]);
+>fb.writeUtf8CodePoint(chars[i]) : any
+>fb.writeUtf8CodePoint : any
+>fb : any
+>writeUtf8CodePoint : any
+>chars[i] : number
+>chars : number[]
+>i : string
+            }
+            fb.index = 0;
+>fb.index = 0 : 0
+>fb.index : any
+>fb : any
+>index : any
+>0 : 0
+
+            var bytes = [];
+>bytes : any[]
+>[] : undefined[]
+
+            for (var i = 0; i < 14; i++) {
+>i : string
+>0 : 0
+>i < 14 : boolean
+>i : string
+>14 : 14
+>i++ : number
+>i : string
+
+                bytes.push(fb.readByte());
+>bytes.push(fb.readByte()) : number
+>bytes.push : (...items: any[]) => number
+>bytes : any[]
+>push : (...items: any[]) => number
+>fb.readByte() : any
+>fb.readByte : any
+>fb : any
+>readByte : any
+            }
+            var expected = [0xEF];
+>expected : number[]
+>[0xEF] : number[]
+>0xEF : 239
+
+            return TestRunner.arrayCompare(bytes, expected);
+>TestRunner.arrayCompare(bytes, expected) : boolean
+>TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
+>TestRunner : typeof TestRunner
+>arrayCompare : (arg1: any[], arg2: any[]) => boolean
+>bytes : any[]
+>expected : number[]
+
+        }));
+
+    return testRunner;
+>testRunner : TestRunner
+
+})();

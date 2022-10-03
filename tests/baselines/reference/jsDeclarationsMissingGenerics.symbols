@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+ * @param {Array} x
+ */
+function x(x) {}
+>x : Symbol(x, Decl(file.js, 0, 0))
+>x : Symbol(x, Decl(file.js, 3, 11))
+
+/**
+ * @param {Promise} x
+ */
+function y(x) {}
+>y : Symbol(y, Decl(file.js, 3, 16))
+>x : Symbol(x, Decl(file.js, 7, 11))
+

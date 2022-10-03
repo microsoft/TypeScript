@@ -1,0 +1,18 @@
+{
+    "scenario": "Verify that a higher import loads a module that was previously skipped",
+    "projectRoot": "tests/cases/projects/NodeModulesSearch",
+    "baselineCheck": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "project": "importHigher",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "importHigher/node_modules/m2/entry.js",
+        "importHigher/node_modules/m1/index.js",
+        "importHigher/node_modules/m2/node_modules/m3/index.js",
+        "importHigher/root.ts"
+    ],
+    "emittedFiles": [
+        "importHigher/root.js"
+    ]
+}

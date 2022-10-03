@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/templates/templateStringInInOperatorES6.ts ===
+var x = `${ "hi" }` in { hi: 10, hello: 20};
+>x : Symbol(x, Decl(templateStringInInOperatorES6.ts, 0, 3))
+>hi : Symbol(hi, Decl(templateStringInInOperatorES6.ts, 0, 24))
+>hello : Symbol(hello, Decl(templateStringInInOperatorES6.ts, 0, 32))
+

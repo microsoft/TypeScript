@@ -1,0 +1,277 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts ===
+// Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
+// parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
+// optional or rest) and types, and identical return types.
+
+class B<T extends Date> {
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 4, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    constructor(x: T) { return null; }
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 5, 16))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 4, 8))
+}
+
+class C<T extends Date> {
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 8, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    constructor(x: T) { return null; }
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 9, 16))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 8, 8))
+}
+
+interface I<T extends Date> {
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 12, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    new(x: T): Date;
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 13, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 12, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 14, 1))
+
+    new<T extends Date>(x: T): RegExp;
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 17, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 17, 24))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 17, 8))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var a: { new<T extends Date>(x: T): T }
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 3))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 29))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 13))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 13))
+
+var b = { new<T extends Date>(x: T) { return null; } }; // not a construct signature, function called new
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+>new : Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 9))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 30))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 14))
+
+function foo1b(x: B<Date>);
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 23, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 24, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 23, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo1b(x: B<Date>); // error
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 23, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 24, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 24, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo1b(x: any) { }
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 23, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 24, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 25, 15))
+
+function foo1c(x: C<Date>);
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 25, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 27, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 27, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo1c(x: C<Date>); // error
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 25, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 27, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 28, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo1c(x: any) { }
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 25, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 27, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 28, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 29, 15))
+
+function foo2(x: I<Date>);
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 29, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 31, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 32, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 31, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo2(x: I<Date>); // error
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 29, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 31, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 32, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 32, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 29, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 31, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 32, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 33, 14))
+
+function foo3(x: typeof a);
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 33, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 36, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 35, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 3))
+
+function foo3(x: typeof a); // error
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 33, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 36, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 36, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 3))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 33, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 36, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 37, 14))
+
+function foo4(x: typeof b);
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 37, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 39, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 40, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 39, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+
+function foo4(x: typeof b); // error
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 37, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 39, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 40, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 40, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+
+function foo4(x: any) { }
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 37, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 39, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 40, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 41, 14))
+
+function foo8(x: B<Date>);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 41, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 43, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 44, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 43, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo8(x: I<Date>); // ok
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 41, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 43, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 44, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 44, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 41, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 43, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 44, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 45, 14))
+
+function foo9(x: B<Date>);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 45, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 47, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 48, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 47, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo9(x: C<Date>); // error since types are structurally equal
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 45, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 47, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 48, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 48, 14))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 45, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 47, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 48, 26))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 49, 14))
+
+function foo10(x: B<Date>);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 49, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 51, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 52, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 51, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo10(x: typeof a); // ok
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 49, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 51, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 52, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 52, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 49, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 51, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 52, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 53, 15))
+
+function foo11(x: B<Date>);
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 53, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 55, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 56, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 55, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo11(x: typeof b); // ok
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 53, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 55, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 56, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 56, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+
+function foo11(x: any) { }
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 53, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 55, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 56, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 57, 15))
+
+function foo12(x: I<Date>);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 57, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 59, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 60, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 59, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo12(x: C<Date>); // ok
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 57, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 59, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 60, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 60, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 57, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 59, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 60, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 61, 15))
+
+function foo12b(x: I2);
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 61, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 63, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 64, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 63, 16))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 14, 1))
+
+function foo12b(x: C<Date>); // ok
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 61, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 63, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 64, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 64, 16))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo12b(x: any) { }
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 61, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 63, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 64, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 65, 16))
+
+function foo13(x: I<Date>);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 65, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 67, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 68, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 67, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo13(x: typeof a); // ok
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 65, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 67, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 68, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 68, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 20, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 65, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 67, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 68, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 69, 15))
+
+function foo14(x: I<Date>);
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 69, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 71, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 72, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 71, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 10, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo14(x: typeof b); // ok
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 69, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 71, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 72, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 72, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 21, 3))
+
+function foo14(x: any) { }
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 69, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 71, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 72, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 73, 15))
+
+function foo15(x: I2);
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 73, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 75, 22), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 75, 15))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 14, 1))
+
+function foo15(x: C<Date>); // ok
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 73, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 75, 22), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 76, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 6, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function foo15(x: any) { }
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 73, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 75, 22), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.ts, 77, 15))
+

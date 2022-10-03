@@ -1,0 +1,116 @@
+=== tests/cases/compiler/declFileCallSignatures_0.ts ===
+export interface ICallSignature {
+>ICallSignature : Symbol(ICallSignature, Decl(declFileCallSignatures_0.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    (): string;
+}
+
+export interface ICallSignatureWithParameters {
+>ICallSignatureWithParameters : Symbol(ICallSignatureWithParameters, Decl(declFileCallSignatures_0.ts, 3, 1))
+
+    /** This is comment for function signature*/
+    (/** this is comment about a*/a: string,
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 7, 5))
+
+        /** this is comment for b*/
+        b: number): void;
+>b : Symbol(b, Decl(declFileCallSignatures_0.ts, 7, 44))
+}
+
+export interface ICallSignatureWithRestParameters {
+>ICallSignatureWithRestParameters : Symbol(ICallSignatureWithRestParameters, Decl(declFileCallSignatures_0.ts, 10, 1))
+
+    (a: string, ...rests: string[]): string;
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 13, 5))
+>rests : Symbol(rests, Decl(declFileCallSignatures_0.ts, 13, 15))
+}
+
+export interface ICallSignatureWithOverloads {
+>ICallSignatureWithOverloads : Symbol(ICallSignatureWithOverloads, Decl(declFileCallSignatures_0.ts, 14, 1))
+
+    (a: string): string;
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 17, 5))
+
+    (a: number): number;
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 18, 5))
+}
+
+export interface ICallSignatureWithTypeParameters<T> {
+>ICallSignatureWithTypeParameters : Symbol(ICallSignatureWithTypeParameters, Decl(declFileCallSignatures_0.ts, 19, 1))
+>T : Symbol(T, Decl(declFileCallSignatures_0.ts, 21, 50))
+
+    /** This comment should appear for foo*/
+    (a: T): string;
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 23, 5))
+>T : Symbol(T, Decl(declFileCallSignatures_0.ts, 21, 50))
+}
+
+export interface ICallSignatureWithOwnTypeParametes {
+>ICallSignatureWithOwnTypeParametes : Symbol(ICallSignatureWithOwnTypeParametes, Decl(declFileCallSignatures_0.ts, 24, 1))
+
+    <T extends ICallSignature>(a: T): string;
+>T : Symbol(T, Decl(declFileCallSignatures_0.ts, 27, 5))
+>ICallSignature : Symbol(ICallSignature, Decl(declFileCallSignatures_0.ts, 0, 0))
+>a : Symbol(a, Decl(declFileCallSignatures_0.ts, 27, 31))
+>T : Symbol(T, Decl(declFileCallSignatures_0.ts, 27, 5))
+}
+
+=== tests/cases/compiler/declFileCallSignatures_1.ts ===
+interface IGlobalCallSignature {
+>IGlobalCallSignature : Symbol(IGlobalCallSignature, Decl(declFileCallSignatures_1.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    (): string;
+}
+
+interface IGlobalCallSignatureWithParameters {
+>IGlobalCallSignatureWithParameters : Symbol(IGlobalCallSignatureWithParameters, Decl(declFileCallSignatures_1.ts, 3, 1))
+
+    /** This is comment for function signature*/
+    (/** this is comment about a*/a: string,
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 7, 5))
+
+        /** this is comment for b*/
+        b: number): void;
+>b : Symbol(b, Decl(declFileCallSignatures_1.ts, 7, 44))
+}
+
+interface IGlobalCallSignatureWithRestParameters {
+>IGlobalCallSignatureWithRestParameters : Symbol(IGlobalCallSignatureWithRestParameters, Decl(declFileCallSignatures_1.ts, 10, 1))
+
+    (a: string, ...rests: string[]): string;
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 14, 5))
+>rests : Symbol(rests, Decl(declFileCallSignatures_1.ts, 14, 15))
+
+}
+
+interface IGlobalCallSignatureWithOverloads {
+>IGlobalCallSignatureWithOverloads : Symbol(IGlobalCallSignatureWithOverloads, Decl(declFileCallSignatures_1.ts, 16, 1))
+
+    (a: string): string;
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 19, 5))
+
+    (a: number): number;
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 20, 5))
+}
+
+interface IGlobalCallSignatureWithTypeParameters<T> {
+>IGlobalCallSignatureWithTypeParameters : Symbol(IGlobalCallSignatureWithTypeParameters, Decl(declFileCallSignatures_1.ts, 21, 1))
+>T : Symbol(T, Decl(declFileCallSignatures_1.ts, 23, 49))
+
+    /** This comment should appear for foo*/
+    (a: T): string;
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 25, 5))
+>T : Symbol(T, Decl(declFileCallSignatures_1.ts, 23, 49))
+}
+
+interface IGlobalCallSignatureWithOwnTypeParametes {
+>IGlobalCallSignatureWithOwnTypeParametes : Symbol(IGlobalCallSignatureWithOwnTypeParametes, Decl(declFileCallSignatures_1.ts, 26, 1))
+
+    <T extends IGlobalCallSignature>(a: T): string;
+>T : Symbol(T, Decl(declFileCallSignatures_1.ts, 29, 5))
+>IGlobalCallSignature : Symbol(IGlobalCallSignature, Decl(declFileCallSignatures_1.ts, 0, 0))
+>a : Symbol(a, Decl(declFileCallSignatures_1.ts, 29, 37))
+>T : Symbol(T, Decl(declFileCallSignatures_1.ts, 29, 5))
+}

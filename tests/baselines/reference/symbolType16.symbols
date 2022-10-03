@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolType16.ts ===
+interface Symbol {
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolType16.ts, 0, 0))
+
+    newSymbolProp: number;
+>newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
+}
+
+var sym: symbol;
+>sym : Symbol(sym, Decl(symbolType16.ts, 4, 3))
+
+sym.newSymbolProp;
+>sym.newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
+>sym : Symbol(sym, Decl(symbolType16.ts, 4, 3))
+>newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
+

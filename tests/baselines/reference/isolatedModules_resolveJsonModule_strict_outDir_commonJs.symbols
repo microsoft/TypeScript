@@ -1,0 +1,8 @@
+=== /a.ts ===
+import * as j from "./j.json";
+>j : Symbol(j, Decl(a.ts, 0, 6))
+
+=== /j.json ===
+{}
+No type information for this code.
+No type information for this code.

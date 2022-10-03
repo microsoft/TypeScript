@@ -1,0 +1,11 @@
+tests/cases/compiler/concatClassAndString.ts(4,1): error TS2629: Cannot assign to 'f' because it is a class.
+
+
+==== tests/cases/compiler/concatClassAndString.ts (1 errors) ====
+    // Shouldn't compile (the long form f = f + ""; doesn't):
+    class f { }
+    
+    f += '';
+    ~
+!!! error TS2629: Cannot assign to 'f' because it is a class.
+    

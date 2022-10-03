@@ -1,0 +1,62 @@
+=== tests/cases/conformance/ambient/user.ts ===
+///<reference path="declarations.d.ts" />
+import {foo, baz} from "foobarbaz";
+>foo : (s: string) => void
+>baz : string
+
+foo(baz);
+>foo(baz) : void
+>foo : (s: string) => void
+>baz : string
+
+import {foos} from "foosball";
+>foos : string
+
+foo(foos);
+>foo(foos) : void
+>foo : (s: string) => void
+>foos : string
+
+// Works with relative file name
+import fileText from "./file!text";
+>fileText : string
+
+foo(fileText);
+>foo(fileText) : void
+>foo : (s: string) => void
+>fileText : string
+
+=== tests/cases/conformance/ambient/declarations.d.ts ===
+declare module "foo*baz" {
+>"foo*baz" : typeof import("foo*baz")
+
+    export function foo(s: string): void;
+>foo : (s: string) => void
+>s : string
+}
+// Augmentations still work
+declare module "foo*baz" {
+>"foo*baz" : typeof import("foo*baz")
+
+    export const baz: string;
+>baz : string
+}
+
+// Longest prefix wins
+declare module "foos*" {
+>"foos*" : typeof import("foos*")
+
+    export const foos: string;
+>foos : string
+}
+
+declare module "*!text" {
+>"*!text" : typeof import("*!text")
+
+    const x: string;
+>x : string
+
+    export default x;
+>x : string
+}
+

@@ -1,0 +1,38 @@
+tests/cases/compiler/moduleVisibilityTest3.ts(20,22): error TS2709: Cannot use namespace 'modes' as a type.
+tests/cases/compiler/moduleVisibilityTest3.ts(20,39): error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
+tests/cases/compiler/moduleVisibilityTest3.ts(21,22): error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
+
+
+==== tests/cases/compiler/moduleVisibilityTest3.ts (3 errors) ====
+    module _modes {
+     export interface IMode {
+      
+     }
+     
+     class Mode {
+      
+     }
+    }
+    
+    //_modes. // produces an internal error - please implement in derived class
+    
+    module editor {
+     import modes = _modes;
+     
+     var i : modes.IMode;
+      
+     // If you just use p1:modes, the compiler accepts it - should be an error
+     class Bug {
+         constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
+                         ~~~~~
+!!! error TS2709: Cannot use namespace 'modes' as a type.
+                                          ~~~~
+!!! error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
+             var x:modes.Mode;
+                         ~~~~
+!!! error TS2724: '_modes' has no exported member named 'Mode'. Did you mean 'IMode'?
+         }
+        
+     }
+    }
+    

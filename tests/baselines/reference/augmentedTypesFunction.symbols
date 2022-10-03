@@ -1,0 +1,75 @@
+=== tests/cases/compiler/augmentedTypesFunction.ts ===
+// function then var
+function y1() { } // error
+>y1 : Symbol(y1, Decl(augmentedTypesFunction.ts, 0, 0))
+
+var y1 = 1; // error
+>y1 : Symbol(y1, Decl(augmentedTypesFunction.ts, 2, 3))
+
+// function then function
+function y2() { } // error
+>y2 : Symbol(y2, Decl(augmentedTypesFunction.ts, 2, 11), Decl(augmentedTypesFunction.ts, 5, 17))
+
+function y2() { } // error
+>y2 : Symbol(y2, Decl(augmentedTypesFunction.ts, 2, 11), Decl(augmentedTypesFunction.ts, 5, 17))
+
+function y2a() { }  // error
+>y2a : Symbol(y2a, Decl(augmentedTypesFunction.ts, 6, 17))
+
+var y2a = () => { } // error
+>y2a : Symbol(y2a, Decl(augmentedTypesFunction.ts, 9, 3))
+
+// function then class
+function y3() { } // error
+>y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 9, 19), Decl(augmentedTypesFunction.ts, 12, 17))
+
+class y3 { } // error
+>y3 : Symbol(y3, Decl(augmentedTypesFunction.ts, 9, 19), Decl(augmentedTypesFunction.ts, 12, 17))
+
+function y3a() { } // error
+>y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12), Decl(augmentedTypesFunction.ts, 15, 18))
+
+class y3a { public foo() { } } // error
+>y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12), Decl(augmentedTypesFunction.ts, 15, 18))
+>foo : Symbol(y3a.foo, Decl(augmentedTypesFunction.ts, 16, 11))
+
+// function then enum
+function y4() { } // error
+>y4 : Symbol(y4, Decl(augmentedTypesFunction.ts, 16, 30))
+
+enum y4 { One } // error
+>y4 : Symbol(y4, Decl(augmentedTypesFunction.ts, 19, 17))
+>One : Symbol(y4.One, Decl(augmentedTypesFunction.ts, 20, 9))
+
+// function then internal module
+function y5() { }
+>y5 : Symbol(y5, Decl(augmentedTypesFunction.ts, 20, 15), Decl(augmentedTypesFunction.ts, 23, 17))
+
+module y5 { } // ok since module is not instantiated
+>y5 : Symbol(y5, Decl(augmentedTypesFunction.ts, 20, 15), Decl(augmentedTypesFunction.ts, 23, 17))
+
+function y5a() { }
+>y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 13), Decl(augmentedTypesFunction.ts, 26, 18))
+
+module y5a { var y = 2; } // should be an error
+>y5a : Symbol(y5a, Decl(augmentedTypesFunction.ts, 24, 13), Decl(augmentedTypesFunction.ts, 26, 18))
+>y : Symbol(y, Decl(augmentedTypesFunction.ts, 27, 16))
+
+function y5b() { }
+>y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 25), Decl(augmentedTypesFunction.ts, 29, 18))
+
+module y5b { export var y = 3; } // should be an error
+>y5b : Symbol(y5b, Decl(augmentedTypesFunction.ts, 27, 25), Decl(augmentedTypesFunction.ts, 29, 18))
+>y : Symbol(y, Decl(augmentedTypesFunction.ts, 30, 23))
+
+function y5c() { }
+>y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 32), Decl(augmentedTypesFunction.ts, 32, 18))
+
+module y5c { export interface I { foo(): void } } // should be an error
+>y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 32), Decl(augmentedTypesFunction.ts, 32, 18))
+>I : Symbol(I, Decl(augmentedTypesFunction.ts, 33, 12))
+>foo : Symbol(I.foo, Decl(augmentedTypesFunction.ts, 33, 33))
+
+// function then import, messes with other errors
+//function y6() { }
+//import y6 = require('');

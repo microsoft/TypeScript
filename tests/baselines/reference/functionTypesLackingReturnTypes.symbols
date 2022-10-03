@@ -1,0 +1,21 @@
+=== tests/cases/compiler/functionTypesLackingReturnTypes.ts ===
+// Error (no '=>')
+function f(x: ()) {
+>f : Symbol(f, Decl(functionTypesLackingReturnTypes.ts, 0, 0))
+>x : Symbol(x, Decl(functionTypesLackingReturnTypes.ts, 1, 11))
+> : Symbol(unknown)
+}
+
+// Error (no '=>')
+var g: (param);
+>g : Symbol(g, Decl(functionTypesLackingReturnTypes.ts, 5, 3))
+>param : Symbol(param)
+
+// Okay
+var h: { () }
+>h : Symbol(h, Decl(functionTypesLackingReturnTypes.ts, 8, 3))
+
+// Okay
+var i: { new () }
+>i : Symbol(i, Decl(functionTypesLackingReturnTypes.ts, 11, 3))
+

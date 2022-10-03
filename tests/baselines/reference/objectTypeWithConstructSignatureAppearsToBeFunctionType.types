@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts ===
+// no errors expected below 
+
+interface I {
+    new(): number;
+}
+
+var i: I;
+>i : I
+
+var r2: number = i();
+>r2 : number
+>i() : any
+>i : I
+
+var r2b: number = new i();
+>r2b : number
+>new i() : number
+>i : I
+
+var r2c: (x: any, y?: any) => any = i.apply;
+>r2c : (x: any, y?: any) => any
+>x : any
+>y : any
+>i.apply : (this: Function, thisArg: any, argArray?: any) => any
+>i : I
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+
+var b: {
+>b : new () => number
+
+    new(): number;
+}
+
+var r4: number = b();
+>r4 : number
+>b() : any
+>b : new () => number
+
+var r4b: number = new b();
+>r4b : number
+>new b() : number
+>b : new () => number
+
+var r4c: (x: any, y?: any) => any = b.apply;
+>r4c : (x: any, y?: any) => any
+>x : any
+>y : any
+>b.apply : (this: Function, thisArg: any, argArray?: any) => any
+>b : new () => number
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+

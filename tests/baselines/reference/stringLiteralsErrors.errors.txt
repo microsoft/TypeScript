@@ -1,0 +1,82 @@
+tests/cases/compiler/stringLiteralsErrors.ts(2,18): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(3,3): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(4,18): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(5,3): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(8,20): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(9,3): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(10,20): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(11,3): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(14,24): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(15,24): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(18,26): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(19,26): error TS1002: Unterminated string literal.
+tests/cases/compiler/stringLiteralsErrors.ts(22,16): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/stringLiteralsErrors.ts(23,17): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/stringLiteralsErrors.ts(24,16): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/stringLiteralsErrors.ts(25,15): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1002: Unterminated string literal.
+
+
+==== tests/cases/compiler/stringLiteralsErrors.ts (17 errors) ====
+    // Srtings missing line terminator
+    var es1 = "line 1
+                     
+!!! error TS1002: Unterminated string literal.
+    ";
+      
+!!! error TS1002: Unterminated string literal.
+    var es2 = 'line 1
+                     
+!!! error TS1002: Unterminated string literal.
+    ';
+      
+!!! error TS1002: Unterminated string literal.
+    
+    // Space after backslash
+    var es3 = 'line 1\ 
+                       
+!!! error TS1002: Unterminated string literal.
+    ';
+      
+!!! error TS1002: Unterminated string literal.
+    var es4 = 'line 1\ 
+                       
+!!! error TS1002: Unterminated string literal.
+    ';
+      
+!!! error TS1002: Unterminated string literal.
+    
+    // Unterminated strings
+    var es5 = "unterminated
+                           
+!!! error TS1002: Unterminated string literal.
+    var es6 = 'unterminated
+                           
+!!! error TS1002: Unterminated string literal.
+    
+    // wrong terminator
+    var es7 = "unterminated '
+                             
+!!! error TS1002: Unterminated string literal.
+    var es8 = 'unterminated "
+                             
+!!! error TS1002: Unterminated string literal.
+    
+    // wrong unicode sequences
+    var es9 = "\u00";
+                   
+!!! error TS1125: Hexadecimal digit expected.
+    var es10 = "\u00GG";
+                    
+!!! error TS1125: Hexadecimal digit expected.
+    var es11 = "\x0";
+                   
+!!! error TS1125: Hexadecimal digit expected.
+    var es12 = "\xmm";
+                  
+!!! error TS1125: Hexadecimal digit expected.
+    
+    // End of file
+    var es13 = " 
+                 
+!!! error TS1002: Unterminated string literal.

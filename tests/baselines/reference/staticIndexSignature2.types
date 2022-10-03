@@ -1,0 +1,51 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts ===
+class C {
+>C : C
+
+    static readonly [s: string]: number;
+>s : string
+
+    static readonly [s: number]: 42
+>s : number
+}
+
+C["foo"] = 1
+>C["foo"] = 1 : 1
+>C["foo"] : number
+>C : typeof C
+>"foo" : "foo"
+>1 : 1
+
+C.bar = 2;
+>C.bar = 2 : 2
+>C.bar : number
+>C : typeof C
+>bar : number
+>2 : 2
+
+const foo = C["foo"]
+>foo : number
+>C["foo"] : number
+>C : typeof C
+>"foo" : "foo"
+
+C[42] = 42
+>C[42] = 42 : 42
+>C[42] : 42
+>C : typeof C
+>42 : 42
+>42 : 42
+
+C[2] = 2;
+>C[2] = 2 : 2
+>C[2] : 42
+>C : typeof C
+>2 : 2
+>2 : 2
+
+const bar = C[42] 
+>bar : 42
+>C[42] : 42
+>C : typeof C
+>42 : 42
+

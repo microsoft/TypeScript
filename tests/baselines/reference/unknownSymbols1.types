@@ -1,0 +1,74 @@
+=== tests/cases/compiler/unknownSymbols1.ts ===
+var x = asdf;
+>x : any
+>asdf : any
+
+var y: asdf;
+>y : asdf
+
+function foo(x: asdf, y: number): asdf { }
+>foo : (x: asdf, y: number) => asdf
+>x : asdf
+>y : number
+
+function foo2() {
+>foo2 : () => any
+
+    return asdf;
+>asdf : any
+}
+
+var z = <asdf>x; // should be an error
+>z : asdf
+><asdf>x : asdf
+>x : any
+
+class C<T> {
+>C : C<T>
+
+    foo: asdf;
+>foo : asdf
+
+    bar: C<asdf>;
+>bar : C<asdf>
+}
+
+class C2 implements asdf { }
+>C2 : C2
+
+interface I extends adsf { }
+
+class C3 { constructor(x: any) { } }
+>C3 : C3
+>x : any
+
+class C4 extends C3 {
+>C4 : C4
+>C3 : C3
+
+    constructor() {
+        super(asdf);
+>super(asdf) : void
+>super : typeof C3
+>asdf : any
+    }
+}
+
+var x2 = this.asdf; // no error, this is any
+>x2 : any
+>this.asdf : any
+>this : typeof globalThis
+>asdf : any
+
+class C5 {
+>C5 : C5
+
+    constructor() {
+        this.asdf = asdf;
+>this.asdf = asdf : any
+>this.asdf : any
+>this : this
+>asdf : any
+>asdf : any
+    }
+}

@@ -1,0 +1,145 @@
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+"\u{10_ffff}"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+'\u{10_ffff}'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+`\u{10_ffff}`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+/\u{10_ffff}/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+"\uff_ff"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+'\uff_ff'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts ===
+`\uff_ff`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/8.ts ===
+/\uff_ff/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts ===
+"\xf_f"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts ===
+'\xf_f'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts ===
+`\xf_f`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts ===
+/\xf_f/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts ===
+"\u{_10ffff}"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts ===
+'\u{_10ffff}'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts ===
+`\u{_10ffff}`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts ===
+/\u{_10ffff}/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts ===
+"\u_ffff"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts ===
+'\u_ffff'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts ===
+`\u_ffff`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/20.ts ===
+/\u_ffff/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts ===
+"\x_ff"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts ===
+'\x_ff'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts ===
+`\x_ff`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/24.ts ===
+/\x_ff/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts ===
+"\u{10ffff_}"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts ===
+'\u{10ffff_}'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts ===
+`\u{10ffff_}`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts ===
+/\u{10ffff_}/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts ===
+"\uffff_"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts ===
+'\uffff_'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts ===
+`\uffff_`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/32.ts ===
+/\uffff_/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/33.ts ===
+"\xff_"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/34.ts ===
+'\xff_'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/35.ts ===
+`\xff_`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/36.ts ===
+/\xff_/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts ===
+"\u{10__ffff}"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts ===
+'\u{10__ffff}'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts ===
+`\u{10__ffff}`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts ===
+/\u{10__ffff}/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts ===
+"\uff__ff"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts ===
+'\uff__ff'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts ===
+`\uff__ff`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts ===
+/\uff__ff/u
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts ===
+"\xf__f"
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts ===
+'\xf__f'
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts ===
+`\xf__f`
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/48.ts ===
+/\xf__f/u
+No type information for this code.
+No type information for this code.

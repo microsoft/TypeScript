@@ -1,0 +1,160 @@
+=== tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads.ts ===
+// interfaces that merge must not have members that conflict
+
+interface A {
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 0, 0), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 5, 1))
+
+    foo(x: number): number;
+>foo : Symbol(A.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 2, 13), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 3, 27), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 7, 13))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 3, 8))
+
+    foo(x: string): string;
+>foo : Symbol(A.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 2, 13), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 3, 27), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 7, 13))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 4, 8))
+}
+
+interface A {
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 0, 0), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 5, 1))
+
+    foo(x: Date): Date;
+>foo : Symbol(A.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 2, 13), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 3, 27), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 7, 13))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 8, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+interface B<T> {
+>B : Symbol(B, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 9, 1), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 14, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 12))
+
+    foo(x: T): number;
+>foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 8))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 12))
+
+    foo(x: string): string;
+>foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 13, 8))
+}
+
+interface B<T> {
+>B : Symbol(B, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 9, 1), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 14, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 12))
+
+    foo(x: T): Date;
+>foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 8))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo(x: Date): string;
+>foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 18, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var b: B<boolean>;
+>b : Symbol(b, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 21, 3))
+>B : Symbol(B, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 9, 1), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 14, 1))
+
+var r = b.foo(true); // returns Date
+>r : Symbol(r, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 22, 3))
+>b.foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+>b : Symbol(b, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 21, 3))
+>foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
+
+// add generic overload
+interface C<T, U> {
+>C : Symbol(C, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 22, 20), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 28, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 12))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 14))
+
+    foo(x: T, y: U): string;
+>foo : Symbol(C.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 19), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 28), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 19))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 8))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 12))
+>y : Symbol(y, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 13))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 14))
+
+    foo(x: string, y: string): number;
+>foo : Symbol(C.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 19), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 28), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 19))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 27, 8))
+>y : Symbol(y, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 27, 18))
+}
+
+interface C<T, U> {
+>C : Symbol(C, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 22, 20), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 28, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 12))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 14))
+
+    foo<W>(x: W, y: W): W;
+>foo : Symbol(C.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 19), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 28), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 19))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 8))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 11))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 8))
+>y : Symbol(y, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 16))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 8))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 31, 8))
+}
+
+var c: C<boolean, Date>;
+>c : Symbol(c, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 34, 3))
+>C : Symbol(C, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 22, 20), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 28, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r2 = c.foo(1, 2); // number
+>r2 : Symbol(r2, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 3))
+>c.foo : Symbol(C.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 19), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 28), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 19))
+>c : Symbol(c, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 34, 3))
+>foo : Symbol(C.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 25, 19), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 26, 28), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 30, 19))
+
+// add generic overload that would be ambiguous
+interface D<T, U> {
+>D : Symbol(D, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 21), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 42, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 12))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 14))
+
+    a: T;
+>a : Symbol(D.a, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 19))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 12))
+
+    b: U;
+>b : Symbol(D.b, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 39, 9))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 14))
+
+    foo<A>(x: A, y: A): U;
+>foo : Symbol(D.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 40, 9), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 19))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 41, 8))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 41, 11))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 41, 8))
+>y : Symbol(y, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 41, 16))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 41, 8))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 14))
+}
+
+interface D<T, U> {
+>D : Symbol(D, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 21), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 42, 1))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 12))
+>U : Symbol(U, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 14), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 14))
+
+    foo<W>(x: W, y: W): T;
+>foo : Symbol(D.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 40, 9), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 19))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 45, 8))
+>x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 45, 11))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 45, 8))
+>y : Symbol(y, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 45, 16))
+>W : Symbol(W, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 45, 8))
+>T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 38, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 12))
+}
+
+var d: D<boolean, Date>;
+>d : Symbol(d, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 48, 3))
+>D : Symbol(D, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 21), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 42, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r3 = d.foo(1, 1); // boolean, last definition wins
+>r3 : Symbol(r3, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 49, 3))
+>d.foo : Symbol(D.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 40, 9), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 19))
+>d : Symbol(d, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 48, 3))
+>foo : Symbol(D.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 40, 9), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 44, 19))
+

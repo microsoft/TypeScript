@@ -1,0 +1,366 @@
+=== tests/cases/compiler/node_modules/prop-types/index.d.ts ===
+export const nominalTypeHack: unique symbol;
+>nominalTypeHack : Symbol(nominalTypeHack, Decl(index.d.ts, 0, 12))
+
+export type IsOptional<T> = undefined | null extends T ? true : undefined extends T ? true : null extends T ? true : false;
+>IsOptional : Symbol(IsOptional, Decl(index.d.ts, 0, 44))
+>T : Symbol(T, Decl(index.d.ts, 2, 23))
+>T : Symbol(T, Decl(index.d.ts, 2, 23))
+>T : Symbol(T, Decl(index.d.ts, 2, 23))
+>T : Symbol(T, Decl(index.d.ts, 2, 23))
+
+export type RequiredKeys<V> = { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never }[keyof V];
+>RequiredKeys : Symbol(RequiredKeys, Decl(index.d.ts, 2, 123))
+>V : Symbol(V, Decl(index.d.ts, 4, 25))
+>K : Symbol(K, Decl(index.d.ts, 4, 33))
+>V : Symbol(V, Decl(index.d.ts, 4, 25))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(index.d.ts, 4, 25))
+>K : Symbol(K, Decl(index.d.ts, 4, 33))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>T : Symbol(T, Decl(index.d.ts, 4, 98))
+>IsOptional : Symbol(IsOptional, Decl(index.d.ts, 0, 44))
+>T : Symbol(T, Decl(index.d.ts, 4, 98))
+>K : Symbol(K, Decl(index.d.ts, 4, 33))
+>V : Symbol(V, Decl(index.d.ts, 4, 25))
+
+export type OptionalKeys<V> = Exclude<keyof V, RequiredKeys<V>>;
+>OptionalKeys : Symbol(OptionalKeys, Decl(index.d.ts, 4, 162))
+>V : Symbol(V, Decl(index.d.ts, 5, 25))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(index.d.ts, 5, 25))
+>RequiredKeys : Symbol(RequiredKeys, Decl(index.d.ts, 2, 123))
+>V : Symbol(V, Decl(index.d.ts, 5, 25))
+
+export type InferPropsInner<V> = { [K in keyof V]-?: InferType<V[K]>; };
+>InferPropsInner : Symbol(InferPropsInner, Decl(index.d.ts, 5, 64))
+>V : Symbol(V, Decl(index.d.ts, 6, 28))
+>K : Symbol(K, Decl(index.d.ts, 6, 36))
+>V : Symbol(V, Decl(index.d.ts, 6, 28))
+>InferType : Symbol(InferType, Decl(index.d.ts, 17, 68))
+>V : Symbol(V, Decl(index.d.ts, 6, 28))
+>K : Symbol(K, Decl(index.d.ts, 6, 36))
+
+export interface Validator<T> {
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>T : Symbol(T, Decl(index.d.ts, 8, 27))
+
+    (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
+>props : Symbol(props, Decl(index.d.ts, 9, 5))
+>propName : Symbol(propName, Decl(index.d.ts, 9, 19))
+>componentName : Symbol(componentName, Decl(index.d.ts, 9, 37))
+>location : Symbol(location, Decl(index.d.ts, 9, 60))
+>propFullName : Symbol(propFullName, Decl(index.d.ts, 9, 78))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [nominalTypeHack]?: T;
+>[nominalTypeHack] : Symbol(Validator[nominalTypeHack], Decl(index.d.ts, 9, 115))
+>nominalTypeHack : Symbol(nominalTypeHack, Decl(index.d.ts, 0, 12))
+>T : Symbol(T, Decl(index.d.ts, 8, 27))
+}
+
+export interface Requireable<T> extends Validator<T> {
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+>T : Symbol(T, Decl(index.d.ts, 13, 29))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>T : Symbol(T, Decl(index.d.ts, 13, 29))
+
+    isRequired: Validator<NonNullable<T>>;
+>isRequired : Symbol(Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(index.d.ts, 13, 29))
+}
+
+export type ValidationMap<T> = { [K in keyof T]?: Validator<T[K]> };
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 15, 1))
+>T : Symbol(T, Decl(index.d.ts, 17, 26))
+>K : Symbol(K, Decl(index.d.ts, 17, 34))
+>T : Symbol(T, Decl(index.d.ts, 17, 26))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>T : Symbol(T, Decl(index.d.ts, 17, 26))
+>K : Symbol(K, Decl(index.d.ts, 17, 34))
+
+export type InferType<V> = V extends Validator<infer T> ? T : any;
+>InferType : Symbol(InferType, Decl(index.d.ts, 17, 68))
+>V : Symbol(V, Decl(index.d.ts, 19, 22))
+>V : Symbol(V, Decl(index.d.ts, 19, 22))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>T : Symbol(T, Decl(index.d.ts, 19, 52))
+>T : Symbol(T, Decl(index.d.ts, 19, 52))
+
+export type InferProps<V> =
+>InferProps : Symbol(InferProps, Decl(index.d.ts, 19, 66))
+>V : Symbol(V, Decl(index.d.ts, 20, 23))
+
+    & InferPropsInner<Pick<V, RequiredKeys<V>>>
+>InferPropsInner : Symbol(InferPropsInner, Decl(index.d.ts, 5, 64))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(index.d.ts, 20, 23))
+>RequiredKeys : Symbol(RequiredKeys, Decl(index.d.ts, 2, 123))
+>V : Symbol(V, Decl(index.d.ts, 20, 23))
+
+    & Partial<InferPropsInner<Pick<V, OptionalKeys<V>>>>;
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>InferPropsInner : Symbol(InferPropsInner, Decl(index.d.ts, 5, 64))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(index.d.ts, 20, 23))
+>OptionalKeys : Symbol(OptionalKeys, Decl(index.d.ts, 4, 162))
+>V : Symbol(V, Decl(index.d.ts, 20, 23))
+
+export const any: Requireable<any>;
+>any : Symbol(any, Decl(index.d.ts, 24, 12))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+
+export const array: Requireable<any[]>;
+>array : Symbol(array, Decl(index.d.ts, 25, 12))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+
+export const bool: Requireable<boolean>;
+>bool : Symbol(bool, Decl(index.d.ts, 26, 12))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+
+export const string: Requireable<string>;
+>string : Symbol(string, Decl(index.d.ts, 27, 12))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+
+export const number: Requireable<number>;
+>number : Symbol(number, Decl(index.d.ts, 28, 12))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+
+export function shape<P extends ValidationMap<any>>(type: P): Requireable<InferProps<P>>;
+>shape : Symbol(shape, Decl(index.d.ts, 28, 41))
+>P : Symbol(P, Decl(index.d.ts, 29, 22))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 15, 1))
+>type : Symbol(type, Decl(index.d.ts, 29, 52))
+>P : Symbol(P, Decl(index.d.ts, 29, 22))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+>InferProps : Symbol(InferProps, Decl(index.d.ts, 19, 66))
+>P : Symbol(P, Decl(index.d.ts, 29, 22))
+
+export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<NonNullable<InferType<T>>>;
+>oneOfType : Symbol(oneOfType, Decl(index.d.ts, 29, 89))
+>T : Symbol(T, Decl(index.d.ts, 30, 26))
+>Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
+>types : Symbol(types, Decl(index.d.ts, 30, 52))
+>T : Symbol(T, Decl(index.d.ts, 30, 26))
+>Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>InferType : Symbol(InferType, Decl(index.d.ts, 17, 68))
+>T : Symbol(T, Decl(index.d.ts, 30, 26))
+
+
+=== tests/cases/compiler/file.ts ===
+import * as PropTypes from "prop-types";
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(file.ts, 0, 40))
+
+    any?: any;
+>any : Symbol(Props.any, Decl(file.ts, 1, 17))
+
+    array: string[];
+>array : Symbol(Props.array, Decl(file.ts, 2, 14))
+
+    bool: boolean;
+>bool : Symbol(Props.bool, Decl(file.ts, 3, 20))
+
+    shape: {
+>shape : Symbol(Props.shape, Decl(file.ts, 4, 18))
+
+        foo: string;
+>foo : Symbol(foo, Decl(file.ts, 5, 12))
+
+        bar?: boolean;
+>bar : Symbol(bar, Decl(file.ts, 6, 20))
+
+        baz?: any
+>baz : Symbol(baz, Decl(file.ts, 7, 22))
+
+    };
+    oneOfType: string | boolean | {
+>oneOfType : Symbol(Props.oneOfType, Decl(file.ts, 9, 6))
+
+        foo?: string;
+>foo : Symbol(foo, Decl(file.ts, 10, 35))
+
+        bar: number;
+>bar : Symbol(bar, Decl(file.ts, 11, 21))
+
+    };
+}
+
+type PropTypesMap = PropTypes.ValidationMap<Props>;
+>PropTypesMap : Symbol(PropTypesMap, Decl(file.ts, 14, 1))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>ValidationMap : Symbol(PropTypes.ValidationMap, Decl(index.d.ts, 15, 1))
+>Props : Symbol(Props, Decl(file.ts, 0, 40))
+
+const innerProps = {
+>innerProps : Symbol(innerProps, Decl(file.ts, 18, 5))
+
+    foo: PropTypes.string.isRequired,
+>foo : Symbol(foo, Decl(file.ts, 18, 20))
+>PropTypes.string.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    bar: PropTypes.bool,
+>bar : Symbol(bar, Decl(file.ts, 19, 37))
+>PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+
+    baz: PropTypes.any
+>baz : Symbol(baz, Decl(file.ts, 20, 24))
+>PropTypes.any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+
+};
+
+const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
+>arrayOfTypes : Symbol(arrayOfTypes, Decl(file.ts, 24, 5))
+>PropTypes.string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+>PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>PropTypes.shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+
+    foo: PropTypes.string,
+>foo : Symbol(foo, Decl(file.ts, 24, 73))
+>PropTypes.string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
+
+    bar: PropTypes.number.isRequired
+>bar : Symbol(bar, Decl(file.ts, 25, 26))
+>PropTypes.number.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.number : Symbol(PropTypes.number, Decl(index.d.ts, 28, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>number : Symbol(PropTypes.number, Decl(index.d.ts, 28, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+})];
+
+// TS checking
+const propTypes: PropTypesMap = {
+>propTypes : Symbol(propTypes, Decl(file.ts, 30, 5))
+>PropTypesMap : Symbol(PropTypesMap, Decl(file.ts, 14, 1))
+
+    any: PropTypes.any,
+>any : Symbol(any, Decl(file.ts, 30, 33))
+>PropTypes.any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+
+    array: PropTypes.array.isRequired,
+>array : Symbol(array, Decl(file.ts, 31, 23))
+>PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    bool: PropTypes.bool.isRequired,
+>bool : Symbol(bool, Decl(file.ts, 32, 38))
+>PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    shape: PropTypes.shape(innerProps).isRequired,
+>shape : Symbol(shape, Decl(file.ts, 33, 36))
+>PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+>innerProps : Symbol(innerProps, Decl(file.ts, 18, 5))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
+>oneOfType : Symbol(oneOfType, Decl(file.ts, 34, 50))
+>PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
+>arrayOfTypes : Symbol(arrayOfTypes, Decl(file.ts, 24, 5))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+};
+
+// JS checking
+const propTypesWithoutAnnotation = {
+>propTypesWithoutAnnotation : Symbol(propTypesWithoutAnnotation, Decl(file.ts, 39, 5))
+
+    any: PropTypes.any,
+>any : Symbol(any, Decl(file.ts, 39, 36))
+>PropTypes.any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>any : Symbol(PropTypes.any, Decl(index.d.ts, 24, 12))
+
+    array: PropTypes.array.isRequired,
+>array : Symbol(array, Decl(file.ts, 40, 23))
+>PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    bool: PropTypes.bool.isRequired,
+>bool : Symbol(bool, Decl(file.ts, 41, 38))
+>PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    shape: PropTypes.shape(innerProps).isRequired,
+>shape : Symbol(shape, Decl(file.ts, 42, 36))
+>PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
+>innerProps : Symbol(innerProps, Decl(file.ts, 18, 5))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
+>oneOfType : Symbol(oneOfType, Decl(file.ts, 43, 50))
+>PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+>PropTypes.oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
+>arrayOfTypes : Symbol(arrayOfTypes, Decl(file.ts, 24, 5))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
+
+};
+
+type ExtractedProps = PropTypes.InferProps<typeof propTypes>;
+>ExtractedProps : Symbol(ExtractedProps, Decl(file.ts, 45, 2))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>InferProps : Symbol(PropTypes.InferProps, Decl(index.d.ts, 19, 66))
+>propTypes : Symbol(propTypes, Decl(file.ts, 30, 5))
+
+type ExtractedPropsWithoutAnnotation = PropTypes.InferProps<typeof propTypesWithoutAnnotation>;
+>ExtractedPropsWithoutAnnotation : Symbol(ExtractedPropsWithoutAnnotation, Decl(file.ts, 47, 61))
+>PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
+>InferProps : Symbol(PropTypes.InferProps, Decl(index.d.ts, 19, 66))
+>propTypesWithoutAnnotation : Symbol(propTypesWithoutAnnotation, Decl(file.ts, 39, 5))
+
+type ExtractPropsMatch = ExtractedProps extends ExtractedPropsWithoutAnnotation ? true : false;
+>ExtractPropsMatch : Symbol(ExtractPropsMatch, Decl(file.ts, 49, 95))
+>ExtractedProps : Symbol(ExtractedProps, Decl(file.ts, 45, 2))
+>ExtractedPropsWithoutAnnotation : Symbol(ExtractedPropsWithoutAnnotation, Decl(file.ts, 47, 61))
+
+const x: true = (null as any as ExtractPropsMatch);
+>x : Symbol(x, Decl(file.ts, 52, 5))
+>ExtractPropsMatch : Symbol(ExtractPropsMatch, Decl(file.ts, 49, 95))
+

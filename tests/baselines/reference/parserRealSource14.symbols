@@ -1,0 +1,2610 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+    export function lastOf(items: any[]): any {
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
+
+        return (items === null || items.length === 0) ? null : items[items.length - 1];
+>items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(parserRealSource14.ts, 6, 27))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+    }
+
+    export function max(a: number, b: number): number {
+>max : Symbol(max, Decl(parserRealSource14.ts, 8, 5))
+>a : Symbol(a, Decl(parserRealSource14.ts, 10, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 10, 34))
+
+        return a >= b ? a : b;
+>a : Symbol(a, Decl(parserRealSource14.ts, 10, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 10, 34))
+>a : Symbol(a, Decl(parserRealSource14.ts, 10, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 10, 34))
+    }
+
+    export function min(a: number, b: number): number {
+>min : Symbol(min, Decl(parserRealSource14.ts, 12, 5))
+>a : Symbol(a, Decl(parserRealSource14.ts, 14, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 14, 34))
+
+        return a <= b ? a : b;
+>a : Symbol(a, Decl(parserRealSource14.ts, 14, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 14, 34))
+>a : Symbol(a, Decl(parserRealSource14.ts, 14, 24))
+>b : Symbol(b, Decl(parserRealSource14.ts, 14, 34))
+    }
+
+    //
+    // Helper class representing a path from a root ast node to a (grand)child ast node.
+    // This is helpful as our tree don't have parents.
+    //
+    export class AstPath {
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+
+        public asts: TypeScript.AST[] = [];
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+
+        public top: number = -1;
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+        static reverseIndexOf(items: any[], index: number): any {
+>reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
+>items : Symbol(items, Decl(parserRealSource14.ts, 26, 30))
+>index : Symbol(index, Decl(parserRealSource14.ts, 26, 43))
+
+            return (items === null || items.length <= index) ? null : items[items.length - index - 1];
+>items : Symbol(items, Decl(parserRealSource14.ts, 26, 30))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(parserRealSource14.ts, 26, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(parserRealSource14.ts, 26, 43))
+>items : Symbol(items, Decl(parserRealSource14.ts, 26, 30))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(parserRealSource14.ts, 26, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(parserRealSource14.ts, 26, 43))
+        }
+
+        public clone(): AstPath {
+>clone : Symbol(AstPath.clone, Decl(parserRealSource14.ts, 28, 9))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+
+            var clone = new AstPath();
+>clone : Symbol(clone, Decl(parserRealSource14.ts, 31, 15))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+
+            clone.asts = this.asts.map((value) => { return value; });
+>clone.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>clone : Symbol(clone, Decl(parserRealSource14.ts, 31, 15))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.asts.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(parserRealSource14.ts, 32, 40))
+>value : Symbol(value, Decl(parserRealSource14.ts, 32, 40))
+
+            clone.top = this.top;
+>clone.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>clone : Symbol(clone, Decl(parserRealSource14.ts, 31, 15))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+            return clone;
+>clone : Symbol(clone, Decl(parserRealSource14.ts, 31, 15))
+        }
+
+        public pop(): TypeScript.AST {
+>pop : Symbol(AstPath.pop, Decl(parserRealSource14.ts, 35, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+
+            var head = this.ast();
+>head : Symbol(head, Decl(parserRealSource14.ts, 38, 15))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+
+            this.up();
+>this.up : Symbol(AstPath.up, Decl(parserRealSource14.ts, 53, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>up : Symbol(AstPath.up, Decl(parserRealSource14.ts, 53, 9))
+
+            while (this.asts.length > this.count()) {
+>this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts.pop();
+>this.asts.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+            }
+            return head;
+>head : Symbol(head, Decl(parserRealSource14.ts, 38, 15))
+        }
+
+        public push(ast: TypeScript.AST) {
+>push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 47, 20))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+
+            while (this.asts.length > this.count()) {
+>this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts.pop();
+>this.asts.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+            }
+            this.top = this.asts.length;
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            this.asts.push(ast);
+>this.asts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 47, 20))
+        }
+
+        public up() {
+>up : Symbol(AstPath.up, Decl(parserRealSource14.ts, 53, 9))
+
+            if (this.top <= -1)
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                throw new Error("Invalid call to 'up'");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            this.top--;
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public down() {
+>down : Symbol(AstPath.down, Decl(parserRealSource14.ts, 59, 9))
+
+            if (this.top == this.ast.length - 1)
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.ast.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+                throw new Error("Invalid call to 'down'");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            this.top++;
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public nodeType(): TypeScript.NodeType {
+>nodeType : Symbol(AstPath.nodeType, Decl(parserRealSource14.ts, 65, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>NodeType : Symbol(TypeScript.NodeType)
+
+            if (this.ast() == null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+
+                return TypeScript.NodeType.None;
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+            return this.ast().nodeType;
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public ast() {
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+
+            return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>AstPath.reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public parent() {
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+            return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>AstPath.reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>reverseIndexOf : Symbol(AstPath.reverseIndexOf, Decl(parserRealSource14.ts, 24, 32))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.asts.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public count() {
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+            return this.top + 1;
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public get(index: number): TypeScript.AST {
+>get : Symbol(AstPath.get, Decl(parserRealSource14.ts, 83, 9))
+>index : Symbol(index, Decl(parserRealSource14.ts, 85, 19))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+
+            return this.asts[index];
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>index : Symbol(index, Decl(parserRealSource14.ts, 85, 19))
+        }
+
+        public isNameOfClass(): boolean {
+>isNameOfClass : Symbol(AstPath.isNameOfClass, Decl(parserRealSource14.ts, 87, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isNameOfInterface(): boolean {
+>isNameOfInterface : Symbol(AstPath.isNameOfInterface, Decl(parserRealSource14.ts, 96, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isNameOfArgument(): boolean {
+>isNameOfArgument : Symbol(AstPath.isNameOfArgument, Decl(parserRealSource14.ts, 105, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.ArgDecl) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.ArgDecl>this.parent()).id === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ArgDecl : Symbol(TypeScript.ArgDecl)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isNameOfVariable(): boolean {
+>isNameOfVariable : Symbol(AstPath.isNameOfVariable, Decl(parserRealSource14.ts, 114, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.VarDecl) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.VarDecl>this.parent()).id === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>VarDecl : Symbol(TypeScript.VarDecl)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isNameOfModule(): boolean {
+>isNameOfModule : Symbol(AstPath.isNameOfModule, Decl(parserRealSource14.ts, 123, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isNameOfFunction(): boolean {
+>isNameOfFunction : Symbol(AstPath.isNameOfFunction, Decl(parserRealSource14.ts, 132, 9))
+
+            if (this.ast() === null || this.parent() === null)
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+
+                return false;
+
+            return (this.ast().nodeType === TypeScript.NodeType.Name) &&
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (this.parent().nodeType === TypeScript.NodeType.FuncDecl) &&
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.FuncDecl>this.parent()).name === this.ast());
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>parent : Symbol(AstPath.parent, Decl(parserRealSource14.ts, 75, 9))
+>this.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+        }
+
+        public isChildOfScript(): boolean {
+>isChildOfScript : Symbol(AstPath.isChildOfScript, Decl(parserRealSource14.ts, 141, 9))
+
+            var ast = lastOf(this.asts);
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 144, 15))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top] === ast &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 144, 15))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script;
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isChildOfModule(): boolean {
+>isChildOfModule : Symbol(AstPath.isChildOfModule, Decl(parserRealSource14.ts, 149, 9))
+
+            var ast = lastOf(this.asts);
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 152, 15))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top] === ast &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 152, 15))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration;
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isChildOfClass(): boolean {
+>isChildOfClass : Symbol(AstPath.isChildOfClass, Decl(parserRealSource14.ts, 157, 9))
+
+            var ast = lastOf(this.asts);
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 160, 15))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top] === ast &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 160, 15))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration;
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isArgumentOfClassConstructor(): boolean {
+>isArgumentOfClassConstructor : Symbol(AstPath.isArgumentOfClassConstructor, Decl(parserRealSource14.ts, 165, 9))
+
+            var ast = lastOf(this.asts);
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 168, 15))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+
+            return this.count() >= 5 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top] === ast &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 168, 15))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 3].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 4].nodeType === TypeScript.NodeType.ClassDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ClassDeclaration : Symbol(TypeScript.ClassDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isChildOfInterface(): boolean {
+>isChildOfInterface : Symbol(AstPath.isChildOfInterface, Decl(parserRealSource14.ts, 178, 9))
+
+            var ast = lastOf(this.asts);
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 181, 15))
+>lastOf : Symbol(lastOf, Decl(parserRealSource14.ts, 5, 19))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top] === ast &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 181, 15))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration;
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isTopLevelImplicitModule() {
+>isTopLevelImplicitModule : Symbol(AstPath.isTopLevelImplicitModule, Decl(parserRealSource14.ts, 186, 9))
+
+            return this.count() >= 1 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top].nodeType === TypeScript.NodeType.ModuleDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isBodyOfTopLevelImplicitModule() {
+>isBodyOfTopLevelImplicitModule : Symbol(AstPath.isBodyOfTopLevelImplicitModule, Decl(parserRealSource14.ts, 192, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] &&
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+        }
+
+        public isBodyOfScript(): boolean {
+>isBodyOfScript : Symbol(AstPath.isBodyOfScript, Decl(parserRealSource14.ts, 200, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Script &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Script : Symbol(TypeScript.Script)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfSwitch(): boolean {
+>isBodyOfSwitch : Symbol(AstPath.isBodyOfSwitch, Decl(parserRealSource14.ts, 206, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Switch &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfModule(): boolean {
+>isBodyOfModule : Symbol(AstPath.isBodyOfModule, Decl(parserRealSource14.ts, 212, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfClass(): boolean {
+>isBodyOfClass : Symbol(AstPath.isBodyOfClass, Decl(parserRealSource14.ts, 218, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ClassDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ClassDeclaration : Symbol(TypeScript.ClassDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfFunction(): boolean {
+>isBodyOfFunction : Symbol(AstPath.isBodyOfFunction, Decl(parserRealSource14.ts, 224, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfInterface(): boolean {
+>isBodyOfInterface : Symbol(AstPath.isBodyOfInterface, Decl(parserRealSource14.ts, 230, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.InterfaceDeclaration &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                 (<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfBlock(): boolean {
+>isBodyOfBlock : Symbol(AstPath.isBodyOfBlock, Decl(parserRealSource14.ts, 236, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Block &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Block : Symbol(TypeScript.Block)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfFor(): boolean {
+>isBodyOfFor : Symbol(AstPath.isBodyOfFor, Decl(parserRealSource14.ts, 242, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.For &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ForStatement : Symbol(TypeScript.ForStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfCase(): boolean {
+>isBodyOfCase : Symbol(AstPath.isBodyOfCase, Decl(parserRealSource14.ts, 248, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Case &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CaseStatement : Symbol(TypeScript.CaseStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfTry(): boolean {
+>isBodyOfTry : Symbol(AstPath.isBodyOfTry, Decl(parserRealSource14.ts, 254, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Try &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Try : Symbol(TypeScript.Try)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfCatch(): boolean {
+>isBodyOfCatch : Symbol(AstPath.isBodyOfCatch, Decl(parserRealSource14.ts, 260, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Catch &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Catch : Symbol(TypeScript.Catch)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfDoWhile(): boolean {
+>isBodyOfDoWhile : Symbol(AstPath.isBodyOfDoWhile, Decl(parserRealSource14.ts, 266, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.DoWhile &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>DoWhileStatement : Symbol(TypeScript.DoWhileStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfWhile(): boolean {
+>isBodyOfWhile : Symbol(AstPath.isBodyOfWhile, Decl(parserRealSource14.ts, 272, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.While &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>WhileStatement : Symbol(TypeScript.WhileStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfForIn(): boolean {
+>isBodyOfForIn : Symbol(AstPath.isBodyOfForIn, Decl(parserRealSource14.ts, 278, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ForInStatement : Symbol(TypeScript.ForInStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfWith(): boolean {
+>isBodyOfWith : Symbol(AstPath.isBodyOfWith, Decl(parserRealSource14.ts, 284, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.With &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>WithStatement : Symbol(TypeScript.WithStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfFinally(): boolean {
+>isBodyOfFinally : Symbol(AstPath.isBodyOfFinally, Decl(parserRealSource14.ts, 290, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Finally &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Finally : Symbol(TypeScript.Finally)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isCaseOfSwitch(): boolean {
+>isCaseOfSwitch : Symbol(AstPath.isCaseOfSwitch, Decl(parserRealSource14.ts, 296, 9))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isDefaultCaseOfSwitch(): boolean {
+>isDefaultCaseOfSwitch : Symbol(AstPath.isDefaultCaseOfSwitch, Decl(parserRealSource14.ts, 303, 9))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] &&
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                (<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>SwitchStatement : Symbol(TypeScript.SwitchStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isListOfObjectLit(): boolean {
+>isListOfObjectLit : Symbol(AstPath.isListOfObjectLit, Decl(parserRealSource14.ts, 311, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfObjectLit(): boolean {
+>isBodyOfObjectLit : Symbol(AstPath.isBodyOfObjectLit, Decl(parserRealSource14.ts, 318, 9))
+
+            return this.isListOfObjectLit();
+>this.isListOfObjectLit : Symbol(AstPath.isListOfObjectLit, Decl(parserRealSource14.ts, 311, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>isListOfObjectLit : Symbol(AstPath.isListOfObjectLit, Decl(parserRealSource14.ts, 311, 9))
+        }
+
+        public isEmptyListOfObjectLit(): boolean {
+>isEmptyListOfObjectLit : Symbol(AstPath.isEmptyListOfObjectLit, Decl(parserRealSource14.ts, 322, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] &&
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+
+                (<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0;
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTList : Symbol(TypeScript.ASTList)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isMemberOfObjectLit(): boolean {
+>isMemberOfObjectLit : Symbol(AstPath.isMemberOfObjectLit, Decl(parserRealSource14.ts, 330, 9))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.ObjectLit &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.Member &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isNameOfMemberOfObjectLit(): boolean {
+>isNameOfMemberOfObjectLit : Symbol(AstPath.isNameOfMemberOfObjectLit, Decl(parserRealSource14.ts, 338, 9))
+
+            return this.count() >= 4 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 3].nodeType === TypeScript.NodeType.ObjectLit &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.Name &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isListOfArrayLit(): boolean {
+>isListOfArrayLit : Symbol(AstPath.isListOfArrayLit, Decl(parserRealSource14.ts, 347, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ArrayLit &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>UnaryExpression : Symbol(TypeScript.UnaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isTargetOfMember(): boolean {
+>isTargetOfMember : Symbol(AstPath.isTargetOfMember, Decl(parserRealSource14.ts, 354, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>BinaryExpression : Symbol(TypeScript.BinaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isMemberOfMember(): boolean {
+>isMemberOfMember : Symbol(AstPath.isMemberOfMember, Decl(parserRealSource14.ts, 360, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>BinaryExpression : Symbol(TypeScript.BinaryExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isItemOfList(): boolean {
+>isItemOfList : Symbol(AstPath.isItemOfList, Decl(parserRealSource14.ts, 366, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List;
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+            //(<Tools.ASTList>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
+        }
+
+        public isThenOfIf(): boolean {
+>isThenOfIf : Symbol(AstPath.isThenOfIf, Decl(parserRealSource14.ts, 372, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IfStatement : Symbol(TypeScript.IfStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isElseOfIf(): boolean {
+>isElseOfIf : Symbol(AstPath.isElseOfIf, Decl(parserRealSource14.ts, 378, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IfStatement : Symbol(TypeScript.IfStatement)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isBodyOfDefaultCase(): boolean {
+>isBodyOfDefaultCase : Symbol(AstPath.isBodyOfDefaultCase, Decl(parserRealSource14.ts, 384, 9))
+
+            return this.isBodyOfCase();
+>this.isBodyOfCase : Symbol(AstPath.isBodyOfCase, Decl(parserRealSource14.ts, 248, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>isBodyOfCase : Symbol(AstPath.isBodyOfCase, Decl(parserRealSource14.ts, 248, 9))
+        }
+
+        public isSingleStatementList(): boolean {
+>isSingleStatementList : Symbol(AstPath.isSingleStatementList, Decl(parserRealSource14.ts, 388, 9))
+
+            return this.count() >= 1 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.ASTList>this.asts[this.top]).members.length === 1;
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTList : Symbol(TypeScript.ASTList)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isArgumentListOfFunction(): boolean {
+>isArgumentListOfFunction : Symbol(AstPath.isArgumentListOfFunction, Decl(parserRealSource14.ts, 394, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isArgumentOfFunction(): boolean {
+>isArgumentOfFunction : Symbol(AstPath.isArgumentOfFunction, Decl(parserRealSource14.ts, 401, 9))
+
+            return this.count() >= 3 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>FuncDecl : Symbol(TypeScript.FuncDecl)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isArgumentListOfCall(): boolean {
+>isArgumentListOfCall : Symbol(AstPath.isArgumentListOfCall, Decl(parserRealSource14.ts, 408, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.Call &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CallExpression : Symbol(TypeScript.CallExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isArgumentListOfNew(): boolean {
+>isArgumentListOfNew : Symbol(AstPath.isArgumentListOfNew, Decl(parserRealSource14.ts, 415, 9))
+
+            return this.count() >= 2 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.New &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>CallExpression : Symbol(TypeScript.CallExpression)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+
+        public isSynthesizedBlock(): boolean {
+>isSynthesizedBlock : Symbol(AstPath.isSynthesizedBlock, Decl(parserRealSource14.ts, 422, 9))
+
+            return this.count() >= 1 &&
+>this.count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>count : Symbol(AstPath.count, Decl(parserRealSource14.ts, 79, 9))
+
+                this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block &&
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                (<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false;
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Block : Symbol(TypeScript.Block)
+>this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
+>this.top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+>this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>top : Symbol(AstPath.top, Decl(parserRealSource14.ts, 23, 43))
+        }
+    }
+
+    export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
+>isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ASTSpan : Symbol(TypeScript.ASTSpan)
+
+        if (ast === null)
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
+
+            return false;
+
+        if (ast.minChar === -1 || ast.limChar === -1)
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 431, 35))
+
+            return false;
+
+        return true;
+    }
+
+    export class AstPathContext {
+>AstPathContext : Symbol(AstPathContext, Decl(parserRealSource14.ts, 439, 5))
+
+        public path = new TypeScript.AstPath();
+>path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>TypeScript.AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+    }
+
+    export enum GetAstPathOptions {
+>GetAstPathOptions : Symbol(GetAstPathOptions, Decl(parserRealSource14.ts, 443, 5))
+
+        Default = 0,
+>Default : Symbol(GetAstPathOptions.Default, Decl(parserRealSource14.ts, 445, 35))
+
+        EdgeInclusive = 1,
+>EdgeInclusive : Symbol(GetAstPathOptions.EdgeInclusive, Decl(parserRealSource14.ts, 446, 20))
+
+        //We need this options dealing with an AST coming from an incomplete AST. For example:
+        //     class foo { // r
+        // If we ask for the AST at the position after the "r" character, we won't see we are 
+        // inside a comment, because the "class" AST node has a limChar corresponding to the position of 
+        // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
+        // we don't find the "precomment" attached to the errorneous empty stmt.
+        //TODO: It would be nice to be able to get rid of this.
+        DontPruneSearchBasedOnPosition = 1 << 1,
+>DontPruneSearchBasedOnPosition : Symbol(GetAstPathOptions.DontPruneSearchBasedOnPosition, Decl(parserRealSource14.ts, 447, 26))
+    }
+
+    ///
+    /// Return the stack of AST nodes containing "position"
+    ///
+    export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
+>getAstPathToPosition : Symbol(getAstPathToPosition, Decl(parserRealSource14.ts, 456, 5))
+>script : Symbol(script, Decl(parserRealSource14.ts, 461, 41))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>options : Symbol(options, Decl(parserRealSource14.ts, 461, 77))
+>GetAstPathOptions.Default : Symbol(GetAstPathOptions.Default, Decl(parserRealSource14.ts, 445, 35))
+>GetAstPathOptions : Symbol(GetAstPathOptions, Decl(parserRealSource14.ts, 443, 5))
+>Default : Symbol(GetAstPathOptions.Default, Decl(parserRealSource14.ts, 445, 35))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+
+        var lookInComments = (comments: TypeScript.Comment[]) => {
+>lookInComments : Symbol(lookInComments, Decl(parserRealSource14.ts, 462, 11))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Comment : Symbol(TypeScript.Comment)
+
+            if (comments && comments.length > 0) {
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>comments.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+                for (var i = 0; i < comments.length; i++) {
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+>comments.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+
+                    var minChar = comments[i].minChar;
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 465, 23))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+
+                    var limChar = comments[i].limChar;
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 466, 23))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+
+                    if (!comments[i].isBlockComment) {
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+
+                        limChar++; // For single line comments, include 1 more character (for the newline)
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 466, 23))
+                    }
+                    if (pos >= minChar && pos < limChar) {
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 465, 23))
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 466, 23))
+
+                        ctx.path.push(comments[i]);
+>ctx.path.push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>ctx.path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+>path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>comments : Symbol(comments, Decl(parserRealSource14.ts, 462, 30))
+>i : Symbol(i, Decl(parserRealSource14.ts, 464, 24))
+                    }
+                }
+            }
+        }
+
+        var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 477, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>parent : Symbol(parent, Decl(parserRealSource14.ts, 477, 48))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 477, 72))
+>IAstWalker : Symbol(IAstWalker)
+
+            if (isValidAstNode(cur)) {
+>isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+
+                // Add "cur" to the stack if it contains our position
+                // For "identifier" nodes, we need a special case: A position equal to "limChar" is
+                // valid, since the position corresponds to a caret position (in between characters)
+                // For example:
+                //  bar
+                //  0123
+                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid
+                var inclusive =
+>inclusive : Symbol(inclusive, Decl(parserRealSource14.ts, 487, 19))
+
+                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||
+>options : Symbol(options, Decl(parserRealSource14.ts, 461, 77))
+>GetAstPathOptions.EdgeInclusive : Symbol(GetAstPathOptions.EdgeInclusive, Decl(parserRealSource14.ts, 446, 20))
+>GetAstPathOptions : Symbol(GetAstPathOptions, Decl(parserRealSource14.ts, 443, 5))
+>EdgeInclusive : Symbol(GetAstPathOptions.EdgeInclusive, Decl(parserRealSource14.ts, 446, 20))
+
+                    cur.nodeType === TypeScript.NodeType.Name ||
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+
+                    pos === script.limChar; // Special "EOF" case
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>script : Symbol(script, Decl(parserRealSource14.ts, 461, 41))
+
+                var minChar = cur.minChar;
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 492, 19))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+
+                var limChar = cur.limChar + (inclusive ? 1 : 0)
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 493, 19))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+>inclusive : Symbol(inclusive, Decl(parserRealSource14.ts, 487, 19))
+
+                if (pos >= minChar && pos < limChar) {
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 492, 19))
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 493, 19))
+
+                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better
+                    //       than top of the stack.
+                    var previous = ctx.path.ast();
+>previous : Symbol(previous, Decl(parserRealSource14.ts, 498, 23))
+>ctx.path.ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+>ctx.path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+>path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>ast : Symbol(AstPath.ast, Decl(parserRealSource14.ts, 71, 9))
+
+                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {
+>previous : Symbol(previous, Decl(parserRealSource14.ts, 498, 23))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+>previous : Symbol(previous, Decl(parserRealSource14.ts, 498, 23))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+>previous : Symbol(previous, Decl(parserRealSource14.ts, 498, 23))
+
+                        ctx.path.push(cur);
+>ctx.path.push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>ctx.path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+>path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+                    }
+                    else {
+                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");
+                    }
+                }
+
+                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually
+                if (pos < limChar) {
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 493, 19))
+
+                    lookInComments(cur.preComments);
+>lookInComments : Symbol(lookInComments, Decl(parserRealSource14.ts, 462, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+                }
+                if (pos >= minChar) {
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 492, 19))
+
+                    lookInComments(cur.postComments);
+>lookInComments : Symbol(lookInComments, Decl(parserRealSource14.ts, 462, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+                }
+
+                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {
+>options : Symbol(options, Decl(parserRealSource14.ts, 461, 77))
+>GetAstPathOptions.DontPruneSearchBasedOnPosition : Symbol(GetAstPathOptions.DontPruneSearchBasedOnPosition, Decl(parserRealSource14.ts, 447, 26))
+>GetAstPathOptions : Symbol(GetAstPathOptions, Decl(parserRealSource14.ts, 443, 5))
+>DontPruneSearchBasedOnPosition : Symbol(GetAstPathOptions.DontPruneSearchBasedOnPosition, Decl(parserRealSource14.ts, 447, 26))
+
+                    // Don't go further down the tree if pos is outside of [minChar, limChar]
+                    walker.options.goChildren = (minChar <= pos && pos <= limChar);
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 477, 72))
+>minChar : Symbol(minChar, Decl(parserRealSource14.ts, 492, 19))
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>pos : Symbol(pos, Decl(parserRealSource14.ts, 461, 64))
+>limChar : Symbol(limChar, Decl(parserRealSource14.ts, 493, 19))
+                }
+            }
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 477, 28))
+        }
+
+        var ctx = new AstPathContext();
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+>AstPathContext : Symbol(AstPathContext, Decl(parserRealSource14.ts, 439, 5))
+
+        TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>script : Symbol(script, Decl(parserRealSource14.ts, 461, 41))
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 477, 11))
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+
+        return ctx.path;
+>ctx.path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+>ctx : Symbol(ctx, Decl(parserRealSource14.ts, 523, 11))
+>path : Symbol(AstPathContext.path, Decl(parserRealSource14.ts, 441, 33))
+    }
+
+    //
+    // Find a source text offset that is safe for lexing tokens at the given position.
+    // This is used when "position" might be inside a comment or string, etc.
+    //
+    export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
+>getTokenizationOffset : Symbol(getTokenizationOffset, Decl(parserRealSource14.ts, 526, 5))
+>script : Symbol(script, Decl(parserRealSource14.ts, 532, 42))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>Script : Symbol(TypeScript.Script)
+>position : Symbol(position, Decl(parserRealSource14.ts, 532, 68))
+
+        var bestOffset = 0;
+>bestOffset : Symbol(bestOffset, Decl(parserRealSource14.ts, 533, 11))
+
+        var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 534, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>parent : Symbol(parent, Decl(parserRealSource14.ts, 534, 39))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 534, 63))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+
+            if (TypeScript.isValidAstNode(cur)) {
+>TypeScript.isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>isValidAstNode : Symbol(isValidAstNode, Decl(parserRealSource14.ts, 429, 5))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+
+                // Did we find a closer offset?
+                if (cur.minChar <= position) {
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+>position : Symbol(position, Decl(parserRealSource14.ts, 532, 68))
+
+                    bestOffset = max(bestOffset, cur.minChar);
+>bestOffset : Symbol(bestOffset, Decl(parserRealSource14.ts, 533, 11))
+>max : Symbol(max, Decl(parserRealSource14.ts, 8, 5))
+>bestOffset : Symbol(bestOffset, Decl(parserRealSource14.ts, 533, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+                }
+
+                // Stop the walk if this node is not related to "minChar"
+                if (cur.minChar > position || cur.limChar < bestOffset) {
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+>position : Symbol(position, Decl(parserRealSource14.ts, 532, 68))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+>bestOffset : Symbol(bestOffset, Decl(parserRealSource14.ts, 533, 11))
+
+                    walker.options.goChildren = false;
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 534, 63))
+                }
+            }
+
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 534, 19))
+        }
+
+        TypeScript.getAstWalkerFactory().walk(script, pre);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>script : Symbol(script, Decl(parserRealSource14.ts, 532, 42))
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 534, 11))
+
+        return bestOffset;
+>bestOffset : Symbol(bestOffset, Decl(parserRealSource14.ts, 533, 11))
+    }
+
+    ///
+    /// Simple function to Walk an AST using a simple callback function.
+    ///
+    export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
+>walkAST : Symbol(walkAST, Decl(parserRealSource14.ts, 552, 5))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 557, 28))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>callback : Symbol(callback, Decl(parserRealSource14.ts, 557, 48))
+>path : Symbol(path, Decl(parserRealSource14.ts, 557, 60))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 557, 74))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
+
+        var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 558, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 558, 28))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>parent : Symbol(parent, Decl(parserRealSource14.ts, 558, 48))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 558, 72))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
+
+            var path: TypeScript.AstPath = walker.state;
+>path : Symbol(path, Decl(parserRealSource14.ts, 559, 15))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 558, 72))
+
+            path.push(cur);
+>path.push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>path : Symbol(path, Decl(parserRealSource14.ts, 559, 15))
+>push : Symbol(AstPath.push, Decl(parserRealSource14.ts, 45, 9))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 558, 28))
+
+            callback(path, walker);
+>callback : Symbol(callback, Decl(parserRealSource14.ts, 557, 48))
+>path : Symbol(path, Decl(parserRealSource14.ts, 559, 15))
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 558, 72))
+
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 558, 28))
+        }
+        var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
+>post : Symbol(post, Decl(parserRealSource14.ts, 564, 11))
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 564, 29))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>parent : Symbol(parent, Decl(parserRealSource14.ts, 564, 49))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AST : Symbol(TypeScript.AST)
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 564, 73))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>IAstWalker : Symbol(TypeScript.IAstWalker)
+
+            var path: TypeScript.AstPath = walker.state;
+>path : Symbol(path, Decl(parserRealSource14.ts, 565, 15))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+>walker : Symbol(walker, Decl(parserRealSource14.ts, 564, 73))
+
+            path.pop();
+>path.pop : Symbol(AstPath.pop, Decl(parserRealSource14.ts, 35, 9))
+>path : Symbol(path, Decl(parserRealSource14.ts, 565, 15))
+>pop : Symbol(AstPath.pop, Decl(parserRealSource14.ts, 35, 9))
+
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource14.ts, 564, 29))
+        }
+
+        var path = new AstPath();
+>path : Symbol(path, Decl(parserRealSource14.ts, 570, 11))
+>AstPath : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
+
+        TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path);
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource14.ts, 0, 0))
+>ast : Symbol(ast, Decl(parserRealSource14.ts, 557, 28))
+>pre : Symbol(pre, Decl(parserRealSource14.ts, 558, 11))
+>post : Symbol(post, Decl(parserRealSource14.ts, 564, 11))
+>path : Symbol(path, Decl(parserRealSource14.ts, 570, 11))
+    }
+}
+

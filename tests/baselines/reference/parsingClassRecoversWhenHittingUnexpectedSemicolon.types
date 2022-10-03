@@ -1,0 +1,11 @@
+=== tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
+class C {
+>C : C
+
+    public f() { };
+>f : () => void
+
+    private m;
+>m : any
+}
+

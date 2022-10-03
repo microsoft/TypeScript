@@ -1,0 +1,42 @@
+=== tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfFunctionBody.ts ===
+function foo1() {
+>foo1 : Symbol(foo1, Decl(doNotEmitDetachedCommentsAtStartOfFunctionBody.ts, 0, 0))
+
+    // Single line comment
+
+    return 42;
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(doNotEmitDetachedCommentsAtStartOfFunctionBody.ts, 4, 1))
+
+    /*
+
+        multi line
+        comment
+    */
+
+    return 42;
+}
+
+function foo3() {
+>foo3 : Symbol(foo3, Decl(doNotEmitDetachedCommentsAtStartOfFunctionBody.ts, 14, 1))
+
+    // Single line comment with more than one blank line
+
+
+    return 42;
+}
+
+function foo4() {
+>foo4 : Symbol(foo4, Decl(doNotEmitDetachedCommentsAtStartOfFunctionBody.ts, 21, 1))
+
+    /*
+
+        multi line comment with more than one blank line
+    */
+
+    return 42;
+}
+
+

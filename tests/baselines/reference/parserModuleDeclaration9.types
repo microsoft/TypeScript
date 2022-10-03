@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration9.ts ===
+module a.number.b {
+No type information for this code.}
+No type information for this code.

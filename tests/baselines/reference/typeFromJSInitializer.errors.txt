@@ -1,0 +1,94 @@
+tests/cases/conformance/salsa/a.js(3,5): error TS7008: Member 'unknown' implicitly has an 'any' type.
+tests/cases/conformance/salsa/a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
+tests/cases/conformance/salsa/a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
+tests/cases/conformance/salsa/a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
+tests/cases/conformance/salsa/a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/salsa/a.js (10 errors) ====
+    function A () {
+        // should get any on this-assignments in constructor
+        this.unknown = null
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS7008: Member 'unknown' implicitly has an 'any' type.
+        this.unknowable = undefined
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7008: Member 'unknowable' implicitly has an 'any' type.
+        this.empty = []
+        ~~~~~~~~~~~~~~~
+!!! error TS7008: Member 'empty' implicitly has an 'any[]' type.
+    }
+    var a = new A()
+    a.unknown = 1
+    a.unknown = true
+    a.unknown = {}
+    a.unknown = 'hi'
+    a.unknowable = 1
+    a.unknowable = true
+    a.unknowable = {}
+    a.unknowable = 'hi'
+    a.empty.push(1)
+    a.empty.push(true)
+    a.empty.push({})
+    a.empty.push('hi')
+    
+    /** @type {number | undefined} */
+    var n;
+    
+    // should get any on parameter initialisers
+    function f(a = null, b = n, l = []) {
+                                ~~~~~~
+!!! error TS7006: Parameter 'l' implicitly has an 'any[]' type.
+        // a should be null in strict mode
+        a = undefined
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'null'.
+        a = null
+        a = 1
+        ~
+!!! error TS2322: Type '1' is not assignable to type 'null'.
+        a = true
+        ~
+!!! error TS2322: Type 'true' is not assignable to type 'null'.
+        a = {}
+        ~
+!!! error TS2322: Type '{}' is not assignable to type 'null'.
+        a = 'ok'
+        ~
+!!! error TS2322: Type '"ok"' is not assignable to type 'null'.
+    
+        // b should be number | undefined, not any
+        b = 1
+        b = undefined
+        b = 'error'
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+        // l should be any[]
+        l.push(1)
+        l.push('ok')
+    }
+    
+    // should get any on variable initialisers
+    var u = undefined;
+    var l = [];
+    u = undefined
+    u = 1
+    u = true
+    u = {}
+    u = 'ok'
+    
+    l.push('ok')
+    
+    /** @type {(v: unknown) => v is undefined} */
+    const isUndef = v => v === undefined;
+    const e = [1, undefined];
+    
+    // should be undefined[]
+    const g = e.filter(isUndef);
+    

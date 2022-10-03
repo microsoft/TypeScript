@@ -1,0 +1,30 @@
+=== tests/cases/compiler/capturedLetConstInLoop12.ts ===
+(function() {
+    "use strict";
+
+    for (let i = 0; i < 4; i++) {
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 3, 12))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 3, 12))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 3, 12))
+
+        (() => [i] = [i + 1])();
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 3, 12))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 3, 12))
+    }
+})();
+
+(function() {
+    "use strict";
+
+    for (let i = 0; i < 4; i++) {
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
+
+        (() => ({a:i} = {a:i + 1}))();
+>a : Symbol(a, Decl(capturedLetConstInLoop12.ts, 12, 17))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
+>a : Symbol(a, Decl(capturedLetConstInLoop12.ts, 12, 25))
+>i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
+    }
+})();

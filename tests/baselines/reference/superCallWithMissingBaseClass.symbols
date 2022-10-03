@@ -1,0 +1,16 @@
+=== tests/cases/compiler/superCallWithMissingBaseClass.ts ===
+class Foo extends Bar {
+>Foo : Symbol(Foo, Decl(superCallWithMissingBaseClass.ts, 0, 0))
+
+    m1() {
+>m1 : Symbol(Foo.m1, Decl(superCallWithMissingBaseClass.ts, 0, 23))
+
+        return super.m1();
+    }
+
+    static m2() {
+>m2 : Symbol(Foo.m2, Decl(superCallWithMissingBaseClass.ts, 3, 5))
+
+        return super.m2();
+    }
+}

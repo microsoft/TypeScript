@@ -1,0 +1,48 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+export default class Decl {
+>Decl : Symbol(Decl, Decl(m1.ts, 0, 0))
+}
+
+export interface Decl {
+>Decl : Symbol(Decl, Decl(m1.ts, 1, 1), Decl(m1.ts, 6, 1))
+
+    p1: number;
+>p1 : Symbol(Decl.p1, Decl(m1.ts, 3, 23))
+
+    p2: number;
+>p2 : Symbol(Decl.p2, Decl(m1.ts, 4, 15))
+}
+
+export namespace Decl {
+>Decl : Symbol(Decl, Decl(m1.ts, 1, 1), Decl(m1.ts, 6, 1))
+
+    interface I {
+>I : Symbol(I, Decl(m1.ts, 8, 23))
+    }
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import Entity from "m1"
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+Entity();
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+var x: Entity;
+>x : Symbol(x, Decl(m2.ts, 4, 3))
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+var y: Entity.I;
+>y : Symbol(y, Decl(m2.ts, 5, 3))
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+>I : Symbol(Entity.I)
+
+var z = new Entity();
+>z : Symbol(z, Decl(m2.ts, 6, 3))
+>Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+
+var sum = z.p1 + z.p2
+>sum : Symbol(sum, Decl(m2.ts, 7, 3))
+>z : Symbol(z, Decl(m2.ts, 6, 3))
+>z : Symbol(z, Decl(m2.ts, 6, 3))
+

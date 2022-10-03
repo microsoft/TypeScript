@@ -1,0 +1,39 @@
+=== tests/cases/conformance/types/spread/objectSpreadComputedProperty.ts ===
+// fixes #12200
+function f() {
+>f : Symbol(f, Decl(objectSpreadComputedProperty.ts, 0, 0))
+
+    let n: number = 12;
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+
+    let m: number = 13;
+>m : Symbol(m, Decl(objectSpreadComputedProperty.ts, 3, 7))
+
+    let a: any = null;
+>a : Symbol(a, Decl(objectSpreadComputedProperty.ts, 4, 7))
+
+    const o1 = { ...{}, [n]: n };
+>o1 : Symbol(o1, Decl(objectSpreadComputedProperty.ts, 5, 9))
+>[n] : Symbol([n], Decl(objectSpreadComputedProperty.ts, 5, 23))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+
+    const o2 = { ...{}, [a]: n };
+>o2 : Symbol(o2, Decl(objectSpreadComputedProperty.ts, 6, 9))
+>[a] : Symbol([a], Decl(objectSpreadComputedProperty.ts, 6, 23))
+>a : Symbol(a, Decl(objectSpreadComputedProperty.ts, 4, 7))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+
+    const o3 = { [a]: n, ...{}, [n]: n, ...{}, [m]: m };
+>o3 : Symbol(o3, Decl(objectSpreadComputedProperty.ts, 7, 9))
+>[a] : Symbol([a], Decl(objectSpreadComputedProperty.ts, 7, 16))
+>a : Symbol(a, Decl(objectSpreadComputedProperty.ts, 4, 7))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+>[n] : Symbol([n], Decl(objectSpreadComputedProperty.ts, 7, 31))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+>n : Symbol(n, Decl(objectSpreadComputedProperty.ts, 2, 7))
+>[m] : Symbol([m], Decl(objectSpreadComputedProperty.ts, 7, 46))
+>m : Symbol(m, Decl(objectSpreadComputedProperty.ts, 3, 7))
+>m : Symbol(m, Decl(objectSpreadComputedProperty.ts, 3, 7))
+}
+

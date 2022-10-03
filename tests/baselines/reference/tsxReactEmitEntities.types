@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+<div>Dot goes here: &middot; &notAnEntity; </div>;
+><div>Dot goes here: &middot; &notAnEntity; </div> : JSX.Element
+>div : any
+>div : any
+
+<div>Be careful of &quot;-ed strings!</div>;
+><div>Be careful of &quot;-ed strings!</div> : JSX.Element
+>div : any
+>div : any
+
+<div>&#0123;&#123;braces&#x7d;&#x7D;</div>;
+><div>&#0123;&#123;braces&#x7d;&#x7D;</div> : JSX.Element
+>div : any
+>div : any
+
+// Escapes do nothing
+<div>\n</div>;
+><div>\n</div> : JSX.Element
+>div : any
+>div : any
+
+// Also works in string literal attributes
+<div attr="&#0123;&hellip;&#x7D;\"></div>;
+><div attr="&#0123;&hellip;&#x7D;\"></div> : JSX.Element
+>div : any
+>attr : string
+>div : any
+
+// Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
+<div attr={"&#0123;&hellip;&#x7D;\""}></div>;
+><div attr={"&#0123;&hellip;&#x7D;\""}></div> : JSX.Element
+>div : any
+>attr : string
+>"&#0123;&hellip;&#x7D;\"" : "&#0123;&hellip;&#x7D;\""
+>div : any
+
+// Preserves single quotes
+<div attr='"'></div>;
+><div attr='"'></div> : JSX.Element
+>div : any
+>attr : string
+>div : any
+
+// https://github.com/microsoft/TypeScript/issues/35732
+<div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
+><div>&#x1F408;&#x1F415;&#128007;&#128017;</div> : JSX.Element
+>div : any
+>div : any
+

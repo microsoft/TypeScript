@@ -1,0 +1,80 @@
+=== tests/cases/compiler/genericMethodOverspecialization.ts ===
+var names = ["list", "table1", "table2", "table3", "summary"];
+>names : string[]
+>["list", "table1", "table2", "table3", "summary"] : string[]
+>"list" : "list"
+>"table1" : "table1"
+>"table2" : "table2"
+>"table3" : "table3"
+>"summary" : "summary"
+
+interface HTMLElement {
+    clientWidth: number;
+>clientWidth : number
+
+    isDisabled: boolean;
+>isDisabled : boolean
+}
+
+declare var document: Document;
+>document : Document
+
+interface Document {
+    getElementById(elementId: string): HTMLElement;
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>elementId : string
+}
+
+var elements = names.map(function (name) {
+>elements : HTMLElement[]
+>names.map(function (name) {    return document.getElementById(name);}) : HTMLElement[]
+>names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>names : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>function (name) {    return document.getElementById(name);} : (name: string) => HTMLElement
+>name : string
+
+    return document.getElementById(name);
+>document.getElementById(name) : HTMLElement
+>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>document : Document
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>name : string
+
+});
+
+
+var xxx = elements.filter(function (e) {
+>xxx : HTMLElement[]
+>elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
+>elements.filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
+>elements : HTMLElement[]
+>filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
+>function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
+>e : HTMLElement
+
+    return !e.isDisabled;
+>!e.isDisabled : boolean
+>e.isDisabled : boolean
+>e : HTMLElement
+>isDisabled : boolean
+
+});
+
+var widths:number[] = elements.map(function (e) { // should not error
+>widths : number[]
+>elements.map(function (e) { // should not error    return e.clientWidth;}) : number[]
+>elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>elements : HTMLElement[]
+>map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>function (e) { // should not error    return e.clientWidth;} : (e: HTMLElement) => number
+>e : HTMLElement
+
+    return e.clientWidth;
+>e.clientWidth : number
+>e : HTMLElement
+>clientWidth : number
+
+});
+
+

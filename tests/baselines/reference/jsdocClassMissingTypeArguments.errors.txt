@@ -1,0 +1,12 @@
+/a.js(4,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+
+
+==== /a.js (1 errors) ====
+    /** @template T */
+    class C {}
+    
+    /** @param {C} p */
+                ~
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+    function f(p) {}
+    

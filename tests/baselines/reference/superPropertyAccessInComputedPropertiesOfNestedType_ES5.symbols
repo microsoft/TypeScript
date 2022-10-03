@@ -1,0 +1,30 @@
+=== tests/cases/compiler/superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts ===
+class A {
+>A : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 0))
+
+    foo() { return 1; }
+>foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 2, 1))
+>A : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 0))
+
+    foo() { return 2; }
+>foo : Symbol(B.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 4, 19))
+
+    bar() {
+>bar : Symbol(B.bar, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 5, 23))
+
+        return class {
+            [super.foo()]() {
+>[super.foo()] : Symbol((Anonymous class)[super.foo()], Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 7, 22))
+>super.foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 9))
+>super : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES5.ts, 0, 9))
+
+                return 100;
+            }
+        }
+    }
+}

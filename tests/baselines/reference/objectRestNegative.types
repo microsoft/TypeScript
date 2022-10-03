@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/rest/objectRestNegative.ts ===
+let o = { a: 1, b: 'no' };
+>o : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'no' : "no"
+
+var { ...mustBeLast, a } = o;
+>mustBeLast : { b: string; }
+>a : number
+>o : { a: number; b: string; }
+
+var b: string;
+>b : string
+
+let notAssignable: { a: string };
+>notAssignable : { a: string; }
+>a : string
+
+({ b, ...notAssignable } = o);
+>({ b, ...notAssignable } = o) : { a: number; b: string; }
+>{ b, ...notAssignable } = o : { a: number; b: string; }
+>{ b, ...notAssignable } : { a: string; b: string; }
+>b : string
+>notAssignable : { a: string; }
+>o : { a: number; b: string; }
+
+
+function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
+>stillMustBeLast : ({ ...mustBeLast, a }: {    a: number;    b: string;}) => void
+>mustBeLast : { b: string; }
+>a : number
+>a : number
+>b : string
+}
+function generic<T extends { x, y }>(t: T) {
+>generic : <T extends { x: any; y: any; }>(t: T) => Omit<T, "x">
+>x : any
+>y : any
+>t : T
+
+    let { x, ...rest } = t;
+>x : any
+>rest : Omit<T, "x">
+>t : T
+
+    return rest;
+>rest : Omit<T, "x">
+}
+
+let rest: { b: string }
+>rest : { b: string; }
+>b : string
+
+({a, ...rest.b + rest.b} = o);
+>({a, ...rest.b + rest.b} = o) : { a: number; b: string; }
+>{a, ...rest.b + rest.b} = o : { a: number; b: string; }
+>{a, ...rest.b + rest.b} : any
+>a : number
+>rest.b + rest.b : string
+>rest.b : string
+>rest : { b: string; }
+>b : string
+>rest.b : string
+>rest : { b: string; }
+>b : string
+>o : { a: number; b: string; }
+

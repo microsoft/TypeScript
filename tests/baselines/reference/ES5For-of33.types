@@ -1,0 +1,15 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of33.ts ===
+for (var v of ['a', 'b', 'c']) {
+>v : string
+>['a', 'b', 'c'] : string[]
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+
+    console.log(v);
+>console.log(v) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>v : string
+}

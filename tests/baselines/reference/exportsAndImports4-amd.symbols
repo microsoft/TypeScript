@@ -1,0 +1,67 @@
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import a = require("./t1");
+>a : Symbol(a, Decl(t3.ts, 0, 0))
+
+a.default;
+>a.default : Symbol(a.default, Decl(t1.ts, 0, 0))
+>a : Symbol(a, Decl(t3.ts, 0, 0))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
+
+import b from "./t1";
+>b : Symbol(b, Decl(t3.ts, 2, 6))
+
+b;
+>b : Symbol(b, Decl(t3.ts, 2, 6))
+
+import * as c from "./t1";
+>c : Symbol(c, Decl(t3.ts, 4, 6))
+
+c.default;
+>c.default : Symbol(a.default, Decl(t1.ts, 0, 0))
+>c : Symbol(c, Decl(t3.ts, 4, 6))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
+
+import { default as d } from "./t1";
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
+>d : Symbol(d, Decl(t3.ts, 6, 8))
+
+d;
+>d : Symbol(d, Decl(t3.ts, 6, 8))
+
+import e1, * as e2 from "./t1";
+>e1 : Symbol(e1, Decl(t3.ts, 8, 6))
+>e2 : Symbol(e2, Decl(t3.ts, 8, 10))
+
+e1;
+>e1 : Symbol(e1, Decl(t3.ts, 8, 6))
+
+e2.default;
+>e2.default : Symbol(a.default, Decl(t1.ts, 0, 0))
+>e2 : Symbol(e2, Decl(t3.ts, 8, 10))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
+
+import f1, { default as f2 } from "./t1";
+>f1 : Symbol(f1, Decl(t3.ts, 11, 6))
+>default : Symbol(a.default, Decl(t1.ts, 0, 0))
+>f2 : Symbol(f2, Decl(t3.ts, 11, 12))
+
+f1;
+>f1 : Symbol(f1, Decl(t3.ts, 11, 6))
+
+f2;
+>f2 : Symbol(f2, Decl(t3.ts, 11, 12))
+
+export { a, b, c, d, e1, e2, f1, f2 };
+>a : Symbol(a, Decl(t3.ts, 14, 8))
+>b : Symbol(b, Decl(t3.ts, 14, 11))
+>c : Symbol(c, Decl(t3.ts, 14, 14))
+>d : Symbol(d, Decl(t3.ts, 14, 17))
+>e1 : Symbol(e1, Decl(t3.ts, 14, 20))
+>e2 : Symbol(e2, Decl(t3.ts, 14, 24))
+>f1 : Symbol(f1, Decl(t3.ts, 14, 28))
+>f2 : Symbol(f2, Decl(t3.ts, 14, 32))
+
+=== tests/cases/conformance/es6/modules/t1.ts ===
+export default "hello";
+No type information for this code.
+No type information for this code.

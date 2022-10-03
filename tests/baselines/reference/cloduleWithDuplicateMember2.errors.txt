@@ -1,0 +1,26 @@
+tests/cases/compiler/cloduleWithDuplicateMember2.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/cloduleWithDuplicateMember2.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/compiler/cloduleWithDuplicateMember2.ts (4 errors) ====
+    class C {
+        set x(y) { }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        static set y(z) { }
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    module C {
+        export var x = 1;
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    module C {
+        export function x() { }
+                        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }

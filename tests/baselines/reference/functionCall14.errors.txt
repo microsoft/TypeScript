@@ -1,0 +1,13 @@
+tests/cases/compiler/functionCall14.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/functionCall14.ts (1 errors) ====
+    function foo(a?:string, ...b:number[]){} 
+    foo('foo', 1); 
+    foo('foo'); 
+    foo();
+    foo(1, 'bar');
+        ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    foo('foo', 1, 3);
+    

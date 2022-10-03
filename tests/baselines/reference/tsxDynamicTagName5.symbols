@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module 'react' {
+>'react' : Symbol("react", Decl(react.d.ts, 0, 0))
+
+	class Component<T, U> { }
+>Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+>T : Symbol(T, Decl(react.d.ts, 1, 17))
+>U : Symbol(U, Decl(react.d.ts, 1, 19))
+}
+
+=== tests/cases/conformance/jsx/app.tsx ===
+import * as React from 'react';
+>React : Symbol(React, Decl(app.tsx, 0, 6))
+
+export class Text extends React.Component<{}, {}> {
+>Text : Symbol(Text, Decl(app.tsx, 0, 31))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
+>React : Symbol(React, Decl(app.tsx, 0, 6))
+>Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
+
+  _tagName: string = 'div';
+>_tagName : Symbol(Text._tagName, Decl(app.tsx, 2, 51))
+
+  render() {
+>render : Symbol(Text.render, Decl(app.tsx, 3, 27))
+
+    return (
+      <this._tagName />
+>this._tagName : Symbol(Text._tagName, Decl(app.tsx, 2, 51))
+>this : Symbol(Text, Decl(app.tsx, 0, 31))
+>_tagName : Symbol(Text._tagName, Decl(app.tsx, 2, 51))
+
+    );
+  }
+}

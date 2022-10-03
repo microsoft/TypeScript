@@ -1,0 +1,74 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts ===
+// Parameter properties are not valid in overloads of constructors
+
+class C {
+>C : Symbol(C, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 0, 0))
+
+    constructor(public x, private y);
+>x : Symbol(C.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
+>y : Symbol(C.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
+
+    constructor(public x, private y) { }
+>x : Symbol(C.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
+>y : Symbol(C.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 5, 1))
+
+    constructor(private x);
+>x : Symbol(C2.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
+
+    constructor(public x) { }
+>x : Symbol(C2.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 10, 1))
+
+    constructor(private x);
+>x : Symbol(C3.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 13, 16))
+
+    constructor(private y) { }
+>y : Symbol(C3.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 14, 16))
+}
+
+interface I {
+>I : Symbol(I, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 15, 1))
+
+    new (public x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 18, 9))
+
+    new (public x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 19, 9))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 20, 1))
+
+    new (private x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 23, 9))
+
+    new (private x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 24, 9))
+}
+
+var a: {
+>a : Symbol(a, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 27, 3))
+
+    new (public x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 28, 9))
+
+    new (public y);
+>y : Symbol(y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 29, 9))
+}
+
+var b: {
+>b : Symbol(b, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 32, 3))
+
+    new (private x);
+>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 33, 9))
+
+    new (private y);
+>y : Symbol(y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 34, 9))
+}

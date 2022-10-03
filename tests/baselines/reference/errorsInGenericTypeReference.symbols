@@ -1,0 +1,188 @@
+=== tests/cases/compiler/errorsInGenericTypeReference.ts ===
+interface IFoo<T> { }
+>IFoo : Symbol(IFoo, Decl(errorsInGenericTypeReference.ts, 0, 0))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 0, 15))
+
+class Foo<T> { }
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 2, 10))
+
+
+// in call type arguments
+class testClass1 {
+>testClass1 : Symbol(testClass1, Decl(errorsInGenericTypeReference.ts, 2, 16))
+
+    method<T>(): void { }
+>method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 7, 11))
+}
+var tc1 = new testClass1();
+>tc1 : Symbol(tc1, Decl(errorsInGenericTypeReference.ts, 9, 3))
+>testClass1 : Symbol(testClass1, Decl(errorsInGenericTypeReference.ts, 2, 16))
+
+tc1.method<{ x: V }>(); // error: could not find symbol V
+>tc1.method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+>tc1 : Symbol(tc1, Decl(errorsInGenericTypeReference.ts, 9, 3))
+>method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 10, 12))
+>V : Symbol(V)
+
+
+// in constructor type arguments
+class testClass2<T> {
+>testClass2 : Symbol(testClass2, Decl(errorsInGenericTypeReference.ts, 10, 23))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 14, 17))
+}
+var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
+>tc2 : Symbol(tc2, Decl(errorsInGenericTypeReference.ts, 16, 3))
+>testClass2 : Symbol(testClass2, Decl(errorsInGenericTypeReference.ts, 10, 23))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 16, 26))
+>V : Symbol(V)
+
+
+// in method return type annotation
+class testClass3 {
+>testClass3 : Symbol(testClass3, Decl(errorsInGenericTypeReference.ts, 16, 37))
+
+    testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+>testMethod1 : Symbol(testClass3.testMethod1, Decl(errorsInGenericTypeReference.ts, 20, 18))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 21, 24))
+>V : Symbol(V)
+
+    static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
+>testMethod2 : Symbol(testClass3.testMethod2, Decl(errorsInGenericTypeReference.ts, 21, 49))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 22, 31))
+>V : Symbol(V)
+
+    set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
+>a : Symbol(testClass3.a, Decl(errorsInGenericTypeReference.ts, 22, 55))
+>value : Symbol(value, Decl(errorsInGenericTypeReference.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 23, 22))
+>V : Symbol(V)
+
+    property: Foo<{ x: V }>; // error: could not find symbol V
+>property : Symbol(testClass3.property, Decl(errorsInGenericTypeReference.ts, 23, 35))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 24, 19))
+>V : Symbol(V)
+}
+
+
+// in function return type annotation
+function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+>testFunction1 : Symbol(testFunction1, Decl(errorsInGenericTypeReference.ts, 25, 1))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 29, 31))
+>V : Symbol(V)
+
+
+// in paramter types
+function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
+>testFunction2 : Symbol(testFunction2, Decl(errorsInGenericTypeReference.ts, 29, 56))
+>p : Symbol(p, Decl(errorsInGenericTypeReference.ts, 33, 23))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 33, 31))
+>V : Symbol(V)
+
+
+// in var type annotation
+var f: Foo<{ x: V }>; // error: could not find symbol V
+>f : Symbol(f, Decl(errorsInGenericTypeReference.ts, 37, 3))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 37, 12))
+>V : Symbol(V)
+
+
+// in constraints
+class testClass4<T extends { x: V }> { } // error: could not find symbol V
+>testClass4 : Symbol(testClass4, Decl(errorsInGenericTypeReference.ts, 37, 21))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 41, 17))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 41, 28))
+>V : Symbol(V)
+
+interface testClass5<T extends Foo<{ x: V }>> { } // error: could not find symbol V
+>testClass5 : Symbol(testClass5, Decl(errorsInGenericTypeReference.ts, 41, 40))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 43, 21))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 43, 36))
+>V : Symbol(V)
+
+class testClass6<T> {
+>testClass6 : Symbol(testClass6, Decl(errorsInGenericTypeReference.ts, 43, 49))
+>T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 45, 17))
+
+    method<M extends { x: V }>(): void { } // error: could not find symbol V
+>method : Symbol(testClass6.method, Decl(errorsInGenericTypeReference.ts, 45, 21))
+>M : Symbol(M, Decl(errorsInGenericTypeReference.ts, 46, 11))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 46, 22))
+>V : Symbol(V)
+}
+
+interface testInterface1 {
+>testInterface1 : Symbol(testInterface1, Decl(errorsInGenericTypeReference.ts, 47, 1))
+
+    new <M extends { x: V }>(a: M); // error: could not find symbol V
+>M : Symbol(M, Decl(errorsInGenericTypeReference.ts, 50, 9))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 50, 20))
+>V : Symbol(V)
+>a : Symbol(a, Decl(errorsInGenericTypeReference.ts, 50, 29))
+>M : Symbol(M, Decl(errorsInGenericTypeReference.ts, 50, 9))
+}
+
+
+// in extends clause
+class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
+>testClass7 : Symbol(testClass7, Decl(errorsInGenericTypeReference.ts, 51, 1))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 55, 30))
+>V : Symbol(V)
+
+
+// in implements clause
+class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
+>testClass8 : Symbol(testClass8, Decl(errorsInGenericTypeReference.ts, 55, 42))
+>IFoo : Symbol(IFoo, Decl(errorsInGenericTypeReference.ts, 0, 0))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 59, 34))
+>V : Symbol(V)
+
+
+// in signatures
+interface testInterface2 {
+>testInterface2 : Symbol(testInterface2, Decl(errorsInGenericTypeReference.ts, 59, 46))
+
+    new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+>a : Symbol(a, Decl(errorsInGenericTypeReference.ts, 64, 9))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 64, 17))
+>V : Symbol(V)
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 64, 33))
+>V : Symbol(V)
+
+    [x: string]: Foo<{ x: V }>; // error: could not find symbol V
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 65, 5))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 65, 22))
+>V : Symbol(V)
+
+    method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+>method : Symbol(testInterface2.method, Decl(errorsInGenericTypeReference.ts, 65, 31))
+>a : Symbol(a, Decl(errorsInGenericTypeReference.ts, 66, 11))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 66, 19))
+>V : Symbol(V)
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 66, 35))
+>V : Symbol(V)
+
+    property: Foo<{ x: V }>; // error: could not find symbol V
+>property : Symbol(testInterface2.property, Decl(errorsInGenericTypeReference.ts, 66, 44))
+>Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+>x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 67, 19))
+>V : Symbol(V)
+}
+
+

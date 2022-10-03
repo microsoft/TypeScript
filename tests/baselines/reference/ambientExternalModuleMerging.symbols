@@ -1,0 +1,32 @@
+=== tests/cases/conformance/ambient/ambientExternalModuleMerging_use.ts ===
+import M = require("M");
+>M : Symbol(M, Decl(ambientExternalModuleMerging_use.ts, 0, 0))
+
+// Should be strings
+var x = M.x;
+>x : Symbol(x, Decl(ambientExternalModuleMerging_use.ts, 2, 3))
+>M.x : Symbol(M.x, Decl(ambientExternalModuleMerging_declare.ts, 1, 14))
+>M : Symbol(M, Decl(ambientExternalModuleMerging_use.ts, 0, 0))
+>x : Symbol(M.x, Decl(ambientExternalModuleMerging_declare.ts, 1, 14))
+
+var y = M.y;
+>y : Symbol(y, Decl(ambientExternalModuleMerging_use.ts, 3, 3))
+>M.y : Symbol(M.y, Decl(ambientExternalModuleMerging_declare.ts, 6, 14))
+>M : Symbol(M, Decl(ambientExternalModuleMerging_use.ts, 0, 0))
+>y : Symbol(M.y, Decl(ambientExternalModuleMerging_declare.ts, 6, 14))
+
+=== tests/cases/conformance/ambient/ambientExternalModuleMerging_declare.ts ===
+declare module "M" {
+>"M" : Symbol("M", Decl(ambientExternalModuleMerging_declare.ts, 0, 0), Decl(ambientExternalModuleMerging_declare.ts, 2, 1))
+
+    export var x: string;
+>x : Symbol(x, Decl(ambientExternalModuleMerging_declare.ts, 1, 14))
+}
+
+// Merge
+declare module "M" {
+>"M" : Symbol("M", Decl(ambientExternalModuleMerging_declare.ts, 0, 0), Decl(ambientExternalModuleMerging_declare.ts, 2, 1))
+
+    export var y: string;
+>y : Symbol(y, Decl(ambientExternalModuleMerging_declare.ts, 6, 14))
+}

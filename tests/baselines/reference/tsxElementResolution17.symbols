@@ -1,0 +1,43 @@
+=== tests/cases/conformance/jsx/consumer.tsx ===
+///<reference path="file.tsx" />
+// Should keep s1 and elide s2
+import s1 = require('elements1');
+>s1 : Symbol(s1, Decl(consumer.tsx, 0, 0))
+
+import s2 = require('elements2');
+>s2 : Symbol(s2, Decl(consumer.tsx, 2, 33))
+
+<s1.MyElement />;
+>s1.MyElement : Symbol(s1.MyElement, Decl(file.tsx, 5, 28))
+>s1 : Symbol(s1, Decl(consumer.tsx, 0, 0))
+>MyElement : Symbol(s1.MyElement, Decl(file.tsx, 5, 28))
+
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements { }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+}
+
+declare module 'elements1' {
+>'elements1' : Symbol("elements1", Decl(file.tsx, 3, 1))
+
+	class MyElement {
+>MyElement : Symbol(MyElement, Decl(file.tsx, 5, 28))
+
+	}
+}
+
+declare module 'elements2' {
+>'elements2' : Symbol("elements2", Decl(file.tsx, 9, 1))
+
+	class MyElement {
+>MyElement : Symbol(MyElement, Decl(file.tsx, 11, 28))
+
+	}
+}
+

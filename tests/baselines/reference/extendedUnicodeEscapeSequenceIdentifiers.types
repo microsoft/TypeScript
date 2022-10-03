@@ -1,0 +1,18 @@
+=== tests/cases/compiler/extendedUnicodeEscapeSequenceIdentifiers.ts ===
+const \u{0061} = 12;
+>\u{0061} : 12
+>12 : 12
+
+const a\u{0061} = 12;
+>a\u{0061} : 12
+>12 : 12
+
+console.log(a + aa);
+>console.log(a + aa) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a + aa : number
+>a : 12
+>aa : 12
+

@@ -1,0 +1,121 @@
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(2,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(18,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(36,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(50,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(66,13): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(76,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(82,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/truthinessCallExpressionCoercion.ts (7 errors) ====
+    function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+        if (required) { // error
+            ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        if (optional) { // ok
+        }
+    
+        if (!!required) { // ok
+        }
+    
+        if (required()) { // ok
+        }
+    }
+    
+    function onlyErrorsWhenUnusedInBody() {
+        function test() { return Math.random() > 0.5; }
+    
+        if (test) { // error
+            ~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            console.log('test');
+        }
+        
+        if (test) { // ok
+            console.log(test);
+        }
+    
+        if (test) { // ok
+            test();
+        }
+        
+        if (test) { // ok
+            [() => null].forEach(() => {
+                test();
+            });
+        }
+        
+        if (test) { // error
+            ~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            [() => null].forEach(test => {
+                test();
+            });
+        }
+    }
+    
+    function checksPropertyAccess() {
+        const x = {
+            foo: {
+                bar() { return true; }
+            }
+        }
+    
+        if (x.foo.bar) { // error
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        if (x.foo.bar) { // ok
+            x.foo.bar;
+        }
+    }
+    
+    class Foo {
+        maybeIsUser?: () => boolean;
+    
+        isUser() {
+            return true;
+        }
+    
+        test() {
+            if (this.isUser) { // error
+                ~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            }
+    
+            if (this.maybeIsUser) { // ok
+            }
+        }
+    }
+    
+    // Test for GH-35557 where ids were not assigned for a symbol.
+    function A(stats: StatsBase<any>) {
+        if (stats.isDirectory) { // err
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            console.log(`[Directory] ${stats.ctime}`)
+        }
+    }
+    
+    function B(a: Nested, b: Nested) {
+        if (a.stats.isDirectory) { // err
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            b.stats.isDirectory(); 
+        }
+        if (a.stats.isDirectory) { // ok
+            a.stats.isDirectory();
+        }
+    } 
+    
+    interface StatsBase<T> {
+        isDirectory(): boolean;
+        ctime: number;
+    }
+    
+    interface Nested {
+        stats: StatsBase<any>;
+    }

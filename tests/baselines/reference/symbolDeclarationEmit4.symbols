@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit4.ts ===
+class C {
+>C : Symbol(C, Decl(symbolDeclarationEmit4.ts, 0, 0))
+
+    get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit4.ts, 0, 9), Decl(symbolDeclarationEmit4.ts, 1, 45))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    set [Symbol.toPrimitive](x) { }
+>[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit4.ts, 0, 9), Decl(symbolDeclarationEmit4.ts, 1, 45))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(symbolDeclarationEmit4.ts, 2, 29))
+}

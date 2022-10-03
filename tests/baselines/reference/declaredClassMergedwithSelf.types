@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/classDeclarations/file1.ts ===
+declare class C1 {}
+>C1 : C1
+
+declare class C1 {}
+>C1 : C1
+
+declare class C2 {}
+>C2 : C2
+
+interface C2 {}
+
+declare class C2 {}
+>C2 : C2
+
+=== tests/cases/conformance/classes/classDeclarations/file2.ts ===
+declare class C3 { }
+>C3 : C3
+
+=== tests/cases/conformance/classes/classDeclarations/file3.ts ===
+declare class C3 { }
+>C3 : C3
+

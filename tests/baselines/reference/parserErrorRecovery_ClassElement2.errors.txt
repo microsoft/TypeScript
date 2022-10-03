@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement2.ts(4,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement2.ts (1 errors) ====
+    module M {
+      class C {
+    
+      enum E {
+      ~~~~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+      }
+    }

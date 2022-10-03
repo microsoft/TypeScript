@@ -1,0 +1,48 @@
+=== tests/cases/compiler/foo.d.ts ===
+declare module "foo" {
+>"foo" : Symbol("foo", Decl(foo.d.ts, 0, 0), Decl(foo-ext.d.ts, 0, 0))
+
+    export class Foo {
+>Foo : Symbol(Foo, Decl(foo.d.ts, 0, 22), Decl(foo-ext.d.ts, 0, 22))
+
+        constructor();
+        method1(): any;
+>method1 : Symbol(Foo.method1, Decl(foo.d.ts, 2, 22))
+    }
+}
+
+=== tests/cases/compiler/foo-ext.d.ts ===
+declare module "foo" {
+>"foo" : Symbol("foo", Decl(foo.d.ts, 0, 0), Decl(foo-ext.d.ts, 0, 0))
+
+    export interface Foo {
+>Foo : Symbol(Foo, Decl(foo.d.ts, 0, 22), Decl(foo-ext.d.ts, 0, 22))
+
+        method2(): any;
+>method2 : Symbol(Foo.method2, Decl(foo-ext.d.ts, 1, 26))
+    }
+}
+
+=== tests/cases/compiler/index.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+
+class Test {
+>Test : Symbol(Test, Decl(index.ts, 0, 27))
+
+    bar: foo.Foo;
+>bar : Symbol(Test.bar, Decl(index.ts, 2, 12))
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+>Foo : Symbol(foo.Foo, Decl(foo.d.ts, 0, 22), Decl(foo-ext.d.ts, 0, 22))
+
+    constructor() {
+        this.bar = new foo.Foo();
+>this.bar : Symbol(Test.bar, Decl(index.ts, 2, 12))
+>this : Symbol(Test, Decl(index.ts, 0, 27))
+>bar : Symbol(Test.bar, Decl(index.ts, 2, 12))
+>foo.Foo : Symbol(foo.Foo, Decl(foo.d.ts, 0, 22), Decl(foo-ext.d.ts, 0, 22))
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+>Foo : Symbol(foo.Foo, Decl(foo.d.ts, 0, 22), Decl(foo-ext.d.ts, 0, 22))
+    }
+}
+

@@ -1,0 +1,86 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterUsedAsConstraint.ts ===
+class C<T, U extends T> { }
+>C : C<T, U>
+
+class C2<T extends U, U> { }
+>C2 : C2<T, U>
+
+class C3<T extends Date, U extends T> { }
+>C3 : C3<T, U>
+
+class C4<T extends U, U extends Date> { }
+>C4 : C4<T, U>
+
+class C5<T extends U, U extends V, V> { }
+>C5 : C5<T, U, V>
+
+class C6<T, U extends T, V extends U> { }
+>C6 : C6<T, U, V>
+
+interface I<T, U extends T> { }
+interface I2<T extends U, U> { }
+interface I3<T extends Date, U extends T> { }
+interface I4<T extends U, U extends Date> { }
+interface I5<T extends U, U extends V, V> { }
+interface I6<T, U extends T, V extends U> { }
+
+function f<T, U extends T>() { }
+>f : <T, U extends T>() => void
+
+function f2<T extends U, U>() { }
+>f2 : <T extends U, U>() => void
+
+function f3<T extends Date, U extends T>() { }
+>f3 : <T extends Date, U extends T>() => void
+
+function f4<T extends U, U extends Date>() { }
+>f4 : <T extends U, U extends Date>() => void
+
+function f5<T extends U, U extends V, V>() { }
+>f5 : <T extends U, U extends V, V>() => void
+
+function f6<T, U extends T, V extends U>() { }
+>f6 : <T, U extends T, V extends U>() => void
+
+var e = <T, U extends T>() => { }
+>e : <T, U extends T>() => void
+><T, U extends T>() => { } : <T, U extends T>() => void
+
+var e2 = <T extends U, U>() => { }
+>e2 : <T extends U, U>() => void
+><T extends U, U>() => { } : <T extends U, U>() => void
+
+var e3 = <T extends Date, U extends T>() => { }
+>e3 : <T extends Date, U extends T>() => void
+><T extends Date, U extends T>() => { } : <T extends Date, U extends T>() => void
+
+var e4 = <T extends U, U extends Date>() => { }
+>e4 : <T extends U, U extends Date>() => void
+><T extends U, U extends Date>() => { } : <T extends U, U extends Date>() => void
+
+var e5 = <T extends U, U extends V, V>() => { }
+>e5 : <T extends U, U extends V, V>() => void
+><T extends U, U extends V, V>() => { } : <T extends U, U extends V, V>() => void
+
+var e6 = <T, U extends T, V extends U>() => { }
+>e6 : <T, U extends T, V extends U>() => void
+><T, U extends T, V extends U>() => { } : <T, U extends T, V extends U>() => void
+
+var a: { <T, U extends T>(): void }
+>a : <T, U extends T>() => void
+
+var a2: { <T extends U, U>(): void }
+>a2 : <T extends U, U>() => void
+
+var a3: { <T extends Date, U extends T>(): void }
+>a3 : <T extends Date, U extends T>() => void
+
+var a4: { <T extends U, U extends Date>(): void }
+>a4 : <T extends U, U extends Date>() => void
+
+var a5: { <T extends U, U extends V, V>(): void }
+>a5 : <T extends U, U extends V, V>() => void
+
+var a6: { <T, U extends T, V extends U>(): void }
+>a6 : <T, U extends T, V extends U>() => void
+

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/interfaceContextualType.ts ===
+export interface IOptions {
+>IOptions : Symbol(IOptions, Decl(interfaceContextualType.ts, 0, 0))
+
+    italic?: boolean;
+>italic : Symbol(IOptions.italic, Decl(interfaceContextualType.ts, 0, 27))
+
+    bold?: boolean;
+>bold : Symbol(IOptions.bold, Decl(interfaceContextualType.ts, 1, 21))
+}
+export interface IMap {
+>IMap : Symbol(IMap, Decl(interfaceContextualType.ts, 3, 1))
+
+    [s: string]: IOptions;
+>s : Symbol(s, Decl(interfaceContextualType.ts, 5, 5))
+>IOptions : Symbol(IOptions, Decl(interfaceContextualType.ts, 0, 0))
+}
+
+class Bug {
+>Bug : Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
+
+    public values: IMap;
+>values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+>IMap : Symbol(IMap, Decl(interfaceContextualType.ts, 3, 1))
+
+    ok() {
+>ok : Symbol(Bug.ok, Decl(interfaceContextualType.ts, 9, 24))
+
+        this.values = {};
+>this.values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+>this : Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
+>values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+
+        this.values['comments'] = { italic: true };
+>this.values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+>this : Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
+>values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+>italic : Symbol(italic, Decl(interfaceContextualType.ts, 12, 35))
+    }
+    shouldBeOK() {
+>shouldBeOK : Symbol(Bug.shouldBeOK, Decl(interfaceContextualType.ts, 13, 5))
+
+        this.values = {
+>this.values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+>this : Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
+>values : Symbol(Bug.values, Decl(interfaceContextualType.ts, 8, 11))
+
+            comments: { italic: true }
+>comments : Symbol(comments, Decl(interfaceContextualType.ts, 15, 23))
+>italic : Symbol(italic, Decl(interfaceContextualType.ts, 16, 23))
+
+        };
+    }
+}
+

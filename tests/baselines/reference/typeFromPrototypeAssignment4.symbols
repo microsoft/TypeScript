@@ -1,0 +1,66 @@
+=== tests/cases/conformance/salsa/a.js ===
+function Multimap4() {
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+
+  this._map = {};
+>this._map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
+>this : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>_map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
+
+};
+
+Multimap4["prototype"] = {
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
+
+  /**
+   * @param {string} key
+   * @returns {number} the value ok
+   */
+  get(key) {
+>get : Symbol(get, Decl(a.js, 4, 26))
+>key : Symbol(key, Decl(a.js, 9, 6))
+
+    return this._map[key + ''];
+>this._map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
+>this : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>_map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
+>key : Symbol(key, Decl(a.js, 9, 6))
+  }
+};
+
+Multimap4["prototype"]["add-on"] = function() {};
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
+
+Multimap4["prototype"]["addon"] = function() {};
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
+
+Multimap4["prototype"]["__underscores__"] = function() {};
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+>"prototype" : Symbol(Multimap4["prototype"], Decl(a.js, 2, 2))
+
+const map4 = new Multimap4();
+>map4 : Symbol(map4, Decl(a.js, 18, 5))
+>Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
+
+map4.get("");
+>map4.get : Symbol(get, Decl(a.js, 4, 26))
+>map4 : Symbol(map4, Decl(a.js, 18, 5))
+>get : Symbol(get, Decl(a.js, 4, 26))
+
+map4["add-on"]();
+>map4 : Symbol(map4, Decl(a.js, 18, 5))
+>"add-on" : Symbol(Multimap4["add-on"], Decl(a.js, 12, 2))
+
+map4.addon();
+>map4.addon : Symbol(Multimap4["addon"], Decl(a.js, 14, 49))
+>map4 : Symbol(map4, Decl(a.js, 18, 5))
+>addon : Symbol(Multimap4["addon"], Decl(a.js, 14, 49))
+
+map4.__underscores__();
+>map4.__underscores__ : Symbol(Multimap4["__underscores__"], Decl(a.js, 15, 48))
+>map4 : Symbol(map4, Decl(a.js, 18, 5))
+>__underscores__ : Symbol(Multimap4["__underscores__"], Decl(a.js, 15, 48))
+

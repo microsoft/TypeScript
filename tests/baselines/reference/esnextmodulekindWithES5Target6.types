@@ -1,0 +1,18 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target6.ts ===
+export function f1(d = 0) {
+>f1 : (d?: number) => void
+>d : number
+>0 : 0
+}
+
+export function f2(...arg) {
+>f2 : (...arg: any[]) => void
+>arg : any[]
+}
+
+export default function f3(d = 0) {
+>f3 : (d?: number) => void
+>d : number
+>0 : 0
+}
+

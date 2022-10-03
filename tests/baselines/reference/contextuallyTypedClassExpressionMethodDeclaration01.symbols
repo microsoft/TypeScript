@@ -1,0 +1,102 @@
+=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts ===
+interface A {
+>A : Symbol(A, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 0))
+
+    numProp: number;
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 13))
+}
+
+interface B  {
+>B : Symbol(B, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 2, 1))
+
+    strProp: string;
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 4, 14))
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
+
+    method1(arg: A): void;
+>method1 : Symbol(Foo.method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 8, 15))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 9, 12))
+>A : Symbol(A, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 0))
+
+    method2(arg: B): void;
+>method2 : Symbol(Foo.method2, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 9, 26))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 10, 12))
+>B : Symbol(B, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 2, 1))
+}
+
+function getFoo1(): Foo {
+>getFoo1 : Symbol(getFoo1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 11, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
+
+    return class {
+        static method1(arg) {
+>method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 14, 18))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 15, 23))
+
+            arg.numProp = 10;
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 15, 23))
+        }
+        static method2(arg) {
+>method2 : Symbol((Anonymous class).method2, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 17, 9))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 18, 23))
+
+            arg.strProp = "hello";
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 18, 23))
+        }
+    }
+}
+
+function getFoo2(): Foo {
+>getFoo2 : Symbol(getFoo2, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 22, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
+
+    return class {
+        static method1 = (arg) => {
+>method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 25, 18))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 26, 26))
+
+            arg.numProp = 10;
+>arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 26, 26))
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 13))
+        }
+        static method2 = (arg) => {
+>method2 : Symbol((Anonymous class).method2, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 28, 9))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 29, 26))
+
+            arg.strProp = "hello";
+>arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 4, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 29, 26))
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 4, 14))
+        }
+    }
+}
+
+function getFoo3(): Foo {
+>getFoo3 : Symbol(getFoo3, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 33, 1))
+>Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
+
+    return class {
+        static method1 = function (arg) {
+>method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 36, 18))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 37, 35))
+
+            arg.numProp = 10;
+>arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 13))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 37, 35))
+>numProp : Symbol(A.numProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 0, 13))
+        }
+        static method2 = function (arg) {
+>method2 : Symbol((Anonymous class).method2, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 39, 9))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 40, 35))
+
+            arg.strProp = "hello";
+>arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 4, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 40, 35))
+>strProp : Symbol(B.strProp, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 4, 14))
+        }
+    }
+}

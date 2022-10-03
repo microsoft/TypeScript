@@ -1,0 +1,46 @@
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2741: Property 'prop' is missing in type 'C' but required in type 'A'.
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,5): error TS2741: Property 'prop' is missing in type 'typeof B' but required in type 'A'.
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(16,5): error TS2741: Property 'prop' is missing in type 'C' but required in type 'B'.
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(17,5): error TS2741: Property 'prop' is missing in type 'typeof B' but required in type 'B'.
+
+
+==== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts (4 errors) ====
+    interface A {
+        prop();
+    }
+    class B {
+        public prop() { }
+    }
+    class C {
+        public static prop() { }
+    }
+    
+    var a: A = new B();
+    a = new C(); // error prop is missing
+    ~
+!!! error TS2741: Property 'prop' is missing in type 'C' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:2:5: 'prop' is declared here.
+    a = B; // error prop is missing
+        ~
+!!! error TS2741: Property 'prop' is missing in type 'typeof B' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:2:5: 'prop' is declared here.
+!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:13:5: Did you mean to use 'new' with this expression?
+    a = C;
+    
+    var b: B = new C(); // error prop is missing
+        ~
+!!! error TS2741: Property 'prop' is missing in type 'C' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:5:12: 'prop' is declared here.
+    b = B; // error prop is missing
+        ~
+!!! error TS2741: Property 'prop' is missing in type 'typeof B' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:5:12: 'prop' is declared here.
+!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:17:5: Did you mean to use 'new' with this expression?
+    b = C;
+    b = a;
+    
+    var c: C = new B();
+    c = B;
+    c = C;
+    c = a;
+    

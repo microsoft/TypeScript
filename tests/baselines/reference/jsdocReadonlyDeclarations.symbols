@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.js ===
+class C {
+>C : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
+
+    /** @readonly */
+    x = 6
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+
+    /** @readonly */
+    constructor(n) {
+>n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
+
+        this.x = n
+>this.x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>this : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
+
+        /**
+         * @readonly
+         * @type {number}
+         */
+        this.y = n
+>this.y : Symbol(C.y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
+>this : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
+>y : Symbol(C.y, Decl(jsdocReadonlyDeclarations.js, 5, 18))
+>n : Symbol(n, Decl(jsdocReadonlyDeclarations.js, 4, 16))
+    }
+}
+new C().x
+>new C().x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+>C : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
+>x : Symbol(C.x, Decl(jsdocReadonlyDeclarations.js, 0, 9))
+
+function F() {
+>F : Symbol(F, Decl(jsdocReadonlyDeclarations.js, 13, 9))
+
+    /** @readonly */
+    this.z = 1
+>this.z : Symbol(F.z, Decl(jsdocReadonlyDeclarations.js, 15, 14))
+>this : Symbol(F, Decl(jsdocReadonlyDeclarations.js, 13, 9))
+>z : Symbol(F.z, Decl(jsdocReadonlyDeclarations.js, 15, 14))
+}
+
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+>D : Symbol(D, Decl(jsdocReadonlyDeclarations.js, 18, 1))
+
+    constructor(/** @readonly */ x) {}
+>x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 22, 16))
+}

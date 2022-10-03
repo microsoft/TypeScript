@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/enumTagOnExports.js ===
+/** @enum {string} */
+module.exports = {};
+>module.exports = {} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{} : {}
+

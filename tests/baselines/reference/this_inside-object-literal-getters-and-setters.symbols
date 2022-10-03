@@ -1,0 +1,32 @@
+=== tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts ===
+module ObjectLiteral {
+>ObjectLiteral : Symbol(ObjectLiteral, Decl(this_inside-object-literal-getters-and-setters.ts, 0, 0))
+
+    var ThisInObjectLiteral = {
+>ThisInObjectLiteral : Symbol(ThisInObjectLiteral, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 7))
+
+        _foo: '1',
+>_foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
+
+        get foo(): string {
+>foo : Symbol(foo, Decl(this_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(this_inside-object-literal-getters-and-setters.ts, 5, 10))
+
+            return this._foo;
+        },
+        set foo(value: string) {
+>foo : Symbol(foo, Decl(this_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(this_inside-object-literal-getters-and-setters.ts, 5, 10))
+>value : Symbol(value, Decl(this_inside-object-literal-getters-and-setters.ts, 6, 16))
+
+            this._foo = value;
+>value : Symbol(value, Decl(this_inside-object-literal-getters-and-setters.ts, 6, 16))
+
+        },
+        test: function () {
+>test : Symbol(test, Decl(this_inside-object-literal-getters-and-setters.ts, 8, 10))
+
+            return this._foo;
+        }
+    }
+}
+
+

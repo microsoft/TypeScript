@@ -1,0 +1,33 @@
+tests/cases/conformance/externalModules/b.ts(6,1): error TS2632: Cannot assign to 'x' because it is an import.
+tests/cases/conformance/externalModules/b.ts(7,1): error TS2632: Cannot assign to 'y' because it is an import.
+tests/cases/conformance/externalModules/b.ts(8,4): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/conformance/externalModules/b.ts(9,4): error TS2540: Cannot assign to 'y' because it is a read-only property.
+
+
+==== tests/cases/conformance/externalModules/b.ts (4 errors) ====
+    import { x, y } from "./a";
+    import * as a1 from "./a";
+    import a2 = require("./a");
+    const a3 = a1;
+    
+    x = 1;     // Error
+    ~
+!!! error TS2632: Cannot assign to 'x' because it is an import.
+    y = 1;     // Error
+    ~
+!!! error TS2632: Cannot assign to 'y' because it is an import.
+    a1.x = 1;  // Error
+       ~
+!!! error TS2540: Cannot assign to 'x' because it is a read-only property.
+    a1.y = 1;  // Error
+       ~
+!!! error TS2540: Cannot assign to 'y' because it is a read-only property.
+    a2.x = 1;
+    a2.y = 1;
+    a3.x = 1;
+    a3.y = 1;
+==== tests/cases/conformance/externalModules/a.ts (0 errors) ====
+    export var x = 1;
+    var y = 1;
+    export { y };
+    

@@ -1,0 +1,26 @@
+=== tests/cases/compiler/arrayConcatMap.ts ===
+var x = [].concat([{ a: 1 }], [{ a: 2 }])
+>x : any[]
+>[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]
+>[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>[].concat([{ a: 1 }], [{ a: 2 }]) : any[]
+>[].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>[] : undefined[]
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>[{ a: 1 }] : { a: number; }[]
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>[{ a: 2 }] : { a: number; }[]
+>{ a: 2 } : { a: number; }
+>a : number
+>2 : 2
+
+          .map(b => b.a);
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>b => b.a : (b: any) => any
+>b : any
+>b.a : any
+>b : any
+>a : any
+

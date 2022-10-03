@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of24.ts ===
+var x: any;
+>x : any
+
+for (var v of x) { }
+>v : any
+>x : any
+

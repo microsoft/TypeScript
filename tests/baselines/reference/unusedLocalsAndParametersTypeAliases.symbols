@@ -1,0 +1,58 @@
+=== tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts ===
+// used in a declaration
+type handler1 = () => void;
+>handler1 : Symbol(handler1, Decl(unusedLocalsAndParametersTypeAliases.ts, 0, 0))
+
+export interface I1 {
+>I1 : Symbol(I1, Decl(unusedLocalsAndParametersTypeAliases.ts, 1, 27))
+
+    getHandler: handler1;
+>getHandler : Symbol(I1.getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 2, 21))
+>handler1 : Symbol(handler1, Decl(unusedLocalsAndParametersTypeAliases.ts, 0, 0))
+}
+
+// exported
+export type handler2 = () => void;
+>handler2 : Symbol(handler2, Decl(unusedLocalsAndParametersTypeAliases.ts, 4, 1))
+
+// used in extends clause
+type handler3 = () => void;
+>handler3 : Symbol(handler3, Decl(unusedLocalsAndParametersTypeAliases.ts, 7, 34))
+
+export interface I3<T extends handler3> {
+>I3 : Symbol(I3, Decl(unusedLocalsAndParametersTypeAliases.ts, 10, 27))
+>T : Symbol(T, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 20))
+>handler3 : Symbol(handler3, Decl(unusedLocalsAndParametersTypeAliases.ts, 7, 34))
+
+    getHandler: T;
+>getHandler : Symbol(I3.getHandler, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 41))
+>T : Symbol(T, Decl(unusedLocalsAndParametersTypeAliases.ts, 11, 20))
+}
+
+// used in another type alias declaration
+type handler4 = () => void;
+>handler4 : Symbol(handler4, Decl(unusedLocalsAndParametersTypeAliases.ts, 13, 1))
+
+type handler5 = handler4 | (()=>number);
+>handler5 : Symbol(handler5, Decl(unusedLocalsAndParametersTypeAliases.ts, 16, 27))
+>handler4 : Symbol(handler4, Decl(unusedLocalsAndParametersTypeAliases.ts, 13, 1))
+
+var x: handler5;
+>x : Symbol(x, Decl(unusedLocalsAndParametersTypeAliases.ts, 18, 3))
+>handler5 : Symbol(handler5, Decl(unusedLocalsAndParametersTypeAliases.ts, 16, 27))
+
+x();
+>x : Symbol(x, Decl(unusedLocalsAndParametersTypeAliases.ts, 18, 3))
+
+// used as type argument
+type handler6 = () => void;
+>handler6 : Symbol(handler6, Decl(unusedLocalsAndParametersTypeAliases.ts, 19, 4))
+
+var y: Array<handler6>;
+>y : Symbol(y, Decl(unusedLocalsAndParametersTypeAliases.ts, 23, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>handler6 : Symbol(handler6, Decl(unusedLocalsAndParametersTypeAliases.ts, 19, 4))
+
+y[0]();
+>y : Symbol(y, Decl(unusedLocalsAndParametersTypeAliases.ts, 23, 3))
+    

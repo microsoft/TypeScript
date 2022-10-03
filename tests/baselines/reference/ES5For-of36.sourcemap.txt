@@ -1,0 +1,177 @@
+===================================================================
+JsFile: ES5For-of36.js
+mapUrl: ES5For-of36.js.map
+sourceRoot: 
+sources: ES5For-of36.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of36.js
+sourceFile:ES5For-of36.ts
+-------------------------------------------------------------------
+>>>var __values = (this && this.__values) || function(o) {
+>>>    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+>>>    if (m) return m.call(o);
+>>>    if (o && typeof o.length === "number") return {
+>>>        next: function () {
+>>>            if (o && i >= o.length) o = void 0;
+>>>            return { value: o && o[i++], done: !o };
+>>>        }
+>>>    };
+>>>    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+>>>};
+>>>var __read = (this && this.__read) || function (o, n) {
+>>>    var m = typeof Symbol === "function" && o[Symbol.iterator];
+>>>    if (!m) return o;
+>>>    var i = m.call(o), r, ar = [], e;
+>>>    try {
+>>>        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+>>>    }
+>>>    catch (error) { e = { error: error }; }
+>>>    finally {
+>>>        try {
+>>>            if (r && !r.done && (m = i["return"])) m.call(i);
+>>>        }
+>>>        finally { if (e) throw e.error; }
+>>>    }
+>>>    return ar;
+>>>};
+>>>var e_1, _a;
+>>>try {
+>>>    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {
+1 >^^^^
+2 >    ^^^^^
+3 >         ^^^^
+4 >             ^^^^^
+5 >                  ^^^^^^^^^
+6 >                           ^
+7 >                            ^
+8 >                             ^^
+9 >                               ^
+10>                                ^
+11>                                 ^
+12>                                  ^^^^^^^^^^^^^^^^
+13>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    for (let [a = 0, b = 1] of 
+3 >         
+4 >             
+5 >                  
+6 >                           [
+7 >                            2
+8 >                             , 
+9 >                               3
+10>                                ]
+11>                                 
+12>                                  
+13>                                                  ) 
+1 >Emitted(30, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(30, 10) Source(1, 28) + SourceIndex(0)
+3 >Emitted(30, 14) Source(1, 28) + SourceIndex(0)
+4 >Emitted(30, 19) Source(1, 28) + SourceIndex(0)
+5 >Emitted(30, 28) Source(1, 28) + SourceIndex(0)
+6 >Emitted(30, 29) Source(1, 29) + SourceIndex(0)
+7 >Emitted(30, 30) Source(1, 30) + SourceIndex(0)
+8 >Emitted(30, 32) Source(1, 32) + SourceIndex(0)
+9 >Emitted(30, 33) Source(1, 33) + SourceIndex(0)
+10>Emitted(30, 34) Source(1, 34) + SourceIndex(0)
+11>Emitted(30, 35) Source(1, 34) + SourceIndex(0)
+12>Emitted(30, 51) Source(1, 34) + SourceIndex(0)
+13>Emitted(30, 79) Source(1, 36) + SourceIndex(0)
+---
+>>>        var _d = __read(_c.value, 2), _e = _d[0], a = _e === void 0 ? 0 : _e, _f = _d[1], b = _f === void 0 ? 1 : _f;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^^
+4 >                 ^^^^^^^^^^^^^^^^^^^
+5 >                                    ^^
+6 >                                      ^^^^^^^^^^
+7 >                                                ^^
+8 >                                                  ^
+9 >                                                   ^^^^^^^^^^^^^^^^^^^
+10>                                                                      ^
+11>                                                                       ^^^^^
+12>                                                                            ^^
+13>                                                                              ^^^^^^^^^^
+14>                                                                                        ^^
+15>                                                                                          ^
+16>                                                                                           ^^^^^^^^^^^^^^^^^^^
+17>                                                                                                              ^
+18>                                                                                                               ^^^^^
+1->
+2 >        
+3 >            
+4 >                 [a = 0, b = 1]
+5 >                                    
+6 >                                      a = 0
+7 >                                                
+8 >                                                  a
+9 >                                                    = 
+10>                                                                      0
+11>                                                                       
+12>                                                                            , 
+13>                                                                              b = 1
+14>                                                                                        
+15>                                                                                          b
+16>                                                                                            = 
+17>                                                                                                              1
+18>                                                                                                               
+1->Emitted(31, 9) Source(1, 10) + SourceIndex(0)
+2 >Emitted(31, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(31, 18) Source(1, 10) + SourceIndex(0)
+4 >Emitted(31, 37) Source(1, 24) + SourceIndex(0)
+5 >Emitted(31, 39) Source(1, 11) + SourceIndex(0)
+6 >Emitted(31, 49) Source(1, 16) + SourceIndex(0)
+7 >Emitted(31, 51) Source(1, 11) + SourceIndex(0)
+8 >Emitted(31, 52) Source(1, 12) + SourceIndex(0)
+9 >Emitted(31, 71) Source(1, 15) + SourceIndex(0)
+10>Emitted(31, 72) Source(1, 16) + SourceIndex(0)
+11>Emitted(31, 77) Source(1, 16) + SourceIndex(0)
+12>Emitted(31, 79) Source(1, 18) + SourceIndex(0)
+13>Emitted(31, 89) Source(1, 23) + SourceIndex(0)
+14>Emitted(31, 91) Source(1, 18) + SourceIndex(0)
+15>Emitted(31, 92) Source(1, 19) + SourceIndex(0)
+16>Emitted(31, 111) Source(1, 22) + SourceIndex(0)
+17>Emitted(31, 112) Source(1, 23) + SourceIndex(0)
+18>Emitted(31, 117) Source(1, 23) + SourceIndex(0)
+---
+>>>        a;
+1 >^^^^^^^^
+2 >        ^
+3 >         ^
+4 >          ^->
+1 >] of [2, 3]) {
+  >    
+2 >        a
+3 >         ;
+1 >Emitted(32, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(32, 10) Source(2, 6) + SourceIndex(0)
+3 >Emitted(32, 11) Source(2, 7) + SourceIndex(0)
+---
+>>>        b;
+1->^^^^^^^^
+2 >        ^
+3 >         ^
+1->
+  >    
+2 >        b
+3 >         ;
+1->Emitted(33, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(33, 10) Source(3, 6) + SourceIndex(0)
+3 >Emitted(33, 11) Source(3, 7) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^^
+1 >
+  >}
+1 >Emitted(34, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>}
+>>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
+>>>finally {
+>>>    try {
+>>>        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+>>>    }
+>>>    finally { if (e_1) throw e_1.error; }
+>>>}
+>>>//# sourceMappingURL=ES5For-of36.js.map

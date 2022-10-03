@@ -1,0 +1,6 @@
+=== tests/cases/compiler/duplicateConstructSignature.ts ===
+interface I {
+No type information for this code.    (): number;
+No type information for this code.    (): string;
+No type information for this code.}
+No type information for this code.

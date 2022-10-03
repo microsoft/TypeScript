@@ -1,0 +1,41 @@
+=== tests/cases/compiler/typeParameterExtendingUnion1.ts ===
+class Animal { run() { } }
+>Animal : Animal
+>run : () => void
+
+class Cat extends Animal { meow }
+>Cat : Cat
+>Animal : Animal
+>meow : any
+
+class Dog extends Animal { woof }
+>Dog : Dog
+>Animal : Animal
+>woof : any
+
+function run(a: Animal) {
+>run : (a: Animal) => void
+>a : Animal
+
+    a.run();
+>a.run() : void
+>a.run : () => void
+>a : Animal
+>run : () => void
+}
+
+function f<T extends Cat | Dog>(a: T) {
+>f : <T extends Cat | Dog>(a: T) => void
+>a : T
+
+    a.run();
+>a.run() : void
+>a.run : (() => void) | (() => void)
+>a : Cat | Dog
+>run : (() => void) | (() => void)
+
+    run(a);
+>run(a) : void
+>run : (a: Animal) => void
+>a : Cat | Dog
+}

@@ -1,0 +1,96 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts ===
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is the type Any, or
+var [[a0], [[a1]]] = []         // Error
+>a0 : any
+>a1 : any
+>[] : []
+
+var [[a2], [[a3]]] = undefined  // Error
+>a2 : any
+>a3 : any
+>undefined : undefined
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
+//        where N is the numeric index of E in the array assignment pattern, or
+var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
+>b0 : number
+>b1 : boolean
+>b2 : string
+>[1, 2, "string"] : [number, number, string]
+>1 : 1
+>2 : 2
+>"string" : "string"
+
+interface J extends Array<Number> {
+    2: number;
+>2 : number
+}
+
+function bar(): J {
+>bar : () => J
+
+    return <[number, number, number]>[1, 2, 3];
+><[number, number, number]>[1, 2, 3] : [number, number, number]
+>[1, 2, 3] : [number, number, number]
+>1 : 1
+>2 : 2
+>3 : 3
+}
+var [b3 = "string", b4, b5] = bar();  // Error
+>b3 : string | Number
+>"string" : "string"
+>b4 : Number
+>b5 : number
+>bar() : J
+>bar : () => J
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
+var temp = [1, 2, 3]
+>temp : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+var [c0, c1]: [number, number] = [...temp];  // Error
+>c0 : number
+>c1 : number
+>[...temp] : number[]
+>...temp : number
+>temp : number[]
+
+var [c2, c3]: [string, string] = [...temp];  // Error
+>c2 : string
+>c3 : string
+>[...temp] : number[]
+>...temp : number
+>temp : number[]
+
+interface F {
+    [idx: number]: boolean
+>idx : number
+}
+
+function foo(idx: number): F {
+>foo : (idx: number) => F
+>idx : number
+
+    return {
+>{        2: true    } : { 2: true; }
+
+        2: true
+>2 : true
+>true : true
+    }
+}
+var [c4, c5, c6] = foo(1);  // Error
+>c4 : any
+>c5 : any
+>c6 : any
+>foo(1) : F
+>foo : (idx: number) => F
+>1 : 1
+

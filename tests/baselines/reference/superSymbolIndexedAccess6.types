@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess6.ts ===
+var symbol: any;
+>symbol : any
+
+class Foo {
+>Foo : Foo
+
+    static [symbol]() {
+>[symbol] : () => number
+>symbol : any
+
+        return 0;
+>0 : 0
+    }
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    static [symbol]() {
+>[symbol] : () => any
+>symbol : any
+
+        return super[symbol]();
+>super[symbol]() : error
+>super[symbol] : error
+>super : typeof Foo
+>symbol : any
+    }
+}

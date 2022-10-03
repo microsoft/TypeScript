@@ -1,0 +1,45 @@
+=== tests/cases/compiler/typeParameterDiamond1.ts ===
+function diamondTop<Top>() {
+>diamondTop : Symbol(diamondTop, Decl(typeParameterDiamond1.ts, 0, 0))
+>Top : Symbol(Top, Decl(typeParameterDiamond1.ts, 0, 20))
+
+    function diamondMiddle<T extends Top, U extends Top>() {
+>diamondMiddle : Symbol(diamondMiddle, Decl(typeParameterDiamond1.ts, 0, 28))
+>T : Symbol(T, Decl(typeParameterDiamond1.ts, 1, 27))
+>Top : Symbol(Top, Decl(typeParameterDiamond1.ts, 0, 20))
+>U : Symbol(U, Decl(typeParameterDiamond1.ts, 1, 41))
+>Top : Symbol(Top, Decl(typeParameterDiamond1.ts, 0, 20))
+
+        function diamondBottom<Bottom extends T | U>() {
+>diamondBottom : Symbol(diamondBottom, Decl(typeParameterDiamond1.ts, 1, 60))
+>Bottom : Symbol(Bottom, Decl(typeParameterDiamond1.ts, 2, 31))
+>T : Symbol(T, Decl(typeParameterDiamond1.ts, 1, 27))
+>U : Symbol(U, Decl(typeParameterDiamond1.ts, 1, 41))
+
+            var top: Top;
+>top : Symbol(top, Decl(typeParameterDiamond1.ts, 3, 15))
+>Top : Symbol(Top, Decl(typeParameterDiamond1.ts, 0, 20))
+
+            var middle: T | U;
+>middle : Symbol(middle, Decl(typeParameterDiamond1.ts, 4, 15))
+>T : Symbol(T, Decl(typeParameterDiamond1.ts, 1, 27))
+>U : Symbol(U, Decl(typeParameterDiamond1.ts, 1, 41))
+
+            var bottom: Bottom;
+>bottom : Symbol(bottom, Decl(typeParameterDiamond1.ts, 5, 15))
+>Bottom : Symbol(Bottom, Decl(typeParameterDiamond1.ts, 2, 31))
+
+            top = middle;
+>top : Symbol(top, Decl(typeParameterDiamond1.ts, 3, 15))
+>middle : Symbol(middle, Decl(typeParameterDiamond1.ts, 4, 15))
+
+            middle = bottom;
+>middle : Symbol(middle, Decl(typeParameterDiamond1.ts, 4, 15))
+>bottom : Symbol(bottom, Decl(typeParameterDiamond1.ts, 5, 15))
+
+            top = bottom;
+>top : Symbol(top, Decl(typeParameterDiamond1.ts, 3, 15))
+>bottom : Symbol(bottom, Decl(typeParameterDiamond1.ts, 5, 15))
+        }
+    }
+}

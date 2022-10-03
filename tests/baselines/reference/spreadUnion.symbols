@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/spread/spreadUnion.ts ===
+var union: { a: number } | { b: string };
+>union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
+>a : Symbol(a, Decl(spreadUnion.ts, 0, 12))
+>b : Symbol(b, Decl(spreadUnion.ts, 0, 28))
+
+var o3: { a: number } | { b: string };
+>o3 : Symbol(o3, Decl(spreadUnion.ts, 2, 3), Decl(spreadUnion.ts, 3, 3))
+>a : Symbol(a, Decl(spreadUnion.ts, 2, 9))
+>b : Symbol(b, Decl(spreadUnion.ts, 2, 25))
+
+var o3 =  { ...union };
+>o3 : Symbol(o3, Decl(spreadUnion.ts, 2, 3), Decl(spreadUnion.ts, 3, 3))
+>union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
+
+var o4: { a: boolean } | { b: string , a: boolean};
+>o4 : Symbol(o4, Decl(spreadUnion.ts, 5, 3), Decl(spreadUnion.ts, 6, 3))
+>a : Symbol(a, Decl(spreadUnion.ts, 5, 9))
+>b : Symbol(b, Decl(spreadUnion.ts, 5, 26))
+>a : Symbol(a, Decl(spreadUnion.ts, 5, 38))
+
+var o4 =  { ...union, a: false };
+>o4 : Symbol(o4, Decl(spreadUnion.ts, 5, 3), Decl(spreadUnion.ts, 6, 3))
+>union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
+>a : Symbol(a, Decl(spreadUnion.ts, 6, 21))
+
+var o5: { a: number } | { b: string } | { a: number, b: string };
+>o5 : Symbol(o5, Decl(spreadUnion.ts, 8, 3), Decl(spreadUnion.ts, 9, 3))
+>a : Symbol(a, Decl(spreadUnion.ts, 8, 9))
+>b : Symbol(b, Decl(spreadUnion.ts, 8, 25))
+>a : Symbol(a, Decl(spreadUnion.ts, 8, 41))
+>b : Symbol(b, Decl(spreadUnion.ts, 8, 52))
+
+var o5 =  { ...union, ...union };
+>o5 : Symbol(o5, Decl(spreadUnion.ts, 8, 3), Decl(spreadUnion.ts, 9, 3))
+>union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
+>union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
+

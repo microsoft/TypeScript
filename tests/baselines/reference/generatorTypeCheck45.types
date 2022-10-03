@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck45.ts ===
+declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
+>foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U, any, undefined>, fun2: (y: U) => T) => T
+>x : T
+>fun : () => Iterator<(x: T) => U, any, undefined>
+>x : T
+>fun2 : (y: U) => T
+>y : U
+
+foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
+>foo("", function* () { yield x => x.length }, p => undefined) : string
+>foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U, any, undefined>, fun2: (y: U) => T) => T
+>"" : ""
+>function* () { yield x => x.length } : () => Generator<(x: string) => number, void, undefined>
+>yield x => x.length : undefined
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+>p => undefined : (p: number) => any
+>p : number
+>undefined : undefined
+

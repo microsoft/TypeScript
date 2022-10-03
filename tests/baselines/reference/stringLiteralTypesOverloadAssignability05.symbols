@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts ===
+function f(x: "foo"): number;
+>f : Symbol(f, Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 0), Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 29), Decl(stringLiteralTypesOverloadAssignability05.ts, 1, 30))
+>x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 11))
+
+function f(x: string): number;
+>f : Symbol(f, Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 0), Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 29), Decl(stringLiteralTypesOverloadAssignability05.ts, 1, 30))
+>x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability05.ts, 1, 11))
+
+function f(x: string): number {
+>f : Symbol(f, Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 0), Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 29), Decl(stringLiteralTypesOverloadAssignability05.ts, 1, 30))
+>x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability05.ts, 2, 11))
+
+    return 0;
+}
+
+function g(x: "foo"): number;
+>g : Symbol(g, Decl(stringLiteralTypesOverloadAssignability05.ts, 4, 1), Decl(stringLiteralTypesOverloadAssignability05.ts, 6, 29))
+>x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability05.ts, 6, 11))
+
+function g(x: string): number {
+>g : Symbol(g, Decl(stringLiteralTypesOverloadAssignability05.ts, 4, 1), Decl(stringLiteralTypesOverloadAssignability05.ts, 6, 29))
+>x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability05.ts, 7, 11))
+
+    return 0;
+}
+
+let a = f;
+>a : Symbol(a, Decl(stringLiteralTypesOverloadAssignability05.ts, 11, 3))
+>f : Symbol(f, Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 0), Decl(stringLiteralTypesOverloadAssignability05.ts, 0, 29), Decl(stringLiteralTypesOverloadAssignability05.ts, 1, 30))
+
+let b = g;
+>b : Symbol(b, Decl(stringLiteralTypesOverloadAssignability05.ts, 12, 3))
+>g : Symbol(g, Decl(stringLiteralTypesOverloadAssignability05.ts, 4, 1), Decl(stringLiteralTypesOverloadAssignability05.ts, 6, 29))
+
+a = b;
+>a : Symbol(a, Decl(stringLiteralTypesOverloadAssignability05.ts, 11, 3))
+>b : Symbol(b, Decl(stringLiteralTypesOverloadAssignability05.ts, 12, 3))
+
+b = a;
+>b : Symbol(b, Decl(stringLiteralTypesOverloadAssignability05.ts, 12, 3))
+>a : Symbol(a, Decl(stringLiteralTypesOverloadAssignability05.ts, 11, 3))
+

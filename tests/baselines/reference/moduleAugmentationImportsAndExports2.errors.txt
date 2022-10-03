@@ -1,0 +1,63 @@
+tests/cases/compiler/f3.ts(3,13): error TS2339: Property 'foo' does not exist on type 'A'.
+tests/cases/compiler/f3.ts(11,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+tests/cases/compiler/f3.ts(11,21): error TS2307: Cannot find module './f2' or its corresponding type declarations.
+tests/cases/compiler/f3.ts(12,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
+tests/cases/compiler/f3.ts(12,21): error TS2307: Cannot find module './f2' or its corresponding type declarations.
+tests/cases/compiler/f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+tests/cases/compiler/f3.ts(14,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+tests/cases/compiler/f4.ts(5,11): error TS2339: Property 'foo' does not exist on type 'A'.
+
+
+==== tests/cases/compiler/f1.ts (0 errors) ====
+    export class A {}
+    
+==== tests/cases/compiler/f2.ts (0 errors) ====
+    export class B {
+        n: number;
+    }
+    
+==== tests/cases/compiler/f3.ts (7 errors) ====
+    import {A} from "./f1";
+    
+    A.prototype.foo = function () { return undefined; }
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
+    
+    namespace N {
+        export interface Ifc { a }
+        export interface Cls { a }
+    }
+    
+    declare module "./f1" {
+        import {B} from "./f2";
+        ~~~~~~
+!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+                        ~~~~~~
+!!! error TS2307: Cannot find module './f2' or its corresponding type declarations.
+        export {B} from "./f2";
+        ~~~~~~
+!!! error TS2666: Exports and export assignments are not permitted in module augmentations.
+                        ~~~~~~
+!!! error TS2307: Cannot find module './f2' or its corresponding type declarations.
+        import I = N.Ifc;
+        ~~~~~~
+!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+        import C = N.Cls;
+        ~~~~~~
+!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+        // should have explicit export
+        interface A {
+            foo(): B;
+            bar(): I;
+            baz(): C;
+        }
+    }
+    
+==== tests/cases/compiler/f4.ts (1 errors) ====
+    import {A} from "./f1";
+    import "./f3";
+    
+    let a: A;
+    let b = a.foo().n;
+              ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'A'.

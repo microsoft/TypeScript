@@ -1,0 +1,548 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts ===
+// checking whether other types are subtypes of type parameters with constraints
+
+function f1<T extends U, U>(x: T, y: U) {
+>f1 : Symbol(f1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 12))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 24))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 28))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 12))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 33))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 24))
+
+    var r = true ? x : y;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 3, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 4, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 28))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 33))
+
+    var r = true ? y : x;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 3, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 4, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 33))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 2, 28))
+}
+
+// V > U > T
+function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
+>f2 : Symbol(f2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 5, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 12))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 24))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 24))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 37))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 37))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 41))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 12))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 46))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 24))
+>z : Symbol(z, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 52))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 37))
+
+    var r = true ? x : y;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 9, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 10, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 41))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 46))
+
+    var r = true ? y : x;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 9, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 10, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 46))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 41))
+
+    // ok
+    var r2 = true ? z : y;
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 13, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 14, 7))
+>z : Symbol(z, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 52))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 46))
+
+    var r2 = true ? y : z;
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 13, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 14, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 46))
+>z : Symbol(z, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 52))
+
+    // ok
+    var r2a = true ? z : x;
+>r2a : Symbol(r2a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 17, 7))
+>z : Symbol(z, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 52))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 41))
+
+    var r2b = true ? x : z;
+>r2b : Symbol(r2b, Decl(subtypesOfTypeParameterWithConstraints2.ts, 18, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 41))
+>z : Symbol(z, Decl(subtypesOfTypeParameterWithConstraints2.ts, 8, 52))
+}
+
+// Date > U > T
+function f3<T extends U, U extends Date>(x: T, y: U) {
+>f3 : Symbol(f3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 19, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 12))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 24))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 24))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 12))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 24))
+
+    var r = true ? x : y;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 23, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 24, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
+
+    var r = true ? y : x;
+>r : Symbol(r, Decl(subtypesOfTypeParameterWithConstraints2.ts, 23, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 24, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
+
+    // ok
+    var r2 = true ? x : new Date(); 
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 27, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 28, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var r2 = true ? new Date() : x;
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 27, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 28, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 41))
+
+    // ok
+    var r3 = true ? y : new Date(); 
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 31, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 32, 7))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    var r3 = true ? new Date() : y;
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 31, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 32, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>y : Symbol(y, Decl(subtypesOfTypeParameterWithConstraints2.ts, 22, 46))
+}
+
+
+interface I1 { foo: number; }
+>I1 : Symbol(I1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 33, 1))
+>foo : Symbol(I1.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 14))
+
+class C1 { foo: number; }
+>C1 : Symbol(C1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 29))
+>foo : Symbol(C1.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 10))
+
+class C2<T> { foo: T; }
+>C2 : Symbol(C2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 25))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 9))
+>foo : Symbol(C2.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 13))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 9))
+
+enum E { A }
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 8))
+
+function f() { }
+>f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
+
+module f {
+>f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfTypeParameterWithConstraints2.ts, 42, 14))
+}
+class c { baz: string }
+>c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
+>baz : Symbol(c.baz, Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 9))
+
+module c {
+>c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
+
+    export var bar = 1;
+>bar : Symbol(bar, Decl(subtypesOfTypeParameterWithConstraints2.ts, 46, 14))
+}
+
+function f4<T extends Number>(x: T) {
+>f4 : Symbol(f4, Decl(subtypesOfTypeParameterWithConstraints2.ts, 47, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 12))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 30))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 12))
+
+    var r0 = true ? x : null; // ok
+>r0 : Symbol(r0, Decl(subtypesOfTypeParameterWithConstraints2.ts, 50, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 51, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 30))
+
+    var r0 = true ? null : x; // ok
+>r0 : Symbol(r0, Decl(subtypesOfTypeParameterWithConstraints2.ts, 50, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 51, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 30))
+
+    var u: typeof undefined;
+>u : Symbol(u, Decl(subtypesOfTypeParameterWithConstraints2.ts, 53, 7))
+>undefined : Symbol(undefined)
+
+    var r0b = true ? u : x; // ok
+>r0b : Symbol(r0b, Decl(subtypesOfTypeParameterWithConstraints2.ts, 54, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 55, 7))
+>u : Symbol(u, Decl(subtypesOfTypeParameterWithConstraints2.ts, 53, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 30))
+
+    var r0b = true ? x : u; // ok
+>r0b : Symbol(r0b, Decl(subtypesOfTypeParameterWithConstraints2.ts, 54, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 55, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 49, 30))
+>u : Symbol(u, Decl(subtypesOfTypeParameterWithConstraints2.ts, 53, 7))
+}
+
+function f5<T extends Number>(x: T) {
+>f5 : Symbol(f5, Decl(subtypesOfTypeParameterWithConstraints2.ts, 56, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 58, 12))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 58, 30))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 58, 12))
+
+    var r1 = true ? 1 : x; // ok
+>r1 : Symbol(r1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 59, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 60, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 58, 30))
+
+    var r1 = true ? x : 1; // ok
+>r1 : Symbol(r1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 59, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 60, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 58, 30))
+}
+
+function f6<T extends String>(x: T) {
+>f6 : Symbol(f6, Decl(subtypesOfTypeParameterWithConstraints2.ts, 61, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 12))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 30))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 12))
+
+    var r2 = true ? '' : x; // ok
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 64, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 65, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 30))
+
+    var r2 = true ? x : ''; // ok
+>r2 : Symbol(r2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 64, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 65, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 63, 30))
+}
+
+function f7<T extends Boolean>(x: T) {
+>f7 : Symbol(f7, Decl(subtypesOfTypeParameterWithConstraints2.ts, 66, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 68, 12))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 68, 31))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 68, 12))
+
+    var r3 = true ? true : x; // ok
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 69, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 70, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 68, 31))
+
+    var r3 = true ? x : true; // ok
+>r3 : Symbol(r3, Decl(subtypesOfTypeParameterWithConstraints2.ts, 69, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 70, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 68, 31))
+}
+
+function f8<T extends Date>(x: T) {
+>f8 : Symbol(f8, Decl(subtypesOfTypeParameterWithConstraints2.ts, 71, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 12))
+
+    var r4 = true ? new Date() : x; // ok
+>r4 : Symbol(r4, Decl(subtypesOfTypeParameterWithConstraints2.ts, 74, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 75, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
+
+    var r4 = true ? x : new Date(); // ok
+>r4 : Symbol(r4, Decl(subtypesOfTypeParameterWithConstraints2.ts, 74, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 75, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 73, 28))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+function f9<T extends RegExp>(x: T) {
+>f9 : Symbol(f9, Decl(subtypesOfTypeParameterWithConstraints2.ts, 76, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 78, 12))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 78, 30))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 78, 12))
+
+    var r5 = true ? /1/ : x; // ok
+>r5 : Symbol(r5, Decl(subtypesOfTypeParameterWithConstraints2.ts, 79, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 80, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 78, 30))
+
+    var r5 = true ? x : /1/; // ok
+>r5 : Symbol(r5, Decl(subtypesOfTypeParameterWithConstraints2.ts, 79, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 80, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 78, 30))
+}
+
+function f10<T extends { foo: number }>(x: T) {
+>f10 : Symbol(f10, Decl(subtypesOfTypeParameterWithConstraints2.ts, 81, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 13))
+>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 40))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 13))
+
+    var r6 = true ? { foo: 1 } : x; // ok
+>r6 : Symbol(r6, Decl(subtypesOfTypeParameterWithConstraints2.ts, 84, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 85, 7))
+>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 84, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 40))
+
+    var r6 = true ? x : { foo: 1 }; // ok
+>r6 : Symbol(r6, Decl(subtypesOfTypeParameterWithConstraints2.ts, 84, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 85, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 83, 40))
+>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 85, 25))
+}
+
+function f11<T extends () => void>(x: T) {
+>f11 : Symbol(f11, Decl(subtypesOfTypeParameterWithConstraints2.ts, 86, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 88, 13))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 88, 35))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 88, 13))
+
+    var r7 = true ? () => { } : x; // ok
+>r7 : Symbol(r7, Decl(subtypesOfTypeParameterWithConstraints2.ts, 89, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 90, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 88, 35))
+
+    var r7 = true ? x : () => { }; // ok
+>r7 : Symbol(r7, Decl(subtypesOfTypeParameterWithConstraints2.ts, 89, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 90, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 88, 35))
+}
+
+function f12<T extends <U>(x: U) => U>(x: T) {
+>f12 : Symbol(f12, Decl(subtypesOfTypeParameterWithConstraints2.ts, 91, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 13))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 27))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 24))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 39))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 13))
+
+    var r8 = true ? <T>(x: T) => { return x } : x; // ok
+>r8 : Symbol(r8, Decl(subtypesOfTypeParameterWithConstraints2.ts, 94, 7))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 94, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 94, 24))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 94, 21))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 94, 24))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 39))
+
+    var r8b = true ? x : <T>(x: T) => { return x }; // ok, type parameters not identical across declarations
+>r8b : Symbol(r8b, Decl(subtypesOfTypeParameterWithConstraints2.ts, 95, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 93, 39))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 95, 26))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 95, 29))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 95, 26))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 95, 29))
+}
+
+function f13<T extends I1>(x: T) {
+>f13 : Symbol(f13, Decl(subtypesOfTypeParameterWithConstraints2.ts, 96, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 98, 13))
+>I1 : Symbol(I1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 33, 1))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 98, 27))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 98, 13))
+
+    var i1: I1;
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 99, 7))
+>I1 : Symbol(I1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 33, 1))
+
+    var r9 = true ? i1 : x; // ok
+>r9 : Symbol(r9, Decl(subtypesOfTypeParameterWithConstraints2.ts, 100, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 101, 7))
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 99, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 98, 27))
+
+    var r9 = true ? x : i1; // ok
+>r9 : Symbol(r9, Decl(subtypesOfTypeParameterWithConstraints2.ts, 100, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 101, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 98, 27))
+>i1 : Symbol(i1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 99, 7))
+}
+
+function f14<T extends C1>(x: T) {
+>f14 : Symbol(f14, Decl(subtypesOfTypeParameterWithConstraints2.ts, 102, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 104, 13))
+>C1 : Symbol(C1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 29))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 104, 27))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 104, 13))
+
+    var c1: C1;
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 105, 7))
+>C1 : Symbol(C1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 29))
+
+    var r10 = true ? c1 : x; // ok
+>r10 : Symbol(r10, Decl(subtypesOfTypeParameterWithConstraints2.ts, 106, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 107, 7))
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 105, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 104, 27))
+
+    var r10 = true ? x : c1; // ok
+>r10 : Symbol(r10, Decl(subtypesOfTypeParameterWithConstraints2.ts, 106, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 107, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 104, 27))
+>c1 : Symbol(c1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 105, 7))
+}
+
+function f15<T extends C2<number>>(x: T) {
+>f15 : Symbol(f15, Decl(subtypesOfTypeParameterWithConstraints2.ts, 108, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 110, 13))
+>C2 : Symbol(C2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 25))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 110, 35))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 110, 13))
+
+    var c2: C2<number>;
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 111, 7))
+>C2 : Symbol(C2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 25))
+
+    var r12 = true ? c2 : x; // ok
+>r12 : Symbol(r12, Decl(subtypesOfTypeParameterWithConstraints2.ts, 112, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 113, 7))
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 111, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 110, 35))
+
+    var r12 = true ? x : c2; // ok
+>r12 : Symbol(r12, Decl(subtypesOfTypeParameterWithConstraints2.ts, 112, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 113, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 110, 35))
+>c2 : Symbol(c2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 111, 7))
+}
+
+function f16<T extends E>(x: T) {
+>f16 : Symbol(f16, Decl(subtypesOfTypeParameterWithConstraints2.ts, 114, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 13))
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 26))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 13))
+
+    var r13 = true ? E : x; // ok
+>r13 : Symbol(r13, Decl(subtypesOfTypeParameterWithConstraints2.ts, 117, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 118, 7))
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 26))
+
+    var r13 = true ? x : E; // ok
+>r13 : Symbol(r13, Decl(subtypesOfTypeParameterWithConstraints2.ts, 117, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 118, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 26))
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+
+    var r14 = true ? E.A : x; // ok
+>r14 : Symbol(r14, Decl(subtypesOfTypeParameterWithConstraints2.ts, 120, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 121, 7))
+>E.A : Symbol(E.A, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 8))
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 8))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 26))
+
+    var r14 = true ? x : E.A; // ok
+>r14 : Symbol(r14, Decl(subtypesOfTypeParameterWithConstraints2.ts, 120, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 121, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 116, 26))
+>E.A : Symbol(E.A, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 8))
+>E : Symbol(E, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 23))
+>A : Symbol(E.A, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 8))
+}
+
+function f17<T extends typeof f>(x: T) {
+>f17 : Symbol(f17, Decl(subtypesOfTypeParameterWithConstraints2.ts, 122, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 124, 13))
+>f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 124, 33))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 124, 13))
+
+    var af: typeof f;
+>af : Symbol(af, Decl(subtypesOfTypeParameterWithConstraints2.ts, 125, 7))
+>f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints2.ts, 39, 12), Decl(subtypesOfTypeParameterWithConstraints2.ts, 40, 16))
+
+    var r15 = true ? af : x; // ok
+>r15 : Symbol(r15, Decl(subtypesOfTypeParameterWithConstraints2.ts, 126, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 127, 7))
+>af : Symbol(af, Decl(subtypesOfTypeParameterWithConstraints2.ts, 125, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 124, 33))
+
+    var r15 = true ? x : af; // ok
+>r15 : Symbol(r15, Decl(subtypesOfTypeParameterWithConstraints2.ts, 126, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 127, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 124, 33))
+>af : Symbol(af, Decl(subtypesOfTypeParameterWithConstraints2.ts, 125, 7))
+}
+
+function f18<T extends typeof c>(x: T) {
+>f18 : Symbol(f18, Decl(subtypesOfTypeParameterWithConstraints2.ts, 128, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 130, 13))
+>c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 130, 33))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 130, 13))
+
+    var ac: typeof c;
+>ac : Symbol(ac, Decl(subtypesOfTypeParameterWithConstraints2.ts, 131, 7))
+>c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
+
+    var r16 = true ? ac : x; // ok
+>r16 : Symbol(r16, Decl(subtypesOfTypeParameterWithConstraints2.ts, 132, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 133, 7))
+>ac : Symbol(ac, Decl(subtypesOfTypeParameterWithConstraints2.ts, 131, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 130, 33))
+
+    var r16 = true ? x : ac; // ok
+>r16 : Symbol(r16, Decl(subtypesOfTypeParameterWithConstraints2.ts, 132, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 133, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 130, 33))
+>ac : Symbol(ac, Decl(subtypesOfTypeParameterWithConstraints2.ts, 131, 7))
+}
+
+function f19<T>(x: T) {
+>f19 : Symbol(f19, Decl(subtypesOfTypeParameterWithConstraints2.ts, 134, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 13))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 16))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 13))
+
+    function f17<U extends T>(a: U) {
+>f17 : Symbol(f17, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 23))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 137, 17))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 13))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 137, 30))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 137, 17))
+
+        var r17 = true ? x : a; // ok
+>r17 : Symbol(r17, Decl(subtypesOfTypeParameterWithConstraints2.ts, 138, 11), Decl(subtypesOfTypeParameterWithConstraints2.ts, 139, 11))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 16))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 137, 30))
+
+        var r17 = true ? a : x; // ok
+>r17 : Symbol(r17, Decl(subtypesOfTypeParameterWithConstraints2.ts, 138, 11), Decl(subtypesOfTypeParameterWithConstraints2.ts, 139, 11))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 137, 30))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 16))
+    }
+
+    function f18<V extends U, U extends T>(a: V) {
+>f18 : Symbol(f18, Decl(subtypesOfTypeParameterWithConstraints2.ts, 140, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 17))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 29))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 29))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 13))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 43))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 17))
+
+        var r18 = true ? x : a; // ok
+>r18 : Symbol(r18, Decl(subtypesOfTypeParameterWithConstraints2.ts, 143, 11), Decl(subtypesOfTypeParameterWithConstraints2.ts, 144, 11))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 16))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 43))
+
+        var r18 = true ? a : x; // ok
+>r18 : Symbol(r18, Decl(subtypesOfTypeParameterWithConstraints2.ts, 143, 11), Decl(subtypesOfTypeParameterWithConstraints2.ts, 144, 11))
+>a : Symbol(a, Decl(subtypesOfTypeParameterWithConstraints2.ts, 142, 43))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 136, 16))
+    }
+}
+
+function f20<T extends Number>(x: T) {
+>f20 : Symbol(f20, Decl(subtypesOfTypeParameterWithConstraints2.ts, 146, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 148, 13))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 148, 31))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 148, 13))
+
+    var r19 = true ? new Object() : x; // ok
+>r19 : Symbol(r19, Decl(subtypesOfTypeParameterWithConstraints2.ts, 149, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 150, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 148, 31))
+
+    var r19 = true ? x : new Object(); // ok
+>r19 : Symbol(r19, Decl(subtypesOfTypeParameterWithConstraints2.ts, 149, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 150, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 148, 31))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function f21<T extends Number>(x: T) {
+>f21 : Symbol(f21, Decl(subtypesOfTypeParameterWithConstraints2.ts, 151, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 153, 13))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 153, 31))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 153, 13))
+
+    var r20 = true ? {} : x; // ok
+>r20 : Symbol(r20, Decl(subtypesOfTypeParameterWithConstraints2.ts, 154, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 155, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 153, 31))
+
+    var r20 = true ? x : {}; // ok
+>r20 : Symbol(r20, Decl(subtypesOfTypeParameterWithConstraints2.ts, 154, 7), Decl(subtypesOfTypeParameterWithConstraints2.ts, 155, 7))
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints2.ts, 153, 31))
+}

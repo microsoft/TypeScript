@@ -1,0 +1,39 @@
+=== tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts ===
+function exports() {
+>exports : Symbol(exports, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 0, 0))
+
+    return 1;
+}
+function require() {
+>require : Symbol(require, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 2, 1))
+
+    return "require";
+}
+module m3 {
+>m3 : Symbol(m3, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 5, 1))
+
+    function exports() {
+>exports : Symbol(exports, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 6, 11))
+
+        return 1;
+    }
+    function require() {
+>require : Symbol(require, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 9, 5))
+
+        return "require";
+    }
+}
+module m4 {
+>m4 : Symbol(m4, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 13, 1))
+
+    export function exports() {
+>exports : Symbol(exports, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 14, 11))
+
+        return 1;
+    }
+    export function require() {
+>require : Symbol(require, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 17, 5))
+
+        return "require";
+    }
+}

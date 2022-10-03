@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
+export default class Foo {}
+>Foo : Foo
+
+=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
+export default function foo() {}
+>foo : () => void
+

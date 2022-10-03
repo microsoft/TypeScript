@@ -1,0 +1,38 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/// <reference types="node" />
+
+const Something = require("fs").Something;
+>Something : Symbol(Something, Decl(index.js, 2, 5))
+>require("fs").Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+>require : Symbol(require)
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+>Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+
+module.exports.A = {}
+>module.exports.A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
+>module.exports : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
+>module : Symbol(module, Decl(index.js, 2, 42))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
+
+module.exports.A.B = {
+>module.exports.A.B : Symbol(A.B, Decl(index.js, 3, 21))
+>module.exports.A : Symbol(A.B, Decl(index.js, 3, 21))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 2, 42))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
+>B : Symbol(A.B, Decl(index.js, 3, 21))
+
+    thing: new Something()
+>thing : Symbol(thing, Decl(index.js, 4, 22))
+>Something : Symbol(Something, Decl(index.js, 2, 5))
+}
+
+=== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+
+    export class Something {}
+>Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+}

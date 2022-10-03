@@ -1,0 +1,148 @@
+=== tests/cases/compiler/es6ClassTest.ts ===
+class Bar {
+>Bar : Bar
+
+    public goo: number;
+>goo : number
+
+    public prop1(x) {
+>prop1 : (x: any) => any
+>x : any
+
+        return x;
+>x : any
+    }
+
+    constructor (n) { }
+>n : any
+}
+
+// new-style class
+class Foo  extends Bar {
+>Foo : Foo
+>Bar : Bar
+
+	foo:number;
+>foo : number
+
+	gar = 0;
+>gar : number
+>0 : 0
+
+	zoo:string = "zoo";
+>zoo : string
+>"zoo" : "zoo"
+
+	x: any;
+>x : any
+
+	bar() { return 0; }
+>bar : () => number
+>0 : 0
+
+	private boo();
+>boo : () => any
+
+	private boo(x?) { return x; }
+>boo : () => any
+>x : any
+>x : any
+
+    static statVal = 0;
+>statVal : number
+>0 : 0
+
+	constructor();
+	constructor(x?, private y?:string, public z?=0) {
+>x : any
+>y : string
+>z : number
+>0 : 0
+
+        super(x);
+>super(x) : void
+>super : typeof Bar
+>x : any
+
+		this.x = x;
+>this.x = x : any
+>this.x : any
+>this : this
+>x : any
+>x : any
+
+        this.gar = 5;
+>this.gar = 5 : 5
+>this.gar : number
+>this : this
+>gar : number
+>5 : 5
+	 }
+}
+
+var f = new Foo();
+>f : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+declare module AmbientMod {
+>AmbientMod : typeof AmbientMod
+
+	export class Provide {
+>Provide : Provide
+
+		foo:number;
+>foo : number
+
+		zoo:string;
+>zoo : string
+
+		constructor();
+		
+		private boo();
+>boo : () => any
+
+		bar();
+>bar : () => any
+	}
+}
+
+
+//class GetSetMonster {
+
+
+//  // attack(target) {
+//  //     WScript.Echo("Attacks " + target);
+//  // }
+//  // The contextual keyword "get" followed by an identifier and
+//  // a curly body defines a getter in the same way that "get"
+//  // defines one in an object literal.
+//  // get isAlive() {
+//  //   return this.health > 0;
+//  // }
+ 
+//  // Likewise, "set" can be used to define setters.
+//  set health(value:number) {
+//    if (value < 0) {
+//      throw new Error('Health must be non-negative.')
+//    }
+//    this.health = value
+//  }
+//  get health() { return 0; }
+
+//  constructor(this.name: string, health: number) {
+//    this.health = 0;
+//  }
+//}
+
+
+//class bar {
+
+//   static fnOverload( );
+
+//   static fnOverload(foo: string){ } // no error
+
+//   constructor(){};    
+
+//}
+

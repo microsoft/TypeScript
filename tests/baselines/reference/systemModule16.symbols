@@ -1,0 +1,32 @@
+=== tests/cases/compiler/systemModule16.ts ===
+import * as x from "foo";
+>x : Symbol(x, Decl(systemModule16.ts, 0, 6))
+
+import * as y from "bar";
+>y : Symbol(y, Decl(systemModule16.ts, 1, 6))
+
+export * from "foo";
+export * from "bar"
+export {x}
+>x : Symbol(x, Decl(systemModule16.ts, 4, 8))
+
+export {y}
+>y : Symbol(y, Decl(systemModule16.ts, 5, 8))
+
+import {a1, b1, c1 as d1} from "foo";
+>a1 : Symbol(a1, Decl(systemModule16.ts, 6, 8))
+>b1 : Symbol(b1, Decl(systemModule16.ts, 6, 11))
+>d1 : Symbol(d1, Decl(systemModule16.ts, 6, 15))
+
+export {a2, b2, c2 as d2} from "bar";
+>a2 : Symbol(a2, Decl(systemModule16.ts, 7, 8))
+>b2 : Symbol(b2, Decl(systemModule16.ts, 7, 11))
+>d2 : Symbol(d2, Decl(systemModule16.ts, 7, 15))
+
+x,y,a1,b1,d1;
+>x : Symbol(x, Decl(systemModule16.ts, 0, 6))
+>y : Symbol(y, Decl(systemModule16.ts, 1, 6))
+>a1 : Symbol(a1, Decl(systemModule16.ts, 6, 8))
+>b1 : Symbol(b1, Decl(systemModule16.ts, 6, 11))
+>d1 : Symbol(d1, Decl(systemModule16.ts, 6, 15))
+

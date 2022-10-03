@@ -1,0 +1,36 @@
+=== tests/cases/compiler/namespacesDeclaration2.ts ===
+namespace N {
+>N : Symbol(N, Decl(namespacesDeclaration2.ts, 0, 0))
+
+    function S() {}
+>S : Symbol(S, Decl(namespacesDeclaration2.ts, 0, 13))
+}
+module M {
+>M : Symbol(M, Decl(namespacesDeclaration2.ts, 2, 1))
+
+    function F() {}
+>F : Symbol(F, Decl(namespacesDeclaration2.ts, 3, 10))
+}
+
+declare namespace ns {
+>ns : Symbol(ns, Decl(namespacesDeclaration2.ts, 5, 1))
+
+    let f: number;
+>f : Symbol(f, Decl(namespacesDeclaration2.ts, 8, 7))
+}
+
+var foge: N.S;
+>foge : Symbol(foge, Decl(namespacesDeclaration2.ts, 11, 3))
+>N : Symbol(N, Decl(namespacesDeclaration2.ts, 0, 0))
+>S : Symbol(N.S)
+
+var foo: M.F;
+>foo : Symbol(foo, Decl(namespacesDeclaration2.ts, 12, 3))
+>M : Symbol(M, Decl(namespacesDeclaration2.ts, 2, 1))
+>F : Symbol(M.F)
+
+let x: ns.A;
+>x : Symbol(x, Decl(namespacesDeclaration2.ts, 13, 3))
+>ns : Symbol(ns, Decl(namespacesDeclaration2.ts, 5, 1))
+>A : Symbol(ns.A)
+

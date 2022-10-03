@@ -1,0 +1,134 @@
+=== tests/cases/conformance/types/members/typesWithSpecializedCallSignatures.ts ===
+// basic uses of specialized signatures without errors
+
+class Base { foo: string }
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(typesWithSpecializedCallSignatures.ts, 2, 12))
+
+class Derived1 extends Base { bar: string }
+>Derived1 : Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>bar : Symbol(Derived1.bar, Decl(typesWithSpecializedCallSignatures.ts, 3, 29))
+
+class Derived2 extends Base { baz: string }
+>Derived2 : Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>baz : Symbol(Derived2.baz, Decl(typesWithSpecializedCallSignatures.ts, 4, 29))
+
+class C {
+>C : Symbol(C, Decl(typesWithSpecializedCallSignatures.ts, 4, 43))
+
+    foo(x: 'hi'): Derived1;
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 7, 8))
+>Derived1 : Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+
+    foo(x: 'bye'): Derived2;
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 8, 8))
+>Derived2 : Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+
+    foo(x: string): Base;
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 9, 8))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+
+    foo(x) {
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 10, 8))
+
+        return x;
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 10, 8))
+    }
+}
+var c = new C();
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>C : Symbol(C, Decl(typesWithSpecializedCallSignatures.ts, 4, 43))
+
+interface I {
+>I : Symbol(I, Decl(typesWithSpecializedCallSignatures.ts, 14, 16))
+
+    foo(x: 'hi'): Derived1;
+>foo : Symbol(I.foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 17, 8))
+>Derived1 : Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+
+    foo(x: 'bye'): Derived2;
+>foo : Symbol(I.foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 18, 8))
+>Derived2 : Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+
+    foo(x: string): Base;
+>foo : Symbol(I.foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 19, 8))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+}
+var i: I;
+>i : Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+>I : Symbol(I, Decl(typesWithSpecializedCallSignatures.ts, 14, 16))
+
+var a: {
+>a : Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+
+    foo(x: 'hi'): Derived1;
+>foo : Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 24, 8))
+>Derived1 : Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+
+    foo(x: 'bye'): Derived2;
+>foo : Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 25, 8))
+>Derived2 : Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+
+    foo(x: string): Base;
+>foo : Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
+>x : Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 26, 8))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+
+};
+
+c = i;
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>i : Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+
+c = a;
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>a : Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+
+i = c;
+>i : Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+
+i = a;
+>i : Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+>a : Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+
+a = c;
+>a : Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+
+a = i;
+>a : Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+>i : Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+
+var r1: Derived1 = c.foo('hi');
+>r1 : Symbol(r1, Decl(typesWithSpecializedCallSignatures.ts, 38, 3))
+>Derived1 : Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>c.foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+
+var r2: Derived2 = c.foo('bye');
+>r2 : Symbol(r2, Decl(typesWithSpecializedCallSignatures.ts, 39, 3))
+>Derived2 : Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>c.foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+
+var r3: Base = c.foo('hm');
+>r3 : Symbol(r3, Decl(typesWithSpecializedCallSignatures.ts, 40, 3))
+>Base : Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>c.foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c : Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+

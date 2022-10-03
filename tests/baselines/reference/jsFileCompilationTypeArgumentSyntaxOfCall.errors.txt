@@ -1,0 +1,40 @@
+tests/cases/compiler/a.jsx(1,13): error TS1109: Expression expected.
+tests/cases/compiler/a.jsx(4,1): error TS2657: JSX expressions must have one parent element.
+tests/cases/compiler/a.jsx(4,5): error TS1003: Identifier expected.
+tests/cases/compiler/a.jsx(4,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/compiler/a.jsx(4,16): error TS17002: Expected corresponding JSX closing tag for 'number'.
+tests/cases/compiler/a.jsx(5,1): error TS2657: JSX expressions must have one parent element.
+tests/cases/compiler/a.jsx(5,5): error TS1003: Identifier expected.
+tests/cases/compiler/a.jsx(5,6): error TS17008: JSX element 'number' has no corresponding closing tag.
+tests/cases/compiler/a.jsx(5,14): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/compiler/a.jsx(6,1): error TS1005: '</' expected.
+
+
+==== tests/cases/compiler/a.jsx (10 errors) ====
+    Foo<number>();
+                ~
+!!! error TS1109: Expression expected.
+    Foo<number>(1);
+    Foo<number>``;
+    <Foo<number>></Foo>;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
+        ~
+!!! error TS1003: Identifier expected.
+                ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+                   ~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'number'.
+    <Foo<number>/>;
+    ~~~~~~~~~~~~~~~
+        ~
+!!! error TS1003: Identifier expected.
+         ~~~~~~
+!!! error TS17008: JSX element 'number' has no corresponding closing tag.
+                 ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+    
+!!! error TS2657: JSX expressions must have one parent element.
+    
+!!! error TS1005: '</' expected.

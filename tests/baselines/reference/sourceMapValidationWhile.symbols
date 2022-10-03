@@ -1,0 +1,16 @@
+=== tests/cases/compiler/sourceMapValidationWhile.ts ===
+var a = 10;
+>a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
+
+while (a == 10) {
+>a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
+
+    a++;
+>a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
+}
+while (a == 10)
+>a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
+{
+    a++;
+>a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
+}

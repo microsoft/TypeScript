@@ -1,0 +1,41 @@
+=== tests/cases/compiler/augmentedTypesEnum3.ts ===
+module E {
+>E : typeof E
+
+    var t;
+>t : any
+}
+enum E { }
+>E : E
+
+enum F { }
+>F : F
+
+module F { var t; }
+>F : typeof F
+>t : any
+
+module A {
+>A : typeof A
+
+    var o;
+>o : any
+}
+enum A {
+>A : A
+
+    b
+>b : A.b
+}
+enum A {
+>A : A
+
+    c
+>c : A.b
+}
+module A {
+>A : typeof A
+
+    var p;
+>p : any
+}

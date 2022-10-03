@@ -1,0 +1,204 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentity2.ts ===
+// object types are identical structurally
+
+class A {
+>A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+
+    foo: number;
+>foo : Symbol(A.foo, Decl(objectTypesIdentity2.ts, 2, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+    foo: boolean;
+>foo : Symbol(B.foo, Decl(objectTypesIdentity2.ts, 6, 9))
+}
+
+class C<T> {
+>C : Symbol(C, Decl(objectTypesIdentity2.ts, 8, 1))
+>T : Symbol(T, Decl(objectTypesIdentity2.ts, 10, 8))
+
+    foo: T;
+>foo : Symbol(C.foo, Decl(objectTypesIdentity2.ts, 10, 12))
+>T : Symbol(T, Decl(objectTypesIdentity2.ts, 10, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+    foo: Date;
+>foo : Symbol(I.foo, Decl(objectTypesIdentity2.ts, 14, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var a: { foo: RegExp; }
+>a : Symbol(a, Decl(objectTypesIdentity2.ts, 18, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 18, 8))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+enum E { A }
+>E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))
+>A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
+
+var b = { foo: E.A };
+>b : Symbol(b, Decl(objectTypesIdentity2.ts, 20, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 20, 9))
+>E.A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
+>E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))
+>A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
+
+function foo5(x: A);
+>foo5 : Symbol(foo5, Decl(objectTypesIdentity2.ts, 20, 21), Decl(objectTypesIdentity2.ts, 22, 20), Decl(objectTypesIdentity2.ts, 23, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 22, 14))
+>A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+
+function foo5(x: B); // ok
+>foo5 : Symbol(foo5, Decl(objectTypesIdentity2.ts, 20, 21), Decl(objectTypesIdentity2.ts, 22, 20), Decl(objectTypesIdentity2.ts, 23, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 23, 14))
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(objectTypesIdentity2.ts, 20, 21), Decl(objectTypesIdentity2.ts, 22, 20), Decl(objectTypesIdentity2.ts, 23, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 24, 14))
+
+function foo5b(x: A);
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentity2.ts, 24, 25), Decl(objectTypesIdentity2.ts, 26, 21), Decl(objectTypesIdentity2.ts, 27, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 26, 15))
+>A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+
+function foo5b(x: C<string>); // ok
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentity2.ts, 24, 25), Decl(objectTypesIdentity2.ts, 26, 21), Decl(objectTypesIdentity2.ts, 27, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 27, 15))
+>C : Symbol(C, Decl(objectTypesIdentity2.ts, 8, 1))
+
+function foo5b(x: any) { }
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentity2.ts, 24, 25), Decl(objectTypesIdentity2.ts, 26, 21), Decl(objectTypesIdentity2.ts, 27, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 28, 15))
+
+function foo6(x: A);
+>foo6 : Symbol(foo6, Decl(objectTypesIdentity2.ts, 28, 26), Decl(objectTypesIdentity2.ts, 30, 20), Decl(objectTypesIdentity2.ts, 31, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 30, 14))
+>A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+
+function foo6(x: I); // ok
+>foo6 : Symbol(foo6, Decl(objectTypesIdentity2.ts, 28, 26), Decl(objectTypesIdentity2.ts, 30, 20), Decl(objectTypesIdentity2.ts, 31, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 31, 14))
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(objectTypesIdentity2.ts, 28, 26), Decl(objectTypesIdentity2.ts, 30, 20), Decl(objectTypesIdentity2.ts, 31, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 32, 14))
+
+function foo7(x: A);
+>foo7 : Symbol(foo7, Decl(objectTypesIdentity2.ts, 32, 25), Decl(objectTypesIdentity2.ts, 34, 20), Decl(objectTypesIdentity2.ts, 35, 27))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 34, 14))
+>A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+
+function foo7(x: typeof a); // ok
+>foo7 : Symbol(foo7, Decl(objectTypesIdentity2.ts, 32, 25), Decl(objectTypesIdentity2.ts, 34, 20), Decl(objectTypesIdentity2.ts, 35, 27))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 35, 14))
+>a : Symbol(a, Decl(objectTypesIdentity2.ts, 18, 3))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(objectTypesIdentity2.ts, 32, 25), Decl(objectTypesIdentity2.ts, 34, 20), Decl(objectTypesIdentity2.ts, 35, 27))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 36, 14))
+
+function foo8(x: B);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentity2.ts, 36, 25), Decl(objectTypesIdentity2.ts, 38, 20), Decl(objectTypesIdentity2.ts, 39, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 38, 14))
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+function foo8(x: I); // ok
+>foo8 : Symbol(foo8, Decl(objectTypesIdentity2.ts, 36, 25), Decl(objectTypesIdentity2.ts, 38, 20), Decl(objectTypesIdentity2.ts, 39, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 39, 14))
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentity2.ts, 36, 25), Decl(objectTypesIdentity2.ts, 38, 20), Decl(objectTypesIdentity2.ts, 39, 20))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 40, 14))
+
+function foo9(x: B);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentity2.ts, 40, 25), Decl(objectTypesIdentity2.ts, 42, 20), Decl(objectTypesIdentity2.ts, 43, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 42, 14))
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+function foo9(x: C<string>); // ok
+>foo9 : Symbol(foo9, Decl(objectTypesIdentity2.ts, 40, 25), Decl(objectTypesIdentity2.ts, 42, 20), Decl(objectTypesIdentity2.ts, 43, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 43, 14))
+>C : Symbol(C, Decl(objectTypesIdentity2.ts, 8, 1))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentity2.ts, 40, 25), Decl(objectTypesIdentity2.ts, 42, 20), Decl(objectTypesIdentity2.ts, 43, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 44, 14))
+
+function foo10(x: B);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentity2.ts, 44, 25), Decl(objectTypesIdentity2.ts, 46, 21), Decl(objectTypesIdentity2.ts, 47, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 46, 15))
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+function foo10(x: typeof a); // ok
+>foo10 : Symbol(foo10, Decl(objectTypesIdentity2.ts, 44, 25), Decl(objectTypesIdentity2.ts, 46, 21), Decl(objectTypesIdentity2.ts, 47, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 47, 15))
+>a : Symbol(a, Decl(objectTypesIdentity2.ts, 18, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentity2.ts, 44, 25), Decl(objectTypesIdentity2.ts, 46, 21), Decl(objectTypesIdentity2.ts, 47, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 48, 15))
+
+function foo11(x: B);
+>foo11 : Symbol(foo11, Decl(objectTypesIdentity2.ts, 48, 26), Decl(objectTypesIdentity2.ts, 50, 21), Decl(objectTypesIdentity2.ts, 51, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 50, 15))
+>B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+
+function foo11(x: typeof b); // ok
+>foo11 : Symbol(foo11, Decl(objectTypesIdentity2.ts, 48, 26), Decl(objectTypesIdentity2.ts, 50, 21), Decl(objectTypesIdentity2.ts, 51, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 51, 15))
+>b : Symbol(b, Decl(objectTypesIdentity2.ts, 20, 3))
+
+function foo11(x: any) { }
+>foo11 : Symbol(foo11, Decl(objectTypesIdentity2.ts, 48, 26), Decl(objectTypesIdentity2.ts, 50, 21), Decl(objectTypesIdentity2.ts, 51, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 52, 15))
+
+function foo12(x: I);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentity2.ts, 52, 26), Decl(objectTypesIdentity2.ts, 54, 21), Decl(objectTypesIdentity2.ts, 55, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 54, 15))
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+function foo12(x: C<string>); // ok
+>foo12 : Symbol(foo12, Decl(objectTypesIdentity2.ts, 52, 26), Decl(objectTypesIdentity2.ts, 54, 21), Decl(objectTypesIdentity2.ts, 55, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 55, 15))
+>C : Symbol(C, Decl(objectTypesIdentity2.ts, 8, 1))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentity2.ts, 52, 26), Decl(objectTypesIdentity2.ts, 54, 21), Decl(objectTypesIdentity2.ts, 55, 29))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 56, 15))
+
+function foo13(x: I);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentity2.ts, 56, 26), Decl(objectTypesIdentity2.ts, 58, 21), Decl(objectTypesIdentity2.ts, 59, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 58, 15))
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+function foo13(x: typeof a); // ok
+>foo13 : Symbol(foo13, Decl(objectTypesIdentity2.ts, 56, 26), Decl(objectTypesIdentity2.ts, 58, 21), Decl(objectTypesIdentity2.ts, 59, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 59, 15))
+>a : Symbol(a, Decl(objectTypesIdentity2.ts, 18, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentity2.ts, 56, 26), Decl(objectTypesIdentity2.ts, 58, 21), Decl(objectTypesIdentity2.ts, 59, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 60, 15))
+
+function foo14(x: I);
+>foo14 : Symbol(foo14, Decl(objectTypesIdentity2.ts, 60, 26), Decl(objectTypesIdentity2.ts, 62, 21), Decl(objectTypesIdentity2.ts, 63, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 62, 15))
+>I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+
+function foo14(x: typeof b); // ok
+>foo14 : Symbol(foo14, Decl(objectTypesIdentity2.ts, 60, 26), Decl(objectTypesIdentity2.ts, 62, 21), Decl(objectTypesIdentity2.ts, 63, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 63, 15))
+>b : Symbol(b, Decl(objectTypesIdentity2.ts, 20, 3))
+
+function foo14(x: any) { }
+>foo14 : Symbol(foo14, Decl(objectTypesIdentity2.ts, 60, 26), Decl(objectTypesIdentity2.ts, 62, 21), Decl(objectTypesIdentity2.ts, 63, 28))
+>x : Symbol(x, Decl(objectTypesIdentity2.ts, 64, 15))
+

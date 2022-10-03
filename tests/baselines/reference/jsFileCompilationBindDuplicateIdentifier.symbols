@@ -1,0 +1,7 @@
+=== tests/cases/compiler/a.js ===
+var a = 10;
+>a : Symbol(a, Decl(a.js, 0, 3))
+
+class a {
+>a : Symbol(a, Decl(a.js, 0, 11))
+}

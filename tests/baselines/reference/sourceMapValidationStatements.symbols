@@ -1,0 +1,197 @@
+=== tests/cases/compiler/sourceMapValidationStatements.ts ===
+function f() {
+>f : Symbol(f, Decl(sourceMapValidationStatements.ts, 0, 0))
+
+    var y;
+>y : Symbol(y, Decl(sourceMapValidationStatements.ts, 1, 7))
+
+    var x = 0;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    for (var i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(sourceMapValidationStatements.ts, 3, 12))
+>i : Symbol(i, Decl(sourceMapValidationStatements.ts, 3, 12))
+>i : Symbol(i, Decl(sourceMapValidationStatements.ts, 3, 12))
+
+        x += i;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>i : Symbol(i, Decl(sourceMapValidationStatements.ts, 3, 12))
+
+        x *= 0;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+    }
+    if (x > 17) {
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+        x /= 9;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    } else {
+        x += 10;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+        x++;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+    }
+    var a = [
+>a : Symbol(a, Decl(sourceMapValidationStatements.ts, 13, 7))
+
+        1,
+        2,
+        3
+    ];
+    var obj = {
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+
+        z: 1,
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+
+        q: "hello"
+>q : Symbol(q, Decl(sourceMapValidationStatements.ts, 19, 13))
+
+    };
+    for (var j in a) {
+>j : Symbol(j, Decl(sourceMapValidationStatements.ts, 22, 12))
+>a : Symbol(a, Decl(sourceMapValidationStatements.ts, 13, 7))
+
+        obj.z = a[j];
+>obj.z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+>a : Symbol(a, Decl(sourceMapValidationStatements.ts, 13, 7))
+>j : Symbol(j, Decl(sourceMapValidationStatements.ts, 22, 12))
+
+        var v = 10;
+>v : Symbol(v, Decl(sourceMapValidationStatements.ts, 24, 11))
+    }
+    try {
+        obj.q = "ohhh";
+>obj.q : Symbol(q, Decl(sourceMapValidationStatements.ts, 19, 13))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>q : Symbol(q, Decl(sourceMapValidationStatements.ts, 19, 13))
+
+    } catch (e) {
+>e : Symbol(e, Decl(sourceMapValidationStatements.ts, 28, 13))
+
+        if (obj.z < 10) {
+>obj.z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+
+            obj.z = 12;
+>obj.z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+
+        } else {
+            obj.q = "hmm";
+>obj.q : Symbol(q, Decl(sourceMapValidationStatements.ts, 19, 13))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>q : Symbol(q, Decl(sourceMapValidationStatements.ts, 19, 13))
+        }
+    }
+    try {
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } catch (e1) {
+>e1 : Symbol(e1, Decl(sourceMapValidationStatements.ts, 37, 13))
+
+        var b = e1;
+>b : Symbol(b, Decl(sourceMapValidationStatements.ts, 38, 11))
+>e1 : Symbol(e1, Decl(sourceMapValidationStatements.ts, 37, 13))
+
+    } finally {
+        y = 70;
+>y : Symbol(y, Decl(sourceMapValidationStatements.ts, 1, 7))
+    }
+    with (obj) {
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+
+        i = 2;
+        z = 10;
+    }
+    switch (obj.z) {
+>obj.z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+>obj : Symbol(obj, Decl(sourceMapValidationStatements.ts, 18, 7))
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 18, 15))
+
+        case 0: {
+            x++;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+            break;
+
+        }
+        case 1: {
+            x--;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+            break;
+
+        }
+        default: {
+            x *= 2;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+            x = 50;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+            break;
+
+        }
+    }
+    while (x < 10) {
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+        x++;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+    }
+    do {
+        x--;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    } while (x > 4)
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    x = y;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>y : Symbol(y, Decl(sourceMapValidationStatements.ts, 1, 7))
+
+    var z = (x == 1) ? x + 1 : x - 1;
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 71, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    (x == 1) ? x + 1 : x - 1;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    x === 1;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+
+    x = z = 40;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 2, 7))
+>z : Symbol(z, Decl(sourceMapValidationStatements.ts, 71, 7))
+
+    eval("y");
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+
+    return;
+}
+var b = function () {
+>b : Symbol(b, Decl(sourceMapValidationStatements.ts, 78, 3))
+
+    var x = 10;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 79, 7))
+
+    x = x + 1;
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 79, 7))
+>x : Symbol(x, Decl(sourceMapValidationStatements.ts, 79, 7))
+
+};
+f();
+>f : Symbol(f, Decl(sourceMapValidationStatements.ts, 0, 0))
+

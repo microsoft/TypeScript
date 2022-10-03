@@ -1,0 +1,23 @@
+=== tests/cases/compiler/moduleClassArrayCodeGenTest.ts ===
+// Invalid code gen for Array of Module class
+
+module M
+>M : Symbol(M, Decl(moduleClassArrayCodeGenTest.ts, 0, 0))
+{
+    export class A { }
+>A : Symbol(A, Decl(moduleClassArrayCodeGenTest.ts, 3, 1))
+
+    class B{ }
+>B : Symbol(B, Decl(moduleClassArrayCodeGenTest.ts, 4, 22))
+}
+
+var t: M.A[] = [];
+>t : Symbol(t, Decl(moduleClassArrayCodeGenTest.ts, 8, 3))
+>M : Symbol(M, Decl(moduleClassArrayCodeGenTest.ts, 0, 0))
+>A : Symbol(M.A, Decl(moduleClassArrayCodeGenTest.ts, 3, 1))
+
+var t2: M.B[] = [];
+>t2 : Symbol(t2, Decl(moduleClassArrayCodeGenTest.ts, 9, 3))
+>M : Symbol(M, Decl(moduleClassArrayCodeGenTest.ts, 0, 0))
+>B : Symbol(M.B)
+

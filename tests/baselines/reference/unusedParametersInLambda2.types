@@ -1,0 +1,17 @@
+=== tests/cases/compiler/unusedParametersInLambda2.ts ===
+class A {
+>A : A
+
+    public f1() {
+>f1 : () => (X: any, Y: any) => void
+
+        return (X, Y) => {
+>(X, Y) => {            Y;        } : (X: any, Y: any) => void
+>X : any
+>Y : any
+
+            Y;
+>Y : any
+        }
+    }
+}

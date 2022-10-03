@@ -1,0 +1,17 @@
+=== tests/cases/compiler/strictModeWordInExportDeclaration.ts ===
+"use strict"
+var x = 1;
+>x : Symbol(x, Decl(strictModeWordInExportDeclaration.ts, 1, 3))
+
+export { x as foo }
+>x : Symbol(x, Decl(strictModeWordInExportDeclaration.ts, 1, 3))
+>foo : Symbol(foo, Decl(strictModeWordInExportDeclaration.ts, 2, 8))
+
+export { x as implements }
+>x : Symbol(x, Decl(strictModeWordInExportDeclaration.ts, 1, 3))
+>implements : Symbol(implements, Decl(strictModeWordInExportDeclaration.ts, 3, 8))
+
+export { x as while }
+>x : Symbol(x, Decl(strictModeWordInExportDeclaration.ts, 1, 3))
+>while : Symbol(while, Decl(strictModeWordInExportDeclaration.ts, 4, 8))
+

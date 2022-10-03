@@ -1,0 +1,14 @@
+=== tests/cases/compiler/stringLiteralPropertyNameWithLineContinuation1.ts ===
+var x = {'text\
+>x : Symbol(x, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 3))
+>'text\' : Symbol('text\
+', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+
+':'hello'}
+x.text = "bar"
+>x.text : Symbol('text\
+', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+>x : Symbol(x, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 3))
+>text : Symbol('text\
+', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+

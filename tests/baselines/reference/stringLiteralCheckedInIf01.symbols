@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf01.ts ===
+type S = "a" | "b";
+>S : Symbol(S, Decl(stringLiteralCheckedInIf01.ts, 0, 0))
+
+type T = S[] | S;
+>T : Symbol(T, Decl(stringLiteralCheckedInIf01.ts, 0, 19))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf01.ts, 0, 0))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf01.ts, 0, 0))
+
+function f(foo: T) {
+>f : Symbol(f, Decl(stringLiteralCheckedInIf01.ts, 1, 17))
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+>T : Symbol(T, Decl(stringLiteralCheckedInIf01.ts, 0, 19))
+
+    if (foo === "a") {
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+
+        return foo;
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+    }
+    else if (foo === "b") {
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+
+        return foo;
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+    }
+    else { 
+        return (foo as S[])[0];
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf01.ts, 3, 11))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf01.ts, 0, 0))
+    }
+}

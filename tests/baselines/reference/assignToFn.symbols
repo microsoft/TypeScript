@@ -1,0 +1,24 @@
+=== tests/cases/compiler/assignToFn.ts ===
+module M {
+>M : Symbol(M, Decl(assignToFn.ts, 0, 0))
+
+    interface I {
+>I : Symbol(I, Decl(assignToFn.ts, 0, 10))
+
+	f(n:number):boolean;
+>f : Symbol(I.f, Decl(assignToFn.ts, 1, 17))
+>n : Symbol(n, Decl(assignToFn.ts, 2, 3))
+    }
+
+    var x:I={ f:function(n) { return true; } };
+>x : Symbol(x, Decl(assignToFn.ts, 5, 7))
+>I : Symbol(I, Decl(assignToFn.ts, 0, 10))
+>f : Symbol(f, Decl(assignToFn.ts, 5, 13))
+>n : Symbol(n, Decl(assignToFn.ts, 5, 25))
+
+    x.f="hello";
+>x.f : Symbol(I.f, Decl(assignToFn.ts, 1, 17))
+>x : Symbol(x, Decl(assignToFn.ts, 5, 7))
+>f : Symbol(I.f, Decl(assignToFn.ts, 1, 17))
+}
+

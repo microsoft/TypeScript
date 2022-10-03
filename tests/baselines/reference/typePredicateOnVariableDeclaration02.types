@@ -1,0 +1,6 @@
+=== tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts ===
+var y: z is number;
+>y : z
+>is : any
+>number : any
+

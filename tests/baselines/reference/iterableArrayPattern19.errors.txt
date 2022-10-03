@@ -1,0 +1,25 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(17,5): error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
+  Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts (1 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooArrayIterator {
+        next() {
+            return {
+                value: [new Foo],
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    function fun([[a], b]: Bar[][]) { }
+    fun(new FooArrayIterator);
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
+!!! error TS2345:   Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.

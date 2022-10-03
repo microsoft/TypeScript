@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInGlobal.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// variables in global
+var num: number;
+>num : number
+
+var var1: string | number;
+>var1 : string | number
+
+if (typeof var1 === "string") {
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+
+    num = var1.length; // string
+>num = var1.length : number
+>num : number
+>var1.length : number
+>var1 : string
+>length : number
+}
+else {
+    num = var1; // number
+>num = var1 : number
+>num : number
+>var1 : number
+}
+

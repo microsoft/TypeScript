@@ -1,0 +1,34 @@
+=== tests/cases/conformance/es6/modules/t1.ts ===
+let as = 100;
+>as : Symbol(as, Decl(t1.ts, 0, 3))
+
+export { as as return, as };
+>as : Symbol(as, Decl(t1.ts, 0, 3))
+>return : Symbol(return, Decl(t1.ts, 2, 8))
+>as : Symbol(as, Decl(t1.ts, 2, 22))
+
+=== tests/cases/conformance/es6/modules/t2.ts ===
+import * as as from "./t1";
+>as : Symbol(as, Decl(t2.ts, 0, 6))
+
+var x = as.as;
+>x : Symbol(x, Decl(t2.ts, 1, 3))
+>as.as : Symbol(as.as, Decl(t1.ts, 2, 22))
+>as : Symbol(as, Decl(t2.ts, 0, 6))
+>as : Symbol(as.as, Decl(t1.ts, 2, 22))
+
+var y = as.return;
+>y : Symbol(y, Decl(t2.ts, 2, 3))
+>as.return : Symbol(as.return, Decl(t1.ts, 2, 8))
+>as : Symbol(as, Decl(t2.ts, 0, 6))
+>return : Symbol(as.return, Decl(t1.ts, 2, 8))
+
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import { as as as } from "./t1";
+>as : Symbol(as, Decl(t1.ts, 2, 22))
+>as : Symbol(as, Decl(t3.ts, 0, 8))
+
+=== tests/cases/conformance/es6/modules/t4.ts ===
+import { as } from "./t1";
+>as : Symbol(as, Decl(t4.ts, 0, 8))
+

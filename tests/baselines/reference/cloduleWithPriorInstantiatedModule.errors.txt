@@ -1,0 +1,22 @@
+tests/cases/compiler/cloduleWithPriorInstantiatedModule.ts(2,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+
+
+==== tests/cases/compiler/cloduleWithPriorInstantiatedModule.ts (1 errors) ====
+    // Non-ambient & instantiated module.
+    module Moclodule {
+           ~~~~~~~~~
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+        export interface Someinterface {
+            foo(): void;
+        }
+        var x = 10;
+    }
+    
+    class Moclodule {
+    }
+    
+    // Instantiated module.
+    module Moclodule {
+        export class Manager {
+        }
+    }

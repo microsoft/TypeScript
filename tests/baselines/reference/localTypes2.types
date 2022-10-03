@@ -1,0 +1,134 @@
+=== tests/cases/conformance/types/localTypes/localTypes2.ts ===
+function f1() {
+>f1 : () => void
+
+    function f() {
+>f : () => typeof C
+
+        class C {
+>C : C
+
+            constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+        }
+        return C;
+>C : typeof C
+    }
+    let C = f();
+>C : typeof C
+>f() : typeof C
+>f : () => typeof C
+
+    let v = new C(10, 20);
+>v : C
+>new C(10, 20) : C
+>C : typeof C
+>10 : 10
+>20 : 20
+
+    let x = v.x;
+>x : number
+>v.x : number
+>v : C
+>x : number
+
+    let y = v.y;
+>y : number
+>v.y : number
+>v : C
+>y : number
+}
+
+function f2() {
+>f2 : () => void
+
+    function f(x: number) {
+>f : (x: number) => typeof C
+>x : number
+
+        class C {
+>C : C
+
+            public x = x;
+>x : number
+>x : number
+
+            constructor(public y: number) { }
+>y : number
+        }
+        return C;
+>C : typeof C
+    }
+    let C = f(10);
+>C : typeof C
+>f(10) : typeof C
+>f : (x: number) => typeof C
+>10 : 10
+
+    let v = new C(20);
+>v : C
+>new C(20) : C
+>C : typeof C
+>20 : 20
+
+    let x = v.x;
+>x : number
+>v.x : number
+>v : C
+>x : number
+
+    let y = v.y;
+>y : number
+>v.y : number
+>v : C
+>y : number
+}
+
+function f3() {
+>f3 : () => void
+
+    function f(x: number, y: number) {
+>f : (x: number, y: number) => typeof C
+>x : number
+>y : number
+
+        class C {
+>C : C
+
+            public x = x;
+>x : number
+>x : number
+
+            public y = y;
+>y : number
+>y : number
+        }
+        return C;
+>C : typeof C
+    }
+    let C = f(10, 20);
+>C : typeof C
+>f(10, 20) : typeof C
+>f : (x: number, y: number) => typeof C
+>10 : 10
+>20 : 20
+
+    let v = new C();
+>v : C
+>new C() : C
+>C : typeof C
+
+    let x = v.x;
+>x : number
+>v.x : number
+>v : C
+>x : number
+
+    let y = v.y;
+>y : number
+>v.y : number
+>v : C
+>y : number
+}
+

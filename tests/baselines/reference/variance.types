@@ -1,0 +1,59 @@
+=== tests/cases/conformance/types/conditional/variance.ts ===
+// Test cases for parameter variances affected by conditional types.
+
+// Repro from #30047
+
+interface Foo<T> {
+  prop: T extends unknown ? true : false;
+>prop : T extends unknown ? true : false
+>true : true
+>false : false
+}
+
+const foo = { prop: true } as const;
+>foo : { readonly prop: true; }
+>{ prop: true } as const : { readonly prop: true; }
+>{ prop: true } : { readonly prop: true; }
+>prop : true
+>true : true
+
+const x: Foo<1> = foo;
+>x : Foo<1>
+>foo : { readonly prop: true; }
+
+const y: Foo<number> = foo;
+>y : Foo<number>
+>foo : { readonly prop: true; }
+
+const z: Foo<number> = x;
+>z : Foo<number>
+>x : Foo<1>
+
+
+// Repro from #30118
+
+class Bar<T extends string> {
+>Bar : Bar<T>
+
+  private static instance: Bar<string>[] = [];
+>instance : Bar<string>[]
+>[] : never[]
+
+  cast(_name: ([T] extends [string] ? string : string)) { }
+>cast : (_name: ([T] extends [string] ? string : string)) => void
+>_name : [T] extends [string] ? string : string
+  
+  pushThis() {
+>pushThis : () => void
+
+    Bar.instance.push(this);
+>Bar.instance.push(this) : number
+>Bar.instance.push : (...items: Bar<string>[]) => number
+>Bar.instance : Bar<string>[]
+>Bar : typeof Bar
+>instance : Bar<string>[]
+>push : (...items: Bar<string>[]) => number
+>this : this
+  }
+}
+

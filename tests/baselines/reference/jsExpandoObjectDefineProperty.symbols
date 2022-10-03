@@ -1,0 +1,20 @@
+=== tests/cases/compiler/index.js ===
+var chrome = {}
+>chrome : Symbol(chrome, Decl(index.js, 0, 3), Decl(index.js, 1, 22), Decl(index.js, 1, 74))
+
+Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>chrome : Symbol(chrome, Decl(index.js, 0, 3), Decl(index.js, 1, 22), Decl(index.js, 1, 74))
+>'devtools' : Symbol(chrome.devtools, Decl(index.js, 0, 15), Decl(index.js, 2, 7))
+>value : Symbol(value, Decl(index.js, 1, 43))
+>enumerable : Symbol(enumerable, Decl(index.js, 1, 54))
+
+chrome.devtools.inspectedWindow = {}
+>chrome.devtools.inspectedWindow : Symbol(chrome.devtools.inspectedWindow, Decl(index.js, 1, 74))
+>chrome.devtools : Symbol(chrome.devtools, Decl(index.js, 0, 15), Decl(index.js, 2, 7))
+>chrome : Symbol(chrome, Decl(index.js, 0, 3), Decl(index.js, 1, 22), Decl(index.js, 1, 74))
+>devtools : Symbol(chrome.devtools, Decl(index.js, 0, 15), Decl(index.js, 2, 7))
+>inspectedWindow : Symbol(chrome.devtools.inspectedWindow, Decl(index.js, 1, 74))
+

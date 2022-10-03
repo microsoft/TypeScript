@@ -1,0 +1,96 @@
+=== tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts ===
+module M {
+    export interface I { }
+}
+module M {
+>M : typeof M
+
+    export class I { }
+>I : I
+}
+
+module M {
+>M : typeof M
+
+    export function f() { }
+>f : typeof f
+}
+module M {
+>M : typeof M
+
+    export class f { } // error
+>f : f
+}
+
+module M {
+>M : typeof M
+
+    function g() { }
+>g : () => void
+}
+module M {
+>M : typeof M
+
+    export class g { } // no error
+>g : g
+}
+
+module M {
+>M : typeof M
+
+    export class C { }
+>C : C
+}
+module M {
+>M : typeof M
+
+    function C() { } // no error
+>C : () => void
+}
+
+module M {
+>M : typeof M
+
+    export var v = 3;
+>v : number
+>3 : 3
+}
+module M {
+>M : typeof M
+
+    export var v = 3; // error for redeclaring var in a different parent
+>v : number
+>3 : 3
+}
+
+class Foo {
+>Foo : Foo
+
+    static x: number;
+>x : number
+}
+
+module Foo {
+>Foo : typeof Foo
+
+    export var x: number; // error for redeclaring var in a different parent
+>x : number
+}
+
+module N {
+>N : typeof N
+
+    export module F {
+>F : typeof F
+
+        var t;
+>t : any
+    }
+}
+declare module N {
+>N : typeof N
+
+    export function F(); // no error because function is ambient
+>F : typeof F
+}
+

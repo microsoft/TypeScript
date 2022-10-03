@@ -1,0 +1,72 @@
+=== tests/cases/compiler/genericChainedCalls.ts ===
+interface I1<T> {
+>I1 : Symbol(I1, Decl(genericChainedCalls.ts, 0, 0))
+>T : Symbol(T, Decl(genericChainedCalls.ts, 0, 13))
+
+    func<U>(callback: (value: T) => U): I1<T>;
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>U : Symbol(U, Decl(genericChainedCalls.ts, 1, 9))
+>callback : Symbol(callback, Decl(genericChainedCalls.ts, 1, 12))
+>value : Symbol(value, Decl(genericChainedCalls.ts, 1, 23))
+>T : Symbol(T, Decl(genericChainedCalls.ts, 0, 13))
+>U : Symbol(U, Decl(genericChainedCalls.ts, 1, 9))
+>I1 : Symbol(I1, Decl(genericChainedCalls.ts, 0, 0))
+>T : Symbol(T, Decl(genericChainedCalls.ts, 0, 13))
+}
+ 
+declare var v1: I1<number>;
+>v1 : Symbol(v1, Decl(genericChainedCalls.ts, 4, 11))
+>I1 : Symbol(I1, Decl(genericChainedCalls.ts, 0, 0))
+ 
+var r1 = v1.func(num => num.toString()) 
+>r1 : Symbol(r1, Decl(genericChainedCalls.ts, 6, 3))
+>v1.func(num => num.toString())            .func(str => str.length) // error, number doesn't have a length           .func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>v1.func(num => num.toString())            .func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>v1.func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>v1 : Symbol(v1, Decl(genericChainedCalls.ts, 4, 11))
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 6, 17))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 6, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+           .func(str => str.length) // error, number doesn't have a length
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>str : Symbol(str, Decl(genericChainedCalls.ts, 7, 17))
+>str : Symbol(str, Decl(genericChainedCalls.ts, 7, 17))
+
+           .func(num => num.toString())
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 8, 17))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 8, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+var s1 = v1.func(num => num.toString()) 
+>s1 : Symbol(s1, Decl(genericChainedCalls.ts, 10, 3))
+>v1.func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>v1 : Symbol(v1, Decl(genericChainedCalls.ts, 4, 11))
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 10, 17))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 10, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+var s2 = s1.func(str => str.length) // should also error
+>s2 : Symbol(s2, Decl(genericChainedCalls.ts, 11, 3))
+>s1.func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>s1 : Symbol(s1, Decl(genericChainedCalls.ts, 10, 3))
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>str : Symbol(str, Decl(genericChainedCalls.ts, 11, 17))
+>str : Symbol(str, Decl(genericChainedCalls.ts, 11, 17))
+
+var s3 = s2.func(num => num.toString())
+>s3 : Symbol(s3, Decl(genericChainedCalls.ts, 12, 3))
+>s2.func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>s2 : Symbol(s2, Decl(genericChainedCalls.ts, 11, 3))
+>func : Symbol(I1.func, Decl(genericChainedCalls.ts, 0, 17))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 12, 17))
+>num.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>num : Symbol(num, Decl(genericChainedCalls.ts, 12, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

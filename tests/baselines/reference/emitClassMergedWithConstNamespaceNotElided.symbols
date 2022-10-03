@@ -1,0 +1,37 @@
+=== tests/cases/compiler/enum.d.ts ===
+export namespace Clone {
+>Clone : Symbol(Clone, Decl(enum.d.ts, 0, 0), Decl(enum.d.ts, 7, 1))
+
+    const enum LOCAL {
+>LOCAL : Symbol(LOCAL, Decl(enum.d.ts, 0, 24))
+
+        AUTO = 0,
+>AUTO : Symbol(LOCAL.AUTO, Decl(enum.d.ts, 1, 22))
+
+        LOCAL = 1,
+>LOCAL : Symbol(LOCAL.LOCAL, Decl(enum.d.ts, 2, 17))
+
+        NO_LOCAL = 2,
+>NO_LOCAL : Symbol(LOCAL.NO_LOCAL, Decl(enum.d.ts, 3, 18))
+
+        NO_LINKS = 3
+>NO_LINKS : Symbol(LOCAL.NO_LINKS, Decl(enum.d.ts, 4, 21))
+    }
+}
+
+export class Clone {
+>Clone : Symbol(Clone, Decl(enum.d.ts, 0, 0), Decl(enum.d.ts, 7, 1))
+
+    static clone(url: string): void;
+>clone : Symbol(Clone.clone, Decl(enum.d.ts, 9, 20))
+>url : Symbol(url, Decl(enum.d.ts, 10, 17))
+}
+=== tests/cases/compiler/usage.ts ===
+import {Clone} from "./enum";
+>Clone : Symbol(Clone, Decl(usage.ts, 0, 8))
+
+Clone.clone("ok");
+>Clone.clone : Symbol(Clone.clone, Decl(enum.d.ts, 9, 20))
+>Clone : Symbol(Clone, Decl(usage.ts, 0, 8))
+>clone : Symbol(Clone.clone, Decl(enum.d.ts, 9, 20))
+

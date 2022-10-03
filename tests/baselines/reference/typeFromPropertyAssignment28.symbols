@@ -1,0 +1,30 @@
+=== tests/cases/conformance/salsa/a.js ===
+// mixed prototype-assignment+class declaration
+class C { constructor() { this.p = 1; } }
+>C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
+>this.p : Symbol(C.p, Decl(a.js, 1, 25))
+>this : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
+>p : Symbol(C.p, Decl(a.js, 1, 25))
+
+// Property assignment does nothing.
+// You have to use Object.defineProperty(C, "prototype", { q: 2 })
+// and that only works on classes with no superclass.
+// (Object.defineProperty isn't recognised as a JS special assignment right now.)
+C.prototype = { q: 2 };
+>C.prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
+>C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
+>prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
+>q : Symbol(q, Decl(a.js, 6, 15))
+
+const c = new C()
+>c : Symbol(c, Decl(a.js, 8, 5))
+>C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
+
+c.p
+>c.p : Symbol(C.p, Decl(a.js, 1, 25))
+>c : Symbol(c, Decl(a.js, 8, 5))
+>p : Symbol(C.p, Decl(a.js, 1, 25))
+
+c.q
+>c : Symbol(c, Decl(a.js, 8, 5))
+

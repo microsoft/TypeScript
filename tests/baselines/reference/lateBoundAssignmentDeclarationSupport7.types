@@ -1,0 +1,70 @@
+=== tests/cases/conformance/salsa/usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport7.js") : typeof x
+>require : any
+>"./lateBoundAssignmentDeclarationSupport7.js" : "./lateBoundAssignmentDeclarationSupport7.js"
+
+const y = x.F["my-fake-sym"];
+>y : string
+>x.F["my-fake-sym"] : string
+>x.F : typeof x.F
+>x : typeof x
+>F : typeof x.F
+>"my-fake-sym" : "my-fake-sym"
+
+const z = x.F[x.S];
+>z : string
+>x.F[x.S] : string
+>x.F : typeof x.F
+>x : typeof x
+>F : typeof x.F
+>x.S : unique symbol
+>x : typeof x
+>S : unique symbol
+
+=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7.js ===
+const _sym = Symbol();
+>_sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const _str = "my-fake-sym";
+>_str : "my-fake-sym"
+>"my-fake-sym" : "my-fake-sym"
+
+function F() {
+>F : typeof F
+}
+F[_sym] = "ok";
+>F[_sym] = "ok" : "ok"
+>F[_sym] : string
+>F : typeof F
+>_sym : unique symbol
+>"ok" : "ok"
+
+F[_str] = "ok";
+>F[_str] = "ok" : "ok"
+>F[_str] : string
+>F : typeof F
+>_str : "my-fake-sym"
+>"ok" : "ok"
+
+module.exports.F = F;
+>module.exports.F = F : typeof F
+>module.exports.F : typeof F
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>F : typeof F
+>F : typeof F
+
+module.exports.S = _sym;
+>module.exports.S = _sym : unique symbol
+>module.exports.S : unique symbol
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>S : unique symbol
+>_sym : unique symbol
+

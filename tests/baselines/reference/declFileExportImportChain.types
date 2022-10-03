@@ -1,0 +1,41 @@
+=== tests/cases/compiler/declFileExportImportChain_d.ts ===
+import c = require("declFileExportImportChain_c");
+>c : typeof c
+
+export var x: c.b1.a.m2.c1;
+>x : c.b1.a.m2.c1
+>c : any
+>b1 : any
+>a : any
+>m2 : any
+
+=== tests/cases/compiler/declFileExportImportChain_a.ts ===
+module m1 {
+>m1 : typeof m1
+
+    export module m2 {
+>m2 : typeof m2
+
+        export class c1 {
+>c1 : c1
+        }
+    }
+}
+export = m1;
+>m1 : typeof m1
+
+=== tests/cases/compiler/declFileExportImportChain_b.ts ===
+export import a = require("declFileExportImportChain_a");
+>a : typeof a
+
+=== tests/cases/compiler/declFileExportImportChain_b1.ts ===
+import b = require("declFileExportImportChain_b");
+>b : typeof b
+
+export = b;
+>b : typeof b
+
+=== tests/cases/compiler/declFileExportImportChain_c.ts ===
+export import b1 = require("declFileExportImportChain_b1");
+>b1 : typeof b1
+

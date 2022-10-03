@@ -1,0 +1,61 @@
+=== tests/cases/compiler/wrappedRecursiveGenericType.ts ===
+interface X<T> { e: T; }
+>e : T
+
+interface A<T> {
+    a: B<T>;
+>a : B<T>
+
+    val: T;
+>val : T
+}
+interface B<T> {
+    b: A<X<T>>;
+>b : A<X<T>>
+
+    val: T;
+>val : T
+}
+var x: A<number>;
+>x : A<number>
+
+x.val = 5;         // val -> number
+>x.val = 5 : 5
+>x.val : number
+>x : A<number>
+>val : number
+>5 : 5
+
+x.a.val = 5;       // val -> number
+>x.a.val = 5 : 5
+>x.a.val : number
+>x.a : B<number>
+>x : A<number>
+>a : B<number>
+>val : number
+>5 : 5
+
+x.a.b.val = 5;     // val -> X<number> (This should be an error)
+>x.a.b.val = 5 : 5
+>x.a.b.val : X<number>
+>x.a.b : A<X<number>>
+>x.a : B<number>
+>x : A<number>
+>a : B<number>
+>b : A<X<number>>
+>val : X<number>
+>5 : 5
+
+x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
+>x.a.b.a.val = 5 : 5
+>x.a.b.a.val : X<number>
+>x.a.b.a : B<X<number>>
+>x.a.b : A<X<number>>
+>x.a : B<number>
+>x : A<number>
+>a : B<number>
+>b : A<X<number>>
+>a : B<X<number>>
+>val : X<number>
+>5 : 5
+

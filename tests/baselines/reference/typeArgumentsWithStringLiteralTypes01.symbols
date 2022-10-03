@@ -1,0 +1,370 @@
+=== tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts ===
+declare function randBool(): boolean;
+>randBool : Symbol(randBool, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 0))
+
+declare function takeReturnString(str: string): string;
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>str : Symbol(str, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 34))
+
+declare function takeReturnHello(str: "Hello"): "Hello";
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>str : Symbol(str, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 33))
+
+declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World";
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>str : Symbol(str, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 38))
+
+function fun1<T>(x: T, y: T) {
+>fun1 : Symbol(fun1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 81))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 14))
+>x : Symbol(x, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 17))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 14))
+>y : Symbol(y, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 22))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 14))
+
+    return randBool() ? x : y;
+>randBool : Symbol(randBool, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 0))
+>x : Symbol(x, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 17))
+>y : Symbol(y, Decl(typeArgumentsWithStringLiteralTypes01.ts, 5, 22))
+}
+
+function fun2<T, U>(x: T, y: U) {
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 14))
+>U : Symbol(U, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 16))
+>x : Symbol(x, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 20))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 14))
+>y : Symbol(y, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 25))
+>U : Symbol(U, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 16))
+
+    return randBool() ? x : y;
+>randBool : Symbol(randBool, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 0))
+>x : Symbol(x, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 20))
+>y : Symbol(y, Decl(typeArgumentsWithStringLiteralTypes01.ts, 9, 25))
+}
+
+function fun3<T>(...args: T[]): T {
+>fun3 : Symbol(fun3, Decl(typeArgumentsWithStringLiteralTypes01.ts, 11, 1))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 13, 14))
+>args : Symbol(args, Decl(typeArgumentsWithStringLiteralTypes01.ts, 13, 17))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 13, 14))
+>T : Symbol(T, Decl(typeArgumentsWithStringLiteralTypes01.ts, 13, 14))
+
+    return args[+randBool()];
+>args : Symbol(args, Decl(typeArgumentsWithStringLiteralTypes01.ts, 13, 17))
+>randBool : Symbol(randBool, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 0))
+}
+
+namespace n1 {
+>n1 : Symbol(n1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 15, 1))
+
+    // The following should all come back as strings.
+    // They should be assignable to/from something of a type 'string'.
+    // They should not be assignable to either "Hello" or "World".
+    export let a = fun1("Hello", "World");
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+>fun1 : Symbol(fun1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 81))
+
+    export let b = fun1("Hello", "Hello");
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+>fun1 : Symbol(fun1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 81))
+
+    export let c = fun2("Hello", "World");
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let d = fun2("Hello", "Hello");
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let e = fun3("Hello", "Hello", "World", "Foo");
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+>fun3 : Symbol(fun3, Decl(typeArgumentsWithStringLiteralTypes01.ts, 11, 1))
+
+    // Should be valid
+    a = takeReturnString(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+
+    b = takeReturnString(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+
+    c = takeReturnString(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+
+    d = takeReturnString(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+
+    e = takeReturnString(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+    
+    // Passing these as arguments should cause an error.
+    a = takeReturnHello(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+
+    b = takeReturnHello(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+
+    c = takeReturnHello(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+
+    d = takeReturnHello(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+
+    e = takeReturnHello(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+
+    // Passing these as arguments should cause an error.
+    a = takeReturnHelloWorld(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 21, 14))
+
+    b = takeReturnHelloWorld(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 22, 14))
+
+    c = takeReturnHelloWorld(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 23, 14))
+
+    d = takeReturnHelloWorld(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 24, 14))
+
+    e = takeReturnHelloWorld(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 25, 14))
+}
+
+namespace n2 {
+>n2 : Symbol(n2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 47, 1))
+
+    // The following (regardless of errors) should come back typed
+    // as "Hello" (or "Hello" | "Hello").
+    export let a = fun1<"Hello">("Hello", "Hello");
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+>fun1 : Symbol(fun1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 81))
+
+    export let b = fun1<"Hello">("Hello", "World");
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+>fun1 : Symbol(fun1, Decl(typeArgumentsWithStringLiteralTypes01.ts, 3, 81))
+
+    export let c = fun2<"Hello", "Hello">("Hello", "Hello");
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let d = fun2<"Hello", "Hello">("Hello", "World");
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let e = fun3<"Hello">("Hello", "World");
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+>fun3 : Symbol(fun3, Decl(typeArgumentsWithStringLiteralTypes01.ts, 11, 1))
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnString(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+
+    b = takeReturnString(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+
+    c = takeReturnString(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+
+    d = takeReturnString(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+
+    e = takeReturnString(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+
+    // Should be valid
+    a = takeReturnHello(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+
+    b = takeReturnHello(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+
+    c = takeReturnHello(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+
+    d = takeReturnHello(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+
+    e = takeReturnHello(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnHelloWorld(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 52, 14))
+
+    b = takeReturnHelloWorld(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 53, 14))
+
+    c = takeReturnHelloWorld(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 54, 14))
+
+    d = takeReturnHelloWorld(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 55, 14))
+
+    e = takeReturnHelloWorld(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 56, 14))
+}
+
+
+namespace n3 {
+>n3 : Symbol(n3, Decl(typeArgumentsWithStringLiteralTypes01.ts, 78, 1))
+
+    // The following (regardless of errors) should come back typed
+    // as "Hello" | "World" (or "World" | "Hello").
+    export let a = fun2<"Hello", "World">("Hello", "World");
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let b = fun2<"Hello", "World">("World", "Hello");
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let c = fun2<"World", "Hello">("Hello", "Hello");
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let d = fun2<"World", "Hello">("World", "World");
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+>fun2 : Symbol(fun2, Decl(typeArgumentsWithStringLiteralTypes01.ts, 7, 1))
+
+    export let e = fun3<"Hello" | "World">("Hello", "World");
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+>fun3 : Symbol(fun3, Decl(typeArgumentsWithStringLiteralTypes01.ts, 11, 1))
+
+    // Assignment from the returned value should cause an error.
+    a = takeReturnString(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+
+    b = takeReturnString(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+
+    c = takeReturnString(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+
+    d = takeReturnString(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+
+    e = takeReturnString(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+>takeReturnString : Symbol(takeReturnString, Decl(typeArgumentsWithStringLiteralTypes01.ts, 0, 37))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+
+    // Passing these as arguments should cause an error.
+    a = takeReturnHello(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+
+    b = takeReturnHello(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+
+    c = takeReturnHello(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+
+    d = takeReturnHello(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+
+    e = takeReturnHello(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+>takeReturnHello : Symbol(takeReturnHello, Decl(typeArgumentsWithStringLiteralTypes01.ts, 1, 55))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+
+    // Both should be valid.
+    a = takeReturnHelloWorld(a);
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>a : Symbol(a, Decl(typeArgumentsWithStringLiteralTypes01.ts, 84, 14))
+
+    b = takeReturnHelloWorld(b);
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>b : Symbol(b, Decl(typeArgumentsWithStringLiteralTypes01.ts, 85, 14))
+
+    c = takeReturnHelloWorld(c);
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>c : Symbol(c, Decl(typeArgumentsWithStringLiteralTypes01.ts, 86, 14))
+
+    d = takeReturnHelloWorld(d);
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>d : Symbol(d, Decl(typeArgumentsWithStringLiteralTypes01.ts, 87, 14))
+
+    e = takeReturnHelloWorld(e);
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+>takeReturnHelloWorld : Symbol(takeReturnHelloWorld, Decl(typeArgumentsWithStringLiteralTypes01.ts, 2, 56))
+>e : Symbol(e, Decl(typeArgumentsWithStringLiteralTypes01.ts, 88, 14))
+}

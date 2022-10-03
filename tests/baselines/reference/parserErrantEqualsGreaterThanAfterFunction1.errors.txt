@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts(1,14): error TS1144: '{' or ';' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts (1 errors) ====
+    function f() => 4;
+                 ~~
+!!! error TS1144: '{' or ';' expected.

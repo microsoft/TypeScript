@@ -1,0 +1,76 @@
+=== tests/cases/compiler/thisIndexOnExistingReadonlyFieldIsNotNever.ts ===
+declare class Component<P, S = {}> {
+>Component : Symbol(Component, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 0))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 24))
+>S : Symbol(S, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 26))
+
+    readonly props: Readonly<{ children?: unknown }> & Readonly<P>;
+>props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 30))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 24))
+
+    state: Readonly<S>;
+>state : Symbol(Component.state, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 67))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 26))
+}
+interface CoachMarkAnchorProps<C> {
+>CoachMarkAnchorProps : Symbol(CoachMarkAnchorProps, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 3, 1))
+>C : Symbol(C, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 31))
+
+    anchorRef?: (anchor: C) => void;
+>anchorRef : Symbol(CoachMarkAnchorProps.anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
+>anchor : Symbol(anchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 5, 17))
+>C : Symbol(C, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 31))
+}
+type AnchorType<P> = Component<P>;
+>AnchorType : Symbol(AnchorType, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 6, 1))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 7, 16))
+>Component : Symbol(Component, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 0))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 7, 16))
+
+class CoachMarkAnchorDecorator {
+>CoachMarkAnchorDecorator : Symbol(CoachMarkAnchorDecorator, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 7, 34))
+
+    decorateComponent<P>(anchor: P) {
+>decorateComponent : Symbol(CoachMarkAnchorDecorator.decorateComponent, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 9, 32))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
+>anchor : Symbol(anchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 25))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
+
+        return class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {
+>CoachMarkAnchor : Symbol(CoachMarkAnchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 14))
+>Component : Symbol(Component, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 0))
+>CoachMarkAnchorProps : Symbol(CoachMarkAnchorProps, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 3, 1))
+>AnchorType : Symbol(AnchorType, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 6, 1))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
+
+            private _onAnchorRef = (anchor: AnchorType<P>) => {
+>_onAnchorRef : Symbol(CoachMarkAnchor._onAnchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 101))
+>anchor : Symbol(anchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 12, 36))
+>AnchorType : Symbol(AnchorType, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 6, 1))
+>P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
+
+                const anchorRef = this.props.anchorRef;
+>anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 13, 21))
+>this.props.anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
+>this.props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
+>this : Symbol(CoachMarkAnchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 14))
+>props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
+>anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
+
+                if (anchorRef) {
+>anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 13, 21))
+
+                    anchorRef(anchor);
+>anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 13, 21))
+>anchor : Symbol(anchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 12, 36))
+                }
+            }
+        };
+    }
+}
+

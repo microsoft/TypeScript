@@ -1,0 +1,6 @@
+error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
+
+
+!!! error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
+==== tests/cases/compiler/optionsInlineSourceMapSourcemap.ts (0 errors) ====
+    var a = 10;

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/typeInferenceTypePredicate2.ts ===
+[true, true, false, null]
+>[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map(thing => thing.toString()) : string[]
+>[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map : <U>(callbackfn: (value: boolean, index: number, array: boolean[]) => U, thisArg?: any) => U[]
+>[true, true, false, null]    .filter((thing): thing is boolean => thing !== null) : boolean[]
+>[true, true, false, null]    .filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
+>[true, true, false, null] : boolean[]
+>true : true
+>true : true
+>false : false
+>null : null
+
+    .filter((thing): thing is boolean => thing !== null)
+>filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
+>(thing): thing is boolean => thing !== null : (thing: boolean) => thing is boolean
+>thing : boolean
+>thing !== null : boolean
+>thing : boolean
+>null : null
+
+    .map(thing => thing.toString());
+>map : <U>(callbackfn: (value: boolean, index: number, array: boolean[]) => U, thisArg?: any) => U[]
+>thing => thing.toString() : (thing: boolean) => string
+>thing : boolean
+>thing.toString() : string
+>thing.toString : () => string
+>thing : boolean
+>toString : () => string
+

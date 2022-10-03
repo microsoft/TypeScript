@@ -1,0 +1,53 @@
+=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethod.ts ===
+class C {
+>C : C
+
+    constructor(t: boolean, z: string, x: number, y = "hello") { }
+>t : boolean
+>z : string
+>x : number
+>y : string
+>"hello" : "hello"
+
+    public foo(x: string, t = false) { }
+>foo : (x: string, t?: boolean) => void
+>x : string
+>t : boolean
+>false : false
+
+    public foo1(x: string, t = false, ...rest) { }
+>foo1 : (x: string, t?: boolean, ...rest: any[]) => void
+>x : string
+>t : boolean
+>false : false
+>rest : any[]
+
+    public bar(t = false) { }
+>bar : (t?: boolean) => void
+>t : boolean
+>false : false
+
+    public boo(t = false, ...rest) { }
+>boo : (t?: boolean, ...rest: any[]) => void
+>t : boolean
+>false : false
+>rest : any[]
+}
+
+class D {
+>D : D
+
+    constructor(y = "hello") { }
+>y : string
+>"hello" : "hello"
+}
+
+class E {
+>E : E
+
+    constructor(y = "hello", ...rest) { }
+>y : string
+>"hello" : "hello"
+>rest : any[]
+}
+

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/reservedWords.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(reservedWords.ts, 0, 3))
+
+    if: 0,
+>if : Symbol(if, Decl(reservedWords.ts, 0, 11))
+
+    debugger: 2,
+>debugger : Symbol(debugger, Decl(reservedWords.ts, 1, 10))
+
+    break: 3,
+>break : Symbol(break, Decl(reservedWords.ts, 2, 16))
+
+    function: 4
+>function : Symbol(function, Decl(reservedWords.ts, 3, 13))
+}
+
+//This compiles.
+
+var obj2 = {
+>obj2 : Symbol(obj2, Decl(reservedWords.ts, 9, 3))
+
+    if: 0,
+>if : Symbol(if, Decl(reservedWords.ts, 9, 12))
+
+    while: 1,
+>while : Symbol(while, Decl(reservedWords.ts, 10, 10))
+
+    debugger: 2,
+>debugger : Symbol(debugger, Decl(reservedWords.ts, 11, 13))
+
+    break: 3,
+>break : Symbol(break, Decl(reservedWords.ts, 12, 16))
+
+    function: 4
+>function : Symbol(function, Decl(reservedWords.ts, 13, 13))
+}
+

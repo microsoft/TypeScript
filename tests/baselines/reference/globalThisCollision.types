@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es2019/globalThisCollision.js ===
+var globalThis;
+>globalThis : any
+

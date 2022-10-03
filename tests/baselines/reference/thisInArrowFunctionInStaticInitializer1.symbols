@@ -1,0 +1,17 @@
+=== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts ===
+function log(a) { }
+>log : Symbol(log, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 0))
+>a : Symbol(a, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 13))
+
+class Vector {
+>Vector : Symbol(Vector, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 19))
+
+ static foo = () => {
+>foo : Symbol(Vector.foo, Decl(thisInArrowFunctionInStaticInitializer1.ts, 2, 14))
+
+  // 'this' should be allowed in a static initializer.
+  log(this);
+>log : Symbol(log, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 0))
+>this : Symbol(Vector, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 19))
+ }
+}

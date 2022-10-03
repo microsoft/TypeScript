@@ -1,0 +1,3153 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.js
+mapUrl: sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.js
+sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.ts
+-------------------------------------------------------------------
+>>>var robotA = [1, "mower", "mowing"];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^
+9 >                        ^^
+10>                          ^^^^^^^^
+11>                                  ^
+12>                                   ^
+13>                                    ^^^^^->
+1 >declare var console: {
+  >    log(msg: any): void;
+  >}
+  >type Robot = [number, string, string];
+  >type MultiSkilledRobot = [string, [string, string]];
+  >
+  >
+2 >let 
+3 >    robotA
+4 >          : Robot = 
+5 >             [
+6 >              1
+7 >               , 
+8 >                 "mower"
+9 >                        , 
+10>                          "mowing"
+11>                                  ]
+12>                                   ;
+1 >Emitted(1, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(7, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(7, 21) + SourceIndex(0)
+5 >Emitted(1, 15) Source(7, 22) + SourceIndex(0)
+6 >Emitted(1, 16) Source(7, 23) + SourceIndex(0)
+7 >Emitted(1, 18) Source(7, 25) + SourceIndex(0)
+8 >Emitted(1, 25) Source(7, 32) + SourceIndex(0)
+9 >Emitted(1, 27) Source(7, 34) + SourceIndex(0)
+10>Emitted(1, 35) Source(7, 42) + SourceIndex(0)
+11>Emitted(1, 36) Source(7, 43) + SourceIndex(0)
+12>Emitted(1, 37) Source(7, 44) + SourceIndex(0)
+---
+>>>var robotB = [2, "trimmer", "trimming"];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^^^
+9 >                          ^^
+10>                            ^^^^^^^^^^
+11>                                      ^
+12>                                       ^
+1->
+  >
+2 >let 
+3 >    robotB
+4 >          : Robot = 
+5 >             [
+6 >              2
+7 >               , 
+8 >                 "trimmer"
+9 >                          , 
+10>                            "trimming"
+11>                                      ]
+12>                                       ;
+1->Emitted(2, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(8, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(8, 21) + SourceIndex(0)
+5 >Emitted(2, 15) Source(8, 22) + SourceIndex(0)
+6 >Emitted(2, 16) Source(8, 23) + SourceIndex(0)
+7 >Emitted(2, 18) Source(8, 25) + SourceIndex(0)
+8 >Emitted(2, 27) Source(8, 34) + SourceIndex(0)
+9 >Emitted(2, 29) Source(8, 36) + SourceIndex(0)
+10>Emitted(2, 39) Source(8, 46) + SourceIndex(0)
+11>Emitted(2, 40) Source(8, 47) + SourceIndex(0)
+12>Emitted(2, 41) Source(8, 48) + SourceIndex(0)
+---
+>>>var robots = [robotA, robotB];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^^^^^^
+7 >                    ^^
+8 >                      ^^^^^^
+9 >                            ^
+10>                             ^
+1 >
+  >
+2 >let 
+3 >    robots
+4 >           = 
+5 >             [
+6 >              robotA
+7 >                    , 
+8 >                      robotB
+9 >                            ]
+10>                             ;
+1 >Emitted(3, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(9, 5) + SourceIndex(0)
+3 >Emitted(3, 11) Source(9, 11) + SourceIndex(0)
+4 >Emitted(3, 14) Source(9, 14) + SourceIndex(0)
+5 >Emitted(3, 15) Source(9, 15) + SourceIndex(0)
+6 >Emitted(3, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(3, 23) Source(9, 23) + SourceIndex(0)
+8 >Emitted(3, 29) Source(9, 29) + SourceIndex(0)
+9 >Emitted(3, 30) Source(9, 30) + SourceIndex(0)
+10>Emitted(3, 31) Source(9, 31) + SourceIndex(0)
+---
+>>>function getRobots() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^
+4 >                  ^->
+1 >
+  >
+2 >function 
+3 >         getRobots
+1 >Emitted(4, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(4, 10) Source(10, 10) + SourceIndex(0)
+3 >Emitted(4, 19) Source(10, 19) + SourceIndex(0)
+---
+>>>    return robots;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^
+4 >                 ^
+1->() {
+  >    
+2 >    return 
+3 >           robots
+4 >                 ;
+1->Emitted(5, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(5, 12) Source(11, 12) + SourceIndex(0)
+3 >Emitted(5, 18) Source(11, 18) + SourceIndex(0)
+4 >Emitted(5, 19) Source(11, 19) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(12, 2) + SourceIndex(0)
+---
+>>>var multiRobotA = ["mower", ["mowing", ""]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^
+7 >                          ^^
+8 >                            ^
+9 >                             ^^^^^^^^
+10>                                     ^^
+11>                                       ^^
+12>                                         ^
+13>                                          ^
+14>                                           ^
+15>                                            ^^^^^^^^^^^->
+1->
+  >
+  >
+2 >let 
+3 >    multiRobotA
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "mower"
+7 >                          , 
+8 >                            [
+9 >                             "mowing"
+10>                                     , 
+11>                                       ""
+12>                                         ]
+13>                                          ]
+14>                                           ;
+1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(14, 5) + SourceIndex(0)
+3 >Emitted(7, 16) Source(14, 16) + SourceIndex(0)
+4 >Emitted(7, 19) Source(14, 38) + SourceIndex(0)
+5 >Emitted(7, 20) Source(14, 39) + SourceIndex(0)
+6 >Emitted(7, 27) Source(14, 46) + SourceIndex(0)
+7 >Emitted(7, 29) Source(14, 48) + SourceIndex(0)
+8 >Emitted(7, 30) Source(14, 49) + SourceIndex(0)
+9 >Emitted(7, 38) Source(14, 57) + SourceIndex(0)
+10>Emitted(7, 40) Source(14, 59) + SourceIndex(0)
+11>Emitted(7, 42) Source(14, 61) + SourceIndex(0)
+12>Emitted(7, 43) Source(14, 62) + SourceIndex(0)
+13>Emitted(7, 44) Source(14, 63) + SourceIndex(0)
+14>Emitted(7, 45) Source(14, 64) + SourceIndex(0)
+---
+>>>var multiRobotB = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^^^
+7 >                            ^^
+8 >                              ^
+9 >                               ^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^^^^^
+12>                                                   ^
+13>                                                    ^
+14>                                                     ^
+1->
+  >
+2 >let 
+3 >    multiRobotB
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "trimmer"
+7 >                            , 
+8 >                              [
+9 >                               "trimming"
+10>                                         , 
+11>                                           "edging"
+12>                                                   ]
+13>                                                    ]
+14>                                                     ;
+1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
+3 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
+4 >Emitted(8, 19) Source(15, 38) + SourceIndex(0)
+5 >Emitted(8, 20) Source(15, 39) + SourceIndex(0)
+6 >Emitted(8, 29) Source(15, 48) + SourceIndex(0)
+7 >Emitted(8, 31) Source(15, 50) + SourceIndex(0)
+8 >Emitted(8, 32) Source(15, 51) + SourceIndex(0)
+9 >Emitted(8, 42) Source(15, 61) + SourceIndex(0)
+10>Emitted(8, 44) Source(15, 63) + SourceIndex(0)
+11>Emitted(8, 52) Source(15, 71) + SourceIndex(0)
+12>Emitted(8, 53) Source(15, 72) + SourceIndex(0)
+13>Emitted(8, 54) Source(15, 73) + SourceIndex(0)
+14>Emitted(8, 55) Source(15, 74) + SourceIndex(0)
+---
+>>>var multiRobots = [multiRobotA, multiRobotB];
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^^^^^
+7 >                              ^^
+8 >                                ^^^^^^^^^^^
+9 >                                           ^
+10>                                            ^
+1 >
+  >
+2 >let 
+3 >    multiRobots
+4 >                = 
+5 >                  [
+6 >                   multiRobotA
+7 >                              , 
+8 >                                multiRobotB
+9 >                                           ]
+10>                                            ;
+1 >Emitted(9, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(9, 5) Source(16, 5) + SourceIndex(0)
+3 >Emitted(9, 16) Source(16, 16) + SourceIndex(0)
+4 >Emitted(9, 19) Source(16, 19) + SourceIndex(0)
+5 >Emitted(9, 20) Source(16, 20) + SourceIndex(0)
+6 >Emitted(9, 31) Source(16, 31) + SourceIndex(0)
+7 >Emitted(9, 33) Source(16, 33) + SourceIndex(0)
+8 >Emitted(9, 44) Source(16, 44) + SourceIndex(0)
+9 >Emitted(9, 45) Source(16, 45) + SourceIndex(0)
+10>Emitted(9, 46) Source(16, 46) + SourceIndex(0)
+---
+>>>function getMultiRobots() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^
+4 >                       ^->
+1 >
+  >
+2 >function 
+3 >         getMultiRobots
+1 >Emitted(10, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(10, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(10, 24) Source(17, 24) + SourceIndex(0)
+---
+>>>    return multiRobots;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^
+4 >                      ^
+1->() {
+  >    
+2 >    return 
+3 >           multiRobots
+4 >                      ;
+1->Emitted(11, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(11, 12) Source(18, 12) + SourceIndex(0)
+3 >Emitted(11, 23) Source(18, 23) + SourceIndex(0)
+4 >Emitted(11, 24) Source(18, 24) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(12, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(19, 2) + SourceIndex(0)
+---
+>>>for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+11>                                                                ^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >for (let [, nameA = "noName"] of 
+3 >     robots
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
+1->Emitted(13, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(13, 6) Source(21, 34) + SourceIndex(0)
+3 >Emitted(13, 16) Source(21, 40) + SourceIndex(0)
+4 >Emitted(13, 18) Source(21, 34) + SourceIndex(0)
+5 >Emitted(13, 35) Source(21, 40) + SourceIndex(0)
+6 >Emitted(13, 37) Source(21, 34) + SourceIndex(0)
+7 >Emitted(13, 57) Source(21, 40) + SourceIndex(0)
+8 >Emitted(13, 59) Source(21, 34) + SourceIndex(0)
+9 >Emitted(13, 63) Source(21, 40) + SourceIndex(0)
+10>Emitted(13, 65) Source(21, 42) + SourceIndex(0)
+---
+>>>    var _a = robots_1[_i], _b = _a[1], nameA = _b === void 0 ? "noName" : _b;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^
+6 >                                     ^^
+7 >                                       ^^^^^
+8 >                                            ^^^^^^^^^^^^^^^^^^^
+9 >                                                               ^^^^^^^^
+10>                                                                       ^^^^^
+1->
+2 >    
+3 >        [, nameA = "noName"]
+4 >                         
+5 >                           nameA = "noName"
+6 >                                     
+7 >                                       nameA
+8 >                                             = 
+9 >                                                               "noName"
+10>                                                                       
+1->Emitted(14, 5) Source(21, 10) + SourceIndex(0)
+2 >Emitted(14, 9) Source(21, 10) + SourceIndex(0)
+3 >Emitted(14, 26) Source(21, 30) + SourceIndex(0)
+4 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
+5 >Emitted(14, 38) Source(21, 29) + SourceIndex(0)
+6 >Emitted(14, 40) Source(21, 13) + SourceIndex(0)
+7 >Emitted(14, 45) Source(21, 18) + SourceIndex(0)
+8 >Emitted(14, 64) Source(21, 21) + SourceIndex(0)
+9 >Emitted(14, 72) Source(21, 29) + SourceIndex(0)
+10>Emitted(14, 77) Source(21, 29) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(15, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(15, 12) Source(22, 12) + SourceIndex(0)
+3 >Emitted(15, 13) Source(22, 13) + SourceIndex(0)
+4 >Emitted(15, 16) Source(22, 16) + SourceIndex(0)
+5 >Emitted(15, 17) Source(22, 17) + SourceIndex(0)
+6 >Emitted(15, 22) Source(22, 22) + SourceIndex(0)
+7 >Emitted(15, 23) Source(22, 23) + SourceIndex(0)
+8 >Emitted(15, 24) Source(22, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(16, 2) Source(23, 2) + SourceIndex(0)
+---
+>>>for (var _c = 0, _d = getRobots(); _c < _d.length; _c++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+13>                                                         ^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, nameA = "noName"] of 
+3 >     getRobots()
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
+1->Emitted(17, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(17, 6) Source(24, 34) + SourceIndex(0)
+3 >Emitted(17, 16) Source(24, 45) + SourceIndex(0)
+4 >Emitted(17, 18) Source(24, 34) + SourceIndex(0)
+5 >Emitted(17, 23) Source(24, 34) + SourceIndex(0)
+6 >Emitted(17, 32) Source(24, 43) + SourceIndex(0)
+7 >Emitted(17, 34) Source(24, 45) + SourceIndex(0)
+8 >Emitted(17, 36) Source(24, 34) + SourceIndex(0)
+9 >Emitted(17, 50) Source(24, 45) + SourceIndex(0)
+10>Emitted(17, 52) Source(24, 34) + SourceIndex(0)
+11>Emitted(17, 56) Source(24, 45) + SourceIndex(0)
+12>Emitted(17, 58) Source(24, 47) + SourceIndex(0)
+---
+>>>    var _e = _d[_c], _f = _e[1], nameA = _f === void 0 ? "noName" : _f;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^
+8 >                                      ^^^^^^^^^^^^^^^^^^^
+9 >                                                         ^^^^^^^^
+10>                                                                 ^^^^^
+1->
+2 >    
+3 >        [, nameA = "noName"]
+4 >                   
+5 >                     nameA = "noName"
+6 >                               
+7 >                                 nameA
+8 >                                       = 
+9 >                                                         "noName"
+10>                                                                 
+1->Emitted(18, 5) Source(24, 10) + SourceIndex(0)
+2 >Emitted(18, 9) Source(24, 10) + SourceIndex(0)
+3 >Emitted(18, 20) Source(24, 30) + SourceIndex(0)
+4 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
+5 >Emitted(18, 32) Source(24, 29) + SourceIndex(0)
+6 >Emitted(18, 34) Source(24, 13) + SourceIndex(0)
+7 >Emitted(18, 39) Source(24, 18) + SourceIndex(0)
+8 >Emitted(18, 58) Source(24, 21) + SourceIndex(0)
+9 >Emitted(18, 66) Source(24, 29) + SourceIndex(0)
+10>Emitted(18, 71) Source(24, 29) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(19, 5) Source(25, 5) + SourceIndex(0)
+2 >Emitted(19, 12) Source(25, 12) + SourceIndex(0)
+3 >Emitted(19, 13) Source(25, 13) + SourceIndex(0)
+4 >Emitted(19, 16) Source(25, 16) + SourceIndex(0)
+5 >Emitted(19, 17) Source(25, 17) + SourceIndex(0)
+6 >Emitted(19, 22) Source(25, 22) + SourceIndex(0)
+7 >Emitted(19, 23) Source(25, 23) + SourceIndex(0)
+8 >Emitted(19, 24) Source(25, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(20, 2) Source(26, 2) + SourceIndex(0)
+---
+>>>for (var _g = 0, _h = [robotA, robotB]; _g < _h.length; _g++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^^^^^^^^^^^^^
+12>                                                      ^^
+13>                                                        ^^^^
+14>                                                            ^^
+15>                                                              ^^^^^^^^^^->
+1->
+  >
+2 >for (let [, nameA = "noName"] of 
+3 >     [robotA, robotB]
+4 >               
+5 >                 [
+6 >                       robotA
+7 >                             , 
+8 >                               robotB
+9 >                                     ]
+10>                                      
+11>                                        [robotA, robotB]
+12>                                                      
+13>                                                        [robotA, robotB]
+14>                                                            ) 
+1->Emitted(21, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(21, 6) Source(27, 34) + SourceIndex(0)
+3 >Emitted(21, 16) Source(27, 50) + SourceIndex(0)
+4 >Emitted(21, 18) Source(27, 34) + SourceIndex(0)
+5 >Emitted(21, 24) Source(27, 35) + SourceIndex(0)
+6 >Emitted(21, 30) Source(27, 41) + SourceIndex(0)
+7 >Emitted(21, 32) Source(27, 43) + SourceIndex(0)
+8 >Emitted(21, 38) Source(27, 49) + SourceIndex(0)
+9 >Emitted(21, 39) Source(27, 50) + SourceIndex(0)
+10>Emitted(21, 41) Source(27, 34) + SourceIndex(0)
+11>Emitted(21, 55) Source(27, 50) + SourceIndex(0)
+12>Emitted(21, 57) Source(27, 34) + SourceIndex(0)
+13>Emitted(21, 61) Source(27, 50) + SourceIndex(0)
+14>Emitted(21, 63) Source(27, 52) + SourceIndex(0)
+---
+>>>    var _j = _h[_g], _k = _j[1], nameA = _k === void 0 ? "noName" : _k;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^
+8 >                                      ^^^^^^^^^^^^^^^^^^^
+9 >                                                         ^^^^^^^^
+10>                                                                 ^^^^^
+1->
+2 >    
+3 >        [, nameA = "noName"]
+4 >                   
+5 >                     nameA = "noName"
+6 >                               
+7 >                                 nameA
+8 >                                       = 
+9 >                                                         "noName"
+10>                                                                 
+1->Emitted(22, 5) Source(27, 10) + SourceIndex(0)
+2 >Emitted(22, 9) Source(27, 10) + SourceIndex(0)
+3 >Emitted(22, 20) Source(27, 30) + SourceIndex(0)
+4 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
+5 >Emitted(22, 32) Source(27, 29) + SourceIndex(0)
+6 >Emitted(22, 34) Source(27, 13) + SourceIndex(0)
+7 >Emitted(22, 39) Source(27, 18) + SourceIndex(0)
+8 >Emitted(22, 58) Source(27, 21) + SourceIndex(0)
+9 >Emitted(22, 66) Source(27, 29) + SourceIndex(0)
+10>Emitted(22, 71) Source(27, 29) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(23, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(23, 12) Source(28, 12) + SourceIndex(0)
+3 >Emitted(23, 13) Source(28, 13) + SourceIndex(0)
+4 >Emitted(23, 16) Source(28, 16) + SourceIndex(0)
+5 >Emitted(23, 17) Source(28, 17) + SourceIndex(0)
+6 >Emitted(23, 22) Source(28, 22) + SourceIndex(0)
+7 >Emitted(23, 23) Source(28, 23) + SourceIndex(0)
+8 >Emitted(23, 24) Source(28, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(24, 2) Source(29, 2) + SourceIndex(0)
+---
+>>>for (var _l = 0, multiRobots_1 = multiRobots; _l < multiRobots_1.length; _l++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                            ^^
+7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                       ^^
+9 >                                                                         ^^^^
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     multiRobots
+4 >               
+5 >                 multiRobots
+6 >                                            
+7 >                                              multiRobots
+8 >                                                                       
+9 >                                                                         multiRobots
+10>                                                                             ) 
+1->Emitted(25, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(25, 6) Source(33, 30) + SourceIndex(0)
+3 >Emitted(25, 16) Source(33, 41) + SourceIndex(0)
+4 >Emitted(25, 18) Source(33, 30) + SourceIndex(0)
+5 >Emitted(25, 45) Source(33, 41) + SourceIndex(0)
+6 >Emitted(25, 47) Source(33, 30) + SourceIndex(0)
+7 >Emitted(25, 72) Source(33, 41) + SourceIndex(0)
+8 >Emitted(25, 74) Source(33, 30) + SourceIndex(0)
+9 >Emitted(25, 78) Source(33, 41) + SourceIndex(0)
+10>Emitted(25, 80) Source(33, 43) + SourceIndex(0)
+---
+>>>    var _m = multiRobots_1[_l], _o = _m[1], _p = _o === void 0 ? ["skill1", "skill2"] : _o, _q = _p[0], primarySkillA = _q === void 0 ? "primary" : _q, _r = _p[1], secondarySkillA = _r === void 0 ? "secondary" : _r;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^
+4 >                              ^^
+5 >                                ^^^^^^^^^^
+6 >                                          ^^
+7 >                                            ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                 ^
+9 >                                                                  ^^^^^^^^
+10>                                                                          ^^
+11>                                                                            ^^^^^^^^
+12>                                                                                    ^
+13>                                                                                     ^^^^^
+14>                                                                                          ^^
+15>                                                                                            ^^^^^^^^^^
+16>                                                                                                      ^^
+17>                                                                                                        ^^^^^^^^^^^^^
+18>                                                                                                                     ^^^^^^^^^^^^^^^^^^^
+19>                                                                                                                                        ^^^^^^^^^
+20>                                                                                                                                                 ^^^^^
+21>                                                                                                                                                      ^^
+22>                                                                                                                                                        ^^^^^^^^^^
+23>                                                                                                                                                                  ^^
+24>                                                                                                                                                                    ^^^^^^^^^^^^^^^
+25>                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                                      ^^^^^^^^^^^
+27>                                                                                                                                                                                                                 ^^^^^
+1->
+2 >    
+3 >        [, [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                              
+5 >                                [
+  >                                    primarySkillA = "primary",
+  >                                    secondarySkillA = "secondary"
+  >                                ] = ["skill1", "skill2"]
+6 >                                          
+7 >                                            [
+  >                                                primarySkillA = "primary",
+  >                                                secondarySkillA = "secondary"
+  >                                            ] = 
+8 >                                                                 [
+9 >                                                                  "skill1"
+10>                                                                          , 
+11>                                                                            "skill2"
+12>                                                                                    ]
+13>                                                                                     
+14>                                                                                          
+15>                                                                                            primarySkillA = "primary"
+16>                                                                                                      
+17>                                                                                                        primarySkillA
+18>                                                                                                                      = 
+19>                                                                                                                                        "primary"
+20>                                                                                                                                                 
+21>                                                                                                                                                      ,
+  >                                                                                                                                                          
+22>                                                                                                                                                        secondarySkillA = "secondary"
+23>                                                                                                                                                                  
+24>                                                                                                                                                                    secondarySkillA
+25>                                                                                                                                                                                    = 
+26>                                                                                                                                                                                                      "secondary"
+27>                                                                                                                                                                                                                 
+1->Emitted(26, 5) Source(30, 10) + SourceIndex(0)
+2 >Emitted(26, 9) Source(30, 10) + SourceIndex(0)
+3 >Emitted(26, 31) Source(33, 26) + SourceIndex(0)
+4 >Emitted(26, 33) Source(30, 13) + SourceIndex(0)
+5 >Emitted(26, 43) Source(33, 25) + SourceIndex(0)
+6 >Emitted(26, 45) Source(30, 13) + SourceIndex(0)
+7 >Emitted(26, 66) Source(33, 5) + SourceIndex(0)
+8 >Emitted(26, 67) Source(33, 6) + SourceIndex(0)
+9 >Emitted(26, 75) Source(33, 14) + SourceIndex(0)
+10>Emitted(26, 77) Source(33, 16) + SourceIndex(0)
+11>Emitted(26, 85) Source(33, 24) + SourceIndex(0)
+12>Emitted(26, 86) Source(33, 25) + SourceIndex(0)
+13>Emitted(26, 91) Source(33, 25) + SourceIndex(0)
+14>Emitted(26, 93) Source(31, 5) + SourceIndex(0)
+15>Emitted(26, 103) Source(31, 30) + SourceIndex(0)
+16>Emitted(26, 105) Source(31, 5) + SourceIndex(0)
+17>Emitted(26, 118) Source(31, 18) + SourceIndex(0)
+18>Emitted(26, 137) Source(31, 21) + SourceIndex(0)
+19>Emitted(26, 146) Source(31, 30) + SourceIndex(0)
+20>Emitted(26, 151) Source(31, 30) + SourceIndex(0)
+21>Emitted(26, 153) Source(32, 5) + SourceIndex(0)
+22>Emitted(26, 163) Source(32, 34) + SourceIndex(0)
+23>Emitted(26, 165) Source(32, 5) + SourceIndex(0)
+24>Emitted(26, 180) Source(32, 20) + SourceIndex(0)
+25>Emitted(26, 199) Source(32, 23) + SourceIndex(0)
+26>Emitted(26, 210) Source(32, 34) + SourceIndex(0)
+27>Emitted(26, 215) Source(32, 34) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >
+  >] = ["skill1", "skill2"]] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(27, 5) Source(34, 5) + SourceIndex(0)
+2 >Emitted(27, 12) Source(34, 12) + SourceIndex(0)
+3 >Emitted(27, 13) Source(34, 13) + SourceIndex(0)
+4 >Emitted(27, 16) Source(34, 16) + SourceIndex(0)
+5 >Emitted(27, 17) Source(34, 17) + SourceIndex(0)
+6 >Emitted(27, 30) Source(34, 30) + SourceIndex(0)
+7 >Emitted(27, 31) Source(34, 31) + SourceIndex(0)
+8 >Emitted(27, 32) Source(34, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(28, 2) Source(35, 2) + SourceIndex(0)
+---
+>>>for (var _s = 0, _t = getMultiRobots(); _s < _t.length; _s++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^
+9 >                                        ^^^^^^^^^^^^^^
+10>                                                      ^^
+11>                                                        ^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     getMultiRobots()
+4 >               
+5 >                 
+6 >                      getMultiRobots
+7 >                                    ()
+8 >                                      
+9 >                                        getMultiRobots()
+10>                                                      
+11>                                                        getMultiRobots()
+12>                                                            ) 
+1->Emitted(29, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(29, 6) Source(39, 30) + SourceIndex(0)
+3 >Emitted(29, 16) Source(39, 46) + SourceIndex(0)
+4 >Emitted(29, 18) Source(39, 30) + SourceIndex(0)
+5 >Emitted(29, 23) Source(39, 30) + SourceIndex(0)
+6 >Emitted(29, 37) Source(39, 44) + SourceIndex(0)
+7 >Emitted(29, 39) Source(39, 46) + SourceIndex(0)
+8 >Emitted(29, 41) Source(39, 30) + SourceIndex(0)
+9 >Emitted(29, 55) Source(39, 46) + SourceIndex(0)
+10>Emitted(29, 57) Source(39, 30) + SourceIndex(0)
+11>Emitted(29, 61) Source(39, 46) + SourceIndex(0)
+12>Emitted(29, 63) Source(39, 48) + SourceIndex(0)
+---
+>>>    var _u = _t[_s], _v = _u[1], _w = _v === void 0 ? ["skill1", "skill2"] : _v, _x = _w[0], primarySkillA = _x === void 0 ? "primary" : _x, _y = _w[1], secondarySkillA = _y === void 0 ? "secondary" : _y;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                      ^
+9 >                                                       ^^^^^^^^
+10>                                                               ^^
+11>                                                                 ^^^^^^^^
+12>                                                                         ^
+13>                                                                          ^^^^^
+14>                                                                               ^^
+15>                                                                                 ^^^^^^^^^^
+16>                                                                                           ^^
+17>                                                                                             ^^^^^^^^^^^^^
+18>                                                                                                          ^^^^^^^^^^^^^^^^^^^
+19>                                                                                                                             ^^^^^^^^^
+20>                                                                                                                                      ^^^^^
+21>                                                                                                                                           ^^
+22>                                                                                                                                             ^^^^^^^^^^
+23>                                                                                                                                                       ^^
+24>                                                                                                                                                         ^^^^^^^^^^^^^^^
+25>                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                           ^^^^^^^^^^^
+27>                                                                                                                                                                                                      ^^^^^
+1->
+2 >    
+3 >        [, [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                   
+5 >                     [
+  >                         primarySkillA = "primary",
+  >                         secondarySkillA = "secondary"
+  >                     ] = ["skill1", "skill2"]
+6 >                               
+7 >                                 [
+  >                                     primarySkillA = "primary",
+  >                                     secondarySkillA = "secondary"
+  >                                 ] = 
+8 >                                                      [
+9 >                                                       "skill1"
+10>                                                               , 
+11>                                                                 "skill2"
+12>                                                                         ]
+13>                                                                          
+14>                                                                               
+15>                                                                                 primarySkillA = "primary"
+16>                                                                                           
+17>                                                                                             primarySkillA
+18>                                                                                                           = 
+19>                                                                                                                             "primary"
+20>                                                                                                                                      
+21>                                                                                                                                           ,
+  >                                                                                                                                               
+22>                                                                                                                                             secondarySkillA = "secondary"
+23>                                                                                                                                                       
+24>                                                                                                                                                         secondarySkillA
+25>                                                                                                                                                                         = 
+26>                                                                                                                                                                                           "secondary"
+27>                                                                                                                                                                                                      
+1->Emitted(30, 5) Source(36, 10) + SourceIndex(0)
+2 >Emitted(30, 9) Source(36, 10) + SourceIndex(0)
+3 >Emitted(30, 20) Source(39, 26) + SourceIndex(0)
+4 >Emitted(30, 22) Source(36, 13) + SourceIndex(0)
+5 >Emitted(30, 32) Source(39, 25) + SourceIndex(0)
+6 >Emitted(30, 34) Source(36, 13) + SourceIndex(0)
+7 >Emitted(30, 55) Source(39, 5) + SourceIndex(0)
+8 >Emitted(30, 56) Source(39, 6) + SourceIndex(0)
+9 >Emitted(30, 64) Source(39, 14) + SourceIndex(0)
+10>Emitted(30, 66) Source(39, 16) + SourceIndex(0)
+11>Emitted(30, 74) Source(39, 24) + SourceIndex(0)
+12>Emitted(30, 75) Source(39, 25) + SourceIndex(0)
+13>Emitted(30, 80) Source(39, 25) + SourceIndex(0)
+14>Emitted(30, 82) Source(37, 5) + SourceIndex(0)
+15>Emitted(30, 92) Source(37, 30) + SourceIndex(0)
+16>Emitted(30, 94) Source(37, 5) + SourceIndex(0)
+17>Emitted(30, 107) Source(37, 18) + SourceIndex(0)
+18>Emitted(30, 126) Source(37, 21) + SourceIndex(0)
+19>Emitted(30, 135) Source(37, 30) + SourceIndex(0)
+20>Emitted(30, 140) Source(37, 30) + SourceIndex(0)
+21>Emitted(30, 142) Source(38, 5) + SourceIndex(0)
+22>Emitted(30, 152) Source(38, 34) + SourceIndex(0)
+23>Emitted(30, 154) Source(38, 5) + SourceIndex(0)
+24>Emitted(30, 169) Source(38, 20) + SourceIndex(0)
+25>Emitted(30, 188) Source(38, 23) + SourceIndex(0)
+26>Emitted(30, 199) Source(38, 34) + SourceIndex(0)
+27>Emitted(30, 204) Source(38, 34) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >
+  >] = ["skill1", "skill2"]] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(31, 5) Source(40, 5) + SourceIndex(0)
+2 >Emitted(31, 12) Source(40, 12) + SourceIndex(0)
+3 >Emitted(31, 13) Source(40, 13) + SourceIndex(0)
+4 >Emitted(31, 16) Source(40, 16) + SourceIndex(0)
+5 >Emitted(31, 17) Source(40, 17) + SourceIndex(0)
+6 >Emitted(31, 30) Source(40, 30) + SourceIndex(0)
+7 >Emitted(31, 31) Source(40, 31) + SourceIndex(0)
+8 >Emitted(31, 32) Source(40, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(32, 2) Source(41, 2) + SourceIndex(0)
+---
+>>>for (var _z = 0, _0 = [multiRobotA, multiRobotB]; _z < _0.length; _z++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^^^^^^
+7 >                                  ^^
+8 >                                    ^^^^^^^^^^^
+9 >                                               ^
+10>                                                ^^
+11>                                                  ^^^^^^^^^^^^^^
+12>                                                                ^^
+13>                                                                  ^^^^
+14>                                                                      ^^
+15>                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     [multiRobotA, multiRobotB]
+4 >               
+5 >                 [
+6 >                       multiRobotA
+7 >                                  , 
+8 >                                    multiRobotB
+9 >                                               ]
+10>                                                
+11>                                                  [multiRobotA, multiRobotB]
+12>                                                                
+13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
+1->Emitted(33, 1) Source(42, 1) + SourceIndex(0)
+2 >Emitted(33, 6) Source(45, 30) + SourceIndex(0)
+3 >Emitted(33, 16) Source(45, 56) + SourceIndex(0)
+4 >Emitted(33, 18) Source(45, 30) + SourceIndex(0)
+5 >Emitted(33, 24) Source(45, 31) + SourceIndex(0)
+6 >Emitted(33, 35) Source(45, 42) + SourceIndex(0)
+7 >Emitted(33, 37) Source(45, 44) + SourceIndex(0)
+8 >Emitted(33, 48) Source(45, 55) + SourceIndex(0)
+9 >Emitted(33, 49) Source(45, 56) + SourceIndex(0)
+10>Emitted(33, 51) Source(45, 30) + SourceIndex(0)
+11>Emitted(33, 65) Source(45, 56) + SourceIndex(0)
+12>Emitted(33, 67) Source(45, 30) + SourceIndex(0)
+13>Emitted(33, 71) Source(45, 56) + SourceIndex(0)
+14>Emitted(33, 73) Source(45, 58) + SourceIndex(0)
+---
+>>>    var _1 = _0[_z], _2 = _1[1], _3 = _2 === void 0 ? ["skill1", "skill2"] : _2, _4 = _3[0], primarySkillA = _4 === void 0 ? "primary" : _4, _5 = _3[1], secondarySkillA = _5 === void 0 ? "secondary" : _5;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                      ^
+9 >                                                       ^^^^^^^^
+10>                                                               ^^
+11>                                                                 ^^^^^^^^
+12>                                                                         ^
+13>                                                                          ^^^^^
+14>                                                                               ^^
+15>                                                                                 ^^^^^^^^^^
+16>                                                                                           ^^
+17>                                                                                             ^^^^^^^^^^^^^
+18>                                                                                                          ^^^^^^^^^^^^^^^^^^^
+19>                                                                                                                             ^^^^^^^^^
+20>                                                                                                                                      ^^^^^
+21>                                                                                                                                           ^^
+22>                                                                                                                                             ^^^^^^^^^^
+23>                                                                                                                                                       ^^
+24>                                                                                                                                                         ^^^^^^^^^^^^^^^
+25>                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                           ^^^^^^^^^^^
+27>                                                                                                                                                                                                      ^^^^^
+1->
+2 >    
+3 >        [, [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                   
+5 >                     [
+  >                         primarySkillA = "primary",
+  >                         secondarySkillA = "secondary"
+  >                     ] = ["skill1", "skill2"]
+6 >                               
+7 >                                 [
+  >                                     primarySkillA = "primary",
+  >                                     secondarySkillA = "secondary"
+  >                                 ] = 
+8 >                                                      [
+9 >                                                       "skill1"
+10>                                                               , 
+11>                                                                 "skill2"
+12>                                                                         ]
+13>                                                                          
+14>                                                                               
+15>                                                                                 primarySkillA = "primary"
+16>                                                                                           
+17>                                                                                             primarySkillA
+18>                                                                                                           = 
+19>                                                                                                                             "primary"
+20>                                                                                                                                      
+21>                                                                                                                                           ,
+  >                                                                                                                                               
+22>                                                                                                                                             secondarySkillA = "secondary"
+23>                                                                                                                                                       
+24>                                                                                                                                                         secondarySkillA
+25>                                                                                                                                                                         = 
+26>                                                                                                                                                                                           "secondary"
+27>                                                                                                                                                                                                      
+1->Emitted(34, 5) Source(42, 10) + SourceIndex(0)
+2 >Emitted(34, 9) Source(42, 10) + SourceIndex(0)
+3 >Emitted(34, 20) Source(45, 26) + SourceIndex(0)
+4 >Emitted(34, 22) Source(42, 13) + SourceIndex(0)
+5 >Emitted(34, 32) Source(45, 25) + SourceIndex(0)
+6 >Emitted(34, 34) Source(42, 13) + SourceIndex(0)
+7 >Emitted(34, 55) Source(45, 5) + SourceIndex(0)
+8 >Emitted(34, 56) Source(45, 6) + SourceIndex(0)
+9 >Emitted(34, 64) Source(45, 14) + SourceIndex(0)
+10>Emitted(34, 66) Source(45, 16) + SourceIndex(0)
+11>Emitted(34, 74) Source(45, 24) + SourceIndex(0)
+12>Emitted(34, 75) Source(45, 25) + SourceIndex(0)
+13>Emitted(34, 80) Source(45, 25) + SourceIndex(0)
+14>Emitted(34, 82) Source(43, 5) + SourceIndex(0)
+15>Emitted(34, 92) Source(43, 30) + SourceIndex(0)
+16>Emitted(34, 94) Source(43, 5) + SourceIndex(0)
+17>Emitted(34, 107) Source(43, 18) + SourceIndex(0)
+18>Emitted(34, 126) Source(43, 21) + SourceIndex(0)
+19>Emitted(34, 135) Source(43, 30) + SourceIndex(0)
+20>Emitted(34, 140) Source(43, 30) + SourceIndex(0)
+21>Emitted(34, 142) Source(44, 5) + SourceIndex(0)
+22>Emitted(34, 152) Source(44, 34) + SourceIndex(0)
+23>Emitted(34, 154) Source(44, 5) + SourceIndex(0)
+24>Emitted(34, 169) Source(44, 20) + SourceIndex(0)
+25>Emitted(34, 188) Source(44, 23) + SourceIndex(0)
+26>Emitted(34, 199) Source(44, 34) + SourceIndex(0)
+27>Emitted(34, 204) Source(44, 34) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >
+  >] = ["skill1", "skill2"]] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(35, 5) Source(46, 5) + SourceIndex(0)
+2 >Emitted(35, 12) Source(46, 12) + SourceIndex(0)
+3 >Emitted(35, 13) Source(46, 13) + SourceIndex(0)
+4 >Emitted(35, 16) Source(46, 16) + SourceIndex(0)
+5 >Emitted(35, 17) Source(46, 17) + SourceIndex(0)
+6 >Emitted(35, 30) Source(46, 30) + SourceIndex(0)
+7 >Emitted(35, 31) Source(46, 31) + SourceIndex(0)
+8 >Emitted(35, 32) Source(46, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(36, 2) Source(47, 2) + SourceIndex(0)
+---
+>>>for (var _6 = 0, robots_2 = robots; _6 < robots_2.length; _6++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+11>                                                                ^->
+1->
+  >
+  >
+2 >for (let [numberB = -1] of 
+3 >     robots
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
+1->Emitted(37, 1) Source(49, 1) + SourceIndex(0)
+2 >Emitted(37, 6) Source(49, 28) + SourceIndex(0)
+3 >Emitted(37, 16) Source(49, 34) + SourceIndex(0)
+4 >Emitted(37, 18) Source(49, 28) + SourceIndex(0)
+5 >Emitted(37, 35) Source(49, 34) + SourceIndex(0)
+6 >Emitted(37, 37) Source(49, 28) + SourceIndex(0)
+7 >Emitted(37, 57) Source(49, 34) + SourceIndex(0)
+8 >Emitted(37, 59) Source(49, 28) + SourceIndex(0)
+9 >Emitted(37, 63) Source(49, 34) + SourceIndex(0)
+10>Emitted(37, 65) Source(49, 36) + SourceIndex(0)
+---
+>>>    var _7 = robots_2[_6][0], numberB = _7 === void 0 ? -1 : _7;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^
+4 >                            ^^
+5 >                              ^^^^^^^
+6 >                                     ^^^^^^^^^^^^^^^^^^^
+7 >                                                        ^
+8 >                                                         ^
+9 >                                                          ^^^^^
+1->
+2 >    
+3 >        numberB = -1
+4 >                            
+5 >                              numberB
+6 >                                      = 
+7 >                                                        -
+8 >                                                         1
+9 >                                                          
+1->Emitted(38, 5) Source(49, 11) + SourceIndex(0)
+2 >Emitted(38, 9) Source(49, 11) + SourceIndex(0)
+3 >Emitted(38, 29) Source(49, 23) + SourceIndex(0)
+4 >Emitted(38, 31) Source(49, 11) + SourceIndex(0)
+5 >Emitted(38, 38) Source(49, 18) + SourceIndex(0)
+6 >Emitted(38, 57) Source(49, 21) + SourceIndex(0)
+7 >Emitted(38, 58) Source(49, 22) + SourceIndex(0)
+8 >Emitted(38, 59) Source(49, 23) + SourceIndex(0)
+9 >Emitted(38, 64) Source(49, 23) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(39, 5) Source(50, 5) + SourceIndex(0)
+2 >Emitted(39, 12) Source(50, 12) + SourceIndex(0)
+3 >Emitted(39, 13) Source(50, 13) + SourceIndex(0)
+4 >Emitted(39, 16) Source(50, 16) + SourceIndex(0)
+5 >Emitted(39, 17) Source(50, 17) + SourceIndex(0)
+6 >Emitted(39, 24) Source(50, 24) + SourceIndex(0)
+7 >Emitted(39, 25) Source(50, 25) + SourceIndex(0)
+8 >Emitted(39, 26) Source(50, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(40, 2) Source(51, 2) + SourceIndex(0)
+---
+>>>for (var _8 = 0, _9 = getRobots(); _8 < _9.length; _8++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+13>                                                         ^^^^^->
+1->
+  >
+2 >for (let [numberB = -1] of 
+3 >     getRobots()
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
+1->Emitted(41, 1) Source(52, 1) + SourceIndex(0)
+2 >Emitted(41, 6) Source(52, 28) + SourceIndex(0)
+3 >Emitted(41, 16) Source(52, 39) + SourceIndex(0)
+4 >Emitted(41, 18) Source(52, 28) + SourceIndex(0)
+5 >Emitted(41, 23) Source(52, 28) + SourceIndex(0)
+6 >Emitted(41, 32) Source(52, 37) + SourceIndex(0)
+7 >Emitted(41, 34) Source(52, 39) + SourceIndex(0)
+8 >Emitted(41, 36) Source(52, 28) + SourceIndex(0)
+9 >Emitted(41, 50) Source(52, 39) + SourceIndex(0)
+10>Emitted(41, 52) Source(52, 28) + SourceIndex(0)
+11>Emitted(41, 56) Source(52, 39) + SourceIndex(0)
+12>Emitted(41, 58) Source(52, 41) + SourceIndex(0)
+---
+>>>    var _10 = _9[_8][0], numberB = _10 === void 0 ? -1 : _10;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^
+4 >                       ^^
+5 >                         ^^^^^^^
+6 >                                ^^^^^^^^^^^^^^^^^^^^
+7 >                                                    ^
+8 >                                                     ^
+9 >                                                      ^^^^^^
+1->
+2 >    
+3 >        numberB = -1
+4 >                       
+5 >                         numberB
+6 >                                 = 
+7 >                                                    -
+8 >                                                     1
+9 >                                                      
+1->Emitted(42, 5) Source(52, 11) + SourceIndex(0)
+2 >Emitted(42, 9) Source(52, 11) + SourceIndex(0)
+3 >Emitted(42, 24) Source(52, 23) + SourceIndex(0)
+4 >Emitted(42, 26) Source(52, 11) + SourceIndex(0)
+5 >Emitted(42, 33) Source(52, 18) + SourceIndex(0)
+6 >Emitted(42, 53) Source(52, 21) + SourceIndex(0)
+7 >Emitted(42, 54) Source(52, 22) + SourceIndex(0)
+8 >Emitted(42, 55) Source(52, 23) + SourceIndex(0)
+9 >Emitted(42, 61) Source(52, 23) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(43, 5) Source(53, 5) + SourceIndex(0)
+2 >Emitted(43, 12) Source(53, 12) + SourceIndex(0)
+3 >Emitted(43, 13) Source(53, 13) + SourceIndex(0)
+4 >Emitted(43, 16) Source(53, 16) + SourceIndex(0)
+5 >Emitted(43, 17) Source(53, 17) + SourceIndex(0)
+6 >Emitted(43, 24) Source(53, 24) + SourceIndex(0)
+7 >Emitted(43, 25) Source(53, 25) + SourceIndex(0)
+8 >Emitted(43, 26) Source(53, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(44, 2) Source(54, 2) + SourceIndex(0)
+---
+>>>for (var _11 = 0, _12 = [robotA, robotB]; _11 < _12.length; _11++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^
+9 >                                       ^
+10>                                        ^^
+11>                                          ^^^^^^^^^^^^^^^^
+12>                                                          ^^
+13>                                                            ^^^^^
+14>                                                                 ^^
+1->
+  >
+2 >for (let [numberB = -1] of 
+3 >     [robotA, robotB]
+4 >                
+5 >                  [
+6 >                         robotA
+7 >                               , 
+8 >                                 robotB
+9 >                                       ]
+10>                                        
+11>                                          [robotA, robotB]
+12>                                                          
+13>                                                            [robotA, robotB]
+14>                                                                 ) 
+1->Emitted(45, 1) Source(55, 1) + SourceIndex(0)
+2 >Emitted(45, 6) Source(55, 28) + SourceIndex(0)
+3 >Emitted(45, 17) Source(55, 44) + SourceIndex(0)
+4 >Emitted(45, 19) Source(55, 28) + SourceIndex(0)
+5 >Emitted(45, 26) Source(55, 29) + SourceIndex(0)
+6 >Emitted(45, 32) Source(55, 35) + SourceIndex(0)
+7 >Emitted(45, 34) Source(55, 37) + SourceIndex(0)
+8 >Emitted(45, 40) Source(55, 43) + SourceIndex(0)
+9 >Emitted(45, 41) Source(55, 44) + SourceIndex(0)
+10>Emitted(45, 43) Source(55, 28) + SourceIndex(0)
+11>Emitted(45, 59) Source(55, 44) + SourceIndex(0)
+12>Emitted(45, 61) Source(55, 28) + SourceIndex(0)
+13>Emitted(45, 66) Source(55, 44) + SourceIndex(0)
+14>Emitted(45, 68) Source(55, 46) + SourceIndex(0)
+---
+>>>    var _13 = _12[_11][0], numberB = _13 === void 0 ? -1 : _13;
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^
+6 >                                  ^^^^^^^^^^^^^^^^^^^^
+7 >                                                      ^
+8 >                                                       ^
+9 >                                                        ^^^^^^
+1 >
+2 >    
+3 >        numberB = -1
+4 >                         
+5 >                           numberB
+6 >                                   = 
+7 >                                                      -
+8 >                                                       1
+9 >                                                        
+1 >Emitted(46, 5) Source(55, 11) + SourceIndex(0)
+2 >Emitted(46, 9) Source(55, 11) + SourceIndex(0)
+3 >Emitted(46, 26) Source(55, 23) + SourceIndex(0)
+4 >Emitted(46, 28) Source(55, 11) + SourceIndex(0)
+5 >Emitted(46, 35) Source(55, 18) + SourceIndex(0)
+6 >Emitted(46, 55) Source(55, 21) + SourceIndex(0)
+7 >Emitted(46, 56) Source(55, 22) + SourceIndex(0)
+8 >Emitted(46, 57) Source(55, 23) + SourceIndex(0)
+9 >Emitted(46, 63) Source(55, 23) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(47, 5) Source(56, 5) + SourceIndex(0)
+2 >Emitted(47, 12) Source(56, 12) + SourceIndex(0)
+3 >Emitted(47, 13) Source(56, 13) + SourceIndex(0)
+4 >Emitted(47, 16) Source(56, 16) + SourceIndex(0)
+5 >Emitted(47, 17) Source(56, 17) + SourceIndex(0)
+6 >Emitted(47, 24) Source(56, 24) + SourceIndex(0)
+7 >Emitted(47, 25) Source(56, 25) + SourceIndex(0)
+8 >Emitted(47, 26) Source(56, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(48, 2) Source(57, 2) + SourceIndex(0)
+---
+>>>for (var _14 = 0, multiRobots_2 = multiRobots; _14 < multiRobots_2.length; _14++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^^
+9 >                                                                           ^^^^^
+10>                                                                                ^^
+1->
+  >
+2 >for (let [nameB = "noName"] of 
+3 >     multiRobots
+4 >                
+5 >                  multiRobots
+6 >                                             
+7 >                                               multiRobots
+8 >                                                                         
+9 >                                                                           multiRobots
+10>                                                                                ) 
+1->Emitted(49, 1) Source(58, 1) + SourceIndex(0)
+2 >Emitted(49, 6) Source(58, 32) + SourceIndex(0)
+3 >Emitted(49, 17) Source(58, 43) + SourceIndex(0)
+4 >Emitted(49, 19) Source(58, 32) + SourceIndex(0)
+5 >Emitted(49, 46) Source(58, 43) + SourceIndex(0)
+6 >Emitted(49, 48) Source(58, 32) + SourceIndex(0)
+7 >Emitted(49, 74) Source(58, 43) + SourceIndex(0)
+8 >Emitted(49, 76) Source(58, 32) + SourceIndex(0)
+9 >Emitted(49, 81) Source(58, 43) + SourceIndex(0)
+10>Emitted(49, 83) Source(58, 45) + SourceIndex(0)
+---
+>>>    var _15 = multiRobots_2[_14][0], nameB = _15 === void 0 ? "noName" : _15;
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                   ^^
+5 >                                     ^^^^^
+6 >                                          ^^^^^^^^^^^^^^^^^^^^
+7 >                                                              ^^^^^^^^
+8 >                                                                      ^^^^^^
+1 >
+2 >    
+3 >        nameB = "noName"
+4 >                                   
+5 >                                     nameB
+6 >                                           = 
+7 >                                                              "noName"
+8 >                                                                      
+1 >Emitted(50, 5) Source(58, 11) + SourceIndex(0)
+2 >Emitted(50, 9) Source(58, 11) + SourceIndex(0)
+3 >Emitted(50, 36) Source(58, 27) + SourceIndex(0)
+4 >Emitted(50, 38) Source(58, 11) + SourceIndex(0)
+5 >Emitted(50, 43) Source(58, 16) + SourceIndex(0)
+6 >Emitted(50, 63) Source(58, 19) + SourceIndex(0)
+7 >Emitted(50, 71) Source(58, 27) + SourceIndex(0)
+8 >Emitted(50, 77) Source(58, 27) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(51, 5) Source(59, 5) + SourceIndex(0)
+2 >Emitted(51, 12) Source(59, 12) + SourceIndex(0)
+3 >Emitted(51, 13) Source(59, 13) + SourceIndex(0)
+4 >Emitted(51, 16) Source(59, 16) + SourceIndex(0)
+5 >Emitted(51, 17) Source(59, 17) + SourceIndex(0)
+6 >Emitted(51, 22) Source(59, 22) + SourceIndex(0)
+7 >Emitted(51, 23) Source(59, 23) + SourceIndex(0)
+8 >Emitted(51, 24) Source(59, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(52, 2) Source(60, 2) + SourceIndex(0)
+---
+>>>for (var _16 = 0, _17 = getMultiRobots(); _16 < _17.length; _16++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^^^^^^
+7 >                                      ^^
+8 >                                        ^^
+9 >                                          ^^^^^^^^^^^^^^^^
+10>                                                          ^^
+11>                                                            ^^^^^
+12>                                                                 ^^
+13>                                                                   ^->
+1->
+  >
+2 >for (let [nameB = "noName"] of 
+3 >     getMultiRobots()
+4 >                
+5 >                  
+6 >                        getMultiRobots
+7 >                                      ()
+8 >                                        
+9 >                                          getMultiRobots()
+10>                                                          
+11>                                                            getMultiRobots()
+12>                                                                 ) 
+1->Emitted(53, 1) Source(61, 1) + SourceIndex(0)
+2 >Emitted(53, 6) Source(61, 32) + SourceIndex(0)
+3 >Emitted(53, 17) Source(61, 48) + SourceIndex(0)
+4 >Emitted(53, 19) Source(61, 32) + SourceIndex(0)
+5 >Emitted(53, 25) Source(61, 32) + SourceIndex(0)
+6 >Emitted(53, 39) Source(61, 46) + SourceIndex(0)
+7 >Emitted(53, 41) Source(61, 48) + SourceIndex(0)
+8 >Emitted(53, 43) Source(61, 32) + SourceIndex(0)
+9 >Emitted(53, 59) Source(61, 48) + SourceIndex(0)
+10>Emitted(53, 61) Source(61, 32) + SourceIndex(0)
+11>Emitted(53, 66) Source(61, 48) + SourceIndex(0)
+12>Emitted(53, 68) Source(61, 50) + SourceIndex(0)
+---
+>>>    var _18 = _17[_16][0], nameB = _18 === void 0 ? "noName" : _18;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^
+6 >                                ^^^^^^^^^^^^^^^^^^^^
+7 >                                                    ^^^^^^^^
+8 >                                                            ^^^^^^
+1->
+2 >    
+3 >        nameB = "noName"
+4 >                         
+5 >                           nameB
+6 >                                 = 
+7 >                                                    "noName"
+8 >                                                            
+1->Emitted(54, 5) Source(61, 11) + SourceIndex(0)
+2 >Emitted(54, 9) Source(61, 11) + SourceIndex(0)
+3 >Emitted(54, 26) Source(61, 27) + SourceIndex(0)
+4 >Emitted(54, 28) Source(61, 11) + SourceIndex(0)
+5 >Emitted(54, 33) Source(61, 16) + SourceIndex(0)
+6 >Emitted(54, 53) Source(61, 19) + SourceIndex(0)
+7 >Emitted(54, 61) Source(61, 27) + SourceIndex(0)
+8 >Emitted(54, 67) Source(61, 27) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(55, 5) Source(62, 5) + SourceIndex(0)
+2 >Emitted(55, 12) Source(62, 12) + SourceIndex(0)
+3 >Emitted(55, 13) Source(62, 13) + SourceIndex(0)
+4 >Emitted(55, 16) Source(62, 16) + SourceIndex(0)
+5 >Emitted(55, 17) Source(62, 17) + SourceIndex(0)
+6 >Emitted(55, 22) Source(62, 22) + SourceIndex(0)
+7 >Emitted(55, 23) Source(62, 23) + SourceIndex(0)
+8 >Emitted(55, 24) Source(62, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(56, 2) Source(63, 2) + SourceIndex(0)
+---
+>>>for (var _19 = 0, _20 = [multiRobotA, multiRobotB]; _19 < _20.length; _19++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^^^^^^^^^^
+9 >                                                 ^
+10>                                                  ^^
+11>                                                    ^^^^^^^^^^^^^^^^
+12>                                                                    ^^
+13>                                                                      ^^^^^
+14>                                                                           ^^
+1->
+  >
+2 >for (let [nameB = "noName"] of 
+3 >     [multiRobotA, multiRobotB]
+4 >                
+5 >                  [
+6 >                         multiRobotA
+7 >                                    , 
+8 >                                      multiRobotB
+9 >                                                 ]
+10>                                                  
+11>                                                    [multiRobotA, multiRobotB]
+12>                                                                    
+13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
+1->Emitted(57, 1) Source(64, 1) + SourceIndex(0)
+2 >Emitted(57, 6) Source(64, 32) + SourceIndex(0)
+3 >Emitted(57, 17) Source(64, 58) + SourceIndex(0)
+4 >Emitted(57, 19) Source(64, 32) + SourceIndex(0)
+5 >Emitted(57, 26) Source(64, 33) + SourceIndex(0)
+6 >Emitted(57, 37) Source(64, 44) + SourceIndex(0)
+7 >Emitted(57, 39) Source(64, 46) + SourceIndex(0)
+8 >Emitted(57, 50) Source(64, 57) + SourceIndex(0)
+9 >Emitted(57, 51) Source(64, 58) + SourceIndex(0)
+10>Emitted(57, 53) Source(64, 32) + SourceIndex(0)
+11>Emitted(57, 69) Source(64, 58) + SourceIndex(0)
+12>Emitted(57, 71) Source(64, 32) + SourceIndex(0)
+13>Emitted(57, 76) Source(64, 58) + SourceIndex(0)
+14>Emitted(57, 78) Source(64, 60) + SourceIndex(0)
+---
+>>>    var _21 = _20[_19][0], nameB = _21 === void 0 ? "noName" : _21;
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^
+6 >                                ^^^^^^^^^^^^^^^^^^^^
+7 >                                                    ^^^^^^^^
+8 >                                                            ^^^^^^
+1 >
+2 >    
+3 >        nameB = "noName"
+4 >                         
+5 >                           nameB
+6 >                                 = 
+7 >                                                    "noName"
+8 >                                                            
+1 >Emitted(58, 5) Source(64, 11) + SourceIndex(0)
+2 >Emitted(58, 9) Source(64, 11) + SourceIndex(0)
+3 >Emitted(58, 26) Source(64, 27) + SourceIndex(0)
+4 >Emitted(58, 28) Source(64, 11) + SourceIndex(0)
+5 >Emitted(58, 33) Source(64, 16) + SourceIndex(0)
+6 >Emitted(58, 53) Source(64, 19) + SourceIndex(0)
+7 >Emitted(58, 61) Source(64, 27) + SourceIndex(0)
+8 >Emitted(58, 67) Source(64, 27) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(59, 5) Source(65, 5) + SourceIndex(0)
+2 >Emitted(59, 12) Source(65, 12) + SourceIndex(0)
+3 >Emitted(59, 13) Source(65, 13) + SourceIndex(0)
+4 >Emitted(59, 16) Source(65, 16) + SourceIndex(0)
+5 >Emitted(59, 17) Source(65, 17) + SourceIndex(0)
+6 >Emitted(59, 22) Source(65, 22) + SourceIndex(0)
+7 >Emitted(59, 23) Source(65, 23) + SourceIndex(0)
+8 >Emitted(59, 24) Source(65, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(60, 2) Source(66, 2) + SourceIndex(0)
+---
+>>>for (var _22 = 0, robots_3 = robots; _22 < robots_3.length; _22++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^
+6 >                                   ^^
+7 >                                     ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                          ^^
+9 >                                                            ^^^^^
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of 
+3 >     robots
+4 >                
+5 >                  robots
+6 >                                   
+7 >                                     robots
+8 >                                                          
+9 >                                                            robots
+10>                                                                 ) 
+1->Emitted(61, 1) Source(68, 1) + SourceIndex(0)
+2 >Emitted(61, 6) Source(68, 67) + SourceIndex(0)
+3 >Emitted(61, 17) Source(68, 73) + SourceIndex(0)
+4 >Emitted(61, 19) Source(68, 67) + SourceIndex(0)
+5 >Emitted(61, 36) Source(68, 73) + SourceIndex(0)
+6 >Emitted(61, 38) Source(68, 67) + SourceIndex(0)
+7 >Emitted(61, 59) Source(68, 73) + SourceIndex(0)
+8 >Emitted(61, 61) Source(68, 67) + SourceIndex(0)
+9 >Emitted(61, 66) Source(68, 73) + SourceIndex(0)
+10>Emitted(61, 68) Source(68, 75) + SourceIndex(0)
+---
+>>>    var _23 = robots_3[_22], _24 = _23[0], numberA2 = _24 === void 0 ? -1 : _24, _25 = _23[1], nameA2 = _25 === void 0 ? "noName" : _25, _26 = _23[2], skillA2 = _26 === void 0 ? "skill" : _26;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^
+4 >                           ^^
+5 >                             ^^^^^^^^^^^^
+6 >                                         ^^
+7 >                                           ^^^^^^^^
+8 >                                                   ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                       ^
+10>                                                                        ^
+11>                                                                         ^^^^^^
+12>                                                                               ^^
+13>                                                                                 ^^^^^^^^^^^^
+14>                                                                                             ^^
+15>                                                                                               ^^^^^^
+16>                                                                                                     ^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                         ^^^^^^^^
+18>                                                                                                                                 ^^^^^^
+19>                                                                                                                                       ^^
+20>                                                                                                                                         ^^^^^^^^^^^^
+21>                                                                                                                                                     ^^
+22>                                                                                                                                                       ^^^^^^^
+23>                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^
+24>                                                                                                                                                                                  ^^^^^^^
+25>                                                                                                                                                                                         ^^^^^^
+1->
+2 >    
+3 >        [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"]
+4 >                           
+5 >                             numberA2 = -1
+6 >                                         
+7 >                                           numberA2
+8 >                                                    = 
+9 >                                                                       -
+10>                                                                        1
+11>                                                                         
+12>                                                                               , 
+13>                                                                                 nameA2 = "noName"
+14>                                                                                             
+15>                                                                                               nameA2
+16>                                                                                                      = 
+17>                                                                                                                         "noName"
+18>                                                                                                                                 
+19>                                                                                                                                       , 
+20>                                                                                                                                         skillA2 = "skill"
+21>                                                                                                                                                     
+22>                                                                                                                                                       skillA2
+23>                                                                                                                                                               = 
+24>                                                                                                                                                                                  "skill"
+25>                                                                                                                                                                                         
+1->Emitted(62, 5) Source(68, 10) + SourceIndex(0)
+2 >Emitted(62, 9) Source(68, 10) + SourceIndex(0)
+3 >Emitted(62, 28) Source(68, 63) + SourceIndex(0)
+4 >Emitted(62, 30) Source(68, 11) + SourceIndex(0)
+5 >Emitted(62, 42) Source(68, 24) + SourceIndex(0)
+6 >Emitted(62, 44) Source(68, 11) + SourceIndex(0)
+7 >Emitted(62, 52) Source(68, 19) + SourceIndex(0)
+8 >Emitted(62, 72) Source(68, 22) + SourceIndex(0)
+9 >Emitted(62, 73) Source(68, 23) + SourceIndex(0)
+10>Emitted(62, 74) Source(68, 24) + SourceIndex(0)
+11>Emitted(62, 80) Source(68, 24) + SourceIndex(0)
+12>Emitted(62, 82) Source(68, 26) + SourceIndex(0)
+13>Emitted(62, 94) Source(68, 43) + SourceIndex(0)
+14>Emitted(62, 96) Source(68, 26) + SourceIndex(0)
+15>Emitted(62, 102) Source(68, 32) + SourceIndex(0)
+16>Emitted(62, 122) Source(68, 35) + SourceIndex(0)
+17>Emitted(62, 130) Source(68, 43) + SourceIndex(0)
+18>Emitted(62, 136) Source(68, 43) + SourceIndex(0)
+19>Emitted(62, 138) Source(68, 45) + SourceIndex(0)
+20>Emitted(62, 150) Source(68, 62) + SourceIndex(0)
+21>Emitted(62, 152) Source(68, 45) + SourceIndex(0)
+22>Emitted(62, 159) Source(68, 52) + SourceIndex(0)
+23>Emitted(62, 179) Source(68, 55) + SourceIndex(0)
+24>Emitted(62, 186) Source(68, 62) + SourceIndex(0)
+25>Emitted(62, 192) Source(68, 62) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(63, 5) Source(69, 5) + SourceIndex(0)
+2 >Emitted(63, 12) Source(69, 12) + SourceIndex(0)
+3 >Emitted(63, 13) Source(69, 13) + SourceIndex(0)
+4 >Emitted(63, 16) Source(69, 16) + SourceIndex(0)
+5 >Emitted(63, 17) Source(69, 17) + SourceIndex(0)
+6 >Emitted(63, 23) Source(69, 23) + SourceIndex(0)
+7 >Emitted(63, 24) Source(69, 24) + SourceIndex(0)
+8 >Emitted(63, 25) Source(69, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(64, 2) Source(70, 2) + SourceIndex(0)
+---
+>>>for (var _27 = 0, _28 = getRobots(); _27 < _28.length; _27++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^
+7 >                                 ^^
+8 >                                   ^^
+9 >                                     ^^^^^^^^^^^^^^^^
+10>                                                     ^^
+11>                                                       ^^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of 
+3 >     getRobots()
+4 >                
+5 >                  
+6 >                        getRobots
+7 >                                 ()
+8 >                                   
+9 >                                     getRobots()
+10>                                                     
+11>                                                       getRobots()
+12>                                                            ) 
+1->Emitted(65, 1) Source(71, 1) + SourceIndex(0)
+2 >Emitted(65, 6) Source(71, 67) + SourceIndex(0)
+3 >Emitted(65, 17) Source(71, 78) + SourceIndex(0)
+4 >Emitted(65, 19) Source(71, 67) + SourceIndex(0)
+5 >Emitted(65, 25) Source(71, 67) + SourceIndex(0)
+6 >Emitted(65, 34) Source(71, 76) + SourceIndex(0)
+7 >Emitted(65, 36) Source(71, 78) + SourceIndex(0)
+8 >Emitted(65, 38) Source(71, 67) + SourceIndex(0)
+9 >Emitted(65, 54) Source(71, 78) + SourceIndex(0)
+10>Emitted(65, 56) Source(71, 67) + SourceIndex(0)
+11>Emitted(65, 61) Source(71, 78) + SourceIndex(0)
+12>Emitted(65, 63) Source(71, 80) + SourceIndex(0)
+---
+>>>    var _29 = _28[_27], _30 = _29[0], numberA2 = _30 === void 0 ? -1 : _30, _31 = _29[1], nameA2 = _31 === void 0 ? "noName" : _31, _32 = _29[2], skillA2 = _32 === void 0 ? "skill" : _32;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                  ^
+10>                                                                   ^
+11>                                                                    ^^^^^^
+12>                                                                          ^^
+13>                                                                            ^^^^^^^^^^^^
+14>                                                                                        ^^
+15>                                                                                          ^^^^^^
+16>                                                                                                ^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                    ^^^^^^^^
+18>                                                                                                                            ^^^^^^
+19>                                                                                                                                  ^^
+20>                                                                                                                                    ^^^^^^^^^^^^
+21>                                                                                                                                                ^^
+22>                                                                                                                                                  ^^^^^^^
+23>                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^
+24>                                                                                                                                                                             ^^^^^^^
+25>                                                                                                                                                                                    ^^^^^^
+1->
+2 >    
+3 >        [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"]
+4 >                      
+5 >                        numberA2 = -1
+6 >                                    
+7 >                                      numberA2
+8 >                                               = 
+9 >                                                                  -
+10>                                                                   1
+11>                                                                    
+12>                                                                          , 
+13>                                                                            nameA2 = "noName"
+14>                                                                                        
+15>                                                                                          nameA2
+16>                                                                                                 = 
+17>                                                                                                                    "noName"
+18>                                                                                                                            
+19>                                                                                                                                  , 
+20>                                                                                                                                    skillA2 = "skill"
+21>                                                                                                                                                
+22>                                                                                                                                                  skillA2
+23>                                                                                                                                                          = 
+24>                                                                                                                                                                             "skill"
+25>                                                                                                                                                                                    
+1->Emitted(66, 5) Source(71, 10) + SourceIndex(0)
+2 >Emitted(66, 9) Source(71, 10) + SourceIndex(0)
+3 >Emitted(66, 23) Source(71, 63) + SourceIndex(0)
+4 >Emitted(66, 25) Source(71, 11) + SourceIndex(0)
+5 >Emitted(66, 37) Source(71, 24) + SourceIndex(0)
+6 >Emitted(66, 39) Source(71, 11) + SourceIndex(0)
+7 >Emitted(66, 47) Source(71, 19) + SourceIndex(0)
+8 >Emitted(66, 67) Source(71, 22) + SourceIndex(0)
+9 >Emitted(66, 68) Source(71, 23) + SourceIndex(0)
+10>Emitted(66, 69) Source(71, 24) + SourceIndex(0)
+11>Emitted(66, 75) Source(71, 24) + SourceIndex(0)
+12>Emitted(66, 77) Source(71, 26) + SourceIndex(0)
+13>Emitted(66, 89) Source(71, 43) + SourceIndex(0)
+14>Emitted(66, 91) Source(71, 26) + SourceIndex(0)
+15>Emitted(66, 97) Source(71, 32) + SourceIndex(0)
+16>Emitted(66, 117) Source(71, 35) + SourceIndex(0)
+17>Emitted(66, 125) Source(71, 43) + SourceIndex(0)
+18>Emitted(66, 131) Source(71, 43) + SourceIndex(0)
+19>Emitted(66, 133) Source(71, 45) + SourceIndex(0)
+20>Emitted(66, 145) Source(71, 62) + SourceIndex(0)
+21>Emitted(66, 147) Source(71, 45) + SourceIndex(0)
+22>Emitted(66, 154) Source(71, 52) + SourceIndex(0)
+23>Emitted(66, 174) Source(71, 55) + SourceIndex(0)
+24>Emitted(66, 181) Source(71, 62) + SourceIndex(0)
+25>Emitted(66, 187) Source(71, 62) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(67, 5) Source(72, 5) + SourceIndex(0)
+2 >Emitted(67, 12) Source(72, 12) + SourceIndex(0)
+3 >Emitted(67, 13) Source(72, 13) + SourceIndex(0)
+4 >Emitted(67, 16) Source(72, 16) + SourceIndex(0)
+5 >Emitted(67, 17) Source(72, 17) + SourceIndex(0)
+6 >Emitted(67, 23) Source(72, 23) + SourceIndex(0)
+7 >Emitted(67, 24) Source(72, 24) + SourceIndex(0)
+8 >Emitted(67, 25) Source(72, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(68, 2) Source(73, 2) + SourceIndex(0)
+---
+>>>for (var _33 = 0, _34 = [robotA, robotB]; _33 < _34.length; _33++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^
+9 >                                       ^
+10>                                        ^^
+11>                                          ^^^^^^^^^^^^^^^^
+12>                                                          ^^
+13>                                                            ^^^^^
+14>                                                                 ^^
+15>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of 
+3 >     [robotA, robotB]
+4 >                
+5 >                  [
+6 >                         robotA
+7 >                               , 
+8 >                                 robotB
+9 >                                       ]
+10>                                        
+11>                                          [robotA, robotB]
+12>                                                          
+13>                                                            [robotA, robotB]
+14>                                                                 ) 
+1->Emitted(69, 1) Source(74, 1) + SourceIndex(0)
+2 >Emitted(69, 6) Source(74, 67) + SourceIndex(0)
+3 >Emitted(69, 17) Source(74, 83) + SourceIndex(0)
+4 >Emitted(69, 19) Source(74, 67) + SourceIndex(0)
+5 >Emitted(69, 26) Source(74, 68) + SourceIndex(0)
+6 >Emitted(69, 32) Source(74, 74) + SourceIndex(0)
+7 >Emitted(69, 34) Source(74, 76) + SourceIndex(0)
+8 >Emitted(69, 40) Source(74, 82) + SourceIndex(0)
+9 >Emitted(69, 41) Source(74, 83) + SourceIndex(0)
+10>Emitted(69, 43) Source(74, 67) + SourceIndex(0)
+11>Emitted(69, 59) Source(74, 83) + SourceIndex(0)
+12>Emitted(69, 61) Source(74, 67) + SourceIndex(0)
+13>Emitted(69, 66) Source(74, 83) + SourceIndex(0)
+14>Emitted(69, 68) Source(74, 85) + SourceIndex(0)
+---
+>>>    var _35 = _34[_33], _36 = _35[0], numberA2 = _36 === void 0 ? -1 : _36, _37 = _35[1], nameA2 = _37 === void 0 ? "noName" : _37, _38 = _35[2], skillA2 = _38 === void 0 ? "skill" : _38;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                  ^
+10>                                                                   ^
+11>                                                                    ^^^^^^
+12>                                                                          ^^
+13>                                                                            ^^^^^^^^^^^^
+14>                                                                                        ^^
+15>                                                                                          ^^^^^^
+16>                                                                                                ^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                    ^^^^^^^^
+18>                                                                                                                            ^^^^^^
+19>                                                                                                                                  ^^
+20>                                                                                                                                    ^^^^^^^^^^^^
+21>                                                                                                                                                ^^
+22>                                                                                                                                                  ^^^^^^^
+23>                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^
+24>                                                                                                                                                                             ^^^^^^^
+25>                                                                                                                                                                                    ^^^^^^
+1->
+2 >    
+3 >        [numberA2 = -1, nameA2 = "noName", skillA2 = "skill"]
+4 >                      
+5 >                        numberA2 = -1
+6 >                                    
+7 >                                      numberA2
+8 >                                               = 
+9 >                                                                  -
+10>                                                                   1
+11>                                                                    
+12>                                                                          , 
+13>                                                                            nameA2 = "noName"
+14>                                                                                        
+15>                                                                                          nameA2
+16>                                                                                                 = 
+17>                                                                                                                    "noName"
+18>                                                                                                                            
+19>                                                                                                                                  , 
+20>                                                                                                                                    skillA2 = "skill"
+21>                                                                                                                                                
+22>                                                                                                                                                  skillA2
+23>                                                                                                                                                          = 
+24>                                                                                                                                                                             "skill"
+25>                                                                                                                                                                                    
+1->Emitted(70, 5) Source(74, 10) + SourceIndex(0)
+2 >Emitted(70, 9) Source(74, 10) + SourceIndex(0)
+3 >Emitted(70, 23) Source(74, 63) + SourceIndex(0)
+4 >Emitted(70, 25) Source(74, 11) + SourceIndex(0)
+5 >Emitted(70, 37) Source(74, 24) + SourceIndex(0)
+6 >Emitted(70, 39) Source(74, 11) + SourceIndex(0)
+7 >Emitted(70, 47) Source(74, 19) + SourceIndex(0)
+8 >Emitted(70, 67) Source(74, 22) + SourceIndex(0)
+9 >Emitted(70, 68) Source(74, 23) + SourceIndex(0)
+10>Emitted(70, 69) Source(74, 24) + SourceIndex(0)
+11>Emitted(70, 75) Source(74, 24) + SourceIndex(0)
+12>Emitted(70, 77) Source(74, 26) + SourceIndex(0)
+13>Emitted(70, 89) Source(74, 43) + SourceIndex(0)
+14>Emitted(70, 91) Source(74, 26) + SourceIndex(0)
+15>Emitted(70, 97) Source(74, 32) + SourceIndex(0)
+16>Emitted(70, 117) Source(74, 35) + SourceIndex(0)
+17>Emitted(70, 125) Source(74, 43) + SourceIndex(0)
+18>Emitted(70, 131) Source(74, 43) + SourceIndex(0)
+19>Emitted(70, 133) Source(74, 45) + SourceIndex(0)
+20>Emitted(70, 145) Source(74, 62) + SourceIndex(0)
+21>Emitted(70, 147) Source(74, 45) + SourceIndex(0)
+22>Emitted(70, 154) Source(74, 52) + SourceIndex(0)
+23>Emitted(70, 174) Source(74, 55) + SourceIndex(0)
+24>Emitted(70, 181) Source(74, 62) + SourceIndex(0)
+25>Emitted(70, 187) Source(74, 62) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(71, 5) Source(75, 5) + SourceIndex(0)
+2 >Emitted(71, 12) Source(75, 12) + SourceIndex(0)
+3 >Emitted(71, 13) Source(75, 13) + SourceIndex(0)
+4 >Emitted(71, 16) Source(75, 16) + SourceIndex(0)
+5 >Emitted(71, 17) Source(75, 17) + SourceIndex(0)
+6 >Emitted(71, 23) Source(75, 23) + SourceIndex(0)
+7 >Emitted(71, 24) Source(75, 24) + SourceIndex(0)
+8 >Emitted(71, 25) Source(75, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(72, 2) Source(76, 2) + SourceIndex(0)
+---
+>>>for (var _39 = 0, multiRobots_3 = multiRobots; _39 < multiRobots_3.length; _39++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^^
+9 >                                                                           ^^^^^
+10>                                                                                ^^
+11>                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA = "noName", [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     multiRobots
+4 >                
+5 >                  multiRobots
+6 >                                             
+7 >                                               multiRobots
+8 >                                                                         
+9 >                                                                           multiRobots
+10>                                                                                ) 
+1->Emitted(73, 1) Source(77, 1) + SourceIndex(0)
+2 >Emitted(73, 6) Source(80, 30) + SourceIndex(0)
+3 >Emitted(73, 17) Source(80, 41) + SourceIndex(0)
+4 >Emitted(73, 19) Source(80, 30) + SourceIndex(0)
+5 >Emitted(73, 46) Source(80, 41) + SourceIndex(0)
+6 >Emitted(73, 48) Source(80, 30) + SourceIndex(0)
+7 >Emitted(73, 74) Source(80, 41) + SourceIndex(0)
+8 >Emitted(73, 76) Source(80, 30) + SourceIndex(0)
+9 >Emitted(73, 81) Source(80, 41) + SourceIndex(0)
+10>Emitted(73, 83) Source(80, 43) + SourceIndex(0)
+---
+>>>    var _40 = multiRobots_3[_39], _41 = _40[0], nameMA = _41 === void 0 ? "noName" : _41, _42 = _40[1], _43 = _42 === void 0 ? ["skill1", "skill2"] : _42, _44 = _43[0], primarySkillA = _44 === void 0 ? "primary" : _44, _45 = _43[1], secondarySkillA = _45 === void 0 ? "secondary" : _45;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                ^^
+5 >                                  ^^^^^^^^^^^^
+6 >                                              ^^
+7 >                                                ^^^^^^
+8 >                                                      ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                          ^^^^^^^^
+10>                                                                                  ^^^^^^
+11>                                                                                        ^^
+12>                                                                                          ^^^^^^^^^^^^
+13>                                                                                                      ^^
+14>                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                                               ^
+16>                                                                                                                                ^^^^^^^^
+17>                                                                                                                                        ^^
+18>                                                                                                                                          ^^^^^^^^
+19>                                                                                                                                                  ^
+20>                                                                                                                                                   ^^^^^^
+21>                                                                                                                                                         ^^
+22>                                                                                                                                                           ^^^^^^^^^^^^
+23>                                                                                                                                                                       ^^
+24>                                                                                                                                                                         ^^^^^^^^^^^^^
+25>                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                                          ^^^^^^^^^
+27>                                                                                                                                                                                                                   ^^^^^^
+28>                                                                                                                                                                                                                         ^^
+29>                                                                                                                                                                                                                           ^^^^^^^^^^^^
+30>                                                                                                                                                                                                                                       ^^
+31>                                                                                                                                                                                                                                         ^^^^^^^^^^^^^^^
+32>                                                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^
+33>                                                                                                                                                                                                                                                                            ^^^^^^^^^^^
+34>                                                                                                                                                                                                                                                                                       ^^^^^^
+1->
+2 >    
+3 >        [nameMA = "noName", [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                                
+5 >                                  nameMA = "noName"
+6 >                                              
+7 >                                                nameMA
+8 >                                                       = 
+9 >                                                                          "noName"
+10>                                                                                  
+11>                                                                                        , 
+12>                                                                                          [
+  >                                                                                              primarySkillA = "primary",
+  >                                                                                              secondarySkillA = "secondary"
+  >                                                                                          ] = ["skill1", "skill2"]
+13>                                                                                                      
+14>                                                                                                        [
+  >                                                                                                            primarySkillA = "primary",
+  >                                                                                                            secondarySkillA = "secondary"
+  >                                                                                                        ] = 
+15>                                                                                                                               [
+16>                                                                                                                                "skill1"
+17>                                                                                                                                        , 
+18>                                                                                                                                          "skill2"
+19>                                                                                                                                                  ]
+20>                                                                                                                                                   
+21>                                                                                                                                                         
+22>                                                                                                                                                           primarySkillA = "primary"
+23>                                                                                                                                                                       
+24>                                                                                                                                                                         primarySkillA
+25>                                                                                                                                                                                       = 
+26>                                                                                                                                                                                                          "primary"
+27>                                                                                                                                                                                                                   
+28>                                                                                                                                                                                                                         ,
+  >                                                                                                                                                                                                                             
+29>                                                                                                                                                                                                                           secondarySkillA = "secondary"
+30>                                                                                                                                                                                                                                       
+31>                                                                                                                                                                                                                                         secondarySkillA
+32>                                                                                                                                                                                                                                                         = 
+33>                                                                                                                                                                                                                                                                            "secondary"
+34>                                                                                                                                                                                                                                                                                       
+1->Emitted(74, 5) Source(77, 10) + SourceIndex(0)
+2 >Emitted(74, 9) Source(77, 10) + SourceIndex(0)
+3 >Emitted(74, 33) Source(80, 26) + SourceIndex(0)
+4 >Emitted(74, 35) Source(77, 11) + SourceIndex(0)
+5 >Emitted(74, 47) Source(77, 28) + SourceIndex(0)
+6 >Emitted(74, 49) Source(77, 11) + SourceIndex(0)
+7 >Emitted(74, 55) Source(77, 17) + SourceIndex(0)
+8 >Emitted(74, 75) Source(77, 20) + SourceIndex(0)
+9 >Emitted(74, 83) Source(77, 28) + SourceIndex(0)
+10>Emitted(74, 89) Source(77, 28) + SourceIndex(0)
+11>Emitted(74, 91) Source(77, 30) + SourceIndex(0)
+12>Emitted(74, 103) Source(80, 25) + SourceIndex(0)
+13>Emitted(74, 105) Source(77, 30) + SourceIndex(0)
+14>Emitted(74, 128) Source(80, 5) + SourceIndex(0)
+15>Emitted(74, 129) Source(80, 6) + SourceIndex(0)
+16>Emitted(74, 137) Source(80, 14) + SourceIndex(0)
+17>Emitted(74, 139) Source(80, 16) + SourceIndex(0)
+18>Emitted(74, 147) Source(80, 24) + SourceIndex(0)
+19>Emitted(74, 148) Source(80, 25) + SourceIndex(0)
+20>Emitted(74, 154) Source(80, 25) + SourceIndex(0)
+21>Emitted(74, 156) Source(78, 5) + SourceIndex(0)
+22>Emitted(74, 168) Source(78, 30) + SourceIndex(0)
+23>Emitted(74, 170) Source(78, 5) + SourceIndex(0)
+24>Emitted(74, 183) Source(78, 18) + SourceIndex(0)
+25>Emitted(74, 203) Source(78, 21) + SourceIndex(0)
+26>Emitted(74, 212) Source(78, 30) + SourceIndex(0)
+27>Emitted(74, 218) Source(78, 30) + SourceIndex(0)
+28>Emitted(74, 220) Source(79, 5) + SourceIndex(0)
+29>Emitted(74, 232) Source(79, 34) + SourceIndex(0)
+30>Emitted(74, 234) Source(79, 5) + SourceIndex(0)
+31>Emitted(74, 249) Source(79, 20) + SourceIndex(0)
+32>Emitted(74, 269) Source(79, 23) + SourceIndex(0)
+33>Emitted(74, 280) Source(79, 34) + SourceIndex(0)
+34>Emitted(74, 286) Source(79, 34) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >
+  >] = ["skill1", "skill2"]] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(75, 5) Source(81, 5) + SourceIndex(0)
+2 >Emitted(75, 12) Source(81, 12) + SourceIndex(0)
+3 >Emitted(75, 13) Source(81, 13) + SourceIndex(0)
+4 >Emitted(75, 16) Source(81, 16) + SourceIndex(0)
+5 >Emitted(75, 17) Source(81, 17) + SourceIndex(0)
+6 >Emitted(75, 23) Source(81, 23) + SourceIndex(0)
+7 >Emitted(75, 24) Source(81, 24) + SourceIndex(0)
+8 >Emitted(75, 25) Source(81, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(76, 2) Source(82, 2) + SourceIndex(0)
+---
+>>>for (var _46 = 0, _47 = getMultiRobots(); _46 < _47.length; _46++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^^^^^^
+7 >                                      ^^
+8 >                                        ^^
+9 >                                          ^^^^^^^^^^^^^^^^
+10>                                                          ^^
+11>                                                            ^^^^^
+12>                                                                 ^^
+13>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA = "noName", [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     getMultiRobots()
+4 >                
+5 >                  
+6 >                        getMultiRobots
+7 >                                      ()
+8 >                                        
+9 >                                          getMultiRobots()
+10>                                                          
+11>                                                            getMultiRobots()
+12>                                                                 ) 
+1->Emitted(77, 1) Source(83, 1) + SourceIndex(0)
+2 >Emitted(77, 6) Source(86, 30) + SourceIndex(0)
+3 >Emitted(77, 17) Source(86, 46) + SourceIndex(0)
+4 >Emitted(77, 19) Source(86, 30) + SourceIndex(0)
+5 >Emitted(77, 25) Source(86, 30) + SourceIndex(0)
+6 >Emitted(77, 39) Source(86, 44) + SourceIndex(0)
+7 >Emitted(77, 41) Source(86, 46) + SourceIndex(0)
+8 >Emitted(77, 43) Source(86, 30) + SourceIndex(0)
+9 >Emitted(77, 59) Source(86, 46) + SourceIndex(0)
+10>Emitted(77, 61) Source(86, 30) + SourceIndex(0)
+11>Emitted(77, 66) Source(86, 46) + SourceIndex(0)
+12>Emitted(77, 68) Source(86, 48) + SourceIndex(0)
+---
+>>>    var _48 = _47[_46], _49 = _48[0], nameMA = _49 === void 0 ? "noName" : _49, _50 = _48[1], _51 = _50 === void 0 ? ["skill1", "skill2"] : _50, _52 = _51[0], primarySkillA = _52 === void 0 ? "primary" : _52, _53 = _51[1], secondarySkillA = _53 === void 0 ? "secondary" : _53;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^
+8 >                                            ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                ^^^^^^^^
+10>                                                                        ^^^^^^
+11>                                                                              ^^
+12>                                                                                ^^^^^^^^^^^^
+13>                                                                                            ^^
+14>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                                     ^
+16>                                                                                                                      ^^^^^^^^
+17>                                                                                                                              ^^
+18>                                                                                                                                ^^^^^^^^
+19>                                                                                                                                        ^
+20>                                                                                                                                         ^^^^^^
+21>                                                                                                                                               ^^
+22>                                                                                                                                                 ^^^^^^^^^^^^
+23>                                                                                                                                                             ^^
+24>                                                                                                                                                               ^^^^^^^^^^^^^
+25>                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                                ^^^^^^^^^
+27>                                                                                                                                                                                                         ^^^^^^
+28>                                                                                                                                                                                                               ^^
+29>                                                                                                                                                                                                                 ^^^^^^^^^^^^
+30>                                                                                                                                                                                                                             ^^
+31>                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^
+32>                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^
+33>                                                                                                                                                                                                                                                                  ^^^^^^^^^^^
+34>                                                                                                                                                                                                                                                                             ^^^^^^
+1->
+2 >    
+3 >        [nameMA = "noName", [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                      
+5 >                        nameMA = "noName"
+6 >                                    
+7 >                                      nameMA
+8 >                                             = 
+9 >                                                                "noName"
+10>                                                                        
+11>                                                                              , 
+12>                                                                                [
+  >                                                                                    primarySkillA = "primary",
+  >                                                                                    secondarySkillA = "secondary"
+  >                                                                                ] = ["skill1", "skill2"]
+13>                                                                                            
+14>                                                                                              [
+  >                                                                                                  primarySkillA = "primary",
+  >                                                                                                  secondarySkillA = "secondary"
+  >                                                                                              ] = 
+15>                                                                                                                     [
+16>                                                                                                                      "skill1"
+17>                                                                                                                              , 
+18>                                                                                                                                "skill2"
+19>                                                                                                                                        ]
+20>                                                                                                                                         
+21>                                                                                                                                               
+22>                                                                                                                                                 primarySkillA = "primary"
+23>                                                                                                                                                             
+24>                                                                                                                                                               primarySkillA
+25>                                                                                                                                                                             = 
+26>                                                                                                                                                                                                "primary"
+27>                                                                                                                                                                                                         
+28>                                                                                                                                                                                                               ,
+  >                                                                                                                                                                                                                   
+29>                                                                                                                                                                                                                 secondarySkillA = "secondary"
+30>                                                                                                                                                                                                                             
+31>                                                                                                                                                                                                                               secondarySkillA
+32>                                                                                                                                                                                                                                               = 
+33>                                                                                                                                                                                                                                                                  "secondary"
+34>                                                                                                                                                                                                                                                                             
+1->Emitted(78, 5) Source(83, 10) + SourceIndex(0)
+2 >Emitted(78, 9) Source(83, 10) + SourceIndex(0)
+3 >Emitted(78, 23) Source(86, 26) + SourceIndex(0)
+4 >Emitted(78, 25) Source(83, 11) + SourceIndex(0)
+5 >Emitted(78, 37) Source(83, 28) + SourceIndex(0)
+6 >Emitted(78, 39) Source(83, 11) + SourceIndex(0)
+7 >Emitted(78, 45) Source(83, 17) + SourceIndex(0)
+8 >Emitted(78, 65) Source(83, 20) + SourceIndex(0)
+9 >Emitted(78, 73) Source(83, 28) + SourceIndex(0)
+10>Emitted(78, 79) Source(83, 28) + SourceIndex(0)
+11>Emitted(78, 81) Source(83, 30) + SourceIndex(0)
+12>Emitted(78, 93) Source(86, 25) + SourceIndex(0)
+13>Emitted(78, 95) Source(83, 30) + SourceIndex(0)
+14>Emitted(78, 118) Source(86, 5) + SourceIndex(0)
+15>Emitted(78, 119) Source(86, 6) + SourceIndex(0)
+16>Emitted(78, 127) Source(86, 14) + SourceIndex(0)
+17>Emitted(78, 129) Source(86, 16) + SourceIndex(0)
+18>Emitted(78, 137) Source(86, 24) + SourceIndex(0)
+19>Emitted(78, 138) Source(86, 25) + SourceIndex(0)
+20>Emitted(78, 144) Source(86, 25) + SourceIndex(0)
+21>Emitted(78, 146) Source(84, 5) + SourceIndex(0)
+22>Emitted(78, 158) Source(84, 30) + SourceIndex(0)
+23>Emitted(78, 160) Source(84, 5) + SourceIndex(0)
+24>Emitted(78, 173) Source(84, 18) + SourceIndex(0)
+25>Emitted(78, 193) Source(84, 21) + SourceIndex(0)
+26>Emitted(78, 202) Source(84, 30) + SourceIndex(0)
+27>Emitted(78, 208) Source(84, 30) + SourceIndex(0)
+28>Emitted(78, 210) Source(85, 5) + SourceIndex(0)
+29>Emitted(78, 222) Source(85, 34) + SourceIndex(0)
+30>Emitted(78, 224) Source(85, 5) + SourceIndex(0)
+31>Emitted(78, 239) Source(85, 20) + SourceIndex(0)
+32>Emitted(78, 259) Source(85, 23) + SourceIndex(0)
+33>Emitted(78, 270) Source(85, 34) + SourceIndex(0)
+34>Emitted(78, 276) Source(85, 34) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >
+  >] = ["skill1", "skill2"]] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(79, 5) Source(87, 5) + SourceIndex(0)
+2 >Emitted(79, 12) Source(87, 12) + SourceIndex(0)
+3 >Emitted(79, 13) Source(87, 13) + SourceIndex(0)
+4 >Emitted(79, 16) Source(87, 16) + SourceIndex(0)
+5 >Emitted(79, 17) Source(87, 17) + SourceIndex(0)
+6 >Emitted(79, 23) Source(87, 23) + SourceIndex(0)
+7 >Emitted(79, 24) Source(87, 24) + SourceIndex(0)
+8 >Emitted(79, 25) Source(87, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(80, 2) Source(88, 2) + SourceIndex(0)
+---
+>>>for (var _54 = 0, _55 = [multiRobotA, multiRobotB]; _54 < _55.length; _54++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^^^^^^^^^^
+9 >                                                 ^
+10>                                                  ^^
+11>                                                    ^^^^^^^^^^^^^^^^
+12>                                                                    ^^
+13>                                                                      ^^^^^
+14>                                                                           ^^
+15>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA = "noName", [
+  >    primarySkillA = "primary",
+  >    secondarySkillA = "secondary"
+  >] = ["skill1", "skill2"]] of 
+3 >     [multiRobotA, multiRobotB]
+4 >                
+5 >                  [
+6 >                         multiRobotA
+7 >                                    , 
+8 >                                      multiRobotB
+9 >                                                 ]
+10>                                                  
+11>                                                    [multiRobotA, multiRobotB]
+12>                                                                    
+13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
+1->Emitted(81, 1) Source(89, 1) + SourceIndex(0)
+2 >Emitted(81, 6) Source(92, 30) + SourceIndex(0)
+3 >Emitted(81, 17) Source(92, 56) + SourceIndex(0)
+4 >Emitted(81, 19) Source(92, 30) + SourceIndex(0)
+5 >Emitted(81, 26) Source(92, 31) + SourceIndex(0)
+6 >Emitted(81, 37) Source(92, 42) + SourceIndex(0)
+7 >Emitted(81, 39) Source(92, 44) + SourceIndex(0)
+8 >Emitted(81, 50) Source(92, 55) + SourceIndex(0)
+9 >Emitted(81, 51) Source(92, 56) + SourceIndex(0)
+10>Emitted(81, 53) Source(92, 30) + SourceIndex(0)
+11>Emitted(81, 69) Source(92, 56) + SourceIndex(0)
+12>Emitted(81, 71) Source(92, 30) + SourceIndex(0)
+13>Emitted(81, 76) Source(92, 56) + SourceIndex(0)
+14>Emitted(81, 78) Source(92, 58) + SourceIndex(0)
+---
+>>>    var _56 = _55[_54], _57 = _56[0], nameMA = _57 === void 0 ? "noName" : _57, _58 = _56[1], _59 = _58 === void 0 ? ["skill1", "skill2"] : _58, _60 = _59[0], primarySkillA = _60 === void 0 ? "primary" : _60, _61 = _59[1], secondarySkillA = _61 === void 0 ? "secondary" : _61;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^
+8 >                                            ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                ^^^^^^^^
+10>                                                                        ^^^^^^
+11>                                                                              ^^
+12>                                                                                ^^^^^^^^^^^^
+13>                                                                                            ^^
+14>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                                     ^
+16>                                                                                                                      ^^^^^^^^
+17>                                                                                                                              ^^
+18>                                                                                                                                ^^^^^^^^
+19>                                                                                                                                        ^
+20>                                                                                                                                         ^^^^^^
+21>                                                                                                                                               ^^
+22>                                                                                                                                                 ^^^^^^^^^^^^
+23>                                                                                                                                                             ^^
+24>                                                                                                                                                               ^^^^^^^^^^^^^
+25>                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                                ^^^^^^^^^
+27>                                                                                                                                                                                                         ^^^^^^
+28>                                                                                                                                                                                                               ^^
+29>                                                                                                                                                                                                                 ^^^^^^^^^^^^
+30>                                                                                                                                                                                                                             ^^
+31>                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^
+32>                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^
+33>                                                                                                                                                                                                                                                                  ^^^^^^^^^^^
+34>                                                                                                                                                                                                                                                                             ^^^^^^
+1->
+2 >    
+3 >        [nameMA = "noName", [
+  >            primarySkillA = "primary",
+  >            secondarySkillA = "secondary"
+  >        ] = ["skill1", "skill2"]]
+4 >                      
+5 >                        nameMA = "noName"
+6 >                                    
+7 >                                      nameMA
+8 >                                             = 
+9 >                                                                "noName"
+10>                                                                        
+11>                                                                              , 
+12>                                                                                [
+  >                                                                                    primarySkillA = "primary",
+  >                                                                                    secondarySkillA = "secondary"
+  >                                                                                ] = ["skill1", "skill2"]
+13>                                                                                            
+14>                                                                                              [
+  >                                                                                                  primarySkillA = "primary",
+  >                                                                                                  secondarySkillA = "secondary"
+  >                                                                                              ] = 
+15>                                                                                                                     [
+16>                                                                                                                      "skill1"
+17>                                                                                                                              , 
+18>                                                                                                                                "skill2"
+19>                                                                                                                                        ]
+20>                                                                                                                                         
+21>                                                                                                                                               
+22>                                                                                                                                                 primarySkillA = "primary"
+23>                                                                                                                                                             
+24>                                                                                                                                                               primarySkillA
+25>                                                                                                                                                                             = 
+26>                                                                                                                                                                                                "primary"
+27>                                                                                                                                                                                                         
+28>                                                                                                                                                                                                               ,
+  >                                                                                                                                                                                                                   
+29>                                                                                                                                                                                                                 secondarySkillA = "secondary"
+30>                                                                                                                                                                                                                             
+31>                                                                                                                                                                                                                               secondarySkillA
+32>                                                                                                                                                                                                                                               = 
+33>                                                                                                                                                                                                                                                                  "secondary"
+34>                                                                                                                                                                                                                                                                             
+1->Emitted(82, 5) Source(89, 10) + SourceIndex(0)
+2 >Emitted(82, 9) Source(89, 10) + SourceIndex(0)
+3 >Emitted(82, 23) Source(92, 26) + SourceIndex(0)
+4 >Emitted(82, 25) Source(89, 11) + SourceIndex(0)
+5 >Emitted(82, 37) Source(89, 28) + SourceIndex(0)
+6 >Emitted(82, 39) Source(89, 11) + SourceIndex(0)
+7 >Emitted(82, 45) Source(89, 17) + SourceIndex(0)
+8 >Emitted(82, 65) Source(89, 20) + SourceIndex(0)
+9 >Emitted(82, 73) Source(89, 28) + SourceIndex(0)
+10>Emitted(82, 79) Source(89, 28) + SourceIndex(0)
+11>Emitted(82, 81) Source(89, 30) + SourceIndex(0)
+12>Emitted(82, 93) Source(92, 25) + SourceIndex(0)
+13>Emitted(82, 95) Source(89, 30) + SourceIndex(0)
+14>Emitted(82, 118) Source(92, 5) + SourceIndex(0)
+15>Emitted(82, 119) Source(92, 6) + SourceIndex(0)
+16>Emitted(82, 127) Source(92, 14) + SourceIndex(0)
+17>Emitted(82, 129) Source(92, 16) + SourceIndex(0)
+18>Emitted(82, 137) Source(92, 24) + SourceIndex(0)
+19>Emitted(82, 138) Source(92, 25) + SourceIndex(0)
+20>Emitted(82, 144) Source(92, 25) + SourceIndex(0)
+21>Emitted(82, 146) Source(90, 5) + SourceIndex(0)
+22>Emitted(82, 158) Source(90, 30) + SourceIndex(0)
+23>Emitted(82, 160) Source(90, 5) + SourceIndex(0)
+24>Emitted(82, 173) Source(90, 18) + SourceIndex(0)
+25>Emitted(82, 193) Source(90, 21) + SourceIndex(0)
+26>Emitted(82, 202) Source(90, 30) + SourceIndex(0)
+27>Emitted(82, 208) Source(90, 30) + SourceIndex(0)
+28>Emitted(82, 210) Source(91, 5) + SourceIndex(0)
+29>Emitted(82, 222) Source(91, 34) + SourceIndex(0)
+30>Emitted(82, 224) Source(91, 5) + SourceIndex(0)
+31>Emitted(82, 239) Source(91, 20) + SourceIndex(0)
+32>Emitted(82, 259) Source(91, 23) + SourceIndex(0)
+33>Emitted(82, 270) Source(91, 34) + SourceIndex(0)
+34>Emitted(82, 276) Source(91, 34) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >
+  >] = ["skill1", "skill2"]] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(83, 5) Source(93, 5) + SourceIndex(0)
+2 >Emitted(83, 12) Source(93, 12) + SourceIndex(0)
+3 >Emitted(83, 13) Source(93, 13) + SourceIndex(0)
+4 >Emitted(83, 16) Source(93, 16) + SourceIndex(0)
+5 >Emitted(83, 17) Source(93, 17) + SourceIndex(0)
+6 >Emitted(83, 23) Source(93, 23) + SourceIndex(0)
+7 >Emitted(83, 24) Source(93, 24) + SourceIndex(0)
+8 >Emitted(83, 25) Source(93, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(84, 2) Source(94, 2) + SourceIndex(0)
+---
+>>>for (var _62 = 0, robots_4 = robots; _62 < robots_4.length; _62++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^
+6 >                                   ^^
+7 >                                     ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                          ^^
+9 >                                                            ^^^^^
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >for (let [numberA3 = -1, ...robotAInfo] of 
+3 >     robots
+4 >                
+5 >                  robots
+6 >                                   
+7 >                                     robots
+8 >                                                          
+9 >                                                            robots
+10>                                                                 ) 
+1->Emitted(85, 1) Source(96, 1) + SourceIndex(0)
+2 >Emitted(85, 6) Source(96, 44) + SourceIndex(0)
+3 >Emitted(85, 17) Source(96, 50) + SourceIndex(0)
+4 >Emitted(85, 19) Source(96, 44) + SourceIndex(0)
+5 >Emitted(85, 36) Source(96, 50) + SourceIndex(0)
+6 >Emitted(85, 38) Source(96, 44) + SourceIndex(0)
+7 >Emitted(85, 59) Source(96, 50) + SourceIndex(0)
+8 >Emitted(85, 61) Source(96, 44) + SourceIndex(0)
+9 >Emitted(85, 66) Source(96, 50) + SourceIndex(0)
+10>Emitted(85, 68) Source(96, 52) + SourceIndex(0)
+---
+>>>    var _63 = robots_4[_62], _64 = _63[0], numberA3 = _64 === void 0 ? -1 : _64, robotAInfo = _63.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^
+4 >                           ^^
+5 >                             ^^^^^^^^^^^^
+6 >                                         ^^
+7 >                                           ^^^^^^^^
+8 >                                                   ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                       ^
+10>                                                                        ^
+11>                                                                         ^^^^^^
+12>                                                                               ^^
+13>                                                                                 ^^^^^^^^^^
+14>                                                                                           ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3 = -1, ...robotAInfo]
+4 >                           
+5 >                             numberA3 = -1
+6 >                                         
+7 >                                           numberA3
+8 >                                                    = 
+9 >                                                                       -
+10>                                                                        1
+11>                                                                         
+12>                                                                               , ...
+13>                                                                                 robotAInfo
+14>                                                                                           
+1->Emitted(86, 5) Source(96, 10) + SourceIndex(0)
+2 >Emitted(86, 9) Source(96, 10) + SourceIndex(0)
+3 >Emitted(86, 28) Source(96, 40) + SourceIndex(0)
+4 >Emitted(86, 30) Source(96, 11) + SourceIndex(0)
+5 >Emitted(86, 42) Source(96, 24) + SourceIndex(0)
+6 >Emitted(86, 44) Source(96, 11) + SourceIndex(0)
+7 >Emitted(86, 52) Source(96, 19) + SourceIndex(0)
+8 >Emitted(86, 72) Source(96, 22) + SourceIndex(0)
+9 >Emitted(86, 73) Source(96, 23) + SourceIndex(0)
+10>Emitted(86, 74) Source(96, 24) + SourceIndex(0)
+11>Emitted(86, 80) Source(96, 24) + SourceIndex(0)
+12>Emitted(86, 82) Source(96, 29) + SourceIndex(0)
+13>Emitted(86, 92) Source(96, 39) + SourceIndex(0)
+14>Emitted(86, 107) Source(96, 39) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(87, 5) Source(97, 5) + SourceIndex(0)
+2 >Emitted(87, 12) Source(97, 12) + SourceIndex(0)
+3 >Emitted(87, 13) Source(97, 13) + SourceIndex(0)
+4 >Emitted(87, 16) Source(97, 16) + SourceIndex(0)
+5 >Emitted(87, 17) Source(97, 17) + SourceIndex(0)
+6 >Emitted(87, 25) Source(97, 25) + SourceIndex(0)
+7 >Emitted(87, 26) Source(97, 26) + SourceIndex(0)
+8 >Emitted(87, 27) Source(97, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(88, 2) Source(98, 2) + SourceIndex(0)
+---
+>>>for (var _65 = 0, _66 = getRobots(); _65 < _66.length; _65++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^
+7 >                                 ^^
+8 >                                   ^^
+9 >                                     ^^^^^^^^^^^^^^^^
+10>                                                     ^^
+11>                                                       ^^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA3 = -1, ...robotAInfo] of 
+3 >     getRobots()
+4 >                
+5 >                  
+6 >                        getRobots
+7 >                                 ()
+8 >                                   
+9 >                                     getRobots()
+10>                                                     
+11>                                                       getRobots()
+12>                                                            ) 
+1->Emitted(89, 1) Source(99, 1) + SourceIndex(0)
+2 >Emitted(89, 6) Source(99, 44) + SourceIndex(0)
+3 >Emitted(89, 17) Source(99, 55) + SourceIndex(0)
+4 >Emitted(89, 19) Source(99, 44) + SourceIndex(0)
+5 >Emitted(89, 25) Source(99, 44) + SourceIndex(0)
+6 >Emitted(89, 34) Source(99, 53) + SourceIndex(0)
+7 >Emitted(89, 36) Source(99, 55) + SourceIndex(0)
+8 >Emitted(89, 38) Source(99, 44) + SourceIndex(0)
+9 >Emitted(89, 54) Source(99, 55) + SourceIndex(0)
+10>Emitted(89, 56) Source(99, 44) + SourceIndex(0)
+11>Emitted(89, 61) Source(99, 55) + SourceIndex(0)
+12>Emitted(89, 63) Source(99, 57) + SourceIndex(0)
+---
+>>>    var _67 = _66[_65], _68 = _67[0], numberA3 = _68 === void 0 ? -1 : _68, robotAInfo = _67.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                  ^
+10>                                                                   ^
+11>                                                                    ^^^^^^
+12>                                                                          ^^
+13>                                                                            ^^^^^^^^^^
+14>                                                                                      ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3 = -1, ...robotAInfo]
+4 >                      
+5 >                        numberA3 = -1
+6 >                                    
+7 >                                      numberA3
+8 >                                               = 
+9 >                                                                  -
+10>                                                                   1
+11>                                                                    
+12>                                                                          , ...
+13>                                                                            robotAInfo
+14>                                                                                      
+1->Emitted(90, 5) Source(99, 10) + SourceIndex(0)
+2 >Emitted(90, 9) Source(99, 10) + SourceIndex(0)
+3 >Emitted(90, 23) Source(99, 40) + SourceIndex(0)
+4 >Emitted(90, 25) Source(99, 11) + SourceIndex(0)
+5 >Emitted(90, 37) Source(99, 24) + SourceIndex(0)
+6 >Emitted(90, 39) Source(99, 11) + SourceIndex(0)
+7 >Emitted(90, 47) Source(99, 19) + SourceIndex(0)
+8 >Emitted(90, 67) Source(99, 22) + SourceIndex(0)
+9 >Emitted(90, 68) Source(99, 23) + SourceIndex(0)
+10>Emitted(90, 69) Source(99, 24) + SourceIndex(0)
+11>Emitted(90, 75) Source(99, 24) + SourceIndex(0)
+12>Emitted(90, 77) Source(99, 29) + SourceIndex(0)
+13>Emitted(90, 87) Source(99, 39) + SourceIndex(0)
+14>Emitted(90, 102) Source(99, 39) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(91, 5) Source(100, 5) + SourceIndex(0)
+2 >Emitted(91, 12) Source(100, 12) + SourceIndex(0)
+3 >Emitted(91, 13) Source(100, 13) + SourceIndex(0)
+4 >Emitted(91, 16) Source(100, 16) + SourceIndex(0)
+5 >Emitted(91, 17) Source(100, 17) + SourceIndex(0)
+6 >Emitted(91, 25) Source(100, 25) + SourceIndex(0)
+7 >Emitted(91, 26) Source(100, 26) + SourceIndex(0)
+8 >Emitted(91, 27) Source(100, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(92, 2) Source(101, 2) + SourceIndex(0)
+---
+>>>for (var _69 = 0, _70 = [robotA, robotB]; _69 < _70.length; _69++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^
+9 >                                       ^
+10>                                        ^^
+11>                                          ^^^^^^^^^^^^^^^^
+12>                                                          ^^
+13>                                                            ^^^^^
+14>                                                                 ^^
+15>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA3 = -1, ...robotAInfo] of 
+3 >     [robotA, robotB]
+4 >                
+5 >                  [
+6 >                         robotA
+7 >                               , 
+8 >                                 robotB
+9 >                                       ]
+10>                                        
+11>                                          [robotA, robotB]
+12>                                                          
+13>                                                            [robotA, robotB]
+14>                                                                 ) 
+1->Emitted(93, 1) Source(102, 1) + SourceIndex(0)
+2 >Emitted(93, 6) Source(102, 44) + SourceIndex(0)
+3 >Emitted(93, 17) Source(102, 60) + SourceIndex(0)
+4 >Emitted(93, 19) Source(102, 44) + SourceIndex(0)
+5 >Emitted(93, 26) Source(102, 45) + SourceIndex(0)
+6 >Emitted(93, 32) Source(102, 51) + SourceIndex(0)
+7 >Emitted(93, 34) Source(102, 53) + SourceIndex(0)
+8 >Emitted(93, 40) Source(102, 59) + SourceIndex(0)
+9 >Emitted(93, 41) Source(102, 60) + SourceIndex(0)
+10>Emitted(93, 43) Source(102, 44) + SourceIndex(0)
+11>Emitted(93, 59) Source(102, 60) + SourceIndex(0)
+12>Emitted(93, 61) Source(102, 44) + SourceIndex(0)
+13>Emitted(93, 66) Source(102, 60) + SourceIndex(0)
+14>Emitted(93, 68) Source(102, 62) + SourceIndex(0)
+---
+>>>    var _71 = _70[_69], _72 = _71[0], numberA3 = _72 === void 0 ? -1 : _72, robotAInfo = _71.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^^^^^^^^
+9 >                                                                  ^
+10>                                                                   ^
+11>                                                                    ^^^^^^
+12>                                                                          ^^
+13>                                                                            ^^^^^^^^^^
+14>                                                                                      ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3 = -1, ...robotAInfo]
+4 >                      
+5 >                        numberA3 = -1
+6 >                                    
+7 >                                      numberA3
+8 >                                               = 
+9 >                                                                  -
+10>                                                                   1
+11>                                                                    
+12>                                                                          , ...
+13>                                                                            robotAInfo
+14>                                                                                      
+1->Emitted(94, 5) Source(102, 10) + SourceIndex(0)
+2 >Emitted(94, 9) Source(102, 10) + SourceIndex(0)
+3 >Emitted(94, 23) Source(102, 40) + SourceIndex(0)
+4 >Emitted(94, 25) Source(102, 11) + SourceIndex(0)
+5 >Emitted(94, 37) Source(102, 24) + SourceIndex(0)
+6 >Emitted(94, 39) Source(102, 11) + SourceIndex(0)
+7 >Emitted(94, 47) Source(102, 19) + SourceIndex(0)
+8 >Emitted(94, 67) Source(102, 22) + SourceIndex(0)
+9 >Emitted(94, 68) Source(102, 23) + SourceIndex(0)
+10>Emitted(94, 69) Source(102, 24) + SourceIndex(0)
+11>Emitted(94, 75) Source(102, 24) + SourceIndex(0)
+12>Emitted(94, 77) Source(102, 29) + SourceIndex(0)
+13>Emitted(94, 87) Source(102, 39) + SourceIndex(0)
+14>Emitted(94, 102) Source(102, 39) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(95, 5) Source(103, 5) + SourceIndex(0)
+2 >Emitted(95, 12) Source(103, 12) + SourceIndex(0)
+3 >Emitted(95, 13) Source(103, 13) + SourceIndex(0)
+4 >Emitted(95, 16) Source(103, 16) + SourceIndex(0)
+5 >Emitted(95, 17) Source(103, 17) + SourceIndex(0)
+6 >Emitted(95, 25) Source(103, 25) + SourceIndex(0)
+7 >Emitted(95, 26) Source(103, 26) + SourceIndex(0)
+8 >Emitted(95, 27) Source(103, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(96, 2) Source(104, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.js.map

@@ -1,0 +1,79 @@
+tests/cases/conformance/jsdoc/validate.ts(14,3): error TS2540: Cannot assign to 'lastName' because it is a read-only property.
+tests/cases/conformance/jsdoc/validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
+tests/cases/conformance/jsdoc/validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsdoc/validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
+
+
+==== tests/cases/conformance/jsdoc/validate.ts (4 errors) ====
+    // Validate in TS as simple validations would usually be interpreted as more special assignments
+    import x = require("./");
+    x.name;
+    x.middleInit;
+    x.lastName;
+    x.zip;
+    x.houseNumber;
+    x.zipStr;
+    
+    x.name = "Another";
+    x.zip = 98123;
+    x.zipStr = "OK";
+    
+    x.lastName = "should fail";
+      ~~~~~~~~
+!!! error TS2540: Cannot assign to 'lastName' because it is a read-only property.
+    x.houseNumber = 12; // should also fail
+      ~~~~~~~~~~~
+!!! error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
+    x.zipStr = 12; // should fail
+    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    x.middleInit = "R"; // should also fail
+      ~~~~~~~~~~
+!!! error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
+    
+==== tests/cases/conformance/jsdoc/index.js (0 errors) ====
+    const x = {};
+    Object.defineProperty(x, "name", { value: "Charles", writable: true });
+    Object.defineProperty(x, "middleInit", { value: "H" });
+    Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
+    Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
+    Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
+    Object.defineProperty(x, "zipStr", {
+        /** @param {string} str */
+        set(str) {
+            this.zip = Number(str) 
+        }
+    });
+    
+    /**
+     * @param {{name: string}} named
+     */
+    function takeName(named) { return named.name; }
+    
+    takeName(x);
+    /**
+     * @type {number}
+     */
+    var a = x.zip;
+    
+    /**
+     * @type {number}
+     */
+    var b = x.houseNumber;
+    
+    const returnExemplar = () => x;
+    const needsExemplar = (_ = x) => void 0;
+    
+    const expected = /** @type {{name: string, readonly middleInit: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
+    
+    /**
+     * 
+     * @param {typeof returnExemplar} a 
+     * @param {typeof needsExemplar} b 
+     */
+    function match(a, b) {}
+    
+    match(() => expected, (x = expected) => void 0);
+    
+    module.exports = x;
+    

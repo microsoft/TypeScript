@@ -1,0 +1,340 @@
+=== tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
+declare var React: any;
+>React : any
+
+declare var Component:any;
+>Component : any
+
+declare var Composite:any;
+>Composite : any
+
+declare var Composite2:any;
+>Composite2 : any
+
+declare var Child:any;
+>Child : any
+
+declare var Namespace:any;
+>Namespace : any
+
+declare var foo: any;
+>foo : any
+
+declare var bar: any;
+>bar : any
+
+declare var y:any;
+>y : any
+
+declare var x:any;
+>x : any
+
+declare var z:any;
+>z : any
+
+declare var hasOwnProperty:any;
+>hasOwnProperty : any
+
+<div>text</div>;
+><div>text</div> : error
+>div : any
+>div : any
+
+<div>
+><div>  {this.props.children}</div> : error
+>div : any
+
+  {this.props.children}
+>this.props.children : any
+>this.props : any
+>this : typeof globalThis
+>props : any
+>children : any
+
+</div>;
+>div : any
+
+<div>
+><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : error
+>div : any
+
+  <div><br /></div>
+><div><br /></div> : error
+>div : any
+><br /> : error
+>br : any
+>div : any
+
+  <Component>{foo}<br />{bar}</Component>
+><Component>{foo}<br />{bar}</Component> : error
+>Component : any
+>foo : any
+><br /> : error
+>br : any
+>bar : any
+>Component : any
+
+  <br />
+><br /> : error
+>br : any
+
+</div>;
+>div : any
+
+
+<Composite>
+><Composite>    {this.props.children}</Composite> : error
+>Composite : any
+
+    {this.props.children}
+>this.props.children : any
+>this.props : any
+>this : typeof globalThis
+>props : any
+>children : any
+
+</Composite>;
+>Composite : any
+
+<Composite>
+><Composite>    <Composite2 /></Composite> : error
+>Composite : any
+
+    <Composite2 />
+><Composite2 /> : error
+>Composite2 : any
+
+</Composite>;
+>Composite : any
+
+var x =
+>x : any
+
+  <div
+><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : error
+>div : any
+
+    attr1={
+>attr1 : string
+
+      "foo" + "bar"
+>"foo" + "bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
+    }
+    attr2={
+>attr2 : string
+
+      "foo" + "bar" +
+>"foo" + "bar" +            "baz" + "bug" : string
+>"foo" + "bar" +            "baz" : string
+>"foo" + "bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
+      
+      "baz" + "bug"
+>"baz" : "baz"
+>"bug" : "bug"
+    }
+    attr3={
+>attr3 : string
+
+      "foo" + "bar" +
+>"foo" + "bar" +      "baz" + "bug" : string
+>"foo" + "bar" +      "baz" : string
+>"foo" + "bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
+
+      "baz" + "bug"
+>"baz" : "baz"
+>"bug" : "bug"
+
+      // Extra line here.
+    }
+    attr4="baz">
+>attr4 : string
+
+  </div>;
+>div : any
+
+(
+>(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : error
+
+  <div>
+><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : error
+>div : any
+
+    {/* A comment at the beginning */}
+    {/* A second comment at the beginning */}
+    <span>
+><span>      {/* A nested comment */}    </span> : error
+>span : any
+
+      {/* A nested comment */}
+    </span>
+>span : any
+
+    {/* A sandwiched comment */}
+    <br />
+><br /> : error
+>br : any
+
+    {/* A comment at the end */}
+    {/* A second comment at the end */}
+  </div>
+>div : any
+
+);
+
+(
+>(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : error
+
+  <div
+><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : error
+>div : any
+
+    /* a multi-line
+       comment */
+    attr1="foo">
+>attr1 : string
+
+    <span // a double-slash comment
+><span // a double-slash comment      attr2="bar"    /> : error
+>span : any
+
+      attr2="bar"
+>attr2 : string
+
+    />
+  </div>
+>div : any
+
+);
+
+<div>&nbsp;</div>;
+><div>&nbsp;</div> : error
+>div : any
+>div : any
+
+<div>&nbsp; </div>;
+><div>&nbsp; </div> : error
+>div : any
+>div : any
+
+<hasOwnProperty>testing</hasOwnProperty>;
+><hasOwnProperty>testing</hasOwnProperty> : error
+>hasOwnProperty : any
+>hasOwnProperty : any
+
+<Component constructor="foo" />;
+><Component constructor="foo" /> : error
+>Component : any
+>constructor : string
+
+<Namespace.Component />;
+><Namespace.Component /> : error
+>Namespace.Component : any
+>Namespace : any
+>Component : any
+
+<Namespace.DeepNamespace.Component />;
+><Namespace.DeepNamespace.Component /> : error
+>Namespace.DeepNamespace.Component : any
+>Namespace.DeepNamespace : any
+>Namespace : any
+>DeepNamespace : any
+>Component : any
+
+<Component { ... x } y
+><Component { ... x } y={2 } z /> : error
+>Component : any
+>x : any
+>y : number
+
+={2 } z />;
+>2 : 2
+>z : true
+
+<Component
+><Component    {...this.props} sound="moo" /> : error
+>Component : any
+
+    {...this.props} sound="moo" />;
+>this.props : any
+>this : typeof globalThis
+>props : any
+>sound : string
+
+<font-face />;
+><font-face /> : error
+>font-face : any
+
+<Component x={y} />;
+><Component x={y} /> : error
+>Component : any
+>x : any
+>y : any
+
+<x-component />;
+><x-component /> : error
+>x-component : any
+
+<Component {...x} />;
+><Component {...x} /> : error
+>Component : any
+>x : any
+
+<Component { ...x } y={2} />;
+><Component { ...x } y={2} /> : error
+>Component : any
+>x : any
+>y : number
+>2 : 2
+
+<Component { ... x } y={2} z />;
+><Component { ... x } y={2} z /> : error
+>Component : any
+>x : any
+>y : number
+>2 : 2
+>z : true
+
+<Component x={1} {...y} />;
+><Component x={1} {...y} /> : error
+>Component : any
+>x : number
+>1 : 1
+>y : any
+
+
+<Component x={1} y="2" {...z} {...z}><Child /></Component>;
+><Component x={1} y="2" {...z} {...z}><Child /></Component> : error
+>Component : any
+>x : number
+>1 : 1
+>y : string
+>z : any
+>z : any
+><Child /> : error
+>Child : any
+>Component : any
+
+<Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : error
+>Component : any
+>x : string
+>(z = { y: 2 }, z) : any
+>z = { y: 2 }, z : any
+>z = { y: 2 } : { y: number; }
+>z : any
+>{ y: 2 } : { y: number; }
+>y : number
+>2 : 2
+>z : any
+>z : number
+>3 : 3
+>Component : any
+
+
+

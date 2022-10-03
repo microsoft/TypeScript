@@ -1,0 +1,157 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergeThreeInterfaces.ts ===
+// interfaces with the same root module should merge
+
+// basic case
+interface A {
+    foo: string;
+>foo : string
+}
+
+interface A {
+    bar: number;
+>bar : number
+}
+
+interface A {
+    baz: boolean;
+>baz : boolean
+}
+
+var a: A;
+>a : A
+
+var r1 = a.foo
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
+
+var r2 = a.bar;
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
+
+var r3 = a.baz;
+>r3 : boolean
+>a.baz : boolean
+>a : A
+>baz : boolean
+
+// basic generic case
+interface B<T> {
+    foo: T;
+>foo : T
+}
+
+interface B<T> {
+    bar: T;
+>bar : T
+}
+
+interface B<T> {
+    baz: T;
+>baz : T
+}
+
+var b: B<string>;
+>b : B<string>
+
+var r4 = b.foo
+>r4 : string
+>b.foo : string
+>b : B<string>
+>foo : string
+
+var r5 = b.bar;
+>r5 : string
+>b.bar : string
+>b : B<string>
+>bar : string
+
+var r6 = b.baz;
+>r6 : string
+>b.baz : string
+>b : B<string>
+>baz : string
+
+// basic non-generic and generic case inside a module
+module M {
+>M : typeof M
+
+    interface A {
+        foo: string;
+>foo : string
+    }
+
+    interface A {
+        bar: number;
+>bar : number
+    }
+
+    interface A {
+        baz: boolean;
+>baz : boolean
+    }
+
+    var a: A;
+>a : A
+
+    var r1 = a.foo;
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
+
+    // BUG 856491
+    var r2 = a.bar; // any, should be number
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
+
+    // BUG 856491
+    var r3 = a.baz; // any, should be boolean
+>r3 : boolean
+>a.baz : boolean
+>a : A
+>baz : boolean
+
+    interface B<T> {
+        foo: T;
+>foo : T
+    }
+
+    interface B<T> {
+        bar: T;
+>bar : T
+    }
+
+    interface B<T> {
+        baz: T;
+>baz : T
+    }
+
+    var b: B<string>;
+>b : B<string>
+
+    var r4 = b.foo
+>r4 : string
+>b.foo : string
+>b : B<string>
+>foo : string
+
+    // BUG 856491
+    var r5 = b.bar; // any, should be number
+>r5 : string
+>b.bar : string
+>b : B<string>
+>bar : string
+
+    // BUG 856491
+    var r6 = b.baz; // any, should be boolean
+>r6 : string
+>b.baz : string
+>b : B<string>
+>baz : string
+}

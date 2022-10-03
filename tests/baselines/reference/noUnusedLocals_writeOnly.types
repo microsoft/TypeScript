@@ -1,0 +1,122 @@
+=== tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
+function f(x = 0, b = false) {
+>f : (x?: number, b?: boolean) => void
+>x : number
+>0 : 0
+>b : boolean
+>false : false
+
+    // None of these statements read from 'x', so it will be marked unused.
+    x = 1;
+>x = 1 : 1
+>x : number
+>1 : 1
+
+    x++;
+>x++ : number
+>x : number
+
+    x /= 2;
+>x /= 2 : number
+>x : number
+>2 : 2
+
+    ([x] = [1]);
+>([x] = [1]) : [number]
+>[x] = [1] : [number]
+>[x] : [number]
+>x : number
+>[1] : [number]
+>1 : 1
+
+    ({ x } = { x: 1 });
+>({ x } = { x: 1 }) : { x: number; }
+>{ x } = { x: 1 } : { x: number; }
+>{ x } : { x: number; }
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    ({ x: x } = { x: 1 });
+>({ x: x } = { x: 1 }) : { x: number; }
+>{ x: x } = { x: 1 } : { x: number; }
+>{ x: x } : { x: number; }
+>x : number
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    ({ a: [{ b: x }] } = { a: [{ b: 1 }] });
+>({ a: [{ b: x }] } = { a: [{ b: 1 }] }) : { a: [{ b: number; }]; }
+>{ a: [{ b: x }] } = { a: [{ b: 1 }] } : { a: [{ b: number; }]; }
+>{ a: [{ b: x }] } : { a: [{ b: number; }]; }
+>a : [{ b: number; }]
+>[{ b: x }] : [{ b: number; }]
+>{ b: x } : { b: number; }
+>b : number
+>x : number
+>{ a: [{ b: 1 }] } : { a: [{ b: number; }]; }
+>a : [{ b: number; }]
+>[{ b: 1 }] : [{ b: number; }]
+>{ b: 1 } : { b: number; }
+>b : number
+>1 : 1
+
+    ({ x = 2 } = { x: b ? 1 : undefined });
+>({ x = 2 } = { x: b ? 1 : undefined }) : { x?: number | undefined; }
+>{ x = 2 } = { x: b ? 1 : undefined } : { x?: number | undefined; }
+>{ x = 2 } : { x?: number; }
+>x : number
+>2 : 2
+>{ x: b ? 1 : undefined } : { x?: number | undefined; }
+>x : number | undefined
+>b ? 1 : undefined : 1 | undefined
+>b : boolean
+>1 : 1
+>undefined : undefined
+
+    let used = 1;
+>used : number
+>1 : 1
+
+    ({ x = used } = { x: b ? 1 : undefined });
+>({ x = used } = { x: b ? 1 : undefined }) : { x?: number | undefined; }
+>{ x = used } = { x: b ? 1 : undefined } : { x?: number | undefined; }
+>{ x = used } : { x?: number; }
+>x : number
+>used : number
+>{ x: b ? 1 : undefined } : { x?: number | undefined; }
+>x : number | undefined
+>b ? 1 : undefined : 1 | undefined
+>b : boolean
+>1 : 1
+>undefined : undefined
+
+    let y = 0;
+>y : number
+>0 : 0
+
+    // This is a write access to y, but not a write-*only* access.
+    f(y++);
+>f(y++) : void
+>f : (x?: number, b?: boolean) => void
+>y++ : number
+>y : number
+
+    let z = 0;
+>z : number
+>0 : 0
+
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
+>f(z = 1) : void
+>f : (x?: number, b?: boolean) => void
+>z = 1 : 1
+>z : number
+>1 : 1
+}
+function f2(_: ReadonlyArray<number>): void {}
+>f2 : (_: ReadonlyArray<number>) => void
+>_ : readonly number[]
+

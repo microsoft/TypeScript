@@ -1,0 +1,14 @@
+=== tests/cases/compiler/collisionThisExpressionAndEnumInGlobal.ts ===
+enum _this { // Error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndEnumInGlobal.ts, 0, 0))
+
+    _thisVal1,
+>_thisVal1 : Symbol(_this._thisVal1, Decl(collisionThisExpressionAndEnumInGlobal.ts, 0, 12))
+
+    _thisVal2,
+>_thisVal2 : Symbol(_this._thisVal2, Decl(collisionThisExpressionAndEnumInGlobal.ts, 1, 14))
+}
+var f = () => this;
+>f : Symbol(f, Decl(collisionThisExpressionAndEnumInGlobal.ts, 4, 3))
+>this : Symbol(globalThis)
+

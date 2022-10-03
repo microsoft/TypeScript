@@ -1,0 +1,29 @@
+tests/cases/compiler/unknownSymbolOffContextualType1.ts(16,18): error TS2339: Property 'xyxyxyx' does not exist on type 'HTMLElement'.
+
+
+==== tests/cases/compiler/unknownSymbolOffContextualType1.ts (1 errors) ====
+    declare var document: Document;
+    interface Document {
+        getElementById(elementId: string): HTMLElement;
+    }
+    interface HTMLElement {
+        isDisabled: boolean;
+    }
+    function getMaxWidth(elementNames: string[]) {
+        var elements = elementNames.map(function (name) {
+            return document.getElementById(name);
+        });
+        var enabled = elements.filter(function (e) {
+            return !e.isDisabled;
+        });
+        var widths = enabled.map(function (e) {
+            return e.xyxyxyx;  // error expected here
+                     ~~~~~~~
+!!! error TS2339: Property 'xyxyxyx' does not exist on type 'HTMLElement'.
+        });
+        var maxWidth = widths.reduce(function (a, b) {
+            return a > b ? a : b;
+        });
+        return maxWidth;
+    }
+    

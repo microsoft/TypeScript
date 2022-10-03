@@ -1,0 +1,8 @@
+=== tests/cases/compiler/libdtsFix.ts ===
+interface HTMLElement {
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(libdtsFix.ts, 0, 0))
+
+    type: string;
+>type : Symbol(HTMLElement.type, Decl(libdtsFix.ts, 0, 23))
+}
+

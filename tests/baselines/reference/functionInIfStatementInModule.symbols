@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionInIfStatementInModule.ts ===
+ 
+module Midori
+>Midori : Symbol(Midori, Decl(functionInIfStatementInModule.ts, 0, 0))
+{
+    if (false) {
+        function Foo(src)
+>Foo : Symbol(Foo, Decl(functionInIfStatementInModule.ts, 3, 16))
+>src : Symbol(src, Decl(functionInIfStatementInModule.ts, 4, 21))
+        {
+        }
+    }
+}
+

@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser585151.ts(2,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser585151.ts(3,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser585151.ts (2 errors) ====
+    class Foo2 {
+      var icecream = "chocolate";
+      ~~~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    

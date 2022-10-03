@@ -1,0 +1,18 @@
+=== tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts ===
+const Foo = {
+>Foo : Symbol(Foo, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 5))
+
+    BANANA: 'banana' as 'banana',
+>BANANA : Symbol(BANANA, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 13))
+}
+
+export const Baa = {
+>Baa : Symbol(Baa, Decl(objectLiteralComputedNameNoDeclarationError.ts, 4, 12))
+
+    [Foo.BANANA]: 1
+>[Foo.BANANA] : Symbol([Foo.BANANA], Decl(objectLiteralComputedNameNoDeclarationError.ts, 4, 20))
+>Foo.BANANA : Symbol(BANANA, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 13))
+>Foo : Symbol(Foo, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 5))
+>BANANA : Symbol(BANANA, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 13))
+
+};

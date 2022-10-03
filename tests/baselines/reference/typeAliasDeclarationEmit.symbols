@@ -1,0 +1,12 @@
+=== tests/cases/compiler/typeAliasDeclarationEmit.ts ===
+export type callback<T> = () => T;
+>callback : Symbol(callback, Decl(typeAliasDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(typeAliasDeclarationEmit.ts, 0, 21))
+>T : Symbol(T, Decl(typeAliasDeclarationEmit.ts, 0, 21))
+
+export type CallbackArray<T extends callback> = () => T;
+>CallbackArray : Symbol(CallbackArray, Decl(typeAliasDeclarationEmit.ts, 0, 34))
+>T : Symbol(T, Decl(typeAliasDeclarationEmit.ts, 2, 26))
+>callback : Symbol(callback, Decl(typeAliasDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(typeAliasDeclarationEmit.ts, 2, 26))
+

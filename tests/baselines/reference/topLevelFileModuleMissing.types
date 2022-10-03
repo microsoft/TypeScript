@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("vs/foo");
+>foo : any
+
+var z = foo.x + 10;
+>z : any
+>foo.x + 10 : any
+>foo.x : any
+>foo : any
+>x : any
+>10 : 10
+

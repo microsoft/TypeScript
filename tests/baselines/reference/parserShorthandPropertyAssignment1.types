@@ -1,0 +1,18 @@
+=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts ===
+function foo(obj: { name?: string; id: number }) { }
+>foo : (obj: {    name?: string;    id: number;}) => void
+>obj : { name?: string; id: number; }
+>name : string
+>id : number
+
+var name:any, id: any;
+>name : any
+>id : any
+
+foo({ name?, id? });
+>foo({ name?, id? }) : void
+>foo : (obj: { name?: string; id: number; }) => void
+>{ name?, id? } : { name: any; id: any; }
+>name : any
+>id : any
+

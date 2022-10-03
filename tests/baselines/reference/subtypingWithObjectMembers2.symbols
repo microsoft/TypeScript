@@ -1,0 +1,170 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts ===
+interface Base {
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(Base.foo, Decl(subtypingWithObjectMembers2.ts, 0, 16))
+}
+
+interface Derived extends Base {
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembers2.ts, 4, 32))
+}
+
+// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+// foo properties are valid, bar properties cause errors in the derived class declarations
+module NotOptional {
+>NotOptional : Symbol(NotOptional, Decl(subtypingWithObjectMembers2.ts, 6, 1))
+
+    interface A {
+>A : Symbol(A, Decl(subtypingWithObjectMembers2.ts, 10, 20))
+
+        foo: Base;
+>foo : Symbol(A.foo, Decl(subtypingWithObjectMembers2.ts, 11, 17))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        bar: Base;
+>bar : Symbol(A.bar, Decl(subtypingWithObjectMembers2.ts, 12, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B extends A {
+>B : Symbol(B, Decl(subtypingWithObjectMembers2.ts, 14, 5))
+>A : Symbol(A, Decl(subtypingWithObjectMembers2.ts, 10, 20))
+
+        foo: Derived; // ok
+>foo : Symbol(B.foo, Decl(subtypingWithObjectMembers2.ts, 16, 27))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        bar: string; // error
+>bar : Symbol(B.bar, Decl(subtypingWithObjectMembers2.ts, 17, 21))
+    }
+
+    interface A2 {
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 19, 5))
+
+        1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers2.ts, 21, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers2.ts, 22, 16))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B2 extends A2 {
+>B2 : Symbol(B2, Decl(subtypingWithObjectMembers2.ts, 24, 5))
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 19, 5))
+
+        1: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers2.ts, 26, 29))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers2.ts, 27, 19))
+    }
+
+    interface A3 {
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 29, 5))
+
+        '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers2.ts, 31, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 32, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B3 extends A3 {
+>B3 : Symbol(B3, Decl(subtypingWithObjectMembers2.ts, 34, 5))
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 29, 5))
+
+        '1': Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers2.ts, 36, 29))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 37, 21))
+    }
+}
+
+// same cases as above but with optional
+module Optional {
+>Optional : Symbol(Optional, Decl(subtypingWithObjectMembers2.ts, 40, 1))
+
+    interface A {
+>A : Symbol(A, Decl(subtypingWithObjectMembers2.ts, 43, 17))
+
+        foo?: Base;
+>foo : Symbol(A.foo, Decl(subtypingWithObjectMembers2.ts, 44, 17))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        bar?: Base;
+>bar : Symbol(A.bar, Decl(subtypingWithObjectMembers2.ts, 45, 19))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B extends A {
+>B : Symbol(B, Decl(subtypingWithObjectMembers2.ts, 47, 5))
+>A : Symbol(A, Decl(subtypingWithObjectMembers2.ts, 43, 17))
+
+        foo?: Derived; // ok
+>foo : Symbol(B.foo, Decl(subtypingWithObjectMembers2.ts, 49, 27))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        bar?: string; // error
+>bar : Symbol(B.bar, Decl(subtypingWithObjectMembers2.ts, 50, 22))
+    }
+
+    interface A2 {
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 52, 5))
+
+        1?: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers2.ts, 54, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        2.0?: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers2.ts, 55, 17))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B2 extends A2 {
+>B2 : Symbol(B2, Decl(subtypingWithObjectMembers2.ts, 57, 5))
+>A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 52, 5))
+
+        1?: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers2.ts, 59, 29))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        2?: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers2.ts, 60, 20))
+    }
+
+    interface A3 {
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 62, 5))
+
+        '1'?: Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers2.ts, 64, 18))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+
+        '2.0'?: Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 65, 19))
+>Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
+    }
+
+    interface B3 extends A3 {
+>B3 : Symbol(B3, Decl(subtypingWithObjectMembers2.ts, 67, 5))
+>A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 62, 5))
+
+        '1'?: Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers2.ts, 69, 29))
+>Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
+
+        '2.0'?: string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 70, 22))
+    }
+}

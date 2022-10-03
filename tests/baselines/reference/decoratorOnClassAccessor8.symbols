@@ -1,0 +1,76 @@
+=== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor8.ts ===
+declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClassAccessor8.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnClassAccessor8.ts, 0, 24))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassAccessor8.ts, 0, 36))
+>descriptor : Symbol(descriptor, Decl(decoratorOnClassAccessor8.ts, 0, 57))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassAccessor8.ts, 0, 21))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassAccessor8.ts, 0, 21))
+
+class A {
+>A : Symbol(A, Decl(decoratorOnClassAccessor8.ts, 0, 126))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(A.x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
+
+    set x(value: number) { }
+>x : Symbol(A.x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 4, 10))
+}
+
+class B {
+>B : Symbol(B, Decl(decoratorOnClassAccessor8.ts, 5, 1))
+
+    get x() { return 0; }
+>x : Symbol(B.x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(B.x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 9, 15))
+}
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassAccessor8.ts, 10, 1))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(C.x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 13, 15))
+
+    get x() { return 0; }
+>x : Symbol(C.x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
+}
+
+class D {
+>D : Symbol(D, Decl(decoratorOnClassAccessor8.ts, 15, 1))
+
+    set x(value: number) { }
+>x : Symbol(D.x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 18, 10))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(D.x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
+}
+
+class E {
+>E : Symbol(E, Decl(decoratorOnClassAccessor8.ts, 20, 1))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(E.x, Decl(decoratorOnClassAccessor8.ts, 22, 9))
+}
+
+class F {
+>F : Symbol(F, Decl(decoratorOnClassAccessor8.ts, 24, 1))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(F.x, Decl(decoratorOnClassAccessor8.ts, 26, 9))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 27, 15))
+}

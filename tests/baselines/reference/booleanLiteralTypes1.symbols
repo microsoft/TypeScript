@@ -1,0 +1,247 @@
+=== tests/cases/conformance/types/literal/booleanLiteralTypes1.ts ===
+type A1 = true | false;
+>A1 : Symbol(A1, Decl(booleanLiteralTypes1.ts, 0, 0))
+
+type A2 = false | true;
+>A2 : Symbol(A2, Decl(booleanLiteralTypes1.ts, 0, 23))
+
+function f1() {
+>f1 : Symbol(f1, Decl(booleanLiteralTypes1.ts, 1, 23))
+
+    var a: A1;
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 4, 7), Decl(booleanLiteralTypes1.ts, 5, 7), Decl(booleanLiteralTypes1.ts, 6, 7), Decl(booleanLiteralTypes1.ts, 7, 7))
+>A1 : Symbol(A1, Decl(booleanLiteralTypes1.ts, 0, 0))
+
+    var a: A2;
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 4, 7), Decl(booleanLiteralTypes1.ts, 5, 7), Decl(booleanLiteralTypes1.ts, 6, 7), Decl(booleanLiteralTypes1.ts, 7, 7))
+>A2 : Symbol(A2, Decl(booleanLiteralTypes1.ts, 0, 23))
+
+    var a: true | false;
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 4, 7), Decl(booleanLiteralTypes1.ts, 5, 7), Decl(booleanLiteralTypes1.ts, 6, 7), Decl(booleanLiteralTypes1.ts, 7, 7))
+
+    var a: false | true;
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 4, 7), Decl(booleanLiteralTypes1.ts, 5, 7), Decl(booleanLiteralTypes1.ts, 6, 7), Decl(booleanLiteralTypes1.ts, 7, 7))
+}
+
+function f2(a: true | false, b: boolean) {
+>f2 : Symbol(f2, Decl(booleanLiteralTypes1.ts, 8, 1))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 10, 12))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 10, 28))
+
+    a = b;
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 10, 12))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 10, 28))
+
+    b = a;
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 10, 28))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 10, 12))
+}
+
+function f3(a: true | false, b: true | false) {
+>f3 : Symbol(f3, Decl(booleanLiteralTypes1.ts, 13, 1))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 15, 12))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 15, 28))
+
+    var x = a || b;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 16, 7), Decl(booleanLiteralTypes1.ts, 17, 7), Decl(booleanLiteralTypes1.ts, 18, 7))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 15, 12))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 15, 28))
+
+    var x = a && b;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 16, 7), Decl(booleanLiteralTypes1.ts, 17, 7), Decl(booleanLiteralTypes1.ts, 18, 7))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 15, 12))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 15, 28))
+
+    var x = !a;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 16, 7), Decl(booleanLiteralTypes1.ts, 17, 7), Decl(booleanLiteralTypes1.ts, 18, 7))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 15, 12))
+}
+
+function f4(t: true, f: false) {
+>f4 : Symbol(f4, Decl(booleanLiteralTypes1.ts, 19, 1))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+
+    var x1 = t && f;
+>x1 : Symbol(x1, Decl(booleanLiteralTypes1.ts, 22, 7))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+
+    var x2 = f && t;
+>x2 : Symbol(x2, Decl(booleanLiteralTypes1.ts, 23, 7))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+
+    var x3 = t || f;
+>x3 : Symbol(x3, Decl(booleanLiteralTypes1.ts, 24, 7))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+
+    var x4 = f || t;
+>x4 : Symbol(x4, Decl(booleanLiteralTypes1.ts, 25, 7))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+
+    var x5 = !t;
+>x5 : Symbol(x5, Decl(booleanLiteralTypes1.ts, 26, 7))
+>t : Symbol(t, Decl(booleanLiteralTypes1.ts, 21, 12))
+
+    var x6 = !f;
+>x6 : Symbol(x6, Decl(booleanLiteralTypes1.ts, 27, 7))
+>f : Symbol(f, Decl(booleanLiteralTypes1.ts, 21, 20))
+}
+
+declare function g(x: true): string;
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 30, 19))
+
+declare function g(x: false): boolean;
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 31, 19))
+
+declare function g(x: boolean): number;
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 32, 19))
+
+function f5(b: boolean) {
+>f5 : Symbol(f5, Decl(booleanLiteralTypes1.ts, 32, 39))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 34, 12))
+
+    var z1 = g(true);
+>z1 : Symbol(z1, Decl(booleanLiteralTypes1.ts, 35, 7))
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+
+    var z2 = g(false);
+>z2 : Symbol(z2, Decl(booleanLiteralTypes1.ts, 36, 7))
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+
+    var z3 = g(b);
+>z3 : Symbol(z3, Decl(booleanLiteralTypes1.ts, 37, 7))
+>g : Symbol(g, Decl(booleanLiteralTypes1.ts, 28, 1), Decl(booleanLiteralTypes1.ts, 30, 36), Decl(booleanLiteralTypes1.ts, 31, 38))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 34, 12))
+}
+
+function assertNever(x: never): never {
+>assertNever : Symbol(assertNever, Decl(booleanLiteralTypes1.ts, 38, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 40, 21))
+
+    throw new Error("Unexpected value");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function f10(x: true | false) {
+>f10 : Symbol(f10, Decl(booleanLiteralTypes1.ts, 42, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 44, 13))
+
+    switch (x) {
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 44, 13))
+
+        case true: return "true";
+        case false: return "false";
+    }
+}
+
+function f11(x: true | false) {
+>f11 : Symbol(f11, Decl(booleanLiteralTypes1.ts, 49, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 51, 13))
+
+    switch (x) {
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 51, 13))
+
+        case true: return "true";
+        case false: return "false";
+    }
+    return assertNever(x);
+>assertNever : Symbol(assertNever, Decl(booleanLiteralTypes1.ts, 38, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 51, 13))
+}
+
+function f12(x: true | false) {
+>f12 : Symbol(f12, Decl(booleanLiteralTypes1.ts, 57, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 59, 13))
+
+    if (x) {
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 59, 13))
+
+        x;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 59, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 59, 13))
+    }
+}
+
+function f13(x: true | false) {
+>f13 : Symbol(f13, Decl(booleanLiteralTypes1.ts, 66, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 68, 13))
+
+    if (x === true) {
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 68, 13))
+
+        x;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 68, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 68, 13))
+    }
+}
+
+type Item =
+>Item : Symbol(Item, Decl(booleanLiteralTypes1.ts, 75, 1))
+
+    { kind: true, a: string } |
+>kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 78, 5))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 78, 17))
+
+    { kind: false, b: string };
+>kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 79, 5))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 79, 18))
+
+function f20(x: Item) {
+>f20 : Symbol(f20, Decl(booleanLiteralTypes1.ts, 79, 31))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 81, 13))
+>Item : Symbol(Item, Decl(booleanLiteralTypes1.ts, 75, 1))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 78, 5), Decl(booleanLiteralTypes1.ts, 79, 5))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 81, 13))
+>kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 78, 5), Decl(booleanLiteralTypes1.ts, 79, 5))
+
+        case true: return x.a;
+>x.a : Symbol(a, Decl(booleanLiteralTypes1.ts, 78, 17))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 81, 13))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 78, 17))
+
+        case false: return x.b;
+>x.b : Symbol(b, Decl(booleanLiteralTypes1.ts, 79, 18))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 81, 13))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 79, 18))
+    }
+}
+
+function f21(x: Item) {
+>f21 : Symbol(f21, Decl(booleanLiteralTypes1.ts, 86, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 88, 13))
+>Item : Symbol(Item, Decl(booleanLiteralTypes1.ts, 75, 1))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 78, 5), Decl(booleanLiteralTypes1.ts, 79, 5))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 88, 13))
+>kind : Symbol(kind, Decl(booleanLiteralTypes1.ts, 78, 5), Decl(booleanLiteralTypes1.ts, 79, 5))
+
+        case true: return x.a;
+>x.a : Symbol(a, Decl(booleanLiteralTypes1.ts, 78, 17))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 88, 13))
+>a : Symbol(a, Decl(booleanLiteralTypes1.ts, 78, 17))
+
+        case false: return x.b;
+>x.b : Symbol(b, Decl(booleanLiteralTypes1.ts, 79, 18))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 88, 13))
+>b : Symbol(b, Decl(booleanLiteralTypes1.ts, 79, 18))
+    }
+    return assertNever(x);
+>assertNever : Symbol(assertNever, Decl(booleanLiteralTypes1.ts, 38, 1))
+>x : Symbol(x, Decl(booleanLiteralTypes1.ts, 88, 13))
+}

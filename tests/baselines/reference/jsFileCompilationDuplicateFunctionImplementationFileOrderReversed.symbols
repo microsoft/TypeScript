@@ -1,0 +1,15 @@
+=== tests/cases/compiler/a.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(b.js, 0, 0))
+
+    return 30;
+}
+
+=== tests/cases/compiler/b.js ===
+function foo() {
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(b.js, 0, 0))
+
+    return 10;
+}
+
+

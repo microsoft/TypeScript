@@ -1,0 +1,378 @@
+=== tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts ===
+class A {
+>A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+
+    x() {
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+    y() {
+>y : Symbol(A.y, Decl(asyncMethodWithSuper_es6.ts, 2, 5))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(asyncMethodWithSuper_es6.ts, 5, 1))
+>A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+
+    // async method with only call/get on 'super' does not require a binding
+    async simple() {
+>simple : Symbol(B.simple, Decl(asyncMethodWithSuper_es6.ts, 7, 19))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // call additional property.
+        super.y();
+>super.y : Symbol(A.y, Decl(asyncMethodWithSuper_es6.ts, 2, 5))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>y : Symbol(A.y, Decl(asyncMethodWithSuper_es6.ts, 2, 5))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 19, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access (read)
+        const b = super["x"];
+>b : Symbol(b, Decl(asyncMethodWithSuper_es6.ts, 22, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    // async method with assignment/destructuring on 'super' requires a binding
+    async advanced() {
+>advanced : Symbol(B.advanced, Decl(asyncMethodWithSuper_es6.ts, 23, 5))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 27, 13))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 36, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access (read)
+        const b = super["x"];
+>b : Symbol(b, Decl(asyncMethodWithSuper_es6.ts, 39, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access (assign)
+        super.x = f;
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 27, 13))
+
+        // element access (assign)
+        super["x"] = f;
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 27, 13))
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 48, 10))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 48, 27))
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 51, 10))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 51, 30))
+
+        // property access in arrow
+        (() => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in arrow
+        (() => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access in async arrow
+        (async () => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in async arrow
+        (async () => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    async property_access_only_read_only() {
+>property_access_only_read_only : Symbol(B.property_access_only_read_only, Decl(asyncMethodWithSuper_es6.ts, 64, 5))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 71, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access in arrow
+        (() => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access in async arrow
+        (async () => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    async property_access_only_write_only() {
+>property_access_only_write_only : Symbol(B.property_access_only_write_only, Decl(asyncMethodWithSuper_es6.ts, 78, 5))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 81, 13))
+
+        // property access (assign)
+        super.x = f;
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 81, 13))
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 87, 10))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 87, 27))
+
+        // property access (assign) in arrow
+        (() => super.x = f);
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 81, 13))
+
+        // property access (assign) in async arrow
+        (async () => super.x = f);
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 81, 13))
+    }
+
+    async element_access_only_read_only() {
+>element_access_only_read_only : Symbol(B.element_access_only_read_only, Decl(asyncMethodWithSuper_es6.ts, 94, 5))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access (read)
+        const a = super["x"];
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 101, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in arrow
+        (() => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in async arrow
+        (async () => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    async element_access_only_write_only() {
+>element_access_only_write_only : Symbol(B.element_access_only_write_only, Decl(asyncMethodWithSuper_es6.ts, 108, 5))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 111, 13))
+
+        // element access (assign)
+        super["x"] = f;
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 111, 13))
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 117, 10))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 117, 30))
+
+        // element access (assign) in arrow
+        (() => super["x"] = f);
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 111, 13))
+
+        // element access (assign) in async arrow
+        (async () => super["x"] = f);
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 111, 13))
+    }
+
+    async * property_access_only_read_only_in_generator() {
+>property_access_only_read_only_in_generator : Symbol(B.property_access_only_read_only_in_generator, Decl(asyncMethodWithSuper_es6.ts, 124, 5))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 131, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access in arrow
+        (() => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // property access in async arrow
+        (async () => super.x());
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    async * property_access_only_write_only_in_generator() {
+>property_access_only_write_only_in_generator : Symbol(B.property_access_only_write_only_in_generator, Decl(asyncMethodWithSuper_es6.ts, 138, 5))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 141, 13))
+
+        // property access (assign)
+        super.x = f;
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 141, 13))
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 147, 10))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 147, 27))
+
+        // property access (assign) in arrow
+        (() => super.x = f);
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 141, 13))
+
+        // property access (assign) in async arrow
+        (async () => super.x = f);
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 141, 13))
+    }
+
+    async * element_access_only_read_only_in_generator() {
+>element_access_only_read_only_in_generator : Symbol(B.element_access_only_read_only_in_generator, Decl(asyncMethodWithSuper_es6.ts, 154, 5))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access (read)
+        const a = super["x"];
+>a : Symbol(a, Decl(asyncMethodWithSuper_es6.ts, 161, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in arrow
+        (() => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        // element access in async arrow
+        (async () => super["x"]());
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+
+    async * element_access_only_write_only_in_generator() {
+>element_access_only_write_only_in_generator : Symbol(B.element_access_only_write_only_in_generator, Decl(asyncMethodWithSuper_es6.ts, 168, 5))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 171, 13))
+
+        // element access (assign)
+        super["x"] = f;
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 171, 13))
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 177, 10))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 177, 30))
+
+        // element access (assign) in arrow
+        (() => super["x"] = f);
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 171, 13))
+
+        // element access (assign) in async arrow
+        (async () => super["x"] = f);
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 171, 13))
+    }
+}
+

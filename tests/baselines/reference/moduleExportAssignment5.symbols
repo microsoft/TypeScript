@@ -1,0 +1,33 @@
+=== tests/cases/conformance/salsa/axios.js ===
+class Axios {
+>Axios : Symbol(Axios, Decl(axios.js, 0, 0))
+
+    constructor() {
+    }
+    m() { }
+>m : Symbol(Axios.m, Decl(axios.js, 2, 5))
+}
+var axios = new Axios();
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+>Axios : Symbol(Axios, Decl(axios.js, 0, 0))
+
+// none of the 3 references should have a use-before-def error
+axios.m()
+>axios.m : Symbol(Axios.m, Decl(axios.js, 2, 5))
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+>m : Symbol(Axios.m, Decl(axios.js, 2, 5))
+
+module.exports = axios;
+>module.exports : Symbol(module.exports, Decl(axios.js, 0, 0))
+>module : Symbol(export=, Decl(axios.js, 7, 9))
+>exports : Symbol(export=, Decl(axios.js, 7, 9))
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+
+module.exports.default = axios;
+>module.exports.default : Symbol(default, Decl(axios.js, 8, 23))
+>module.exports : Symbol(default, Decl(axios.js, 8, 23))
+>module : Symbol(module, Decl(axios.js, 7, 9))
+>exports : Symbol(module.exports, Decl(axios.js, 0, 0))
+>default : Symbol(default, Decl(axios.js, 8, 23))
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+

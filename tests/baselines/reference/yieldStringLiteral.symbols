@@ -1,0 +1,7 @@
+=== tests/cases/compiler/yieldStringLiteral.ts ===
+function yieldString() {
+>yieldString : Symbol(yieldString, Decl(yieldStringLiteral.ts, 0, 0))
+
+    yield 'literal';
+}
+

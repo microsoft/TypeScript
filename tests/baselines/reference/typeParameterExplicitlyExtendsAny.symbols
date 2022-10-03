@@ -1,0 +1,86 @@
+=== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts ===
+function fee<T>() {
+>fee : Symbol(fee, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 13))
+
+    var t: T;
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 13))
+
+    t.blah; // Error
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
+
+    t.toString; // ok
+>t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+function fee2<T extends any>() {
+>fee2 : Symbol(fee2, Decl(typeParameterExplicitlyExtendsAny.ts, 4, 1))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 6, 14))
+
+    var t: T;
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 6, 14))
+
+    t.blah; // ok
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
+
+    t.toString; // ok
+>t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+function f<T extends any>(x: T) {
+>f : Symbol(f, Decl(typeParameterExplicitlyExtendsAny.ts, 10, 1))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 11))
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 11))
+
+    x.children;
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+
+    x();
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+
+    new x();
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+
+    x[100];
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+
+    x['hello'];
+>x : Symbol(x, Decl(typeParameterExplicitlyExtendsAny.ts, 12, 26))
+}
+
+
+// Generic Tree structure
+type Tree<T> = T & {
+>Tree : Symbol(Tree, Decl(typeParameterExplicitlyExtendsAny.ts, 18, 1))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 22, 10))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 22, 10))
+
+    children?: Tree<T>[];
+>children : Symbol(children, Decl(typeParameterExplicitlyExtendsAny.ts, 22, 20))
+>Tree : Symbol(Tree, Decl(typeParameterExplicitlyExtendsAny.ts, 18, 1))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 22, 10))
+}
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(typeParameterExplicitlyExtendsAny.ts, 24, 1))
+
+    public static displayTree1<T extends Tree<any>>(tree: T) {
+>displayTree1 : Symbol(MyClass.displayTree1, Decl(typeParameterExplicitlyExtendsAny.ts, 26, 15))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 31))
+>Tree : Symbol(Tree, Decl(typeParameterExplicitlyExtendsAny.ts, 18, 1))
+>tree : Symbol(tree, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 52))
+>T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 31))
+
+        // error "Property 'children' does not exist on type 'T'"
+        tree.children;
+>tree : Symbol(tree, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 52))
+    }
+}
+

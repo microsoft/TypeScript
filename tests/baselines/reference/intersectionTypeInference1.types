@@ -1,0 +1,38 @@
+=== tests/cases/compiler/intersectionTypeInference1.ts ===
+// Repro from #8801
+
+function alert(s: string) {}
+>alert : (s: string) => void
+>s : string
+
+const parameterFn = (props:{store:string}) => alert(props.store)
+>parameterFn : (props: {    store: string;}) => void
+>(props:{store:string}) => alert(props.store) : (props: {    store: string;}) => void
+>props : { store: string; }
+>store : string
+>alert(props.store) : void
+>alert : (s: string) => void
+>props.store : string
+>props : { store: string; }
+>store : string
+
+const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o
+>brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>f : (p: {    dispatch: number;} & OwnProps) => void
+>p : { dispatch: number; } & OwnProps
+>dispatch : number
+>(o: OwnProps) => o : (o: OwnProps) => OwnProps
+>o : OwnProps
+>o : OwnProps
+
+export const Form3 = brokenFunction(parameterFn)({store: "hello"})
+>Form3 : { store: string; }
+>brokenFunction(parameterFn)({store: "hello"}) : { store: string; }
+>brokenFunction(parameterFn) : (o: { store: string; }) => { store: string; }
+>brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>parameterFn : (props: { store: string; }) => void
+>{store: "hello"} : { store: string; }
+>store : string
+>"hello" : "hello"
+

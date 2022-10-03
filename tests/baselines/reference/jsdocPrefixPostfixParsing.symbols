@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+/**
+ * @param {number![]} x - number[]
+ * @param {!number[]} y - number[]
+ * @param {(number[])!} z - number[]
+ * @param {number?[]} a - parse error without parentheses
+ * @param {?number[]} b - number[] | null
+ * @param {(number[])?} c - number[] | null
+ * @param {...?number} e - (number | null)[]
+ * @param {...number?} f - number[] | null
+ * @param {...number!?} g - number[] | null
+ * @param {...number?!} h - parse error without parentheses (also nonsensical)
+ * @param {...number[]} i - number[][]
+ * @param {...number![]?} j - number[][] | null
+ * @param {...number?[]!} k - parse error without parentheses
+ * @param {number extends number ? true : false} l - conditional types work
+ * @param {[number, number?]} m - [number, (number | undefined)?]
+ */
+function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
+>f : Symbol(f, Decl(prefixPostfix.js, 0, 0))
+>x : Symbol(x, Decl(prefixPostfix.js, 17, 11))
+>y : Symbol(y, Decl(prefixPostfix.js, 17, 13))
+>z : Symbol(z, Decl(prefixPostfix.js, 17, 16))
+>a : Symbol(a, Decl(prefixPostfix.js, 17, 19))
+>b : Symbol(b, Decl(prefixPostfix.js, 17, 22))
+>c : Symbol(c, Decl(prefixPostfix.js, 17, 25))
+>e : Symbol(e, Decl(prefixPostfix.js, 17, 28))
+>f : Symbol(f, Decl(prefixPostfix.js, 17, 31))
+>g : Symbol(g, Decl(prefixPostfix.js, 17, 34))
+>h : Symbol(h, Decl(prefixPostfix.js, 17, 37))
+>i : Symbol(i, Decl(prefixPostfix.js, 17, 40))
+>j : Symbol(j, Decl(prefixPostfix.js, 17, 43))
+>k : Symbol(k, Decl(prefixPostfix.js, 17, 46))
+>l : Symbol(l, Decl(prefixPostfix.js, 17, 49))
+>m : Symbol(m, Decl(prefixPostfix.js, 17, 52))
+}
+

@@ -1,0 +1,142 @@
+=== tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts ===
+interface I {
+>I : Symbol(I, Decl(forStatementsMultipleInvalidDecl.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(forStatementsMultipleInvalidDecl.ts, 0, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
+>I : Symbol(I, Decl(forStatementsMultipleInvalidDecl.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(forStatementsMultipleInvalidDecl.ts, 4, 22))
+
+    valid: boolean;
+>valid : Symbol(C.valid, Decl(forStatementsMultipleInvalidDecl.ts, 5, 15))
+}
+
+class C2 extends C {
+>C2 : Symbol(C2, Decl(forStatementsMultipleInvalidDecl.ts, 7, 1))
+>C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
+
+    name: string;
+>name : Symbol(C2.name, Decl(forStatementsMultipleInvalidDecl.ts, 9, 20))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+>T : Symbol(T, Decl(forStatementsMultipleInvalidDecl.ts, 13, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(forStatementsMultipleInvalidDecl.ts, 13, 11))
+>T : Symbol(T, Decl(forStatementsMultipleInvalidDecl.ts, 13, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(forStatementsMultipleInvalidDecl.ts, 14, 14))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+>T : Symbol(T, Decl(forStatementsMultipleInvalidDecl.ts, 13, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(forStatementsMultipleInvalidDecl.ts, 15, 18))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+>T : Symbol(T, Decl(forStatementsMultipleInvalidDecl.ts, 13, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(forStatementsMultipleInvalidDecl.ts, 17, 1))
+>x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 19, 11))
+
+module M {
+>M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
+
+    export class A {
+>A : Symbol(A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(forStatementsMultipleInvalidDecl.ts, 22, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(forStatementsMultipleInvalidDecl.ts, 24, 5))
+>x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 26, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 26, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+// all of these are errors
+for( var a: any;;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+
+for( var a = 1;;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+
+for( var a = 'a string';;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+
+for( var a = new C();;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+>C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
+
+for( var a = new D<string>();;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+
+for( var a = M;;){}
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
+>M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
+
+for( var b: I;;){}
+>b : Symbol(b, Decl(forStatementsMultipleInvalidDecl.ts, 37, 8), Decl(forStatementsMultipleInvalidDecl.ts, 38, 8), Decl(forStatementsMultipleInvalidDecl.ts, 39, 8))
+>I : Symbol(I, Decl(forStatementsMultipleInvalidDecl.ts, 0, 0))
+
+for( var b = new C();;){}
+>b : Symbol(b, Decl(forStatementsMultipleInvalidDecl.ts, 37, 8), Decl(forStatementsMultipleInvalidDecl.ts, 38, 8), Decl(forStatementsMultipleInvalidDecl.ts, 39, 8))
+>C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
+
+for( var b = new C2();;){}
+>b : Symbol(b, Decl(forStatementsMultipleInvalidDecl.ts, 37, 8), Decl(forStatementsMultipleInvalidDecl.ts, 38, 8), Decl(forStatementsMultipleInvalidDecl.ts, 39, 8))
+>C2 : Symbol(C2, Decl(forStatementsMultipleInvalidDecl.ts, 7, 1))
+
+for(var f = F;;){}
+>f : Symbol(f, Decl(forStatementsMultipleInvalidDecl.ts, 41, 7), Decl(forStatementsMultipleInvalidDecl.ts, 42, 8))
+>F : Symbol(F, Decl(forStatementsMultipleInvalidDecl.ts, 17, 1))
+
+for( var f = (x: number) => '';;){}
+>f : Symbol(f, Decl(forStatementsMultipleInvalidDecl.ts, 41, 7), Decl(forStatementsMultipleInvalidDecl.ts, 42, 8))
+>x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 42, 14))
+
+for(var arr: string[];;){}
+>arr : Symbol(arr, Decl(forStatementsMultipleInvalidDecl.ts, 44, 7), Decl(forStatementsMultipleInvalidDecl.ts, 45, 8), Decl(forStatementsMultipleInvalidDecl.ts, 46, 8))
+
+for( var arr = [1, 2, 3, 4];;){}
+>arr : Symbol(arr, Decl(forStatementsMultipleInvalidDecl.ts, 44, 7), Decl(forStatementsMultipleInvalidDecl.ts, 45, 8), Decl(forStatementsMultipleInvalidDecl.ts, 46, 8))
+
+for( var arr = [new C(), new C2(), new D<string>()];;){}
+>arr : Symbol(arr, Decl(forStatementsMultipleInvalidDecl.ts, 44, 7), Decl(forStatementsMultipleInvalidDecl.ts, 45, 8), Decl(forStatementsMultipleInvalidDecl.ts, 46, 8))
+>C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
+>C2 : Symbol(C2, Decl(forStatementsMultipleInvalidDecl.ts, 7, 1))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+
+for(var arr2 = [new D<string>()];;){}
+>arr2 : Symbol(arr2, Decl(forStatementsMultipleInvalidDecl.ts, 48, 7), Decl(forStatementsMultipleInvalidDecl.ts, 49, 8))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+
+for( var arr2 = new Array<D<number>>();;){}
+>arr2 : Symbol(arr2, Decl(forStatementsMultipleInvalidDecl.ts, 48, 7), Decl(forStatementsMultipleInvalidDecl.ts, 49, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
+
+for(var m: typeof M;;){}
+>m : Symbol(m, Decl(forStatementsMultipleInvalidDecl.ts, 51, 7), Decl(forStatementsMultipleInvalidDecl.ts, 52, 8))
+>M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
+
+for( var m = M.A;;){}
+>m : Symbol(m, Decl(forStatementsMultipleInvalidDecl.ts, 51, 7), Decl(forStatementsMultipleInvalidDecl.ts, 52, 8))
+>M.A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+>M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
+>A : Symbol(M.A, Decl(forStatementsMultipleInvalidDecl.ts, 21, 10))
+

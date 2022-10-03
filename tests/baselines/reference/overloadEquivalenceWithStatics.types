@@ -1,0 +1,21 @@
+=== tests/cases/compiler/overloadEquivalenceWithStatics.ts ===
+class A1<T> {
+>A1 : A1<T>
+
+static B<S>(v: A1<S>): A1<S>; // 1 
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>v : A1<S>
+
+static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>v : S
+
+static B<S>(v: any): A1<S> {
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>v : any
+
+return null;
+>null : null
+}
+}
+

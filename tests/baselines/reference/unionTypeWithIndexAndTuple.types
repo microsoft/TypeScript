@@ -1,0 +1,18 @@
+=== tests/cases/compiler/unionTypeWithIndexAndTuple.ts ===
+interface I {
+    [index: number]: any;
+>index : number
+
+    someOtherProperty: number;
+>someOtherProperty : number
+}
+function f(args: ["a"] | I) { }
+>f : (args: ["a"] | I) => void
+>args : I | ["a"]
+
+f(["a"]);
+>f(["a"]) : void
+>f : (args: I | ["a"]) => void
+>["a"] : ["a"]
+>"a" : "a"
+

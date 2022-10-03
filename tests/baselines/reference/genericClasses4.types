@@ -1,0 +1,76 @@
+=== tests/cases/compiler/genericClasses4.ts ===
+// once caused stack overflow
+class Vec2_T<A>
+>Vec2_T : Vec2_T<A>
+{
+    constructor(public x: A, public y: A) { }
+>x : A
+>y : A
+
+    fmap<B>(f: (a: A) => B): Vec2_T<B> {
+>fmap : <B>(f: (a: A) => B) => Vec2_T<B>
+>f : (a: A) => B
+>a : A
+
+        var x:B = f(this.x);
+>x : B
+>f(this.x) : B
+>f : (a: A) => B
+>this.x : A
+>this : this
+>x : A
+
+        var y:B = f(this.y);
+>y : B
+>f(this.y) : B
+>f : (a: A) => B
+>this.y : A
+>this : this
+>y : A
+
+        var retval: Vec2_T<B> = new Vec2_T(x, y);
+>retval : Vec2_T<B>
+>new Vec2_T(x, y) : Vec2_T<B>
+>Vec2_T : typeof Vec2_T
+>x : B
+>y : B
+
+        return retval;
+>retval : Vec2_T<B>
+    }
+    apply<B>(f: Vec2_T<(a: A) => B>): Vec2_T<B> {
+>apply : <B>(f: Vec2_T<(a: A) => B>) => Vec2_T<B>
+>f : Vec2_T<(a: A) => B>
+>a : A
+
+        var x:B = f.x(this.x);
+>x : B
+>f.x(this.x) : B
+>f.x : (a: A) => B
+>f : Vec2_T<(a: A) => B>
+>x : (a: A) => B
+>this.x : A
+>this : this
+>x : A
+
+        var y:B = f.y(this.y);
+>y : B
+>f.y(this.y) : B
+>f.y : (a: A) => B
+>f : Vec2_T<(a: A) => B>
+>y : (a: A) => B
+>this.y : A
+>this : this
+>y : A
+
+        var retval: Vec2_T<B> = new Vec2_T(x, y);
+>retval : Vec2_T<B>
+>new Vec2_T(x, y) : Vec2_T<B>
+>Vec2_T : typeof Vec2_T
+>x : B
+>y : B
+
+        return retval;
+>retval : Vec2_T<B>
+    }
+}

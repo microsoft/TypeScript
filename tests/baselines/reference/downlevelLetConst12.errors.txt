@@ -1,0 +1,19 @@
+tests/cases/compiler/downlevelLetConst12.ts(6,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/compiler/downlevelLetConst12.ts(9,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+
+
+==== tests/cases/compiler/downlevelLetConst12.ts (2 errors) ====
+    'use strict'
+    // top level let\const should not be renamed
+    let foo;
+    const bar = 1;
+    
+    let [baz] = [];
+         ~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+    let {a: baz2} = { a: 1 };
+    
+    const [baz3] = []
+           ~~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+    const {a: baz4} = { a: 1 };

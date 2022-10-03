@@ -1,0 +1,33 @@
+=== tests/cases/compiler/overloadModifiersMustAgree.ts ===
+class baz {
+>baz : baz
+
+    public foo();
+>foo : () => any
+
+    private foo(bar?: any) { } // error - access modifiers do not agree
+>foo : () => any
+>bar : any
+}
+
+declare function bar();
+>bar : { (): any; (s: string): any; }
+
+export function bar(s: string);
+>bar : (s: string) => any
+>s : string
+
+function bar(s?: string) { }
+>bar : { (): any; (s: string): any; }
+>s : string
+
+interface I {
+    foo? ();
+>foo : { (): any; (s: string): any; }
+
+    foo(s: string);
+>foo : { (): any; (s: string): any; }
+>s : string
+}
+
+

@@ -1,0 +1,44 @@
+=== tests/cases/compiler/scopeTests.ts ===
+class C { private v; public p; static s; }
+>C : C
+>v : any
+>p : any
+>s : any
+
+class D extends C {
+>D : D
+>C : C
+
+  public v: number;
+>v : number
+
+  public p: number
+>p : number
+
+  constructor() {
+   super()
+>super() : void
+>super : typeof C
+
+   this.v = 1;
+>this.v = 1 : 1
+>this.v : number
+>this : this
+>v : number
+>1 : 1
+
+   this.p = 1;
+>this.p = 1 : 1
+>this.p : number
+>this : this
+>p : number
+>1 : 1
+
+   C.s = 1;
+>C.s = 1 : 1
+>C.s : any
+>C : typeof C
+>s : any
+>1 : 1
+  }
+}

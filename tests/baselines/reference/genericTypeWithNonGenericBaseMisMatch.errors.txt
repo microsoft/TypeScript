@@ -1,0 +1,38 @@
+tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(5,2): error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type 'I'.
+  Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
+    Types of parameters 'a' and 'a' are incompatible.
+      Type '{ a: number; }' is not assignable to type 'T'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
+tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I'.
+  Types of property 'f' are incompatible.
+    Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void'.
+      Types of parameters 'a' and 'a' are incompatible.
+        Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts (2 errors) ====
+    interface I {
+    	f: (a: { a: number }) => void
+    }
+    class X<T extends { a: string }> implements I {
+    	f(a: T): void { }
+    	~
+!!! error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
+!!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2416:       Type '{ a: number; }' is not assignable to type 'T'.
+!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
+    }
+    var x = new X<{ a: string }>();
+    var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
+        ~
+!!! error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void'.
+!!! error TS2322:       Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2322:         Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322:           Types of property 'a' are incompatible.
+!!! error TS2322:             Type 'number' is not assignable to type 'string'.
+    

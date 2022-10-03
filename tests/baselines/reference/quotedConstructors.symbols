@@ -1,0 +1,66 @@
+=== tests/cases/conformance/classes/constructorDeclarations/quotedConstructors.ts ===
+class C {
+>C : Symbol(C, Decl(quotedConstructors.ts, 0, 0))
+
+    "constructor"() {
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(C, Decl(quotedConstructors.ts, 0, 0))
+    }
+}
+
+class D {
+>D : Symbol(D, Decl(quotedConstructors.ts, 4, 1))
+
+    'constructor'() {
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(D, Decl(quotedConstructors.ts, 4, 1))
+    }
+}
+
+class E {
+>E : Symbol(E, Decl(quotedConstructors.ts, 10, 1))
+
+    ['constructor']() {
+>['constructor'] : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
+>'constructor' : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
+
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(E, Decl(quotedConstructors.ts, 10, 1))
+    }
+}
+
+new class {
+    "constructor"() {
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol((Anonymous class), Decl(quotedConstructors.ts, 18, 3))
+    }
+};
+
+var o = { "constructor"() {} };
+>o : Symbol(o, Decl(quotedConstructors.ts, 24, 3))
+>"constructor" : Symbol("constructor", Decl(quotedConstructors.ts, 24, 9))
+
+class F {
+>F : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
+
+    "\x63onstructor"() {
+        console.log(this);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
+    }
+}
+

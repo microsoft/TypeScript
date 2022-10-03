@@ -1,0 +1,58 @@
+tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+  Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+  Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    	}
+    	interface ElementAttributesProperty {
+    		props;
+    	}
+    	interface IntrinsicAttributes {
+    		ref?: string;
+    	}
+    }
+    
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    declare class Component<P, S>  {
+    	constructor(props?: P, context?: any);
+    	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
+    	setState(state: S, callback?: () => any): void;
+    	forceUpdate(callBack?: () => any): void;
+    	render(): JSX.Element;
+    	props: P;
+    	state: S;
+    	context: {};
+    }
+    
+    
+    interface ComponentClass<P> {
+    	new (props?: P, context?: any): Component<P, any>;
+    }
+    
+    declare module TestMod {
+    	interface TestClass extends ComponentClass<{reqd: any}> {
+    	}
+    	var Test: TestClass;
+    }
+    
+    // Errors correctly
+    const T = TestMod.Test;
+    var t1 = <T />;
+              ~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+!!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+    
+    // Should error
+    var t2 = <TestMod.Test />;
+              ~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+!!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+    
+    

@@ -1,0 +1,16 @@
+tests/cases/compiler/assignToFn.ts(8,5): error TS2322: Type 'string' is not assignable to type '(n: number) => boolean'.
+
+
+==== tests/cases/compiler/assignToFn.ts (1 errors) ====
+    module M {
+        interface I {
+    	f(n:number):boolean;
+        }
+    
+        var x:I={ f:function(n) { return true; } };
+    
+        x.f="hello";
+        ~~~
+!!! error TS2322: Type 'string' is not assignable to type '(n: number) => boolean'.
+    }
+    

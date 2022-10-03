@@ -1,0 +1,44 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof foo
+
+var x = new foo(true); // Should error
+>x : foo<{ a: string; b: number; }>
+>new foo(true) : foo<{ a: string; b: number; }>
+>foo : typeof foo
+>true : true
+
+var y = new foo({a: "test", b: 42}); // Should be OK
+>y : foo<{ a: string; b: number; }>
+>new foo({a: "test", b: 42}) : foo<{ a: string; b: number; }>
+>foo : typeof foo
+>{a: "test", b: 42} : { a: string; b: number; }
+>a : string
+>"test" : "test"
+>b : number
+>42 : 42
+
+var z: number = y.test.b;
+>z : number
+>y.test.b : number
+>y.test : { a: string; b: number; }
+>y : foo<{ a: string; b: number; }>
+>test : { a: string; b: number; }
+>b : number
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+class Foo<T extends {a: string; b:number;}>{
+>Foo : Foo<T>
+>a : string
+>b : number
+
+	test: T;
+>test : T
+
+	constructor(x: T){}
+>x : T
+}
+
+export = Foo;
+>Foo : Foo<T>
+

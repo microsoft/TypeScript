@@ -1,0 +1,25 @@
+=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts ===
+declare module X { export interface bar { } }
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 0))
+>bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 18))
+
+declare module "m" {
+>"m" : Symbol("m", Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 45))
+
+    module X { export interface foo { } }
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
+>foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
+
+    export { X };
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 3, 12))
+
+    export function foo(): X.foo;
+>foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 3, 17))
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
+>foo : Symbol(X.foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
+
+    export function bar(): X.bar; // error
+>bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 4, 33))
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
+>bar : Symbol(X.bar)
+}

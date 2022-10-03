@@ -1,0 +1,20 @@
+=== tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts ===
+declare module "punycode" {
+>"punycode" : Symbol("punycode", Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 0))
+
+    interface ucs2 {
+>ucs2 : Symbol(ucs2, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 27), Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 6, 14))
+
+        decode(string: string): string;
+>decode : Symbol(ucs2.decode, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 1, 20))
+>string : Symbol(string, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 2, 15))
+
+        encode(codePoints: number[]): string;
+>encode : Symbol(ucs2.encode, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 2, 39))
+>codePoints : Symbol(codePoints, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 3, 15))
+    }
+
+    export let ucs2: ucs2;
+>ucs2 : Symbol(ucs2, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 27), Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 6, 14))
+>ucs2 : Symbol(ucs2, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 27), Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 6, 14))
+}

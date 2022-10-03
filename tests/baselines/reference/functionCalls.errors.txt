@@ -1,0 +1,65 @@
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(8,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(9,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(10,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(25,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(26,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(27,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(32,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(33,1): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/functionCalls/functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type arguments.
+
+
+==== tests/cases/conformance/expressions/functionCalls/functionCalls.ts (9 errors) ====
+    // Invoke function call on value of type 'any' with no type arguments
+    var anyVar: any;
+    anyVar(0);
+    anyVar('');
+    
+    // Invoke function call on value of type 'any' with type arguments
+    // These should be errors
+    anyVar<string>('hello');
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    anyVar<number>();
+    ~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    anyVar<Window>(undefined);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    
+    // Invoke function call on value of a subtype of Function with no call signatures with no type arguments
+    interface SubFunc extends Function {
+        prop: number;
+    }
+    var subFunc: SubFunc;
+    subFunc(0);
+    subFunc('');
+    subFunc();
+    
+    
+    // Invoke function call on value of a subtype of Function with no call signatures with type arguments
+    // These should be errors
+    subFunc<number>(0);
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    subFunc<string>('');
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    subFunc<any>();
+    ~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    // Invoke function call on value of type Function with no call signatures with type arguments
+    // These should be errors
+    var func: Function;
+    func<number>(0);
+    ~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    func<string>('');
+    ~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    func<any>();
+    ~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    

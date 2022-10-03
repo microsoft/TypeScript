@@ -1,0 +1,174 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInClassMethods.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// variables in global
+var num: number;
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+
+var var1: string | number;
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+
+class C1 {
+>C1 : Symbol(C1, Decl(typeGuardsInClassMethods.ts, 5, 26))
+
+    constructor(param: string | number) {
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 7, 16))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 12, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 12, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 12, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 7, 16))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 7, 16))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    // Inside function declaration
+    private p1(param: string | number) {
+>p1 : Symbol(C1.p1, Decl(typeGuardsInClassMethods.ts, 17, 5))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 19, 15))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 24, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 24, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 24, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 19, 15))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 19, 15))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    // Inside function declaration
+    p2(param: string | number) {
+>p2 : Symbol(C1.p2, Decl(typeGuardsInClassMethods.ts, 29, 5))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 31, 7))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 36, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 36, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 36, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 31, 7))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 31, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    // Inside function declaration
+    private static s1(param: string | number) {
+>s1 : Symbol(C1.s1, Decl(typeGuardsInClassMethods.ts, 41, 5))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 43, 22))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 48, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 48, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 48, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 43, 22))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 43, 22))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    // Inside function declaration
+    static s2(param: string | number) {
+>s2 : Symbol(C1.s2, Decl(typeGuardsInClassMethods.ts, 53, 5))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 55, 14))
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInClassMethods.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 60, 11))
+
+        num = typeof var2 === "string" && var2.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 60, 11))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardsInClassMethods.ts, 60, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num : Symbol(num, Decl(typeGuardsInClassMethods.ts, 4, 3))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 55, 14))
+>param.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 55, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/importInsideModule_file2.ts ===
+export module myModule {
+>myModule : Symbol(myModule, Decl(importInsideModule_file2.ts, 0, 0))
+
+    import foo = require("importInsideModule_file1");
+>foo : Symbol(foo, Decl(importInsideModule_file2.ts, 0, 24))
+
+    var a = foo.x;
+>a : Symbol(a, Decl(importInsideModule_file2.ts, 2, 7))
+>foo : Symbol(foo, Decl(importInsideModule_file2.ts, 0, 24))
+}

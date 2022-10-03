@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit13.ts ===
+class C {
+>C : C
+
+    get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : string
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+>"" : ""
+
+    set [Symbol.toStringTag](x) { }
+>[Symbol.toStringTag] : any
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+>x : any
+}

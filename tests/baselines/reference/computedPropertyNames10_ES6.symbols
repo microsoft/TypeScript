@@ -1,0 +1,58 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames10_ES6.ts ===
+var s: string;
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+
+var n: number;
+>n : Symbol(n, Decl(computedPropertyNames10_ES6.ts, 1, 3))
+
+var a: any;
+>a : Symbol(a, Decl(computedPropertyNames10_ES6.ts, 2, 3))
+
+var v = {
+>v : Symbol(v, Decl(computedPropertyNames10_ES6.ts, 3, 3))
+
+    [s]() { },
+>[s] : Symbol([s], Decl(computedPropertyNames10_ES6.ts, 3, 9))
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+
+    [n]() { },
+>[n] : Symbol([n], Decl(computedPropertyNames10_ES6.ts, 4, 14))
+>n : Symbol(n, Decl(computedPropertyNames10_ES6.ts, 1, 3))
+
+    [s + s]() { },
+>[s + s] : Symbol([s + s], Decl(computedPropertyNames10_ES6.ts, 5, 14))
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+
+    [s + n]() { },
+>[s + n] : Symbol([s + n], Decl(computedPropertyNames10_ES6.ts, 6, 18))
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+>n : Symbol(n, Decl(computedPropertyNames10_ES6.ts, 1, 3))
+
+    [+s]() { },
+>[+s] : Symbol([+s], Decl(computedPropertyNames10_ES6.ts, 7, 18))
+>s : Symbol(s, Decl(computedPropertyNames10_ES6.ts, 0, 3))
+
+    [""]() { },
+>[""] : Symbol([""], Decl(computedPropertyNames10_ES6.ts, 8, 15))
+>"" : Symbol([""], Decl(computedPropertyNames10_ES6.ts, 8, 15))
+
+    [0]() { },
+>[0] : Symbol([0], Decl(computedPropertyNames10_ES6.ts, 9, 15))
+>0 : Symbol([0], Decl(computedPropertyNames10_ES6.ts, 9, 15))
+
+    [a]() { },
+>[a] : Symbol([a], Decl(computedPropertyNames10_ES6.ts, 10, 14))
+>a : Symbol(a, Decl(computedPropertyNames10_ES6.ts, 2, 3))
+
+    [<any>true]() { },
+>[<any>true] : Symbol([<any>true], Decl(computedPropertyNames10_ES6.ts, 11, 14))
+
+    [`hello bye`]() { },
+>[`hello bye`] : Symbol([`hello bye`], Decl(computedPropertyNames10_ES6.ts, 12, 22))
+>`hello bye` : Symbol([`hello bye`], Decl(computedPropertyNames10_ES6.ts, 12, 22))
+
+    [`hello ${a} bye`]() { }
+>[`hello ${a} bye`] : Symbol([`hello ${a} bye`], Decl(computedPropertyNames10_ES6.ts, 13, 24))
+>a : Symbol(a, Decl(computedPropertyNames10_ES6.ts, 2, 3))
+}

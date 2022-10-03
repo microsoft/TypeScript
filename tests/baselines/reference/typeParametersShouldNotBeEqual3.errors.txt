@@ -1,0 +1,23 @@
+tests/cases/compiler/typeParametersShouldNotBeEqual3.ts(4,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Object'.
+tests/cases/compiler/typeParametersShouldNotBeEqual3.ts(5,5): error TS2322: Type 'Object' is not assignable to type 'T'.
+  'Object' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Object'.
+    The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+
+
+==== tests/cases/compiler/typeParametersShouldNotBeEqual3.ts (2 errors) ====
+    function ff<T extends Object, U extends Object>(x: T, y: U) {
+        var z: Object;
+        x = x;  // Ok
+        x = y;  // Ok
+        ~
+!!! error TS2322: Type 'U' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Object'.
+        x = z;  // Ok
+        ~
+!!! error TS2322: Type 'Object' is not assignable to type 'T'.
+!!! error TS2322:   'Object' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Object'.
+!!! error TS2322:     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+        z = x;  // Ok
+    }
+    

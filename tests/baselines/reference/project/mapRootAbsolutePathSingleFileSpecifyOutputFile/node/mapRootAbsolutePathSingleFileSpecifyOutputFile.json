@@ -1,0 +1,22 @@
+{
+    "scenario": "[Sourcemap]/[Maproot-AbsolutePath]: outputdir_singleFile: specify outputFile",
+    "projectRoot": "tests/cases/projects/outputdir_singleFile",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/test.js",
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "mapRoot": "tests/cases/projects/outputdir_singleFile/mapFiles",
+    "resolveMapRoot": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "bin/test.js.map",
+        "bin/test.js",
+        "bin/test.d.ts"
+    ]
+}

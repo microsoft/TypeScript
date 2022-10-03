@@ -1,0 +1,38 @@
+=== tests/cases/compiler/extBaseClass1.ts ===
+module M {
+>M : typeof M
+
+    export class B {
+>B : B
+
+	    public x=10;
+>x : number
+>10 : 10
+    }
+
+    export class C extends B {
+>C : C
+>B : B
+    }
+}
+
+module M {
+>M : typeof M
+
+    export class C2 extends B {
+>C2 : C2
+>B : B
+    }
+}
+
+module N {
+>N : typeof N
+
+    export class C3 extends M.B {
+>C3 : C3
+>M.B : M.B
+>M : typeof M
+>B : typeof M.B
+    }
+}
+

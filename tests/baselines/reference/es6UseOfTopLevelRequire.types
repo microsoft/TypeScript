@@ -1,0 +1,32 @@
+=== tests/cases/compiler/a.ts ===
+import require from "./b"
+>require : (s: string) => void
+
+require("arg");
+>require("arg") : void
+>require : (s: string) => void
+>"arg" : "arg"
+
+import exports from "./c"
+>exports : 0
+
+var x = exports + 2;
+>x : number
+>exports + 2 : number
+>exports : 0
+>2 : 2
+
+=== tests/cases/compiler/b.ts ===
+export default function require(s: string): void {
+>require : (s: string) => void
+>s : string
+}
+
+=== tests/cases/compiler/c.ts ===
+export const exports = 0;
+>exports : 0
+>0 : 0
+
+export default exports;
+>exports : 0
+

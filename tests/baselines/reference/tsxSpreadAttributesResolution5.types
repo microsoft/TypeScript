@@ -1,0 +1,82 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface PoisonedProp {
+    x: string;
+>x : string
+
+    y: 2;
+>y : 2
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Poisoned
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+    }
+}
+
+let obj = {
+>obj : { x: string; y: number; }
+>{    x: "hello world",    y: 2} : { x: string; y: number; }
+
+    x: "hello world",
+>x : string
+>"hello world" : "hello world"
+
+    y: 2
+>y : number
+>2 : 2
+
+};
+
+// Error as "obj" has type { x: string; y: number }
+let p = <Poisoned {...obj} />;
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
+>Poisoned : typeof Poisoned
+>obj : { x: string; y: number; }
+
+class EmptyProp extends React.Component<{}, {}> {
+>EmptyProp : EmptyProp
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return <div>Default hi</div>;
+><div>Default hi</div> : JSX.Element
+>div : any
+>div : any
+    }
+    greeting: string;
+>greeting : string
+}
+
+let o = {
+>o : { prop1: boolean; }
+>{    prop1: false} : { prop1: boolean; }
+
+    prop1: false
+>prop1 : boolean
+>false : false
+}
+// Ok
+let e = <EmptyProp {...o} />;
+>e : JSX.Element
+><EmptyProp {...o} /> : JSX.Element
+>EmptyProp : typeof EmptyProp
+>o : { prop1: boolean; }
+

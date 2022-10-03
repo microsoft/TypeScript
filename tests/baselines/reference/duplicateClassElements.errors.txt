@@ -1,0 +1,120 @@
+tests/cases/compiler/duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
+tests/cases/compiler/duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.
+tests/cases/compiler/duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(18,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(29,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(32,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+tests/cases/compiler/duplicateClassElements.ts(36,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
+tests/cases/compiler/duplicateClassElements.ts(39,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
+tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
+
+
+==== tests/cases/compiler/duplicateClassElements.ts (24 errors) ====
+    class a {
+        public a;
+        public a;
+               ~
+!!! error TS2300: Duplicate identifier 'a'.
+        public b() {
+               ~
+!!! error TS2393: Duplicate function implementation.
+        }
+        public b() {
+               ~
+!!! error TS2393: Duplicate function implementation.
+        }
+        public x;
+               ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            return 10;
+        }
+        set x(_x: number) {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        }
+    
+        get y() {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return "Hello";
+        }
+        set y(_y: string) {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        public z() {
+               ~
+!!! error TS2300: Duplicate identifier 'z'.
+        }
+        get z() {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2300: Duplicate identifier 'z'.
+            return "Hello";
+        }
+        set z(_y: string) {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2300: Duplicate identifier 'z'.
+        }
+    
+        get x2() {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 10;
+        }
+        set x2(_x: number) {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+        public x2;
+               ~~
+!!! error TS2300: Duplicate identifier 'x2'.
+               ~~
+!!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+!!! related TS6203 tests/cases/compiler/duplicateClassElements.ts:29:9: 'x2' was also declared here.
+    
+        get z2() {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~~
+!!! error TS2300: Duplicate identifier 'z2'.
+            return "Hello";
+        }
+        set z2(_y: string) {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~~
+!!! error TS2300: Duplicate identifier 'z2'.
+        }
+        public z2() {
+               ~~
+!!! error TS2300: Duplicate identifier 'z2'.
+        }
+    
+    }

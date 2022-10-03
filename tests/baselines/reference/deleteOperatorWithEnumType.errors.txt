@@ -1,0 +1,64 @@
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(7,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(8,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(11,31): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(12,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(15,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(15,38): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,38): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,46): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(19,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(20,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(21,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(22,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts (13 errors) ====
+    // delete  operator on enum type
+    
+    enum ENUM { };
+    enum ENUM1 { A, B, "" };
+    
+    // enum type var
+    var ResultIsBoolean1 = delete ENUM;
+                                  ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    var ResultIsBoolean2 = delete ENUM1;
+                                  ~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    
+    // enum type expressions
+    var ResultIsBoolean3 = delete ENUM1["A"];
+                                  ~~~~~~~~~~
+!!! error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+    var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
+                                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    
+    // multiple delete  operators
+    var ResultIsBoolean5 = delete delete ENUM;
+                                  ~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+                                         ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    
+    // miss assignment operators
+    delete ENUM;
+           ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    delete ENUM1;
+           ~~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    delete ENUM1.B;
+           ~~~~~~~
+!!! error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+    delete ENUM, ENUM1;
+           ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

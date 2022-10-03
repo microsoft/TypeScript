@@ -1,0 +1,36 @@
+tests/cases/compiler/duplicateVariablesWithAny.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+tests/cases/compiler/duplicateVariablesWithAny.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+tests/cases/compiler/duplicateVariablesWithAny.ts(10,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+tests/cases/compiler/duplicateVariablesWithAny.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+
+
+==== tests/cases/compiler/duplicateVariablesWithAny.ts (4 errors) ====
+    // They should have to be the same even when one of the types is 'any'
+    var x: any;
+    var x = 2; //error
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/duplicateVariablesWithAny.ts:2:5: 'x' was also declared here.
+    
+    var y = "";
+    var y; //error
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+!!! related TS6203 tests/cases/compiler/duplicateVariablesWithAny.ts:5:5: 'y' was also declared here.
+    
+    module N {
+        var x: any;
+        var x = 2; //error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/duplicateVariablesWithAny.ts:9:9: 'x' was also declared here.
+    
+        var y = "";
+        var y; //error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+!!! related TS6203 tests/cases/compiler/duplicateVariablesWithAny.ts:12:9: 'y' was also declared here.
+    }
+    
+    var z: any;
+    var z; // ok

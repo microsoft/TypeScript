@@ -1,0 +1,43 @@
+=== tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
+function update(b: Readonly<Float32Array>) {
+>update : Symbol(update, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 0, 0))
+>b : Symbol(b, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 0, 16))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    const c = copy(b);
+>c : Symbol(c, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 1, 9))
+>copy : Symbol(copy, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 7, 1))
+>b : Symbol(b, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 0, 16))
+
+    add(c, c);
+>add : Symbol(add, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 3, 1))
+>c : Symbol(c, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 1, 9))
+>c : Symbol(c, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 1, 9))
+}
+
+function add(a: Float32Array, b: Float32Array, c: Float32Array = a) {
+>add : Symbol(add, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 3, 1))
+>a : Symbol(a, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 13))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 29))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 46))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 13))
+
+    c[0] = a[0] + b[0];
+>c : Symbol(c, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 46))
+>a : Symbol(a, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 13))
+>b : Symbol(b, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 5, 29))
+}
+
+function copy(a: Float32Array) {
+>copy : Symbol(copy, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 7, 1))
+>a : Symbol(a, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 9, 14))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return new Float32Array(a);
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(readonlyFloat32ArrayAssignableWithFloat32Array.ts, 9, 14))
+}

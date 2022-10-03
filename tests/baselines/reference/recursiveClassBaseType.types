@@ -1,0 +1,46 @@
+=== tests/cases/compiler/recursiveClassBaseType.ts ===
+// Repro from #44281
+
+declare const p: <T>(fn: () => T) => T;
+>p : <T>(fn: () => T) => T
+>fn : () => T
+
+declare const Base: <T>(val: T) => { new(): T };
+>Base : <T>(val: T) => new () => T
+>val : T
+
+class C extends Base({ x: p<C[]>(() => []) }) { }
+>C : C
+>Base({ x: p<C[]>(() => []) }) : { x: C[]; }
+>Base : <T>(val: T) => new () => T
+>{ x: p<C[]>(() => []) } : { x: C[]; }
+>x : C[]
+>p<C[]>(() => []) : C[]
+>p : <T>(fn: () => T) => T
+>() => [] : () => never[]
+>[] : never[]
+
+// Repro from #44359
+
+abstract class Base1 {
+>Base1 : Base1
+
+    abstract root(): Derived1;
+>root : () => Derived1
+}
+
+class Derived1 extends class extends Base1 {
+>Derived1 : Derived1
+>class extends Base1 {    root() {        return undefined as any;    }} : (Anonymous class)
+>Base1 : Base1
+
+    root() {
+>root : () => any
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+}
+{ }
+

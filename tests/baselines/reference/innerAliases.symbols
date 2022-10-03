@@ -1,0 +1,50 @@
+=== tests/cases/compiler/innerAliases.ts ===
+module A {
+>A : Symbol(A, Decl(innerAliases.ts, 0, 0))
+
+    export module B {
+>B : Symbol(B, Decl(innerAliases.ts, 0, 10))
+
+        export module C {
+>C : Symbol(C, Decl(innerAliases.ts, 1, 21))
+
+            export class Class1 {}
+>Class1 : Symbol(Class1, Decl(innerAliases.ts, 2, 25))
+        }
+    }
+}
+
+module D {
+>D : Symbol(D, Decl(innerAliases.ts, 6, 1))
+
+    import inner = A.B.C; 
+>inner : Symbol(inner, Decl(innerAliases.ts, 8, 10))
+>A : Symbol(A, Decl(innerAliases.ts, 0, 0))
+>B : Symbol(A.B, Decl(innerAliases.ts, 0, 10))
+>C : Symbol(inner, Decl(innerAliases.ts, 1, 21))
+   
+    var c1 = new inner.Class1(); 
+>c1 : Symbol(c1, Decl(innerAliases.ts, 11, 7))
+>inner.Class1 : Symbol(inner.Class1, Decl(innerAliases.ts, 2, 25))
+>inner : Symbol(inner, Decl(innerAliases.ts, 8, 10))
+>Class1 : Symbol(inner.Class1, Decl(innerAliases.ts, 2, 25))
+
+    export module E { 
+>E : Symbol(E, Decl(innerAliases.ts, 11, 32))
+
+        export class Class2 {}
+>Class2 : Symbol(Class2, Decl(innerAliases.ts, 13, 21))
+    }
+}
+
+var c: D.inner.Class1;
+>c : Symbol(c, Decl(innerAliases.ts, 18, 3))
+>D : Symbol(D, Decl(innerAliases.ts, 6, 1))
+>inner : Symbol(D.inner)
+>Class1 : Symbol(D.inner.Class1)
+
+c = new D.inner.Class1();
+>c : Symbol(c, Decl(innerAliases.ts, 18, 3))
+>D : Symbol(D, Decl(innerAliases.ts, 6, 1))
+
+

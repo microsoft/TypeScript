@@ -1,0 +1,9 @@
+=== /app.ts ===
+interface A {
+    x: $
+>x : $
+}
+=== /types/lib/index.d.ts ===
+interface $ { x }
+>x : any
+

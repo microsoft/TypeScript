@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics12.ts':
+/tests/cases/fourslash/a.js(1,1): error TS8009: The 'declare' modifier can only be used in TypeScript files.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    declare var v;
+    ~~~~~~~
+!!! error TS8009: The 'declare' modifier can only be used in TypeScript files.

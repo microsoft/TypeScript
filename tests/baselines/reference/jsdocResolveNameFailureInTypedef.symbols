@@ -1,0 +1,12 @@
+=== /a.js ===
+/**
+ * @param {Ty} x
+ */
+function f(x) {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 3, 11))
+
+/**
+ * @typedef {CantResolveThis} Ty
+ */
+

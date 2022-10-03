@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag01.ts ===
+class CtorTag { }
+>CtorTag : CtorTag
+
+CtorTag `Hello world!`;
+>CtorTag `Hello world!` : any
+>CtorTag : typeof CtorTag
+>`Hello world!` : "Hello world!"
+

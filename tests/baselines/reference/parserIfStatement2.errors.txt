@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserIfStatement2.ts(1,5): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserIfStatement2.ts (1 errors) ====
+    if (a) {
+        ~
+!!! error TS2304: Cannot find name 'a'.
+    }

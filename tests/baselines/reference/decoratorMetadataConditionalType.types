@@ -1,0 +1,27 @@
+=== tests/cases/compiler/decoratorMetadataConditionalType.ts ===
+declare function d(): PropertyDecorator;
+>d : () => PropertyDecorator
+
+abstract class BaseEntity<T> {
+>BaseEntity : BaseEntity<T>
+
+    @d()
+>d() : PropertyDecorator
+>d : () => PropertyDecorator
+
+    public attributes: T extends { attributes: infer A } ? A : undefined;
+>attributes : T extends { attributes: infer A; } ? A : undefined
+>attributes : A
+}
+class C {
+>C : C
+
+    @d()
+>d() : PropertyDecorator
+>d : () => PropertyDecorator
+
+    x: number extends string ? false : true;
+>x : true
+>false : false
+>true : true
+}

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/rest/objectRestReadonly.ts ===
+// #23734
+type ObjType = {
+>ObjType : Symbol(ObjType, Decl(objectRestReadonly.ts, 0, 0))
+
+  foo: string
+>foo : Symbol(foo, Decl(objectRestReadonly.ts, 1, 16))
+
+  baz: string
+>baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
+
+  quux: string
+>quux : Symbol(quux, Decl(objectRestReadonly.ts, 3, 13))
+}
+
+const obj: Readonly<ObjType> = {
+>obj : Symbol(obj, Decl(objectRestReadonly.ts, 7, 5))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>ObjType : Symbol(ObjType, Decl(objectRestReadonly.ts, 0, 0))
+
+  foo: 'bar',
+>foo : Symbol(foo, Decl(objectRestReadonly.ts, 7, 32))
+
+  baz: 'qux',
+>baz : Symbol(baz, Decl(objectRestReadonly.ts, 8, 13))
+
+  quux: 'quuz',
+>quux : Symbol(quux, Decl(objectRestReadonly.ts, 9, 13))
+}
+
+const { foo, ...rest } = obj
+>foo : Symbol(foo, Decl(objectRestReadonly.ts, 13, 7))
+>rest : Symbol(rest, Decl(objectRestReadonly.ts, 13, 12))
+>obj : Symbol(obj, Decl(objectRestReadonly.ts, 7, 5))
+
+delete rest.baz
+>rest.baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
+>rest : Symbol(rest, Decl(objectRestReadonly.ts, 13, 12))
+>baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
+

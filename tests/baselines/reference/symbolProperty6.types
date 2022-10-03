@@ -1,0 +1,33 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty6.ts ===
+class C {
+>C : C
+
+    [Symbol.iterator] = 0;
+>[Symbol.iterator] : number
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>0 : 0
+
+    [Symbol.unscopables]: number;
+>[Symbol.unscopables] : number
+>Symbol.unscopables : unique symbol
+>Symbol : SymbolConstructor
+>unscopables : unique symbol
+
+    [Symbol.toPrimitive]() { }
+>[Symbol.toPrimitive] : () => void
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+
+    get [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : number
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+        return 0;
+>0 : 0
+    }
+}

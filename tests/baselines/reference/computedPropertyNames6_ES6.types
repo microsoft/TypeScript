@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames6_ES6.ts ===
+var p1: number | string;
+>p1 : string | number
+
+var p2: number | number[];
+>p2 : number | number[]
+
+var p3: string | boolean;
+>p3 : string | boolean
+
+var v = {
+>v : { [x: string]: number; }
+>{    [p1]: 0,    [p2]: 1,    [p3]: 2} : { [x: string]: number; }
+
+    [p1]: 0,
+>[p1] : number
+>p1 : string | number
+>0 : 0
+
+    [p2]: 1,
+>[p2] : number
+>p2 : number | number[]
+>1 : 1
+
+    [p3]: 2
+>[p3] : number
+>p3 : string | boolean
+>2 : 2
+}

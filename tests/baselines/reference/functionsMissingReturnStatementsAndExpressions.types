@@ -1,0 +1,206 @@
+=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts ===
+function f1(): string {
+>f1 : () => string
+
+    // errors because there are no return statements
+}
+
+function f2(): string {
+>f2 : () => string
+
+    // Permissible; returns undefined.
+    return;
+}
+
+function f3(): string {
+>f3 : () => string
+
+    return "Okay, because this is a return expression.";
+>"Okay, because this is a return expression." : "Okay, because this is a return expression."
+}
+
+function f4(): void {
+>f4 : () => void
+
+    // Fine since we are typed void.
+}
+
+function f5(): void {
+>f5 : () => void
+
+    // Fine since we are typed void.
+    return;
+}
+
+function f6(): void {
+>f6 : () => void
+
+    // Fine since we are typed void and return undefined
+    return undefined;
+>undefined : undefined
+}
+
+function f7(): void {
+>f7 : () => void
+
+    // Fine since we are typed void and return null
+    return null;
+>null : null
+}
+
+function f8(): void {
+>f8 : () => void
+
+    // Fine since are typed any.
+    return;
+}
+
+function f9(): void {
+>f9 : () => void
+
+    // Fine since we are typed any and return undefined
+    return undefined;
+>undefined : undefined
+}
+
+function f10(): void {
+>f10 : () => void
+
+    // Fine since we are typed any and return null
+    return null;
+>null : null
+}
+
+function f11(): string {
+>f11 : () => string
+
+    // Fine since we consist of a single throw statement.
+    throw undefined;
+>undefined : undefined
+}
+
+function f12(): void {
+>f12 : () => void
+
+    // Fine since we consist of a single throw statement.
+    throw undefined;
+>undefined : undefined
+}
+
+function f13(): any {
+>f13 : () => any
+
+    // Fine since we consist of a single throw statement.
+    throw undefined;
+>undefined : undefined
+}
+
+function f14(): number {
+>f14 : () => number
+
+    // Not fine, since we can *only* consist of a single throw statement
+    // if no return statements are present but we are annotated.
+    throw undefined;
+>undefined : undefined
+
+    throw null;
+>null : null
+}
+
+function f15(): number {
+>f15 : () => number
+
+    // Fine, since we have a return statement somewhere.
+    throw undefined;
+>undefined : undefined
+
+    throw null;
+>null : null
+
+    return;
+}
+
+
+function f16() {
+>f16 : () => void
+
+    // Okay; not type annotated.
+}
+
+function f17() {
+>f17 : () => void
+
+    // Okay; not type annotated.
+    return;
+}
+
+function f18() {
+>f18 : () => string
+
+    return "Okay, not type annotated.";
+>"Okay, not type annotated." : "Okay, not type annotated."
+}
+
+function f19(): void | number {
+>f19 : () => void | number
+
+    // Okay; function return type is union containing void
+}
+
+function f20(): any | number {
+>f20 : () => any | number
+
+    // Okay; function return type is union containing any
+}
+
+function f21(): number | string {
+>f21 : () => number | string
+
+    // Not okay; union does not contain void or any
+}
+
+class C {
+>C : C
+
+    public get m1() {
+>m1 : void
+
+        // Errors; get accessors must return a value.
+    }
+
+    public get m2() {
+>m2 : void
+
+        // Permissible; returns undefined.
+        return;
+    }
+
+    public get m3() {
+>m3 : string
+
+        return "Okay, because this is a return expression.";
+>"Okay, because this is a return expression." : "Okay, because this is a return expression."
+    }
+
+    public get m4() {
+>m4 : void
+
+        // Fine since this consists of a single throw statement.
+        throw null;
+>null : null
+    }
+
+    public get m5() {
+>m5 : void
+
+        // Not fine, since we can *only* consist of a single throw statement
+        // if no return statements are present but we are a get accessor.
+        throw null;
+>null : null
+
+        throw undefined.
+>undefined. : any
+>undefined : undefined
+    }
+> : any
+}

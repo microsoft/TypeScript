@@ -1,0 +1,49 @@
+tests/cases/compiler/collisionArgumentsFunctionExpressions.ts(2,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsFunctionExpressions.ts(5,29): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsFunctionExpressions.ts(21,17): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+tests/cases/compiler/collisionArgumentsFunctionExpressions.ts(26,26): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+
+
+==== tests/cases/compiler/collisionArgumentsFunctionExpressions.ts (4 errors) ====
+    function foo() {
+        function f1(arguments: number, ...restParameters) { //arguments is error
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments = 10; // no error
+        }
+        function f12(i: number, ...arguments) { //arguments is error
+                                ~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments: any[]; // no error
+        }
+        function f1NoError(arguments: number) { // no error
+            var arguments = 10; // no error
+        }
+    
+        function f3(...restParameters) {
+            var arguments = 10; // no error
+        }
+        function f3NoError() {
+            var arguments = 10; // no error
+        }
+    
+        function f4(arguments: number, ...rest); // no codegen no error
+        function f4(arguments: string, ...rest); // no codegen no error
+        function f4(arguments: any, ...rest) { // error
+                    ~~~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments: any; // No error
+        }
+        function f42(i: number, ...arguments); // no codegen no error
+        function f42(i: string, ...arguments); // no codegen no error
+        function f42(i: any, ...arguments) { // error
+                             ~~~~~~~~~~~~
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+            var arguments: any[]; // No error
+        }
+        function f4NoError(arguments: number); // no error
+        function f4NoError(arguments: string); // no error
+        function f4NoError(arguments: any) { // no error
+            var arguments: any; // No error
+        }
+    }

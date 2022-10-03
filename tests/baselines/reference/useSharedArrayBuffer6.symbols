@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es2017/useSharedArrayBuffer6.ts ===
+var foge = new SharedArrayBuffer(1024);
+>foge : Symbol(foge, Decl(useSharedArrayBuffer6.ts, 0, 3))
+>SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
+
+foge.length; // should error
+>foge : Symbol(foge, Decl(useSharedArrayBuffer6.ts, 0, 3))
+
+var length = SharedArrayBuffer.length;
+>length : Symbol(length, Decl(useSharedArrayBuffer6.ts, 3, 3))
+>SharedArrayBuffer.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+

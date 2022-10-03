@@ -1,0 +1,28 @@
+=== tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithoutExport.ts ===
+export module a {
+>a : typeof a
+
+    export function foo(x: number) {
+>foo : (x: number) => number
+>x : number
+
+        return x;
+>x : number
+    }
+}
+
+import b = a.foo;
+>b : (x: number) => number
+>a : typeof a
+>foo : (x: number) => number
+
+export var bVal = b(10);
+>bVal : number
+>b(10) : number
+>b : (x: number) => number
+>10 : 10
+
+export var bVal2 = b;
+>bVal2 : (x: number) => number
+>b : (x: number) => number
+

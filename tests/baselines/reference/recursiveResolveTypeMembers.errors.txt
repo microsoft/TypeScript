@@ -1,0 +1,19 @@
+tests/cases/compiler/recursiveResolveTypeMembers.ts(4,49): error TS2577: Return type annotation circularly references itself.
+tests/cases/compiler/recursiveResolveTypeMembers.ts(4,58): error TS2304: Cannot find name 'H'.
+tests/cases/compiler/recursiveResolveTypeMembers.ts(4,79): error TS2304: Cannot find name 'R'.
+
+
+==== tests/cases/compiler/recursiveResolveTypeMembers.ts (3 errors) ====
+    // Repro from #25291
+    
+    type PromisedTuple<L extends any[], U = (...args: L) => void> =
+        U extends (h: infer H, ...args: infer R) => [Promise<H>, ...PromisedTuple<R>] ? [] : []
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2577: Return type annotation circularly references itself.
+                                                             ~
+!!! error TS2304: Cannot find name 'H'.
+                                                                                  ~
+!!! error TS2304: Cannot find name 'R'.
+    
+    type Promised = PromisedTuple<[1, 2, 3]> 
+    

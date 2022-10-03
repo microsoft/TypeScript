@@ -1,0 +1,1864 @@
+=== tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts ===
+//﻿
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+///<reference path='formatting.ts' />
+
+
+module Formatting {
+>Formatting : Symbol(Formatting, Decl(parserindenter.ts, 0, 0))
+
+    export class Indenter implements ILineIndenationResolver  {
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+        private indentationBag: IndentationBag;
+>indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>IndentationBag : Symbol(IndentationBag)
+
+        private scriptBlockBeginLineNumber: number;
+>scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
+
+        private offsetIndentationDeltas: Dictionary_int_int;
+>offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>Dictionary_int_int : Symbol(Dictionary_int_int)
+
+        constructor(
+            public logger: TypeScript.ILogger,
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>TypeScript : Symbol(TypeScript)
+>ILogger : Symbol(TypeScript.ILogger)
+
+            public tree: ParseTree,
+>tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+>ParseTree : Symbol(ParseTree)
+
+            public snapshot: ITextSnapshot,
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>ITextSnapshot : Symbol(ITextSnapshot)
+
+            public languageHostIndentation: string,
+>languageHostIndentation : Symbol(Indenter.languageHostIndentation, Decl(parserindenter.ts, 28, 43))
+
+            public editorOptions: Services.EditorOptions,
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
+
+            public firstToken: TokenSpan,
+>firstToken : Symbol(Indenter.firstToken, Decl(parserindenter.ts, 30, 57))
+>TokenSpan : Symbol(TokenSpan)
+
+            public smartIndent: boolean) {
+>smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+
+            this.indentationBag = new IndentationBag(this.snapshot);
+>this.indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+
+            this.scriptBlockBeginLineNumber = -1;
+>this.scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
+
+            this.offsetIndentationDeltas = new Dictionary_int_int();     // text offset -> indentation delta
+>this.offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+
+            // by default the root (program) has zero indendation
+            this.tree.Root.SetIndentationOverride("");
+>this.tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+
+            this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
+>this.ApplyScriptBlockIndentation : Symbol(Indenter.ApplyScriptBlockIndentation, Decl(parserindenter.ts, 340, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyScriptBlockIndentation : Symbol(Indenter.ApplyScriptBlockIndentation, Decl(parserindenter.ts, 340, 9))
+>this.languageHostIndentation : Symbol(Indenter.languageHostIndentation, Decl(parserindenter.ts, 28, 43))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>languageHostIndentation : Symbol(Indenter.languageHostIndentation, Decl(parserindenter.ts, 28, 43))
+>this.tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+
+            this.FillInheritedIndentation(this.tree);
+>this.FillInheritedIndentation : Symbol(Indenter.FillInheritedIndentation, Decl(parserindenter.ts, 568, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>FillInheritedIndentation : Symbol(Indenter.FillInheritedIndentation, Decl(parserindenter.ts, 568, 9))
+>this.tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+
+        }
+
+        public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
+>GetIndentationEdits : Symbol(Indenter.GetIndentationEdits, Decl(parserindenter.ts, 44, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 46, 35))
+>TokenSpan : Symbol(TokenSpan)
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 46, 74))
+>ParseNode : Symbol(ParseNode)
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 46, 91))
+>List_TextEditInfo : Symbol(List_TextEditInfo)
+
+            if (this.logger.information()) {
+>this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+
+                this.logger.log("GetIndentationEdits(" +
+>this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+
+                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +
+>token : Symbol(token, Decl(parserindenter.ts, 46, 35))
+>token : Symbol(token, Decl(parserindenter.ts, 46, 35))
+
+                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+
+                    ")");
+            }
+
+            var result = this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent);
+>result : Symbol(result, Decl(parserindenter.ts, 54, 15))
+>this.GetIndentationEditsWorker : Symbol(Indenter.GetIndentationEditsWorker, Decl(parserindenter.ts, 64, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentationEditsWorker : Symbol(Indenter.GetIndentationEditsWorker, Decl(parserindenter.ts, 64, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 46, 35))
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+>node : Symbol(node, Decl(parserindenter.ts, 46, 74))
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 46, 91))
+
+            if (this.logger.information()) {
+>this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+
+                for (var i = 0; i < result.count() ; i++) {
+>i : Symbol(i, Decl(parserindenter.ts, 57, 24))
+>i : Symbol(i, Decl(parserindenter.ts, 57, 24))
+>result : Symbol(result, Decl(parserindenter.ts, 54, 15))
+>i : Symbol(i, Decl(parserindenter.ts, 57, 24))
+
+                    var edit = result.get(i);
+>edit : Symbol(edit, Decl(parserindenter.ts, 58, 23))
+>result : Symbol(result, Decl(parserindenter.ts, 54, 15))
+>i : Symbol(i, Decl(parserindenter.ts, 57, 24))
+
+                    this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
+>this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>edit : Symbol(edit, Decl(parserindenter.ts, 58, 23))
+>edit : Symbol(edit, Decl(parserindenter.ts, 58, 23))
+>edit : Symbol(edit, Decl(parserindenter.ts, 58, 23))
+>edit : Symbol(edit, Decl(parserindenter.ts, 58, 23))
+                }
+            }
+
+            return result;
+>result : Symbol(result, Decl(parserindenter.ts, 54, 15))
+        }
+
+        public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
+>GetIndentationEditsWorker : Symbol(Indenter.GetIndentationEditsWorker, Decl(parserindenter.ts, 64, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>TokenSpan : Symbol(TokenSpan)
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 66, 58))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>ParseNode : Symbol(ParseNode)
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 66, 97))
+>List_TextEditInfo : Symbol(List_TextEditInfo)
+
+            var result = new List_TextEditInfo();
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            // This handles the case:
+            //      return (
+            //              function() {
+            //              })
+            // The given function's node indicates that the function starts directly after "return (".
+            // In this case, we adjust the span to point to the function keyword.
+            // The same applies to objects and arrays.
+            // The reason this is done inside the Indenter is because it only affects indentation behavior.
+            // It's also done in ParseTree when we traverse up the tree because we don't have the 
+            // tokens for nodes outside the span we are formatting.
+            this.AdjustStartOffsetIfNeeded(token, node);
+>this.AdjustStartOffsetIfNeeded : Symbol(Indenter.AdjustStartOffsetIfNeeded, Decl(parserindenter.ts, 706, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>AdjustStartOffsetIfNeeded : Symbol(Indenter.AdjustStartOffsetIfNeeded, Decl(parserindenter.ts, 706, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+
+            // Don't adjust indentation on the same line of a script block
+            if (this.scriptBlockBeginLineNumber == token.lineNumber()) {
+>this.scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+
+                return result;
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+            }
+
+            // Don't indent multi-line strings
+            if (!sameLineIndent && this.IsMultiLineString(token)) {
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 66, 97))
+>this.IsMultiLineString : Symbol(Indenter.IsMultiLineString, Decl(parserindenter.ts, 732, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>IsMultiLineString : Symbol(Indenter.IsMultiLineString, Decl(parserindenter.ts, 732, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+
+                return result;
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+            }
+
+            // Special cases for the tokens that don't show up in the tree, such as curly braces and comments
+            indentationInfo = this.GetSpecialCaseIndentation(token, node);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>this.GetSpecialCaseIndentation : Symbol(Indenter.GetSpecialCaseIndentation, Decl(parserindenter.ts, 204, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetSpecialCaseIndentation : Symbol(Indenter.GetSpecialCaseIndentation, Decl(parserindenter.ts, 204, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+
+            if (indentationInfo == null) {
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+
+                //// For anything else
+
+                // Get the indentation level only from the node that starts on the same offset as the token
+                // otherwise the token is not meant to be indented
+                while (!node.CanIndent() && node.Parent != null && token.Span.span.start() == node.Parent.AuthorNode.Details.StartOffset)
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+
+                    node = node.Parent;
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+
+                if (node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset) {
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+
+                    indentationInfo = node.GetEffectiveIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+                }
+                else {
+                    //// Special cases for anything else that is not in the tree and should be indented
+
+                    // check for label (identifier followed by a colon)
+                    if (token.Token == AuthorTokenKind.atkIdentifier && nextToken != null && nextToken.Token == AuthorTokenKind.atkColon) {
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 66, 58))
+>nextToken : Symbol(nextToken, Decl(parserindenter.ts, 66, 58))
+
+                        // This will make the label on the same level as the surrounding function/block
+                        // ex: 
+                        // {
+                        //      statement;
+                        //      label:
+                        //          statement;
+                        // }
+                        indentationInfo = node.GetEffectiveChildrenIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+                    }
+                    else {
+                        //// Move the token the same indentation-delta that moved its indentable parent
+                        //// For example:
+                        ////    var a,
+                        ////        b;
+                        //// The declaration 'b' would remain under 'a' even if 'var' got indented.
+                        indentationInfo = this.ApplyIndentationDeltaFromParent(token, node);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>this.ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+                    }
+                }
+            }
+
+            // Get the indent edit from the indentation info
+            if (indentationInfo != null) {
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+
+                var edit = this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent);
+>edit : Symbol(edit, Decl(parserindenter.ts, 132, 19))
+>this.GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 66, 97))
+
+                if (edit != null) {
+>edit : Symbol(edit, Decl(parserindenter.ts, 132, 19))
+
+                    this.RegisterIndentation(edit, sameLineIndent);
+>this.RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
+>edit : Symbol(edit, Decl(parserindenter.ts, 132, 19))
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 66, 97))
+
+                    result.add(edit);
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+>edit : Symbol(edit, Decl(parserindenter.ts, 132, 19))
+
+                    // multi-line comments, apply delta indentation to all the other lines
+                    if (token.Token == AuthorTokenKind.atkComment) {
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+
+                        var commentEdits = this.GetCommentIndentationEdits(token);
+>commentEdits : Symbol(commentEdits, Decl(parserindenter.ts, 140, 27))
+>this.GetCommentIndentationEdits : Symbol(Indenter.GetCommentIndentationEdits, Decl(parserindenter.ts, 149, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetCommentIndentationEdits : Symbol(Indenter.GetCommentIndentationEdits, Decl(parserindenter.ts, 149, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+
+                        commentEdits.foreach((item) => {
+>commentEdits : Symbol(commentEdits, Decl(parserindenter.ts, 140, 27))
+>item : Symbol(item, Decl(parserindenter.ts, 141, 46))
+
+                            result.add(item);
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+>item : Symbol(item, Decl(parserindenter.ts, 141, 46))
+
+                        });
+                    }
+                }
+            }
+
+            return result;
+>result : Symbol(result, Decl(parserindenter.ts, 67, 15))
+        }
+
+        private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
+>GetCommentIndentationEdits : Symbol(Indenter.GetCommentIndentationEdits, Decl(parserindenter.ts, 149, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+>TokenSpan : Symbol(TokenSpan)
+>List_TextEditInfo : Symbol(List_TextEditInfo)
+
+            var result = new List_TextEditInfo();
+>result : Symbol(result, Decl(parserindenter.ts, 152, 15))
+
+            if (token.Token != AuthorTokenKind.atkComment)
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+
+                return result;
+>result : Symbol(result, Decl(parserindenter.ts, 152, 15))
+
+            var commentLastLineNumber = this.snapshot.GetLineNumberFromPosition(token.Span.endPosition());
+>commentLastLineNumber : Symbol(commentLastLineNumber, Decl(parserindenter.ts, 157, 15))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+
+            if (token.lineNumber() == commentLastLineNumber)
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+>commentLastLineNumber : Symbol(commentLastLineNumber, Decl(parserindenter.ts, 157, 15))
+
+                return result;
+>result : Symbol(result, Decl(parserindenter.ts, 152, 15))
+
+            var commentFirstLineIndentationDelta = this.GetIndentationDelta(token.Span.startPosition(), null);
+>commentFirstLineIndentationDelta : Symbol(commentFirstLineIndentationDelta, Decl(parserindenter.ts, 161, 15))
+>this.GetIndentationDelta : Symbol(Indenter.GetIndentationDelta, Decl(parserindenter.ts, 520, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentationDelta : Symbol(Indenter.GetIndentationDelta, Decl(parserindenter.ts, 520, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+
+            if (commentFirstLineIndentationDelta != undefined) {
+>commentFirstLineIndentationDelta : Symbol(commentFirstLineIndentationDelta, Decl(parserindenter.ts, 161, 15))
+>undefined : Symbol(undefined)
+
+                for (var line = token.lineNumber() + 1; line <= commentLastLineNumber; line++) {
+>line : Symbol(line, Decl(parserindenter.ts, 163, 24))
+>token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+>line : Symbol(line, Decl(parserindenter.ts, 163, 24))
+>commentLastLineNumber : Symbol(commentLastLineNumber, Decl(parserindenter.ts, 157, 15))
+>line : Symbol(line, Decl(parserindenter.ts, 163, 24))
+
+                    var lineStartPosition = this.snapshot.GetLineFromLineNumber(line).startPosition();
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 164, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>line : Symbol(line, Decl(parserindenter.ts, 163, 24))
+
+                    var lineIndent = this.GetLineIndentationForOffset(lineStartPosition);
+>lineIndent : Symbol(lineIndent, Decl(parserindenter.ts, 165, 23))
+>this.GetLineIndentationForOffset : Symbol(Indenter.GetLineIndentationForOffset, Decl(parserindenter.ts, 661, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetLineIndentationForOffset : Symbol(Indenter.GetLineIndentationForOffset, Decl(parserindenter.ts, 661, 9))
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 164, 23))
+
+                    var commentIndentationInfo = this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta);
+>commentIndentationInfo : Symbol(commentIndentationInfo, Decl(parserindenter.ts, 167, 23))
+>this.ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
+>lineIndent : Symbol(lineIndent, Decl(parserindenter.ts, 165, 23))
+>commentFirstLineIndentationDelta : Symbol(commentFirstLineIndentationDelta, Decl(parserindenter.ts, 161, 15))
+
+                    if (commentIndentationInfo != null) {
+>commentIndentationInfo : Symbol(commentIndentationInfo, Decl(parserindenter.ts, 167, 23))
+
+                        var tokenStartPosition = lineStartPosition + lineIndent.length;
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 169, 27))
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 164, 23))
+>lineIndent.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>lineIndent : Symbol(lineIndent, Decl(parserindenter.ts, 165, 23))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+                        var commentIndentationEdit = this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false);
+>commentIndentationEdit : Symbol(commentIndentationEdit, Decl(parserindenter.ts, 170, 27))
+>this.GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
+>commentIndentationInfo : Symbol(commentIndentationInfo, Decl(parserindenter.ts, 167, 23))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 169, 27))
+
+                        if (commentIndentationEdit != null) {
+>commentIndentationEdit : Symbol(commentIndentationEdit, Decl(parserindenter.ts, 170, 27))
+
+                            result.add(commentIndentationEdit);
+>result : Symbol(result, Decl(parserindenter.ts, 152, 15))
+>commentIndentationEdit : Symbol(commentIndentationEdit, Decl(parserindenter.ts, 170, 27))
+                        }
+                    }
+                }
+            }
+
+            return result;
+>result : Symbol(result, Decl(parserindenter.ts, 152, 15))
+        }
+
+        static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
+>GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 181, 43))
+>editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 181, 62))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
+
+            return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 181, 43))
+>editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 181, 62))
+        }
+
+        static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
+>GetIndentSizeFromText : Symbol(Indenter.GetIndentSizeFromText, Decl(parserindenter.ts, 183, 9))
+>text : Symbol(text, Decl(parserindenter.ts, 185, 37))
+>editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 185, 50))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
+>includeNonIndentChars : Symbol(includeNonIndentChars, Decl(parserindenter.ts, 185, 89))
+
+            var indentSize = 0;
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+
+            for (var i = 0; i < text.length; i++) {
+>i : Symbol(i, Decl(parserindenter.ts, 188, 20))
+>i : Symbol(i, Decl(parserindenter.ts, 188, 20))
+>text.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(parserindenter.ts, 185, 37))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserindenter.ts, 188, 20))
+
+                var c = text.charAt(i);
+>c : Symbol(c, Decl(parserindenter.ts, 189, 19))
+>text.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(parserindenter.ts, 185, 37))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserindenter.ts, 188, 20))
+
+                if (c == '\t')
+>c : Symbol(c, Decl(parserindenter.ts, 189, 19))
+
+                    indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize);
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+>editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 185, 50))
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+>editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 185, 50))
+
+                else if (c == ' ')
+>c : Symbol(c, Decl(parserindenter.ts, 189, 19))
+
+                    indentSize += 1;
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+
+                else {
+                    if (includeNonIndentChars)
+>includeNonIndentChars : Symbol(includeNonIndentChars, Decl(parserindenter.ts, 185, 89))
+
+                        indentSize += 1;
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+
+                    else
+                        break;
+                }
+            }
+
+            return indentSize;
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 186, 15))
+        }
+
+        private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
+>GetSpecialCaseIndentation : Symbol(Indenter.GetSpecialCaseIndentation, Decl(parserindenter.ts, 204, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 206, 42))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            switch (token.Token) {
+>token : Symbol(token, Decl(parserindenter.ts, 206, 42))
+
+                case AuthorTokenKind.atkLCurly: // { is not part of the tree
+                    indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>this.GetSpecialCaseIndentationForLCurly : Symbol(Indenter.GetSpecialCaseIndentationForLCurly, Decl(parserindenter.ts, 243, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetSpecialCaseIndentationForLCurly : Symbol(Indenter.GetSpecialCaseIndentationForLCurly, Decl(parserindenter.ts, 243, 9))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                    return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+
+                case AuthorTokenKind.atkElse:   // else is not part of the tree
+                case AuthorTokenKind.atkRBrack: // ] is not part of the tree
+                    indentationInfo = node.GetNodeStartLineIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                    return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+
+                case AuthorTokenKind.atkRCurly: // } is not part of the tree
+                    // if '}' is for a body-block, get indentation based on its parent.
+                    if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock && node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody)
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                        node = node.Parent;
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                    indentationInfo = node.GetNodeStartLineIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                    return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+
+                case AuthorTokenKind.atkWhile: // while (in do-while) is not part of the tree
+                    if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile) {
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                        indentationInfo = node.GetNodeStartLineIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                        return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+                    }
+
+                    return null;
+
+                case AuthorTokenKind.atkSColon:
+                    return this.GetSpecialCaseIndentationForSemicolon(token, node);
+>this.GetSpecialCaseIndentationForSemicolon : Symbol(Indenter.GetSpecialCaseIndentationForSemicolon, Decl(parserindenter.ts, 262, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetSpecialCaseIndentationForSemicolon : Symbol(Indenter.GetSpecialCaseIndentationForSemicolon, Decl(parserindenter.ts, 262, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 206, 42))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                case AuthorTokenKind.atkComment:
+                    return this.GetSpecialCaseIndentationForComment(token, node);
+>this.GetSpecialCaseIndentationForComment : Symbol(Indenter.GetSpecialCaseIndentationForComment, Decl(parserindenter.ts, 285, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetSpecialCaseIndentationForComment : Symbol(Indenter.GetSpecialCaseIndentationForComment, Decl(parserindenter.ts, 285, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 206, 42))
+>node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+
+                default:
+                    return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+            }
+        }
+
+        private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
+>GetSpecialCaseIndentationForLCurly : Symbol(Indenter.GetSpecialCaseIndentationForLCurly, Decl(parserindenter.ts, 243, 9))
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+
+                node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse) {
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+
+                    // flushed with the node (function & if)
+                indentationInfo = node.GetNodeStartLineIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+            }
+            else if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject && !node.CanIndent()) {
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+
+                // if the open curly belongs to a non-indented object, do nothing here.
+                return null;
+            }
+
+            // effective identation of the block
+            indentationInfo = node.GetEffectiveIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+            return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+        }
+
+        private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
+>GetSpecialCaseIndentationForSemicolon : Symbol(Indenter.GetSpecialCaseIndentationForSemicolon, Decl(parserindenter.ts, 262, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 264, 54))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            if (this.smartIndent) {
+>this.smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+
+                indentationInfo = node.GetEffectiveChildrenIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+            }
+            else {
+                // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+
+                    // The passed node is actually either the program or the list because semicolon doesn't belong
+                    // to any statement in the tree, though the statement extends up to the semicolon position.
+                    // To find the correct statement, we look for the adjacent node on the left of the semicolon.
+                    var semiColonStartSpan = new Span(token.Span.startPosition(), 0);
+>semiColonStartSpan : Symbol(semiColonStartSpan, Decl(parserindenter.ts, 277, 23))
+>token : Symbol(token, Decl(parserindenter.ts, 264, 54))
+
+                    node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node);
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+>semiColonStartSpan : Symbol(semiColonStartSpan, Decl(parserindenter.ts, 277, 23))
+>semiColonStartSpan : Symbol(semiColonStartSpan, Decl(parserindenter.ts, 277, 23))
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+
+                    indentationInfo = node.GetEffectiveChildrenIndentation(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+
+                    return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+                }
+            }
+
+            return null;
+        }
+
+        private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
+>GetSpecialCaseIndentationForComment : Symbol(Indenter.GetSpecialCaseIndentationForComment, Decl(parserindenter.ts, 285, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 288, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            // Only indent line comment and the first line of block comment
+            var twoCharSpan = token.Span.Intersection(new Span(token.Span.startPosition(), 2));
+>twoCharSpan : Symbol(twoCharSpan, Decl(parserindenter.ts, 291, 15))
+>token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+>token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+
+            if (twoCharSpan != null && (twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*")) {
+>twoCharSpan : Symbol(twoCharSpan, Decl(parserindenter.ts, 291, 15))
+>twoCharSpan : Symbol(twoCharSpan, Decl(parserindenter.ts, 291, 15))
+>twoCharSpan : Symbol(twoCharSpan, Decl(parserindenter.ts, 291, 15))
+
+                while (node.ChildrenIndentationDelta == null && node.Parent != null)
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+
+                    node = node.Parent;
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+
+                if (this.CanIndentComment(token, node)) {
+>this.CanIndentComment : Symbol(Indenter.CanIndentComment, Decl(parserindenter.ts, 305, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>CanIndentComment : Symbol(Indenter.CanIndentComment, Decl(parserindenter.ts, 305, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+
+                    indentationInfo = node.GetEffectiveChildrenIndentationForComment(this);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 288, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+                }
+                else {
+                    indentationInfo = this.ApplyIndentationDeltaFromParent(token, node);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 288, 15))
+>this.ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+>node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+                }
+            }
+
+            return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 288, 15))
+        }
+
+        private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
+>CanIndentComment : Symbol(Indenter.CanIndentComment, Decl(parserindenter.ts, 305, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 307, 33))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 307, 50))
+>ParseNode : Symbol(ParseNode)
+
+            switch (node.AuthorNode.Details.Kind) {
+>node : Symbol(node, Decl(parserindenter.ts, 307, 50))
+
+                case AuthorParseNodeKind.apnkProg:
+                case AuthorParseNodeKind.apnkBlock:
+                case AuthorParseNodeKind.apnkSwitch:
+                case AuthorParseNodeKind.apnkCase:
+                case AuthorParseNodeKind.apnkDefaultCase:
+                case AuthorParseNodeKind.apnkIf:
+                case AuthorParseNodeKind.apnkFor:
+                case AuthorParseNodeKind.apnkForIn:
+                case AuthorParseNodeKind.apnkWhile:
+                case AuthorParseNodeKind.apnkWith:
+                case AuthorParseNodeKind.apnkDoWhile:
+                case AuthorParseNodeKind.apnkObject:
+                    return true;
+
+                case AuthorParseNodeKind.apnkFncDecl:
+                    // Comments before arguments are not indented.
+                    // This code doesn't cover the cases of comment after the last argument or 
+                    // when there are no arguments. Though this is okay since the only case we care about is:
+                    // function foo(/* test */ a,
+                    //              /* test */ b)
+                    var result = true;
+>result : Symbol(result, Decl(parserindenter.ts, 329, 23))
+
+                    var children = ParseNodeExtensions.FindChildrenWithEdge(node, AuthorParseNodeEdge.apneArgument);
+>children : Symbol(children, Decl(parserindenter.ts, 330, 23))
+>node : Symbol(node, Decl(parserindenter.ts, 307, 50))
+
+                    children.foreach((argumentNode) => {
+>children : Symbol(children, Decl(parserindenter.ts, 330, 23))
+>argumentNode : Symbol(argumentNode, Decl(parserindenter.ts, 331, 38))
+
+                        if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)
+>token : Symbol(token, Decl(parserindenter.ts, 307, 33))
+>argumentNode : Symbol(argumentNode, Decl(parserindenter.ts, 331, 38))
+
+                            result = false;
+>result : Symbol(result, Decl(parserindenter.ts, 329, 23))
+
+                    });
+
+                    return result;
+>result : Symbol(result, Decl(parserindenter.ts, 329, 23))
+            }
+
+            return false;
+        }
+
+        private ApplyScriptBlockIndentation(languageHostIndentation: string, tree: ParseTree): void
+>ApplyScriptBlockIndentation : Symbol(Indenter.ApplyScriptBlockIndentation, Decl(parserindenter.ts, 340, 9))
+>languageHostIndentation : Symbol(languageHostIndentation, Decl(parserindenter.ts, 342, 44))
+>tree : Symbol(tree, Decl(parserindenter.ts, 342, 76))
+>ParseTree : Symbol(ParseTree)
+        {
+            if (languageHostIndentation == null || tree.StartNodeSelf == null)
+>languageHostIndentation : Symbol(languageHostIndentation, Decl(parserindenter.ts, 342, 44))
+>tree : Symbol(tree, Decl(parserindenter.ts, 342, 76))
+
+                return;
+
+            var scriptBlockIndentation = this.ApplyIndentationLevel(languageHostIndentation, 1);
+>scriptBlockIndentation : Symbol(scriptBlockIndentation, Decl(parserindenter.ts, 347, 15))
+>this.ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>languageHostIndentation : Symbol(languageHostIndentation, Decl(parserindenter.ts, 342, 44))
+
+            //TypeScript: Projection snapshots not supported
+
+            // Disconnect the sibling node if it belongs to a different script block
+            //IProjectionSnapshot projectionSnapshot = this.snapshot as IProjectionSnapshot;
+            //if (projectionSnapshot != null)
+            //{
+            //    // Get script block spans.
+            //    foreach (SnapshotSpan sourceSpan in projectionSnapshot.GetSourceSpans())
+            //    {
+            //        // Map the spans to the JavaScript buffer.
+            //        ReadOnlyCollection<Span> spans = projectionSnapshot.MapFromSourceSnapshot(sourceSpan);
+
+            //        Debug.Assert(spans.Count == 1, string.Format(CultureInfo.InvariantCulture, "Unexpected span count of {0}.", spans.Count));
+
+            //        if (spans.Count > 0)
+            //        {
+            //            Span span = spans.First();
+
+            //            // If the "self" node is the first root-level node in a script block, then remove the start node.
+            //            if (span.Contains(tree.StartNodethis.AuthorNode.Details.StartOffset))
+            //            {
+            //                this.scriptBlockBeginLineNumber = projectionSnapshot.GetLineNumberFromPosition(span.Start);
+
+            //                if (tree.StartNodePreviousSibling.HasValue)
+            //                {
+            //                    int siblingStartOffset = tree.StartNodePreviousSibling.Value.Details.StartOffset;
+
+            //                    // Don't consider sibling in these cases:
+            //                    // 1. The sibling belongs to another script block
+            //                    // 2. The sibling is on the same line of the script block
+            //                    if (!span.Contains(siblingStartOffset) || projectionSnapshot.GetLineNumberFromPosition(siblingStartOffset) == this.scriptBlockBeginLineNumber)
+            //                    {
+            //                        tree.StartNodePreviousSibling = null;
+            //                    }
+            //                }
+
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
+
+            // The root is the program.
+            tree.Root.SetIndentationOverride(scriptBlockIndentation);
+>tree : Symbol(tree, Decl(parserindenter.ts, 342, 76))
+>scriptBlockIndentation : Symbol(scriptBlockIndentation, Decl(parserindenter.ts, 347, 15))
+        }
+
+        private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
+>GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
+>indentInfo : Symbol(indentInfo, Decl(parserindenter.ts, 395, 30))
+>IndentationInfo : Symbol(IndentationInfo)
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 395, 58))
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 395, 86))
+>TextEditInfo : Symbol(TextEditInfo)
+
+            var indentText = this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level);
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 396, 15))
+>this.ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>indentInfo : Symbol(indentInfo, Decl(parserindenter.ts, 395, 30))
+>indentInfo : Symbol(indentInfo, Decl(parserindenter.ts, 395, 30))
+
+            if (sameLineIndent) {
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 395, 86))
+
+                return new TextEditInfo(tokenStartPosition, 0, indentText);
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 395, 58))
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 396, 15))
+            }
+            else {
+                var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 402, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 395, 58))
+
+                var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 403, 19))
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 402, 19))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 395, 58))
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 402, 19))
+
+                var currentIndentText = this.snapshot.GetText(currentIndentSpan);
+>currentIndentText : Symbol(currentIndentText, Decl(parserindenter.ts, 404, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 403, 19))
+
+                if (currentIndentText !== indentText) {
+>currentIndentText : Symbol(currentIndentText, Decl(parserindenter.ts, 404, 19))
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 396, 15))
+
+                    if (this.logger.debug()) {
+>this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+
+                        // Verify that currentIndentText is all whitespaces
+                        for (var i = 0, len = currentIndentText.length; i < len; i++) {
+>i : Symbol(i, Decl(parserindenter.ts, 409, 32))
+>len : Symbol(len, Decl(parserindenter.ts, 409, 39))
+>currentIndentText : Symbol(currentIndentText, Decl(parserindenter.ts, 404, 19))
+>i : Symbol(i, Decl(parserindenter.ts, 409, 32))
+>len : Symbol(len, Decl(parserindenter.ts, 409, 39))
+>i : Symbol(i, Decl(parserindenter.ts, 409, 32))
+
+                            var c = currentIndentText.charCodeAt(i);
+>c : Symbol(c, Decl(parserindenter.ts, 410, 31))
+>currentIndentText : Symbol(currentIndentText, Decl(parserindenter.ts, 404, 19))
+>i : Symbol(i, Decl(parserindenter.ts, 409, 32))
+
+                            if (!StringUtils.IsWhiteSpace(c)) {
+>c : Symbol(c, Decl(parserindenter.ts, 410, 31))
+
+                                Debug.Fail("Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText());
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 402, 19))
+
+                                break;
+                            }
+                        }
+                    }
+                    return new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText);
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 403, 19))
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 403, 19))
+>indentText : Symbol(indentText, Decl(parserindenter.ts, 396, 15))
+                }
+            }
+
+            return null;
+        }
+
+        private ApplyIndentationLevel(existingIndentation: string, level: number): string {
+>ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>existingIndentation : Symbol(existingIndentation, Decl(parserindenter.ts, 424, 38))
+>level : Symbol(level, Decl(parserindenter.ts, 424, 66))
+
+            var indentSize = this.editorOptions.IndentSize;
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 425, 15))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+            var tabSize = this.editorOptions.TabSize;
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 426, 15))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+            var convertTabsToSpaces = this.editorOptions.ConvertTabsToSpaces;
+>convertTabsToSpaces : Symbol(convertTabsToSpaces, Decl(parserindenter.ts, 427, 15))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+            if (level < 0) {
+>level : Symbol(level, Decl(parserindenter.ts, 424, 66))
+
+                if (StringUtils.IsNullOrEmpty(existingIndentation))
+>existingIndentation : Symbol(existingIndentation, Decl(parserindenter.ts, 424, 38))
+
+                    return "";
+
+                var totalIndent = 0;
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+
+                StringUtils.foreach(existingIndentation, (c) => {
+>existingIndentation : Symbol(existingIndentation, Decl(parserindenter.ts, 424, 38))
+>c : Symbol(c, Decl(parserindenter.ts, 434, 58))
+
+                    if (c == '\t')
+>c : Symbol(c, Decl(parserindenter.ts, 434, 58))
+
+                        totalIndent += tabSize;
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 426, 15))
+
+                    else
+                        totalIndent++;
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+
+                });
+
+                totalIndent += level * indentSize;
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+>level : Symbol(level, Decl(parserindenter.ts, 424, 66))
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 425, 15))
+
+                if (totalIndent < 0)
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+
+                    return "";
+                else
+                    return this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces);
+>this.GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>totalIndent : Symbol(totalIndent, Decl(parserindenter.ts, 433, 19))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 426, 15))
+>convertTabsToSpaces : Symbol(convertTabsToSpaces, Decl(parserindenter.ts, 427, 15))
+            }
+
+            var totalIndentSize = level * indentSize;
+>totalIndentSize : Symbol(totalIndentSize, Decl(parserindenter.ts, 448, 15))
+>level : Symbol(level, Decl(parserindenter.ts, 424, 66))
+>indentSize : Symbol(indentSize, Decl(parserindenter.ts, 425, 15))
+
+            return this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces);
+>this.GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>existingIndentation : Symbol(existingIndentation, Decl(parserindenter.ts, 424, 38))
+>totalIndentSize : Symbol(totalIndentSize, Decl(parserindenter.ts, 448, 15))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 426, 15))
+>convertTabsToSpaces : Symbol(convertTabsToSpaces, Decl(parserindenter.ts, 427, 15))
+        }
+
+        private GetIndentString(prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean): string {
+>GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>prefix : Symbol(prefix, Decl(parserindenter.ts, 452, 32))
+>totalIndentSize : Symbol(totalIndentSize, Decl(parserindenter.ts, 452, 47))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 452, 72))
+>convertTabsToSpaces : Symbol(convertTabsToSpaces, Decl(parserindenter.ts, 452, 89))
+
+            var tabString = convertTabsToSpaces ? StringUtils.create(' ', tabSize) : "\t";
+>tabString : Symbol(tabString, Decl(parserindenter.ts, 453, 15))
+>convertTabsToSpaces : Symbol(convertTabsToSpaces, Decl(parserindenter.ts, 452, 89))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 452, 72))
+
+            var text = "";
+>text : Symbol(text, Decl(parserindenter.ts, 455, 15))
+
+            if (!StringUtils.IsNullOrEmpty(prefix))
+>prefix : Symbol(prefix, Decl(parserindenter.ts, 452, 32))
+
+                text += prefix;
+>text : Symbol(text, Decl(parserindenter.ts, 455, 15))
+>prefix : Symbol(prefix, Decl(parserindenter.ts, 452, 32))
+
+            var pos = 0;
+>pos : Symbol(pos, Decl(parserindenter.ts, 459, 15))
+
+            // fill first with tabs
+            while (pos <= totalIndentSize - tabSize) {
+>pos : Symbol(pos, Decl(parserindenter.ts, 459, 15))
+>totalIndentSize : Symbol(totalIndentSize, Decl(parserindenter.ts, 452, 47))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 452, 72))
+
+                text += tabString;
+>text : Symbol(text, Decl(parserindenter.ts, 455, 15))
+>tabString : Symbol(tabString, Decl(parserindenter.ts, 453, 15))
+
+                pos += tabSize;
+>pos : Symbol(pos, Decl(parserindenter.ts, 459, 15))
+>tabSize : Symbol(tabSize, Decl(parserindenter.ts, 452, 72))
+            }
+
+            // fill the reminder with spaces
+            while (pos < totalIndentSize) {
+>pos : Symbol(pos, Decl(parserindenter.ts, 459, 15))
+>totalIndentSize : Symbol(totalIndentSize, Decl(parserindenter.ts, 452, 47))
+
+                text += ' ';
+>text : Symbol(text, Decl(parserindenter.ts, 455, 15))
+
+                pos++;
+>pos : Symbol(pos, Decl(parserindenter.ts, 459, 15))
+            }
+
+            return text;
+>text : Symbol(text, Decl(parserindenter.ts, 455, 15))
+        }
+
+        private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
+>ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 476, 49))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 476, 66))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentationInfo: IndentationInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 477, 15))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            var indentableParent = node;
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 476, 66))
+
+            while (indentableParent != null && !indentableParent.CanIndent())
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+
+                indentableParent = indentableParent.Parent;
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+
+            if (indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+
+                var parentIndentationDeltaSize = this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition());
+>parentIndentationDeltaSize : Symbol(parentIndentationDeltaSize, Decl(parserindenter.ts, 484, 19))
+>this.GetIndentationDelta : Symbol(Indenter.GetIndentationDelta, Decl(parserindenter.ts, 520, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentationDelta : Symbol(Indenter.GetIndentationDelta, Decl(parserindenter.ts, 520, 9))
+>indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
+>token : Symbol(token, Decl(parserindenter.ts, 476, 49))
+
+                if (parentIndentationDeltaSize !== undefined) {
+>parentIndentationDeltaSize : Symbol(parentIndentationDeltaSize, Decl(parserindenter.ts, 484, 19))
+>undefined : Symbol(undefined)
+
+                    indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 477, 15))
+>this.ApplyIndentationDelta1 : Symbol(Indenter.ApplyIndentationDelta1, Decl(parserindenter.ts, 491, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationDelta1 : Symbol(Indenter.ApplyIndentationDelta1, Decl(parserindenter.ts, 491, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 476, 49))
+>parentIndentationDeltaSize : Symbol(parentIndentationDeltaSize, Decl(parserindenter.ts, 484, 19))
+                }
+            }
+
+            return indentationInfo;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 477, 15))
+        }
+
+        private ApplyIndentationDelta1(tokenStartPosition: number, delta: number): IndentationInfo {
+>ApplyIndentationDelta1 : Symbol(Indenter.ApplyIndentationDelta1, Decl(parserindenter.ts, 491, 9))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 493, 39))
+>delta : Symbol(delta, Decl(parserindenter.ts, 493, 66))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            // Get current indentation
+            var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 495, 15))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 493, 39))
+
+            var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 496, 15))
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 495, 15))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 493, 39))
+>snapshotLine : Symbol(snapshotLine, Decl(parserindenter.ts, 495, 15))
+
+            var currentIndent = this.snapshot.GetText(currentIndentSpan);
+>currentIndent : Symbol(currentIndent, Decl(parserindenter.ts, 497, 15))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>currentIndentSpan : Symbol(currentIndentSpan, Decl(parserindenter.ts, 496, 15))
+
+            // Calculate new indentation from current-indentation and delta
+            return this.ApplyIndentationDelta2(currentIndent, delta);
+>this.ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
+>currentIndent : Symbol(currentIndent, Decl(parserindenter.ts, 497, 15))
+>delta : Symbol(delta, Decl(parserindenter.ts, 493, 66))
+        }
+
+        private ApplyIndentationDelta2(currentIndent: string, delta: number): IndentationInfo {
+>ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
+>currentIndent : Symbol(currentIndent, Decl(parserindenter.ts, 503, 39))
+>delta : Symbol(delta, Decl(parserindenter.ts, 503, 61))
+>IndentationInfo : Symbol(IndentationInfo)
+
+            if (delta == 0)
+>delta : Symbol(delta, Decl(parserindenter.ts, 503, 61))
+
+                return null;
+
+            var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
+>currentIndentSize : Symbol(currentIndentSize, Decl(parserindenter.ts, 507, 15))
+>Indenter.GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>currentIndent : Symbol(currentIndent, Decl(parserindenter.ts, 503, 39))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+            var newIndentSize = currentIndentSize + delta;
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 509, 15))
+>currentIndentSize : Symbol(currentIndentSize, Decl(parserindenter.ts, 507, 15))
+>delta : Symbol(delta, Decl(parserindenter.ts, 503, 61))
+
+            if (newIndentSize < 0) {
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 509, 15))
+
+                newIndentSize = 0;
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 509, 15))
+            }
+
+            var newIndent = this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces);
+>newIndent : Symbol(newIndent, Decl(parserindenter.ts, 514, 15))
+>this.GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentString : Symbol(Indenter.GetIndentString, Decl(parserindenter.ts, 450, 9))
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 509, 15))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+            if (newIndent != null) {
+>newIndent : Symbol(newIndent, Decl(parserindenter.ts, 514, 15))
+
+                return new IndentationInfo(newIndent, 0);
+>newIndent : Symbol(newIndent, Decl(parserindenter.ts, 514, 15))
+            }
+
+            return null;
+        }
+
+        private GetIndentationDelta(tokenStartPosition: number, childTokenStartPosition: number/*?*/): number/*?*/ {
+>GetIndentationDelta : Symbol(Indenter.GetIndentationDelta, Decl(parserindenter.ts, 520, 9))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 522, 36))
+>childTokenStartPosition : Symbol(childTokenStartPosition, Decl(parserindenter.ts, 522, 63))
+
+            Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position");
+>childTokenStartPosition : Symbol(childTokenStartPosition, Decl(parserindenter.ts, 522, 63))
+>undefined : Symbol(undefined)
+
+            var indentationDeltaSize = this.offsetIndentationDeltas.GetValue(tokenStartPosition);
+>indentationDeltaSize : Symbol(indentationDeltaSize, Decl(parserindenter.ts, 525, 15))
+>this.offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 522, 36))
+
+            if (indentationDeltaSize === null) {
+>indentationDeltaSize : Symbol(indentationDeltaSize, Decl(parserindenter.ts, 525, 15))
+
+                var indentEditInfo = this.indentationBag.FindIndent(tokenStartPosition);
+>indentEditInfo : Symbol(indentEditInfo, Decl(parserindenter.ts, 527, 19))
+>this.indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 522, 36))
+
+                // No recorded indentation, return null
+                if (indentEditInfo == null)
+>indentEditInfo : Symbol(indentEditInfo, Decl(parserindenter.ts, 527, 19))
+
+                    return null;
+
+                var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
+>origIndentText : Symbol(origIndentText, Decl(parserindenter.ts, 533, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>indentEditInfo : Symbol(indentEditInfo, Decl(parserindenter.ts, 527, 19))
+>indentEditInfo : Symbol(indentEditInfo, Decl(parserindenter.ts, 527, 19))
+
+                var newIndentText = indentEditInfo.Indentation();
+>newIndentText : Symbol(newIndentText, Decl(parserindenter.ts, 534, 19))
+>indentEditInfo : Symbol(indentEditInfo, Decl(parserindenter.ts, 527, 19))
+
+                var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true);
+>origIndentSize : Symbol(origIndentSize, Decl(parserindenter.ts, 536, 19))
+>Indenter.GetIndentSizeFromText : Symbol(Indenter.GetIndentSizeFromText, Decl(parserindenter.ts, 183, 9))
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentSizeFromText : Symbol(Indenter.GetIndentSizeFromText, Decl(parserindenter.ts, 183, 9))
+>origIndentText : Symbol(origIndentText, Decl(parserindenter.ts, 533, 19))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+                var newIndentSize = Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions);
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 537, 19))
+>Indenter.GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>newIndentText : Symbol(newIndentText, Decl(parserindenter.ts, 534, 19))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+                // Check the child's position whether it's before the parent position
+                // if so indent the child based on the first token on the line as opposed to the parent position
+                //
+                // Example of relative to parent (not line), relative indentation should be "4 (newIndentSize) - 9 (indentSize up to for) = -5"
+                //
+                // if (1) { for (i = 0; i < 10;       =>          if (1) {
+                //                      i++) {                       for (i = 0; i < 10;
+                //                                                               i++) {
+                //
+                // Example of relative to line, relative indentation should be "4 (newIndentSize) - 0 (indentSize up to if) = 4"
+                //
+                // if (1) { for (i = 0; i < 10;      =>          if (1) {
+                //     i++) {                                        for (i = 0; i < 10;
+                //                                                       i++) {
+                if (childTokenStartPosition !== null) {
+>childTokenStartPosition : Symbol(childTokenStartPosition, Decl(parserindenter.ts, 522, 63))
+
+                    var childTokenLineStartPosition = this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition();
+>childTokenLineStartPosition : Symbol(childTokenLineStartPosition, Decl(parserindenter.ts, 554, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>childTokenStartPosition : Symbol(childTokenStartPosition, Decl(parserindenter.ts, 522, 63))
+
+                    var childIndentText = this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition));
+>childIndentText : Symbol(childIndentText, Decl(parserindenter.ts, 555, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>childTokenLineStartPosition : Symbol(childTokenLineStartPosition, Decl(parserindenter.ts, 554, 23))
+>childTokenStartPosition : Symbol(childTokenStartPosition, Decl(parserindenter.ts, 522, 63))
+>childTokenLineStartPosition : Symbol(childTokenLineStartPosition, Decl(parserindenter.ts, 554, 23))
+
+                    var childIndentSize = Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions);
+>childIndentSize : Symbol(childIndentSize, Decl(parserindenter.ts, 557, 23))
+>Indenter.GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>childIndentText : Symbol(childIndentText, Decl(parserindenter.ts, 555, 23))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+
+                    if (childIndentSize < origIndentSize)
+>childIndentSize : Symbol(childIndentSize, Decl(parserindenter.ts, 557, 23))
+>origIndentSize : Symbol(origIndentSize, Decl(parserindenter.ts, 536, 19))
+
+                        origIndentSize = Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions);
+>origIndentSize : Symbol(origIndentSize, Decl(parserindenter.ts, 536, 19))
+>Indenter.GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>Indenter : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
+>origIndentText : Symbol(origIndentText, Decl(parserindenter.ts, 533, 19))
+>this.editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+                }
+
+                indentationDeltaSize = newIndentSize - origIndentSize;
+>indentationDeltaSize : Symbol(indentationDeltaSize, Decl(parserindenter.ts, 525, 15))
+>newIndentSize : Symbol(newIndentSize, Decl(parserindenter.ts, 537, 19))
+>origIndentSize : Symbol(origIndentSize, Decl(parserindenter.ts, 536, 19))
+
+                this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize);
+>this.offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 522, 36))
+>indentationDeltaSize : Symbol(indentationDeltaSize, Decl(parserindenter.ts, 525, 15))
+            }
+
+            return indentationDeltaSize;
+>indentationDeltaSize : Symbol(indentationDeltaSize, Decl(parserindenter.ts, 525, 15))
+        }
+
+        private FillInheritedIndentation(tree: ParseTree): void
+>FillInheritedIndentation : Symbol(Indenter.FillInheritedIndentation, Decl(parserindenter.ts, 568, 9))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+>ParseTree : Symbol(ParseTree)
+        {
+            var offset = -1;
+>offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
+
+            var indentNode: ParseNode = null;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>ParseNode : Symbol(ParseNode)
+
+            if (tree.StartNodeSelf != null) {
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                if (!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0) {
+>this.smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                    indentNode = tree.StartNodeSelf;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                    offset = tree.StartNodePreviousSibling.Details.StartOffset;
+>offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                    // In case the sibling node is on the same line of a parent node, ex:
+                    //      case 1: a++;
+                    //          break;
+                    // In this example, the sibling of break is a++ but a++ is on the same line of its parent.
+                    var lineNum = this.snapshot.GetLineNumberFromPosition(offset);
+>lineNum : Symbol(lineNum, Decl(parserindenter.ts, 584, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
+
+                    var node = indentNode;
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                    while (node.Parent != null && this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) == lineNum) {
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+>lineNum : Symbol(lineNum, Decl(parserindenter.ts, 584, 23))
+
+                        node = node.Parent;
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+
+                        if (node.CanIndent()) {
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+
+                            indentNode = node;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 585, 23))
+
+                            indentNode.IndentationDelta = 0;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+                        }
+                    }
+                }
+                else {
+                    var parent: ParseNode;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>ParseNode : Symbol(ParseNode)
+
+                    // Otherwise base on parent indentation.
+                    if (this.smartIndent) {
+>this.smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+
+                        // in smartIndent the self node is the parent node since it's the closest node to the new line
+                        // ... unless in case if the startNodeSelf represents the firstToken then we need to choose its parent
+                        parent = tree.StartNodeSelf;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                        while (parent != null && parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition())
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>this.firstToken : Symbol(Indenter.firstToken, Decl(parserindenter.ts, 30, 57))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>firstToken : Symbol(Indenter.firstToken, Decl(parserindenter.ts, 30, 57))
+
+                            parent = parent.Parent;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+                    }
+                    else {
+                        // Get the parent that is really on a different line from the self node
+                        var startNodeLineNumber = this.snapshot.GetLineNumberFromPosition(tree.StartNodeSelf.AuthorNode.Details.StartOffset);
+>startNodeLineNumber : Symbol(startNodeLineNumber, Decl(parserindenter.ts, 607, 27))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                        parent = tree.StartNodeSelf.Parent;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+
+                        while (parent != null &&
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+
+                                startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset)) {
+>startNodeLineNumber : Symbol(startNodeLineNumber, Decl(parserindenter.ts, 607, 27))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+
+                            parent = parent.Parent;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+                        }
+                    }
+
+                    // The parent node to take its indentation is the first parent that has indentation.
+                    while (parent != null && !parent.CanIndent()) {
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+
+                        parent = parent.Parent;
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+                    }
+
+                    // Skip Program since it has no indentation
+                    if (parent != null && parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+
+                        offset = parent.AuthorNode.Details.StartOffset;
+>offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+
+                        indentNode = parent;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+                    }
+                }
+            }
+
+            if (indentNode != null) {
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                var indentOverride = this.GetLineIndentationForOffset(offset);
+>indentOverride : Symbol(indentOverride, Decl(parserindenter.ts, 629, 19))
+>this.GetLineIndentationForOffset : Symbol(Indenter.GetLineIndentationForOffset, Decl(parserindenter.ts, 661, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>GetLineIndentationForOffset : Symbol(Indenter.GetLineIndentationForOffset, Decl(parserindenter.ts, 661, 9))
+>offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
+
+                // Set the indentation on all the siblings to be the same as indentNode
+                if (!this.smartIndent && tree.StartNodePreviousSibling !== null && indentNode.Parent != null) {
+>this.smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
+>tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                    ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>sibling : Symbol(sibling, Decl(parserindenter.ts, 633, 80))
+
+                        if (sibling !== indentNode) {
+>sibling : Symbol(sibling, Decl(parserindenter.ts, 633, 80))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                            if (sibling.CanIndent())
+>sibling : Symbol(sibling, Decl(parserindenter.ts, 633, 80))
+
+                                sibling.SetIndentationOverride(indentOverride);
+>sibling : Symbol(sibling, Decl(parserindenter.ts, 633, 80))
+>indentOverride : Symbol(indentOverride, Decl(parserindenter.ts, 629, 19))
+                        }
+                    });
+                }
+
+                // Set the indent override string on the indent node and on every parent (on different line) after adjusting the indent by the negative delta
+                var lastDelta = 0;
+>lastDelta : Symbol(lastDelta, Decl(parserindenter.ts, 642, 19))
+
+                var lastLine = this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset);
+>lastLine : Symbol(lastLine, Decl(parserindenter.ts, 643, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                do {
+                    var currentLine = this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset);
+>currentLine : Symbol(currentLine, Decl(parserindenter.ts, 645, 23))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                    if (lastLine != currentLine) {
+>lastLine : Symbol(lastLine, Decl(parserindenter.ts, 643, 19))
+>currentLine : Symbol(currentLine, Decl(parserindenter.ts, 645, 23))
+
+                        lastLine = currentLine;
+>lastLine : Symbol(lastLine, Decl(parserindenter.ts, 643, 19))
+>currentLine : Symbol(currentLine, Decl(parserindenter.ts, 645, 23))
+
+                        indentOverride = this.ApplyIndentationLevel(indentOverride, -lastDelta);
+>indentOverride : Symbol(indentOverride, Decl(parserindenter.ts, 629, 19))
+>this.ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>ApplyIndentationLevel : Symbol(Indenter.ApplyIndentationLevel, Decl(parserindenter.ts, 422, 9))
+>indentOverride : Symbol(indentOverride, Decl(parserindenter.ts, 629, 19))
+>lastDelta : Symbol(lastDelta, Decl(parserindenter.ts, 642, 19))
+
+                        lastDelta = 0;
+>lastDelta : Symbol(lastDelta, Decl(parserindenter.ts, 642, 19))
+                    }
+
+                    if (indentNode.CanIndent()) {
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+
+                        indentNode.SetIndentationOverride(indentOverride);
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>indentOverride : Symbol(indentOverride, Decl(parserindenter.ts, 629, 19))
+
+                        lastDelta = indentNode.IndentationDelta;
+>lastDelta : Symbol(lastDelta, Decl(parserindenter.ts, 642, 19))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+                    }
+
+                    indentNode = indentNode.Parent;
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+                }
+                while (indentNode != null);
+>indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+            }
+        }
+
+        public GetLineIndentationForOffset(offset: number): string {
+>GetLineIndentationForOffset : Symbol(Indenter.GetLineIndentationForOffset, Decl(parserindenter.ts, 661, 9))
+>offset : Symbol(offset, Decl(parserindenter.ts, 663, 43))
+
+            var indentationEdit: IndentationEditInfo;
+>indentationEdit : Symbol(indentationEdit, Decl(parserindenter.ts, 664, 15))
+>IndentationEditInfo : Symbol(IndentationEditInfo)
+
+            // First check if we already have indentation info in our indentation bag
+            indentationEdit = this.indentationBag.FindIndent(offset);
+>indentationEdit : Symbol(indentationEdit, Decl(parserindenter.ts, 664, 15))
+>this.indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>offset : Symbol(offset, Decl(parserindenter.ts, 663, 43))
+
+            if (indentationEdit != null) {
+>indentationEdit : Symbol(indentationEdit, Decl(parserindenter.ts, 664, 15))
+
+                return indentationEdit.Indentation();
+>indentationEdit : Symbol(indentationEdit, Decl(parserindenter.ts, 664, 15))
+            }
+            else {
+                // Otherwise, use the indentation from the textBuffer
+                var line = this.snapshot.GetLineFromPosition(offset);
+>line : Symbol(line, Decl(parserindenter.ts, 673, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>offset : Symbol(offset, Decl(parserindenter.ts, 663, 43))
+
+                var lineText = line.getText();
+>lineText : Symbol(lineText, Decl(parserindenter.ts, 674, 19))
+>line : Symbol(line, Decl(parserindenter.ts, 673, 19))
+
+                var index = 0;
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+
+                while (index < lineText.length && (lineText.charAt(index) == ' ' || lineText.charAt(index) == '\t')) {
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+>lineText : Symbol(lineText, Decl(parserindenter.ts, 674, 19))
+>lineText : Symbol(lineText, Decl(parserindenter.ts, 674, 19))
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+>lineText : Symbol(lineText, Decl(parserindenter.ts, 674, 19))
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+
+                    ++index;
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+                }
+
+                return lineText.substr(0, index);
+>lineText : Symbol(lineText, Decl(parserindenter.ts, 674, 19))
+>index : Symbol(index, Decl(parserindenter.ts, 675, 19))
+            }
+        }
+
+        private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
+>RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+>TextEditInfo : Symbol(TextEditInfo)
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 685, 57))
+        {
+            var indentationInfo: IndentationEditInfo = null;
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 687, 15))
+>IndentationEditInfo : Symbol(IndentationEditInfo)
+
+            if (sameLineIndent) {
+>sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 685, 57))
+
+                // Consider the original indentation from the beginning of the line up to the indent position (or really the token position)
+                var lineStartPosition = this.snapshot.GetLineFromPosition(indent.Position).startPosition();
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 691, 19))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+
+                var lineIndentLength = indent.Position - lineStartPosition;
+>lineIndentLength : Symbol(lineIndentLength, Decl(parserindenter.ts, 692, 19))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 691, 19))
+
+                indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 687, 15))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+>lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 691, 19))
+>lineIndentLength : Symbol(lineIndentLength, Decl(parserindenter.ts, 692, 19))
+            }
+            else {
+                indentationInfo = new IndentationEditInfo(indent);
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 687, 15))
+>indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+            }
+
+            this.indentationBag.AddIndent(indentationInfo);
+>this.indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 687, 15))
+        }
+
+        public RegisterIndentation2(position: number, indent: string): void
+>RegisterIndentation2 : Symbol(Indenter.RegisterIndentation2, Decl(parserindenter.ts, 701, 9))
+>position : Symbol(position, Decl(parserindenter.ts, 703, 36))
+>indent : Symbol(indent, Decl(parserindenter.ts, 703, 53))
+        {
+            this.RegisterIndentation(new TextEditInfo(position, 0, indent), false);
+>this.RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
+>position : Symbol(position, Decl(parserindenter.ts, 703, 36))
+>indent : Symbol(indent, Decl(parserindenter.ts, 703, 53))
+        }
+
+        private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
+>AdjustStartOffsetIfNeeded : Symbol(Indenter.AdjustStartOffsetIfNeeded, Decl(parserindenter.ts, 706, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 708, 42))
+>TokenSpan : Symbol(TokenSpan)
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+>ParseNode : Symbol(ParseNode)
+        {
+            if (token == null)
+>token : Symbol(token, Decl(parserindenter.ts, 708, 42))
+
+                return;
+
+            var updateStartOffset = false;
+>updateStartOffset : Symbol(updateStartOffset, Decl(parserindenter.ts, 713, 15))
+
+            switch (token.Token) {
+>token : Symbol(token, Decl(parserindenter.ts, 708, 42))
+
+                case AuthorTokenKind.atkFunction:
+                    updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl;
+>updateStartOffset : Symbol(updateStartOffset, Decl(parserindenter.ts, 713, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+
+                    break;
+
+                case AuthorTokenKind.atkLCurly:
+                    updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject;
+>updateStartOffset : Symbol(updateStartOffset, Decl(parserindenter.ts, 713, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+
+                    break;
+
+                case AuthorTokenKind.atkLBrack:
+                    updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray;
+>updateStartOffset : Symbol(updateStartOffset, Decl(parserindenter.ts, 713, 15))
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+
+                    break;
+            }
+
+            if (updateStartOffset) {
+>updateStartOffset : Symbol(updateStartOffset, Decl(parserindenter.ts, 713, 15))
+
+                ParseNodeExtensions.SetNodeSpan(node, token.Span.startPosition(), node.AuthorNode.Details.EndOffset);
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+>token : Symbol(token, Decl(parserindenter.ts, 708, 42))
+>node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+            }
+        }
+
+        private IsMultiLineString(token: TokenSpan): boolean {
+>IsMultiLineString : Symbol(Indenter.IsMultiLineString, Decl(parserindenter.ts, 732, 9))
+>token : Symbol(token, Decl(parserindenter.ts, 734, 34))
+>TokenSpan : Symbol(TokenSpan)
+
+            return token.tokenID === TypeScript.TokenID.StringLiteral &&
+>token : Symbol(token, Decl(parserindenter.ts, 734, 34))
+
+                this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>token : Symbol(token, Decl(parserindenter.ts, 734, 34))
+>this.snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>this : Symbol(Indenter, Decl(parserindenter.ts, 18, 19))
+>snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>token : Symbol(token, Decl(parserindenter.ts, 734, 34))
+        }
+    }
+}
+

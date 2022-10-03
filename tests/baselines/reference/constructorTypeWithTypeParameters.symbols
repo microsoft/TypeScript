@@ -1,0 +1,16 @@
+=== tests/cases/compiler/constructorTypeWithTypeParameters.ts ===
+declare var X: {
+>X : Symbol(X, Decl(constructorTypeWithTypeParameters.ts, 0, 11))
+
+    new <T>(): number;
+>T : Symbol(T, Decl(constructorTypeWithTypeParameters.ts, 1, 9))
+}
+declare var Y: {
+>Y : Symbol(Y, Decl(constructorTypeWithTypeParameters.ts, 3, 11))
+
+    new (): number;
+}
+var anotherVar: new <T>() => number;
+>anotherVar : Symbol(anotherVar, Decl(constructorTypeWithTypeParameters.ts, 6, 3))
+>T : Symbol(T, Decl(constructorTypeWithTypeParameters.ts, 6, 21))
+

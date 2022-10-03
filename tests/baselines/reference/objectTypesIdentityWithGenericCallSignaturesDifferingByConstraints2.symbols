@@ -1,0 +1,462 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts ===
+// Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
+// parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
+// optional or rest) and types, and identical return types.
+
+class A {
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+    foo<T extends U, U extends Date>(x: T, y: U): string { return null; }
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 4, 9))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 8))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 37))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 8))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 42))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
+}
+
+class B<T extends U, U extends Array<number>> {
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 8))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 20))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(x: T, y: U): string { return null; }
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 47))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 9, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 8))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 9, 13))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 20))
+}
+
+class C<T extends U, U extends String> {
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 8))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 20))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 20))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(x: T, y: U): string { return null; }
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 40))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 13, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 8))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 13, 13))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 20))
+}
+
+class D<T extends U, U extends Number> {
+>D : Symbol(D, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 14, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 8))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 20))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 20))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(x: T, y: U): string { return null; }
+>foo : Symbol(D.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 40))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 17, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 8))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 17, 13))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 20))
+}
+
+interface I<T extends U, U extends Number> {
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 12))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 24))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 24))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(x: T, y: U): string;
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 44))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 21, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 12))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 21, 13))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 24))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 22, 1))
+
+    foo<T extends U, U extends Boolean>(x: T, y: U): string;
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 24, 14))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 8))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 20))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 20))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 40))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 8))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 45))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 20))
+}
+
+var a: { foo<T extends U, U extends Array<string>>(x: T, y: U): string }
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 13))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 25))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 51))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 13))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 56))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 25))
+
+var b = { foo<T extends U, U extends RegExp>(x: T, y: U) { return ''; } };
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 3))
+>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 9))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 14))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 26))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 26))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 45))
+>T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 14))
+>y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 50))
+>U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 26))
+
+function foo1(x: A);
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 74), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 31, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 32, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 31, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo1(x: A); // error
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 74), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 31, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 32, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 32, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo1(x: any) { }
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 74), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 31, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 32, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 33, 14))
+
+function foo1b(x: B<Array<number>, Array<number>>);
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 33, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 35, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 36, 51))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 35, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo1b(x: B<Array<number>, Array<number>>); // error
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 33, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 35, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 36, 51))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 36, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo1b(x: any) { }
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 33, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 35, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 36, 51))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 37, 15))
+
+function foo1c(x: C<String, String>);
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 39, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 40, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 39, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo1c(x: C<String, String>); // error
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 39, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 40, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 40, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo1c(x: any) { }
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 39, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 40, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 41, 15))
+
+function foo2(x: I<Number, Number>);
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 41, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 43, 36), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 44, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 43, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo2(x: I<Number, Number>); // error
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 41, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 43, 36), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 44, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 44, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 41, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 43, 36), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 44, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 45, 14))
+
+function foo3(x: typeof a);
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 48, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 47, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+
+function foo3(x: typeof a); // error
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 48, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 48, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 48, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 49, 14))
+
+function foo4(x: typeof b);
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 51, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 52, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 51, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 3))
+
+function foo4(x: typeof b); // error
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 51, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 52, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 52, 14))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 3))
+
+function foo4(x: any) { }
+>foo4 : Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 51, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 52, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 53, 14))
+
+function foo5(x: A);
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 55, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 56, 50))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 55, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo5(x: B<Array<number>, Array<number>>); // ok
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 55, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 56, 50))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 56, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 55, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 56, 50))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 57, 14))
+
+function foo5b(x: A);
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 57, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 59, 21), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 60, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 59, 15))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo5b(x: C<String, String>); // ok
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 57, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 59, 21), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 60, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 60, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo5b(x: any) { }
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 57, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 59, 21), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 60, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 61, 15))
+
+function foo5c(x: C<String, String>);
+>foo5c : Symbol(foo5c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 61, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 63, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 64, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 63, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo5c(x: D<Number, Number>); // ok
+>foo5c : Symbol(foo5c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 61, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 63, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 64, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 64, 15))
+>D : Symbol(D, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 14, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo5c(x: any) { }
+>foo5c : Symbol(foo5c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 61, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 63, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 64, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 65, 15))
+
+function foo6c(x: C<String, String>);
+>foo6c : Symbol(foo6c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 65, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 67, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 68, 34))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 67, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo6c(x: D<any, Number>); // error, "any" does not satisfy the constraint
+>foo6c : Symbol(foo6c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 65, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 67, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 68, 34))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 68, 15))
+>D : Symbol(D, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 14, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo6c(x: any) { }
+>foo6c : Symbol(foo6c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 65, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 67, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 68, 34))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 69, 15))
+
+function foo6(x: A);
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 69, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 71, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 72, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 71, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo6(x: I<Number, Number>); // ok
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 69, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 71, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 72, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 72, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 69, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 71, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 72, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 73, 14))
+
+function foo7(x: A);
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 75, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 75, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+
+function foo7(x: typeof a); // ok
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 75, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 76, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 75, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 76, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 77, 14))
+
+function foo8(x: B<Array<number>, Array<number>>);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 77, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 79, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 80, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 79, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo8(x: I<Number, Number>); // ok
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 77, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 79, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 80, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 80, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 77, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 79, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 80, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 81, 14))
+
+function foo9(x: B<Array<number>, Array<number>>);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 81, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 83, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 84, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 83, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo9(x: C<String, String>); // ok
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 81, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 83, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 84, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 84, 14))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 81, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 83, 50), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 84, 36))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 85, 14))
+
+function foo10(x: B<Array<number>, Array<number>>);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 85, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 87, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 88, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 87, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo10(x: typeof a); // ok
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 85, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 87, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 88, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 88, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 85, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 87, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 88, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 89, 15))
+
+function foo11(x: B<Array<number>, Array<number>>);
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 89, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 91, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 92, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 91, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 6, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo11(x: typeof b); // ok
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 89, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 91, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 92, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 92, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 3))
+
+function foo11(x: any) { }
+>foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 89, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 91, 51), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 92, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 93, 15))
+
+function foo12(x: I<Number, Number>);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 96, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 95, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo12(x: C<String, String>); // ok
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 96, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 96, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 96, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 97, 15))
+
+function foo12b(x: I2);
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 99, 23), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 100, 38))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 99, 16))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 22, 1))
+
+function foo12b(x: C<String, String>); // ok
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 99, 23), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 100, 38))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 100, 16))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo12b(x: any) { }
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 99, 23), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 100, 38))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 101, 16))
+
+function foo13(x: I<Number, Number>);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 101, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 103, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 104, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 103, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo13(x: typeof a); // ok
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 101, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 103, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 104, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 104, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 28, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 101, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 103, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 104, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 105, 15))
+
+function foo14(x: I<Number, Number>);
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 105, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 107, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 108, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 107, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 18, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo14(x: typeof b); // ok
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 105, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 107, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 108, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 108, 15))
+>b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 29, 3))
+
+function foo14(x: any) { }
+>foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 105, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 107, 37), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 108, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 109, 15))
+
+function foo15(x: I2);
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 109, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 111, 22), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 112, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 111, 15))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 22, 1))
+
+function foo15(x: C<String, String>); // ok
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 109, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 111, 22), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 112, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 112, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 10, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo15(x: any) { }
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 109, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 111, 22), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 112, 37))
+>x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 113, 15))
+

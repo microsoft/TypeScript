@@ -1,0 +1,36 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+export function makeP<P>(Ctor: React.ComponentClass<P>) {
+>makeP : Symbol(makeP, Decl(file.tsx, 0, 32))
+>P : Symbol(P, Decl(file.tsx, 2, 22))
+>Ctor : Symbol(Ctor, Decl(file.tsx, 2, 25))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react.d.ts, 205, 5))
+>P : Symbol(P, Decl(file.tsx, 2, 22))
+
+	return class extends React.PureComponent<P, void> {
+>React.PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 180, 5))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 180, 5))
+>P : Symbol(P, Decl(file.tsx, 2, 22))
+
+		public render(): JSX.Element {
+>render : Symbol((Anonymous class).render, Decl(file.tsx, 3, 52))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+			return (
+				<Ctor {...this.props } />
+>Ctor : Symbol(Ctor, Decl(file.tsx, 2, 25))
+>this.props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
+>this : Symbol((Anonymous class), Decl(file.tsx, 3, 7))
+>props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
+
+			);
+		}
+	};
+}
+
+

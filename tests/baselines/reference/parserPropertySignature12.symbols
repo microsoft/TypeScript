@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/PropertySignatures/parserPropertySignature12.ts ===
+interface I {
+>I : Symbol(I, Decl(parserPropertySignature12.ts, 0, 0))
+
+  3?:any;
+>3 : Symbol(I[3], Decl(parserPropertySignature12.ts, 0, 13))
+}

@@ -1,0 +1,23 @@
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,1): error TS2303: Circular definition of import alias 'Foo'.
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,12): error TS1005: '=' expected.
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,12): error TS2304: Cannot find name 'From'.
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,12): error TS2503: Cannot find namespace 'From'.
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,12): error TS4000: Import declaration 'Foo' is using private name 'From'.
+tests/cases/compiler/declarationEmitUnknownImport2.ts(1,17): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/declarationEmitUnknownImport2.ts (6 errors) ====
+    import Foo From './Foo'; // Syntax error
+    ~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'Foo'.
+               ~~~~
+!!! error TS1005: '=' expected.
+               ~~~~
+!!! error TS2304: Cannot find name 'From'.
+               ~~~~
+!!! error TS2503: Cannot find namespace 'From'.
+               ~~~~
+!!! error TS4000: Import declaration 'Foo' is using private name 'From'.
+                    ~~~~~~~
+!!! error TS1005: ';' expected.
+    export default Foo

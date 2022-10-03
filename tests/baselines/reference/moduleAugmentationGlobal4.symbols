@@ -1,0 +1,24 @@
+=== tests/cases/compiler/f1.ts ===
+declare global {
+>global : Symbol(global, Decl(f1.ts, 0, 0))
+
+    interface Something {x}
+>Something : Symbol(Something, Decl(f1.ts, 0, 16), Decl(f2.ts, 0, 16))
+>x : Symbol(Something.x, Decl(f1.ts, 1, 25))
+}
+export {};
+=== tests/cases/compiler/f2.ts ===
+declare global {
+>global : Symbol(global, Decl(f2.ts, 0, 0))
+
+    interface Something {y}
+>Something : Symbol(Something, Decl(f1.ts, 0, 16), Decl(f2.ts, 0, 16))
+>y : Symbol(Something.y, Decl(f2.ts, 1, 25))
+}
+export {};
+=== tests/cases/compiler/f3.ts ===
+import "./f1";
+No type information for this code.import "./f2";
+No type information for this code.
+No type information for this code.
+No type information for this code.

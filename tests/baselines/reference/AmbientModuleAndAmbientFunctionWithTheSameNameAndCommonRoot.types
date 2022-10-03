@@ -1,0 +1,33 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
+declare module Point {
+>Point : typeof Point
+
+    export var Origin: { x: number; y: number; }
+>Origin : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/function.d.ts ===
+declare function Point(): { x: number; y: number; }
+>Point : typeof Point
+>x : number
+>y : number
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+var cl: { x: number; y: number; }
+>cl : { x: number; y: number; }
+>x : number
+>y : number
+
+var cl = Point();
+>cl : { x: number; y: number; }
+>Point() : { x: number; y: number; }
+>Point : typeof Point
+
+var cl = Point.Origin;
+>cl : { x: number; y: number; }
+>Point.Origin : { x: number; y: number; }
+>Point : typeof Point
+>Origin : { x: number; y: number; }
+

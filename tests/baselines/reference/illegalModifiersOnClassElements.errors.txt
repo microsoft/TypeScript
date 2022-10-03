@@ -1,0 +1,13 @@
+tests/cases/compiler/illegalModifiersOnClassElements.ts(2,19): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+
+
+==== tests/cases/compiler/illegalModifiersOnClassElements.ts (2 errors) ====
+    class C {
+        declare foo = 1;
+                      ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+        export bar = 1;
+        ~~~~~~
+!!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
+    }

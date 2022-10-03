@@ -1,0 +1,11 @@
+=== tests/cases/compiler/unusedSingleParameterInContructor.ts ===
+class Dummy {
+>Dummy : Symbol(Dummy, Decl(unusedSingleParameterInContructor.ts, 0, 0))
+
+    constructor(person: string) {
+>person : Symbol(person, Decl(unusedSingleParameterInContructor.ts, 1, 16))
+
+        var unused = 20;
+>unused : Symbol(unused, Decl(unusedSingleParameterInContructor.ts, 2, 11))
+    }
+}

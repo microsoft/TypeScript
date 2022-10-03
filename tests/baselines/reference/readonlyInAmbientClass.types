@@ -1,0 +1,11 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts ===
+declare class C{
+>C : C
+
+	constructor(readonly x: number);
+>x : number
+
+	method(readonly x: number);
+>method : (x: number) => any
+>x : number
+}

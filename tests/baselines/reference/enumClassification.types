@@ -1,0 +1,196 @@
+=== tests/cases/conformance/enums/enumClassification.ts ===
+// An enum type where each member has no initializer or an initializer that specififes
+// a numeric literal, a string literal, or a single identifier naming another member in
+// the enum type is classified as a literal enum type. An enum type that doesn't adhere
+// to this pattern is classified as a numeric enum type.
+
+// Examples of literal enum types
+
+enum E01 {
+>E01 : E01
+
+    A
+>A : E01.A
+}
+
+enum E02 {
+>E02 : E02
+
+    A = 123
+>A : E02.A
+>123 : 123
+}
+
+enum E03 {
+>E03 : E03
+
+    A = "hello"
+>A : E03.A
+>"hello" : "hello"
+}
+
+enum E04 {
+>E04 : E04
+
+    A,
+>A : E04.A
+
+    B,
+>B : E04.B
+
+    C
+>C : E04.C
+}
+
+enum E05 {
+>E05 : E05
+
+    A,
+>A : E05.A
+
+    B = 10,
+>B : E05.B
+>10 : 10
+
+    C
+>C : E05.C
+}
+
+enum E06 {
+>E06 : E06
+
+    A = "one",
+>A : E06.A
+>"one" : "one"
+
+    B = "two",
+>B : E06.B
+>"two" : "two"
+
+    C = "three"
+>C : E06.C
+>"three" : "three"
+}
+
+enum E07 {
+>E07 : E07
+
+    A,
+>A : E07.A
+
+    B,
+>B : E07.B
+
+    C = "hi",
+>C : E07.C
+>"hi" : "hi"
+
+    D = 10,
+>D : E07.D
+>10 : 10
+
+    E,
+>E : E07.E
+
+    F = "bye"
+>F : E07.F
+>"bye" : "bye"
+}
+
+enum E08 {
+>E08 : E08
+
+    A = 10,
+>A : E08.A
+>10 : 10
+
+    B = "hello",
+>B : E08.B
+>"hello" : "hello"
+
+    C = A,
+>C : E08.A
+>A : E08.A
+
+    D = B,
+>D : E08.B
+>B : E08.B
+
+    E = C,
+>E : E08.A
+>C : E08.A
+}
+
+// Examples of numeric enum types with only constant members
+
+enum E10 {}
+>E10 : E10
+
+enum E11 {
+>E11 : E11
+
+    A = +0,
+>A : E11
+>+0 : 0
+>0 : 0
+
+    B,
+>B : E11
+
+    C
+>C : E11
+}
+
+enum E12 {
+>E12 : E12
+
+    A = 1 << 0,
+>A : E12
+>1 << 0 : number
+>1 : 1
+>0 : 0
+
+    B = 1 << 1,
+>B : E12
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+    C = 1 << 2
+>C : E12
+>1 << 2 : number
+>1 : 1
+>2 : 2
+}
+
+// Examples of numeric enum types with constant and computed members
+
+enum E20 {
+>E20 : E20
+
+    A = "foo".length,
+>A : E20
+>"foo".length : number
+>"foo" : "foo"
+>length : number
+
+    B = A + 1,
+>B : E20
+>A + 1 : number
+>A : E20
+>1 : 1
+
+    C = +"123",
+>C : E20
+>+"123" : number
+>"123" : "123"
+
+    D = Math.sin(1)
+>D : E20
+>Math.sin(1) : number
+>Math.sin : (x: number) => number
+>Math : Math
+>sin : (x: number) => number
+>1 : 1
+}
+

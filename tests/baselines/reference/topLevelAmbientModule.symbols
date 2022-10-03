@@ -1,0 +1,19 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+/// <reference path="foo_0.ts"/>
+import foo = require("foo");
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+
+var z = foo.x + 10;
+>z : Symbol(z, Decl(foo_1.ts, 2, 3))
+>foo.x : Symbol(foo.x, Decl(foo_0.ts, 1, 11))
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+>x : Symbol(foo.x, Decl(foo_0.ts, 1, 11))
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+declare module "foo" {
+>"foo" : Symbol("foo", Decl(foo_0.ts, 0, 0))
+
+	export var x: number;
+>x : Symbol(x, Decl(foo_0.ts, 1, 11))
+}
+

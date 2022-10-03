@@ -1,0 +1,37 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType6_ES6.ts ===
+interface I<T> {
+>I : Symbol(I, Decl(computedPropertyNamesContextualType6_ES6.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType6_ES6.ts, 0, 12))
+
+    [s: string]: T;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType6_ES6.ts, 1, 5))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType6_ES6.ts, 0, 12))
+}
+
+declare function foo<T>(obj: I<T>): T
+>foo : Symbol(foo, Decl(computedPropertyNamesContextualType6_ES6.ts, 2, 1))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType6_ES6.ts, 4, 21))
+>obj : Symbol(obj, Decl(computedPropertyNamesContextualType6_ES6.ts, 4, 24))
+>I : Symbol(I, Decl(computedPropertyNamesContextualType6_ES6.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType6_ES6.ts, 4, 21))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType6_ES6.ts, 4, 21))
+
+foo({
+>foo : Symbol(foo, Decl(computedPropertyNamesContextualType6_ES6.ts, 2, 1))
+
+    p: "",
+>p : Symbol(p, Decl(computedPropertyNamesContextualType6_ES6.ts, 6, 5))
+
+    0: () => { },
+>0 : Symbol(0, Decl(computedPropertyNamesContextualType6_ES6.ts, 7, 10))
+
+    ["hi" + "bye"]: true,
+>["hi" + "bye"] : Symbol(["hi" + "bye"], Decl(computedPropertyNamesContextualType6_ES6.ts, 8, 17))
+
+    [0 + 1]: 0,
+>[0 + 1] : Symbol([0 + 1], Decl(computedPropertyNamesContextualType6_ES6.ts, 9, 25))
+
+    [+"hi"]: [0]
+>[+"hi"] : Symbol([+"hi"], Decl(computedPropertyNamesContextualType6_ES6.ts, 10, 15))
+
+});

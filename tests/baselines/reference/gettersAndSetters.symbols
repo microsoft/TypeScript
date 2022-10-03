@@ -1,0 +1,150 @@
+=== tests/cases/compiler/gettersAndSetters.ts ===
+// classes
+class C {
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+
+    public fooBack = "";
+>fooBack : Symbol(C.fooBack, Decl(gettersAndSetters.ts, 1, 9))
+
+    static barBack:string = "";
+>barBack : Symbol(C.barBack, Decl(gettersAndSetters.ts, 2, 24))
+
+    public bazBack = "";
+>bazBack : Symbol(C.bazBack, Decl(gettersAndSetters.ts, 3, 31))
+    
+    public get Foo() { return this.fooBack;} // ok
+>Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+>this.fooBack : Symbol(C.fooBack, Decl(gettersAndSetters.ts, 1, 9))
+>this : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>fooBack : Symbol(C.fooBack, Decl(gettersAndSetters.ts, 1, 9))
+
+    public set Foo(foo:string) {this.fooBack = foo;} // ok
+>Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+>foo : Symbol(foo, Decl(gettersAndSetters.ts, 7, 19))
+>this.fooBack : Symbol(C.fooBack, Decl(gettersAndSetters.ts, 1, 9))
+>this : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>fooBack : Symbol(C.fooBack, Decl(gettersAndSetters.ts, 1, 9))
+>foo : Symbol(foo, Decl(gettersAndSetters.ts, 7, 19))
+
+    static get Bar() {return C.barBack;} // ok
+>Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+>C.barBack : Symbol(C.barBack, Decl(gettersAndSetters.ts, 2, 24))
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>barBack : Symbol(C.barBack, Decl(gettersAndSetters.ts, 2, 24))
+
+    static set Bar(bar:string) {C.barBack = bar;} // ok
+>Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+>bar : Symbol(bar, Decl(gettersAndSetters.ts, 10, 19))
+>C.barBack : Symbol(C.barBack, Decl(gettersAndSetters.ts, 2, 24))
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>barBack : Symbol(C.barBack, Decl(gettersAndSetters.ts, 2, 24))
+>bar : Symbol(bar, Decl(gettersAndSetters.ts, 10, 19))
+
+    public get = function() {} // ok
+>get : Symbol(C.get, Decl(gettersAndSetters.ts, 10, 49))
+
+    public set = function() {} // ok
+>set : Symbol(C.set, Decl(gettersAndSetters.ts, 12, 30))
+}
+
+var c = new C();
+>c : Symbol(c, Decl(gettersAndSetters.ts, 16, 3))
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+
+var foo = c.Foo;
+>foo : Symbol(foo, Decl(gettersAndSetters.ts, 18, 3))
+>c.Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+>c : Symbol(c, Decl(gettersAndSetters.ts, 16, 3))
+>Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+
+c.Foo = "foov";
+>c.Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+>c : Symbol(c, Decl(gettersAndSetters.ts, 16, 3))
+>Foo : Symbol(C.Foo, Decl(gettersAndSetters.ts, 4, 24), Decl(gettersAndSetters.ts, 6, 44))
+
+var bar = C.Bar;
+>bar : Symbol(bar, Decl(gettersAndSetters.ts, 21, 3))
+>C.Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+
+C.Bar = "barv";
+>C.Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+>C : Symbol(C, Decl(gettersAndSetters.ts, 0, 0))
+>Bar : Symbol(C.Bar, Decl(gettersAndSetters.ts, 7, 52), Decl(gettersAndSetters.ts, 9, 40))
+
+var baz = c.Baz;
+>baz : Symbol(baz, Decl(gettersAndSetters.ts, 24, 3))
+>c : Symbol(c, Decl(gettersAndSetters.ts, 16, 3))
+
+c.Baz = "bazv";
+>c : Symbol(c, Decl(gettersAndSetters.ts, 16, 3))
+
+// The Foo accessors' return and param types should be contextually typed to the Foo field
+var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
+>o : Symbol(o, Decl(gettersAndSetters.ts, 28, 3))
+>Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 9))
+>Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 25), Decl(gettersAndSetters.ts, 28, 47))
+>Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 25), Decl(gettersAndSetters.ts, 28, 47))
+>val : Symbol(val, Decl(gettersAndSetters.ts, 28, 56))
+>val : Symbol(val, Decl(gettersAndSetters.ts, 28, 56))
+
+var ofg = o.Foo;
+>ofg : Symbol(ofg, Decl(gettersAndSetters.ts, 30, 3))
+>o.Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 9))
+>o : Symbol(o, Decl(gettersAndSetters.ts, 28, 3))
+>Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 9))
+
+o.Foo = 0;
+>o.Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 9))
+>o : Symbol(o, Decl(gettersAndSetters.ts, 28, 3))
+>Foo : Symbol(Foo, Decl(gettersAndSetters.ts, 28, 9))
+
+
+interface I1 {
+>I1 : Symbol(I1, Decl(gettersAndSetters.ts, 31, 10))
+
+    (n:number):number;
+>n : Symbol(n, Decl(gettersAndSetters.ts, 35, 5))
+}
+
+var i:I1 = function (n) {return n;}
+>i : Symbol(i, Decl(gettersAndSetters.ts, 38, 3))
+>I1 : Symbol(I1, Decl(gettersAndSetters.ts, 31, 10))
+>n : Symbol(n, Decl(gettersAndSetters.ts, 38, 21))
+>n : Symbol(n, Decl(gettersAndSetters.ts, 38, 21))
+
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+>x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+if (typeof x === "string") {
+>x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
+
+  let obj = {
+>obj : Symbol(obj, Decl(gettersAndSetters.ts, 43, 5))
+
+    set prop(_: any) { x.toUpperCase(); },
+>prop : Symbol(prop, Decl(gettersAndSetters.ts, 43, 13), Decl(gettersAndSetters.ts, 44, 42))
+>_ : Symbol(_, Decl(gettersAndSetters.ts, 44, 13))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    get prop() { return x.toUpperCase() },
+>prop : Symbol(prop, Decl(gettersAndSetters.ts, 43, 13), Decl(gettersAndSetters.ts, 44, 42))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    method() { return x.toUpperCase() }
+>method : Symbol(method, Decl(gettersAndSetters.ts, 45, 42))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+  }
+}
+

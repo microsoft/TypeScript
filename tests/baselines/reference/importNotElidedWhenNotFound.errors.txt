@@ -1,0 +1,32 @@
+tests/cases/compiler/importNotElidedWhenNotFound.ts(1,15): error TS2307: Cannot find module 'file' or its corresponding type declarations.
+tests/cases/compiler/importNotElidedWhenNotFound.ts(2,15): error TS2307: Cannot find module 'other_file' or its corresponding type declarations.
+tests/cases/compiler/importNotElidedWhenNotFound.ts(10,16): error TS2307: Cannot find module 'file2' or its corresponding type declarations.
+tests/cases/compiler/importNotElidedWhenNotFound.ts(11,16): error TS2307: Cannot find module 'file3' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/importNotElidedWhenNotFound.ts (4 errors) ====
+    import X from 'file';
+                  ~~~~~~
+!!! error TS2307: Cannot find module 'file' or its corresponding type declarations.
+    import Z from 'other_file';
+                  ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'other_file' or its corresponding type declarations.
+    
+    class Y extends Z {
+      constructor() {
+        super(X);
+      }
+    }
+    
+    import X2 from 'file2';
+                   ~~~~~~~
+!!! error TS2307: Cannot find module 'file2' or its corresponding type declarations.
+    import X3 from 'file3';
+                   ~~~~~~~
+!!! error TS2307: Cannot find module 'file3' or its corresponding type declarations.
+    class Q extends Z {
+      constructor() {
+        super(X2, X3);
+      }
+    }
+    

@@ -1,0 +1,23 @@
+tests/cases/compiler/genericCloneReturnTypes2.ts(15,5): error TS2322: Type 'MyList<string>' is not assignable to type 'MyList<number>'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/genericCloneReturnTypes2.ts (1 errors) ====
+    class MyList<T> {
+        public size: number;
+        public data: T[];
+        constructor(n: number) {
+            this.size = n;
+            this.data = new Array<T>(this.size);
+        }
+        public clone() {
+            return new MyList<T>(this.size);
+        }
+    }
+    var a: MyList<string>;
+    var b: MyList<any> = a.clone(); // ok
+    var c: MyList<string> = a.clone(); // bug was there was an error on this line
+    var d: MyList<number> = a.clone(); // error
+        ~
+!!! error TS2322: Type 'MyList<string>' is not assignable to type 'MyList<number>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.

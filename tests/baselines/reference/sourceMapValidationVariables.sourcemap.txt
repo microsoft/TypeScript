@@ -1,0 +1,108 @@
+===================================================================
+JsFile: sourceMapValidationVariables.js
+mapUrl: sourceMapValidationVariables.js.map
+sourceRoot: 
+sources: sourceMapValidationVariables.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationVariables.js
+sourceFile:sourceMapValidationVariables.ts
+-------------------------------------------------------------------
+>>>var a = 10;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+1 >
+2 >var 
+3 >    a
+4 >      = 
+5 >        10
+6 >          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+---
+>>>var b;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    b
+4 >     ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+4 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+---
+>>>var c = 10, d, e;
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^^
+7 >            ^
+8 >             ^^
+9 >               ^
+10>                ^
+1->
+  >
+2 >var 
+3 >    c
+4 >      = 
+5 >        10
+6 >          , 
+7 >            d
+8 >             , 
+9 >               e
+10>                ;
+1->Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+3 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
+4 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+5 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
+6 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+7 >Emitted(3, 14) Source(3, 14) + SourceIndex(0)
+8 >Emitted(3, 16) Source(3, 16) + SourceIndex(0)
+9 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+10>Emitted(3, 18) Source(3, 18) + SourceIndex(0)
+---
+>>>var c2, d2 = 10;
+1 >
+2 >^^^^
+3 >    ^^
+4 >      ^^
+5 >        ^^
+6 >          ^^^
+7 >             ^^
+8 >               ^
+9 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    c2
+4 >      , 
+5 >        d2
+6 >           = 
+7 >             10
+8 >               ;
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+3 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+4 >Emitted(4, 9) Source(4, 9) + SourceIndex(0)
+5 >Emitted(4, 11) Source(4, 11) + SourceIndex(0)
+6 >Emitted(4, 14) Source(4, 14) + SourceIndex(0)
+7 >Emitted(4, 16) Source(4, 16) + SourceIndex(0)
+8 >Emitted(4, 17) Source(4, 17) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationVariables.js.map

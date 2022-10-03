@@ -1,0 +1,115 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
+function generic<T>(t: T) {
+>generic : <T>(t: T) => void
+>t : T
+
+    var o: object = t; // expect error
+>o : object
+>t : T
+}
+var a = {};
+>a : {}
+>{} : {}
+
+var b = "42";
+>b : string
+>"42" : "42"
+
+generic<object>({});
+>generic<object>({}) : void
+>generic : <T>(t: T) => void
+>{} : {}
+
+generic<object>(a);
+>generic<object>(a) : void
+>generic : <T>(t: T) => void
+>a : {}
+
+generic<object>(123); // expect error
+>generic<object>(123) : void
+>generic : <T>(t: T) => void
+>123 : 123
+
+generic<object>(b); // expect error
+>generic<object>(b) : void
+>generic : <T>(t: T) => void
+>b : string
+
+function bound<T extends object>(t: T) {
+>bound : <T extends object>(t: T) => void
+>t : T
+
+    var o: object = t; // ok
+>o : object
+>t : T
+}
+
+bound({});
+>bound({}) : void
+>bound : <T extends object>(t: T) => void
+>{} : {}
+
+bound(a);
+>bound(a) : void
+>bound : <T extends object>(t: T) => void
+>a : {}
+
+bound(123); // expect error
+>bound(123) : void
+>bound : <T extends object>(t: T) => void
+>123 : 123
+
+bound(b); // expect error
+>bound(b) : void
+>bound : <T extends object>(t: T) => void
+>b : string
+
+function bound2<T extends object>() {}
+>bound2 : <T extends object>() => void
+
+bound2<{}>();
+>bound2<{}>() : void
+>bound2 : <T extends object>() => void
+
+bound2<Object>();
+>bound2<Object>() : void
+>bound2 : <T extends object>() => void
+
+bound2<number>(); // expect error
+>bound2<number>() : void
+>bound2 : <T extends object>() => void
+
+bound2<string>(); // expect error
+>bound2<string>() : void
+>bound2 : <T extends object>() => void
+
+function bound3<T extends {}>(t: T) {
+>bound3 : <T extends {}>(t: T) => void
+>t : T
+
+    var o: object = t; // ok
+>o : object
+>t : T
+}
+
+interface Proxy<T extends object> {}
+
+var x: Proxy<number>; // error
+>x : Proxy<number>
+
+var y: Proxy<null>; // ok
+>y : Proxy<null>
+>null : null
+
+var z: Proxy<undefined> ; // ok
+>z : Proxy<undefined>
+
+
+interface Blah {
+    foo: number;
+>foo : number
+}
+
+var u: Proxy<Blah>; // ok
+>u : Proxy<Blah>
+

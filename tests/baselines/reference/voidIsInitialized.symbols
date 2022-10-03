@@ -1,0 +1,23 @@
+=== tests/cases/compiler/voidIsInitialized.ts ===
+const x: void = undefined;
+>x : Symbol(x, Decl(voidIsInitialized.ts, 0, 5))
+>undefined : Symbol(undefined)
+
+const y: void = undefined;
+>y : Symbol(y, Decl(voidIsInitialized.ts, 1, 5))
+>undefined : Symbol(undefined)
+
+if(typeof x === "undefined") {
+>x : Symbol(x, Decl(voidIsInitialized.ts, 0, 5))
+
+    x // no error: assume x2 is initialised
+>x : Symbol(x, Decl(voidIsInitialized.ts, 0, 5))
+}
+
+if(typeof y !== "undefined") {
+>y : Symbol(y, Decl(voidIsInitialized.ts, 1, 5))
+
+    y // no error: do not narrow void
+>y : Symbol(y, Decl(voidIsInitialized.ts, 1, 5))
+}
+

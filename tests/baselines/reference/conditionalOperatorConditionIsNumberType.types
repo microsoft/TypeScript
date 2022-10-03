@@ -1,0 +1,316 @@
+=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsNumberType.ts ===
+//Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
+var condNumber: number;
+>condNumber : number
+
+var exprAny1: any;
+>exprAny1 : any
+
+var exprBoolean1: boolean;
+>exprBoolean1 : boolean
+
+var exprNumber1: number;
+>exprNumber1 : number
+
+var exprString1: string;
+>exprString1 : string
+
+var exprIsObject1: Object;
+>exprIsObject1 : Object
+
+var exprAny2: any;
+>exprAny2 : any
+
+var exprBoolean2: boolean;
+>exprBoolean2 : boolean
+
+var exprNumber2: number;
+>exprNumber2 : number
+
+var exprString2: string;
+>exprString2 : string
+
+var exprIsObject2: Object;
+>exprIsObject2 : Object
+
+//Cond is a number type variable
+condNumber ? exprAny1 : exprAny2;
+>condNumber ? exprAny1 : exprAny2 : any
+>condNumber : number
+>exprAny1 : any
+>exprAny2 : any
+
+condNumber ? exprBoolean1 : exprBoolean2;
+>condNumber ? exprBoolean1 : exprBoolean2 : boolean
+>condNumber : number
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+condNumber ? exprNumber1 : exprNumber2;
+>condNumber ? exprNumber1 : exprNumber2 : number
+>condNumber : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+condNumber ? exprString1 : exprString2;
+>condNumber ? exprString1 : exprString2 : string
+>condNumber : number
+>exprString1 : string
+>exprString2 : string
+
+condNumber ? exprIsObject1 : exprIsObject2;
+>condNumber ? exprIsObject1 : exprIsObject2 : Object
+>condNumber : number
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+condNumber ? exprString1 : exprBoolean1; // Union
+>condNumber ? exprString1 : exprBoolean1 : string | boolean
+>condNumber : number
+>exprString1 : string
+>exprBoolean1 : boolean
+
+//Cond is a number type literal
+1 ? exprAny1 : exprAny2;
+>1 ? exprAny1 : exprAny2 : any
+>1 : 1
+>exprAny1 : any
+>exprAny2 : any
+
+0 ? exprBoolean1 : exprBoolean2;
+>0 ? exprBoolean1 : exprBoolean2 : boolean
+>0 : 0
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+0.123456789 ? exprNumber1 : exprNumber2;
+>0.123456789 ? exprNumber1 : exprNumber2 : number
+>0.123456789 : 0.123456789
+>exprNumber1 : number
+>exprNumber2 : number
+
+- 10000000000000 ? exprString1 : exprString2;
+>- 10000000000000 ? exprString1 : exprString2 : string
+>- 10000000000000 : -10000000000000
+>10000000000000 : 10000000000000
+>exprString1 : string
+>exprString2 : string
+
+1000000000000 ? exprIsObject1 : exprIsObject2;
+>1000000000000 ? exprIsObject1 : exprIsObject2 : Object
+>1000000000000 : 1000000000000
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+10000 ? exprString1 : exprBoolean1; // Union
+>10000 ? exprString1 : exprBoolean1 : string | boolean
+>10000 : 10000
+>exprString1 : string
+>exprBoolean1 : boolean
+
+//Cond is a number type expression
+function foo() { return 1 };
+>foo : () => number
+>1 : 1
+
+var array = [1, 2, 3];
+>array : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+1 * 0 ? exprAny1 : exprAny2;
+>1 * 0 ? exprAny1 : exprAny2 : any
+>1 * 0 : number
+>1 : 1
+>0 : 0
+>exprAny1 : any
+>exprAny2 : any
+
+1 + 1 ? exprBoolean1 : exprBoolean2;
+>1 + 1 ? exprBoolean1 : exprBoolean2 : boolean
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+"string".length ? exprNumber1 : exprNumber2;
+>"string".length ? exprNumber1 : exprNumber2 : number
+>"string".length : number
+>"string" : "string"
+>length : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+foo() ? exprString1 : exprString2;
+>foo() ? exprString1 : exprString2 : string
+>foo() : number
+>foo : () => number
+>exprString1 : string
+>exprString2 : string
+
+foo() / array[1] ? exprIsObject1 : exprIsObject2;
+>foo() / array[1] ? exprIsObject1 : exprIsObject2 : Object
+>foo() / array[1] : number
+>foo() : number
+>foo : () => number
+>array[1] : number
+>array : number[]
+>1 : 1
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+foo() ? exprString1 : exprBoolean1; // Union
+>foo() ? exprString1 : exprBoolean1 : string | boolean
+>foo() : number
+>foo : () => number
+>exprString1 : string
+>exprBoolean1 : boolean
+
+//Results shoud be same as Expr1 and Expr2
+var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
+>resultIsAny1 : any
+>condNumber ? exprAny1 : exprAny2 : any
+>condNumber : number
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean1 = condNumber ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean1 : boolean
+>condNumber ? exprBoolean1 : exprBoolean2 : boolean
+>condNumber : number
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber1 = condNumber ? exprNumber1 : exprNumber2;
+>resultIsNumber1 : number
+>condNumber ? exprNumber1 : exprNumber2 : number
+>condNumber : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString1 = condNumber ? exprString1 : exprString2;
+>resultIsString1 : string
+>condNumber ? exprString1 : exprString2 : string
+>condNumber : number
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject1 = condNumber ? exprIsObject1 : exprIsObject2;
+>resultIsObject1 : Object
+>condNumber ? exprIsObject1 : exprIsObject2 : Object
+>condNumber : number
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+var resultIsStringOrBoolean1 = condNumber ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean1 : string | boolean
+>condNumber ? exprString1 : exprBoolean1 : string | boolean
+>condNumber : number
+>exprString1 : string
+>exprBoolean1 : boolean
+
+var resultIsAny2 = 1 ? exprAny1 : exprAny2;
+>resultIsAny2 : any
+>1 ? exprAny1 : exprAny2 : any
+>1 : 1
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean2 = 0 ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean2 : boolean
+>0 ? exprBoolean1 : exprBoolean2 : boolean
+>0 : 0
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber2 = 0.123456789 ? exprNumber1 : exprNumber2;
+>resultIsNumber2 : number
+>0.123456789 ? exprNumber1 : exprNumber2 : number
+>0.123456789 : 0.123456789
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString2 = - 10000000000000 ? exprString1 : exprString2;
+>resultIsString2 : string
+>- 10000000000000 ? exprString1 : exprString2 : string
+>- 10000000000000 : -10000000000000
+>10000000000000 : 10000000000000
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
+>resultIsObject2 : Object
+>1000000000000 ? exprIsObject1 : exprIsObject2 : Object
+>1000000000000 : 1000000000000
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean2 : string | boolean
+>10000 ? exprString1 : exprBoolean1 : string | boolean
+>10000 : 10000
+>exprString1 : string
+>exprBoolean1 : boolean
+
+var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
+>resultIsAny3 : any
+>1 * 0 ? exprAny1 : exprAny2 : any
+>1 * 0 : number
+>1 : 1
+>0 : 0
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean3 : boolean
+>1 + 1 ? exprBoolean1 : exprBoolean2 : boolean
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
+>resultIsNumber3 : number
+>"string".length ? exprNumber1 : exprNumber2 : number
+>"string".length : number
+>"string" : "string"
+>length : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString3 = foo() ? exprString1 : exprString2;
+>resultIsString3 : string
+>foo() ? exprString1 : exprString2 : string
+>foo() : number
+>foo : () => number
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
+>resultIsObject3 : Object
+>foo() / array[1] ? exprIsObject1 : exprIsObject2 : Object
+>foo() / array[1] : number
+>foo() : number
+>foo : () => number
+>array[1] : number
+>array : number[]
+>1 : 1
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean3 : string | boolean
+>foo() / array[1] ? exprString1 : exprBoolean1 : string | boolean
+>foo() / array[1] : number
+>foo() : number
+>foo : () => number
+>array[1] : number
+>array : number[]
+>1 : 1
+>exprString1 : string
+>exprBoolean1 : boolean
+

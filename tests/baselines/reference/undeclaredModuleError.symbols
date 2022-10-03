@@ -1,0 +1,58 @@
+=== tests/cases/compiler/undeclaredModuleError.ts ===
+import fs = require('fs');
+>fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+
+function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
+>readdir : Symbol(readdir, Decl(undeclaredModuleError.ts, 0, 26))
+>path : Symbol(path, Decl(undeclaredModuleError.ts, 1, 17))
+>accept : Symbol(accept, Decl(undeclaredModuleError.ts, 1, 30))
+>stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 40))
+>fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+>Stats : Symbol(fs.Stats)
+>name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 55))
+>callback : Symbol(callback, Decl(undeclaredModuleError.ts, 1, 81))
+>error : Symbol(error, Decl(undeclaredModuleError.ts, 1, 93))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(undeclaredModuleError.ts, 1, 106))
+>name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 117))
+>stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 131))
+>fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+>Stats : Symbol(fs.Stats)
+
+function join(...paths: string[]) {}
+>join : Symbol(join, Decl(undeclaredModuleError.ts, 1, 165))
+>paths : Symbol(paths, Decl(undeclaredModuleError.ts, 3, 14))
+
+function instrumentFile(covFileDir: string, covFileName: string, originalFilePath: string) {
+>instrumentFile : Symbol(instrumentFile, Decl(undeclaredModuleError.ts, 3, 36))
+>covFileDir : Symbol(covFileDir, Decl(undeclaredModuleError.ts, 5, 24))
+>covFileName : Symbol(covFileName, Decl(undeclaredModuleError.ts, 5, 43))
+>originalFilePath : Symbol(originalFilePath, Decl(undeclaredModuleError.ts, 5, 64))
+
+    fs.readFile(originalFilePath, () => {       
+>fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+>originalFilePath : Symbol(originalFilePath, Decl(undeclaredModuleError.ts, 5, 64))
+
+        readdir(covFileDir, () => {
+>readdir : Symbol(readdir, Decl(undeclaredModuleError.ts, 0, 26))
+>covFileDir : Symbol(covFileDir, Decl(undeclaredModuleError.ts, 5, 24))
+
+        } , (error: Error, files: {}[]) => {
+>error : Symbol(error, Decl(undeclaredModuleError.ts, 8, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
+
+                files.forEach((file) => {
+>files.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>file : Symbol(file, Decl(undeclaredModuleError.ts, 9, 31))
+
+                    var fullPath = join(IDoNotExist);
+>fullPath : Symbol(fullPath, Decl(undeclaredModuleError.ts, 10, 23))
+>join : Symbol(join, Decl(undeclaredModuleError.ts, 1, 165))
+
+                } );
+            } );
+    } );
+}

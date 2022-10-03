@@ -1,0 +1,42 @@
+=== tests/cases/compiler/typeParameterOrderReversal.ts ===
+interface X<T> {
+>X : Symbol(X, Decl(typeParameterOrderReversal.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
+
+    n: T;
+>n : Symbol(X.n, Decl(typeParameterOrderReversal.ts, 0, 16))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
+}
+
+// Only difference here is order of type parameters
+function uFirst<U extends X<T>, T>(x: U) { }
+>uFirst : Symbol(uFirst, Decl(typeParameterOrderReversal.ts, 2, 1))
+>U : Symbol(U, Decl(typeParameterOrderReversal.ts, 5, 16))
+>X : Symbol(X, Decl(typeParameterOrderReversal.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 5, 31))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 5, 31))
+>x : Symbol(x, Decl(typeParameterOrderReversal.ts, 5, 35))
+>U : Symbol(U, Decl(typeParameterOrderReversal.ts, 5, 16))
+
+function tFirst<T, U extends X<T>>(x: U) { }
+>tFirst : Symbol(tFirst, Decl(typeParameterOrderReversal.ts, 5, 44))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 6, 16))
+>U : Symbol(U, Decl(typeParameterOrderReversal.ts, 6, 18))
+>X : Symbol(X, Decl(typeParameterOrderReversal.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterOrderReversal.ts, 6, 16))
+>x : Symbol(x, Decl(typeParameterOrderReversal.ts, 6, 35))
+>U : Symbol(U, Decl(typeParameterOrderReversal.ts, 6, 18))
+
+var z: X<number> = null;
+>z : Symbol(z, Decl(typeParameterOrderReversal.ts, 7, 3))
+>X : Symbol(X, Decl(typeParameterOrderReversal.ts, 0, 0))
+
+// Both of these should be allowed
+uFirst(z);
+>uFirst : Symbol(uFirst, Decl(typeParameterOrderReversal.ts, 2, 1))
+>z : Symbol(z, Decl(typeParameterOrderReversal.ts, 7, 3))
+
+tFirst(z);
+>tFirst : Symbol(tFirst, Decl(typeParameterOrderReversal.ts, 5, 44))
+>z : Symbol(z, Decl(typeParameterOrderReversal.ts, 7, 3))
+

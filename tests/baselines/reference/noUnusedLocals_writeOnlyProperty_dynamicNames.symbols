@@ -1,0 +1,33 @@
+=== tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts ===
+const x = Symbol("x");
+>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const y = Symbol("y");
+>y : Symbol(y, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+class C {
+>C : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 22))
+
+    private [x]: number;
+>[x] : Symbol(C[x], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 2, 9))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 0, 5))
+
+    private [y]: number;
+>[y] : Symbol(C[y], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 3, 24))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 5))
+
+    m() {
+>m : Symbol(C.m, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 4, 24))
+
+        this[x] = 0; // write-only
+>this : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 22))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 0, 5))
+
+        this[y];
+>this : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 22))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 5))
+    }
+}
+

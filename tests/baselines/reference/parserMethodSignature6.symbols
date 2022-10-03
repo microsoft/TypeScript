@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature6.ts ===
+interface I {
+>I : Symbol(I, Decl(parserMethodSignature6.ts, 0, 0))
+
+  "F"?();
+>"F" : Symbol(I["F"], Decl(parserMethodSignature6.ts, 0, 13))
+}

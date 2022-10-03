@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/Symbols/symbolType11.ts ===
+var s = Symbol.for("logical");
+>s : symbol
+>Symbol.for("logical") : symbol
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+>"logical" : "logical"
+
+s && s;
+>s && s : symbol
+>s : symbol
+>s : symbol
+
+s && [];
+>s && [] : undefined[]
+>s : symbol
+>[] : undefined[]
+
+0 && s;
+>0 && s : 0
+>0 : 0
+>s : symbol
+
+s || s;
+>s || s : symbol
+>s : symbol
+>s : symbol
+
+s || 1;
+>s || 1 : symbol | 1
+>s : symbol
+>1 : 1
+
+({}) || s;
+>({}) || s : symbol | {}
+>({}) : {}
+>{} : {}
+>s : symbol
+

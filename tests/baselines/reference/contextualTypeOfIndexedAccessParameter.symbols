@@ -1,0 +1,47 @@
+=== tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts ===
+type Keys = "a" | "b";
+>Keys : Symbol(Keys, Decl(contextualTypeOfIndexedAccessParameter.ts, 0, 0))
+
+type OptionsForKey = { a: { cb: (p: number) => number } } & { b: {} };
+>OptionsForKey : Symbol(OptionsForKey, Decl(contextualTypeOfIndexedAccessParameter.ts, 0, 22))
+>a : Symbol(a, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 22))
+>cb : Symbol(cb, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 27))
+>p : Symbol(p, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 33))
+>b : Symbol(b, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 61))
+
+declare function f<K extends Keys>(key: K, options: OptionsForKey[K]): void;
+>f : Symbol(f, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 70))
+>K : Symbol(K, Decl(contextualTypeOfIndexedAccessParameter.ts, 4, 19))
+>Keys : Symbol(Keys, Decl(contextualTypeOfIndexedAccessParameter.ts, 0, 0))
+>key : Symbol(key, Decl(contextualTypeOfIndexedAccessParameter.ts, 4, 35))
+>K : Symbol(K, Decl(contextualTypeOfIndexedAccessParameter.ts, 4, 19))
+>options : Symbol(options, Decl(contextualTypeOfIndexedAccessParameter.ts, 4, 42))
+>OptionsForKey : Symbol(OptionsForKey, Decl(contextualTypeOfIndexedAccessParameter.ts, 0, 22))
+>K : Symbol(K, Decl(contextualTypeOfIndexedAccessParameter.ts, 4, 19))
+
+f("a", {
+>f : Symbol(f, Decl(contextualTypeOfIndexedAccessParameter.ts, 2, 70))
+
+    cb: p => p,
+>cb : Symbol(cb, Decl(contextualTypeOfIndexedAccessParameter.ts, 6, 8))
+>p : Symbol(p, Decl(contextualTypeOfIndexedAccessParameter.ts, 7, 7))
+>p : Symbol(p, Decl(contextualTypeOfIndexedAccessParameter.ts, 7, 7))
+
+});
+
+function g<
+>g : Symbol(g, Decl(contextualTypeOfIndexedAccessParameter.ts, 8, 3))
+
+    K extends "a" | "b">(x: ({ a: string } & { b: string })[K], y: string) {
+>K : Symbol(K, Decl(contextualTypeOfIndexedAccessParameter.ts, 10, 11))
+>x : Symbol(x, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 25))
+>a : Symbol(a, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 30))
+>b : Symbol(b, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 46))
+>K : Symbol(K, Decl(contextualTypeOfIndexedAccessParameter.ts, 10, 11))
+>y : Symbol(y, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 63))
+
+    x = y;
+>x : Symbol(x, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 25))
+>y : Symbol(y, Decl(contextualTypeOfIndexedAccessParameter.ts, 11, 63))
+}
+

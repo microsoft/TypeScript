@@ -1,0 +1,23 @@
+=== tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx ===
+declare const React: any
+>React : Symbol(React, Decl(errorSpanForUnclosedJsxTag.tsx, 0, 13))
+
+let Foo = {
+>Foo : Symbol(Foo, Decl(errorSpanForUnclosedJsxTag.tsx, 2, 3))
+
+  Bar() {}
+>Bar : Symbol(Bar, Decl(errorSpanForUnclosedJsxTag.tsx, 2, 11))
+}
+
+let Baz = () => {}
+>Baz : Symbol(Baz, Decl(errorSpanForUnclosedJsxTag.tsx, 6, 3))
+
+let x = <    Foo.Bar >Hello
+>x : Symbol(x, Decl(errorSpanForUnclosedJsxTag.tsx, 8, 3))
+>Foo.Bar : Symbol(Bar, Decl(errorSpanForUnclosedJsxTag.tsx, 2, 11))
+>Foo : Symbol(Foo, Decl(errorSpanForUnclosedJsxTag.tsx, 2, 3))
+>Bar : Symbol(Bar, Decl(errorSpanForUnclosedJsxTag.tsx, 2, 11))
+
+let y = <   Baz >Hello
+>Baz : Symbol(Baz, Decl(errorSpanForUnclosedJsxTag.tsx, 6, 3))
+

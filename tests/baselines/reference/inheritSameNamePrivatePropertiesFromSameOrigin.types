@@ -1,0 +1,19 @@
+=== tests/cases/compiler/inheritSameNamePrivatePropertiesFromSameOrigin.ts ===
+class B {
+>B : B
+
+    private x: number;
+>x : number
+}
+class C extends B { }
+>C : C
+>B : B
+
+class C2 extends B { }
+>C2 : C2
+>B : B
+
+interface A extends C, C2 { // ok
+    y: string;
+>y : string
+}

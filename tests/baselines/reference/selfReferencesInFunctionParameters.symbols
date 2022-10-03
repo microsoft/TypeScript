@@ -1,0 +1,32 @@
+=== tests/cases/compiler/selfReferencesInFunctionParameters.ts ===
+function foo(x: number = x) {
+>foo : Symbol(foo, Decl(selfReferencesInFunctionParameters.ts, 0, 0))
+>x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 0, 13))
+>x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 0, 13))
+}
+
+function bar(x0 = "", x: number = x) {
+>bar : Symbol(bar, Decl(selfReferencesInFunctionParameters.ts, 1, 1))
+>x0 : Symbol(x0, Decl(selfReferencesInFunctionParameters.ts, 3, 13))
+>x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 3, 21))
+>x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 3, 21))
+}
+
+class C {
+>C : Symbol(C, Decl(selfReferencesInFunctionParameters.ts, 4, 1))
+
+    constructor(x = 1, y = y) {
+>x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 7, 16))
+>y : Symbol(y, Decl(selfReferencesInFunctionParameters.ts, 7, 22))
+>y : Symbol(y, Decl(selfReferencesInFunctionParameters.ts, 7, 22))
+    }
+     
+    bar(a = "", b: string = b.toString()) {
+>bar : Symbol(C.bar, Decl(selfReferencesInFunctionParameters.ts, 8, 5))
+>a : Symbol(a, Decl(selfReferencesInFunctionParameters.ts, 10, 8))
+>b : Symbol(b, Decl(selfReferencesInFunctionParameters.ts, 10, 15))
+>b.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(selfReferencesInFunctionParameters.ts, 10, 15))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}

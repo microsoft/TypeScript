@@ -1,0 +1,14 @@
+tests/cases/compiler/extendGenericArray2.ts(8,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/extendGenericArray2.ts (1 errors) ====
+    interface IFoo<T> {
+        x: T;
+    }
+    
+    interface Array<T> extends IFoo<T> { }
+    
+    var arr: string[] = [];
+    var y: number = arr.x;
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

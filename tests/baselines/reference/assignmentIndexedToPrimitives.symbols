@@ -1,0 +1,41 @@
+=== tests/cases/compiler/assignmentIndexedToPrimitives.ts ===
+const n1: number = [0];
+>n1 : Symbol(n1, Decl(assignmentIndexedToPrimitives.ts, 0, 5))
+
+const n2: number = ["0"];
+>n2 : Symbol(n2, Decl(assignmentIndexedToPrimitives.ts, 1, 5))
+
+const n3: number = [0, "1"];
+>n3 : Symbol(n3, Decl(assignmentIndexedToPrimitives.ts, 2, 5))
+
+const n4: 0 = [0];
+>n4 : Symbol(n4, Decl(assignmentIndexedToPrimitives.ts, 3, 5))
+
+const s1: string = [0];
+>s1 : Symbol(s1, Decl(assignmentIndexedToPrimitives.ts, 5, 5))
+
+const s2: string = ["0"];
+>s2 : Symbol(s2, Decl(assignmentIndexedToPrimitives.ts, 6, 5))
+
+const s3: string = [0, "1"];
+>s3 : Symbol(s3, Decl(assignmentIndexedToPrimitives.ts, 7, 5))
+
+const s4: "01" = ["0", "1"];
+>s4 : Symbol(s4, Decl(assignmentIndexedToPrimitives.ts, 8, 5))
+
+const no1: number = { 0: 1 };
+>no1 : Symbol(no1, Decl(assignmentIndexedToPrimitives.ts, 10, 5))
+>0 : Symbol(0, Decl(assignmentIndexedToPrimitives.ts, 10, 21))
+
+const so1: string = { 0: 1 };
+>so1 : Symbol(so1, Decl(assignmentIndexedToPrimitives.ts, 12, 5))
+>0 : Symbol(0, Decl(assignmentIndexedToPrimitives.ts, 12, 21))
+
+const so2: string = { "0": 1 };
+>so2 : Symbol(so2, Decl(assignmentIndexedToPrimitives.ts, 13, 5))
+>"0" : Symbol("0", Decl(assignmentIndexedToPrimitives.ts, 13, 21))
+
+const so3: string = { 0: "1" };
+>so3 : Symbol(so3, Decl(assignmentIndexedToPrimitives.ts, 14, 5))
+>0 : Symbol(0, Decl(assignmentIndexedToPrimitives.ts, 14, 21))
+

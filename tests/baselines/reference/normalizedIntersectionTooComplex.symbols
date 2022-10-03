@@ -1,0 +1,250 @@
+=== tests/cases/compiler/normalizedIntersectionTooComplex.ts ===
+// Repro from #30050
+
+interface Obj<T> {
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 2, 14))
+
+	ref: T;
+>ref : Symbol(Obj.ref, Decl(normalizedIntersectionTooComplex.ts, 2, 18))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 2, 14))
+}
+interface Func<T> {
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 5, 15))
+
+	(x: T): void;
+>x : Symbol(x, Decl(normalizedIntersectionTooComplex.ts, 6, 2))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 5, 15))
+}
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(normalizedIntersectionTooComplex.ts, 7, 1))
+>U : Symbol(U, Decl(normalizedIntersectionTooComplex.ts, 8, 25))
+>U : Symbol(U, Decl(normalizedIntersectionTooComplex.ts, 8, 25))
+>k : Symbol(k, Decl(normalizedIntersectionTooComplex.ts, 8, 48))
+>U : Symbol(U, Decl(normalizedIntersectionTooComplex.ts, 8, 25))
+>k : Symbol(k, Decl(normalizedIntersectionTooComplex.ts, 8, 81))
+>I : Symbol(I, Decl(normalizedIntersectionTooComplex.ts, 8, 89))
+>I : Symbol(I, Decl(normalizedIntersectionTooComplex.ts, 8, 89))
+
+type CtorOf<T> = (arg: UnionToIntersection<T>) => T;
+>CtorOf : Symbol(CtorOf, Decl(normalizedIntersectionTooComplex.ts, 8, 114))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 9, 12))
+>arg : Symbol(arg, Decl(normalizedIntersectionTooComplex.ts, 9, 18))
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(normalizedIntersectionTooComplex.ts, 7, 1))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 9, 12))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 9, 12))
+
+interface Big {
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "0": { common?: string; "0"?: number, ref?: Obj<Big["0"]> | Func<Big["0"]>; }
+>"0" : Symbol(Big["0"], Decl(normalizedIntersectionTooComplex.ts, 11, 15))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 12, 10))
+>"0" : Symbol("0", Decl(normalizedIntersectionTooComplex.ts, 12, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 12, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "1": { common?: string; "1"?: number, ref?: Obj<Big["1"]> | Func<Big["1"]>; }
+>"1" : Symbol(Big["1"], Decl(normalizedIntersectionTooComplex.ts, 12, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 13, 10))
+>"1" : Symbol("1", Decl(normalizedIntersectionTooComplex.ts, 13, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 13, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "2": { common?: string; "2"?: number, ref?: Obj<Big["2"]> | Func<Big["2"]>; }
+>"2" : Symbol(Big["2"], Decl(normalizedIntersectionTooComplex.ts, 13, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 14, 10))
+>"2" : Symbol("2", Decl(normalizedIntersectionTooComplex.ts, 14, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 14, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "3": { common?: string; "3"?: number, ref?: Obj<Big["3"]> | Func<Big["3"]>; }
+>"3" : Symbol(Big["3"], Decl(normalizedIntersectionTooComplex.ts, 14, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 15, 10))
+>"3" : Symbol("3", Decl(normalizedIntersectionTooComplex.ts, 15, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 15, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "4": { common?: string; "4"?: number, ref?: Obj<Big["4"]> | Func<Big["4"]>; }
+>"4" : Symbol(Big["4"], Decl(normalizedIntersectionTooComplex.ts, 15, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 16, 10))
+>"4" : Symbol("4", Decl(normalizedIntersectionTooComplex.ts, 16, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 16, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "5": { common?: string; "5"?: number, ref?: Obj<Big["5"]> | Func<Big["5"]>; }
+>"5" : Symbol(Big["5"], Decl(normalizedIntersectionTooComplex.ts, 16, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 17, 10))
+>"5" : Symbol("5", Decl(normalizedIntersectionTooComplex.ts, 17, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 17, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "6": { common?: string; "6"?: number, ref?: Obj<Big["6"]> | Func<Big["6"]>; }
+>"6" : Symbol(Big["6"], Decl(normalizedIntersectionTooComplex.ts, 17, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 18, 10))
+>"6" : Symbol("6", Decl(normalizedIntersectionTooComplex.ts, 18, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 18, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "7": { common?: string; "7"?: number, ref?: Obj<Big["7"]> | Func<Big["7"]>; }
+>"7" : Symbol(Big["7"], Decl(normalizedIntersectionTooComplex.ts, 18, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 19, 10))
+>"7" : Symbol("7", Decl(normalizedIntersectionTooComplex.ts, 19, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 19, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "8": { common?: string; "8"?: number, ref?: Obj<Big["8"]> | Func<Big["8"]>; }
+>"8" : Symbol(Big["8"], Decl(normalizedIntersectionTooComplex.ts, 19, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 20, 10))
+>"8" : Symbol("8", Decl(normalizedIntersectionTooComplex.ts, 20, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 20, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "9": { common?: string; "9"?: number, ref?: Obj<Big["9"]> | Func<Big["9"]>; }
+>"9" : Symbol(Big["9"], Decl(normalizedIntersectionTooComplex.ts, 20, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 21, 10))
+>"9" : Symbol("9", Decl(normalizedIntersectionTooComplex.ts, 21, 27))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 21, 41))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "10": { common?: string; "10"?: number, ref?: Obj<Big["10"]> | Func<Big["10"]>; }
+>"10" : Symbol(Big["10"], Decl(normalizedIntersectionTooComplex.ts, 21, 81))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 22, 11))
+>"10" : Symbol("10", Decl(normalizedIntersectionTooComplex.ts, 22, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 22, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "11": { common?: string; "11"?: number, ref?: Obj<Big["11"]> | Func<Big["11"]>; }
+>"11" : Symbol(Big["11"], Decl(normalizedIntersectionTooComplex.ts, 22, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 23, 11))
+>"11" : Symbol("11", Decl(normalizedIntersectionTooComplex.ts, 23, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 23, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "12": { common?: string; "12"?: number, ref?: Obj<Big["12"]> | Func<Big["12"]>; }
+>"12" : Symbol(Big["12"], Decl(normalizedIntersectionTooComplex.ts, 23, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 24, 11))
+>"12" : Symbol("12", Decl(normalizedIntersectionTooComplex.ts, 24, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 24, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "13": { common?: string; "13"?: number, ref?: Obj<Big["13"]> | Func<Big["13"]>; }
+>"13" : Symbol(Big["13"], Decl(normalizedIntersectionTooComplex.ts, 24, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 25, 11))
+>"13" : Symbol("13", Decl(normalizedIntersectionTooComplex.ts, 25, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 25, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "14": { common?: string; "14"?: number, ref?: Obj<Big["14"]> | Func<Big["14"]>; }
+>"14" : Symbol(Big["14"], Decl(normalizedIntersectionTooComplex.ts, 25, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 26, 11))
+>"14" : Symbol("14", Decl(normalizedIntersectionTooComplex.ts, 26, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 26, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "15": { common?: string; "15"?: number, ref?: Obj<Big["15"]> | Func<Big["15"]>; }
+>"15" : Symbol(Big["15"], Decl(normalizedIntersectionTooComplex.ts, 26, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 27, 11))
+>"15" : Symbol("15", Decl(normalizedIntersectionTooComplex.ts, 27, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 27, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "16": { common?: string; "16"?: number, ref?: Obj<Big["16"]> | Func<Big["16"]>; }
+>"16" : Symbol(Big["16"], Decl(normalizedIntersectionTooComplex.ts, 27, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 28, 11))
+>"16" : Symbol("16", Decl(normalizedIntersectionTooComplex.ts, 28, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 28, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+    "17": { common?: string; "17"?: number, ref?: Obj<Big["17"]> | Func<Big["17"]>; }
+>"17" : Symbol(Big["17"], Decl(normalizedIntersectionTooComplex.ts, 28, 85))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 29, 11))
+>"17" : Symbol("17", Decl(normalizedIntersectionTooComplex.ts, 29, 28))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 29, 43))
+>Obj : Symbol(Obj, Decl(normalizedIntersectionTooComplex.ts, 0, 0))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>Func : Symbol(Func, Decl(normalizedIntersectionTooComplex.ts, 4, 1))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+}
+declare function getCtor<T extends keyof Big>(comp: T): CtorOf<Big[T]>
+>getCtor : Symbol(getCtor, Decl(normalizedIntersectionTooComplex.ts, 30, 1))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 31, 25))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>comp : Symbol(comp, Decl(normalizedIntersectionTooComplex.ts, 31, 46))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 31, 25))
+>CtorOf : Symbol(CtorOf, Decl(normalizedIntersectionTooComplex.ts, 8, 114))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+>T : Symbol(T, Decl(normalizedIntersectionTooComplex.ts, 31, 25))
+
+declare var all: keyof Big;
+>all : Symbol(all, Decl(normalizedIntersectionTooComplex.ts, 33, 11))
+>Big : Symbol(Big, Decl(normalizedIntersectionTooComplex.ts, 9, 52))
+
+const ctor = getCtor(all);
+>ctor : Symbol(ctor, Decl(normalizedIntersectionTooComplex.ts, 34, 5))
+>getCtor : Symbol(getCtor, Decl(normalizedIntersectionTooComplex.ts, 30, 1))
+>all : Symbol(all, Decl(normalizedIntersectionTooComplex.ts, 33, 11))
+
+const comp = ctor({ common: "ok", ref: x => console.log(x) });
+>comp : Symbol(comp, Decl(normalizedIntersectionTooComplex.ts, 35, 5))
+>ctor : Symbol(ctor, Decl(normalizedIntersectionTooComplex.ts, 34, 5))
+>common : Symbol(common, Decl(normalizedIntersectionTooComplex.ts, 35, 19))
+>ref : Symbol(ref, Decl(normalizedIntersectionTooComplex.ts, 35, 33))
+>x : Symbol(x, Decl(normalizedIntersectionTooComplex.ts, 35, 38))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(normalizedIntersectionTooComplex.ts, 35, 38))
+

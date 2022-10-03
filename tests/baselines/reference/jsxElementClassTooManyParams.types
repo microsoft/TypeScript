@@ -1,0 +1,38 @@
+=== tests/cases/compiler/jsxElementClassTooManyParams.tsx ===
+namespace JSX {
+    export interface Element {}
+    export interface IntrinsicClassAttributes<TClass, TOther=never> {
+        ref?: TClass;
+>ref : TClass | undefined
+
+        item?: TOther;
+>item : TOther | undefined
+    }
+    export interface ElementClass extends Element {}
+    export interface ElementAttributesProperty { props: {}; }
+>props : {}
+
+    export interface ElementChildrenAttribute { children: {}; }
+>children : {}
+
+    export interface IntrinsicAttributes {}
+    export interface IntrinsicElements { [key: string]: Element }
+>key : string
+}
+class ElemClass<T extends {x: number}> implements JSX.ElementClass {
+>ElemClass : ElemClass<T>
+>x : number
+>JSX : any
+
+    constructor(public props: T) {}
+>props : T
+}
+const elem = <ElemClass x={12} y={24} />
+>elem : JSX.Element
+><ElemClass x={12} y={24} /> : JSX.Element
+>ElemClass : typeof ElemClass
+>x : number
+>12 : 12
+>y : number
+>24 : 24
+

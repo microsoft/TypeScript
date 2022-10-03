@@ -1,0 +1,10 @@
+tests/cases/compiler/unusedFunctionsinNamespaces1.ts(2,14): error TS6133: 'function1' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedFunctionsinNamespaces1.ts (1 errors) ====
+    namespace Validation {
+        function function1() {
+                 ~~~~~~~~~
+!!! error TS6133: 'function1' is declared but its value is never read.
+        }
+    }

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/noImplicitAnyInContextuallyTypesFunctionParamter.ts ===
+var regexMatchList = ['', ''];
+>regexMatchList : string[]
+>['', ''] : string[]
+>'' : ""
+>'' : ""
+
+regexMatchList.forEach(match => ''.replace(match, ''));
+>regexMatchList.forEach(match => ''.replace(match, '')) : void
+>regexMatchList.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>regexMatchList : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>match => ''.replace(match, '') : (match: string) => string
+>match : string
+>''.replace(match, '') : string
+>''.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>'' : ""
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>match : string
+>'' : ""
+

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/enumWithPrimitiveName.ts ===
+enum string { }
+>string : Symbol(string, Decl(enumWithPrimitiveName.ts, 0, 0))
+
+enum number { }
+>number : Symbol(number, Decl(enumWithPrimitiveName.ts, 0, 15))
+
+enum any { }
+>any : Symbol(any, Decl(enumWithPrimitiveName.ts, 1, 15))
+

@@ -1,0 +1,7 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile1.js
+// File to emit, does not contain syntactic errors
+// expected to be emitted correctelly regardless of the syntactic errors in the other file
+var noErrors = true;
+

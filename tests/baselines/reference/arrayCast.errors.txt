@@ -1,0 +1,16 @@
+tests/cases/compiler/arrayCast.ts(3,23): error TS2352: Conversion of type '{ foo: string; }[]' to type '{ id: number; }[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ foo: string; }' is not comparable to type '{ id: number; }'.
+    Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
+
+
+==== tests/cases/compiler/arrayCast.ts (1 errors) ====
+    // Should fail. Even though the array is contextually typed with { id: number }[], it still
+    // has type { foo: string }[], which is not assignable to { id: number }[].
+    <{ id: number; }[]>[{ foo: "s" }];
+                          ~~~~~~~~
+!!! error TS2352: Conversion of type '{ foo: string; }[]' to type '{ id: number; }[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type '{ foo: string; }' is not comparable to type '{ id: number; }'.
+!!! error TS2352:     Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
+    
+    // Should succeed, as the {} element causes the type of the array to be {}[]
+    <{ id: number; }[]>[{ foo: "s" }, {}]; 

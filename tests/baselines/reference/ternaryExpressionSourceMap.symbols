@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ternaryExpressionSourceMap.ts ===
+var x = 1;
+>x : Symbol(x, Decl(ternaryExpressionSourceMap.ts, 0, 3))
+
+var foo = x ? () => 0 : () => 0;
+>foo : Symbol(foo, Decl(ternaryExpressionSourceMap.ts, 1, 3))
+>x : Symbol(x, Decl(ternaryExpressionSourceMap.ts, 0, 3))
+

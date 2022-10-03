@@ -1,0 +1,8 @@
+=== /a.ts ===
+a;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+
+=== /node_modules/@types/a/index.d.ts ===
+declare const a: string;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+

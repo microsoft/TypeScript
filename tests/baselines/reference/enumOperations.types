@@ -1,0 +1,64 @@
+=== tests/cases/compiler/enumOperations.ts ===
+enum Enum { None = 0 }
+>Enum : Enum
+>None : Enum.None
+>0 : 0
+
+var enumType: Enum = Enum.None;
+>enumType : Enum
+>Enum.None : Enum
+>Enum : typeof Enum
+>None : Enum
+
+var numberType: number = 0;
+>numberType : number
+>0 : 0
+
+var anyType: any = 0;
+>anyType : any
+>0 : 0
+ 
+enumType ^ numberType;
+>enumType ^ numberType : number
+>enumType : Enum
+>numberType : number
+
+numberType ^ anyType;
+>numberType ^ anyType : number
+>numberType : number
+>anyType : any
+ 
+enumType & anyType;
+>enumType & anyType : number
+>enumType : Enum
+>anyType : any
+
+enumType | anyType;
+>enumType | anyType : number
+>enumType : Enum
+>anyType : any
+
+enumType ^ anyType;
+>enumType ^ anyType : number
+>enumType : Enum
+>anyType : any
+
+~anyType;
+>~anyType : number
+>anyType : any
+
+enumType <<anyType;
+>enumType <<anyType : number
+>enumType : Enum
+>anyType : any
+
+enumType >>anyType;
+>enumType >>anyType : number
+>enumType : Enum
+>anyType : any
+
+enumType >>>anyType;
+>enumType >>>anyType : number
+>enumType : Enum
+>anyType : any
+

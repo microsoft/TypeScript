@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import * as React from "react";
+>React : Symbol(React, Decl(file.tsx, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(file.tsx, 0, 31))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1), Decl(file.tsx, 1, 16))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 2368, 78), Decl(file.tsx, 2, 19))
+
+            "a-b": any;
+>"a-b" : Symbol(IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+
+            "a-c": any;
+>"a-c" : Symbol(IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+        }
+    }
+}
+const Compa = (x: {x: number}) => <div>{"" + x}</div>;
+>Compa : Symbol(Compa, Decl(file.tsx, 9, 5))
+>x : Symbol(x, Decl(file.tsx, 9, 15))
+>x : Symbol(x, Decl(file.tsx, 9, 19))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>x : Symbol(x, Decl(file.tsx, 9, 15))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+
+let a = <\u0061></a>; // works
+>a : Symbol(a, Decl(file.tsx, 11, 3))
+>\u0061 : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+
+let ab = <\u0061-b></a-b>; // works
+>ab : Symbol(ab, Decl(file.tsx, 12, 3))
+>\u0061-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+>a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+
+let ac = <a-\u0063></a-c>; // works
+>ac : Symbol(ac, Decl(file.tsx, 13, 3))
+>a-\u0063 : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+>a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+
+let compa = <Comp\u0061 x={12} />; // works
+>compa : Symbol(compa, Decl(file.tsx, 14, 3))
+>Comp\u0061 : Symbol(Compa, Decl(file.tsx, 9, 5))
+>x : Symbol(x, Decl(file.tsx, 14, 23))
+
+let a2 = <\u{0061}></a>; // works
+>a2 : Symbol(a2, Decl(file.tsx, 16, 3))
+>\u{0061} : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+
+let ab2 = <\u{0061}-b></a-b>; // works
+>ab2 : Symbol(ab2, Decl(file.tsx, 17, 3))
+>\u{0061}-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+>a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+
+let ac2 = <a-\u{0063}></a-c>; // works
+>ac2 : Symbol(ac2, Decl(file.tsx, 18, 3))
+>a-\u{0063} : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+>a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+
+let compa2 = <Comp\u{0061} x={12} />; // works
+>compa2 : Symbol(compa2, Decl(file.tsx, 19, 3))
+>Comp\u{0061} : Symbol(Compa, Decl(file.tsx, 9, 5))
+>x : Symbol(x, Decl(file.tsx, 19, 26))
+

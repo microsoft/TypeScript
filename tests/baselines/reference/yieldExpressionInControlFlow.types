@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/yieldExpressions/bug25149.js ===
+function* f() {
+>f : () => Generator<any, void, any>
+
+    var o
+>o : any
+
+    while (true) {
+>true : true
+
+        o = yield o
+>o = yield o : any
+>o : any
+>yield o : any
+>o : any
+    }
+}
+
+=== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
+// fails in Typescript too
+function* g() {
+>g : () => Generator<any, void, any>
+
+    var o = []
+>o : any[]
+>[] : undefined[]
+
+    while (true) {
+>true : true
+
+        o = yield* o
+>o = yield* o : any
+>o : any[]
+>yield* o : any
+>o : any
+    }
+}
+

@@ -1,0 +1,176 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts ===
+class Foo {
+>Foo : Foo
+
+    private x: string;
+>x : string
+}
+
+interface I extends Foo {
+    y: number;
+>y : number
+}
+
+class Bar extends Foo implements I { // ok
+>Bar : Bar
+>Foo : Foo
+
+    y: number;
+>y : number
+}
+
+class Bar2 extends Foo implements I { // error
+>Bar2 : Bar2
+>Foo : Foo
+
+    x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+class Bar3 extends Foo implements I { // error
+>Bar3 : Bar3
+>Foo : Foo
+
+    private x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+// another level of indirection
+module M {
+>M : typeof M
+
+    class Foo {
+>Foo : Foo
+
+        private x: string;
+>x : string
+    }
+
+    class Baz extends Foo {
+>Baz : Baz
+>Foo : Foo
+
+        z: number;
+>z : number
+    }
+
+    interface I extends Baz {
+        y: number;
+>y : number
+    }
+
+    class Bar extends Foo implements I { // ok
+>Bar : Bar
+>Foo : Foo
+
+        y: number;
+>y : number
+
+        z: number;
+>z : number
+    }
+
+    class Bar2 extends Foo implements I { // error
+>Bar2 : Bar2
+>Foo : Foo
+
+        x: string;
+>x : string
+
+        y: number;
+>y : number
+    }
+
+    class Bar3 extends Foo implements I { // error
+>Bar3 : Bar3
+>Foo : Foo
+
+        private x: string;
+>x : string
+
+        y: number;
+>y : number
+    }
+}
+
+// two levels of privates
+module M2 {
+>M2 : typeof M2
+
+    class Foo {
+>Foo : Foo
+
+        private x: string;
+>x : string
+    }
+
+    class Baz extends Foo {
+>Baz : Baz
+>Foo : Foo
+
+        private y: number;
+>y : number
+    }
+
+    interface I extends Baz {
+        z: number;
+>z : number
+    }
+
+    class Bar extends Foo implements I { // error
+>Bar : Bar
+>Foo : Foo
+
+        z: number;
+>z : number
+    }
+
+    var b: Bar;
+>b : Bar
+
+    var r1 = b.z;
+>r1 : number
+>b.z : number
+>b : Bar
+>z : number
+
+    var r2 = b.x; // error
+>r2 : string
+>b.x : string
+>b : Bar
+>x : string
+
+    var r3 = b.y; // error
+>r3 : any
+>b.y : any
+>b : Bar
+>y : any
+
+    class Bar2 extends Foo implements I { // error
+>Bar2 : Bar2
+>Foo : Foo
+
+        x: string;
+>x : string
+
+        z: number;
+>z : number
+    }
+
+    class Bar3 extends Foo implements I { // error
+>Bar3 : Bar3
+>Foo : Foo
+
+        private x: string;
+>x : string
+
+        z: number;
+>z : number
+    }
+}

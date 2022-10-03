@@ -1,0 +1,164 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// Pretty much all of this should be an error, (since enums are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
+
+export enum A {}
+>A : A
+
+export enum B {
+>B : B
+
+    Member
+>Member : B.Member
+}
+
+enum C {}
+>C : C
+
+export { C };
+>C : typeof C
+
+enum DD {}
+>DD : DD
+
+export { DD as D };
+>DD : typeof DD
+>D : typeof DD
+
+export enum E {}
+>E : E
+
+export { E as EE };
+>E : typeof E
+>EE : typeof E
+
+export { F as FF };
+>F : typeof F
+>FF : typeof F
+
+export enum F {}
+>F : F
+
+export enum G {
+>G : G
+
+    A = 1,
+>A : G.A
+>1 : 1
+
+    B,
+>B : G.B
+
+    C
+>C : G.C
+}
+
+export enum H {
+>H : H
+
+    A = "a",
+>A : H.A
+>"a" : "a"
+
+    B = "b"
+>B : H.B
+>"b" : "b"
+}
+
+export enum I {
+>I : I
+
+    A = "a",
+>A : I.A
+>"a" : "a"
+
+    B = 0,
+>B : I.B
+>0 : 0
+
+    C
+>C : I.C
+}
+
+export const enum J {
+>J : J
+
+    A = 1,
+>A : J.A
+>1 : 1
+
+    B,
+>B : J.B
+
+    C
+>C : J.C
+}
+
+export enum K {
+>K : K
+
+    None   = 0,
+>None : K
+>0 : 0
+
+    A = 1 << 0,
+>A : K
+>1 << 0 : number
+>1 : 1
+>0 : 0
+
+    B = 1 << 1,
+>B : K
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+    C = 1 << 2,
+>C : K
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+    Mask = A | B | C,
+>Mask : K
+>A | B | C : number
+>A | B : number
+>A : K
+>B : K
+>C : K
+}
+
+export const enum L {
+>L : L
+
+    None   = 0,
+>None : L
+>0 : 0
+
+    A = 1 << 0,
+>A : L
+>1 << 0 : number
+>1 : 1
+>0 : 0
+
+    B = 1 << 1,
+>B : L
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+    C = 1 << 2,
+>C : L
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+    Mask = A | B | C,
+>Mask : L
+>A | B | C : number
+>A | B : number
+>A : L
+>B : L
+>C : L
+}
+

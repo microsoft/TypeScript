@@ -1,0 +1,246 @@
+=== tests/cases/compiler/privacyClass.ts ===
+export module m1 {
+>m1 : Symbol(m1, Decl(privacyClass.ts, 0, 0))
+
+    export interface m1_i_public {
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+
+    interface m1_i_private {
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+    }
+
+    export class m1_c_public {
+>m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+
+        private f1() {
+>f1 : Symbol(m1_c_public.f1, Decl(privacyClass.ts, 7, 30))
+        }
+    }
+
+    class m1_c_private {
+>m1_c_private : Symbol(m1_c_private, Decl(privacyClass.ts, 10, 5))
+    }
+
+    class m1_C1_private extends m1_c_public {
+>m1_C1_private : Symbol(m1_C1_private, Decl(privacyClass.ts, 13, 5))
+>m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+    }
+    class m1_C2_private extends m1_c_private {
+>m1_C2_private : Symbol(m1_C2_private, Decl(privacyClass.ts, 16, 5))
+>m1_c_private : Symbol(m1_c_private, Decl(privacyClass.ts, 10, 5))
+    }
+    export class m1_C3_public extends m1_c_public {
+>m1_C3_public : Symbol(m1_C3_public, Decl(privacyClass.ts, 18, 5))
+>m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+    }
+    export class m1_C4_public extends m1_c_private {
+>m1_C4_public : Symbol(m1_C4_public, Decl(privacyClass.ts, 20, 5))
+>m1_c_private : Symbol(m1_c_private, Decl(privacyClass.ts, 10, 5))
+    }
+
+    class m1_C5_private implements m1_i_public {
+>m1_C5_private : Symbol(m1_C5_private, Decl(privacyClass.ts, 22, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+    class m1_C6_private implements m1_i_private {
+>m1_C6_private : Symbol(m1_C6_private, Decl(privacyClass.ts, 25, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+    }
+    export class m1_C7_public implements m1_i_public {
+>m1_C7_public : Symbol(m1_C7_public, Decl(privacyClass.ts, 27, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+    export class m1_C8_public implements m1_i_private {
+>m1_C8_public : Symbol(m1_C8_public, Decl(privacyClass.ts, 29, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+    }
+
+    class m1_C9_private extends m1_c_public implements m1_i_private, m1_i_public {
+>m1_C9_private : Symbol(m1_C9_private, Decl(privacyClass.ts, 31, 5))
+>m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+    class m1_C10_private extends m1_c_private implements  m1_i_private, m1_i_public {
+>m1_C10_private : Symbol(m1_C10_private, Decl(privacyClass.ts, 34, 5))
+>m1_c_private : Symbol(m1_c_private, Decl(privacyClass.ts, 10, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+    export class m1_C11_public extends m1_c_public implements  m1_i_private, m1_i_public {
+>m1_C11_public : Symbol(m1_C11_public, Decl(privacyClass.ts, 36, 5))
+>m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+    export class m1_C12_public extends m1_c_private implements  m1_i_private, m1_i_public {
+>m1_C12_public : Symbol(m1_C12_public, Decl(privacyClass.ts, 38, 5))
+>m1_c_private : Symbol(m1_c_private, Decl(privacyClass.ts, 10, 5))
+>m1_i_private : Symbol(m1_i_private, Decl(privacyClass.ts, 2, 5))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyClass.ts, 0, 18))
+    }
+}
+
+
+module m2 {
+>m2 : Symbol(m2, Decl(privacyClass.ts, 41, 1))
+
+    export interface m2_i_public {
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+
+    interface m2_i_private {
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+    }
+
+    export class m2_c_public {
+>m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+
+        private f1() {
+>f1 : Symbol(m2_c_public.f1, Decl(privacyClass.ts, 51, 30))
+        }
+    }
+
+    class m2_c_private {
+>m2_c_private : Symbol(m2_c_private, Decl(privacyClass.ts, 54, 5))
+    }
+
+    class m2_C1_private extends m2_c_public {
+>m2_C1_private : Symbol(m2_C1_private, Decl(privacyClass.ts, 57, 5))
+>m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+    }
+    class m2_C2_private extends m2_c_private {
+>m2_C2_private : Symbol(m2_C2_private, Decl(privacyClass.ts, 60, 5))
+>m2_c_private : Symbol(m2_c_private, Decl(privacyClass.ts, 54, 5))
+    }
+    export class m2_C3_public extends m2_c_public {
+>m2_C3_public : Symbol(m2_C3_public, Decl(privacyClass.ts, 62, 5))
+>m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+    }
+    export class m2_C4_public extends m2_c_private {
+>m2_C4_public : Symbol(m2_C4_public, Decl(privacyClass.ts, 64, 5))
+>m2_c_private : Symbol(m2_c_private, Decl(privacyClass.ts, 54, 5))
+    }
+
+    class m2_C5_private implements m2_i_public {
+>m2_C5_private : Symbol(m2_C5_private, Decl(privacyClass.ts, 66, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+    class m2_C6_private implements m2_i_private {
+>m2_C6_private : Symbol(m2_C6_private, Decl(privacyClass.ts, 69, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+    }
+    export class m2_C7_public implements m2_i_public {
+>m2_C7_public : Symbol(m2_C7_public, Decl(privacyClass.ts, 71, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+    export class m2_C8_public implements m2_i_private {
+>m2_C8_public : Symbol(m2_C8_public, Decl(privacyClass.ts, 73, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+    }
+
+    class m2_C9_private extends m2_c_public implements m2_i_private, m2_i_public {
+>m2_C9_private : Symbol(m2_C9_private, Decl(privacyClass.ts, 75, 5))
+>m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+    class m2_C10_private extends m2_c_private implements  m2_i_private, m2_i_public {
+>m2_C10_private : Symbol(m2_C10_private, Decl(privacyClass.ts, 78, 5))
+>m2_c_private : Symbol(m2_c_private, Decl(privacyClass.ts, 54, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+    export class m2_C11_public extends m2_c_public implements  m2_i_private, m2_i_public {
+>m2_C11_public : Symbol(m2_C11_public, Decl(privacyClass.ts, 80, 5))
+>m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+    export class m2_C12_public extends m2_c_private implements  m2_i_private, m2_i_public {
+>m2_C12_public : Symbol(m2_C12_public, Decl(privacyClass.ts, 82, 5))
+>m2_c_private : Symbol(m2_c_private, Decl(privacyClass.ts, 54, 5))
+>m2_i_private : Symbol(m2_i_private, Decl(privacyClass.ts, 46, 5))
+>m2_i_public : Symbol(m2_i_public, Decl(privacyClass.ts, 44, 11))
+    }
+}
+
+export interface glo_i_public {
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+
+interface glo_i_private {
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+}
+
+export class glo_c_public {
+>glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+
+    private f1() {
+>f1 : Symbol(glo_c_public.f1, Decl(privacyClass.ts, 93, 27))
+    }
+}
+
+class glo_c_private {
+>glo_c_private : Symbol(glo_c_private, Decl(privacyClass.ts, 96, 1))
+}
+
+class glo_C1_private extends glo_c_public {
+>glo_C1_private : Symbol(glo_C1_private, Decl(privacyClass.ts, 99, 1))
+>glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+}
+class glo_C2_private extends glo_c_private {
+>glo_C2_private : Symbol(glo_C2_private, Decl(privacyClass.ts, 102, 1))
+>glo_c_private : Symbol(glo_c_private, Decl(privacyClass.ts, 96, 1))
+}
+export class glo_C3_public extends glo_c_public {
+>glo_C3_public : Symbol(glo_C3_public, Decl(privacyClass.ts, 104, 1))
+>glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+}
+export class glo_C4_public extends glo_c_private {
+>glo_C4_public : Symbol(glo_C4_public, Decl(privacyClass.ts, 106, 1))
+>glo_c_private : Symbol(glo_c_private, Decl(privacyClass.ts, 96, 1))
+}
+
+class glo_C5_private implements glo_i_public {
+>glo_C5_private : Symbol(glo_C5_private, Decl(privacyClass.ts, 108, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+class glo_C6_private implements glo_i_private {
+>glo_C6_private : Symbol(glo_C6_private, Decl(privacyClass.ts, 111, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+}
+export class glo_C7_public implements glo_i_public {
+>glo_C7_public : Symbol(glo_C7_public, Decl(privacyClass.ts, 113, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+export class glo_C8_public implements glo_i_private {
+>glo_C8_public : Symbol(glo_C8_public, Decl(privacyClass.ts, 115, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+}
+
+class glo_C9_private extends glo_c_public implements glo_i_private, glo_i_public {
+>glo_C9_private : Symbol(glo_C9_private, Decl(privacyClass.ts, 117, 1))
+>glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+class glo_C10_private extends glo_c_private implements  glo_i_private, glo_i_public {
+>glo_C10_private : Symbol(glo_C10_private, Decl(privacyClass.ts, 120, 1))
+>glo_c_private : Symbol(glo_c_private, Decl(privacyClass.ts, 96, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+export class glo_C11_public extends glo_c_public implements  glo_i_private, glo_i_public {
+>glo_C11_public : Symbol(glo_C11_public, Decl(privacyClass.ts, 122, 1))
+>glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}
+export class glo_C12_public extends glo_c_private implements  glo_i_private, glo_i_public {
+>glo_C12_public : Symbol(glo_C12_public, Decl(privacyClass.ts, 124, 1))
+>glo_c_private : Symbol(glo_c_private, Decl(privacyClass.ts, 96, 1))
+>glo_i_private : Symbol(glo_i_private, Decl(privacyClass.ts, 88, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyClass.ts, 85, 1))
+}

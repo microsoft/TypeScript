@@ -1,0 +1,18 @@
+tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts(2,36): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts(7,30): error TS2332: 'this' cannot be referenced in current location.
+
+
+==== tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts (2 errors) ====
+    enum TopLevelEnum {
+        ThisWasAllowedButShouldNotBe = this // Should not be allowed
+                                       ~~~~
+!!! error TS2332: 'this' cannot be referenced in current location.
+    }
+    
+    module ModuleEnum {
+        enum EnumInModule {
+            WasADifferentError = this // this was handled as if this was in a module
+                                 ~~~~
+!!! error TS2332: 'this' cannot be referenced in current location.
+        }
+    }

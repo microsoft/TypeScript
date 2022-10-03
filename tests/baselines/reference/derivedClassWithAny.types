@@ -1,0 +1,134 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts ===
+class C {
+>C : C
+
+    x: number;
+>x : number
+
+    get X(): number { return 1; }
+>X : number
+>1 : 1
+
+    foo(): number {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+
+    static y: number;
+>y : number
+
+    static get Y(): number {
+>Y : number
+
+        return 1;
+>1 : 1
+    }
+    static bar(): number {
+>bar : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    x: any;
+>x : any
+
+    get X(): any {
+>X : any
+
+        return null;
+>null : null
+    }
+    foo(): any {
+>foo : () => any
+
+        return 1;
+>1 : 1
+    }
+
+    static y: any;
+>y : any
+
+    static get Y(): any {
+>Y : any
+
+        return null;
+>null : null
+    }
+    static bar(): any {
+>bar : () => any
+
+        return null;
+>null : null
+    }
+}
+
+// if D is a valid class definition than E is now not safe tranisitively through C
+class E extends D {
+>E : E
+>D : D
+
+    x: string;
+>x : string
+
+    get X(): string{ return ''; }
+>X : string
+>'' : ""
+
+    foo(): string {
+>foo : () => string
+
+        return '';
+>'' : ""
+    }
+
+    static y: string;
+>y : string
+
+    static get Y(): string {
+>Y : string
+
+        return '';
+>'' : ""
+    }
+    static bar(): string {
+>bar : () => string
+
+        return '';
+>'' : ""
+    }
+}
+
+var c: C;
+>c : C
+
+var d: D;
+>d : D
+
+var e: E;
+>e : E
+
+c = d;
+>c = d : D
+>c : C
+>d : D
+
+c = e;
+>c = e : E
+>c : C
+>e : E
+
+var r = c.foo(); // e.foo would return string
+>r : number
+>c.foo() : number
+>c.foo : () => number
+>c : C
+>foo : () => number
+

@@ -1,0 +1,20 @@
+tests/cases/compiler/targetTypeTest3.ts(4,21): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/targetTypeTest3.ts(4,23): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/targetTypeTest3.ts (2 errors) ====
+    // Test target typing for array literals and call expressions
+    
+    
+    var a : string[] = [1,2,"3"]; // should produce an error
+                        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                          ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    
+    function func1(stuff:any[]) { return stuff; }
+    
+    function func2(stuff1:string, stuff2:number, stuff3:number) {
+    	return func1([stuff1, stuff2, stuff3]);
+    }

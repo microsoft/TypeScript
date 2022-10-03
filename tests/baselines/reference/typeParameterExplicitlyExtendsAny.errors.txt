@@ -1,0 +1,58 @@
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(3,7): error TS2339: Property 'blah' does not exist on type 'T'.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(9,7): error TS2339: Property 'blah' does not exist on type 'T'.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(14,7): error TS2339: Property 'children' does not exist on type 'T'.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(15,5): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(16,9): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
+tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts(30,14): error TS2339: Property 'children' does not exist on type 'T'.
+
+
+==== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts (6 errors) ====
+    function fee<T>() {
+        var t: T;
+        t.blah; // Error
+          ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'T'.
+        t.toString; // ok
+    }
+    
+    function fee2<T extends any>() {
+        var t: T;
+        t.blah; // ok
+          ~~~~
+!!! error TS2339: Property 'blah' does not exist on type 'T'.
+        t.toString; // ok
+    }
+    
+    function f<T extends any>(x: T) {
+        x.children;
+          ~~~~~~~~
+!!! error TS2339: Property 'children' does not exist on type 'T'.
+        x();
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+        new x();
+            ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
+        x[100];
+        x['hello'];
+    }
+    
+    
+    // Generic Tree structure
+    type Tree<T> = T & {
+        children?: Tree<T>[];
+    }
+    
+    class MyClass {
+        public static displayTree1<T extends Tree<any>>(tree: T) {
+            // error "Property 'children' does not exist on type 'T'"
+            tree.children;
+                 ~~~~~~~~
+!!! error TS2339: Property 'children' does not exist on type 'T'.
+        }
+    }
+    

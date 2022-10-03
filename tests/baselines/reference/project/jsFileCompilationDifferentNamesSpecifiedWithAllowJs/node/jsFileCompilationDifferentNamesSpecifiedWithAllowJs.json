@@ -1,0 +1,16 @@
+{
+    "scenario": "Verify when different .ts and .js file exist and their names are specified in tsconfig.json and .js files are consumed",
+    "projectRoot": "tests/cases/projects/jsFileCompilation",
+    "baselineCheck": true,
+    "declaration": true,
+    "project": "DifferentNamesSpecifiedWithAllowJs",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "DifferentNamesSpecifiedWithAllowJs/a.ts",
+        "DifferentNamesSpecifiedWithAllowJs/b.js"
+    ],
+    "emittedFiles": [
+        "test.js",
+        "test.d.ts"
+    ]
+}

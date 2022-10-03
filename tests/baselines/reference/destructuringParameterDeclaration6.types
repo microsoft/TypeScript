@@ -1,0 +1,75 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts ===
+// A parameter declaration may specify either an identifier or a binding pattern.
+
+// Reserved words are not allowed to be used as an identifier in parameter declaration
+"use strict"
+>"use strict" : "use strict"
+
+// Error
+function a({while}) { }
+>a : ({ while:  }: { while: any; }) => void
+>while : any
+> : any
+
+function a1({public}) { }
+>a1 : ({ public }: { public: any; }) => void
+>public : any
+
+function a4([while, for, public]){ }
+>a4 : ([]: any[]) => any
+>, : any
+> : any
+> : any
+>, public : any
+> : any
+>public : any
+> : any
+> : any
+> : any
+
+function a5(...while) { }
+>a5 : (...: any[]) => any
+> : any[]
+> : any
+
+function a6(...public) { }
+>a6 : (...public: any[]) => void
+>public : any[]
+
+function a7(...a: string) { }
+>a7 : (...a: string) => void
+>a : string
+
+a({ while: 1 });
+>a({ while: 1 }) : void
+>a : ({ while:  }: { while: any; }) => void
+>{ while: 1 } : { while: number; }
+>while : number
+>1 : 1
+
+// No Error
+function b1({public: x}) { }
+>b1 : ({ public: x }: { public: any; }) => void
+>public : any
+>x : any
+
+function b2({while: y}) { }
+>b2 : ({ while: y }: { while: any; }) => void
+>while : any
+>y : any
+
+b1({ public: 1 });
+>b1({ public: 1 }) : void
+>b1 : ({ public: x }: { public: any; }) => void
+>{ public: 1 } : { public: number; }
+>public : number
+>1 : 1
+
+b2({ while: 1 });
+>b2({ while: 1 }) : void
+>b2 : ({ while: y }: { while: any; }) => void
+>{ while: 1 } : { while: number; }
+>while : number
+>1 : 1
+
+

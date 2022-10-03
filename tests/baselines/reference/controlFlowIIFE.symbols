@@ -1,0 +1,158 @@
+=== tests/cases/conformance/controlFlow/controlFlowIIFE.ts ===
+declare function getStringOrNumber(): string | number;
+>getStringOrNumber : Symbol(getStringOrNumber, Decl(controlFlowIIFE.ts, 0, 0))
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowIIFE.ts, 0, 54))
+
+    let x = getStringOrNumber();
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
+>getStringOrNumber : Symbol(getStringOrNumber, Decl(controlFlowIIFE.ts, 0, 0))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
+
+        let n = function() {
+>n : Symbol(n, Decl(controlFlowIIFE.ts, 5, 11))
+
+            return x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        }();
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowIIFE.ts, 9, 1))
+
+    let x = getStringOrNumber();
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
+>getStringOrNumber : Symbol(getStringOrNumber, Decl(controlFlowIIFE.ts, 0, 0))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
+
+        let n = (function() {
+>n : Symbol(n, Decl(controlFlowIIFE.ts, 14, 11))
+
+            return x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        })();
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowIIFE.ts, 18, 1))
+
+    let x = getStringOrNumber();
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
+>getStringOrNumber : Symbol(getStringOrNumber, Decl(controlFlowIIFE.ts, 0, 0))
+
+    let y: number;
+>y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
+
+        let n = (z => x.length + y + z)(y = 1);
+>n : Symbol(n, Decl(controlFlowIIFE.ts, 24, 11))
+>z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
+>z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
+>y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
+    }
+}
+
+// Repros from #8381
+
+let maybeNumber: number | undefined;
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 30, 3))
+
+(function () {
+    maybeNumber = 1;
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 30, 3))
+
+})();
+maybeNumber++;
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 30, 3))
+
+if (maybeNumber !== undefined) {
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 30, 3))
+>undefined : Symbol(undefined)
+
+    maybeNumber++;
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 30, 3))
+}
+
+let test: string | undefined;
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+
+if (!test) {
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+
+    throw new Error('Test is not defined');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+(() => {
+    test.slice(1); // No error
+>test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+})();
+
+// Repro from #23565
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowIIFE.ts, 45, 5))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    (function() {
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    })();
+    v;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowIIFE.ts, 55, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    (function*() {
+        yield 1;
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowIIFE.ts, 64, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    (async function() {
+        v = await 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+}

@@ -1,0 +1,29 @@
+tests/cases/compiler/deduplicateImportsInSystem.ts(1,17): error TS2792: Cannot find module 'f1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/deduplicateImportsInSystem.ts(2,17): error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/deduplicateImportsInSystem.ts(3,17): error TS2792: Cannot find module 'f3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/deduplicateImportsInSystem.ts(4,17): error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/deduplicateImportsInSystem.ts(5,17): error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/deduplicateImportsInSystem.ts(6,17): error TS2792: Cannot find module 'f1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/deduplicateImportsInSystem.ts (6 errors) ====
+    import {A} from "f1";
+                    ~~~~
+!!! error TS2792: Cannot find module 'f1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {B} from "f2";
+                    ~~~~
+!!! error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {C} from "f3";
+                    ~~~~
+!!! error TS2792: Cannot find module 'f3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {D} from 'f2';
+                    ~~~~
+!!! error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {E} from "f2";
+                    ~~~~
+!!! error TS2792: Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import {F} from 'f1';
+                    ~~~~
+!!! error TS2792: Cannot find module 'f1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    console.log(A + B + C + D + E + F)

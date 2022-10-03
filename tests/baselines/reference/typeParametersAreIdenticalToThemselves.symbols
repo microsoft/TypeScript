@@ -1,0 +1,328 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/typeParametersAreIdenticalToThemselves.ts ===
+// type parameters from the same declaration are identical to themself
+
+function foo1<T>(x: T);
+>foo1 : Symbol(foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 0, 0), Decl(typeParametersAreIdenticalToThemselves.ts, 2, 23), Decl(typeParametersAreIdenticalToThemselves.ts, 3, 23))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 2, 14))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 2, 17))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 2, 14))
+
+function foo1<T>(x: T); // no error, different declaration for each T
+>foo1 : Symbol(foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 0, 0), Decl(typeParametersAreIdenticalToThemselves.ts, 2, 23), Decl(typeParametersAreIdenticalToThemselves.ts, 3, 23))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 3, 14))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 3, 17))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 3, 14))
+
+function foo1<T>(x: T) { }
+>foo1 : Symbol(foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 0, 0), Decl(typeParametersAreIdenticalToThemselves.ts, 2, 23), Decl(typeParametersAreIdenticalToThemselves.ts, 3, 23))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 14))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 17))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 14))
+
+function foo2<T, U>(x: T);
+>foo2 : Symbol(foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 6, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 7, 26))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 6, 14))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 6, 16))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 6, 20))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 6, 14))
+
+function foo2<T, U>(x: T); // no error, different declaration for each T
+>foo2 : Symbol(foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 6, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 7, 26))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 7, 14))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 7, 16))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 7, 20))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 7, 14))
+
+function foo2<T, U>(x: T) { }
+>foo2 : Symbol(foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 4, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 6, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 7, 26))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 8, 14))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 8, 16))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 8, 20))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 8, 14))
+
+function foo3<T, U>(x: T, y: U) {
+>foo3 : Symbol(foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 8, 29))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 16))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 20))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+>y : Symbol(y, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 25))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 16))
+
+    function inner(x: T);
+>inner : Symbol(inner, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 33), Decl(typeParametersAreIdenticalToThemselves.ts, 11, 25), Decl(typeParametersAreIdenticalToThemselves.ts, 12, 25))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 11, 19))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+
+    function inner(x: T); // error, same T
+>inner : Symbol(inner, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 33), Decl(typeParametersAreIdenticalToThemselves.ts, 11, 25), Decl(typeParametersAreIdenticalToThemselves.ts, 12, 25))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 12, 19))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+
+    function inner(x: T) { }
+>inner : Symbol(inner, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 33), Decl(typeParametersAreIdenticalToThemselves.ts, 11, 25), Decl(typeParametersAreIdenticalToThemselves.ts, 12, 25))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 13, 19))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+
+    function inner2(x: T);
+>inner2 : Symbol(inner2, Decl(typeParametersAreIdenticalToThemselves.ts, 13, 28), Decl(typeParametersAreIdenticalToThemselves.ts, 15, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 16, 29))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 15, 20))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 10, 14))
+
+    function inner2<T>(x: T); // no error, different T
+>inner2 : Symbol(inner2, Decl(typeParametersAreIdenticalToThemselves.ts, 13, 28), Decl(typeParametersAreIdenticalToThemselves.ts, 15, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 16, 29))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 16, 20))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 16, 23))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 16, 20))
+
+    function inner2(x: any) { }
+>inner2 : Symbol(inner2, Decl(typeParametersAreIdenticalToThemselves.ts, 13, 28), Decl(typeParametersAreIdenticalToThemselves.ts, 15, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 16, 29))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 17, 20))
+}
+
+class C<T> {
+>C : Symbol(C, Decl(typeParametersAreIdenticalToThemselves.ts, 18, 1))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+
+    foo1(x: T);
+>foo1 : Symbol(C.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 12), Decl(typeParametersAreIdenticalToThemselves.ts, 21, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 22, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 21, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+
+    foo1(x: T); // error, same T
+>foo1 : Symbol(C.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 12), Decl(typeParametersAreIdenticalToThemselves.ts, 21, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 22, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 22, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+
+    foo1(x: T) { }
+>foo1 : Symbol(C.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 12), Decl(typeParametersAreIdenticalToThemselves.ts, 21, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 22, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 23, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+
+    foo2<U>(a: T, x: U);
+>foo2 : Symbol(C.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 23, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 25, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 26, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 25, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 25, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 25, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 25, 9))
+
+    foo2<U>(a: T, x: U); // no error, different declaration for each U
+>foo2 : Symbol(C.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 23, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 25, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 26, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 26, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 26, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 26, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 26, 9))
+
+    foo2<U>(a: T, x: U) { }
+>foo2 : Symbol(C.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 23, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 25, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 26, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 20, 8))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 9))
+
+    foo3<T>(x: T);
+>foo3 : Symbol(C.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 29, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 30, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 29, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 29, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 29, 9))
+
+    foo3<T>(x: T); // no error, different declaration for each T
+>foo3 : Symbol(C.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 29, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 30, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 30, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 30, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 30, 9))
+
+    foo3<T>(x: T) { }
+>foo3 : Symbol(C.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 27, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 29, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 30, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 9))
+
+    foo4<T extends Date>(x: T);
+>foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 25))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 9))
+
+    foo4<T extends Date>(x: T); // no error, different declaration for each T
+>foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 25))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 9))
+
+    foo4<T extends Date>(x: T) { }
+>foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 25))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 9))
+}
+
+class C2<T extends Date> {
+>C2 : Symbol(C2, Decl(typeParametersAreIdenticalToThemselves.ts, 36, 1))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo1(x: T);
+>foo1 : Symbol(C2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 39, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 40, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 39, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+
+    foo1(x: T); // error, same T
+>foo1 : Symbol(C2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 39, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 40, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 40, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+
+    foo1(x: T) { }
+>foo1 : Symbol(C2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 39, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 40, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 41, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+
+    foo2<U>(a: T, x: U);
+>foo2 : Symbol(C2.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 41, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 43, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 44, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 43, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 43, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 43, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 43, 9))
+
+    foo2<U>(a: T, x: U); // no error, different declaration for each U
+>foo2 : Symbol(C2.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 41, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 43, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 44, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 44, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 44, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 44, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 44, 9))
+
+    foo2<U>(a: T, x: U) { }
+>foo2 : Symbol(C2.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 41, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 43, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 44, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 9))
+
+    foo3<T>(x: T);
+>foo3 : Symbol(C2.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 47, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 48, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 47, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 47, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 47, 9))
+
+    foo3<T>(x: T); // no error, different declaration for each T
+>foo3 : Symbol(C2.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 47, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 48, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 48, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 48, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 48, 9))
+
+    foo3<T>(x: T) { }
+>foo3 : Symbol(C2.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 45, 27), Decl(typeParametersAreIdenticalToThemselves.ts, 47, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 48, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 49, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 49, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 49, 9))
+}
+
+interface I<T> {
+>I : Symbol(I, Decl(typeParametersAreIdenticalToThemselves.ts, 50, 1))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 12))
+
+    foo1(x: T);
+>foo1 : Symbol(I.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 16), Decl(typeParametersAreIdenticalToThemselves.ts, 53, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 53, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 12))
+
+    foo1(x: T); // error, same T
+>foo1 : Symbol(I.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 16), Decl(typeParametersAreIdenticalToThemselves.ts, 53, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 54, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 12))
+
+    foo2<U>(a: T, x: U);
+>foo2 : Symbol(I.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 54, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 56, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 56, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 56, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 12))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 56, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 56, 9))
+
+    foo2<U>(a: T, x: U); // no error, different declaration for each U
+>foo2 : Symbol(I.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 54, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 56, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 52, 12))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 9))
+
+    foo3<T>(x: T);
+>foo3 : Symbol(I.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 59, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 59, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 59, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 59, 9))
+
+    foo3<T>(x: T); // no error, different declaration for each T
+>foo3 : Symbol(I.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 57, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 59, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 9))
+
+    foo4<T extends Date>(x: T);
+>foo4 : Symbol(I.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 62, 31))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 25))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 9))
+
+    foo4<T extends Date>(x: T); // no error, different declaration for each T
+>foo4 : Symbol(I.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 62, 31))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 25))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 9))
+}
+
+interface I2<T extends Date> {
+>I2 : Symbol(I2, Decl(typeParametersAreIdenticalToThemselves.ts, 64, 1))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo1(x: T);
+>foo1 : Symbol(I2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 30), Decl(typeParametersAreIdenticalToThemselves.ts, 67, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 67, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
+
+    foo1(x: T); // error, same T
+>foo1 : Symbol(I2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 30), Decl(typeParametersAreIdenticalToThemselves.ts, 67, 15))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 68, 9))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
+
+    foo2<U>(a: T, x: U);
+>foo2 : Symbol(I2.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 68, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 70, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 70, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 70, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 70, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 70, 9))
+
+    foo2<U>(a: T, x: U); // no error, different declaration for each U
+>foo2 : Symbol(I2.foo2, Decl(typeParametersAreIdenticalToThemselves.ts, 68, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 70, 24))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 9))
+>a : Symbol(a, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 17))
+>U : Symbol(U, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 9))
+
+    foo3<T>(x: T);
+>foo3 : Symbol(I2.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 73, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 73, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 73, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 73, 9))
+
+    foo3<T>(x: T); // no error, different declaration for each T
+>foo3 : Symbol(I2.foo3, Decl(typeParametersAreIdenticalToThemselves.ts, 71, 24), Decl(typeParametersAreIdenticalToThemselves.ts, 73, 18))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 74, 9))
+>x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 74, 12))
+>T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 74, 9))
+}

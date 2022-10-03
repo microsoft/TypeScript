@@ -1,0 +1,7 @@
+=== tests/cases/compiler/duplicateTypeParameters3.ts ===
+interface X {
+x: () => <A, A>() => void;
+>x : () => <A>() => void
+}
+ 
+

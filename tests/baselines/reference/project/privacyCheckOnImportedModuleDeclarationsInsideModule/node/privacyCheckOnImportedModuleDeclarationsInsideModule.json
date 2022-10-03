@@ -1,0 +1,15 @@
+{
+    "scenario": "privacy Check on imported module - declarations inside module",
+    "projectRoot": "tests/cases/projects/privacyCheck-InsideModule",
+    "inputFiles": [
+        "testGlo.ts"
+    ],
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "testGlo.ts"
+    ],
+    "emittedFiles": [
+        "testGlo.js"
+    ]
+}

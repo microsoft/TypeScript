@@ -1,0 +1,32 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop1.ts ===
+declare function use(n: number): void;
+>use : (n: number) => void
+>n : number
+
+(function () {
+>(function () {  'use strict'  for (let i = 0; i < 9; ++i) {    (() => use(++i))();  }})() : void
+>(function () {  'use strict'  for (let i = 0; i < 9; ++i) {    (() => use(++i))();  }}) : () => void
+>function () {  'use strict'  for (let i = 0; i < 9; ++i) {    (() => use(++i))();  }} : () => void
+
+  'use strict'
+>'use strict' : "use strict"
+
+  for (let i = 0; i < 9; ++i) {
+>i : number
+>0 : 0
+>i < 9 : boolean
+>i : number
+>9 : 9
+>++i : number
+>i : number
+
+    (() => use(++i))();
+>(() => use(++i))() : void
+>(() => use(++i)) : () => void
+>() => use(++i) : () => void
+>use(++i) : void
+>use : (n: number) => void
+>++i : number
+>i : number
+  }
+})();

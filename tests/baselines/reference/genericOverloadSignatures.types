@@ -1,0 +1,63 @@
+=== tests/cases/compiler/genericOverloadSignatures.ts ===
+interface A {
+    <T>(x: T): void;
+>x : T
+
+    <T>(x: T): void;
+>x : T
+}
+
+function f<T>(a: T);
+>f : { <T>(a: T): any; <T>(a: T): any; }
+>a : T
+
+function f<T>(a: T);
+>f : { <T>(a: T): any; <T>(a: T): any; }
+>a : T
+
+function f(a) { }
+>f : { <T>(a: T): any; <T>(a: T): any; }
+>a : any
+
+interface I2 {
+    f<T>(x: T): number;
+>f : { <T>(x: T): number; <T>(x: T): string; }
+>x : T
+
+    f<T>(x: T): string;
+>f : { <T>(x: T): number; <T>(x: T): string; }
+>x : T
+}
+
+interface I3<T> {
+    f(x: T): number;
+>f : { (x: T): number; (x: T): string; }
+>x : T
+
+    f(x: T): string;
+>f : { (x: T): number; (x: T): string; }
+>x : T
+}
+
+class C2<T> {
+>C2 : C2<T>
+}
+var b: {
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+
+    new <T>(x: T, y: string): C2<T>;
+>x : T
+>y : string
+
+    new <T>(x: T, y: string): C2<T>;
+>x : T
+>y : string
+}
+
+interface D {
+    <T>(x: T): T;
+>x : T
+
+    <T>(x: T): T;
+>x : T
+}

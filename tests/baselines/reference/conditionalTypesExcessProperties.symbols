@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts ===
+type Something<T> = { test: string } &  (T extends object ? {
+>Something : Symbol(Something, Decl(conditionalTypesExcessProperties.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypesExcessProperties.ts, 0, 15))
+>test : Symbol(test, Decl(conditionalTypesExcessProperties.ts, 0, 21))
+>T : Symbol(T, Decl(conditionalTypesExcessProperties.ts, 0, 15))
+
+    arg: T
+>arg : Symbol(arg, Decl(conditionalTypesExcessProperties.ts, 0, 61))
+>T : Symbol(T, Decl(conditionalTypesExcessProperties.ts, 0, 15))
+
+} : {
+    arg?: undefined
+>arg : Symbol(arg, Decl(conditionalTypesExcessProperties.ts, 2, 5))
+
+    });
+
+function testFunc2<A extends object>(a: A, sa: Something<A>) {
+>testFunc2 : Symbol(testFunc2, Decl(conditionalTypesExcessProperties.ts, 4, 7))
+>A : Symbol(A, Decl(conditionalTypesExcessProperties.ts, 6, 19))
+>a : Symbol(a, Decl(conditionalTypesExcessProperties.ts, 6, 37))
+>A : Symbol(A, Decl(conditionalTypesExcessProperties.ts, 6, 19))
+>sa : Symbol(sa, Decl(conditionalTypesExcessProperties.ts, 6, 42))
+>Something : Symbol(Something, Decl(conditionalTypesExcessProperties.ts, 0, 0))
+>A : Symbol(A, Decl(conditionalTypesExcessProperties.ts, 6, 19))
+
+    sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
+>sa : Symbol(sa, Decl(conditionalTypesExcessProperties.ts, 6, 42))
+>test : Symbol(test, Decl(conditionalTypesExcessProperties.ts, 7, 10))
+>arg : Symbol(arg, Decl(conditionalTypesExcessProperties.ts, 7, 22))
+>a : Symbol(a, Decl(conditionalTypesExcessProperties.ts, 6, 37))
+
+    sa = { test: 'bye', arg: a, arr: a } // excess
+>sa : Symbol(sa, Decl(conditionalTypesExcessProperties.ts, 6, 42))
+>test : Symbol(test, Decl(conditionalTypesExcessProperties.ts, 8, 10))
+>arg : Symbol(arg, Decl(conditionalTypesExcessProperties.ts, 8, 23))
+>a : Symbol(a, Decl(conditionalTypesExcessProperties.ts, 6, 37))
+>arr : Symbol(arr, Decl(conditionalTypesExcessProperties.ts, 8, 31))
+>a : Symbol(a, Decl(conditionalTypesExcessProperties.ts, 6, 37))
+}
+

@@ -1,0 +1,11 @@
+tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts(1,14): error TS4118: The type of this node cannot be serialized because its property '[iterator]' cannot be serialized.
+tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts(1,14): error TS4118: The type of this node cannot be serialized because its property '[unscopables]' cannot be serialized.
+
+
+==== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts (2 errors) ====
+    export const thing = (null as any as { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] });
+                 ~~~~~
+!!! error TS4118: The type of this node cannot be serialized because its property '[iterator]' cannot be serialized.
+                 ~~~~~
+!!! error TS4118: The type of this node cannot be serialized because its property '[unscopables]' cannot be serialized.
+    

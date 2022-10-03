@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+module.exports = class {
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 0, 0))
+>exports : Symbol(export=, Decl(index.js, 0, 0))
+
+    /**
+     * @param {number} p
+     */
+    constructor(p) {
+>p : Symbol(p, Decl(index.js, 4, 16))
+
+        this.t = 12 + p;
+>this.t : Symbol(exports.t, Decl(index.js, 4, 20))
+>this : Symbol(exports, Decl(index.js, 0, 16))
+>t : Symbol(exports.t, Decl(index.js, 4, 20))
+>p : Symbol(p, Decl(index.js, 4, 16))
+    }
+}
+module.exports.Sub = class {
+>module.exports.Sub : Symbol(Sub, Decl(index.js, 7, 1))
+>module.exports : Symbol(Sub, Decl(index.js, 7, 1))
+>module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>Sub : Symbol(Sub, Decl(index.js, 7, 1))
+
+    constructor() {
+        this.instance = new module.exports(10);
+>this.instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
+>this : Symbol(Sub, Decl(index.js, 8, 20))
+>instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+    }
+}
+

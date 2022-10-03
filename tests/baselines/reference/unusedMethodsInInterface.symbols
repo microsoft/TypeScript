@@ -1,0 +1,12 @@
+=== tests/cases/compiler/unusedMethodsInInterface.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(unusedMethodsInInterface.ts, 0, 0))
+
+    f1();
+>f1 : Symbol(I1.f1, Decl(unusedMethodsInInterface.ts, 0, 14))
+
+    f2(x: number, y: string);
+>f2 : Symbol(I1.f2, Decl(unusedMethodsInInterface.ts, 1, 9))
+>x : Symbol(x, Decl(unusedMethodsInInterface.ts, 2, 7))
+>y : Symbol(y, Decl(unusedMethodsInInterface.ts, 2, 17))
+}

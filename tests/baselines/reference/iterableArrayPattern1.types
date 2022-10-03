@@ -1,0 +1,39 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern1.ts ===
+class SymbolIterator {
+>SymbolIterator : SymbolIterator
+
+    next() {
+>next : () => { value: symbol; done: boolean; }
+
+        return {
+>{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+
+            value: Symbol(),
+>value : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+var [a, b] = new SymbolIterator;
+>a : symbol
+>b : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

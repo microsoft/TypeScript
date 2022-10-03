@@ -1,0 +1,69 @@
+=== tests/cases/compiler/declarationEmitRetainsJsdocyComments.ts ===
+/**
+ * comment1
+ * @param p 
+ */
+export const foo = (p: string) => {
+>foo : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
+>(p: string) => {    return {        /**         * comment2         * @param s          */        bar: (s: number) => {},        /**         * comment3         * @param s          */        bar2(s: number) {},    }} : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
+>p : string
+
+    return {
+>{        /**         * comment2         * @param s          */        bar: (s: number) => {},        /**         * comment3         * @param s          */        bar2(s: number) {},    } : { bar: (s: number) => void; bar2(s: number): void; }
+
+        /**
+         * comment2
+         * @param s 
+         */
+        bar: (s: number) => {},
+>bar : (s: number) => void
+>(s: number) => {} : (s: number) => void
+>s : number
+
+        /**
+         * comment3
+         * @param s 
+         */
+        bar2(s: number) {},
+>bar2 : (s: number) => void
+>s : number
+    }
+}
+
+export class Foo {
+>Foo : Foo
+
+    /**
+     * comment4
+     * @param s  
+     */
+    bar(s: number) {
+>bar : (s: number) => void
+>s : number
+    }
+}
+
+export let {
+    /**
+    * comment5
+    */
+    someMethod
+>someMethod : any
+
+} = null as any;
+>null as any : any
+>null : null
+
+declare global {
+>global : any
+
+    interface ExtFunc {
+        /**
+        * comment6
+        */
+        someMethod(collection: any[]): boolean;
+>someMethod : (collection: any[]) => boolean
+>collection : any[]
+    }
+}
+

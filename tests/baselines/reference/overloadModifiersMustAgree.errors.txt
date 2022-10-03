@@ -1,0 +1,30 @@
+tests/cases/compiler/overloadModifiersMustAgree.ts(2,12): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/compiler/overloadModifiersMustAgree.ts(6,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/compiler/overloadModifiersMustAgree.ts(7,17): error TS2383: Overload signatures must all be exported or non-exported.
+tests/cases/compiler/overloadModifiersMustAgree.ts(12,5): error TS2386: Overload signatures must all be optional or required.
+
+
+==== tests/cases/compiler/overloadModifiersMustAgree.ts (4 errors) ====
+    class baz {
+        public foo();
+               ~~~
+!!! error TS2385: Overload signatures must all be public, private or protected.
+        private foo(bar?: any) { } // error - access modifiers do not agree
+    }
+    
+    declare function bar();
+                     ~~~
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
+    export function bar(s: string);
+                    ~~~
+!!! error TS2383: Overload signatures must all be exported or non-exported.
+    function bar(s?: string) { }
+    
+    interface I {
+        foo? ();
+        foo(s: string);
+        ~~~
+!!! error TS2386: Overload signatures must all be optional or required.
+    }
+    
+    

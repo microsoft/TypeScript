@@ -1,0 +1,34 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+// from #3108
+export var test = 'abc';
+>test : Symbol(test, Decl(a.ts, 1, 10))
+
+=== tests/cases/conformance/decorators/class/b.ts ===
+import { test } from './a';
+>test : Symbol(test, Decl(b.ts, 0, 8))
+
+function filter(handler: any) {
+>filter : Symbol(filter, Decl(b.ts, 0, 27))
+>handler : Symbol(handler, Decl(b.ts, 2, 16))
+
+    return function (target: any, propertyKey: string) {
+>target : Symbol(target, Decl(b.ts, 3, 21))
+>propertyKey : Symbol(propertyKey, Decl(b.ts, 3, 33))
+
+        // ...
+    };
+}
+
+class Wat {
+>Wat : Symbol(Wat, Decl(b.ts, 6, 1))
+
+    @filter(() => test == 'abc')
+>filter : Symbol(filter, Decl(b.ts, 0, 27))
+>test : Symbol(test, Decl(b.ts, 0, 8))
+
+    static whatever() {
+>whatever : Symbol(Wat.whatever, Decl(b.ts, 8, 11))
+
+        // ...
+    }
+}

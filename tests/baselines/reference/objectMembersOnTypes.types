@@ -1,0 +1,32 @@
+=== tests/cases/compiler/objectMembersOnTypes.ts ===
+interface I {}
+class AAA implements I { }
+>AAA : AAA
+
+var x: number;
+>x : number
+
+x.toString();
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+
+var i: I;
+>i : I
+
+i.toString(); // used to be an error
+>i.toString() : string
+>i.toString : () => string
+>i : I
+>toString : () => string
+
+var c: AAA;
+>c : AAA
+
+c.toString(); // used to be an error
+>c.toString() : string
+>c.toString : () => string
+>c : AAA
+>toString : () => string
+

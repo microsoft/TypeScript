@@ -1,0 +1,19 @@
+=== tests/cases/compiler/contextualTypingTwoInstancesOfSameTypeParameter.ts ===
+function f6<T>(x: (a: T) => T) {
+>f6 : Symbol(f6, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 12))
+>x : Symbol(x, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 15))
+>a : Symbol(a, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 19))
+>T : Symbol(T, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 12))
+>T : Symbol(T, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 12))
+
+    return null;
+} 
+f6(x => f6(y => x = y));
+>f6 : Symbol(f6, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 0))
+>x : Symbol(x, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 3, 3))
+>f6 : Symbol(f6, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 0))
+>y : Symbol(y, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 3, 11))
+>x : Symbol(x, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 3, 3))
+>y : Symbol(y, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 3, 11))
+

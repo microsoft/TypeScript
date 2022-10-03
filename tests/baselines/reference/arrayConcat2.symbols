@@ -1,0 +1,23 @@
+=== tests/cases/compiler/arrayConcat2.ts ===
+var a: string[] = [];
+>a : Symbol(a, Decl(arrayConcat2.ts, 0, 3))
+
+a.concat("hello", 'world');
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(arrayConcat2.ts, 0, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+a.concat('Hello');
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(arrayConcat2.ts, 0, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var b = new Array<string>();
+>b : Symbol(b, Decl(arrayConcat2.ts, 5, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+b.concat('hello');
+>b.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(arrayConcat2.ts, 5, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

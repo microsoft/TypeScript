@@ -1,0 +1,16 @@
+=== /a/node_modules/@types/jquery/index.d.ts ===
+interface JQuery {
+>JQuery : Symbol(JQuery, Decl(index.d.ts, 0, 0))
+
+}
+
+=== /a/app.ts ===
+/// <reference types="jquery"/>
+namespace Test {
+>Test : Symbol(Test, Decl(app.ts, 0, 0))
+
+    export var x: JQuery;
+>x : Symbol(x, Decl(app.ts, 2, 14))
+>JQuery : Symbol(JQuery, Decl(index.d.ts, 0, 0))
+}
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/randomSemicolons1.ts ===
+; ;
+var a = 1;
+>a : number
+>1 : 1
+
+; 
+

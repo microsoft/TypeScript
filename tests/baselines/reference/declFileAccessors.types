@@ -1,0 +1,173 @@
+=== tests/cases/compiler/declFileAccessors_0.ts ===
+/** This is comment for c1*/
+export class c1 {
+>c1 : c1
+
+    /** getter property*/
+    public get p3() {
+>p3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** setter property*/
+    public set p3(/** this is value*/value: number) {
+>p3 : number
+>value : number
+    }
+    /** private getter property*/
+    private get pp3() {
+>pp3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** private setter property*/
+    private set pp3(/** this is value*/value: number) {
+>pp3 : number
+>value : number
+    }
+    /** static getter property*/
+    static get s3() {
+>s3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** setter property*/
+    static set s3( /** this is value*/value: number) {
+>s3 : number
+>value : number
+    }
+    public get nc_p3() {
+>nc_p3 : number
+
+        return 10;
+>10 : 10
+    }
+    public set nc_p3(value: number) {
+>nc_p3 : number
+>value : number
+    }
+    private get nc_pp3() {
+>nc_pp3 : number
+
+        return 10;
+>10 : 10
+    }
+    private set nc_pp3(value: number) {
+>nc_pp3 : number
+>value : number
+    }
+    static get nc_s3() {
+>nc_s3 : string
+
+        return "";
+>"" : ""
+    }
+    static set nc_s3(value: string) {
+>nc_s3 : string
+>value : string
+    }
+
+    // Only getter property
+    public get onlyGetter() {
+>onlyGetter : number
+
+        return 10;
+>10 : 10
+    }
+
+    // Only setter property
+    public set onlySetter(value: number) {
+>onlySetter : number
+>value : number
+    }
+}
+
+=== tests/cases/compiler/declFileAccessors_1.ts ===
+/** This is comment for c2 - the global class*/
+class c2 {
+>c2 : c2
+
+    /** getter property*/
+    public get p3() {
+>p3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** setter property*/
+    public set p3(/** this is value*/value: number) {
+>p3 : number
+>value : number
+    }
+    /** private getter property*/
+    private get pp3() {
+>pp3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** private setter property*/
+    private set pp3(/** this is value*/value: number) {
+>pp3 : number
+>value : number
+    }
+    /** static getter property*/
+    static get s3() {
+>s3 : number
+
+        return 10;
+>10 : 10
+    }
+    /** setter property*/
+    static set s3( /** this is value*/value: number) {
+>s3 : number
+>value : number
+    }
+    public get nc_p3() {
+>nc_p3 : number
+
+        return 10;
+>10 : 10
+    }
+    public set nc_p3(value: number) {
+>nc_p3 : number
+>value : number
+    }
+    private get nc_pp3() {
+>nc_pp3 : number
+
+        return 10;
+>10 : 10
+    }
+    private set nc_pp3(value: number) {
+>nc_pp3 : number
+>value : number
+    }
+    static get nc_s3() {
+>nc_s3 : string
+
+        return "";
+>"" : ""
+    }
+    static set nc_s3(value: string) {
+>nc_s3 : string
+>value : string
+    }
+
+    // Only getter property
+    public get onlyGetter() {
+>onlyGetter : number
+
+        return 10;
+>10 : 10
+    }
+
+    // Only setter property
+    public set onlySetter(value: number) {
+>onlySetter : number
+>value : number
+    }
+}

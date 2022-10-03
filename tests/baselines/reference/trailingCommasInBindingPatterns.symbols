@@ -1,0 +1,34 @@
+=== tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts ===
+const [...a,] = [];
+>a : Symbol(a, Decl(trailingCommasInBindingPatterns.ts, 0, 7))
+
+const {...b,} = {};
+>b : Symbol(b, Decl(trailingCommasInBindingPatterns.ts, 1, 7))
+
+let c, d;
+>c : Symbol(c, Decl(trailingCommasInBindingPatterns.ts, 2, 3))
+>d : Symbol(d, Decl(trailingCommasInBindingPatterns.ts, 2, 6))
+
+([...c,] = []);
+>c : Symbol(c, Decl(trailingCommasInBindingPatterns.ts, 2, 3))
+
+({...d,} = {});
+>d : Symbol(d, Decl(trailingCommasInBindingPatterns.ts, 2, 6))
+
+// Allowed for non-rest elements
+const [e,] = <any>[];
+>e : Symbol(e, Decl(trailingCommasInBindingPatterns.ts, 7, 7))
+
+const {f,} = <any>{};
+>f : Symbol(f, Decl(trailingCommasInBindingPatterns.ts, 8, 7))
+
+let g, h;
+>g : Symbol(g, Decl(trailingCommasInBindingPatterns.ts, 9, 3))
+>h : Symbol(h, Decl(trailingCommasInBindingPatterns.ts, 9, 6))
+
+([g,] = <any>[]);
+>g : Symbol(g, Decl(trailingCommasInBindingPatterns.ts, 9, 3))
+
+({h,} = <any>{});
+>h : Symbol(h, Decl(trailingCommasInBindingPatterns.ts, 11, 2))
+

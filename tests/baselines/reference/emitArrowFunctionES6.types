@@ -1,0 +1,104 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionES6.ts ===
+var f1 = () => { }
+>f1 : () => void
+>() => { } : () => void
+
+var f2 = (x: string, y: string) => { }
+>f2 : (x: string, y: string) => void
+>(x: string, y: string) => { } : (x: string, y: string) => void
+>x : string
+>y : string
+
+var f3 = (x: string, y: number, ...rest) => { }
+>f3 : (x: string, y: number, ...rest: any[]) => void
+>(x: string, y: number, ...rest) => { } : (x: string, y: number, ...rest: any[]) => void
+>x : string
+>y : number
+>rest : any[]
+
+var f4 = (x: string, y: number, z=10) => { }
+>f4 : (x: string, y: number, z?: number) => void
+>(x: string, y: number, z=10) => { } : (x: string, y: number, z?: number) => void
+>x : string
+>y : number
+>z : number
+>10 : 10
+
+function foo(func: () => boolean) { }
+>foo : (func: () => boolean) => void
+>func : () => boolean
+
+foo(() => true);
+>foo(() => true) : void
+>foo : (func: () => boolean) => void
+>() => true : () => true
+>true : true
+
+foo(() => { return false; });
+>foo(() => { return false; }) : void
+>foo : (func: () => boolean) => void
+>() => { return false; } : () => false
+>false : false
+
+// Binding patterns in arrow functions
+var p1 = ([a]) => { };
+>p1 : ([a]: [any]) => void
+>([a]) => { } : ([a]: [any]) => void
+>a : any
+
+var p2 = ([...a]) => { };
+>p2 : ([...a]: Iterable<any>) => void
+>([...a]) => { } : ([...a]: Iterable<any>) => void
+>a : any[]
+
+var p3 = ([, a]) => { };
+>p3 : ([, a]: [any, any]) => void
+>([, a]) => { } : ([, a]: [any, any]) => void
+> : undefined
+>a : any
+
+var p4 = ([, ...a]) => { };
+>p4 : ([, ...a]: [any?, ...any[]]) => void
+>([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
+> : undefined
+>a : any[]
+
+var p5 = ([a = 1]) => { };
+>p5 : ([a]: [number?]) => void
+>([a = 1]) => { } : ([a]: [number?]) => void
+>a : number
+>1 : 1
+
+var p6 = ({ a }) => { };
+>p6 : ({ a }: { a: any; }) => void
+>({ a }) => { } : ({ a }: { a: any; }) => void
+>a : any
+
+var p7 = ({ a: { b } }) => { };
+>p7 : ({ a: { b } }: { a: { b: any; }; }) => void
+>({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
+>a : any
+>b : any
+
+var p8 = ({ a = 1 }) => { };
+>p8 : ({ a }: { a?: number; }) => void
+>({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
+>a : number
+>1 : 1
+
+var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
+>p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>a : any
+>b : number
+>1 : 1
+>{ b: 1 } : { b?: number; }
+>b : number
+>1 : 1
+
+var p10 = ([{ value, done }]) => { };
+>p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>value : any
+>done : any
+

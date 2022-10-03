@@ -1,0 +1,34 @@
+=== tests/cases/compiler/systemModuleConstEnumsSeparateCompilation.ts ===
+declare function use(a: any);
+>use : (a: any) => any
+>a : any
+
+const enum TopLevelConstEnum { X }
+>TopLevelConstEnum : TopLevelConstEnum
+>X : TopLevelConstEnum.X
+
+export function foo() {
+>foo : () => void
+
+    use(TopLevelConstEnum.X);
+>use(TopLevelConstEnum.X) : any
+>use : (a: any) => any
+>TopLevelConstEnum.X : TopLevelConstEnum
+>TopLevelConstEnum : typeof TopLevelConstEnum
+>X : TopLevelConstEnum
+
+    use(M.NonTopLevelConstEnum.X);
+>use(M.NonTopLevelConstEnum.X) : any
+>use : (a: any) => any
+>M.NonTopLevelConstEnum.X : M.NonTopLevelConstEnum
+>M.NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
+>M : typeof M
+>NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
+>X : M.NonTopLevelConstEnum
+}
+
+module M {
+    export const enum NonTopLevelConstEnum { X }
+>NonTopLevelConstEnum : NonTopLevelConstEnum
+>X : NonTopLevelConstEnum.X
+}

@@ -1,0 +1,125 @@
+=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts ===
+declare const o1: undefined | { b: string };
+>o1 : Symbol(o1, Decl(elementAccessChain.ts, 0, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 0, 31))
+
+o1?.["b"];
+>o1 : Symbol(o1, Decl(elementAccessChain.ts, 0, 13))
+
+declare const o2: undefined | { b: { c: string } };
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.["b"].c;
+>o2?.["b"].c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.b["c"];
+>o2?.b : Symbol(b, Decl(elementAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 3, 31))
+
+declare const o3: { b: undefined | { c: string } };
+>o3 : Symbol(o3, Decl(elementAccessChain.ts, 7, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 7, 19))
+>c : Symbol(c, Decl(elementAccessChain.ts, 7, 36))
+
+o3["b"]?.c;
+>o3["b"]?.c : Symbol(c, Decl(elementAccessChain.ts, 7, 36))
+>o3 : Symbol(o3, Decl(elementAccessChain.ts, 7, 13))
+>"b" : Symbol(b, Decl(elementAccessChain.ts, 7, 19))
+>c : Symbol(c, Decl(elementAccessChain.ts, 7, 36))
+
+o3.b?.["c"];
+>o3.b : Symbol(b, Decl(elementAccessChain.ts, 7, 19))
+>o3 : Symbol(o3, Decl(elementAccessChain.ts, 7, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 7, 19))
+
+declare const o4: { b?: { c: { d?: { e: string } } } };
+>o4 : Symbol(o4, Decl(elementAccessChain.ts, 11, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 11, 19))
+>c : Symbol(c, Decl(elementAccessChain.ts, 11, 25))
+>d : Symbol(d, Decl(elementAccessChain.ts, 11, 30))
+>e : Symbol(e, Decl(elementAccessChain.ts, 11, 36))
+
+o4.b?.["c"].d?.e;
+>o4.b?.["c"].d?.e : Symbol(e, Decl(elementAccessChain.ts, 11, 36))
+>o4.b?.["c"].d : Symbol(d, Decl(elementAccessChain.ts, 11, 30))
+>o4.b : Symbol(b, Decl(elementAccessChain.ts, 11, 19))
+>o4 : Symbol(o4, Decl(elementAccessChain.ts, 11, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 11, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 11, 30))
+>e : Symbol(e, Decl(elementAccessChain.ts, 11, 36))
+
+o4.b?.["c"].d?.["e"];
+>o4.b?.["c"].d : Symbol(d, Decl(elementAccessChain.ts, 11, 30))
+>o4.b : Symbol(b, Decl(elementAccessChain.ts, 11, 19))
+>o4 : Symbol(o4, Decl(elementAccessChain.ts, 11, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 11, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 11, 30))
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+>o5 : Symbol(o5, Decl(elementAccessChain.ts, 15, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>c : Symbol(c, Decl(elementAccessChain.ts, 15, 27))
+>d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>e : Symbol(e, Decl(elementAccessChain.ts, 15, 38))
+
+o5.b?.()["c"].d?.e;
+>o5.b?.()["c"].d?.e : Symbol(e, Decl(elementAccessChain.ts, 15, 38))
+>o5.b?.()["c"].d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>o5.b : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>o5 : Symbol(o5, Decl(elementAccessChain.ts, 15, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>e : Symbol(e, Decl(elementAccessChain.ts, 15, 38))
+
+o5.b?.()["c"].d?.["e"];
+>o5.b?.()["c"].d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>o5.b : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>o5 : Symbol(o5, Decl(elementAccessChain.ts, 15, 13))
+>b : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+
+o5["b"]?.()["c"].d?.e;
+>o5["b"]?.()["c"].d?.e : Symbol(e, Decl(elementAccessChain.ts, 15, 38))
+>o5["b"]?.()["c"].d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>o5 : Symbol(o5, Decl(elementAccessChain.ts, 15, 13))
+>"b" : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>e : Symbol(e, Decl(elementAccessChain.ts, 15, 38))
+
+o5["b"]?.()["c"].d?.["e"];
+>o5["b"]?.()["c"].d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+>o5 : Symbol(o5, Decl(elementAccessChain.ts, 15, 13))
+>"b" : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
+>d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
+
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : Symbol(o6, Decl(elementAccessChain.ts, 22, 13))
+>T : Symbol(T, Decl(elementAccessChain.ts, 22, 19))
+>x : Symbol(x, Decl(elementAccessChain.ts, 22, 41))
+
+o6<number>()?.["x"];
+>o6 : Symbol(o6, Decl(elementAccessChain.ts, 22, 13))
+
+// GH#36031
+o2?.["b"]!.c;
+>o2?.["b"]!.c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.["b"]!["c"];
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+
+o2?.["b"]!.c!;
+>o2?.["b"]!.c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.["b"]!["c"]!;
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+

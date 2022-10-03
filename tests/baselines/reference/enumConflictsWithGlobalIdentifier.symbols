@@ -1,0 +1,16 @@
+=== tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts ===
+enum Position { 
+>Position : Symbol(Position, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 0))
+
+    IgnoreRulesSpecific = 0,
+>IgnoreRulesSpecific : Symbol(Position.IgnoreRulesSpecific, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 15))
+}
+var x = IgnoreRulesSpecific.
+>x : Symbol(x, Decl(enumConflictsWithGlobalIdentifier.ts, 3, 3))
+
+var y = Position.IgnoreRulesSpecific;
+>y : Symbol(y, Decl(enumConflictsWithGlobalIdentifier.ts, 4, 3))
+>Position.IgnoreRulesSpecific : Symbol(Position.IgnoreRulesSpecific, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 15))
+>Position : Symbol(Position, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 0))
+>IgnoreRulesSpecific : Symbol(Position.IgnoreRulesSpecific, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 15))
+

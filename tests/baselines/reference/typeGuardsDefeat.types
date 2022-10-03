@@ -1,0 +1,105 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts ===
+// Also note that it is possible to defeat a type guard by calling a function that changes the 
+// type of the guarded variable.
+function foo(x: number | string) {
+>foo : (x: number | string) => number
+>x : string | number
+
+    function f() {
+>f : () => void
+
+        x = 10;
+>x = 10 : 10
+>x : string | number
+>10 : 10
+    }
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        f();
+>f() : void
+>f : () => void
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        return x++; // number
+>x++ : number
+>x : number
+    }
+}
+function foo2(x: number | string) {
+>foo2 : (x: number | string) => number
+>x : string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        var f = function () {
+>f : () => number
+>function () {            return x * x;        } : () => number
+
+            return x * x;
+>x * x : number
+>x : string | number
+>x : string | number
+
+        };
+    }
+    x = "hello";
+>x = "hello" : "hello"
+>x : string | number
+>"hello" : "hello"
+
+    f();
+>f() : number
+>f : () => number
+}
+function foo3(x: number | string) {
+>foo3 : (x: number | string) => number
+>x : string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        var f = () => x * x;
+>f : () => number
+>() => x * x : () => number
+>x * x : number
+>x : string | number
+>x : string | number
+    }
+    x = "hello";
+>x = "hello" : "hello"
+>x : string | number
+>"hello" : "hello"
+
+    f();
+>f() : number
+>f : () => number
+}
+

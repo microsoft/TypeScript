@@ -1,0 +1,34 @@
+=== tests/cases/compiler/genericTypeWithMultipleBases3.ts ===
+interface IA<T> {
+
+foo(x: T): T;
+>foo : (x: T) => T
+>x : T
+
+}
+
+interface IB<T> {
+
+bar(x: T): T;
+>bar : (x: T) => T
+>x : T
+
+}
+
+interface IC<T> extends IA<T>, IB<T> { }
+
+var c: IC<number>;
+>c : IC<number>
+
+var x = c.foo;
+>x : (x: number) => number
+>c.foo : (x: number) => number
+>c : IC<number>
+>foo : (x: number) => number
+
+var y = c.bar;
+>y : (x: number) => number
+>c.bar : (x: number) => number
+>c : IC<number>
+>bar : (x: number) => number
+

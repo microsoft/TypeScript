@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+var lol;
+>lol : Symbol(lol, Decl(0.js, 1, 3))
+
+const obj = {
+>obj : Symbol(obj, Decl(0.js, 2, 5))
+
+  /** @type {string|undefined} */
+  bar: 42,
+>bar : Symbol(bar, Decl(0.js, 2, 13))
+
+  /** @type {function(number): number} */
+  method1(n1) {
+>method1 : Symbol(method1, Decl(0.js, 4, 10))
+>n1 : Symbol(n1, Decl(0.js, 6, 10))
+
+      return "42";
+  },
+  /** @type {function(number): number} */
+  method2: (n1) => "lol",
+>method2 : Symbol(method2, Decl(0.js, 8, 4))
+>n1 : Symbol(n1, Decl(0.js, 10, 12))
+
+  /** @type {function(number): number} */
+  arrowFunc: (num="0") => num + 42,
+>arrowFunc : Symbol(arrowFunc, Decl(0.js, 10, 25))
+>num : Symbol(num, Decl(0.js, 12, 14))
+>num : Symbol(num, Decl(0.js, 12, 14))
+
+  /** @type {string} */
+  lol
+>lol : Symbol(lol, Decl(0.js, 12, 35))
+}
+lol = "string"
+>lol : Symbol(lol, Decl(0.js, 1, 3))
+
+/** @type {string} */
+var s = obj.method1(0);
+>s : Symbol(s, Decl(0.js, 18, 3))
+>obj.method1 : Symbol(method1, Decl(0.js, 4, 10))
+>obj : Symbol(obj, Decl(0.js, 2, 5))
+>method1 : Symbol(method1, Decl(0.js, 4, 10))
+
+/** @type {string} */
+var s1 = obj.method2("0");
+>s1 : Symbol(s1, Decl(0.js, 21, 3))
+>obj.method2 : Symbol(method2, Decl(0.js, 8, 4))
+>obj : Symbol(obj, Decl(0.js, 2, 5))
+>method2 : Symbol(method2, Decl(0.js, 8, 4))
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/quotedAccessorName2.ts ===
+class C {
+>C : C
+
+    static get "foo"() { return 0; }
+>"foo" : number
+>0 : 0
+}

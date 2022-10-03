@@ -1,0 +1,29 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts ===
+interface G<T> {
+>G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+
+    x: G<G<T>> // infinitely expanding type reference
+>x : Symbol(G.x, Decl(infiniteExpansionThroughTypeInference.ts, 0, 16))
+>G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+>G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+
+    y: T
+>y : Symbol(G.y, Decl(infiniteExpansionThroughTypeInference.ts, 1, 14))
+>T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+}
+
+function ff<T>(g: G<T>): void {
+>ff : Symbol(ff, Decl(infiniteExpansionThroughTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 5, 12))
+>g : Symbol(g, Decl(infiniteExpansionThroughTypeInference.ts, 5, 15))
+>G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 5, 12))
+
+    ff(g) // when infering T here we need to make sure to not descend into the structure of G<T> infinitely
+>ff : Symbol(ff, Decl(infiniteExpansionThroughTypeInference.ts, 3, 1))
+>g : Symbol(g, Decl(infiniteExpansionThroughTypeInference.ts, 5, 15))
+}
+
+

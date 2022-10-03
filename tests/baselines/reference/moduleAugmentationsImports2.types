@@ -1,0 +1,106 @@
+=== tests/cases/compiler/a.ts ===
+export class A {}
+>A : A
+
+=== tests/cases/compiler/b.ts ===
+export class B {x: number;}
+>B : B
+>x : number
+
+=== tests/cases/compiler/c.d.ts ===
+declare module "C" {
+>"C" : typeof import("C")
+
+    class Cls {y: string; }
+>Cls : Cls
+>y : string
+}
+
+=== tests/cases/compiler/d.ts ===
+/// <reference path="c.d.ts"/>
+
+import {A} from "./a";
+>A : typeof A
+
+import {B} from "./b";
+>B : typeof B
+
+A.prototype.getB = function () { return undefined; }
+>A.prototype.getB = function () { return undefined; } : () => any
+>A.prototype.getB : () => B
+>A.prototype : A
+>A : typeof A
+>prototype : A
+>getB : () => B
+>function () { return undefined; } : () => any
+>undefined : undefined
+
+declare module "./a" {
+>"./a" : typeof import("tests/cases/compiler/a")
+
+    interface A {
+        getB(): B;
+>getB : () => B
+    }
+}
+
+=== tests/cases/compiler/e.ts ===
+import {A} from "./a";
+>A : typeof A
+
+import {Cls} from "C";
+>Cls : typeof Cls
+
+A.prototype.getCls = function () { return undefined; }
+>A.prototype.getCls = function () { return undefined; } : () => any
+>A.prototype.getCls : () => Cls
+>A.prototype : A
+>A : typeof A
+>prototype : A
+>getCls : () => Cls
+>function () { return undefined; } : () => any
+>undefined : undefined
+
+declare module "./a" {
+>"./a" : typeof import("tests/cases/compiler/a")
+
+    interface A {
+        getCls(): Cls;
+>getCls : () => Cls
+    }
+}
+
+=== tests/cases/compiler/main.ts ===
+import {A} from "./a";
+>A : typeof A
+
+import "d";
+import "e";
+
+let a: A;
+>a : A
+
+let b = a.getB().x.toFixed();
+>b : string
+>a.getB().x.toFixed() : string
+>a.getB().x.toFixed : (fractionDigits?: number) => string
+>a.getB().x : number
+>a.getB() : import("tests/cases/compiler/b").B
+>a.getB : () => import("tests/cases/compiler/b").B
+>a : A
+>getB : () => import("tests/cases/compiler/b").B
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+let c = a.getCls().y.toLowerCase();
+>c : string
+>a.getCls().y.toLowerCase() : string
+>a.getCls().y.toLowerCase : () => string
+>a.getCls().y : string
+>a.getCls() : import("C").Cls
+>a.getCls : () => import("C").Cls
+>a : A
+>getCls : () => import("C").Cls
+>y : string
+>toLowerCase : () => string
+

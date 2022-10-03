@@ -1,0 +1,35 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES6.ts ===
+class Base {
+>Base : Base
+}
+class C extends Base {
+>C : C
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+
+        () => {
+>() => {            var obj = {                // Ideally, we would capture this. But the reference is                // illegal, and not capturing this is consistent with                //treatment of other similar violations.                [(super(), "prop")]() { }            };        } : () => void
+
+            var obj = {
+>obj : { prop(): void; }
+>{                // Ideally, we would capture this. But the reference is                // illegal, and not capturing this is consistent with                //treatment of other similar violations.                [(super(), "prop")]() { }            } : { prop(): void; }
+
+                // Ideally, we would capture this. But the reference is
+                // illegal, and not capturing this is consistent with
+                //treatment of other similar violations.
+                [(super(), "prop")]() { }
+>[(super(), "prop")] : () => void
+>(super(), "prop") : "prop"
+>super(), "prop" : "prop"
+>super() : void
+>super : any
+>"prop" : "prop"
+
+            };
+        }
+    }
+}

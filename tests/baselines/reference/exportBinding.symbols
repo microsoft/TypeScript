@@ -1,0 +1,35 @@
+=== tests/cases/conformance/es6/modules/exportConsts.ts ===
+export { x }
+>x : Symbol(x, Decl(exportConsts.ts, 0, 8))
+
+export { x as xx }
+>x : Symbol(x, Decl(exportConsts.ts, 4, 5))
+>xx : Symbol(xx, Decl(exportConsts.ts, 1, 8))
+
+export default x;
+>x : Symbol(x, Decl(exportConsts.ts, 4, 5))
+
+const x = 'x'
+>x : Symbol(x, Decl(exportConsts.ts, 4, 5))
+
+export { Y as Z }
+>Y : Symbol(Y, Decl(exportConsts.ts, 6, 17))
+>Z : Symbol(Z, Decl(exportConsts.ts, 6, 8))
+
+class Y {}
+>Y : Symbol(Y, Decl(exportConsts.ts, 6, 17))
+
+=== tests/cases/conformance/es6/modules/exportVars.ts ===
+export { y }
+>y : Symbol(y, Decl(exportVars.ts, 0, 8))
+
+export { y as yy }
+>y : Symbol(y, Decl(exportVars.ts, 3, 3))
+>yy : Symbol(yy, Decl(exportVars.ts, 1, 8))
+
+export default y;
+>y : Symbol(y, Decl(exportVars.ts, 3, 3))
+
+var y = 'y'
+>y : Symbol(y, Decl(exportVars.ts, 3, 3))
+

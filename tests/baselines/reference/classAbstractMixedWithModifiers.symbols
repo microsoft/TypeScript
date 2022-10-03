@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts ===
+abstract class A {
+>A : Symbol(A, Decl(classAbstractMixedWithModifiers.ts, 0, 0))
+
+    abstract foo_a();
+>foo_a : Symbol(A.foo_a, Decl(classAbstractMixedWithModifiers.ts, 0, 18))
+
+    public abstract foo_b();
+>foo_b : Symbol(A.foo_b, Decl(classAbstractMixedWithModifiers.ts, 1, 21))
+
+    protected abstract foo_c();
+>foo_c : Symbol(A.foo_c, Decl(classAbstractMixedWithModifiers.ts, 3, 28))
+
+    private abstract foo_d();
+>foo_d : Symbol(A.foo_d, Decl(classAbstractMixedWithModifiers.ts, 4, 31))
+
+    abstract public foo_bb();
+>foo_bb : Symbol(A.foo_bb, Decl(classAbstractMixedWithModifiers.ts, 5, 29))
+
+    abstract protected foo_cc();
+>foo_cc : Symbol(A.foo_cc, Decl(classAbstractMixedWithModifiers.ts, 7, 29))
+
+    abstract private foo_dd();
+>foo_dd : Symbol(A.foo_dd, Decl(classAbstractMixedWithModifiers.ts, 8, 32))
+
+    abstract static foo_d();
+>foo_d : Symbol(A.foo_d, Decl(classAbstractMixedWithModifiers.ts, 9, 30))
+
+    static abstract foo_e();
+>foo_e : Symbol(A.foo_e, Decl(classAbstractMixedWithModifiers.ts, 11, 28))
+
+    abstract async foo_f();
+>foo_f : Symbol(A.foo_f, Decl(classAbstractMixedWithModifiers.ts, 12, 28))
+
+    async abstract foo_g();
+>foo_g : Symbol(A.foo_g, Decl(classAbstractMixedWithModifiers.ts, 14, 27))
+}
+

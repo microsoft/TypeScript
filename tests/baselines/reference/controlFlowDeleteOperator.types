@@ -1,0 +1,78 @@
+=== tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts ===
+function f() {
+>f : () => void
+
+    let x: { a?: number | string, b: number | string } = { b: 1 };
+>x : { a?: string | number | undefined; b: number | string; }
+>a : string | number | undefined
+>b : string | number
+>{ b: 1 } : { b: number; }
+>b : number
+>1 : 1
+
+    x.a;
+>x.a : string | number | undefined
+>x : { a?: string | number | undefined; b: string | number; }
+>a : string | number | undefined
+
+    x.b;
+>x.b : string | number
+>x : { a?: string | number | undefined; b: string | number; }
+>b : string | number
+
+    x.a = 1;
+>x.a = 1 : 1
+>x.a : string | number | undefined
+>x : { a?: string | number | undefined; b: string | number; }
+>a : string | number | undefined
+>1 : 1
+
+    x.b = 1;
+>x.b = 1 : 1
+>x.b : string | number
+>x : { a?: string | number | undefined; b: string | number; }
+>b : string | number
+>1 : 1
+
+    x.a;
+>x.a : number
+>x : { a?: string | number | undefined; b: string | number; }
+>a : number
+
+    x.b;
+>x.b : number
+>x : { a?: string | number | undefined; b: string | number; }
+>b : number
+
+    delete x.a;
+>delete x.a : boolean
+>x.a : number
+>x : { a?: string | number | undefined; b: string | number; }
+>a : number
+
+    delete x.b;
+>delete x.b : boolean
+>x.b : number
+>x : { a?: string | number | undefined; b: string | number; }
+>b : number
+
+    x.a;
+>x.a : undefined
+>x : { a?: string | number | undefined; b: string | number; }
+>a : undefined
+
+    x.b;
+>x.b : string | number
+>x : { a?: string | number | undefined; b: string | number; }
+>b : string | number
+
+    x;
+>x : { a?: string | number | undefined; b: string | number; }
+
+    delete x;  // No effect
+>delete x : boolean
+>x : { a?: string | number | undefined; b: string | number; }
+
+    x;
+>x : { a?: string | number | undefined; b: string | number; }
+}

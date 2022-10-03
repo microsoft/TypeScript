@@ -1,0 +1,164 @@
+tests/cases/compiler/unusedLocalsAndParameters.ts(4,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(9,22): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(15,5): error TS6133: 'farrow' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(15,15): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(18,7): error TS6196: 'C' is declared but never used.
+tests/cases/compiler/unusedLocalsAndParameters.ts(20,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(23,11): error TS6133: 'v' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(27,5): error TS6133: 'E' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(29,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(32,11): error TS6133: 'v' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(38,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(41,11): error TS6133: 'v' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(48,10): error TS6133: 'i' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(52,10): error TS6133: 'i' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(56,17): error TS6133: 'n' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(63,11): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(68,11): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(71,11): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(74,11): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(79,11): error TS6133: 'N' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(83,13): error TS2304: Cannot find name 'y'.
+tests/cases/compiler/unusedLocalsAndParameters.ts(83,14): error TS1005: ',' expected.
+tests/cases/compiler/unusedLocalsAndParameters.ts(84,6): error TS1005: ',' expected.
+tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/unusedLocalsAndParameters.ts (25 errors) ====
+    export { };
+    
+    // function declaration paramter
+    function f(a) {
+               ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    }
+    f(0);
+    
+    // function expression paramter
+    var fexp = function (a) {
+                         ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    };
+    
+    fexp(0);
+    
+    // arrow function paramter
+    var farrow = (a) => {
+        ~~~~~~
+!!! error TS6133: 'farrow' is declared but its value is never read.
+                  ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    };
+    
+    class C {
+          ~
+!!! error TS6196: 'C' is declared but never used.
+        // Method declaration paramter
+        method(a) {
+               ~
+!!! error TS6133: 'a' is declared but its value is never read.
+        }
+        // Accessor declaration paramter
+        set x(v: number) {
+              ~
+!!! error TS6133: 'v' is declared but its value is never read.
+        }
+    }
+    
+    var E = class {
+        ~
+!!! error TS6133: 'E' is declared but its value is never read.
+        // Method declaration paramter
+        method(a) {
+               ~
+!!! error TS6133: 'a' is declared but its value is never read.
+        }
+        // Accessor declaration paramter
+        set x(v: number) {
+              ~
+!!! error TS6133: 'v' is declared but its value is never read.
+        }
+    }
+    
+    var o = {
+        // Object literal method declaration paramter
+        method(a) {
+               ~
+!!! error TS6133: 'a' is declared but its value is never read.
+        },
+        // Accessor declaration paramter
+        set x(v: number) {
+              ~
+!!! error TS6133: 'v' is declared but its value is never read.
+        }
+    };
+    
+    o;
+    
+    // in a for..in statment
+    for (let i in o) {
+             ~
+!!! error TS6133: 'i' is declared but its value is never read.
+    }
+    
+    // in a for..of statment
+    for (let i of [1, 2, 3]) {
+             ~
+!!! error TS6133: 'i' is declared but its value is never read.
+    }
+    
+    // in a for. statment
+    for (let i = 0, n; i < 10; i++) {
+                    ~
+!!! error TS6133: 'n' is declared but its value is never read.
+    }
+    
+    // in a block
+    
+    const condition = false;
+    if (condition) {
+        const c = 0;
+              ~
+!!! error TS6133: 'c' is declared but its value is never read.
+    }
+    
+    // in try/catch/finally
+    try {
+        const a = 0;
+              ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    }
+    catch (e) {
+        const c = 1;
+              ~
+!!! error TS6133: 'c' is declared but its value is never read.
+    }
+    finally {
+        const c = 0;
+              ~
+!!! error TS6133: 'c' is declared but its value is never read.
+    }
+    
+    
+    // in a namespace
+    namespace N {
+              ~
+!!! error TS6133: 'N' is declared but its value is never read.
+        var x;
+            ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    }
+    
+    for (let x: y) {
+                ~
+!!! error TS2304: Cannot find name 'y'.
+                 ~
+!!! error TS1005: ',' expected.
+        z(x);
+         ~
+!!! error TS1005: ',' expected.
+    }
+    ~
+!!! error TS1109: Expression expected.
+    

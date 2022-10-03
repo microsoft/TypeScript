@@ -1,0 +1,15 @@
+tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterBindingPattern.2.ts(3,6): error TS2373: Parameter '{ [a()?.d]: c = "" }' cannot reference identifier 'a' declared after it.
+tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterBindingPattern.2.ts(6,24): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
+
+
+==== tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterBindingPattern.2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/36295
+    const a = (): { d: string } | undefined => undefined;
+    (({ [a()?.d]: c = "" }) => { var a; })();
+         ~
+!!! error TS2373: Parameter '{ [a()?.d]: c = "" }' cannot reference identifier 'a' declared after it.
+    
+    const x = "";
+    (({ [a()?.d]: c }, d = x) => { var x; })();
+                           ~
+!!! error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.

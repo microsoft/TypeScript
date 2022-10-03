@@ -1,0 +1,90 @@
+=== tests/cases/conformance/classes/members/constructorFunctionTypes/constructorHasPrototypeProperty.ts ===
+module NonGeneric {
+>NonGeneric : typeof NonGeneric
+
+    class C {
+>C : C
+
+        foo: string;
+>foo : string
+    }
+
+    class D extends C {
+>D : D
+>C : C
+
+        bar: string;
+>bar : string
+    }
+
+    var r = C.prototype;
+>r : C
+>C.prototype : C
+>C : typeof C
+>prototype : C
+
+    r.foo;
+>r.foo : string
+>r : C
+>foo : string
+
+    var r2 = D.prototype;
+>r2 : D
+>D.prototype : D
+>D : typeof D
+>prototype : D
+
+    r2.bar;
+>r2.bar : string
+>r2 : D
+>bar : string
+}
+
+module Generic {
+>Generic : typeof Generic
+
+    class C<T,U> {
+>C : C<T, U>
+
+        foo: T;
+>foo : T
+
+        bar: U;
+>bar : U
+    }
+
+    class D<T,U> extends C<T,U> {
+>D : D<T, U>
+>C : C<T, U>
+
+        baz: T;
+>baz : T
+
+        bing: U;
+>bing : U
+    }
+
+    var r = C.prototype; // C<any, any>
+>r : C<any, any>
+>C.prototype : C<any, any>
+>C : typeof C
+>prototype : C<any, any>
+
+    var ra = r.foo; // any
+>ra : any
+>r.foo : any
+>r : C<any, any>
+>foo : any
+
+    var r2 = D.prototype; // D<any, any>
+>r2 : D<any, any>
+>D.prototype : D<any, any>
+>D : typeof D
+>prototype : D<any, any>
+
+    var rb = r2.baz; // any
+>rb : any
+>r2.baz : any
+>r2 : D<any, any>
+>baz : any
+}

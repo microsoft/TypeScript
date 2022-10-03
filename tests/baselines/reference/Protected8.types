@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/Protected/Protected8.ts ===
+interface I {
+   protected
+>protected : any
+
+   p
+>p : any
+}

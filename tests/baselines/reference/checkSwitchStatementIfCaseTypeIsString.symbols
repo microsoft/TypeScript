@@ -1,0 +1,29 @@
+=== tests/cases/compiler/checkSwitchStatementIfCaseTypeIsString.ts ===
+declare function use(a: any): void;
+>use : Symbol(use, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 0, 0))
+>a : Symbol(a, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 0, 21))
+
+class A {
+>A : Symbol(A, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 0, 35))
+
+    doIt(x: Array<string>): void {
+>doIt : Symbol(A.doIt, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 2, 9))
+>x : Symbol(x, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 3, 9))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        x.forEach((v) => {
+>x.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 3, 9))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 4, 19))
+
+            switch(v) {
+>v : Symbol(v, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 4, 19))
+
+                case "test": use(this);
+>use : Symbol(use, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 0, 0))
+>this : Symbol(A, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 0, 35))
+            }
+        });
+    }
+}

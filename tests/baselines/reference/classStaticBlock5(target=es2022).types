@@ -1,0 +1,45 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts ===
+class B {
+>B : B
+
+    static a = 1;
+>a : number
+>1 : 1
+
+    static b = 2;
+>b : number
+>2 : 2
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    static b = 3;
+>b : number
+>3 : 3
+
+    static c = super.a
+>c : number
+>super.a : number
+>super : typeof B
+>a : number
+
+    static {
+        this.b;
+>this.b : number
+>this : typeof C
+>b : number
+
+        super.b;
+>super.b : number
+>super : typeof B
+>b : number
+
+        super.a;
+>super.a : number
+>super : typeof B
+>a : number
+    }
+}
+

@@ -1,0 +1,63 @@
+=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts ===
+    false ? (arg?: number = 0) => 47 : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 0, 13))
+
+    false ? ((arg?: number = 0) => 57) : null;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 1, 14))
+
+    false ? null : (arg?: number = 0) => 67;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 2, 20))
+
+    ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 3, 6))
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 3, 38))
+
+    foo(
+        (a) => 110, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 6, 9))
+
+        ((a) => 111), 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 7, 10))
+
+        (a) => {
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 8, 9))
+
+            return 112;
+        },
+        (a? ) => 113, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 11, 9))
+
+        (a, b? ) => 114, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 12, 9))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 12, 11))
+
+        (a: number) => 115, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 13, 9))
+
+        (a: number = 0) => 116, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 14, 9))
+
+        (a = 0) => 117, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 15, 9))
+
+        (a?: number = 0) => 118, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 16, 9))
+
+        (...a: number[]) => 119, 
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 17, 9))
+
+        (a, b? = 0, ...c: number[]) => 120,
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 18, 9))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 18, 11))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 18, 19))
+
+        (a) => (b) => (c) => 121,
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 19, 9))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 19, 16))
+>c : Symbol(c, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 19, 23))
+
+        false? (a) => 0 : (b) => 122
+>a : Symbol(a, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 20, 16))
+>b : Symbol(b, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 20, 27))
+
+    );

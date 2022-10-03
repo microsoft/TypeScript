@@ -1,0 +1,11 @@
+=== tests/cases/compiler/paramterDestrcuturingDeclaration.ts ===
+interface C {
+    ({p: name}): any;
+>p : any
+>name : any
+
+    new ({p: boolean}): any;
+>p : any
+>boolean : any
+}
+

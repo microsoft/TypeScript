@@ -1,0 +1,46 @@
+=== tests/cases/compiler/genericFunctionsWithOptionalParameters1.ts ===
+interface Utils {
+>Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 0))
+
+   fold<T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 10))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
+>folder : Symbol(folder, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 27))
+>s : Symbol(s, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 38))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 10))
+>t : Symbol(t, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 43))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
+>init : Symbol(init, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 55))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 10))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
+}
+
+var utils: Utils;
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters1.ts, 4, 3))
+>Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 0))
+
+utils.fold(); // no error
+>utils.fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters1.ts, 4, 3))
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+
+utils.fold(null); // no error
+>utils.fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters1.ts, 4, 3))
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+
+utils.fold(null, null); // no error
+>utils.fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters1.ts, 4, 3))
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+
+utils.fold(null, null, null); // no error
+>utils.fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters1.ts, 4, 3))
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters1.ts, 0, 17))
+

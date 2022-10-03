@@ -1,0 +1,45 @@
+tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+tests/cases/conformance/jsx/file.tsx(25,9): error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
+tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    import React = require('react');
+    
+    interface Prop {
+        a: number,
+        b: string,
+        children: Button;
+    }
+    
+    class Button extends React.Component<any, any> {
+        render() {
+            return (<div>My Button</div>)
+        }
+    }
+    
+    function Comp(p: Prop) {
+        return <div>{p.b}</div>;
+    }
+    
+    // Error: no children specified
+    let k = <Comp a={10} b="hi" />;
+             ~~~~
+!!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:6:5: 'children' is declared here.
+    
+    // Error: JSX.element is not the same as JSX.ElementClass
+    let k1 =
+        <Comp a={10} b="hi">
+            <Button />
+            ~~~~~~~~~~
+!!! error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:6:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & Prop'
+        </Comp>;
+    let k2 =
+        <Comp a={10} b="hi">
+            {Button}
+             ~~~~~~
+!!! error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+!!! related TS6213 tests/cases/conformance/jsx/file.tsx:29:10: Did you mean to use 'new' with this expression?
+        </Comp>;

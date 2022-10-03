@@ -1,0 +1,26 @@
+tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts(16,9): error TS2322: Type 'number' is not assignable to type '() => unknown'.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts (1 errors) ====
+    // Repro from #19316
+    
+    type ComputedOf<T> = {
+        [K in keyof T]: () => T[K];
+    }
+    
+    declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
+    
+    foo({
+        props: { x: 10, y: 20 },
+        computed: {
+            bar(): number {
+                let z = this.bar;
+                return 42;
+            },
+            baz: 42
+            ~~~
+!!! error TS2322: Type 'number' is not assignable to type '() => unknown'.
+!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts:16:9: The expected type comes from property 'baz' which is declared here on type 'ComputedOf<{ bar: unknown; baz: unknown; }>'
+        }
+    });
+    

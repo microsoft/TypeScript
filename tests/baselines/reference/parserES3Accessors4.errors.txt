@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors4.ts(1,15): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors4.ts (1 errors) ====
+    var v = { set Foo(a) { } };
+                  ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

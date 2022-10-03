@@ -1,0 +1,33 @@
+=== tests/cases/compiler/a.ts ===
+export const x = Symbol();
+>x : Symbol(x, Decl(a.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== tests/cases/compiler/b.ts ===
+import { x } from "./a";
+>x : Symbol(x, Decl(b.ts, 0, 8))
+
+export class C {
+>C : Symbol(C, Decl(b.ts, 0, 24))
+
+  private [x]: number = 1;
+>[x] : Symbol(C[x], Decl(b.ts, 2, 16))
+>x : Symbol(x, Decl(b.ts, 0, 8))
+}
+
+=== tests/cases/compiler/c.ts ===
+import { x } from "./a";
+>x : Symbol(x, Decl(c.ts, 0, 8))
+
+import { C } from "./b";
+>C : Symbol(C, Decl(c.ts, 1, 8))
+
+export class D extends C {
+>D : Symbol(D, Decl(c.ts, 1, 24))
+>C : Symbol(C, Decl(c.ts, 1, 8))
+
+  private [x]: 12 = 12;
+>[x] : Symbol(D[x], Decl(c.ts, 3, 26))
+>x : Symbol(x, Decl(c.ts, 0, 8))
+}
+

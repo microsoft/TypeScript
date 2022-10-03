@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement4.ts ===
+TWO:
+>TWO : any
+
+while (true){
+>true : true
+
+  var x = () => {
+>x : () => void
+>() => {    continue TWO;  } : () => void
+
+    continue TWO;
+>TWO : any
+  }
+}
+

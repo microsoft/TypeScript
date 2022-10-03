@@ -1,0 +1,108 @@
+tests/cases/compiler/implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(28,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(32,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/implicitAnyCastedValue.ts(41,10): error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/implicitAnyCastedValue.ts(53,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/implicitAnyCastedValue.ts (9 errors) ====
+    var x = function () {
+        return <any>0;  // this should not be an error
+    }
+    
+    function foo() {
+        return <any>"hello world";  // this should not be an error
+    }
+    
+    class C {
+        bar = null;  // this should be an error
+        ~~~
+!!! error TS7008: Member 'bar' implicitly has an 'any' type.
+        foo = undefined;  // this should be an error
+        ~~~
+!!! error TS7008: Member 'foo' implicitly has an 'any' type.
+        public get tempVar() {
+                   ~~~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return <any>0;  // this should not be an error
+        }
+    
+        public returnBarWithCase() {    // this should not be an error
+            return <any>this.bar;
+        }
+    
+        public returnFooWithCase() {
+            return <any>this.foo;  // this should not be an error
+        }
+    }
+    
+    class C1 {
+        getValue = null;  // this should be an error
+        ~~~~~~~~
+!!! error TS7008: Member 'getValue' implicitly has an 'any' type.
+    
+        public get castedGet() {
+                   ~~~~~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return <any>this.getValue;  // this should not be an error
+        }
+    
+        public get notCastedGet() {
+                   ~~~~~~~~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return this.getValue;  // this should not be an error
+        }
+    }
+    
+    function castedNull() {
+        return <any>null;  // this should not be an error
+    }
+    
+    function notCastedNull() {
+             ~~~~~~~~~~~~~
+!!! error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
+        return null;  // this should be an error
+    }
+    
+    function returnTypeBar(): any {
+        return null;  // this should not be an error
+    }
+    
+    function undefinedBar() {
+        return <any>undefined;  // this should not be an error
+    }
+    
+    function multipleRets1(x) {    // this should not be an error
+                           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        if (x) {
+            return <any>0;
+        }
+        else {
+            return null;
+        }
+    }
+    
+    function multipleRets2(x) {    // this should not be an error
+                           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        if (x) {
+            return null;
+        }
+        else if (x == 1) {
+            return <any>0;
+        }
+        else {
+            return undefined;
+        }
+    }
+    
+    // this should not be an error
+    var bar1 = <any>null;
+    var bar2 = <any>undefined;
+    var bar3 = <any>0;
+    var array = <any>[null, undefined];

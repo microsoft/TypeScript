@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/import/importTypeAmbientMissing.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+    export = Point;
+>Point : Point
+}
+const x: import("fo") = { x: 0, y: 0 }; // typo, error
+>x : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+

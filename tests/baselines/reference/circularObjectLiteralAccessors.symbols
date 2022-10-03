@@ -1,0 +1,33 @@
+=== tests/cases/compiler/circularObjectLiteralAccessors.ts ===
+// Repro from #6000
+
+const a = {
+>a : Symbol(a, Decl(circularObjectLiteralAccessors.ts, 2, 5))
+
+    b: {
+>b : Symbol(b, Decl(circularObjectLiteralAccessors.ts, 2, 11))
+
+        get foo(): string {
+>foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 3, 8), Decl(circularObjectLiteralAccessors.ts, 6, 10))
+
+            return a.foo;
+>a.foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 10, 6))
+>a : Symbol(a, Decl(circularObjectLiteralAccessors.ts, 2, 5))
+>foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 10, 6))
+
+        },
+        set foo(value: string) {
+>foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 3, 8), Decl(circularObjectLiteralAccessors.ts, 6, 10))
+>value : Symbol(value, Decl(circularObjectLiteralAccessors.ts, 7, 16))
+
+            a.foo = value;
+>a.foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 10, 6))
+>a : Symbol(a, Decl(circularObjectLiteralAccessors.ts, 2, 5))
+>foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 10, 6))
+>value : Symbol(value, Decl(circularObjectLiteralAccessors.ts, 7, 16))
+        }
+    },
+    foo: ''
+>foo : Symbol(foo, Decl(circularObjectLiteralAccessors.ts, 10, 6))
+
+};

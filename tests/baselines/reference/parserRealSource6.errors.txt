@@ -1,0 +1,404 @@
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(8,24): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,41): error TS2304: Cannot find name 'ScopeChain'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(15,22): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(16,21): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(17,23): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(18,30): error TS2304: Cannot find name 'AstWalkOptions'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(20,35): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(20,83): error TS2304: Cannot find name 'ASTFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(26,35): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(27,48): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(28,31): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(30,35): error TS2304: Cannot find name 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(31,36): error TS2304: Cannot find name 'TypeDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(32,36): error TS2304: Cannot find name 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(35,33): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(37,37): error TS2304: Cannot find name 'ILogger'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(38,36): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(39,34): error TS2304: Cannot find name 'ISourceText'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(44,28): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(48,41): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(60,45): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(68,37): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(73,50): error TS2339: Property 'quickParse' does not exist on type 'typeof TypeScript'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,45): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,58): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,71): error TS2304: Cannot find name 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(81,13): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(93,23): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(94,30): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(95,24): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(96,31): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(98,19): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(99,20): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(100,21): error TS2304: Cannot find name 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(101,27): error TS2304: Cannot find name 'SymbolScopeBuilder'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(102,20): error TS2304: Cannot find name 'ScopeChain'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(102,37): error TS2304: Cannot find name 'ScopeChain'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(113,48): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(113,61): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(113,74): error TS2304: Cannot find name 'IAstWalker'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(120,29): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(126,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(127,35): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(134,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(139,51): error TS2304: Cannot find name 'TypeDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(142,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(143,38): error TS2304: Cannot find name 'UnaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(156,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(157,50): error TS2304: Cannot find name 'ModuleDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(164,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(171,22): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(172,37): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(179,59): error TS2304: Cannot find name 'hasFlag'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(179,86): error TS2304: Cannot find name 'FncFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(212,50): error TS2304: Cannot find name 'ILogger'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(212,67): error TS2304: Cannot find name 'Script'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(212,81): error TS2304: Cannot find name 'ISourceText'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts (60 errors) ====
+    // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+    // See LICENSE.txt in the project root for complete license information.
+    
+    ///<reference path='typescript.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+    
+    module TypeScript {
+        export class TypeCollectionContext {
+            public script: Script = null;
+                           ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+    
+            constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
+                                            ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopeChain'.
+                                                                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeChecker'.
+            }
+        }
+    
+        export class MemberScopeContext {
+            public type: Type = null;
+                         ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            public ast: AST = null;
+                        ~~~
+!!! error TS2304: Cannot find name 'AST'.
+            public scope: SymbolScope;
+                          ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+            public options = new AstWalkOptions();
+                                 ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'AstWalkOptions'.
+    
+            constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
+                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeFlow'.
+                                                                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'ASTFlags'.
+            }
+        }
+    
+        export class EnclosingScopeContext {
+    
+            public scopeGetter: () => SymbolScope = null;
+                                      ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+            public objectLiteralScopeGetter: () => SymbolScope = null;
+                                                   ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+            public scopeStartAST: AST = null;
+                                  ~~~
+!!! error TS2304: Cannot find name 'AST'.
+            public skipNextFuncDeclForClass = false;
+            public deepestModuleDecl: ModuleDeclaration = null;
+                                      ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
+            public enclosingClassDecl: TypeDeclaration = null;
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeDeclaration'.
+            public enclosingObjectLit: UnaryExpression = null;
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'UnaryExpression'.
+            public publicsOnly = true;
+            public useFullAst = false;
+            private scriptFragment: Script;
+                                    ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+    
+            constructor (public logger: ILogger,
+                                        ~~~~~~~
+!!! error TS2304: Cannot find name 'ILogger'.
+                        public script: Script,
+                                       ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                        public text: ISourceText,
+                                     ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ISourceText'.
+                        public pos: number,
+                        public isMemberCompletion: boolean) {
+            }
+    
+            public getScope(): SymbolScope {
+                               ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+                return this.scopeGetter();
+            }
+    
+            public getObjectLiteralScope(): SymbolScope {
+                                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScope'.
+                return this.objectLiteralScopeGetter();
+            }
+    
+            public getScopeAST() {
+                return this.scopeStartAST;
+            }
+    
+            public getScopePosition() {
+                return this.scopeStartAST.minChar;
+            }
+    
+            public getScriptFragmentStartAST(): AST {
+                                                ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                return this.scopeStartAST;
+            }
+    
+            public getScriptFragmentPosition(): number {
+                return this.getScriptFragmentStartAST().minChar;
+            }
+    
+            public getScriptFragment(): Script {
+                                        ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                if (this.scriptFragment == null) {
+                    var ast = this.getScriptFragmentStartAST();
+                    var minChar = ast.minChar;
+                    var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
+                    this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script;
+                                                     ~~~~~~~~~~
+!!! error TS2339: Property 'quickParse' does not exist on type 'typeof TypeScript'.
+                }
+                return this.scriptFragment;
+            }
+        }
+    
+        export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
+                                                ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                             ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                          ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IAstWalker'.
+            var memScope: MemberScopeContext = walker.state;
+            if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                memScope.ast = ast;
+                if ((ast.type == null) && (memScope.pos >= 0)) {
+                    memScope.flow.inScopeTypeCheck(ast, memScope.scope);
+                }
+                memScope.type = ast.type;
+                memScope.options.stopWalk();
+            }
+            return ast;
+        }
+    
+        export function pushTypeCollectionScope(container: Symbol,
+            valueMembers: ScopedMembers,
+                          ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+            ambientValueMembers: ScopedMembers,
+                                 ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+            enclosedTypes: ScopedMembers,
+                           ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+            ambientEnclosedTypes: ScopedMembers,
+                                  ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopedMembers'.
+            context: TypeCollectionContext,
+            thisType: Type,
+                      ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            classType: Type,
+                       ~~~~
+!!! error TS2304: Cannot find name 'Type'.
+            moduleDecl: ModuleDeclaration) {
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
+            var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
+                              ~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
+            var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
+                       ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopeChain'.
+                                        ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ScopeChain'.
+            chain.thisType = thisType;
+            chain.classType = classType;
+            chain.moduleDecl = moduleDecl;
+            context.scopeChain = chain;
+        }
+    
+        export function popTypeCollectionScope(context: TypeCollectionContext) {
+            context.scopeChain = context.scopeChain.previous;
+        }
+    
+        export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
+                                                   ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                ~~~
+!!! error TS2304: Cannot find name 'AST'.
+                                                                             ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IAstWalker'.
+            var context: EnclosingScopeContext = walker.state;
+            var minChar = ast.minChar;
+            var limChar = ast.limChar;
+    
+            // Account for the fact completion list may be called at the end of a file which
+            // is has not been fully re-parsed yet.
+            if (ast.nodeType == NodeType.Script && context.pos > limChar)
+                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                limChar = context.pos;
+    
+            if ((minChar <= context.pos) &&
+                (limChar >= context.pos)) {
+                switch (ast.nodeType) {
+                    case NodeType.Script:
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        var script = <Script>ast;
+                                      ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                        context.scopeGetter = function () {
+                            return script.bod === null ? null : script.bod.enclosingScope;
+                        };
+                        context.scopeStartAST = script;
+                        break;
+    
+                    case NodeType.ClassDeclaration:
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        context.scopeGetter = function () {
+                            return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        context.enclosingClassDecl = <TypeDeclaration>ast;
+                                                      ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeDeclaration'.
+                        break;
+    
+                    case NodeType.ObjectLit:
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        var objectLit = <UnaryExpression>ast;
+                                         ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'UnaryExpression'.
+                        // Only consider target-typed object literals
+                        if (objectLit.targetType) {
+                            context.scopeGetter = function () {
+                                return objectLit.targetType.containedScope;
+                            };
+                            context.objectLiteralScopeGetter = function () {
+                                return objectLit.targetType.memberScope;
+                            }
+                            context.enclosingObjectLit = objectLit;
+                        }
+                        break;
+    
+                    case NodeType.ModuleDeclaration:
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        context.deepestModuleDecl = <ModuleDeclaration>ast;
+                                                     ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
+                        context.scopeGetter = function () {
+                            return ast.type === null ? null : ast.type.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        break;
+    
+                    case NodeType.InterfaceDeclaration:
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        context.scopeGetter = function () {
+                            return (ast.type === null) ? null : ast.type.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        break;
+    
+                    case NodeType.FuncDecl: {
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeType'.
+                        var funcDecl = <FuncDecl>ast;
+                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'FuncDecl'.
+                        if (context.skipNextFuncDeclForClass) {
+                            context.skipNextFuncDeclForClass = false;
+                        }
+                        else {
+                            context.scopeGetter = function () {
+                                // The scope of a class constructor is hidden somewhere we don't expect :-S
+                                if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+                                                              ~~~~~~~
+!!! error TS2304: Cannot find name 'hasFlag'.
+                                                                                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'FncFlags'.
+                                    if (ast.type && ast.type.enclosingType) {
+                                        return ast.type.enclosingType.constructorScope;
+                                    }
+                                }
+    
+                                if (funcDecl.scopeType) {
+                                    return funcDecl.scopeType.containedScope;
+                                }
+    
+                                if (funcDecl.type) {
+                                    return funcDecl.type.containedScope;
+                                }
+                                return null;
+                            };
+                            context.scopeStartAST = ast;
+                        }
+                    }
+                        break;
+                }
+                walker.options.goChildren = true;
+            }
+            else {
+                walker.options.goChildren = false;
+            }
+            return ast;
+        }
+    
+        //
+        // Find the enclosing scope context from a position inside a script AST.
+        // The "scopeStartAST" of the returned scope is always valid.
+        // Return "null" if the enclosing scope can't be found.
+        //
+        export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
+                                                     ~~~~~~~
+!!! error TS2304: Cannot find name 'ILogger'.
+                                                                      ~~~~~~
+!!! error TS2304: Cannot find name 'Script'.
+                                                                                    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ISourceText'.
+            var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
+    
+            TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);
+                       ~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+    
+            if (context.scopeStartAST === null)
+                return null;
+            return context;
+        }
+    }

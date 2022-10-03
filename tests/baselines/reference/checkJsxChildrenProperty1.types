@@ -1,0 +1,71 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: string | JSX.Element
+>children : string | JSX.Element
+>JSX : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => JSX.Element
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : JSX.Element
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// OK
+let k = <Comp a={10} b="hi" children ="lol" />;
+>k : JSX.Element
+><Comp a={10} b="hi" children ="lol" /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+>children : string
+
+let k1 =
+>k1 : JSX.Element
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        hi hi hi!    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+let k2 =
+>k2 : JSX.Element
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div>hi hi hi!</div>    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        <div>hi hi hi!</div>
+><div>hi hi hi!</div> : JSX.Element
+>div : any
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+

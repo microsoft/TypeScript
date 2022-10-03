@@ -1,0 +1,34 @@
+=== tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts ===
+// Not OK
+interface B { x; }
+>x : any
+
+interface B { x?; }
+>x : any
+
+// OK
+class A {
+>A : A
+
+  public y: string;
+>y : string
+}
+
+interface A {
+  y: string;
+>y : string
+}
+
+// Not OK
+class C {
+>C : C
+
+  private y: string;
+>y : string
+}
+
+interface C {
+  y: string;
+>y : string
+}
+

@@ -1,0 +1,86 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts ===
+interface I {
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+    (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
+>stringParts : Symbol(stringParts, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 1, 5))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 1, 39))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+    g: I;
+>g : Symbol(I.g, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 1, 63))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+    h: I;
+>h : Symbol(I.h, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 2, 9))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+    member: I;
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+    thisIsNotATag(x: string): void
+>thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 4, 14))
+>x : Symbol(x, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 5, 18))
+
+    [x: number]: I;
+>x : Symbol(x, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 6, 5))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+}
+
+var f: I;
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>I : Symbol(I, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 0, 0))
+
+f `abc`
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+
+f `abc${1}def${2}ghi`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+
+f `abc`.member
+>f `abc`.member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc${1}def${2}ghi`.member;
+>f `abc${1}def${2}ghi`.member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc`["member"];
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc${1}def${2}ghi`["member"];
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc`[0].member `abc${1}def${2}ghi`;
+>f `abc`[0].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+>f `abc${1}def${2}ghi`["member"].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
+>f `abc${ true }def${ true }ghi`["member"].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+
+f.thisIsNotATag(`abc`);
+>f.thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 4, 14))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 4, 14))
+
+f.thisIsNotATag(`abc${1}def${2}ghi`);
+>f.thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 4, 14))
+>f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 4, 14))
+

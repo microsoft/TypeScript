@@ -1,0 +1,57 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+class Handler {
+>Handler : Handler
+
+	static get OPTIONS() {
+>OPTIONS : number
+
+		return 1;
+>1 : 1
+	}
+
+	process() {
+>process : () => void
+	}
+}
+Handler.statische = function() { }
+>Handler.statische = function() { } : () => void
+>Handler.statische : () => void
+>Handler : typeof Handler
+>statische : () => void
+>function() { } : () => void
+
+const Strings = {
+>Strings : { a: string; b: string; }
+>{    a: "A",    b: "B"} : { a: string; b: string; }
+
+    a: "A",
+>a : string
+>"A" : "A"
+
+    b: "B"
+>b : string
+>"B" : "B"
+}
+
+module.exports = Handler;
+>module.exports = Handler : typeof Handler
+>module.exports : typeof Handler
+>module : { exports: typeof Handler; }
+>exports : typeof Handler
+>Handler : typeof Handler
+
+module.exports.Strings = Strings
+>module.exports.Strings = Strings : { a: string; b: string; }
+>module.exports.Strings : { a: string; b: string; }
+>module.exports : typeof Handler
+>module : { exports: typeof Handler; }
+>exports : typeof Handler
+>Strings : { a: string; b: string; }
+>Strings : { a: string; b: string; }
+
+/**
+ * @typedef {Object} HandlerOptions
+ * @property {String} name
+ * Should be able to export a type alias at the same time.
+ */
+

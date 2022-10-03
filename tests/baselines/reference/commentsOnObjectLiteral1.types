@@ -1,0 +1,13 @@
+=== tests/cases/compiler/commentsOnObjectLiteral1.ts ===
+var Person = makeClass( 
+>Person : any
+>makeClass(    /**      @scope Person    */    {   } ) : any
+>makeClass : any
+
+   /** 
+     @scope Person 
+   */ 
+   {
+>{   } : {}
+   } 
+);

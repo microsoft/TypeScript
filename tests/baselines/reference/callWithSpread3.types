@@ -1,0 +1,183 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts ===
+declare const s2: [string, string];
+>s2 : [string, string]
+
+declare const s3: [string, string, string];
+>s3 : [string, string, string]
+
+declare const s2_: [string, string, ...string[]];
+>s2_ : [string, string, ...string[]]
+
+declare const s_: string[];
+>s_ : string[]
+
+declare const n_: number[];
+>n_ : number[]
+
+declare const s2n_: [string, string, ...number[]];
+>s2n_ : [string, string, ...number[]]
+
+declare function fs2(a: string, b: string): void;
+>fs2 : (a: string, b: string) => void
+>a : string
+>b : string
+
+declare function fs2_(a: string, b: string, ...c: string[]): void;
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>a : string
+>b : string
+>c : string[]
+
+declare function fs2n_(a: string, b: string, ...c: number[]): void;
+>fs2n_ : (a: string, b: string, ...c: number[]) => void
+>a : string
+>b : string
+>c : number[]
+
+declare function fs5(a: string, b: string, c: string, d: string, e: string): void;
+>fs5 : (a: string, b: string, c: string, d: string, e: string) => void
+>a : string
+>b : string
+>c : string
+>d : string
+>e : string
+
+// error
+fs2('a', ...s2); // error on ...s2
+>fs2('a', ...s2) : void
+>fs2 : (a: string, b: string) => void
+>'a' : "a"
+>...s2 : string
+>s2 : [string, string]
+
+fs2('a', 'b', 'c', ...s2); // error on 'c' and ...s2
+>fs2('a', 'b', 'c', ...s2) : void
+>fs2 : (a: string, b: string) => void
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+>...s2 : string
+>s2 : [string, string]
+
+fs2('a', 'b', ...s2, 'c'); // error on ...s2 and 'c'
+>fs2('a', 'b', ...s2, 'c') : void
+>fs2 : (a: string, b: string) => void
+>'a' : "a"
+>'b' : "b"
+>...s2 : string
+>s2 : [string, string]
+>'c' : "c"
+
+fs2('a', 'b', 'c', ...s2, 'd'); // error on 'c', ...s2 and 'd'
+>fs2('a', 'b', 'c', ...s2, 'd') : void
+>fs2 : (a: string, b: string) => void
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+>...s2 : string
+>s2 : [string, string]
+>'d' : "d"
+
+fs2(...s2, 'a'); // error on 'a'
+>fs2(...s2, 'a') : void
+>fs2 : (a: string, b: string) => void
+>...s2 : string
+>s2 : [string, string]
+>'a' : "a"
+
+fs2(...s3); // error on ...s3
+>fs2(...s3) : void
+>fs2 : (a: string, b: string) => void
+>...s3 : string
+>s3 : [string, string, string]
+
+fs2_(...s_); // error on ...s_
+>fs2_(...s_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s_ : string
+>s_ : string[]
+
+fs2_(...s2n_); // error on ...s2n_
+>fs2_(...s2n_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s2n_ : string | number
+>s2n_ : [string, string, ...number[]]
+
+fs2_(...s_, ...s_); // error on ...s_
+>fs2_(...s_, ...s_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s_ : string
+>s_ : string[]
+>...s_ : string
+>s_ : string[]
+
+fs2_(...s_, ...s_, ...s_); // error on ...s_
+>fs2_(...s_, ...s_, ...s_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s_ : string
+>s_ : string[]
+>...s_ : string
+>s_ : string[]
+>...s_ : string
+>s_ : string[]
+
+// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2_); // error on ...s2_
+>fs2n_(...s2_) : void
+>fs2n_ : (a: string, b: string, ...c: number[]) => void
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+
+// ok
+fs2_(...s2_);
+>fs2_(...s2_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+
+fs2_(...s2_, ...s_);
+>fs2_(...s2_, ...s_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+>...s_ : string
+>s_ : string[]
+
+fs2_(...s2_, ...s2_);
+>fs2_(...s2_, ...s2_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+
+fs2_(...s_, ...s2_);
+>fs2_(...s_, ...s2_) : void
+>fs2_ : (a: string, b: string, ...c: string[]) => void
+>...s_ : string
+>s_ : string[]
+>...s2_ : string
+>s2_ : [string, string, ...string[]]
+
+fs2n_(...s2n_);
+>fs2n_(...s2n_) : void
+>fs2n_ : (a: string, b: string, ...c: number[]) => void
+>...s2n_ : string | number
+>s2n_ : [string, string, ...number[]]
+
+fs2n_(...s2);
+>fs2n_(...s2) : void
+>fs2n_ : (a: string, b: string, ...c: number[]) => void
+>...s2 : string
+>s2 : [string, string]
+
+// fs2n_(...s2, ...n_); // FIXME: should compile
+fs5(...s2, "foo", ...s2);
+>fs5(...s2, "foo", ...s2) : void
+>fs5 : (a: string, b: string, c: string, d: string, e: string) => void
+>...s2 : string
+>s2 : [string, string]
+>"foo" : "foo"
+>...s2 : string
+>s2 : [string, string]
+

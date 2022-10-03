@@ -1,0 +1,15 @@
+tests/cases/compiler/a.js(2,7): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+tests/cases/compiler/a.js(3,12): error TS8010: Type annotations can only be used in TypeScript files.
+
+
+==== tests/cases/compiler/a.js (2 errors) ====
+    @SomeDecorator
+    class SomeClass {
+          ~~~~~~~~~
+!!! error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+        foo(x: number) {
+               ~~~~~~
+!!! error TS8010: Type annotations can only be used in TypeScript files.
+    
+        }
+    }

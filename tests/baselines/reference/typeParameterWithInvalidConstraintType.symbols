@@ -1,0 +1,30 @@
+=== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts ===
+class A<T extends T> {
+>A : Symbol(A, Decl(typeParameterWithInvalidConstraintType.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterWithInvalidConstraintType.ts, 0, 8))
+>T : Symbol(T, Decl(typeParameterWithInvalidConstraintType.ts, 0, 8))
+
+    foo() {
+>foo : Symbol(A.foo, Decl(typeParameterWithInvalidConstraintType.ts, 0, 22))
+
+        var x: T;
+>x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))
+>T : Symbol(T, Decl(typeParameterWithInvalidConstraintType.ts, 0, 8))
+
+        var a = x.foo();
+>a : Symbol(a, Decl(typeParameterWithInvalidConstraintType.ts, 3, 11))
+>x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))
+
+        var b = new x(123);
+>b : Symbol(b, Decl(typeParameterWithInvalidConstraintType.ts, 4, 11))
+>x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))
+
+        var c = x[1];
+>c : Symbol(c, Decl(typeParameterWithInvalidConstraintType.ts, 5, 11))
+>x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))
+
+        var d = x();
+>d : Symbol(d, Decl(typeParameterWithInvalidConstraintType.ts, 6, 11))
+>x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))
+    }
+}

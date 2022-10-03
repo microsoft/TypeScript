@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/tuple/wideningTuples7.ts ===
+var foo = function bar() {
+>foo : Symbol(foo, Decl(wideningTuples7.ts, 0, 3))
+>bar : Symbol(bar, Decl(wideningTuples7.ts, 0, 9))
+
+    let intermediate: [string];
+>intermediate : Symbol(intermediate, Decl(wideningTuples7.ts, 1, 7))
+
+    return intermediate = [undefined];
+>intermediate : Symbol(intermediate, Decl(wideningTuples7.ts, 1, 7))
+>undefined : Symbol(undefined)
+
+};

@@ -1,0 +1,57 @@
+=== c:/root/src/file1.ts ===
+import {x} from "./project/file2";
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+
+import {y} from "module3";
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+
+declare function use(x: string);
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>x : Symbol(x, Decl(file1.ts, 3, 21))
+
+use(x.toFixed());
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+use(y.toFixed());
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+=== c:/root/generated/src/project/file2.ts ===
+import {a} from "module1";
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+
+import {b} from "templates/module2";
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+
+import {x as c} from "../file3";
+>x : Symbol(c, Decl(file3.d.ts, 0, 10))
+>c : Symbol(c, Decl(file2.ts, 2, 8))
+
+export let x = a + b + c;
+>x : Symbol(x, Decl(file2.ts, 3, 10))
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+>c : Symbol(c, Decl(file2.ts, 2, 8))
+
+=== c:/shared/module1.d.ts ===
+export let a: number
+>a : Symbol(a, Decl(module1.d.ts, 0, 10))
+
+=== c:/root/generated/src/templates/module2.ts ===
+export let b: number;
+>b : Symbol(b, Decl(module2.ts, 0, 10))
+
+=== c:/root/src/file3.d.ts ===
+export let x: number;
+>x : Symbol(x, Decl(file3.d.ts, 0, 10))
+
+=== c:/module3.d.ts ===
+export let y: number;
+>y : Symbol(y, Decl(module3.d.ts, 0, 10))
+
+

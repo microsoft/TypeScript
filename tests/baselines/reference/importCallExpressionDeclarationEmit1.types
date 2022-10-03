@@ -1,0 +1,48 @@
+=== tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit1.ts ===
+declare function getSpecifier(): string;
+>getSpecifier : () => string
+
+declare var whatToLoad: boolean;
+>whatToLoad : boolean
+
+declare const directory: string;
+>directory : string
+
+declare const moduleFile: number;
+>moduleFile : number
+
+import(getSpecifier());
+>import(getSpecifier()) : Promise<any>
+>getSpecifier() : string
+>getSpecifier : () => string
+
+var p0 = import(`${directory}\\${moduleFile}`);
+>p0 : Promise<any>
+>import(`${directory}\\${moduleFile}`) : Promise<any>
+>`${directory}\\${moduleFile}` : string
+>directory : string
+>moduleFile : number
+
+var p1 = import(getSpecifier());
+>p1 : Promise<any>
+>import(getSpecifier()) : Promise<any>
+>getSpecifier() : string
+>getSpecifier : () => string
+
+const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
+>p2 : Promise<any>
+>import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
+>whatToLoad ? getSpecifier() : "defaulPath" : string
+>whatToLoad : boolean
+>getSpecifier() : string
+>getSpecifier : () => string
+>"defaulPath" : "defaulPath"
+
+function returnDynamicLoad(path: string) {
+>returnDynamicLoad : (path: string) => Promise<any>
+>path : string
+
+    return import(path);
+>import(path) : Promise<any>
+>path : string
+}

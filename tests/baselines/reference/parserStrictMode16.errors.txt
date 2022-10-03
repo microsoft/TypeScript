@@ -1,0 +1,20 @@
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts(2,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts(3,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts(4,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts(5,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts (4 errors) ====
+    "use strict";
+    delete this;
+           ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    delete 1;
+           ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    delete null;
+           ~~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    delete "a";
+           ~~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

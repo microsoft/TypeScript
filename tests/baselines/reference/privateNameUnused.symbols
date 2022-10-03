@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts ===
+export class A {
+>A : Symbol(A, Decl(privateNameUnused.ts, 0, 0))
+
+    #used = "used";
+>#used : Symbol(A.#used, Decl(privateNameUnused.ts, 0, 16))
+
+    #unused = "unused";
+>#unused : Symbol(A.#unused, Decl(privateNameUnused.ts, 1, 19))
+
+    constructor () {
+        console.log(this.#used);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#used : Symbol(A.#used, Decl(privateNameUnused.ts, 0, 16))
+>this : Symbol(A, Decl(privateNameUnused.ts, 0, 0))
+    }
+}
+
+export class A2 {
+>A2 : Symbol(A2, Decl(privateNameUnused.ts, 6, 1))
+
+    #used() {  };
+>#used : Symbol(A2.#used, Decl(privateNameUnused.ts, 8, 17))
+
+    #unused() { };
+>#unused : Symbol(A2.#unused, Decl(privateNameUnused.ts, 9, 17))
+
+    constructor () {
+        console.log(this.#used());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#used : Symbol(A2.#used, Decl(privateNameUnused.ts, 8, 17))
+>this : Symbol(A2, Decl(privateNameUnused.ts, 6, 1))
+    }
+}
+
+export class A3 {
+>A3 : Symbol(A3, Decl(privateNameUnused.ts, 14, 1))
+
+    get #used() { return 0 };
+>#used : Symbol(A3.#used, Decl(privateNameUnused.ts, 16, 17), Decl(privateNameUnused.ts, 17, 29))
+
+    set #used(value: number) {  };
+>#used : Symbol(A3.#used, Decl(privateNameUnused.ts, 16, 17), Decl(privateNameUnused.ts, 17, 29))
+>value : Symbol(value, Decl(privateNameUnused.ts, 18, 14))
+    
+    get #unused() { return 0 };
+>#unused : Symbol(A3.#unused, Decl(privateNameUnused.ts, 18, 34), Decl(privateNameUnused.ts, 20, 31))
+
+    set #unused(value: number) {  };
+>#unused : Symbol(A3.#unused, Decl(privateNameUnused.ts, 18, 34), Decl(privateNameUnused.ts, 20, 31))
+>value : Symbol(value, Decl(privateNameUnused.ts, 21, 16))
+
+    constructor () {
+        console.log(this.#used);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#used : Symbol(A3.#used, Decl(privateNameUnused.ts, 16, 17), Decl(privateNameUnused.ts, 17, 29))
+>this : Symbol(A3, Decl(privateNameUnused.ts, 14, 1))
+    }
+}

@@ -1,0 +1,25 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallSignaturesThatHidesBaseSignature.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 0, 0))
+
+    (): { a: number };
+>a : Symbol(a, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 1, 9))
+}
+
+interface Derived extends Foo {
+>Derived : Symbol(Derived, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 0, 0))
+
+    (): { a: number; b: number };
+>a : Symbol(a, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 5, 9))
+>b : Symbol(b, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 5, 20))
+}
+
+var d: Derived;
+>d : Symbol(d, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 8, 3))
+>Derived : Symbol(Derived, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 2, 1))
+
+var r = d();
+>r : Symbol(r, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 9, 3))
+>d : Symbol(d, Decl(interfaceWithCallSignaturesThatHidesBaseSignature.ts, 8, 3))
+

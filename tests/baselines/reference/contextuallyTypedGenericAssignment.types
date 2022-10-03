@@ -1,0 +1,22 @@
+=== tests/cases/compiler/contextuallyTypedGenericAssignment.ts ===
+function foo<A extends any[]>(
+>foo : <A extends any[]>(arg: <T extends { a: number; }>(t: T, ...rest: A) => number) => void
+
+    arg: <T extends { a: number }>(t: T, ...rest: A) => number
+>arg : <T extends { a: number; }>(t: T, ...rest: A) => number
+>a : number
+>t : T
+>rest : A
+
+) { }
+
+foo((t, u: number) => t.a)
+>foo((t, u: number) => t.a) : void
+>foo : <A extends any[]>(arg: <T extends { a: number; }>(t: T, ...rest: A) => number) => void
+>(t, u: number) => t.a : <T extends { a: number; }>(t: T, u: number) => number
+>t : T
+>u : number
+>t.a : number
+>t : T
+>a : number
+

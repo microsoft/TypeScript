@@ -1,0 +1,32 @@
+=== tests/cases/compiler/moduleCrashBug1.ts ===
+module _modes {
+>_modes : Symbol(_modes, Decl(moduleCrashBug1.ts, 0, 0))
+
+ export interface IMode {
+>IMode : Symbol(IMode, Decl(moduleCrashBug1.ts, 0, 15))
+  
+ }
+ 
+ class Mode {
+>Mode : Symbol(Mode, Decl(moduleCrashBug1.ts, 3, 2))
+  
+ }
+}
+
+//_modes. // produces an internal error - please implement in derived class
+
+module editor {
+>editor : Symbol(editor, Decl(moduleCrashBug1.ts, 8, 1))
+
+ import modes = _modes;
+>modes : Symbol(modes, Decl(moduleCrashBug1.ts, 12, 15))
+>_modes : Symbol(modes, Decl(moduleCrashBug1.ts, 0, 0))
+
+}
+
+var m : _modes;
+>m : Symbol(m, Decl(moduleCrashBug1.ts, 17, 3))
+>_modes : Symbol(_modes)
+
+
+

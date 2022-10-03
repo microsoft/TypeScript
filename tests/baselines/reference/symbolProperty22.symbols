@@ -1,0 +1,39 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty22.ts ===
+interface I<T, U> {
+>I : Symbol(I, Decl(symbolProperty22.ts, 0, 0))
+>T : Symbol(T, Decl(symbolProperty22.ts, 0, 12))
+>U : Symbol(U, Decl(symbolProperty22.ts, 0, 14))
+
+    [Symbol.unscopables](x: T): U;
+>[Symbol.unscopables] : Symbol(I[Symbol.unscopables], Decl(symbolProperty22.ts, 0, 19))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty22.ts, 1, 25))
+>T : Symbol(T, Decl(symbolProperty22.ts, 0, 12))
+>U : Symbol(U, Decl(symbolProperty22.ts, 0, 14))
+}
+
+declare function foo<T, U>(p1: T, p2: I<T, U>): U;
+>foo : Symbol(foo, Decl(symbolProperty22.ts, 2, 1))
+>T : Symbol(T, Decl(symbolProperty22.ts, 4, 21))
+>U : Symbol(U, Decl(symbolProperty22.ts, 4, 23))
+>p1 : Symbol(p1, Decl(symbolProperty22.ts, 4, 27))
+>T : Symbol(T, Decl(symbolProperty22.ts, 4, 21))
+>p2 : Symbol(p2, Decl(symbolProperty22.ts, 4, 33))
+>I : Symbol(I, Decl(symbolProperty22.ts, 0, 0))
+>T : Symbol(T, Decl(symbolProperty22.ts, 4, 21))
+>U : Symbol(U, Decl(symbolProperty22.ts, 4, 23))
+>U : Symbol(U, Decl(symbolProperty22.ts, 4, 23))
+
+foo("", { [Symbol.unscopables]: s => s.length });
+>foo : Symbol(foo, Decl(symbolProperty22.ts, 2, 1))
+>[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(symbolProperty22.ts, 6, 9))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

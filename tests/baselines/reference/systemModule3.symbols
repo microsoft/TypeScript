@@ -1,0 +1,14 @@
+=== tests/cases/compiler/file1.ts ===
+export default function() {}
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/file2.ts ===
+export default function f() {}
+>f : Symbol(f, Decl(file2.ts, 0, 0))
+
+=== tests/cases/compiler/file3.ts ===
+export default class C {}
+>C : Symbol(C, Decl(file3.ts, 0, 0))
+
+=== tests/cases/compiler/file4.ts ===
+export default class {}
+No type information for this code.

@@ -1,0 +1,3 @@
+=== tests/cases/compiler/primitiveTypeAsmoduleName.ts ===
+module string {}
+No type information for this code.

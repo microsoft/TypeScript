@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraintTransitively2.ts ===
+// using a type parameter as a constraint for a type parameter is invalid
+// these should be errors at the type parameter constraint declarations, and have no downstream errors
+
+interface A { foo: number }
+>foo : number
+
+interface B extends A { bar: string; }
+>bar : string
+
+interface C extends B { baz: boolean; }
+>baz : boolean
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+var c: C;
+>c : C
+
+function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>x : T
+>y : U
+>z : V
+>z : V
+
+//function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
+
+foo(1, 2, '');
+>foo(1, 2, '') : ""
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>1 : 1
+>2 : 2
+>'' : ""
+
+foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
+>foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true }) : { x: number; y: number; z: boolean; }
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+>{ x: 1, y: '' } : { x: number; y: string; }
+>x : number
+>1 : 1
+>y : string
+>'' : ""
+>{ x: 2, y: 2, z: true } : { x: number; y: number; z: true; }
+>x : number
+>2 : 2
+>y : number
+>2 : 2
+>z : true
+>true : true
+
+foo(a, b, a);
+>foo(a, b, a) : A
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>a : A
+>b : B
+>a : A
+
+foo(a, { foo: 1, bar: '', hm: true }, b);
+>foo(a, { foo: 1, bar: '', hm: true }, b) : B
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>a : A
+>{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
+>foo : number
+>1 : 1
+>bar : string
+>'' : ""
+>hm : true
+>true : true
+>b : B
+
+foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { });
+>foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { }) : () => void
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>(x: number, y: string) => { } : (x: number, y: string) => void
+>x : number
+>y : string
+>(x, y: boolean) => { } : (x: any, y: boolean) => void
+>x : any
+>y : boolean
+>() => { } : () => void
+
+function foo2<T extends A, U extends A, V extends A>(x: T, y: U, z: V): V { return z; }
+>foo2 : <T extends A, U extends A, V extends A>(x: T, y: U, z: V) => V
+>x : T
+>y : U
+>z : V
+>z : V
+
+//function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
+foo(b, a, c);
+>foo(b, a, c) : C
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>b : B
+>a : A
+>c : C
+
+foo(c, c, a);
+>foo(c, c, a) : A
+>foo : <T, U, V>(x: T, y: U, z: V) => V
+>c : C
+>c : C
+>a : A
+

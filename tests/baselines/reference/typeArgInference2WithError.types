@@ -1,0 +1,18 @@
+=== tests/cases/compiler/typeArgInference2WithError.ts ===
+interface Item {
+    name: string;
+>name : string
+}
+
+declare function foo<T extends Item>(x?: T, y?: T): T;
+>foo : <T extends Item>(x?: T, y?: T) => T
+>x : T
+>y : T
+
+var z7 = foo("abc", 5); // Error
+>z7 : Item
+>foo("abc", 5) : Item
+>foo : <T extends Item>(x?: T, y?: T) => T
+>"abc" : "abc"
+>5 : 5
+

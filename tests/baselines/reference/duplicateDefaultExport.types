@@ -1,0 +1,5 @@
+=== tests/cases/compiler/duplicateDefaultExport.ts ===
+export default 0;
+No type information for this code.export default function() {}
+No type information for this code.
+No type information for this code.

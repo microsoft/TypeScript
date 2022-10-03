@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/t.d.ts ===
+type A<T extends string> = { a: T }
+>A : A<T>
+>a : T
+
+=== tests/cases/conformance/jsdoc/test.js ===
+/** Also should error for jsdoc typedefs
+ * @template {string} U
+ * @typedef {{ b: U }} B
+ */
+/** @type {A<number>} */
+var a;
+>a : A<number>
+
+/** @type {B<number>} */
+var b;
+>b : B<number>
+

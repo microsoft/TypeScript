@@ -1,0 +1,144 @@
+=== tests/cases/conformance/salsa/a.js ===
+// non top-level:
+// all references to _map, set, get, addon should be ok
+(function container() {
+>container : Symbol(container, Decl(a.js, 2, 1))
+
+    /** @constructor */
+    var Multimap = function() {
+>Multimap : Symbol(Multimap, Decl(a.js, 4, 7))
+
+        this._map = {};
+>this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+        this._map
+>this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+        this.set
+>this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+        this.get
+>this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+        this.addon
+>this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+
+    };
+
+    Multimap.prototype = {
+>Multimap.prototype : Symbol(Multimap.prototype, Decl(a.js, 10, 6))
+>Multimap : Symbol(Multimap, Decl(a.js, 4, 7))
+>prototype : Symbol(Multimap.prototype, Decl(a.js, 10, 6))
+
+        set: function() {
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+            this._map
+>this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+            this.set
+>this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+            this.get
+>this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+            this.addon
+>this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+
+        },
+        get() {
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+            this._map
+>this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+            this.set
+>this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+            this.get
+>this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+            this.addon
+>this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+        }
+    }
+
+    Multimap.prototype.addon = function () {
+>Multimap.prototype : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>Multimap : Symbol(Multimap, Decl(a.js, 4, 7))
+>prototype : Symbol(Multimap.prototype, Decl(a.js, 10, 6))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+
+        this._map
+>this._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+        this.set
+>this.set : Symbol(set, Decl(a.js, 12, 26))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+        this.get
+>this.get : Symbol(get, Decl(a.js, 18, 10))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+        this.addon
+>this.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>this : Symbol(Multimap, Decl(a.js, 4, 18))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+    }
+
+    var mm = new Multimap();
+>mm : Symbol(mm, Decl(a.js, 34, 7))
+>Multimap : Symbol(Multimap, Decl(a.js, 4, 7))
+
+    mm._map
+>mm._map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+>mm : Symbol(mm, Decl(a.js, 34, 7))
+>_map : Symbol(Multimap._map, Decl(a.js, 4, 31))
+
+    mm.set
+>mm.set : Symbol(set, Decl(a.js, 12, 26))
+>mm : Symbol(mm, Decl(a.js, 34, 7))
+>set : Symbol(set, Decl(a.js, 12, 26))
+
+    mm.get
+>mm.get : Symbol(get, Decl(a.js, 18, 10))
+>mm : Symbol(mm, Decl(a.js, 34, 7))
+>get : Symbol(get, Decl(a.js, 18, 10))
+
+    mm.addon
+>mm.addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+>mm : Symbol(mm, Decl(a.js, 34, 7))
+>addon : Symbol(Multimap.addon, Decl(a.js, 25, 5))
+
+});
+

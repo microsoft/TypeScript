@@ -1,0 +1,23 @@
+tests/cases/compiler/enumPropertyAccess.ts(7,11): error TS2339: Property 'Green' does not exist on type 'Colors.Red'.
+tests/cases/compiler/enumPropertyAccess.ts(12,7): error TS2339: Property 'Green' does not exist on type 'Colors'.
+
+
+==== tests/cases/compiler/enumPropertyAccess.ts (2 errors) ====
+    enum Colors {
+        Red,
+        Green
+    }
+    
+    var x = Colors.Red; // type of 'x' should be 'Colors'
+    var p = x.Green; // error
+              ~~~~~
+!!! error TS2339: Property 'Green' does not exist on type 'Colors.Red'.
+    x.toFixed(); // ok
+    
+    // Now with generics
+    function fill<B extends Colors>(f: B) {
+        f.Green; // error
+          ~~~~~
+!!! error TS2339: Property 'Green' does not exist on type 'Colors'.
+        f.toFixed(); // ok
+    }

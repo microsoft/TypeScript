@@ -1,0 +1,9 @@
+=== tests/cases/compiler/arraySlice.ts ===
+var arr: string[] | number[];
+>arr : Symbol(arr, Decl(arraySlice.ts, 0, 3))
+
+arr.splice(1, 1);
+>arr.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(arraySlice.ts, 0, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

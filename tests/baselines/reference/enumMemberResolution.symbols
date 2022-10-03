@@ -1,0 +1,19 @@
+=== tests/cases/compiler/enumMemberResolution.ts ===
+enum Position2 {
+>Position2 : Symbol(Position2, Decl(enumMemberResolution.ts, 0, 0))
+
+    IgnoreRulesSpecific = 0
+>IgnoreRulesSpecific : Symbol(Position2.IgnoreRulesSpecific, Decl(enumMemberResolution.ts, 0, 16))
+}
+var x = IgnoreRulesSpecific. // error
+>x : Symbol(x, Decl(enumMemberResolution.ts, 3, 3))
+
+var y = 1;
+>y : Symbol(y, Decl(enumMemberResolution.ts, 4, 3))
+
+var z = Position2.IgnoreRulesSpecific; // no error
+>z : Symbol(z, Decl(enumMemberResolution.ts, 5, 3))
+>Position2.IgnoreRulesSpecific : Symbol(Position2.IgnoreRulesSpecific, Decl(enumMemberResolution.ts, 0, 16))
+>Position2 : Symbol(Position2, Decl(enumMemberResolution.ts, 0, 0))
+>IgnoreRulesSpecific : Symbol(Position2.IgnoreRulesSpecific, Decl(enumMemberResolution.ts, 0, 16))
+

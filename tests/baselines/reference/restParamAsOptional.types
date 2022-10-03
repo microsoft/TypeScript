@@ -1,0 +1,10 @@
+=== tests/cases/compiler/restParamAsOptional.ts ===
+function f(...x?) { }
+>f : (...x?: any[]) => void
+>x : any[]
+
+function f2(...x = []) { }
+>f2 : (...x?: any[]) => void
+>x : any[]
+>[] : undefined[]
+

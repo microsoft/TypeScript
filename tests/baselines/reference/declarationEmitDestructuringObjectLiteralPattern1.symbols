@@ -1,0 +1,41 @@
+=== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern1.ts ===
+var { } = { x: 5, y: "hello" };
+>x : Symbol(x, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 0, 11))
+>y : Symbol(y, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 0, 17))
+
+var { x4 } = { x4: 5, y4: "hello" };
+>x4 : Symbol(x4, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 1, 5))
+>x4 : Symbol(x4, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 1, 14))
+>y4 : Symbol(y4, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 1, 21))
+
+var { y5 } = { x5: 5, y5: "hello" };
+>y5 : Symbol(y5, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 2, 5))
+>x5 : Symbol(x5, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 2, 14))
+>y5 : Symbol(y5, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 2, 21))
+
+var { x6, y6 } = { x6: 5, y6: "hello" };
+>x6 : Symbol(x6, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 3, 5))
+>y6 : Symbol(y6, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 3, 9))
+>x6 : Symbol(x6, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 3, 18))
+>y6 : Symbol(y6, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 3, 25))
+
+var { x7: a1 } = { x7: 5, y7: "hello" };
+>x7 : Symbol(x7, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 4, 18))
+>a1 : Symbol(a1, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 4, 5))
+>x7 : Symbol(x7, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 4, 18))
+>y7 : Symbol(y7, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 4, 25))
+
+var { y8: b1 } = { x8: 5, y8: "hello" };
+>y8 : Symbol(y8, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 5, 25))
+>b1 : Symbol(b1, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 5, 5))
+>x8 : Symbol(x8, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 5, 18))
+>y8 : Symbol(y8, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 5, 25))
+
+var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
+>x9 : Symbol(x9, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 26))
+>a2 : Symbol(a2, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 5))
+>y9 : Symbol(y9, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 33))
+>b2 : Symbol(b2, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 13))
+>x9 : Symbol(x9, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 26))
+>y9 : Symbol(y9, Decl(declarationEmitDestructuringObjectLiteralPattern1.ts, 6, 33))
+

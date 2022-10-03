@@ -1,0 +1,28 @@
+tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts(8,15): error TS18030: An optional chain cannot contain private identifiers.
+tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts(9,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts(9,17): error TS18030: An optional chain cannot contain private identifiers.
+tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts(10,22): error TS18030: An optional chain cannot contain private identifiers.
+
+
+==== tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts (4 errors) ====
+    class A {
+        a?: A
+        #b?: A;
+        getA(): A {
+            return new A();
+        }
+        constructor() {
+            this?.#b;           // Error
+                  ~~
+!!! error TS18030: An optional chain cannot contain private identifiers.
+            this?.a.#b;         // Error
+            ~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                    ~~
+!!! error TS18030: An optional chain cannot contain private identifiers.
+            this?.getA().#b;    // Error
+                         ~~
+!!! error TS18030: An optional chain cannot contain private identifiers.
+        }
+    }
+    

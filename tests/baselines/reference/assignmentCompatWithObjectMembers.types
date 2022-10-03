@@ -1,0 +1,296 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers.ts ===
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+// no errors expected
+
+module SimpleTypes {
+>SimpleTypes : typeof SimpleTypes
+
+    class S { foo: string; }
+>S : S
+>foo : string
+
+    class T { foo: string; }
+>T : T
+>foo : string
+
+    var s: S;
+>s : S
+
+    var t: T;
+>t : T
+
+    interface S2 { foo: string; }
+>foo : string
+
+    interface T2 { foo: string; }
+>foo : string
+
+    var s2: S2;
+>s2 : S2
+
+    var t2: T2;
+>t2 : T2
+
+    var a: { foo: string; }
+>a : { foo: string; }
+>foo : string
+
+    var b: { foo: string; }
+>b : { foo: string; }
+>foo : string
+
+    var a2 = { foo: '' };
+>a2 : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+    var b2 = { foo: '' };
+>b2 : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+    s = t;
+>s = t : T
+>s : S
+>t : T
+
+    t = s;
+>t = s : S
+>t : T
+>s : S
+
+    s = s2;
+>s = s2 : S2
+>s : S
+>s2 : S2
+
+    s = a2;
+>s = a2 : { foo: string; }
+>s : S
+>a2 : { foo: string; }
+
+    s2 = t2;
+>s2 = t2 : T2
+>s2 : S2
+>t2 : T2
+
+    t2 = s2;
+>t2 = s2 : S2
+>t2 : T2
+>s2 : S2
+
+    s2 = t;
+>s2 = t : T
+>s2 : S2
+>t : T
+
+    s2 = b;
+>s2 = b : { foo: string; }
+>s2 : S2
+>b : { foo: string; }
+
+    s2 = a2;
+>s2 = a2 : { foo: string; }
+>s2 : S2
+>a2 : { foo: string; }
+
+    a = b;
+>a = b : { foo: string; }
+>a : { foo: string; }
+>b : { foo: string; }
+
+    b = a;
+>b = a : { foo: string; }
+>b : { foo: string; }
+>a : { foo: string; }
+
+    a = s;
+>a = s : S
+>a : { foo: string; }
+>s : S
+
+    a = s2;
+>a = s2 : S2
+>a : { foo: string; }
+>s2 : S2
+
+    a = a2;
+>a = a2 : { foo: string; }
+>a : { foo: string; }
+>a2 : { foo: string; }
+
+    a2 = b2;
+>a2 = b2 : { foo: string; }
+>a2 : { foo: string; }
+>b2 : { foo: string; }
+
+    b2 = a2;
+>b2 = a2 : { foo: string; }
+>b2 : { foo: string; }
+>a2 : { foo: string; }
+
+    a2 = b;
+>a2 = b : { foo: string; }
+>a2 : { foo: string; }
+>b : { foo: string; }
+
+    a2 = t2;
+>a2 = t2 : T2
+>a2 : { foo: string; }
+>t2 : T2
+
+    a2 = t;
+>a2 = t : T
+>a2 : { foo: string; }
+>t : T
+}
+
+module ObjectTypes {
+>ObjectTypes : typeof ObjectTypes
+
+    class S { foo: S; }
+>S : S
+>foo : S
+
+    class T { foo: T; }
+>T : T
+>foo : T
+
+    var s: S;
+>s : S
+
+    var t: T;
+>t : T
+
+    interface S2 { foo: S2; }
+>foo : S2
+
+    interface T2 { foo: T2; }
+>foo : T2
+
+    var s2: S2;
+>s2 : S2
+
+    var t2: T2;
+>t2 : T2
+
+    var a: { foo: typeof a; }
+>a : { foo: typeof a; }
+>foo : { foo: typeof a; }
+>a : { foo: any; }
+
+    var b: { foo: typeof b; }
+>b : { foo: typeof b; }
+>foo : { foo: typeof b; }
+>b : { foo: any; }
+
+    var a2 = { foo: a2 };
+>a2 : any
+>{ foo: a2 } : { foo: any; }
+>foo : any
+>a2 : any
+
+    var b2 = { foo: b2 };
+>b2 : any
+>{ foo: b2 } : { foo: any; }
+>foo : any
+>b2 : any
+
+    s = t;
+>s = t : T
+>s : S
+>t : T
+
+    t = s;
+>t = s : S
+>t : T
+>s : S
+
+    s = s2;
+>s = s2 : S2
+>s : S
+>s2 : S2
+
+    s = a2;
+>s = a2 : any
+>s : S
+>a2 : any
+
+    s2 = t2;
+>s2 = t2 : T2
+>s2 : S2
+>t2 : T2
+
+    t2 = s2;
+>t2 = s2 : S2
+>t2 : T2
+>s2 : S2
+
+    s2 = t;
+>s2 = t : T
+>s2 : S2
+>t : T
+
+    s2 = b;
+>s2 = b : { foo: any; }
+>s2 : S2
+>b : { foo: any; }
+
+    s2 = a2;
+>s2 = a2 : any
+>s2 : S2
+>a2 : any
+
+    a = b;
+>a = b : { foo: any; }
+>a : { foo: any; }
+>b : { foo: any; }
+
+    b = a;
+>b = a : { foo: any; }
+>b : { foo: any; }
+>a : { foo: any; }
+
+    a = s;
+>a = s : S
+>a : { foo: any; }
+>s : S
+
+    a = s2;
+>a = s2 : S2
+>a : { foo: any; }
+>s2 : S2
+
+    a = a2;
+>a = a2 : any
+>a : { foo: any; }
+>a2 : any
+
+    a2 = b2;
+>a2 = b2 : any
+>a2 : any
+>b2 : any
+
+    b2 = a2;
+>b2 = a2 : any
+>b2 : any
+>a2 : any
+
+    a2 = b;
+>a2 = b : { foo: any; }
+>a2 : any
+>b : { foo: any; }
+
+    a2 = t2;
+>a2 = t2 : T2
+>a2 : any
+>t2 : T2
+
+    a2 = t;
+>a2 = t : T
+>a2 : any
+>t : T
+
+}

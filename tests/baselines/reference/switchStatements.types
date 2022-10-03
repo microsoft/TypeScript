@@ -1,0 +1,179 @@
+=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+module M {
+>M : typeof M
+
+    export function fn(x: number) {
+>fn : (x: number) => string
+>x : number
+
+        return '';
+>'' : ""
+    }
+}
+
+var x: any;
+>x : any
+
+switch (x) {
+>x : any
+
+    case '':
+>'' : ""
+
+    case 12:
+>12 : 12
+
+    case true:
+>true : true
+
+    case null:
+>null : null
+
+    case undefined:
+>undefined : undefined
+
+    case new Date(12):
+>new Date(12) : Date
+>Date : DateConstructor
+>12 : 12
+
+    case new Object():
+>new Object() : Object
+>Object : ObjectConstructor
+
+    case /[a-z]/:
+>/[a-z]/ : RegExp
+
+    case[]:
+>[] : undefined[]
+
+    case {}:
+>{} : {}
+
+    case { id: 12 }:
+>{ id: 12 } : { id: number; }
+>id : number
+>12 : 12
+
+    case['a']:
+>['a'] : string[]
+>'a' : "a"
+
+    case typeof x:
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+
+    case typeof M:
+>typeof M : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>M : typeof M
+
+    case M.fn(1):
+>M.fn(1) : string
+>M.fn : (x: number) => string
+>M : typeof M
+>fn : (x: number) => string
+>1 : 1
+
+    case <T>(x: number) => '':
+><T>(x: number) => '' : <T>(x: number) => string
+>x : number
+>'' : ""
+
+    case (<T>(x: number) => '')(2):
+>(<T>(x: number) => '')(2) : string
+>(<T>(x: number) => '') : <T>(x: number) => string
+><T>(x: number) => '' : <T>(x: number) => string
+>x : number
+>'' : ""
+>2 : 2
+
+    default:
+}
+
+// basic assignable check, rest covered in tests for 'assignment compatibility'
+class C { id: number; }
+>C : C
+>id : number
+
+class D extends C { name: string }
+>D : D
+>C : C
+>name : string
+
+switch (new C()) {
+>new C() : C
+>C : typeof C
+
+    case new D():
+>new D() : D
+>D : typeof D
+
+    case { id: 12, name: '' }:
+>{ id: 12, name: '' } : { id: number; name: string; }
+>id : number
+>12 : 12
+>name : string
+>'' : ""
+
+    case new C():
+>new C() : C
+>C : typeof C
+}
+
+switch ('') { }
+>'' : ""
+
+switch (12) { }
+>12 : 12
+
+switch (true) { }
+>true : true
+
+switch (null) { }
+>null : null
+
+switch (undefined) { }
+>undefined : undefined
+
+switch (new Date(12)) { }
+>new Date(12) : Date
+>Date : DateConstructor
+>12 : 12
+
+switch (new Object()) { }
+>new Object() : Object
+>Object : ObjectConstructor
+
+switch (/[a-z]/) { }
+>/[a-z]/ : RegExp
+
+switch ([]) { }
+>[] : undefined[]
+
+switch ({}) { }
+>{} : {}
+
+switch ({ id: 12 }) { }
+>{ id: 12 } : { id: number; }
+>id : number
+>12 : 12
+
+switch (['a']) { }
+>['a'] : string[]
+>'a' : "a"
+
+switch (<T>(x: number) => '') { }
+><T>(x: number) => '' : <T>(x: number) => string
+>x : number
+>'' : ""
+
+switch ((<T>(x: T) => '')(1)) { }
+>(<T>(x: T) => '')(1) : string
+>(<T>(x: T) => '') : <T>(x: T) => string
+><T>(x: T) => '' : <T>(x: T) => string
+>x : T
+>'' : ""
+>1 : 1
+
+
+

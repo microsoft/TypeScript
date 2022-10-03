@@ -1,0 +1,7 @@
+=== tests/cases/compiler/unionRelationshipCheckPasses.ts ===
+const item: { foo?: undefined } | { foo: number } = null as any as { foo?: number | undefined };
+>item : Symbol(item, Decl(unionRelationshipCheckPasses.ts, 0, 5))
+>foo : Symbol(foo, Decl(unionRelationshipCheckPasses.ts, 0, 13))
+>foo : Symbol(foo, Decl(unionRelationshipCheckPasses.ts, 0, 35))
+>foo : Symbol(foo, Decl(unionRelationshipCheckPasses.ts, 0, 68))
+

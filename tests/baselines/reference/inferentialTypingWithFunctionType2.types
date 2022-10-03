@@ -1,0 +1,21 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionType2.ts ===
+function identity<A>(a: A): A {
+>identity : <A>(a: A) => A
+>a : A
+
+    return a;
+>a : A
+}
+var x = [1, 2, 3].map(identity)[0];
+>x : number
+>[1, 2, 3].map(identity)[0] : number
+>[1, 2, 3].map(identity) : number[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>identity : <A>(a: A) => A
+>0 : 0
+

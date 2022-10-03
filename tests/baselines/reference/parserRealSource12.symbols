@@ -1,0 +1,2513 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource12.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource12.ts, 0, 0))
+
+    export interface IAstWalker {
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+        walk(ast: AST, parent: AST): AST;
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 7, 13))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 7, 22))
+>AST : Symbol(AST)
+>AST : Symbol(AST)
+
+        options: AstWalkOptions;
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+
+        state: any; // user state object
+>state : Symbol(IAstWalker.state, Decl(parserRealSource12.ts, 8, 32))
+    }
+
+    export class AstWalkOptions {
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+
+        public goChildren = true;
+>goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+
+        public goNextSibling = true;
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+        public reverseSiblings = false; // visit siblings in reverse execution order
+>reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+
+        public stopWalk(stop:boolean = true) {
+>stopWalk : Symbol(AstWalkOptions.stopWalk, Decl(parserRealSource12.ts, 15, 39))
+>stop : Symbol(stop, Decl(parserRealSource12.ts, 17, 24))
+
+            this.goChildren = !stop;
+>this.goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+>this : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+>goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+>stop : Symbol(stop, Decl(parserRealSource12.ts, 17, 24))
+
+            this.goNextSibling = !stop;
+>this.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>this : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>stop : Symbol(stop, Decl(parserRealSource12.ts, 17, 24))
+        }
+    }
+
+    export interface IAstWalkCallback {
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+
+        (ast: AST, parent: AST, walker: IAstWalker): AST;
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 24, 9))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 24, 18))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 24, 31))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>AST : Symbol(AST)
+    }
+
+    export interface IAstWalkChildren {
+>IAstWalkChildren : Symbol(IAstWalkChildren, Decl(parserRealSource12.ts, 25, 5))
+
+        (preAst: AST, parent: AST, walker: IAstWalker): void;
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 28, 9))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 28, 21))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 28, 34))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+    }
+
+    class AstWalker implements IAstWalker {
+>AstWalker : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+        constructor (
+            private childrenWalkers: IAstWalkChildren[],
+>childrenWalkers : Symbol(AstWalker.childrenWalkers, Decl(parserRealSource12.ts, 32, 21))
+>IAstWalkChildren : Symbol(IAstWalkChildren, Decl(parserRealSource12.ts, 25, 5))
+
+            private pre: IAstWalkCallback,
+>pre : Symbol(AstWalker.pre, Decl(parserRealSource12.ts, 33, 56))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+
+            private post: IAstWalkCallback,
+>post : Symbol(AstWalker.post, Decl(parserRealSource12.ts, 34, 42))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+
+            public options: AstWalkOptions,
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+
+            public state: any) {
+>state : Symbol(AstWalker.state, Decl(parserRealSource12.ts, 36, 43))
+        }
+
+        public walk(ast: AST, parent: AST): AST {
+>walk : Symbol(AstWalker.walk, Decl(parserRealSource12.ts, 38, 9))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 40, 29))
+>AST : Symbol(AST)
+>AST : Symbol(AST)
+
+            var preAst = this.pre(ast, parent, this);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+>this.pre : Symbol(AstWalker.pre, Decl(parserRealSource12.ts, 33, 56))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>pre : Symbol(AstWalker.pre, Decl(parserRealSource12.ts, 33, 56))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 40, 29))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+
+            if (preAst === undefined) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+>undefined : Symbol(undefined)
+
+                preAst = ast;
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+            }
+            if (this.options.goChildren) {
+>this.options.goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+>this.options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+
+                var svGoSib = this.options.goNextSibling;
+>svGoSib : Symbol(svGoSib, Decl(parserRealSource12.ts, 46, 19))
+>this.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>this.options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                this.options.goNextSibling = true;
+>this.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>this.options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                // Call the "walkChildren" function corresponding to "nodeType".
+                this.childrenWalkers[ast.nodeType](ast, parent, this);
+>this.childrenWalkers : Symbol(AstWalker.childrenWalkers, Decl(parserRealSource12.ts, 32, 21))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>childrenWalkers : Symbol(AstWalker.childrenWalkers, Decl(parserRealSource12.ts, 32, 21))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 40, 29))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+
+                this.options.goNextSibling = svGoSib;
+>this.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>this.options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>svGoSib : Symbol(svGoSib, Decl(parserRealSource12.ts, 46, 19))
+            }
+            else {
+                // no go only applies to children of node issuing it
+                this.options.goChildren = true;
+>this.options.goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+>this.options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>options : Symbol(AstWalker.options, Decl(parserRealSource12.ts, 35, 43))
+>goChildren : Symbol(AstWalkOptions.goChildren, Decl(parserRealSource12.ts, 12, 33))
+            }
+            if (this.post) {
+>this.post : Symbol(AstWalker.post, Decl(parserRealSource12.ts, 34, 42))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>post : Symbol(AstWalker.post, Decl(parserRealSource12.ts, 34, 42))
+
+                var postAst = this.post(preAst, parent, this);
+>postAst : Symbol(postAst, Decl(parserRealSource12.ts, 57, 19))
+>this.post : Symbol(AstWalker.post, Decl(parserRealSource12.ts, 34, 42))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>post : Symbol(AstWalker.post, Decl(parserRealSource12.ts, 34, 42))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 40, 29))
+>this : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+
+                if (postAst === undefined) {
+>postAst : Symbol(postAst, Decl(parserRealSource12.ts, 57, 19))
+>undefined : Symbol(undefined)
+
+                    postAst = preAst;
+>postAst : Symbol(postAst, Decl(parserRealSource12.ts, 57, 19))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+                }
+                return postAst;
+>postAst : Symbol(postAst, Decl(parserRealSource12.ts, 57, 19))
+            }
+            else {
+                return preAst;
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
+            }
+        }
+    }
+
+    export class AstWalkerFactory {
+>AstWalkerFactory : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+
+        private childrenWalkers: IAstWalkChildren[] = [];
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>IAstWalkChildren : Symbol(IAstWalkChildren, Decl(parserRealSource12.ts, 25, 5))
+
+        constructor () {
+            this.initChildrenWalkers();
+>this.initChildrenWalkers : Symbol(AstWalkerFactory.initChildrenWalkers, Decl(parserRealSource12.ts, 90, 9))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>initChildrenWalkers : Symbol(AstWalkerFactory.initChildrenWalkers, Decl(parserRealSource12.ts, 90, 9))
+        }
+
+        public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
+>walk : Symbol(AstWalkerFactory.walk, Decl(parserRealSource12.ts, 74, 9))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 76, 20))
+>AST : Symbol(AST)
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 76, 29))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>post : Symbol(post, Decl(parserRealSource12.ts, 76, 52))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>options : Symbol(options, Decl(parserRealSource12.ts, 76, 77))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+>state : Symbol(state, Decl(parserRealSource12.ts, 76, 103))
+>AST : Symbol(AST)
+
+            return this.getWalker(pre, post, options, state).walk(ast, null)
+>this.getWalker(pre, post, options, state).walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>this.getWalker : Symbol(AstWalkerFactory.getWalker, Decl(parserRealSource12.ts, 78, 9))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>getWalker : Symbol(AstWalkerFactory.getWalker, Decl(parserRealSource12.ts, 78, 9))
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 76, 29))
+>post : Symbol(post, Decl(parserRealSource12.ts, 76, 52))
+>options : Symbol(options, Decl(parserRealSource12.ts, 76, 77))
+>state : Symbol(state, Decl(parserRealSource12.ts, 76, 103))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>ast : Symbol(ast, Decl(parserRealSource12.ts, 76, 20))
+        }
+
+        public getWalker(pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): IAstWalker {
+>getWalker : Symbol(AstWalkerFactory.getWalker, Decl(parserRealSource12.ts, 78, 9))
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 80, 25))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>post : Symbol(post, Decl(parserRealSource12.ts, 80, 47))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>options : Symbol(options, Decl(parserRealSource12.ts, 80, 72))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+>state : Symbol(state, Decl(parserRealSource12.ts, 80, 98))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            return this.getSlowWalker(pre, post, options, state);
+>this.getSlowWalker : Symbol(AstWalkerFactory.getSlowWalker, Decl(parserRealSource12.ts, 82, 9))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>getSlowWalker : Symbol(AstWalkerFactory.getSlowWalker, Decl(parserRealSource12.ts, 82, 9))
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 80, 25))
+>post : Symbol(post, Decl(parserRealSource12.ts, 80, 47))
+>options : Symbol(options, Decl(parserRealSource12.ts, 80, 72))
+>state : Symbol(state, Decl(parserRealSource12.ts, 80, 98))
+        }
+
+        private getSlowWalker(pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): IAstWalker {
+>getSlowWalker : Symbol(AstWalkerFactory.getSlowWalker, Decl(parserRealSource12.ts, 82, 9))
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 84, 30))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>post : Symbol(post, Decl(parserRealSource12.ts, 84, 52))
+>IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
+>options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+>state : Symbol(state, Decl(parserRealSource12.ts, 84, 103))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (!options) {
+>options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
+
+                options = new AstWalkOptions();
+>options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
+>AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
+            }
+
+            return new AstWalker(this.childrenWalkers, pre, post, options, state);
+>AstWalker : Symbol(AstWalker, Decl(parserRealSource12.ts, 29, 5))
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>pre : Symbol(pre, Decl(parserRealSource12.ts, 84, 30))
+>post : Symbol(post, Decl(parserRealSource12.ts, 84, 52))
+>options : Symbol(options, Decl(parserRealSource12.ts, 84, 77))
+>state : Symbol(state, Decl(parserRealSource12.ts, 84, 103))
+        }
+
+        private initChildrenWalkers(): void {
+>initChildrenWalkers : Symbol(AstWalkerFactory.initChildrenWalkers, Decl(parserRealSource12.ts, 90, 9))
+
+            this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.ObjectLit] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.Void] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.Comma] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Pos] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.Neg] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.Delete] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.Await] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.In] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Dot] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.From] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Is] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.InstOf] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Typeof] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.NumberLit] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTypeReferenceChildren : Symbol(ChildrenWalkers.walkTypeReferenceChildren, Decl(parserRealSource12.ts, 267, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTypeReferenceChildren : Symbol(ChildrenWalkers.walkTypeReferenceChildren, Decl(parserRealSource12.ts, 267, 9))
+
+            this.childrenWalkers[NodeType.Index] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Call] = ChildrenWalkers.walkCallExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkCallExpressionChildren : Symbol(ChildrenWalkers.walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkCallExpressionChildren : Symbol(ChildrenWalkers.walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
+
+            this.childrenWalkers[NodeType.New] = ChildrenWalkers.walkCallExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkCallExpressionChildren : Symbol(ChildrenWalkers.walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkCallExpressionChildren : Symbol(ChildrenWalkers.walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
+
+            this.childrenWalkers[NodeType.Asg] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgAdd] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgSub] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgDiv] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgMul] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgMod] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgXor] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgOr] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgLsh] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgRsh] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.AsgRs2] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.ConditionalExpression] = ChildrenWalkers.walkTrinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTrinaryExpressionChildren : Symbol(ChildrenWalkers.walkTrinaryExpressionChildren, Decl(parserRealSource12.ts, 285, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTrinaryExpressionChildren : Symbol(ChildrenWalkers.walkTrinaryExpressionChildren, Decl(parserRealSource12.ts, 285, 9))
+
+            this.childrenWalkers[NodeType.LogOr] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.LogAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Or] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Xor] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.And] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Eq] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Ne] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Eqv] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.NEqv] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Lt] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Le] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Gt] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Ge] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Add] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Sub] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Mul] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Div] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Mod] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Lsh] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Rsh] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Rs2] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.Not] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.LogNot] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.IncPre] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.DecPre] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.IncPost] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.DecPost] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.TypeAssertion] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.FuncDecl] = ChildrenWalkers.walkFuncDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkFuncDeclChildren : Symbol(ChildrenWalkers.walkFuncDeclChildren, Decl(parserRealSource12.ts, 297, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkFuncDeclChildren : Symbol(ChildrenWalkers.walkFuncDeclChildren, Decl(parserRealSource12.ts, 297, 9))
+
+            this.childrenWalkers[NodeType.Member] = ChildrenWalkers.walkBinaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBinaryExpressionChildren : Symbol(ChildrenWalkers.walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+
+            this.childrenWalkers[NodeType.VarDecl] = ChildrenWalkers.walkBoundDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBoundDeclChildren : Symbol(ChildrenWalkers.walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBoundDeclChildren : Symbol(ChildrenWalkers.walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
+
+            this.childrenWalkers[NodeType.ArgDecl] = ChildrenWalkers.walkBoundDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBoundDeclChildren : Symbol(ChildrenWalkers.walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBoundDeclChildren : Symbol(ChildrenWalkers.walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
+
+            this.childrenWalkers[NodeType.Return] = ChildrenWalkers.walkReturnStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkReturnStatementChildren : Symbol(ChildrenWalkers.walkReturnStatementChildren, Decl(parserRealSource12.ts, 324, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkReturnStatementChildren : Symbol(ChildrenWalkers.walkReturnStatementChildren, Decl(parserRealSource12.ts, 324, 9))
+
+            this.childrenWalkers[NodeType.Break] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkUnaryExpressionChildren : Symbol(ChildrenWalkers.walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+
+            this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkForStatementChildren : Symbol(ChildrenWalkers.walkForStatementChildren, Decl(parserRealSource12.ts, 330, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkForStatementChildren : Symbol(ChildrenWalkers.walkForStatementChildren, Decl(parserRealSource12.ts, 330, 9))
+
+            this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkForInStatementChildren : Symbol(ChildrenWalkers.walkForInStatementChildren, Decl(parserRealSource12.ts, 348, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkForInStatementChildren : Symbol(ChildrenWalkers.walkForInStatementChildren, Decl(parserRealSource12.ts, 348, 9))
+
+            this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkIfStatementChildren : Symbol(ChildrenWalkers.walkIfStatementChildren, Decl(parserRealSource12.ts, 358, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkIfStatementChildren : Symbol(ChildrenWalkers.walkIfStatementChildren, Decl(parserRealSource12.ts, 358, 9))
+
+            this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkWhileStatementChildren : Symbol(ChildrenWalkers.walkWhileStatementChildren, Decl(parserRealSource12.ts, 368, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkWhileStatementChildren : Symbol(ChildrenWalkers.walkWhileStatementChildren, Decl(parserRealSource12.ts, 368, 9))
+
+            this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkDoWhileStatementChildren : Symbol(ChildrenWalkers.walkDoWhileStatementChildren, Decl(parserRealSource12.ts, 375, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkDoWhileStatementChildren : Symbol(ChildrenWalkers.walkDoWhileStatementChildren, Decl(parserRealSource12.ts, 375, 9))
+
+            this.childrenWalkers[NodeType.Block] = ChildrenWalkers.walkBlockChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkBlockChildren : Symbol(ChildrenWalkers.walkBlockChildren, Decl(parserRealSource12.ts, 382, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkBlockChildren : Symbol(ChildrenWalkers.walkBlockChildren, Decl(parserRealSource12.ts, 382, 9))
+
+            this.childrenWalkers[NodeType.Case] = ChildrenWalkers.walkCaseStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkCaseStatementChildren : Symbol(ChildrenWalkers.walkCaseStatementChildren, Decl(parserRealSource12.ts, 388, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkCaseStatementChildren : Symbol(ChildrenWalkers.walkCaseStatementChildren, Decl(parserRealSource12.ts, 388, 9))
+
+            this.childrenWalkers[NodeType.Switch] = ChildrenWalkers.walkSwitchStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkSwitchStatementChildren : Symbol(ChildrenWalkers.walkSwitchStatementChildren, Decl(parserRealSource12.ts, 398, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkSwitchStatementChildren : Symbol(ChildrenWalkers.walkSwitchStatementChildren, Decl(parserRealSource12.ts, 398, 9))
+
+            this.childrenWalkers[NodeType.Try] = ChildrenWalkers.walkTryChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTryChildren : Symbol(ChildrenWalkers.walkTryChildren, Decl(parserRealSource12.ts, 408, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTryChildren : Symbol(ChildrenWalkers.walkTryChildren, Decl(parserRealSource12.ts, 408, 9))
+
+            this.childrenWalkers[NodeType.TryCatch] = ChildrenWalkers.walkTryCatchChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTryCatchChildren : Symbol(ChildrenWalkers.walkTryCatchChildren, Decl(parserRealSource12.ts, 414, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTryCatchChildren : Symbol(ChildrenWalkers.walkTryCatchChildren, Decl(parserRealSource12.ts, 414, 9))
+
+            this.childrenWalkers[NodeType.TryFinally] = ChildrenWalkers.walkTryFinallyChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTryFinallyChildren : Symbol(ChildrenWalkers.walkTryFinallyChildren, Decl(parserRealSource12.ts, 424, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTryFinallyChildren : Symbol(ChildrenWalkers.walkTryFinallyChildren, Decl(parserRealSource12.ts, 424, 9))
+
+            this.childrenWalkers[NodeType.Finally] = ChildrenWalkers.walkFinallyChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkFinallyChildren : Symbol(ChildrenWalkers.walkFinallyChildren, Decl(parserRealSource12.ts, 434, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkFinallyChildren : Symbol(ChildrenWalkers.walkFinallyChildren, Decl(parserRealSource12.ts, 434, 9))
+
+            this.childrenWalkers[NodeType.Catch] = ChildrenWalkers.walkCatchChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkCatchChildren : Symbol(ChildrenWalkers.walkCatchChildren, Decl(parserRealSource12.ts, 440, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkCatchChildren : Symbol(ChildrenWalkers.walkCatchChildren, Decl(parserRealSource12.ts, 440, 9))
+
+            this.childrenWalkers[NodeType.List] = ChildrenWalkers.walkListChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkListChildren : Symbol(ChildrenWalkers.walkListChildren, Decl(parserRealSource12.ts, 222, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkListChildren : Symbol(ChildrenWalkers.walkListChildren, Decl(parserRealSource12.ts, 222, 9))
+
+            this.childrenWalkers[NodeType.Script] = ChildrenWalkers.walkScriptChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkScriptChildren : Symbol(ChildrenWalkers.walkScriptChildren, Decl(parserRealSource12.ts, 474, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkScriptChildren : Symbol(ChildrenWalkers.walkScriptChildren, Decl(parserRealSource12.ts, 474, 9))
+
+            this.childrenWalkers[NodeType.ClassDeclaration] = ChildrenWalkers.walkClassDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkClassDeclChildren : Symbol(ChildrenWalkers.walkClassDeclChildren, Decl(parserRealSource12.ts, 462, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkClassDeclChildren : Symbol(ChildrenWalkers.walkClassDeclChildren, Decl(parserRealSource12.ts, 462, 9))
+
+            this.childrenWalkers[NodeType.InterfaceDeclaration] = ChildrenWalkers.walkTypeDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkTypeDeclChildren : Symbol(ChildrenWalkers.walkTypeDeclChildren, Decl(parserRealSource12.ts, 480, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkTypeDeclChildren : Symbol(ChildrenWalkers.walkTypeDeclChildren, Decl(parserRealSource12.ts, 480, 9))
+
+            this.childrenWalkers[NodeType.ModuleDeclaration] = ChildrenWalkers.walkModuleDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkModuleDeclChildren : Symbol(ChildrenWalkers.walkModuleDeclChildren, Decl(parserRealSource12.ts, 493, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkModuleDeclChildren : Symbol(ChildrenWalkers.walkModuleDeclChildren, Decl(parserRealSource12.ts, 493, 9))
+
+            this.childrenWalkers[NodeType.ImportDeclaration] = ChildrenWalkers.walkImportDeclChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkImportDeclChildren : Symbol(ChildrenWalkers.walkImportDeclChildren, Decl(parserRealSource12.ts, 497, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkImportDeclChildren : Symbol(ChildrenWalkers.walkImportDeclChildren, Decl(parserRealSource12.ts, 497, 9))
+
+            this.childrenWalkers[NodeType.With] = ChildrenWalkers.walkWithStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkWithStatementChildren : Symbol(ChildrenWalkers.walkWithStatementChildren, Decl(parserRealSource12.ts, 506, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkWithStatementChildren : Symbol(ChildrenWalkers.walkWithStatementChildren, Decl(parserRealSource12.ts, 506, 9))
+
+            this.childrenWalkers[NodeType.Label] = ChildrenWalkers.walkLabelChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkLabelChildren : Symbol(ChildrenWalkers.walkLabelChildren, Decl(parserRealSource12.ts, 516, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkLabelChildren : Symbol(ChildrenWalkers.walkLabelChildren, Decl(parserRealSource12.ts, 516, 9))
+
+            this.childrenWalkers[NodeType.LabeledStatement] = ChildrenWalkers.walkLabeledStatementChildren;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkLabeledStatementChildren : Symbol(ChildrenWalkers.walkLabeledStatementChildren, Decl(parserRealSource12.ts, 520, 9))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkLabeledStatementChildren : Symbol(ChildrenWalkers.walkLabeledStatementChildren, Decl(parserRealSource12.ts, 520, 9))
+
+            this.childrenWalkers[NodeType.EBStart] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>ChildrenWalkers.walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+>walkNone : Symbol(ChildrenWalkers.walkNone, Decl(parserRealSource12.ts, 219, 28))
+
+            // Verify the code is up to date with the enum
+            for (var e in (<any>NodeType)._map) {
+>e : Symbol(e, Decl(parserRealSource12.ts, 202, 20))
+
+                if ((<any>this.childrenWalkers)[e] === undefined) {
+>this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+>childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
+>e : Symbol(e, Decl(parserRealSource12.ts, 202, 20))
+>undefined : Symbol(undefined)
+
+                    throw new Error("initWalkers function is not up to date with enum content!");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+                }
+            }
+        }
+    }
+
+    var globalAstWalkerFactory: AstWalkerFactory;
+>globalAstWalkerFactory : Symbol(globalAstWalkerFactory, Decl(parserRealSource12.ts, 210, 7))
+>AstWalkerFactory : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+
+    export function getAstWalkerFactory(): AstWalkerFactory {
+>getAstWalkerFactory : Symbol(getAstWalkerFactory, Decl(parserRealSource12.ts, 210, 49))
+>AstWalkerFactory : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+
+        if (!globalAstWalkerFactory) {
+>globalAstWalkerFactory : Symbol(globalAstWalkerFactory, Decl(parserRealSource12.ts, 210, 7))
+
+            globalAstWalkerFactory = new AstWalkerFactory();
+>globalAstWalkerFactory : Symbol(globalAstWalkerFactory, Decl(parserRealSource12.ts, 210, 7))
+>AstWalkerFactory : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
+        }
+        return globalAstWalkerFactory;
+>globalAstWalkerFactory : Symbol(globalAstWalkerFactory, Decl(parserRealSource12.ts, 210, 7))
+    }
+
+    module ChildrenWalkers {
+>ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
+
+        export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
+>walkNone : Symbol(walkNone, Decl(parserRealSource12.ts, 219, 28))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 220, 33))
+>ASTList : Symbol(ASTList)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 220, 49))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 220, 62))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            // Nothing to do
+        }
+
+        export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
+>walkListChildren : Symbol(walkListChildren, Decl(parserRealSource12.ts, 222, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>ASTList : Symbol(ASTList)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 224, 57))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            var len = preAst.members.length;
+>len : Symbol(len, Decl(parserRealSource12.ts, 225, 15))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+
+            if (walker.options.reverseSiblings) {
+>walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+
+                for (var i = len - 1; i >= 0; i--) {
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>len : Symbol(len, Decl(parserRealSource12.ts, 225, 15))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+
+                    if (walker.options.goNextSibling) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                        preAst.members[i] = walker.walk(preAst.members[i], preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>len : Symbol(len, Decl(parserRealSource12.ts, 225, 15))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+
+                    if (walker.options.goNextSibling) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                        preAst.members[i] = walker.walk(preAst.members[i], preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>i : Symbol(i, Decl(parserRealSource12.ts, 227, 24), Decl(parserRealSource12.ts, 234, 24))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+                    }
+                }
+            }
+        }
+
+        export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
+>walkUnaryExpressionChildren : Symbol(walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>UnaryExpression : Symbol(UnaryExpression)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 242, 76))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 242, 89))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.castTerm) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+
+                preAst.castTerm = walker.walk(preAst.castTerm, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 242, 89))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+            }
+            if (preAst.operand) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+
+                preAst.operand = walker.walk(preAst.operand, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 242, 89))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+            }
+        }
+
+        export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
+>walkBinaryExpressionChildren : Symbol(walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>BinaryExpression : Symbol(BinaryExpression)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 251, 78))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (walker.options.reverseSiblings) {
+>walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+
+                if (preAst.operand2) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+
+                    preAst.operand2 = walker.walk(preAst.operand2, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+                }
+                if ((preAst.operand1) && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                    preAst.operand1 = walker.walk(preAst.operand1, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+                }
+            } else {
+                if (preAst.operand1) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+
+                    preAst.operand1 = walker.walk(preAst.operand1, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+                }
+                if ((preAst.operand2) && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                    preAst.operand2 = walker.walk(preAst.operand2, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+                }
+            }
+        }
+
+        export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
+>walkTypeReferenceChildren : Symbol(walkTypeReferenceChildren, Decl(parserRealSource12.ts, 267, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+>TypeReference : Symbol(TypeReference)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 269, 72))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 269, 85))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.term) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+
+                preAst.term = walker.walk(preAst.term, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 269, 85))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+            }
+        }
+
+        export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
+>walkCallExpressionChildren : Symbol(walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>CallExpression : Symbol(CallExpression)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 275, 74))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (!walker.options.reverseSiblings) {
+>walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+
+                preAst.target = walker.walk(preAst.target, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+            }
+            if (preAst.arguments && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+            }
+            if ((walker.options.reverseSiblings) && (walker.options.goNextSibling)) {
+>walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.target = walker.walk(preAst.target, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+            }
+        }
+
+        export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
+>walkTrinaryExpressionChildren : Symbol(walkTrinaryExpressionChildren, Decl(parserRealSource12.ts, 285, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>ConditionalExpression : Symbol(ConditionalExpression)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 287, 84))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.operand1) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+
+                preAst.operand1 = walker.walk(preAst.operand1, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+            }
+            if (preAst.operand2 && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.operand2 = walker.walk(preAst.operand2, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+            }
+            if (preAst.operand3 && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.operand3 = walker.walk(preAst.operand3, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+            }
+        }
+
+        export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
+>walkFuncDeclChildren : Symbol(walkFuncDeclChildren, Decl(parserRealSource12.ts, 297, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>FuncDecl : Symbol(FuncDecl)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 299, 62))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.name) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+
+                preAst.name = <Identifier>walker.walk(preAst.name, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>Identifier : Symbol(Identifier)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+            }
+            if (preAst.arguments && (preAst.arguments.members.length > 0) && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+            }
+            if (preAst.returnTypeAnnotation && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.returnTypeAnnotation = walker.walk(preAst.returnTypeAnnotation, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+            }
+            if (preAst.bod && (preAst.bod.members.length > 0) && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+            }
+        }
+
+        export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
+>walkBoundDeclChildren : Symbol(walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>BoundDecl : Symbol(BoundDecl)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 314, 64))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.id) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+
+                preAst.id = <Identifier>walker.walk(preAst.id, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>Identifier : Symbol(Identifier)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+            }
+            if (preAst.init) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+
+                preAst.init = walker.walk(preAst.init, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+            }
+            if ((preAst.typeExpr) && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.typeExpr = walker.walk(preAst.typeExpr, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+            }
+        }
+
+        export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
+>walkReturnStatementChildren : Symbol(walkReturnStatementChildren, Decl(parserRealSource12.ts, 324, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+>ReturnStatement : Symbol(ReturnStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 326, 76))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 326, 89))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.returnExpression) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+
+                preAst.returnExpression = walker.walk(preAst.returnExpression, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 326, 89))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+            }
+        }
+
+        export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
+>walkForStatementChildren : Symbol(walkForStatementChildren, Decl(parserRealSource12.ts, 330, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>ForStatement : Symbol(ForStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 332, 70))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.init) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+
+                preAst.init = walker.walk(preAst.init, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+            }
+
+            if (preAst.cond && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.cond = walker.walk(preAst.cond, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+            }
+
+            if (preAst.incr && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.incr = walker.walk(preAst.incr, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+            }
+
+            if (preAst.body && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+            }
+        }
+
+        export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
+>walkForInStatementChildren : Symbol(walkForInStatementChildren, Decl(parserRealSource12.ts, 348, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>ForInStatement : Symbol(ForInStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 350, 74))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.lval = walker.walk(preAst.lval, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+
+            if (walker.options.goNextSibling) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.obj = walker.walk(preAst.obj, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+            }
+            if (preAst.body && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+            }
+        }
+
+        export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
+>walkIfStatementChildren : Symbol(walkIfStatementChildren, Decl(parserRealSource12.ts, 358, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>IfStatement : Symbol(IfStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 360, 68))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.cond = walker.walk(preAst.cond, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+
+            if (preAst.thenBod && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.thenBod = walker.walk(preAst.thenBod, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+            }
+            if (preAst.elseBod && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.elseBod = walker.walk(preAst.elseBod, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+            }
+        }
+
+        export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
+>walkWhileStatementChildren : Symbol(walkWhileStatementChildren, Decl(parserRealSource12.ts, 368, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>WhileStatement : Symbol(WhileStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 370, 74))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.cond = walker.walk(preAst.cond, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+
+            if (preAst.body && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+            }
+        }
+
+        export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
+>walkDoWhileStatementChildren : Symbol(walkDoWhileStatementChildren, Decl(parserRealSource12.ts, 375, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>DoWhileStatement : Symbol(DoWhileStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 377, 78))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.cond = walker.walk(preAst.cond, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+
+            if (preAst.body && (walker.options.goNextSibling)) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+            }
+        }
+
+        export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
+>walkBlockChildren : Symbol(walkBlockChildren, Decl(parserRealSource12.ts, 382, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+>Block : Symbol(Block)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 384, 56))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 384, 69))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.statements) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+
+                preAst.statements = <ASTList>walker.walk(preAst.statements, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 384, 69))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+            }
+        }
+
+        export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
+>walkCaseStatementChildren : Symbol(walkCaseStatementChildren, Decl(parserRealSource12.ts, 388, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>CaseStatement : Symbol(CaseStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 390, 72))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.expr) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+
+                preAst.expr = walker.walk(preAst.expr, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+            }
+
+            if (preAst.body && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = <ASTList>walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+            }
+        }
+
+        export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
+>walkSwitchStatementChildren : Symbol(walkSwitchStatementChildren, Decl(parserRealSource12.ts, 398, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>SwitchStatement : Symbol(SwitchStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 400, 76))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.val) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+
+                preAst.val = walker.walk(preAst.val, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+            }
+
+            if ((preAst.caseList) && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+            }
+        }
+
+        export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
+>walkTryChildren : Symbol(walkTryChildren, Decl(parserRealSource12.ts, 408, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+>Try : Symbol(Try)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 410, 52))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 410, 65))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.body) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 410, 65))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+            }
+        }
+
+        export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
+>walkTryCatchChildren : Symbol(walkTryCatchChildren, Decl(parserRealSource12.ts, 414, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>TryCatch : Symbol(TryCatch)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 416, 62))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.tryNode) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+
+                preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>Try : Symbol(Try)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+            }
+
+            if ((preAst.catchNode) && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>Catch : Symbol(Catch)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+            }
+        }
+
+        export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
+>walkTryFinallyChildren : Symbol(walkTryFinallyChildren, Decl(parserRealSource12.ts, 424, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>TryFinally : Symbol(TryFinally)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 426, 66))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.tryNode) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+
+                preAst.tryNode = walker.walk(preAst.tryNode, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+            }
+
+            if (preAst.finallyNode && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>Finally : Symbol(Finally)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+            }
+        }
+
+        export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
+>walkFinallyChildren : Symbol(walkFinallyChildren, Decl(parserRealSource12.ts, 434, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+>Finally : Symbol(Finally)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 436, 60))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 436, 73))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.body) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 436, 73))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+            }
+        }
+
+        export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
+>walkCatchChildren : Symbol(walkCatchChildren, Decl(parserRealSource12.ts, 440, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>Catch : Symbol(Catch)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 442, 56))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.param) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+
+                preAst.param = <VarDecl>walker.walk(preAst.param, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>VarDecl : Symbol(VarDecl)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+            }
+
+            if ((preAst.body) && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+            }
+        }
+
+        export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
+>walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>NamedDeclaration : Symbol(NamedDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 452, 68))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.name = <Identifier>walker.walk(preAst.name, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>Identifier : Symbol(Identifier)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+
+            if (walker.options.goNextSibling && preAst.members) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+
+                preAst.members = <ASTList>walker.walk(preAst.members, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+            }
+
+        }
+
+        export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
+>walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 460, 46))
+>TypeDeclaration : Symbol(TypeDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 460, 70))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 460, 83))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            walkRecordChildren(preAst, parent, walker);
+>walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 460, 46))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 460, 70))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 460, 83))
+        }
+
+        export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
+>walkClassDeclChildren : Symbol(walkClassDeclChildren, Decl(parserRealSource12.ts, 462, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ClassDeclaration : Symbol(ClassDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 464, 71))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            walkNamedTypeChildren(preAst, parent, walker);
+>walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 464, 71))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+
+            if (walker.options.goNextSibling && preAst.extendsList) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+
+                preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+            }
+
+            if (walker.options.goNextSibling && preAst.implementsList) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+
+                preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+            }
+        }
+
+        export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
+>walkScriptChildren : Symbol(walkScriptChildren, Decl(parserRealSource12.ts, 474, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+>Script : Symbol(Script)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 476, 58))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 476, 71))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.bod) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+
+                preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 476, 71))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+            }
+        }
+
+        export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
+>walkTypeDeclChildren : Symbol(walkTypeDeclChildren, Decl(parserRealSource12.ts, 480, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 482, 74))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            walkNamedTypeChildren(preAst, parent, walker);
+>walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 482, 74))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+
+            // walked arguments as part of members
+            if (walker.options.goNextSibling && preAst.extendsList) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+
+                preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+            }
+
+            if (walker.options.goNextSibling && preAst.implementsList) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+
+                preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+            }
+        }
+
+        export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
+>walkModuleDeclChildren : Symbol(walkModuleDeclChildren, Decl(parserRealSource12.ts, 493, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 495, 47))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 495, 73))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 495, 86))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            walkRecordChildren(preAst, parent, walker);
+>walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 495, 47))
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 495, 73))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 495, 86))
+        }
+
+        export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
+>walkImportDeclChildren : Symbol(walkImportDeclChildren, Decl(parserRealSource12.ts, 497, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>ImportDeclaration : Symbol(ImportDeclaration)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 499, 73))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.id) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+
+                preAst.id = <Identifier>walker.walk(preAst.id, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>Identifier : Symbol(Identifier)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+            }
+            if (preAst.alias) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+
+                preAst.alias = walker.walk(preAst.alias, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+            }
+        }
+
+        export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
+>walkWithStatementChildren : Symbol(walkWithStatementChildren, Decl(parserRealSource12.ts, 506, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>WithStatement : Symbol(WithStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 508, 72))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            if (preAst.expr) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+
+                preAst.expr = walker.walk(preAst.expr, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+            }
+
+            if (preAst.body && walker.options.goNextSibling) {
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.body = walker.walk(preAst.body, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+            }
+        }
+
+        export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
+>walkLabelChildren : Symbol(walkLabelChildren, Decl(parserRealSource12.ts, 516, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 518, 42))
+>Label : Symbol(Label)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 518, 56))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 518, 69))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            //TODO: Walk "id"?
+        }
+
+        export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
+>walkLabeledStatementChildren : Symbol(walkLabeledStatementChildren, Decl(parserRealSource12.ts, 520, 9))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>LabeledStatement : Symbol(LabeledStatement)
+>parent : Symbol(parent, Decl(parserRealSource12.ts, 522, 78))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
+>IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+
+            preAst.labels = <ASTList>walker.walk(preAst.labels, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>ASTList : Symbol(ASTList)
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+
+            if (walker.options.goNextSibling) {
+>walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+>walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
+>options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
+>goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
+
+                preAst.stmt = walker.walk(preAst.stmt, preAst);
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
+>walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+            }
+        }
+    }
+}

@@ -1,0 +1,101 @@
+=== tests/cases/conformance/salsa/input.js ===
+function Class()
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+{
+}
+
+// error: 'Class' doesn't have property 'notPresent'
+Class.prototype.containsError = function () { return this.notPresent; };
+>Class.prototype : Symbol(Class.containsError, Decl(input.js, 2, 1))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>containsError : Symbol(Class.containsError, Decl(input.js, 2, 1))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+// lots of methods that return this, which caused out-of-memory in #9527
+Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
+>Class.prototype : Symbol(Class.m1, Decl(input.js, 5, 72))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m1 : Symbol(Class.m1, Decl(input.js, 5, 72))
+>a : Symbol(a, Decl(input.js, 8, 31))
+>b : Symbol(b, Decl(input.js, 8, 33))
+>c : Symbol(c, Decl(input.js, 8, 36))
+>d : Symbol(d, Decl(input.js, 8, 39))
+>tx : Symbol(tx, Decl(input.js, 8, 42))
+>ty : Symbol(ty, Decl(input.js, 8, 46))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m2 = function (x, y) { return this; };
+>Class.prototype : Symbol(Class.m2, Decl(input.js, 8, 68))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m2 : Symbol(Class.m2, Decl(input.js, 8, 68))
+>x : Symbol(x, Decl(input.js, 9, 31))
+>y : Symbol(y, Decl(input.js, 9, 33))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m3 = function (x, y) { return this; };
+>Class.prototype : Symbol(Class.m3, Decl(input.js, 9, 54))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m3 : Symbol(Class.m3, Decl(input.js, 9, 54))
+>x : Symbol(x, Decl(input.js, 10, 31))
+>y : Symbol(y, Decl(input.js, 10, 33))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m4 = function (angle) { return this; };
+>Class.prototype : Symbol(Class.m4, Decl(input.js, 10, 54))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m4 : Symbol(Class.m4, Decl(input.js, 10, 54))
+>angle : Symbol(angle, Decl(input.js, 11, 31))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m5 = function (matrix) { return this; };
+>Class.prototype : Symbol(Class.m5, Decl(input.js, 11, 55))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m5 : Symbol(Class.m5, Decl(input.js, 11, 55))
+>matrix : Symbol(matrix, Decl(input.js, 12, 31))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; };
+>Class.prototype : Symbol(Class.m6, Decl(input.js, 12, 56))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m6 : Symbol(Class.m6, Decl(input.js, 12, 56))
+>x : Symbol(x, Decl(input.js, 13, 31))
+>y : Symbol(y, Decl(input.js, 13, 33))
+>pivotX : Symbol(pivotX, Decl(input.js, 13, 36))
+>pivotY : Symbol(pivotY, Decl(input.js, 13, 44))
+>scaleX : Symbol(scaleX, Decl(input.js, 13, 52))
+>scaleY : Symbol(scaleY, Decl(input.js, 13, 60))
+>rotation : Symbol(rotation, Decl(input.js, 13, 68))
+>skewX : Symbol(skewX, Decl(input.js, 13, 78))
+>skewY : Symbol(skewY, Decl(input.js, 13, 85))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m7 = function(matrix) { return this; };
+>Class.prototype : Symbol(Class.m7, Decl(input.js, 13, 110))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m7 : Symbol(Class.m7, Decl(input.js, 13, 110))
+>matrix : Symbol(matrix, Decl(input.js, 14, 30))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m8 = function() { return this; };
+>Class.prototype : Symbol(Class.m8, Decl(input.js, 14, 55))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m8 : Symbol(Class.m8, Decl(input.js, 14, 55))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+Class.prototype.m9 = function () { return this; };
+>Class.prototype : Symbol(Class.m9, Decl(input.js, 15, 49))
+>Class : Symbol(Class, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m9 : Symbol(Class.m9, Decl(input.js, 15, 49))
+>this : Symbol(Class, Decl(input.js, 0, 0))
+
+

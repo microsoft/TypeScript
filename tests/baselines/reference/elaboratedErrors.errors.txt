@@ -1,0 +1,48 @@
+tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+tests/cases/compiler/elaboratedErrors.ts(21,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
+tests/cases/compiler/elaboratedErrors.ts(24,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
+tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
+
+
+==== tests/cases/compiler/elaboratedErrors.ts (5 errors) ====
+    interface FileSystem {
+      read: number;
+    }
+    
+    function fn(s: WorkerFS): void;
+    function fn(s: FileSystem): void;
+    function fn(s: FileSystem|WorkerFS) { }
+    
+    // This should issue a large error, not a small one
+    class WorkerFS implements FileSystem {
+      read: string;
+      ~~~~
+!!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
+    }
+    
+    interface Alpha { x: string; }
+    interface Beta { y: number; }
+    var x: Alpha;
+    var y: Beta;
+    
+    // Only one of these errors should be large
+    x = y;
+    ~
+!!! error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:14:19: 'x' is declared here.
+    x = y;
+    ~
+!!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
+    
+    // Only one of these errors should be large
+    y = x;
+    ~
+!!! error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:15:18: 'y' is declared here.
+    y = x;
+    ~
+!!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
+    

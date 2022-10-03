@@ -1,0 +1,20 @@
+tests/cases/compiler/commentOnClassAccessor2.ts(5,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/commentOnClassAccessor2.ts(10,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/commentOnClassAccessor2.ts (2 errors) ====
+    class C {
+      /**
+       * Getter.
+       */
+      get bar(): number { return 1;}
+          ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    
+      /**
+       * Setter.
+       */
+      set bar(v) { }
+          ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }

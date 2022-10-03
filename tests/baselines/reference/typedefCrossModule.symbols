@@ -1,0 +1,76 @@
+=== tests/cases/conformance/jsdoc/commonjs.d.ts ===
+declare var module: { exports: any};
+>module : Symbol(module, Decl(commonjs.d.ts, 0, 11))
+>exports : Symbol(exports, Decl(commonjs.d.ts, 0, 21))
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+module.exports = C
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 0, 0))
+>exports : Symbol(export=, Decl(mod1.js, 0, 0))
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+function C() {
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(mod1.js, 5, 14))
+>this : Symbol(C, Decl(mod1.js, 4, 18))
+>p : Symbol(C.p, Decl(mod1.js, 5, 14))
+}
+
+=== tests/cases/conformance/jsdoc/mod2.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+
+export function C() {
+>C : Symbol(C, Decl(mod2.js, 0, 0))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(mod2.js, 5, 21))
+>this : Symbol(C, Decl(mod2.js, 0, 0))
+>p : Symbol(C.p, Decl(mod2.js, 5, 21))
+}
+
+=== tests/cases/conformance/jsdoc/mod3.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+
+exports.C = function() {
+>exports.C : Symbol(C, Decl(mod3.js, 0, 0))
+>exports : Symbol(C, Decl(mod3.js, 0, 0))
+>C : Symbol(C, Decl(mod3.js, 0, 0))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(mod3.js, 5, 24))
+>this : Symbol(C, Decl(mod3.js, 5, 11))
+>p : Symbol(C.p, Decl(mod3.js, 5, 24))
+}
+
+=== tests/cases/conformance/jsdoc/use.js ===
+/** @type {import('./mod1').Both} */
+var both1 = { type: 'a', x: 1 };
+>both1 : Symbol(both1, Decl(use.js, 1, 3))
+>type : Symbol(type, Decl(use.js, 1, 13))
+>x : Symbol(x, Decl(use.js, 1, 24))
+
+/** @type {import('./mod2').Both} */
+var both2 = both1;
+>both2 : Symbol(both2, Decl(use.js, 3, 3))
+>both1 : Symbol(both1, Decl(use.js, 1, 3))
+
+/** @type {import('./mod3').Both} */
+var both3 = both2;
+>both3 : Symbol(both3, Decl(use.js, 5, 3))
+>both2 : Symbol(both2, Decl(use.js, 3, 3))
+
+
+

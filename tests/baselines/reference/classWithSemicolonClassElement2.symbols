@@ -1,0 +1,7 @@
+=== tests/cases/conformance/classes/classDeclarations/classWithSemicolonClassElement2.ts ===
+class C {
+>C : Symbol(C, Decl(classWithSemicolonClassElement2.ts, 0, 0))
+
+    ;
+    ;
+}

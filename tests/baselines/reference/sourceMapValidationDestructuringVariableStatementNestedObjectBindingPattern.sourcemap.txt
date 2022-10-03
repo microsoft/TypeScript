@@ -1,0 +1,452 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js
+mapUrl: sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js
+sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts
+-------------------------------------------------------------------
+>>>var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^^
+6 >               ^^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^^^^^^
+11>                                    ^^
+12>                                      ^^
+13>                                        ^^^^^^^
+14>                                               ^^
+15>                                                 ^^^^^^^^
+16>                                                         ^^
+17>                                                           ^^^^^^^^^
+18>                                                                    ^^
+19>                                                                      ^^^^^^
+20>                                                                            ^^
+21>                                                                              ^^
+22>                                                                                ^
+23>                                                                                 ^^^^^^^->
+1 >declare var console: {
+  >    log(msg: string): void;
+  >}
+  >interface Robot {
+  >    name: string;
+  >    skills: {
+  >        primary: string;
+  >        secondary: string;
+  >    };
+  >}
+  >
+2 >var 
+3 >    robotA
+4 >          : Robot = 
+5 >             { 
+6 >               name
+7 >                   : 
+8 >                     "mower"
+9 >                            , 
+10>                              skills
+11>                                    : 
+12>                                      { 
+13>                                        primary
+14>                                               : 
+15>                                                 "mowing"
+16>                                                         , 
+17>                                                           secondary
+18>                                                                    : 
+19>                                                                      "none"
+20>                                                                             }
+21>                                                                               }
+22>                                                                                ;
+1 >Emitted(1, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(11, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(11, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(11, 21) + SourceIndex(0)
+5 >Emitted(1, 16) Source(11, 23) + SourceIndex(0)
+6 >Emitted(1, 20) Source(11, 27) + SourceIndex(0)
+7 >Emitted(1, 22) Source(11, 29) + SourceIndex(0)
+8 >Emitted(1, 29) Source(11, 36) + SourceIndex(0)
+9 >Emitted(1, 31) Source(11, 38) + SourceIndex(0)
+10>Emitted(1, 37) Source(11, 44) + SourceIndex(0)
+11>Emitted(1, 39) Source(11, 46) + SourceIndex(0)
+12>Emitted(1, 41) Source(11, 48) + SourceIndex(0)
+13>Emitted(1, 48) Source(11, 55) + SourceIndex(0)
+14>Emitted(1, 50) Source(11, 57) + SourceIndex(0)
+15>Emitted(1, 58) Source(11, 65) + SourceIndex(0)
+16>Emitted(1, 60) Source(11, 67) + SourceIndex(0)
+17>Emitted(1, 69) Source(11, 76) + SourceIndex(0)
+18>Emitted(1, 71) Source(11, 78) + SourceIndex(0)
+19>Emitted(1, 77) Source(11, 84) + SourceIndex(0)
+20>Emitted(1, 79) Source(11, 86) + SourceIndex(0)
+21>Emitted(1, 81) Source(11, 88) + SourceIndex(0)
+22>Emitted(1, 82) Source(11, 89) + SourceIndex(0)
+---
+>>>var robotB = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^^
+6 >               ^^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^
+9 >                              ^^
+10>                                ^^^^^^
+11>                                      ^^
+12>                                        ^^
+13>                                          ^^^^^^^
+14>                                                 ^^
+15>                                                   ^^^^^^^^^^
+16>                                                             ^^
+17>                                                               ^^^^^^^^^
+18>                                                                        ^^
+19>                                                                          ^^^^^^^^
+20>                                                                                  ^^
+21>                                                                                    ^^
+22>                                                                                      ^
+1->
+  >
+2 >var 
+3 >    robotB
+4 >          : Robot = 
+5 >             { 
+6 >               name
+7 >                   : 
+8 >                     "trimmer"
+9 >                              , 
+10>                                skills
+11>                                      : 
+12>                                        { 
+13>                                          primary
+14>                                                 : 
+15>                                                   "trimming"
+16>                                                             , 
+17>                                                               secondary
+18>                                                                        : 
+19>                                                                          "edging"
+20>                                                                                   }
+21>                                                                                     }
+22>                                                                                      ;
+1->Emitted(2, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(12, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(12, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(12, 21) + SourceIndex(0)
+5 >Emitted(2, 16) Source(12, 23) + SourceIndex(0)
+6 >Emitted(2, 20) Source(12, 27) + SourceIndex(0)
+7 >Emitted(2, 22) Source(12, 29) + SourceIndex(0)
+8 >Emitted(2, 31) Source(12, 38) + SourceIndex(0)
+9 >Emitted(2, 33) Source(12, 40) + SourceIndex(0)
+10>Emitted(2, 39) Source(12, 46) + SourceIndex(0)
+11>Emitted(2, 41) Source(12, 48) + SourceIndex(0)
+12>Emitted(2, 43) Source(12, 50) + SourceIndex(0)
+13>Emitted(2, 50) Source(12, 57) + SourceIndex(0)
+14>Emitted(2, 52) Source(12, 59) + SourceIndex(0)
+15>Emitted(2, 62) Source(12, 69) + SourceIndex(0)
+16>Emitted(2, 64) Source(12, 71) + SourceIndex(0)
+17>Emitted(2, 73) Source(12, 80) + SourceIndex(0)
+18>Emitted(2, 75) Source(12, 82) + SourceIndex(0)
+19>Emitted(2, 83) Source(12, 90) + SourceIndex(0)
+20>Emitted(2, 85) Source(12, 92) + SourceIndex(0)
+21>Emitted(2, 87) Source(12, 94) + SourceIndex(0)
+22>Emitted(2, 88) Source(12, 95) + SourceIndex(0)
+---
+>>>var _a = robotA.skills, primaryA = _a.primary, secondaryA = _a.secondary;
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^^^
+5 >               ^^^^^^^
+6 >                      ^^
+7 >                        ^^^^^^^^
+8 >                                ^^^^^^^^^^^^^
+9 >                                             ^^
+10>                                               ^^^^^^^^^^
+11>                                                         ^^^^^^^^^^^^^^^
+12>                                                                        ^
+13>                                                                         ^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >var { 
+2 >
+3 >    skills: { primary: primaryA, secondary: secondaryA } } = 
+4 >         robotA
+5 >               
+6 >                      
+7 >                        primaryA
+8 >                                
+9 >                                             , secondary: 
+10>                                               secondaryA
+11>                                                          }
+12>                                                                         } = robotA;
+1 >Emitted(3, 1) Source(14, 7) + SourceIndex(0)
+2 >Emitted(3, 5) Source(14, 7) + SourceIndex(0)
+3 >Emitted(3, 10) Source(14, 64) + SourceIndex(0)
+4 >Emitted(3, 16) Source(14, 70) + SourceIndex(0)
+5 >Emitted(3, 23) Source(14, 59) + SourceIndex(0)
+6 >Emitted(3, 25) Source(14, 26) + SourceIndex(0)
+7 >Emitted(3, 33) Source(14, 34) + SourceIndex(0)
+8 >Emitted(3, 46) Source(14, 34) + SourceIndex(0)
+9 >Emitted(3, 48) Source(14, 47) + SourceIndex(0)
+10>Emitted(3, 58) Source(14, 57) + SourceIndex(0)
+11>Emitted(3, 73) Source(14, 59) + SourceIndex(0)
+12>Emitted(3, 74) Source(14, 71) + SourceIndex(0)
+---
+>>>var nameB = robotB.name, _b = robotB.skills, primaryB = _b.primary, secondaryB = _b.secondary;
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^^^^^
+7 >                       ^^
+8 >                         ^^^^^
+9 >                              ^^^^^^
+10>                                    ^^^^^^^
+11>                                           ^^
+12>                                             ^^^^^^^^
+13>                                                     ^^^^^^^^^^^^^
+14>                                                                  ^^
+15>                                                                    ^^^^^^^^^^
+16>                                                                              ^^^^^^^^^^^^^^^
+17>                                                                                             ^
+18>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >var { 
+2 >name: 
+3 >    nameB
+4 >         , skills: { primary: primaryB, secondary: secondaryB } } = 
+5 >            robotB
+6 >                  
+7 >                       , 
+8 >                         skills: { primary: primaryB, secondary: secondaryB } } = 
+9 >                              robotB
+10>                                    
+11>                                           
+12>                                             primaryB
+13>                                                     
+14>                                                                  , secondary: 
+15>                                                                    secondaryB
+16>                                                                               }
+17>                                                                                              } = robotB;
+1->Emitted(4, 1) Source(15, 7) + SourceIndex(0)
+2 >Emitted(4, 5) Source(15, 13) + SourceIndex(0)
+3 >Emitted(4, 10) Source(15, 18) + SourceIndex(0)
+4 >Emitted(4, 13) Source(15, 77) + SourceIndex(0)
+5 >Emitted(4, 19) Source(15, 83) + SourceIndex(0)
+6 >Emitted(4, 24) Source(15, 18) + SourceIndex(0)
+7 >Emitted(4, 26) Source(15, 20) + SourceIndex(0)
+8 >Emitted(4, 31) Source(15, 77) + SourceIndex(0)
+9 >Emitted(4, 37) Source(15, 83) + SourceIndex(0)
+10>Emitted(4, 44) Source(15, 72) + SourceIndex(0)
+11>Emitted(4, 46) Source(15, 39) + SourceIndex(0)
+12>Emitted(4, 54) Source(15, 47) + SourceIndex(0)
+13>Emitted(4, 67) Source(15, 47) + SourceIndex(0)
+14>Emitted(4, 69) Source(15, 60) + SourceIndex(0)
+15>Emitted(4, 79) Source(15, 70) + SourceIndex(0)
+16>Emitted(4, 94) Source(15, 72) + SourceIndex(0)
+17>Emitted(4, 95) Source(15, 84) + SourceIndex(0)
+---
+>>>var _c = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^
+5 >           ^^^^
+6 >               ^^
+7 >                 ^^^^^^^
+8 >                        ^^
+9 >                          ^^^^^^
+10>                                ^^
+11>                                  ^^
+12>                                    ^^^^^^^
+13>                                           ^^
+14>                                             ^^^^^^^^
+15>                                                     ^^
+16>                                                       ^^^^^^^^^
+17>                                                                ^^
+18>                                                                  ^^^^^^^^^^^^^^^^^
+19>                                                                                   ^^
+20>                                                                                     ^^
+21>                                                                                       ^^
+22>                                                                                         ^^^^^
+23>                                                                                              ^^^^^^^^^^
+24>                                                                                                        ^^
+25>                                                                                                          ^^^^^^^^^^^^^^
+26>                                                                                                                        ^^
+27>                                                                                                                          ^^^^^^^^
+28>                                                                                                                                  ^^^^^^^^^^^^^
+29>                                                                                                                                               ^^
+30>                                                                                                                                                 ^^^^^^^^^^
+31>                                                                                                                                                           ^^^^^^^^^^^^^^^
+32>                                                                                                                                                                          ^
+1->
+  >var 
+2 >
+3 >    { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = 
+4 >         { 
+5 >           name
+6 >               : 
+7 >                 "Edger"
+8 >                        , 
+9 >                          skills
+10>                                : 
+11>                                  { 
+12>                                    primary
+13>                                           : 
+14>                                             "edging"
+15>                                                     , 
+16>                                                       secondary
+17>                                                                : 
+18>                                                                  "branch trimming"
+19>                                                                                    }
+20>                                                                                      }
+21>                                                                                       
+22>                                                                                         nameC
+23>                                                                                              
+24>                                                                                                        , 
+25>                                                                                                          skills: { primary: primaryB, secondary: secondaryB }
+26>                                                                                                                        
+27>                                                                                                                          primaryB
+28>                                                                                                                                  
+29>                                                                                                                                               , secondary: 
+30>                                                                                                                                                 secondaryB
+31>                                                                                                                                                            } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
+32>                                                                                                                                                                          ;
+1->Emitted(5, 1) Source(16, 5) + SourceIndex(0)
+2 >Emitted(5, 5) Source(16, 5) + SourceIndex(0)
+3 >Emitted(5, 10) Source(16, 77) + SourceIndex(0)
+4 >Emitted(5, 12) Source(16, 79) + SourceIndex(0)
+5 >Emitted(5, 16) Source(16, 83) + SourceIndex(0)
+6 >Emitted(5, 18) Source(16, 85) + SourceIndex(0)
+7 >Emitted(5, 25) Source(16, 92) + SourceIndex(0)
+8 >Emitted(5, 27) Source(16, 94) + SourceIndex(0)
+9 >Emitted(5, 33) Source(16, 100) + SourceIndex(0)
+10>Emitted(5, 35) Source(16, 102) + SourceIndex(0)
+11>Emitted(5, 37) Source(16, 104) + SourceIndex(0)
+12>Emitted(5, 44) Source(16, 111) + SourceIndex(0)
+13>Emitted(5, 46) Source(16, 113) + SourceIndex(0)
+14>Emitted(5, 54) Source(16, 121) + SourceIndex(0)
+15>Emitted(5, 56) Source(16, 123) + SourceIndex(0)
+16>Emitted(5, 65) Source(16, 132) + SourceIndex(0)
+17>Emitted(5, 67) Source(16, 134) + SourceIndex(0)
+18>Emitted(5, 84) Source(16, 151) + SourceIndex(0)
+19>Emitted(5, 86) Source(16, 153) + SourceIndex(0)
+20>Emitted(5, 88) Source(16, 155) + SourceIndex(0)
+21>Emitted(5, 90) Source(16, 13) + SourceIndex(0)
+22>Emitted(5, 95) Source(16, 18) + SourceIndex(0)
+23>Emitted(5, 105) Source(16, 18) + SourceIndex(0)
+24>Emitted(5, 107) Source(16, 20) + SourceIndex(0)
+25>Emitted(5, 121) Source(16, 72) + SourceIndex(0)
+26>Emitted(5, 123) Source(16, 39) + SourceIndex(0)
+27>Emitted(5, 131) Source(16, 47) + SourceIndex(0)
+28>Emitted(5, 144) Source(16, 47) + SourceIndex(0)
+29>Emitted(5, 146) Source(16, 60) + SourceIndex(0)
+30>Emitted(5, 156) Source(16, 70) + SourceIndex(0)
+31>Emitted(5, 171) Source(16, 155) + SourceIndex(0)
+32>Emitted(5, 172) Source(16, 156) + SourceIndex(0)
+---
+>>>if (nameB == nameB) {
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^
+5 >             ^^^^^
+6 >                  ^^
+7 >                    ^^^^->
+1 >
+  >
+  >
+2 >if (
+3 >    nameB
+4 >          == 
+5 >             nameB
+6 >                  ) 
+1 >Emitted(6, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(6, 5) Source(18, 5) + SourceIndex(0)
+3 >Emitted(6, 10) Source(18, 10) + SourceIndex(0)
+4 >Emitted(6, 14) Source(18, 14) + SourceIndex(0)
+5 >Emitted(6, 19) Source(18, 19) + SourceIndex(0)
+6 >Emitted(6, 21) Source(18, 21) + SourceIndex(0)
+---
+>>>    console.log(nameC);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1->{
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameC
+7 >                     )
+8 >                      ;
+1->Emitted(7, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(7, 12) Source(19, 12) + SourceIndex(0)
+3 >Emitted(7, 13) Source(19, 13) + SourceIndex(0)
+4 >Emitted(7, 16) Source(19, 16) + SourceIndex(0)
+5 >Emitted(7, 17) Source(19, 17) + SourceIndex(0)
+6 >Emitted(7, 22) Source(19, 22) + SourceIndex(0)
+7 >Emitted(7, 23) Source(19, 23) + SourceIndex(0)
+8 >Emitted(7, 24) Source(19, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^->
+1 >
+  >}
+1 >Emitted(8, 2) Source(20, 2) + SourceIndex(0)
+---
+>>>else {
+1->^^^^^
+2 >     ^^^^^^^^^^^^^^^^^^^->
+1->
+  >else 
+1->Emitted(9, 6) Source(21, 6) + SourceIndex(0)
+---
+>>>    console.log(nameC);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1->{
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameC
+7 >                     )
+8 >                      ;
+1->Emitted(10, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(10, 12) Source(22, 12) + SourceIndex(0)
+3 >Emitted(10, 13) Source(22, 13) + SourceIndex(0)
+4 >Emitted(10, 16) Source(22, 16) + SourceIndex(0)
+5 >Emitted(10, 17) Source(22, 17) + SourceIndex(0)
+6 >Emitted(10, 22) Source(22, 22) + SourceIndex(0)
+7 >Emitted(10, 23) Source(22, 23) + SourceIndex(0)
+8 >Emitted(10, 24) Source(22, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(11, 2) Source(23, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.js.map

@@ -1,0 +1,55 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts ===
+class A {
+>A : A
+
+    #foo = this.#bar; // Error
+>#foo : number
+>this.#bar : number
+>this : this
+
+    #bar = 3;
+>#bar : number
+>3 : 3
+}
+
+class A2 {
+>A2 : A2
+
+    #foo = this.#bar(); // No Error
+>#foo : number
+>this.#bar() : number
+>this.#bar : () => number
+>this : this
+
+    #bar() { return 3 };
+>#bar : () => number
+>3 : 3
+}
+
+class A3 {
+>A3 : A3
+
+    #foo = this.#bar; // No Error
+>#foo : number
+>this.#bar : number
+>this : this
+
+    get #bar() { return 3 };
+>#bar : number
+>3 : 3
+}
+
+class B {
+>B : B
+
+    #foo = this.#bar; // Error
+>#foo : any
+>this.#bar : any
+>this : this
+
+    #bar = this.#foo;
+>#bar : any
+>this.#foo : any
+>this : this
+}
+

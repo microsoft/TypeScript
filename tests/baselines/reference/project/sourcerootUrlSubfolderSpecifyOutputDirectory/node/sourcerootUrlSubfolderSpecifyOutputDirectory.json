@@ -1,0 +1,25 @@
+{
+    "scenario": "[Sourcemap]/[Sourceroot-Url]: outputdir_subfolder: specify outputDirectory",
+    "projectRoot": "tests/cases/projects/outputdir_subfolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "outDir": "outdir/simple",
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "sourceRoot": "http://typescript.codeplex.com/",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "ref/m1.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "outdir/simple/ref/m1.js.map",
+        "outdir/simple/ref/m1.js",
+        "outdir/simple/ref/m1.d.ts",
+        "outdir/simple/test.js.map",
+        "outdir/simple/test.js",
+        "outdir/simple/test.d.ts"
+    ]
+}

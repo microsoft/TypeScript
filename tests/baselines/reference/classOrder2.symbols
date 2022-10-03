@@ -1,0 +1,32 @@
+=== tests/cases/compiler/classOrder2.ts ===
+class A extends B {
+>A : Symbol(A, Decl(classOrder2.ts, 0, 0))
+>B : Symbol(B, Decl(classOrder2.ts, 4, 1))
+
+  foo() { this.bar(); }
+>foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
+>this.bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
+>this : Symbol(A, Decl(classOrder2.ts, 0, 0))
+>bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
+
+}
+
+class B {
+>B : Symbol(B, Decl(classOrder2.ts, 4, 1))
+
+  bar() { }
+>bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
+
+}
+
+
+var a = new A();
+>a : Symbol(a, Decl(classOrder2.ts, 13, 3))
+>A : Symbol(A, Decl(classOrder2.ts, 0, 0))
+
+a.foo();
+>a.foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
+>a : Symbol(a, Decl(classOrder2.ts, 13, 3))
+>foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
+
+

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts ===
+class A1 { }
+>A1 : A1
+
+interface A2 extends A1 { }
+declare const a: A2;
+>a : A2
+
+class C { #something: number }
+>C : C
+>#something : number
+
+const c: C = a;
+>c : C
+>a : A2
+

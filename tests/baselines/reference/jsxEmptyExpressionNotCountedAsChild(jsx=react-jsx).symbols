@@ -1,0 +1,42 @@
+=== tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from 'react'
+>React : Symbol(React, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 30))
+
+    children: React.ReactElement<any>
+>children : Symbol(Props.children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
+>React : Symbol(React, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+}
+
+function Wrapper(props: Props) {
+>Wrapper : Symbol(Wrapper, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 5, 1))
+>props : Symbol(props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 7, 17))
+>Props : Symbol(Props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 30))
+
+    return <div>{props.children}</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>props.children : Symbol(Props.children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
+>props : Symbol(props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 7, 17))
+>children : Symbol(Props.children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+const element = (
+>element : Symbol(element, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 11, 5))
+
+    <Wrapper>
+>Wrapper : Symbol(Wrapper, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 5, 1))
+
+    {/* comment */}
+     <div>Hello</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+    </Wrapper>
+>Wrapper : Symbol(Wrapper, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 5, 1))
+
+)

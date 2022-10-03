@@ -1,0 +1,20 @@
+=== tests/cases/compiler/noCollisionThisExpressionInFunctionAndVarInGlobal.ts ===
+var console: {
+>console : Symbol(console, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 3))
+
+    log(val: any);
+>log : Symbol(log, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 14))
+>val : Symbol(val, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 1, 8))
+}
+var _this = 5;
+>_this : Symbol(_this, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 3, 3))
+
+function x() {
+>x : Symbol(x, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 3, 14))
+
+    x => { console.log(this); };
+>x : Symbol(x, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 4, 14))
+>console.log : Symbol(log, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 14))
+>console : Symbol(console, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 3))
+>log : Symbol(log, Decl(noCollisionThisExpressionInFunctionAndVarInGlobal.ts, 0, 14))
+}

@@ -1,0 +1,146 @@
+=== tests/cases/conformance/types/thisType/thisTypeInAccessors.ts ===
+interface Foo {
+    n: number;
+>n : number
+
+    x: number;
+>x : number
+}
+
+const explicit = {
+>explicit : { n: number; x: number; }
+>{    n: 12,    get x(this: Foo): number { return this.n; },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
+
+    n: 12,
+>n : number
+>12 : 12
+
+    get x(this: Foo): number { return this.n; },
+>x : number
+>this : Foo
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : number
+>this : Foo
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
+const copiedFromGetter = {
+>copiedFromGetter : { n: number; x: number; }
+>{    n: 14,    get x(this: Foo): number { return this.n; },    set x(n) { this.n = n; }} : { n: number; x: number; }
+
+    n: 14,
+>n : number
+>14 : 14
+
+    get x(this: Foo): number { return this.n; },
+>x : number
+>this : Foo
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(n) { this.n = n; }
+>x : number
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
+const copiedFromSetter = {
+>copiedFromSetter : { n: number; x: number; }
+>{    n: 15,    get x() { return this.n },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
+
+    n: 15,
+>n : number
+>15 : 15
+
+    get x() { return this.n },
+>x : number
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : number
+>this : Foo
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
+const copiedFromGetterUnannotated = {
+>copiedFromGetterUnannotated : { n: number; x: number; }
+>{    n: 16,    get x(this: Foo) { return this.n },    set x(this, n) { this.n = n; }} : { n: number; x: number; }
+
+    n: 16,
+>n : number
+>16 : 16
+
+    get x(this: Foo) { return this.n },
+>x : number
+>this : Foo
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(this, n) { this.n = n; }
+>x : number
+>this : Foo
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
+
+class Explicit {
+>Explicit : Explicit
+
+    n = 17;
+>n : number
+>17 : 17
+
+    get x(this: Foo): number { return this.n; }
+>x : number
+>this : Foo
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(this: Foo, n: number) { this.n = n; }
+>x : number
+>this : Foo
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
+class Contextual {
+>Contextual : Contextual
+
+    n = 21;
+>n : number
+>21 : 21
+
+    get x() { return this.n } // inside a class, so already correct
+>x : number
+>this.n : number
+>this : this
+>n : number
+}
+

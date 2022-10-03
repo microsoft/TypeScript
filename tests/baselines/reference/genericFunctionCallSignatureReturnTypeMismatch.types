@@ -1,0 +1,31 @@
+=== tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts ===
+interface Array<T> {}
+
+var f : { <T>(x:T): T; }
+>f : <T>(x: T) => T
+>x : T
+
+var g : { <S>() : S[]; };
+>g : <S>() => S[]
+
+f = g;
+>f = g : <S>() => S[]
+>f : <T>(x: T) => T
+>g : <S>() => S[]
+
+var s = f("str").toUpperCase();
+>s : string
+>f("str").toUpperCase() : string
+>f("str").toUpperCase : () => string
+>f("str") : "str"
+>f : <T>(x: T) => T
+>"str" : "str"
+>toUpperCase : () => string
+
+console.log(s);
+>console.log(s) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>s : string
+

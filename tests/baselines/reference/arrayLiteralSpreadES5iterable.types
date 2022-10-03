@@ -1,0 +1,133 @@
+=== tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts ===
+function f0() {
+>f0 : () => void
+
+    var a = [1, 2, 3];
+>a : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    var a1 = [...a];
+>a1 : number[]
+>[...a] : number[]
+>...a : number
+>a : number[]
+
+    var a2 = [1, ...a];
+>a2 : number[]
+>[1, ...a] : number[]
+>1 : 1
+>...a : number
+>a : number[]
+
+    var a3 = [1, 2, ...a];
+>a3 : number[]
+>[1, 2, ...a] : number[]
+>1 : 1
+>2 : 2
+>...a : number
+>a : number[]
+
+    var a4 = [...a, 1];
+>a4 : number[]
+>[...a, 1] : number[]
+>...a : number
+>a : number[]
+>1 : 1
+
+    var a5 = [...a, 1, 2];
+>a5 : number[]
+>[...a, 1, 2] : number[]
+>...a : number
+>a : number[]
+>1 : 1
+>2 : 2
+
+    var a6 = [1, 2, ...a, 1, 2];
+>a6 : number[]
+>[1, 2, ...a, 1, 2] : number[]
+>1 : 1
+>2 : 2
+>...a : number
+>a : number[]
+>1 : 1
+>2 : 2
+
+    var a7 = [1, ...a, 2, ...a];
+>a7 : number[]
+>[1, ...a, 2, ...a] : number[]
+>1 : 1
+>...a : number
+>a : number[]
+>2 : 2
+>...a : number
+>a : number[]
+
+    var a8 = [...a, ...a, ...a];
+>a8 : number[]
+>[...a, ...a, ...a] : number[]
+>...a : number
+>a : number[]
+>...a : number
+>a : number[]
+>...a : number
+>a : number[]
+}
+
+function f1() {
+>f1 : () => void
+
+    var a = [1, 2, 3];
+>a : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    var b = ["hello", ...a, true];
+>b : (string | number | boolean)[]
+>["hello", ...a, true] : (string | number | boolean)[]
+>"hello" : "hello"
+>...a : number
+>a : number[]
+>true : true
+
+    var b: (string | number | boolean)[];
+>b : (string | number | boolean)[]
+}
+
+function f2() {
+>f2 : () => void
+
+    var a = [...[...[...[...[...[]]]]]];
+>a : any[]
+>[...[...[...[...[...[]]]]]] : undefined[]
+>...[...[...[...[...[]]]]] : undefined
+>[...[...[...[...[]]]]] : undefined[]
+>...[...[...[...[]]]] : undefined
+>[...[...[...[]]]] : undefined[]
+>...[...[...[]]] : undefined
+>[...[...[]]] : undefined[]
+>...[...[]] : undefined
+>[...[]] : undefined[]
+>...[] : undefined
+>[] : undefined[]
+
+    var b = [...[...[...[...[...[5]]]]]];
+>b : number[]
+>[...[...[...[...[...[5]]]]]] : number[]
+>...[...[...[...[...[5]]]]] : number
+>[...[...[...[...[5]]]]] : number[]
+>...[...[...[...[5]]]] : number
+>[...[...[...[5]]]] : number[]
+>...[...[...[5]]] : number
+>[...[...[5]]] : number[]
+>...[...[5]] : number
+>[...[5]] : number[]
+>...[5] : number
+>[5] : number[]
+>5 : 5
+}
+

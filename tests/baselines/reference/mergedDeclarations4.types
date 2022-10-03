@@ -1,0 +1,64 @@
+=== tests/cases/compiler/mergedDeclarations4.ts ===
+module M {
+>M : typeof M
+
+    export function f() { }
+>f : typeof f
+
+    f();
+>f() : void
+>f : typeof f
+
+    M.f();    
+>M.f() : void
+>M.f : typeof f
+>M : typeof M
+>f : typeof f
+
+    var r = f.hello;
+>r : number
+>f.hello : number
+>f : typeof f
+>hello : number
+}
+ 
+module M {
+>M : typeof M
+
+    export module f {
+>f : typeof f
+
+        export var hello = 1;
+>hello : number
+>1 : 1
+    }
+    f();
+>f() : void
+>f : typeof f
+
+    M.f();
+>M.f() : void
+>M.f : typeof f
+>M : typeof M
+>f : typeof f
+
+    var r = f.hello;
+>r : number
+>f.hello : number
+>f : typeof f
+>hello : number
+}
+ 
+M.f();
+>M.f() : void
+>M.f : typeof M.f
+>M : typeof M
+>f : typeof M.f
+
+M.f.hello;
+>M.f.hello : number
+>M.f : typeof M.f
+>M : typeof M
+>f : typeof M.f
+>hello : number
+

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/numericIndexerConstraint5.ts ===
+var x = { name: "x", 0: new Date() };
+>x : { name: string; 0: Date; }
+>{ name: "x", 0: new Date() } : { name: string; 0: Date; }
+>name : string
+>"x" : "x"
+>0 : Date
+>new Date() : Date
+>Date : DateConstructor
+
+var z: { [name: number]: string } = x;
+>z : { [name: number]: string; }
+>name : number
+>x : { name: string; 0: Date; }
+

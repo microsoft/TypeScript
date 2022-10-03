@@ -1,0 +1,3 @@
+=== tests/cases/compiler/undeclaredVarEmit.ts ===
+f: number;
+No type information for this code.

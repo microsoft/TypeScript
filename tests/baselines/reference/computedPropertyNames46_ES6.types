@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames46_ES6.ts ===
+var o = {
+>o : { 0: number; }
+>{    ["" || 0]: 0} : { 0: number; }
+
+    ["" || 0]: 0
+>["" || 0] : number
+>"" || 0 : 0
+>"" : ""
+>0 : 0
+>0 : 0
+
+};

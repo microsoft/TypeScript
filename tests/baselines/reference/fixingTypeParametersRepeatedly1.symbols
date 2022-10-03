@@ -1,0 +1,51 @@
+=== tests/cases/compiler/fixingTypeParametersRepeatedly1.ts ===
+declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+>f : Symbol(f, Decl(fixingTypeParametersRepeatedly1.ts, 0, 0))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 0, 22))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>y : Symbol(y, Decl(fixingTypeParametersRepeatedly1.ts, 0, 27))
+>p : Symbol(p, Decl(fixingTypeParametersRepeatedly1.ts, 0, 32))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>z : Symbol(z, Decl(fixingTypeParametersRepeatedly1.ts, 0, 43))
+>p : Symbol(p, Decl(fixingTypeParametersRepeatedly1.ts, 0, 48))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 0, 19))
+
+f("", x => null, x => x.toLowerCase());
+>f : Symbol(f, Decl(fixingTypeParametersRepeatedly1.ts, 0, 0))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 5))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 16))
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 16))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+// First overload of g should type check just like f
+declare function g<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+>g : Symbol(g, Decl(fixingTypeParametersRepeatedly1.ts, 1, 39), Decl(fixingTypeParametersRepeatedly1.ts, 4, 63))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 4, 22))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>y : Symbol(y, Decl(fixingTypeParametersRepeatedly1.ts, 4, 27))
+>p : Symbol(p, Decl(fixingTypeParametersRepeatedly1.ts, 4, 32))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>z : Symbol(z, Decl(fixingTypeParametersRepeatedly1.ts, 4, 43))
+>p : Symbol(p, Decl(fixingTypeParametersRepeatedly1.ts, 4, 48))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+>T : Symbol(T, Decl(fixingTypeParametersRepeatedly1.ts, 4, 19))
+
+declare function g();
+>g : Symbol(g, Decl(fixingTypeParametersRepeatedly1.ts, 1, 39), Decl(fixingTypeParametersRepeatedly1.ts, 4, 63))
+
+g("", x => null, x => x.toLowerCase());
+>g : Symbol(g, Decl(fixingTypeParametersRepeatedly1.ts, 1, 39), Decl(fixingTypeParametersRepeatedly1.ts, 4, 63))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 5))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

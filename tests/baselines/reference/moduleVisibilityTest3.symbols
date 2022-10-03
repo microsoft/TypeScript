@@ -1,0 +1,49 @@
+=== tests/cases/compiler/moduleVisibilityTest3.ts ===
+module _modes {
+>_modes : Symbol(_modes, Decl(moduleVisibilityTest3.ts, 0, 0))
+
+ export interface IMode {
+>IMode : Symbol(IMode, Decl(moduleVisibilityTest3.ts, 0, 15))
+  
+ }
+ 
+ class Mode {
+>Mode : Symbol(Mode, Decl(moduleVisibilityTest3.ts, 3, 2))
+  
+ }
+}
+
+//_modes. // produces an internal error - please implement in derived class
+
+module editor {
+>editor : Symbol(editor, Decl(moduleVisibilityTest3.ts, 8, 1))
+
+ import modes = _modes;
+>modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>_modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 0, 0))
+ 
+ var i : modes.IMode;
+>i : Symbol(i, Decl(moduleVisibilityTest3.ts, 15, 4))
+>modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>IMode : Symbol(modes.IMode, Decl(moduleVisibilityTest3.ts, 0, 15))
+  
+ // If you just use p1:modes, the compiler accepts it - should be an error
+ class Bug {
+>Bug : Symbol(Bug, Decl(moduleVisibilityTest3.ts, 15, 21))
+
+     constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
+>p1 : Symbol(p1, Decl(moduleVisibilityTest3.ts, 19, 17))
+>modes : Symbol(modes)
+>p2 : Symbol(p2, Decl(moduleVisibilityTest3.ts, 19, 27))
+>modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>Mode : Symbol(modes.Mode)
+
+         var x:modes.Mode;
+>x : Symbol(x, Decl(moduleVisibilityTest3.ts, 20, 12))
+>modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>Mode : Symbol(modes.Mode)
+     }
+    
+ }
+}
+

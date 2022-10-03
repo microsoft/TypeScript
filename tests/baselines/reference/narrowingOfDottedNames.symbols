@@ -1,0 +1,203 @@
+=== tests/cases/compiler/narrowingOfDottedNames.ts ===
+// Repro from #8383
+
+class A {
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+
+    prop!: { a: string; };
+>prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+}
+
+class B {
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+
+    prop!: { b: string; }
+>prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+}
+
+function isA(x: any): x is A {
+>isA : Symbol(isA, Decl(narrowingOfDottedNames.ts, 8, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 10, 13))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 10, 13))
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+
+    return x instanceof A;
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 10, 13))
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+}
+
+function isB(x: any): x is B {
+>isB : Symbol(isB, Decl(narrowingOfDottedNames.ts, 12, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 14, 13))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 14, 13))
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+
+    return x instanceof B;
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 14, 13))
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+}
+
+function f1(x: A | B) {
+>f1 : Symbol(f1, Decl(narrowingOfDottedNames.ts, 16, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+
+    while (true) {
+        if (x instanceof A) {
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+
+            x.prop.a;
+>x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+>x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+>prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+        }
+        else if (x instanceof B) {
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+
+            x.prop.b;
+>x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+>x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+>prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+        }
+    }
+}
+
+function f2(x: A | B) {
+>f2 : Symbol(f2, Decl(narrowingOfDottedNames.ts, 27, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+>A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+>B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+
+    while (true) {
+        if (isA(x)) {
+>isA : Symbol(isA, Decl(narrowingOfDottedNames.ts, 8, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+
+            x.prop.a;
+>x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+>x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+>prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+        }
+        else if (isB(x)) {
+>isB : Symbol(isB, Decl(narrowingOfDottedNames.ts, 12, 1))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+
+            x.prop.b;
+>x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+>x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+>prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+        }
+    }
+}
+
+// Repro from #28100
+
+class Foo1
+>Foo1 : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
+{
+    x: number;  // Error
+>x : Symbol(Foo1.x, Decl(narrowingOfDottedNames.ts, 43, 1))
+
+    constructor() {
+        if (this instanceof Boolean) {
+>this : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+
+class Foo2
+>Foo2 : Symbol(Foo2, Decl(narrowingOfDottedNames.ts, 49, 1))
+{
+    x: number;  // Error
+>x : Symbol(Foo2.x, Decl(narrowingOfDottedNames.ts, 52, 1))
+
+    constructor() {
+    }
+}
+
+// Repro from  #29513
+
+class AInfo {
+>AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+
+    a_count: number = 1;
+>a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+}
+
+class BInfo {
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+
+    b_count: number = 1;
+>b_count : Symbol(BInfo.b_count, Decl(narrowingOfDottedNames.ts, 64, 13))
+}
+
+class Base {
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    id: number = 0;
+>id : Symbol(Base.id, Decl(narrowingOfDottedNames.ts, 68, 12))
+}
+
+class A2 extends Base {
+>A2 : Symbol(A2, Decl(narrowingOfDottedNames.ts, 70, 1))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    info!: AInfo;
+>info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+}
+
+class B2 extends Base {
+>B2 : Symbol(B2, Decl(narrowingOfDottedNames.ts, 74, 1))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+    info!: BInfo;
+>info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+}
+
+let target: Base = null as any;
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+
+while (target) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+
+    if (target instanceof A2) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>A2 : Symbol(A2, Decl(narrowingOfDottedNames.ts, 70, 1))
+
+        target.info.a_count = 3;
+>target.info.a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+>target.info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+>a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+    }
+    else if (target instanceof B2) {
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>B2 : Symbol(B2, Decl(narrowingOfDottedNames.ts, 74, 1))
+
+        const j: BInfo = target.info;
+>j : Symbol(j, Decl(narrowingOfDottedNames.ts, 87, 13))
+>BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+>target.info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+>target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+>info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
+    }
+}
+

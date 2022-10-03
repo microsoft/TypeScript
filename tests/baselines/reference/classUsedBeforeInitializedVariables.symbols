@@ -1,0 +1,120 @@
+=== tests/cases/compiler/classUsedBeforeInitializedVariables.ts ===
+class Test {
+>Test : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+
+    p1 = 0;
+>p1 : Symbol(Test.p1, Decl(classUsedBeforeInitializedVariables.ts, 0, 12))
+
+    p2 = this.p1;
+>p2 : Symbol(Test.p2, Decl(classUsedBeforeInitializedVariables.ts, 1, 11))
+>this.p1 : Symbol(Test.p1, Decl(classUsedBeforeInitializedVariables.ts, 0, 12))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>p1 : Symbol(Test.p1, Decl(classUsedBeforeInitializedVariables.ts, 0, 12))
+
+    p3 = this.p4;
+>p3 : Symbol(Test.p3, Decl(classUsedBeforeInitializedVariables.ts, 2, 17))
+>this.p4 : Symbol(Test.p4, Decl(classUsedBeforeInitializedVariables.ts, 3, 17))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>p4 : Symbol(Test.p4, Decl(classUsedBeforeInitializedVariables.ts, 3, 17))
+
+    p4 = 0;
+>p4 : Symbol(Test.p4, Decl(classUsedBeforeInitializedVariables.ts, 3, 17))
+
+    p5?: number;
+>p5 : Symbol(Test.p5, Decl(classUsedBeforeInitializedVariables.ts, 4, 11))
+
+    p6?: string;
+>p6 : Symbol(Test.p6, Decl(classUsedBeforeInitializedVariables.ts, 5, 16))
+
+    p7 = {
+>p7 : Symbol(Test.p7, Decl(classUsedBeforeInitializedVariables.ts, 7, 16))
+
+        hello: (this.p6 = "string"),
+>hello : Symbol(hello, Decl(classUsedBeforeInitializedVariables.ts, 8, 10))
+>this.p6 : Symbol(Test.p6, Decl(classUsedBeforeInitializedVariables.ts, 5, 16))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>p6 : Symbol(Test.p6, Decl(classUsedBeforeInitializedVariables.ts, 5, 16))
+
+    };
+
+    directlyAssigned: any = this.directlyAssigned;
+>directlyAssigned : Symbol(Test.directlyAssigned, Decl(classUsedBeforeInitializedVariables.ts, 10, 6))
+>this.directlyAssigned : Symbol(Test.directlyAssigned, Decl(classUsedBeforeInitializedVariables.ts, 10, 6))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>directlyAssigned : Symbol(Test.directlyAssigned, Decl(classUsedBeforeInitializedVariables.ts, 10, 6))
+
+    withinArrowFunction: any = () => this.withinArrowFunction;
+>withinArrowFunction : Symbol(Test.withinArrowFunction, Decl(classUsedBeforeInitializedVariables.ts, 12, 50))
+>this.withinArrowFunction : Symbol(Test.withinArrowFunction, Decl(classUsedBeforeInitializedVariables.ts, 12, 50))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>withinArrowFunction : Symbol(Test.withinArrowFunction, Decl(classUsedBeforeInitializedVariables.ts, 12, 50))
+
+    withinFunction: any = function () {
+>withinFunction : Symbol(Test.withinFunction, Decl(classUsedBeforeInitializedVariables.ts, 14, 62))
+
+        return this.withinFunction;
+    };
+
+    withinObjectLiteral: any = {
+>withinObjectLiteral : Symbol(Test.withinObjectLiteral, Decl(classUsedBeforeInitializedVariables.ts, 18, 6))
+
+        [this.withinObjectLiteral]: true,
+>[this.withinObjectLiteral] : Symbol([this.withinObjectLiteral], Decl(classUsedBeforeInitializedVariables.ts, 20, 32))
+>this.withinObjectLiteral : Symbol(Test.withinObjectLiteral, Decl(classUsedBeforeInitializedVariables.ts, 18, 6))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>withinObjectLiteral : Symbol(Test.withinObjectLiteral, Decl(classUsedBeforeInitializedVariables.ts, 18, 6))
+
+    };
+
+    withinObjectLiteralGetterName: any = {
+>withinObjectLiteralGetterName : Symbol(Test.withinObjectLiteralGetterName, Decl(classUsedBeforeInitializedVariables.ts, 22, 6))
+
+        get [this.withinObjectLiteralGetterName]() {
+>[this.withinObjectLiteralGetterName] : Symbol([this.withinObjectLiteralGetterName], Decl(classUsedBeforeInitializedVariables.ts, 24, 42))
+>this.withinObjectLiteralGetterName : Symbol(Test.withinObjectLiteralGetterName, Decl(classUsedBeforeInitializedVariables.ts, 22, 6))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>withinObjectLiteralGetterName : Symbol(Test.withinObjectLiteralGetterName, Decl(classUsedBeforeInitializedVariables.ts, 22, 6))
+
+            return true;
+        }
+    };
+
+    withinObjectLiteralSetterName: any = {
+>withinObjectLiteralSetterName : Symbol(Test.withinObjectLiteralSetterName, Decl(classUsedBeforeInitializedVariables.ts, 28, 6))
+
+        set [this.withinObjectLiteralSetterName](_: any) {}
+>[this.withinObjectLiteralSetterName] : Symbol([this.withinObjectLiteralSetterName], Decl(classUsedBeforeInitializedVariables.ts, 30, 42))
+>this.withinObjectLiteralSetterName : Symbol(Test.withinObjectLiteralSetterName, Decl(classUsedBeforeInitializedVariables.ts, 28, 6))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>withinObjectLiteralSetterName : Symbol(Test.withinObjectLiteralSetterName, Decl(classUsedBeforeInitializedVariables.ts, 28, 6))
+>_ : Symbol(_, Decl(classUsedBeforeInitializedVariables.ts, 31, 49))
+
+    };
+
+    withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
+>withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))
+>this.withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))
+
+    fromOptional = this.p5;
+>fromOptional : Symbol(Test.fromOptional, Decl(classUsedBeforeInitializedVariables.ts, 34, 100))
+>this.p5 : Symbol(Test.p5, Decl(classUsedBeforeInitializedVariables.ts, 4, 11))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>p5 : Symbol(Test.p5, Decl(classUsedBeforeInitializedVariables.ts, 4, 11))
+
+    // These error cases are ignored (not checked by control flow analysis)
+
+    assignedByArrowFunction: any = (() => this.assignedByFunction)();
+>assignedByArrowFunction : Symbol(Test.assignedByArrowFunction, Decl(classUsedBeforeInitializedVariables.ts, 36, 27))
+>this.assignedByFunction : Symbol(Test.assignedByFunction, Decl(classUsedBeforeInitializedVariables.ts, 40, 69))
+>this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
+>assignedByFunction : Symbol(Test.assignedByFunction, Decl(classUsedBeforeInitializedVariables.ts, 40, 69))
+
+    assignedByFunction: any = (function () {
+>assignedByFunction : Symbol(Test.assignedByFunction, Decl(classUsedBeforeInitializedVariables.ts, 40, 69))
+
+        return this.assignedByFunction;
+    })();
+}
+

@@ -1,0 +1,56 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+const Foo = (props: any) => <div/>;
+>Foo : (props: any) => JSX.Element
+>(props: any) => <div/> : (props: any) => JSX.Element
+>props : any
+><div/> : JSX.Element
+>div : any
+
+// Should be OK
+const foo = <Foo />;
+>foo : JSX.Element
+><Foo /> : JSX.Element
+>Foo : (props: any) => JSX.Element
+
+
+// Should be OK
+var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
+>MainMenu : React.StatelessComponent<{}>
+>React : any
+>(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: React.ReactNode; }) => JSX.Element
+>props : { children?: React.ReactNode; }
+>(<div>    <h3>Main Menu</h3></div>) : JSX.Element
+><div>    <h3>Main Menu</h3></div> : JSX.Element
+>div : any
+
+    <h3>Main Menu</h3>
+><h3>Main Menu</h3> : JSX.Element
+>h3 : any
+>h3 : any
+
+</div>);
+>div : any
+
+var App: React.StatelessComponent<{ children }> = ({children}) => (
+>App : React.StatelessComponent<{ children: any; }>
+>React : any
+>children : any
+>({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
+>children : any
+>(    <div >        <MainMenu/>	</div>) : JSX.Element
+
+    <div >
+><div >        <MainMenu/>	</div> : JSX.Element
+>div : any
+
+        <MainMenu/>
+><MainMenu/> : JSX.Element
+>MainMenu : React.StatelessComponent<{}>
+
+	</div>
+>div : any
+
+);

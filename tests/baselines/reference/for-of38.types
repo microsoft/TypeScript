@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of38.ts ===
+var map = new Map([["", true]]);
+>map : Map<string, boolean>
+>new Map([["", true]]) : Map<string, boolean>
+>Map : MapConstructor
+>[["", true]] : [string, true][]
+>["", true] : [string, true]
+>"" : ""
+>true : true
+
+for (var [k, v] of map) {
+>k : string
+>v : boolean
+>map : Map<string, boolean>
+
+    k;
+>k : string
+
+    v;
+>v : boolean
+}

@@ -1,0 +1,3 @@
+class C {
+ public constructor() { }
+}

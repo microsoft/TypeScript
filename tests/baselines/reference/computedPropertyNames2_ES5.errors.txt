@@ -1,0 +1,19 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts(6,9): error TS2378: A 'get' accessor must return a value.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts(8,16): error TS2378: A 'get' accessor must return a value.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts (2 errors) ====
+    var methodName = "method";
+    var accessorName = "accessor";
+    class C {
+        [methodName]() { }
+        static [methodName]() { }
+        get [accessorName]() { }
+            ~~~~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+        set [accessorName](v) { }
+        static get [accessorName]() { }
+                   ~~~~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+        static set [accessorName](v) { }
+    }

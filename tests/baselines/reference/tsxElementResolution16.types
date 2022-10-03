@@ -1,0 +1,17 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+}
+
+interface Obj1 {
+	new(n: string): {};
+>n : string
+}
+var obj1: Obj1;
+>obj1 : Obj1
+
+<obj1 x={10} />; // Error (JSX.Element is implicit any)
+><obj1 x={10} /> : any
+>obj1 : Obj1
+>x : number
+>10 : 10
+

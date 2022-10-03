@@ -1,0 +1,36 @@
+=== tests/cases/compiler/declFileTypeofClass.ts ===
+class c {
+>c : c
+
+    static x : string;
+>x : string
+
+    private static y: number;
+>y : number
+
+    private x3: string;
+>x3 : string
+
+    public y3: number;
+>y3 : number
+}
+
+var x: c;
+>x : c
+
+var y = c;
+>y : typeof c
+>c : typeof c
+
+var z: typeof c;
+>z : typeof c
+>c : typeof c
+
+class genericC<T>
+>genericC : genericC<T>
+{
+}
+var genericX = genericC;
+>genericX : typeof genericC
+>genericC : typeof genericC
+

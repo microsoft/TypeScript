@@ -1,0 +1,19 @@
+=== tests/cases/compiler/genericCallWithFixedArguments.ts ===
+class A { foo() { } }
+>A : A
+>foo : () => void
+
+class B { bar() { }} 
+>B : B
+>bar : () => void
+
+function g<T, U>(x) { }
+>g : <T, U>(x: any) => void
+>x : any
+
+g<A, B>(7) // the parameter list is fixed, so this should not error
+>g<A, B>(7) : void
+>g : <T, U>(x: any) => void
+>7 : 7
+ 
+

@@ -1,0 +1,9 @@
+tests/cases/conformance/es2017/useSharedArrayBuffer3.ts(1,16): error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+
+
+==== tests/cases/conformance/es2017/useSharedArrayBuffer3.ts (1 errors) ====
+    var foge = new SharedArrayBuffer(1024);
+                   ~~~~~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+    var bar = foge.slice(1, 10);
+    var len = foge.byteLength;

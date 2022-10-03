@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts ===
+namespace A {
+>A : Symbol(A, Decl(classExtendingOptionalChain.ts, 0, 0))
+
+    export class B {}
+>B : Symbol(B, Decl(classExtendingOptionalChain.ts, 0, 13))
+}
+
+// ok
+class C1 extends A?.B {}
+>C1 : Symbol(C1, Decl(classExtendingOptionalChain.ts, 2, 1))
+>A?.B : Symbol(A.B, Decl(classExtendingOptionalChain.ts, 0, 13))
+>A : Symbol(A, Decl(classExtendingOptionalChain.ts, 0, 0))
+>B : Symbol(A.B, Decl(classExtendingOptionalChain.ts, 0, 13))
+
+// error
+class C2 implements A?.B {}
+>C2 : Symbol(C2, Decl(classExtendingOptionalChain.ts, 5, 24))
+>A?.B : Symbol(A.B, Decl(classExtendingOptionalChain.ts, 0, 13))
+>A : Symbol(A, Decl(classExtendingOptionalChain.ts, 0, 0))
+>B : Symbol(A.B, Decl(classExtendingOptionalChain.ts, 0, 13))
+

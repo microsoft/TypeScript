@@ -1,0 +1,19 @@
+tests/cases/compiler/extBaseClass2.ts(2,31): error TS2339: Property 'B' does not exist on type 'typeof M'.
+tests/cases/compiler/extBaseClass2.ts(7,29): error TS2304: Cannot find name 'B'.
+
+
+==== tests/cases/compiler/extBaseClass2.ts (2 errors) ====
+    module N {
+        export class C4 extends M.B {
+                                  ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof M'.
+        }
+    }
+    
+    module M {
+        export class C5 extends B {
+                                ~
+!!! error TS2304: Cannot find name 'B'.
+        }
+    }
+    

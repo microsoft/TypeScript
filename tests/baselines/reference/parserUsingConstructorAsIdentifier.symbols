@@ -1,0 +1,127 @@
+=== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts ===
+        function define(constructor, instanceMembers, staticMembers) {
+>define : Symbol(define, Decl(parserUsingConstructorAsIdentifier.ts, 0, 0))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 36))
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 53))
+
+            constructor = constructor || function () { };
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+
+            PluginUtilities.Utilities.markSupportedForProcessing(constructor);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+
+            if (instanceMembers) {
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 36))
+
+                initializeProperties(constructor.prototype, instanceMembers);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 36))
+            }
+            if (staticMembers) {
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 53))
+
+                initializeProperties(constructor, staticMembers);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 0, 53))
+            }
+            return constructor;
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))
+        }
+
+        function derive(baseClass, constructor, instanceMembers, staticMembers) {
+>derive : Symbol(derive, Decl(parserUsingConstructorAsIdentifier.ts, 10, 9))
+>baseClass : Symbol(baseClass, Decl(parserUsingConstructorAsIdentifier.ts, 12, 24))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 47))
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 64))
+
+            if (baseClass) {
+>baseClass : Symbol(baseClass, Decl(parserUsingConstructorAsIdentifier.ts, 12, 24))
+
+                constructor = constructor || function () { };
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+
+                var basePrototype = baseClass.prototype;
+>basePrototype : Symbol(basePrototype, Decl(parserUsingConstructorAsIdentifier.ts, 15, 19))
+>baseClass : Symbol(baseClass, Decl(parserUsingConstructorAsIdentifier.ts, 12, 24))
+
+                constructor.prototype = Object.create(basePrototype);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>basePrototype : Symbol(basePrototype, Decl(parserUsingConstructorAsIdentifier.ts, 15, 19))
+
+                PluginUtilities.Utilities.markSupportedForProcessing(constructor);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+
+                Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>value : Symbol(value, Decl(parserUsingConstructorAsIdentifier.ts, 18, 77))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>writable : Symbol(writable, Decl(parserUsingConstructorAsIdentifier.ts, 18, 97))
+>configurable : Symbol(configurable, Decl(parserUsingConstructorAsIdentifier.ts, 18, 113))
+>enumerable : Symbol(enumerable, Decl(parserUsingConstructorAsIdentifier.ts, 18, 133))
+
+                if (instanceMembers) {
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 47))
+
+                    initializeProperties(constructor.prototype, instanceMembers);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 47))
+                }
+                if (staticMembers) {
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 64))
+
+                    initializeProperties(constructor, staticMembers);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 64))
+                }
+                return constructor;
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+
+            } else {
+                return define(constructor, instanceMembers, staticMembers);
+>define : Symbol(define, Decl(parserUsingConstructorAsIdentifier.ts, 0, 0))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
+>instanceMembers : Symbol(instanceMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 47))
+>staticMembers : Symbol(staticMembers, Decl(parserUsingConstructorAsIdentifier.ts, 12, 64))
+            }
+        }
+
+        function mix(constructor) {
+>mix : Symbol(mix, Decl(parserUsingConstructorAsIdentifier.ts, 29, 9))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 31, 21))
+
+            constructor = constructor || function () { };
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 31, 21))
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 31, 21))
+
+            var i, len;
+>i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
+>len : Symbol(len, Decl(parserUsingConstructorAsIdentifier.ts, 33, 18))
+
+            for (i = 1, len = arguments.length; i < len; i++) {
+>i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
+>len : Symbol(len, Decl(parserUsingConstructorAsIdentifier.ts, 33, 18))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
+>len : Symbol(len, Decl(parserUsingConstructorAsIdentifier.ts, 33, 18))
+>i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
+
+                initializeProperties(constructor.prototype, arguments[i]);
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 31, 21))
+>arguments : Symbol(arguments)
+>i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
+            }
+            return constructor;
+>constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 31, 21))
+        }

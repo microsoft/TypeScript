@@ -1,0 +1,20 @@
+=== tests/cases/compiler/a.js ===
+var elemA = 42;
+>elemA : Symbol(elemA, Decl(a.js, 0, 3))
+
+=== tests/cases/compiler/b.jsx ===
+var elemB = <b>{"test"}</b>;
+>elemB : Symbol(elemB, Decl(b.jsx, 0, 3))
+
+=== tests/cases/compiler/c.js ===
+var elemC = <c>{42}</c>;
+>elemC : Symbol(elemC, Decl(c.js, 0, 3))
+
+=== tests/cases/compiler/d.ts ===
+var elemD = 42;
+>elemD : Symbol(elemD, Decl(d.ts, 0, 3))
+
+=== tests/cases/compiler/e.tsx ===
+var elemE = <e>{true}</e>;
+>elemE : Symbol(elemE, Decl(e.tsx, 0, 3))
+

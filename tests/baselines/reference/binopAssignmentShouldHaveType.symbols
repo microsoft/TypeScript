@@ -1,0 +1,41 @@
+=== tests/cases/compiler/binopAssignmentShouldHaveType.ts ===
+declare var console;
+>console : Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
+
+"use strict";
+module Test {
+>Test : Symbol(Test, Decl(binopAssignmentShouldHaveType.ts, 1, 13))
+
+ export class Bug {
+>Bug : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
+
+  getName():string {
+>getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+
+   return "name";
+  }
+  bug() {
+>bug : Symbol(Bug.bug, Decl(binopAssignmentShouldHaveType.ts, 6, 3))
+
+   var name:string= null;
+>name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
+
+   if ((name= this.getName()).length > 0) {
+>(name= this.getName()).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
+>this.getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>this : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
+>getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    console.log(name);
+>console : Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
+>name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
+   }
+  }
+ }
+}
+
+ 
+
+

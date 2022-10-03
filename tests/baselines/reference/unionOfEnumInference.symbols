@@ -1,0 +1,44 @@
+=== tests/cases/compiler/unionOfEnumInference.ts ===
+// Repro from #42932
+
+enum Enum { A, B, C }
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+>A : Symbol(Enum.A, Decl(unionOfEnumInference.ts, 2, 11))
+>B : Symbol(Enum.B, Decl(unionOfEnumInference.ts, 2, 14))
+>C : Symbol(Enum.C, Decl(unionOfEnumInference.ts, 2, 17))
+
+interface Interface<T extends Enum> {
+>Interface : Symbol(Interface, Decl(unionOfEnumInference.ts, 2, 21))
+>T : Symbol(T, Decl(unionOfEnumInference.ts, 4, 20))
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+
+	type: T;
+>type : Symbol(Interface.type, Decl(unionOfEnumInference.ts, 4, 37))
+>T : Symbol(T, Decl(unionOfEnumInference.ts, 4, 20))
+}
+
+function foo<T extends Enum>(x: Interface<T>) { }
+>foo : Symbol(foo, Decl(unionOfEnumInference.ts, 6, 1))
+>T : Symbol(T, Decl(unionOfEnumInference.ts, 8, 13))
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+>x : Symbol(x, Decl(unionOfEnumInference.ts, 8, 29))
+>Interface : Symbol(Interface, Decl(unionOfEnumInference.ts, 2, 21))
+>T : Symbol(T, Decl(unionOfEnumInference.ts, 8, 13))
+
+function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
+>bar : Symbol(bar, Decl(unionOfEnumInference.ts, 8, 49))
+>x : Symbol(x, Decl(unionOfEnumInference.ts, 10, 13))
+>Interface : Symbol(Interface, Decl(unionOfEnumInference.ts, 2, 21))
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+>A : Symbol(Enum.A, Decl(unionOfEnumInference.ts, 2, 11))
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+>B : Symbol(Enum.B, Decl(unionOfEnumInference.ts, 2, 14))
+>Interface : Symbol(Interface, Decl(unionOfEnumInference.ts, 2, 21))
+>Enum : Symbol(Enum, Decl(unionOfEnumInference.ts, 0, 0))
+>C : Symbol(Enum.C, Decl(unionOfEnumInference.ts, 2, 17))
+
+	foo(x);
+>foo : Symbol(foo, Decl(unionOfEnumInference.ts, 6, 1))
+>x : Symbol(x, Decl(unionOfEnumInference.ts, 10, 13))
+}
+

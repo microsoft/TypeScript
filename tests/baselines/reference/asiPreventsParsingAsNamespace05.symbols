@@ -1,0 +1,23 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts ===
+let namespace = 10;
+>namespace : Symbol(namespace, Decl(asiPreventsParsingAsNamespace05.ts, 0, 3))
+
+namespace a.b {
+>a : Symbol(a, Decl(asiPreventsParsingAsNamespace05.ts, 0, 19))
+>b : Symbol(b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+
+    export let c = 20;
+>c : Symbol(c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+}
+
+namespace
+>namespace : Symbol(namespace, Decl(asiPreventsParsingAsNamespace05.ts, 0, 3))
+
+a.b.c
+>a.b.c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+>a.b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+>a : Symbol(a, Decl(asiPreventsParsingAsNamespace05.ts, 0, 19))
+>b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+>c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+{
+}

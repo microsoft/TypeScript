@@ -1,0 +1,38 @@
+tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(13,35): error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'number | IProps'.
+  Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(16,49): error TS2322: Type '{ asdfasdf: string; }' is not assignable to type '{ testBool?: boolean; }'.
+  Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean; }'.
+tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'IProps'.
+  Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+
+
+==== tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts (3 errors) ====
+    interface IProps {
+        iconProp?: string;
+        nestedProp?: {
+            testBool?: boolean;
+        }
+    }
+    
+    interface INestedProps {
+        nestedProps?: IProps;
+    }
+    
+    // These are the types of errors we want:
+    const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'number | IProps'.
+!!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+    
+    // Nested typing works here and we also get an expected error:
+    const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
+                                                    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ asdfasdf: string; }' is not assignable to type '{ testBool?: boolean; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean; }'.
+    
+    // Want an error generated here but there isn't one.
+    const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'IProps'.
+!!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+    

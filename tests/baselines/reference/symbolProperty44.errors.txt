@@ -1,0 +1,17 @@
+tests/cases/conformance/es6/Symbols/symbolProperty44.ts(2,9): error TS2733: Property '[Symbol.hasInstance]' was also declared here.
+tests/cases/conformance/es6/Symbols/symbolProperty44.ts(5,9): error TS2718: Duplicate property '[Symbol.hasInstance]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty44.ts (2 errors) ====
+    class C {
+        get [Symbol.hasInstance]() {
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2733: Property '[Symbol.hasInstance]' was also declared here.
+            return "";
+        }
+        get [Symbol.hasInstance]() {
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2718: Duplicate property '[Symbol.hasInstance]'.
+            return "";
+        }
+    }

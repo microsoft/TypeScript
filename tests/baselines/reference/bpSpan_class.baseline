@@ -1,0 +1,365 @@
+
+1  >class Greeter {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (0 to 15)  SpanInfo: {"start":0,"length":396}
+    >class Greeter {
+    >    constructor(public greeting: string, ...b: string[]) {
+    >    }
+    >    greet() {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >    private x: string;
+    >    private x1: number = 10;
+    >    private fn() {
+    >        return this.greeting;
+    >    }
+    >    get greetings() {
+    >        return this.greeting;
+    >    }
+    >    set greetings(greetings: string) {
+    >        this.greeting = greetings;
+    >    }
+    >}
+    >:=> (line 1, col 0) to (line 18, col 1)
+--------------------------------
+2  >    constructor(public greeting: string, ...b: string[]) {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (16 to 31)  SpanInfo: {"start":79,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
+2  >    constructor(public greeting: string, ...b: string[]) {
+
+                    ~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (32 to 55)  SpanInfo: {"start":32,"length":23}
+    >public greeting: string
+    >:=> (line 2, col 16) to (line 2, col 39)
+2  >    constructor(public greeting: string, ...b: string[]) {
+
+                                            ~~~~~~~~~~~~~~~~=> Pos: (56 to 71)  SpanInfo: {"start":57,"length":14}
+    >...b: string[]
+    >:=> (line 2, col 41) to (line 2, col 55)
+2  >    constructor(public greeting: string, ...b: string[]) {
+
+                                                            ~~~=> Pos: (72 to 74)  SpanInfo: {"start":79,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
+--------------------------------
+3  >    }
+
+    ~~~~~~                                        => Pos: (75 to 80)  SpanInfo: {"start":79,"length":1}
+    >}
+    >:=> (line 3, col 4) to (line 3, col 5)
+--------------------------------
+4  >    greet() {
+
+    ~~~~~~~~~~~~~~                                => Pos: (81 to 94)  SpanInfo: {"start":85,"length":64}
+    >greet() {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >:=> (line 4, col 4) to (line 6, col 5)
+--------------------------------
+5  >        return "<h1>" + this.greeting + "</h1>";
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (95 to 143)  SpanInfo: {"start":103,"length":39}
+    >return "<h1>" + this.greeting + "</h1>"
+    >:=> (line 5, col 8) to (line 5, col 47)
+--------------------------------
+6  >    }
+
+    ~~~~~~                                        => Pos: (144 to 149)  SpanInfo: {"start":148,"length":1}
+    >}
+    >:=> (line 6, col 4) to (line 6, col 5)
+--------------------------------
+7  >    private x: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (150 to 172)  SpanInfo: undefined
+--------------------------------
+8  >    private x1: number = 10;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (173 to 201)  SpanInfo: {"start":177,"length":24}
+    >private x1: number = 10;
+    >:=> (line 8, col 4) to (line 8, col 28)
+--------------------------------
+9  >    private fn() {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (202 to 220)  SpanInfo: {"start":206,"length":50}
+    >private fn() {
+    >        return this.greeting;
+    >    }
+    >:=> (line 9, col 4) to (line 11, col 5)
+--------------------------------
+10 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (221 to 250)  SpanInfo: {"start":229,"length":20}
+    >return this.greeting
+    >:=> (line 10, col 8) to (line 10, col 28)
+--------------------------------
+11 >    }
+
+    ~~~~~~                                        => Pos: (251 to 256)  SpanInfo: {"start":255,"length":1}
+    >}
+    >:=> (line 11, col 4) to (line 11, col 5)
+--------------------------------
+12 >    get greetings() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (257 to 278)  SpanInfo: {"start":261,"length":53}
+    >get greetings() {
+    >        return this.greeting;
+    >    }
+    >:=> (line 12, col 4) to (line 14, col 5)
+--------------------------------
+13 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (279 to 308)  SpanInfo: {"start":287,"length":20}
+    >return this.greeting
+    >:=> (line 13, col 8) to (line 13, col 28)
+--------------------------------
+14 >    }
+
+    ~~~~~~                                        => Pos: (309 to 314)  SpanInfo: {"start":313,"length":1}
+    >}
+    >:=> (line 14, col 4) to (line 14, col 5)
+--------------------------------
+15 >    set greetings(greetings: string) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       => Pos: (315 to 353)  SpanInfo: {"start":319,"length":75}
+    >set greetings(greetings: string) {
+    >        this.greeting = greetings;
+    >    }
+    >:=> (line 15, col 4) to (line 17, col 5)
+--------------------------------
+16 >        this.greeting = greetings;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (354 to 388)  SpanInfo: {"start":362,"length":25}
+    >this.greeting = greetings
+    >:=> (line 16, col 8) to (line 16, col 33)
+--------------------------------
+17 >    }
+
+    ~~~~~~                                        => Pos: (389 to 394)  SpanInfo: {"start":393,"length":1}
+    >}
+    >:=> (line 17, col 4) to (line 17, col 5)
+--------------------------------
+18 >}
+
+    ~~                                            => Pos: (395 to 396)  SpanInfo: {"start":395,"length":1}
+    >}
+    >:=> (line 18, col 0) to (line 18, col 1)
+--------------------------------
+19 >class Greeter2 {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (397 to 413)  SpanInfo: {"start":397,"length":18}
+    >class Greeter2 {
+    >}
+    >:=> (line 19, col 0) to (line 20, col 1)
+--------------------------------
+20 >}
+
+    ~~                                            => Pos: (414 to 415)  SpanInfo: {"start":414,"length":1}
+    >}
+    >:=> (line 20, col 0) to (line 20, col 1)
+--------------------------------
+21 >class Greeter1 
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (416 to 431)  SpanInfo: {"start":416,"length":419}
+    >class Greeter1 
+    >{
+    >    constructor(public greeting: string, ...b: string[])
+    >    {
+    >    }
+    >    greet()
+    >    {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >    private x: string;
+    >    private x1: number = 10;
+    >    private fn()
+    >    {
+    >        return this.greeting;
+    >    }
+    >    get greetings() 
+    >    {
+    >        return this.greeting;
+    >    }
+    >    set greetings(greetings: string)
+    >    {
+    >        this.greeting = greetings;
+    >    }
+    >}
+    >:=> (line 21, col 0) to (line 44, col 1)
+--------------------------------
+22 >{
+
+    ~~                                            => Pos: (432 to 433)  SpanInfo: {"start":501,"length":1}
+    >}
+    >:=> (line 25, col 4) to (line 25, col 5)
+--------------------------------
+23 >    constructor(public greeting: string, ...b: string[])
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (434 to 449)  SpanInfo: {"start":501,"length":1}
+    >}
+    >:=> (line 25, col 4) to (line 25, col 5)
+23 >    constructor(public greeting: string, ...b: string[])
+
+                    ~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (450 to 473)  SpanInfo: {"start":450,"length":23}
+    >public greeting: string
+    >:=> (line 23, col 16) to (line 23, col 39)
+23 >    constructor(public greeting: string, ...b: string[])
+
+                                            ~~~~~~~~~~~~~~~~~=> Pos: (474 to 490)  SpanInfo: {"start":475,"length":14}
+    >...b: string[]
+    >:=> (line 23, col 41) to (line 23, col 55)
+--------------------------------
+24 >    {
+
+    ~~~~~~                                        => Pos: (491 to 496)  SpanInfo: {"start":501,"length":1}
+    >}
+    >:=> (line 25, col 4) to (line 25, col 5)
+--------------------------------
+25 >    }
+
+    ~~~~~~                                        => Pos: (497 to 502)  SpanInfo: {"start":501,"length":1}
+    >}
+    >:=> (line 25, col 4) to (line 25, col 5)
+--------------------------------
+26 >    greet()
+
+    ~~~~~~~~~~~~                                  => Pos: (503 to 514)  SpanInfo: {"start":507,"length":68}
+    >greet()
+    >    {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >:=> (line 26, col 4) to (line 29, col 5)
+--------------------------------
+27 >    {
+
+    ~~~~~~                                        => Pos: (515 to 520)  SpanInfo: {"start":529,"length":39}
+    >return "<h1>" + this.greeting + "</h1>"
+    >:=> (line 28, col 8) to (line 28, col 47)
+--------------------------------
+28 >        return "<h1>" + this.greeting + "</h1>";
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (521 to 569)  SpanInfo: {"start":529,"length":39}
+    >return "<h1>" + this.greeting + "</h1>"
+    >:=> (line 28, col 8) to (line 28, col 47)
+--------------------------------
+29 >    }
+
+    ~~~~~~                                        => Pos: (570 to 575)  SpanInfo: {"start":574,"length":1}
+    >}
+    >:=> (line 29, col 4) to (line 29, col 5)
+--------------------------------
+30 >    private x: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (576 to 598)  SpanInfo: undefined
+--------------------------------
+31 >    private x1: number = 10;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (599 to 627)  SpanInfo: {"start":603,"length":24}
+    >private x1: number = 10;
+    >:=> (line 31, col 4) to (line 31, col 28)
+--------------------------------
+32 >    private fn()
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (628 to 644)  SpanInfo: {"start":632,"length":54}
+    >private fn()
+    >    {
+    >        return this.greeting;
+    >    }
+    >:=> (line 32, col 4) to (line 35, col 5)
+--------------------------------
+33 >    {
+
+    ~~~~~~                                        => Pos: (645 to 650)  SpanInfo: {"start":659,"length":20}
+    >return this.greeting
+    >:=> (line 34, col 8) to (line 34, col 28)
+--------------------------------
+34 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (651 to 680)  SpanInfo: {"start":659,"length":20}
+    >return this.greeting
+    >:=> (line 34, col 8) to (line 34, col 28)
+--------------------------------
+35 >    }
+
+    ~~~~~~                                        => Pos: (681 to 686)  SpanInfo: {"start":685,"length":1}
+    >}
+    >:=> (line 35, col 4) to (line 35, col 5)
+--------------------------------
+36 >    get greetings() 
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (687 to 707)  SpanInfo: {"start":691,"length":58}
+    >get greetings() 
+    >    {
+    >        return this.greeting;
+    >    }
+    >:=> (line 36, col 4) to (line 39, col 5)
+--------------------------------
+37 >    {
+
+    ~~~~~~                                        => Pos: (708 to 713)  SpanInfo: {"start":722,"length":20}
+    >return this.greeting
+    >:=> (line 38, col 8) to (line 38, col 28)
+--------------------------------
+38 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (714 to 743)  SpanInfo: {"start":722,"length":20}
+    >return this.greeting
+    >:=> (line 38, col 8) to (line 38, col 28)
+--------------------------------
+39 >    }
+
+    ~~~~~~                                        => Pos: (744 to 749)  SpanInfo: {"start":748,"length":1}
+    >}
+    >:=> (line 39, col 4) to (line 39, col 5)
+--------------------------------
+40 >    set greetings(greetings: string)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (750 to 786)  SpanInfo: {"start":754,"length":79}
+    >set greetings(greetings: string)
+    >    {
+    >        this.greeting = greetings;
+    >    }
+    >:=> (line 40, col 4) to (line 43, col 5)
+--------------------------------
+41 >    {
+
+    ~~~~~~                                        => Pos: (787 to 792)  SpanInfo: {"start":801,"length":25}
+    >this.greeting = greetings
+    >:=> (line 42, col 8) to (line 42, col 33)
+--------------------------------
+42 >        this.greeting = greetings;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (793 to 827)  SpanInfo: {"start":801,"length":25}
+    >this.greeting = greetings
+    >:=> (line 42, col 8) to (line 42, col 33)
+--------------------------------
+43 >    }
+
+    ~~~~~~                                        => Pos: (828 to 833)  SpanInfo: {"start":832,"length":1}
+    >}
+    >:=> (line 43, col 4) to (line 43, col 5)
+--------------------------------
+44 >}
+
+    ~~                                            => Pos: (834 to 835)  SpanInfo: {"start":834,"length":1}
+    >}
+    >:=> (line 44, col 0) to (line 44, col 1)
+--------------------------------
+45 >class Greeter12
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (836 to 851)  SpanInfo: {"start":836,"length":19}
+    >class Greeter12
+    >{
+    >}
+    >:=> (line 45, col 0) to (line 47, col 1)
+--------------------------------
+46 >{
+
+    ~~                                            => Pos: (852 to 853)  SpanInfo: {"start":854,"length":1}
+    >}
+    >:=> (line 47, col 0) to (line 47, col 1)
+--------------------------------
+47 >}
+    ~                                             => Pos: (854 to 854)  SpanInfo: {"start":854,"length":1}
+    >}
+    >:=> (line 47, col 0) to (line 47, col 1)

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/quotedFunctionName2.ts ===
+class Test1 {
+>Test1 : Test1
+
+  static "prop1"() { }
+>"prop1" : () => void
+}

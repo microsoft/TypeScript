@@ -1,0 +1,383 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts ===
+// Generic call with no parameters
+function noParams<T>() { }
+>noParams : Symbol(noParams, Decl(typeArgumentInference.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 1, 18))
+
+noParams();
+>noParams : Symbol(noParams, Decl(typeArgumentInference.ts, 0, 0))
+
+noParams<string>();
+>noParams : Symbol(noParams, Decl(typeArgumentInference.ts, 0, 0))
+
+noParams<{}>();
+>noParams : Symbol(noParams, Decl(typeArgumentInference.ts, 0, 0))
+
+// Generic call with parameters but none use type parameter type
+function noGenericParams<T>(n: string) { }
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInference.ts, 4, 15))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 7, 25))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 7, 28))
+
+noGenericParams('');
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInference.ts, 4, 15))
+
+noGenericParams<number>('');
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInference.ts, 4, 15))
+
+noGenericParams<{}>('');
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInference.ts, 4, 15))
+
+// Generic call with multiple type parameters and only one used in parameter type annotation
+function someGenerics1<T, U>(n: T, m: number) { }
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInference.ts, 10, 24))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 13, 23))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 13, 25))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 13, 29))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 13, 23))
+>m : Symbol(m, Decl(typeArgumentInference.ts, 13, 34))
+
+someGenerics1(3, 4);
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInference.ts, 10, 24))
+
+someGenerics1<number, {}>(3, 4);
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInference.ts, 10, 24))
+
+// Generic call with argument of function type whose parameter is of type parameter type
+function someGenerics2a<T>(n: (x: T) => void) { }
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInference.ts, 15, 32))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 18, 24))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 18, 27))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 18, 31))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 18, 24))
+
+someGenerics2a((n: string) => n);
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInference.ts, 15, 32))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 19, 16))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 19, 16))
+
+someGenerics2a<string>((n: string) => n);
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInference.ts, 15, 32))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 20, 24))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 20, 24))
+
+someGenerics2a<string>((n) => n.substr(0));
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInference.ts, 15, 32))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 21, 24))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 21, 24))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+
+function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInference.ts, 21, 43))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 23, 24))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 23, 26))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 23, 30))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 23, 34))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 23, 24))
+>y : Symbol(y, Decl(typeArgumentInference.ts, 23, 39))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 23, 26))
+
+someGenerics2b((n: string, x: number) => n);
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInference.ts, 21, 43))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 24, 16))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 24, 26))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 24, 16))
+
+someGenerics2b<string, number>((n: string, t: number) => n);
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInference.ts, 21, 43))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 25, 32))
+>t : Symbol(t, Decl(typeArgumentInference.ts, 25, 42))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 25, 32))
+
+someGenerics2b<string, number>((n, t) => n.substr(t * t));
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInference.ts, 21, 43))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 26, 32))
+>t : Symbol(t, Decl(typeArgumentInference.ts, 26, 34))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 26, 32))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(typeArgumentInference.ts, 26, 34))
+>t : Symbol(t, Decl(typeArgumentInference.ts, 26, 34))
+
+// Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
+function someGenerics3<T>(producer: () => T) { }
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInference.ts, 26, 58))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 29, 23))
+>producer : Symbol(producer, Decl(typeArgumentInference.ts, 29, 26))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 29, 23))
+
+someGenerics3(() => '');
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInference.ts, 26, 58))
+
+someGenerics3<Date>(() => undefined);
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInference.ts, 26, 58))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+someGenerics3<number>(() => 3);
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInference.ts, 26, 58))
+
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInference.ts, 32, 31))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 35, 23))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 35, 25))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 35, 29))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 35, 23))
+>f : Symbol(f, Decl(typeArgumentInference.ts, 35, 34))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 35, 39))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 35, 25))
+
+someGenerics4(4, () => null);
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInference.ts, 32, 31))
+
+someGenerics4<string, number>('', () => 3);
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInference.ts, 32, 31))
+
+someGenerics4<string, number>(null, null);
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInference.ts, 32, 31))
+
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInference.ts, 38, 42))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 41, 23))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 41, 25))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 41, 29))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 41, 25))
+>f : Symbol(f, Decl(typeArgumentInference.ts, 41, 34))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 41, 39))
+>U : Symbol(U, Decl(typeArgumentInference.ts, 41, 23))
+
+someGenerics5(4, () => null);
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInference.ts, 38, 42))
+
+someGenerics5<number, string>('', () => 3);
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInference.ts, 38, 42))
+
+someGenerics5<string, number>(null, null);
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInference.ts, 38, 42))
+
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInference.ts, 44, 42))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 47, 26))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 47, 30))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 47, 41))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 47, 46))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>c : Symbol(c, Decl(typeArgumentInference.ts, 47, 57))
+>c : Symbol(c, Decl(typeArgumentInference.ts, 47, 62))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 47, 23))
+
+someGenerics6(n => n, n => n, n => n);
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInference.ts, 44, 42))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 14))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 14))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 21))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 21))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 29))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 48, 29))
+
+someGenerics6<number>(n => n, n => n, n => n);
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInference.ts, 44, 42))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 22))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 22))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 29))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 29))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 37))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 49, 37))
+
+someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInference.ts, 44, 42))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 23))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 23))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 41))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 41))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 59))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 50, 59))
+
+// Generic call with multiple arguments of function types that each have parameters of different generic type
+function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInference.ts, 50, 76))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 53, 23))
+>B : Symbol(B, Decl(typeArgumentInference.ts, 53, 25))
+>C : Symbol(C, Decl(typeArgumentInference.ts, 53, 28))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 53, 32))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 53, 36))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 53, 23))
+>A : Symbol(A, Decl(typeArgumentInference.ts, 53, 23))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 53, 47))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 53, 52))
+>B : Symbol(B, Decl(typeArgumentInference.ts, 53, 25))
+>B : Symbol(B, Decl(typeArgumentInference.ts, 53, 25))
+>c : Symbol(c, Decl(typeArgumentInference.ts, 53, 63))
+>c : Symbol(c, Decl(typeArgumentInference.ts, 53, 68))
+>C : Symbol(C, Decl(typeArgumentInference.ts, 53, 28))
+>C : Symbol(C, Decl(typeArgumentInference.ts, 53, 28))
+
+someGenerics7(n => n, n => n, n => n);
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInference.ts, 50, 76))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 14))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 14))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 21))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 21))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 29))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 54, 29))
+
+someGenerics7<number, string, number>(n => n, n => n, n => n);
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInference.ts, 50, 76))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 38))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 38))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 45))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 45))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 53))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 55, 53))
+
+someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n);
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInference.ts, 50, 76))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 39))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 39))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 57))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 57))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 75))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 56, 75))
+
+// Generic call with argument of generic function type
+function someGenerics8<T>(n: T): T { return n; }
+>someGenerics8 : Symbol(someGenerics8, Decl(typeArgumentInference.ts, 56, 92))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 59, 23))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 59, 26))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 59, 23))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 59, 23))
+>n : Symbol(n, Decl(typeArgumentInference.ts, 59, 26))
+
+var x = someGenerics8(someGenerics7);
+>x : Symbol(x, Decl(typeArgumentInference.ts, 60, 3))
+>someGenerics8 : Symbol(someGenerics8, Decl(typeArgumentInference.ts, 56, 92))
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInference.ts, 50, 76))
+
+x<string, string, string>(null, null, null);
+>x : Symbol(x, Decl(typeArgumentInference.ts, 60, 3))
+
+// Generic call with multiple parameters of generic type passed arguments with no best common type
+function someGenerics9<T>(a: T, b: T, c: T): T {
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 64, 23))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 64, 26))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 64, 23))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 64, 31))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 64, 23))
+>c : Symbol(c, Decl(typeArgumentInference.ts, 64, 37))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 64, 23))
+>T : Symbol(T, Decl(typeArgumentInference.ts, 64, 23))
+
+    return null;
+}
+var a9a = someGenerics9('', 0, []);
+>a9a : Symbol(a9a, Decl(typeArgumentInference.ts, 67, 3), Decl(typeArgumentInference.ts, 68, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+
+var a9a: {};
+>a9a : Symbol(a9a, Decl(typeArgumentInference.ts, 67, 3), Decl(typeArgumentInference.ts, 68, 3))
+
+var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
+>a9b : Symbol(a9b, Decl(typeArgumentInference.ts, 69, 3), Decl(typeArgumentInference.ts, 70, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 69, 25))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 69, 37))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 69, 54))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 69, 64))
+
+var a9b: { a?: number; b?: string; };
+>a9b : Symbol(a9b, Decl(typeArgumentInference.ts, 69, 3), Decl(typeArgumentInference.ts, 70, 3))
+>a : Symbol(a, Decl(typeArgumentInference.ts, 70, 10))
+>b : Symbol(b, Decl(typeArgumentInference.ts, 70, 22))
+
+// Generic call with multiple parameters of generic type passed arguments with multiple best common types
+interface A91 {
+>A91 : Symbol(A91, Decl(typeArgumentInference.ts, 70, 37))
+
+    x: number;
+>x : Symbol(A91.x, Decl(typeArgumentInference.ts, 73, 15))
+
+    y?: string;
+>y : Symbol(A91.y, Decl(typeArgumentInference.ts, 74, 14))
+}
+interface A92 {
+>A92 : Symbol(A92, Decl(typeArgumentInference.ts, 76, 1))
+
+    x: number;
+>x : Symbol(A92.x, Decl(typeArgumentInference.ts, 77, 15))
+
+    z?: Date;
+>z : Symbol(A92.z, Decl(typeArgumentInference.ts, 78, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
+>a9e : Symbol(a9e, Decl(typeArgumentInference.ts, 81, 3), Decl(typeArgumentInference.ts, 82, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeArgumentInference.ts, 81, 36))
+>z : Symbol(z, Decl(typeArgumentInference.ts, 81, 42))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 81, 61))
+>y : Symbol(y, Decl(typeArgumentInference.ts, 81, 67))
+
+var a9e: {};
+>a9e : Symbol(a9e, Decl(typeArgumentInference.ts, 81, 3), Decl(typeArgumentInference.ts, 82, 3))
+
+var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
+>a9f : Symbol(a9f, Decl(typeArgumentInference.ts, 83, 3), Decl(typeArgumentInference.ts, 84, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>A92 : Symbol(A92, Decl(typeArgumentInference.ts, 76, 1))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeArgumentInference.ts, 83, 41))
+>z : Symbol(z, Decl(typeArgumentInference.ts, 83, 47))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 83, 66))
+>y : Symbol(y, Decl(typeArgumentInference.ts, 83, 72))
+
+var a9f: A92;
+>a9f : Symbol(a9f, Decl(typeArgumentInference.ts, 83, 3), Decl(typeArgumentInference.ts, 84, 3))
+>A92 : Symbol(A92, Decl(typeArgumentInference.ts, 76, 1))
+
+// Generic call with multiple parameters of generic type passed arguments with a single best common type
+var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
+>a9d : Symbol(a9d, Decl(typeArgumentInference.ts, 87, 3), Decl(typeArgumentInference.ts, 88, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 87, 25))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 87, 35))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 87, 45))
+
+var a9d: { x: number; };
+>a9d : Symbol(a9d, Decl(typeArgumentInference.ts, 87, 3), Decl(typeArgumentInference.ts, 88, 3))
+>x : Symbol(x, Decl(typeArgumentInference.ts, 88, 10))
+
+// Generic call with multiple parameters of generic type where one argument is of type 'any'
+var anyVar: any;
+>anyVar : Symbol(anyVar, Decl(typeArgumentInference.ts, 91, 3))
+
+var a = someGenerics9(7, anyVar, 4);
+>a : Symbol(a, Decl(typeArgumentInference.ts, 92, 3), Decl(typeArgumentInference.ts, 93, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>anyVar : Symbol(anyVar, Decl(typeArgumentInference.ts, 91, 3))
+
+var a: any;
+>a : Symbol(a, Decl(typeArgumentInference.ts, 92, 3), Decl(typeArgumentInference.ts, 93, 3))
+
+// Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
+var arr = someGenerics9([], null, undefined);
+>arr : Symbol(arr, Decl(typeArgumentInference.ts, 96, 3), Decl(typeArgumentInference.ts, 97, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInference.ts, 61, 44))
+>undefined : Symbol(undefined)
+
+var arr: any[];
+>arr : Symbol(arr, Decl(typeArgumentInference.ts, 96, 3), Decl(typeArgumentInference.ts, 97, 3))
+
+

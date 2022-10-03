@@ -1,0 +1,23 @@
+tests/cases/compiler/exportDeclarationInInternalModule.ts(13,19): error TS1141: String literal expected.
+
+
+==== tests/cases/compiler/exportDeclarationInInternalModule.ts (1 errors) ====
+    class Bbb {
+    }
+    
+    class Aaa extends Bbb { }
+    
+    module Aaa {
+        export class SomeType { }
+    }
+    
+    module Bbb {
+        export class SomeType { }
+    
+        export * from Aaa;      // this line causes the nullref
+                      ~~~
+!!! error TS1141: String literal expected.
+    }
+    
+    var a: Bbb.SomeType;
+    

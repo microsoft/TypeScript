@@ -1,0 +1,69 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts ===
+function foo<T>(t: T) {
+>foo : <T>(t: T) => T
+>t : T
+
+    return t;
+>t : T
+}
+
+var r = foo([1, 2]); // number[]
+>r : number[]
+>foo([1, 2]) : number[]
+>foo : <T>(t: T) => T
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var r = foo<number[]>([1, 2]); // number[]
+>r : number[]
+>foo<number[]>([1, 2]) : number[]
+>foo : <T>(t: T) => T
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var ra = foo<any[]>([1, 2]); // any[]
+>ra : any[]
+>foo<any[]>([1, 2]) : any[]
+>foo : <T>(t: T) => T
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+var r2 = foo([]); // any[]
+>r2 : any[]
+>foo([]) : any[]
+>foo : <T>(t: T) => T
+>[] : undefined[]
+
+var r3 = foo<number[]>([]); // number[]
+>r3 : number[]
+>foo<number[]>([]) : number[]
+>foo : <T>(t: T) => T
+>[] : undefined[]
+
+var r4 = foo([1, '']); // {}[]
+>r4 : (string | number)[]
+>foo([1, '']) : (string | number)[]
+>foo : <T>(t: T) => T
+>[1, ''] : (string | number)[]
+>1 : 1
+>'' : ""
+
+var r5 = foo<any[]>([1, '']); // any[]
+>r5 : any[]
+>foo<any[]>([1, '']) : any[]
+>foo : <T>(t: T) => T
+>[1, ''] : (string | number)[]
+>1 : 1
+>'' : ""
+
+var r6 = foo<Object[]>([1, '']); // Object[]
+>r6 : Object[]
+>foo<Object[]>([1, '']) : Object[]
+>foo : <T>(t: T) => T
+>[1, ''] : (string | number)[]
+>1 : 1
+>'' : ""
+

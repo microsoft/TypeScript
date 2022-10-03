@@ -1,0 +1,50 @@
+=== tests/cases/compiler/anyInferenceAnonymousFunctions.ts ===
+var paired: any[];
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+
+paired.reduce(function (a1, a2) {
+>paired.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a1 : Symbol(a1, Decl(anyInferenceAnonymousFunctions.ts, 2, 24))
+>a2 : Symbol(a2, Decl(anyInferenceAnonymousFunctions.ts, 2, 27))
+
+    return a1.concat({});
+>a1 : Symbol(a1, Decl(anyInferenceAnonymousFunctions.ts, 2, 24))
+
+} , []);
+
+paired.reduce((b1, b2) => {
+>paired.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b1 : Symbol(b1, Decl(anyInferenceAnonymousFunctions.ts, 8, 15))
+>b2 : Symbol(b2, Decl(anyInferenceAnonymousFunctions.ts, 8, 18))
+
+    return b1.concat({});
+>b1 : Symbol(b1, Decl(anyInferenceAnonymousFunctions.ts, 8, 15))
+
+} , []);
+
+paired.reduce((b3, b4) => b3.concat({}), []);
+>paired.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b3 : Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
+>b4 : Symbol(b4, Decl(anyInferenceAnonymousFunctions.ts, 13, 18))
+>b3 : Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
+
+paired.map((c1) => c1.count);
+>paired.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>c1 : Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
+>c1 : Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
+
+paired.map(function (c2) { return c2.count; });
+>paired.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>c2 : Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
+>c2 : Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
+

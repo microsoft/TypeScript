@@ -1,0 +1,14 @@
+=== tests/cases/compiler/commentsOnObjectLiteral4.ts ===
+var v = {
+>v : Symbol(v, Decl(commentsOnObjectLiteral4.ts, 0, 3))
+
+ /**
+  * @type {number}
+  */
+ get bar(): number {
+>bar : Symbol(bar, Decl(commentsOnObjectLiteral4.ts, 0, 9))
+
+  return 12;
+ }
+}
+

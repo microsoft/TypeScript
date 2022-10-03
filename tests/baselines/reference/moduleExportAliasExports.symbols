@@ -1,0 +1,21 @@
+=== tests/cases/conformance/salsa/Eloquent.js ===
+// bug #27365, crashes from github.com/marijnh/Eloquent-JavaScript
+(function() {
+exports.bigOak = 1
+>exports.bigOak : Symbol(bigOak, Decl(Eloquent.js, 1, 13))
+>exports : Symbol(bigOak, Decl(Eloquent.js, 1, 13))
+>bigOak : Symbol(bigOak, Decl(Eloquent.js, 1, 13))
+
+exports.everywhere = 2
+>exports.everywhere : Symbol(everywhere, Decl(Eloquent.js, 2, 18))
+>exports : Symbol(everywhere, Decl(Eloquent.js, 2, 18))
+>everywhere : Symbol(everywhere, Decl(Eloquent.js, 2, 18))
+
+module.exports = exports
+>module.exports : Symbol(module.exports, Decl(Eloquent.js, 0, 0))
+>module : Symbol(export=, Decl(Eloquent.js, 3, 22))
+>exports : Symbol(export=, Decl(Eloquent.js, 3, 22))
+>exports : Symbol("tests/cases/conformance/salsa/Eloquent", Decl(Eloquent.js, 0, 0))
+
+})()
+

@@ -1,0 +1,10 @@
+{
+    "files": [],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [ 
+        { "path": "./folder" },
+        { "path": "./folder2"}
+    ]
+  }

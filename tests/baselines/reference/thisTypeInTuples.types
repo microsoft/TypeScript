@@ -1,0 +1,36 @@
+=== tests/cases/conformance/types/thisType/thisTypeInTuples.ts ===
+interface Array<T> {
+    slice(): this;
+>slice : { (start?: number, end?: number): T[]; (): this; }
+}
+
+let t: [number, string] = [42, "hello"];
+>t : [number, string]
+>[42, "hello"] : [number, string]
+>42 : 42
+>"hello" : "hello"
+
+let a = t.slice();
+>a : [number, string]
+>t.slice() : [number, string]
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>t : [number, string]
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+
+let b = t.slice(1);
+>b : (string | number)[]
+>t.slice(1) : (string | number)[]
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>t : [number, string]
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>1 : 1
+
+let c = t.slice(0, 1);
+>c : (string | number)[]
+>t.slice(0, 1) : (string | number)[]
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>t : [number, string]
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>0 : 0
+>1 : 1
+

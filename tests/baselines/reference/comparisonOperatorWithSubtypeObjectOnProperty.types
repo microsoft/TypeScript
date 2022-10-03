@@ -1,0 +1,263 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnProperty.ts ===
+class Base {
+>Base : Base
+
+    public a: string;
+>a : string
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    public b: string;
+>b : string
+}
+
+class A1 {
+>A1 : A1
+
+    public a: Base;
+>a : Base
+
+    public b: Base;
+>b : Base
+}
+
+class B1 {
+>B1 : B1
+
+    public a: Base;
+>a : Base
+
+    public b: Derived;
+>b : Derived
+}
+
+class A2 {
+>A2 : A2
+
+    private a;
+>a : any
+}
+
+class B2 extends A2 {
+>B2 : B2
+>A2 : A2
+
+    private b;
+>b : any
+}
+
+var a1: A1;
+>a1 : A1
+
+var a2: A2;
+>a2 : A2
+
+var b1: B1;
+>b1 : B1
+
+var b2: B2;
+>b2 : B2
+
+// operator <
+var ra1 = a1 < b1;
+>ra1 : boolean
+>a1 < b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var ra2 = a2 < b2;
+>ra2 : boolean
+>a2 < b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var ra3 = b1 < a1;
+>ra3 : boolean
+>b1 < a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var ra4 = b2 < a2;
+>ra4 : boolean
+>b2 < a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator >
+var rb1 = a1 > b1;
+>rb1 : boolean
+>a1 > b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rb2 = a2 > b2;
+>rb2 : boolean
+>a2 > b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rb3 = b1 > a1;
+>rb3 : boolean
+>b1 > a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rb4 = b2 > a2;
+>rb4 : boolean
+>b2 > a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator <=
+var rc1 = a1 <= b1;
+>rc1 : boolean
+>a1 <= b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rc2 = a2 <= b2;
+>rc2 : boolean
+>a2 <= b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rc3 = b1 <= a1;
+>rc3 : boolean
+>b1 <= a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rc4 = b2 <= a2;
+>rc4 : boolean
+>b2 <= a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator >=
+var rd1 = a1 >= b1;
+>rd1 : boolean
+>a1 >= b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rd2 = a2 >= b2;
+>rd2 : boolean
+>a2 >= b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rd3 = b1 >= a1;
+>rd3 : boolean
+>b1 >= a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rd4 = b2 >= a2;
+>rd4 : boolean
+>b2 >= a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator ==
+var re1 = a1 == b1;
+>re1 : boolean
+>a1 == b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var re2 = a2 == b2;
+>re2 : boolean
+>a2 == b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var re3 = b1 == a1;
+>re3 : boolean
+>b1 == a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var re4 = b2 == a2;
+>re4 : boolean
+>b2 == a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator !=
+var rf1 = a1 != b1;
+>rf1 : boolean
+>a1 != b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rf2 = a2 != b2;
+>rf2 : boolean
+>a2 != b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rf3 = b1 != a1;
+>rf3 : boolean
+>b1 != a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rf4 = b2 != a2;
+>rf4 : boolean
+>b2 != a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator ===
+var rg1 = a1 === b1;
+>rg1 : boolean
+>a1 === b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rg2 = a2 === b2;
+>rg2 : boolean
+>a2 === b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rg3 = b1 === a1;
+>rg3 : boolean
+>b1 === a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rg4 = b2 === a2;
+>rg4 : boolean
+>b2 === a2 : boolean
+>b2 : B2
+>a2 : A2
+
+// operator !==
+var rh1 = a1 !== b1;
+>rh1 : boolean
+>a1 !== b1 : boolean
+>a1 : A1
+>b1 : B1
+
+var rh2 = a2 !== b2;
+>rh2 : boolean
+>a2 !== b2 : boolean
+>a2 : A2
+>b2 : B2
+
+var rh3 = b1 !== a1;
+>rh3 : boolean
+>b1 !== a1 : boolean
+>b1 : B1
+>a1 : A1
+
+var rh4 = b2 !== a2;
+>rh4 : boolean
+>b2 !== a2 : boolean
+>b2 : B2
+>a2 : A2
+

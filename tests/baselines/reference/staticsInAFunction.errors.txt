@@ -1,0 +1,51 @@
+tests/cases/compiler/staticsInAFunction.ts(1,13): error TS1005: '(' expected.
+tests/cases/compiler/staticsInAFunction.ts(2,4): error TS1128: Declaration or statement expected.
+tests/cases/compiler/staticsInAFunction.ts(2,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+tests/cases/compiler/staticsInAFunction.ts(3,4): error TS1128: Declaration or statement expected.
+tests/cases/compiler/staticsInAFunction.ts(3,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+tests/cases/compiler/staticsInAFunction.ts(3,16): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/staticsInAFunction.ts(3,20): error TS1005: ',' expected.
+tests/cases/compiler/staticsInAFunction.ts(3,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/staticsInAFunction.ts(4,4): error TS1128: Declaration or statement expected.
+tests/cases/compiler/staticsInAFunction.ts(4,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+tests/cases/compiler/staticsInAFunction.ts(4,16): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/staticsInAFunction.ts(4,21): error TS1109: Expression expected.
+tests/cases/compiler/staticsInAFunction.ts(4,22): error TS2693: 'any' only refers to a type, but is being used as a value here.
+tests/cases/compiler/staticsInAFunction.ts(4,26): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/staticsInAFunction.ts (14 errors) ====
+    function boo{
+                ~
+!!! error TS1005: '(' expected.
+       static test()
+       ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+              ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+       static test(name:string)
+       ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+              ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                   ~~~~
+!!! error TS2304: Cannot find name 'name'.
+                       ~
+!!! error TS1005: ',' expected.
+                        ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+       static test(name?:any){}
+       ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+              ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                   ~~~~
+!!! error TS2304: Cannot find name 'name'.
+                        ~
+!!! error TS1109: Expression expected.
+                         ~~~
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
+                             ~
+!!! error TS1005: ';' expected.
+    }
+    

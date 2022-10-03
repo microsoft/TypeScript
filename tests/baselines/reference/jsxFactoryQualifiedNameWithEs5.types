@@ -1,0 +1,26 @@
+=== tests/cases/compiler/index.tsx ===
+import "./jsx";
+
+var skate: any;
+>skate : any
+
+const React = { createElement: skate.h };
+>React : { createElement: any; }
+>{ createElement: skate.h } : { createElement: any; }
+>createElement : any
+>skate.h : any
+>skate : any
+>h : any
+
+class Component {
+>Component : Component
+
+    renderCallback() {
+>renderCallback : () => any
+
+        return <div>test</div>;
+><div>test</div> : error
+>div : any
+>div : any
+    }
+};

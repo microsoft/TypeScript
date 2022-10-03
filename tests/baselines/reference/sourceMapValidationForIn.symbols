@@ -1,0 +1,41 @@
+=== tests/cases/compiler/sourceMapValidationForIn.ts ===
+for (var x in String) {
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+}
+for (x in String) {
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+}
+for (var x2 in String)
+>x2 : Symbol(x2, Decl(sourceMapValidationForIn.ts, 6, 8))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+{
+    WScript.Echo(x2);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>x2 : Symbol(x2, Decl(sourceMapValidationForIn.ts, 6, 8))
+}
+for (x in String)
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+{
+    WScript.Echo(x);
+>WScript.Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>WScript : Symbol(WScript, Decl(lib.scripthost.d.ts, --, --))
+>Echo : Symbol(Echo, Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
+}

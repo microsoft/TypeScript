@@ -1,0 +1,606 @@
+=== tests/cases/compiler/controlFlowCaching.ts ===
+// Repro for #8401
+
+function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
+>f : (dim: any, offsets: any, arr: any, acommon: any, centerAnchorLimit: any, g: any, has: any, lin: any) => void
+>dim : any
+>offsets : any
+>arr : any
+>acommon : any
+>centerAnchorLimit : any
+>g : any
+>has : any
+>lin : any
+
+    var isRtl = this._isRtl();  // chart mirroring
+>isRtl : any
+>this._isRtl() : any
+>this._isRtl : any
+>this : any
+>_isRtl : any
+
+    // prepare variable
+    var o = this.opt, ta = this.chart.theme.axis, position = o.position,
+>o : any
+>this.opt : any
+>this : any
+>opt : any
+>ta : any
+>this.chart.theme.axis : any
+>this.chart.theme : any
+>this.chart : any
+>this : any
+>chart : any
+>theme : any
+>axis : any
+>position : any
+>o.position : any
+>o : any
+>position : any
+
+        leftBottom = position !== "rightOrTop", rotation = o.rotation % 360,
+>leftBottom : boolean
+>position !== "rightOrTop" : boolean
+>position : any
+>"rightOrTop" : "rightOrTop"
+>rotation : number
+>o.rotation % 360 : number
+>o.rotation : any
+>o : any
+>rotation : any
+>360 : 360
+
+        start, stop, titlePos, titleRotation = 0, titleOffset, axisVector, tickVector, anchorOffset, labelOffset, labelAlign,
+>start : any
+>stop : any
+>titlePos : any
+>titleRotation : number
+>0 : 0
+>titleOffset : any
+>axisVector : any
+>tickVector : any
+>anchorOffset : any
+>labelOffset : any
+>labelAlign : any
+
+        labelGap = this.chart.theme.axis.tick.labelGap,
+>labelGap : any
+>this.chart.theme.axis.tick.labelGap : any
+>this.chart.theme.axis.tick : any
+>this.chart.theme.axis : any
+>this.chart.theme : any
+>this.chart : any
+>this : any
+>chart : any
+>theme : any
+>axis : any
+>tick : any
+>labelGap : any
+
+        taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
+>taFont : any
+>o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font) : any
+>o.font || (ta.majorTick && ta.majorTick.font) : any
+>o.font : any
+>o : any
+>font : any
+>(ta.majorTick && ta.majorTick.font) : any
+>ta.majorTick && ta.majorTick.font : any
+>ta.majorTick : any
+>ta : any
+>majorTick : any
+>ta.majorTick.font : any
+>ta.majorTick : any
+>ta : any
+>majorTick : any
+>font : any
+>(ta.tick && ta.tick.font) : any
+>ta.tick && ta.tick.font : any
+>ta.tick : any
+>ta : any
+>tick : any
+>ta.tick.font : any
+>ta.tick : any
+>ta : any
+>tick : any
+>font : any
+
+        taTitleFont = o.titleFont || (ta.title && ta.title.font),
+>taTitleFont : any
+>o.titleFont || (ta.title && ta.title.font) : any
+>o.titleFont : any
+>o : any
+>titleFont : any
+>(ta.title && ta.title.font) : any
+>ta.title && ta.title.font : any
+>ta.title : any
+>ta : any
+>title : any
+>ta.title.font : any
+>ta.title : any
+>ta : any
+>title : any
+>font : any
+
+        taFontColor = o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) || "black",
+>taFontColor : any
+>o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) || "black" : any
+>o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) : any
+>o.fontColor || (ta.majorTick && ta.majorTick.fontColor) : any
+>o.fontColor : any
+>o : any
+>fontColor : any
+>(ta.majorTick && ta.majorTick.fontColor) : any
+>ta.majorTick && ta.majorTick.fontColor : any
+>ta.majorTick : any
+>ta : any
+>majorTick : any
+>ta.majorTick.fontColor : any
+>ta.majorTick : any
+>ta : any
+>majorTick : any
+>fontColor : any
+>(ta.tick && ta.tick.fontColor) : any
+>ta.tick && ta.tick.fontColor : any
+>ta.tick : any
+>ta : any
+>tick : any
+>ta.tick.fontColor : any
+>ta.tick : any
+>ta : any
+>tick : any
+>fontColor : any
+>"black" : "black"
+
+        taTitleFontColor = o.titleFontColor || (ta.title && ta.title.fontColor) || "black",
+>taTitleFontColor : any
+>o.titleFontColor || (ta.title && ta.title.fontColor) || "black" : any
+>o.titleFontColor || (ta.title && ta.title.fontColor) : any
+>o.titleFontColor : any
+>o : any
+>titleFontColor : any
+>(ta.title && ta.title.fontColor) : any
+>ta.title && ta.title.fontColor : any
+>ta.title : any
+>ta : any
+>title : any
+>ta.title.fontColor : any
+>ta.title : any
+>ta : any
+>title : any
+>fontColor : any
+>"black" : "black"
+
+        taTitleGap = (o.titleGap == 0) ? 0 : o.titleGap || (ta.title && ta.title.gap) || 15,
+>taTitleGap : any
+>(o.titleGap == 0) ? 0 : o.titleGap || (ta.title && ta.title.gap) || 15 : any
+>(o.titleGap == 0) : boolean
+>o.titleGap == 0 : boolean
+>o.titleGap : any
+>o : any
+>titleGap : any
+>0 : 0
+>0 : 0
+>o.titleGap || (ta.title && ta.title.gap) || 15 : any
+>o.titleGap || (ta.title && ta.title.gap) : any
+>o.titleGap : any
+>o : any
+>titleGap : any
+>(ta.title && ta.title.gap) : any
+>ta.title && ta.title.gap : any
+>ta.title : any
+>ta : any
+>title : any
+>ta.title.gap : any
+>ta.title : any
+>ta : any
+>title : any
+>gap : any
+>15 : 15
+
+        taTitleOrientation = o.titleOrientation || (ta.title && ta.title.orientation) || "axis",
+>taTitleOrientation : any
+>o.titleOrientation || (ta.title && ta.title.orientation) || "axis" : any
+>o.titleOrientation || (ta.title && ta.title.orientation) : any
+>o.titleOrientation : any
+>o : any
+>titleOrientation : any
+>(ta.title && ta.title.orientation) : any
+>ta.title && ta.title.orientation : any
+>ta.title : any
+>ta : any
+>title : any
+>ta.title.orientation : any
+>ta.title : any
+>ta : any
+>title : any
+>orientation : any
+>"axis" : "axis"
+
+        taMajorTick = this.chart.theme.getTick("major", o),
+>taMajorTick : any
+>this.chart.theme.getTick("major", o) : any
+>this.chart.theme.getTick : any
+>this.chart.theme : any
+>this.chart : any
+>this : any
+>chart : any
+>theme : any
+>getTick : any
+>"major" : "major"
+>o : any
+
+        taMinorTick = this.chart.theme.getTick("minor", o),
+>taMinorTick : any
+>this.chart.theme.getTick("minor", o) : any
+>this.chart.theme.getTick : any
+>this.chart.theme : any
+>this.chart : any
+>this : any
+>chart : any
+>theme : any
+>getTick : any
+>"minor" : "minor"
+>o : any
+
+        taMicroTick = this.chart.theme.getTick("micro", o),
+>taMicroTick : any
+>this.chart.theme.getTick("micro", o) : any
+>this.chart.theme.getTick : any
+>this.chart.theme : any
+>this.chart : any
+>this : any
+>chart : any
+>theme : any
+>getTick : any
+>"micro" : "micro"
+>o : any
+
+        taStroke = "stroke" in o ? o.stroke : ta.stroke,
+>taStroke : any
+>"stroke" in o ? o.stroke : ta.stroke : any
+>"stroke" in o : boolean
+>"stroke" : "stroke"
+>o : any
+>o.stroke : any
+>o : any
+>stroke : any
+>ta.stroke : any
+>ta : any
+>stroke : any
+
+        size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
+>size : any
+>taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0 : any
+>taFont : any
+>g.normalizedLength(g.splitFontString(taFont).size) : any
+>g.normalizedLength : any
+>g : any
+>normalizedLength : any
+>g.splitFontString(taFont).size : any
+>g.splitFontString(taFont) : any
+>g.splitFontString : any
+>g : any
+>splitFontString : any
+>taFont : any
+>size : any
+>0 : 0
+
+        cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
+>cosr : number
+>Math.abs(Math.cos(rotation * Math.PI / 180)) : number
+>Math.abs : (x: number) => number
+>Math : Math
+>abs : (x: number) => number
+>Math.cos(rotation * Math.PI / 180) : number
+>Math.cos : (x: number) => number
+>Math : Math
+>cos : (x: number) => number
+>rotation * Math.PI / 180 : number
+>rotation * Math.PI : number
+>rotation : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>180 : 180
+
+        sinr = Math.abs(Math.sin(rotation * Math.PI / 180)),
+>sinr : number
+>Math.abs(Math.sin(rotation * Math.PI / 180)) : number
+>Math.abs : (x: number) => number
+>Math : Math
+>abs : (x: number) => number
+>Math.sin(rotation * Math.PI / 180) : number
+>Math.sin : (x: number) => number
+>Math : Math
+>sin : (x: number) => number
+>rotation * Math.PI / 180 : number
+>rotation * Math.PI : number
+>rotation : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>180 : 180
+
+        tsize = taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0;
+>tsize : any
+>taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0 : any
+>taTitleFont : any
+>g.normalizedLength(g.splitFontString(taTitleFont).size) : any
+>g.normalizedLength : any
+>g : any
+>normalizedLength : any
+>g.splitFontString(taTitleFont).size : any
+>g.splitFontString(taTitleFont) : any
+>g.splitFontString : any
+>g : any
+>splitFontString : any
+>taTitleFont : any
+>size : any
+>0 : 0
+
+    if (rotation < 0) {
+>rotation < 0 : boolean
+>rotation : number
+>0 : 0
+
+        rotation += 360;
+>rotation += 360 : number
+>rotation : number
+>360 : 360
+    }
+    var cachedLabelW = this._getMaxLabelSize();
+>cachedLabelW : any
+>this._getMaxLabelSize() : any
+>this._getMaxLabelSize : any
+>this : any
+>_getMaxLabelSize : any
+
+    cachedLabelW = cachedLabelW && cachedLabelW.majLabelW;
+>cachedLabelW = cachedLabelW && cachedLabelW.majLabelW : any
+>cachedLabelW : any
+>cachedLabelW && cachedLabelW.majLabelW : any
+>cachedLabelW : any
+>cachedLabelW.majLabelW : any
+>cachedLabelW : any
+>majLabelW : any
+
+    titleOffset = size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,
+>titleOffset = size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) +        tsize + taTitleGap : any
+>titleOffset : any
+>size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) +        tsize + taTitleGap : any
+>size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) +        tsize : any
+>size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) : any
+>size * cosr + (cachedLabelW || 0) * sinr + labelGap : any
+>size * cosr + (cachedLabelW || 0) * sinr : number
+>size * cosr : number
+>size : any
+>cosr : number
+>(cachedLabelW || 0) * sinr : number
+>(cachedLabelW || 0) : any
+>cachedLabelW || 0 : any
+>cachedLabelW : any
+>0 : 0
+>sinr : number
+>labelGap : any
+>Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) : number
+>Math.max : (...values: number[]) => number
+>Math : Math
+>max : (...values: number[]) => number
+>taMajorTick.length > 0 ? taMajorTick.length : 0 : any
+>taMajorTick.length > 0 : boolean
+>taMajorTick.length : any
+>taMajorTick : any
+>length : any
+>0 : 0
+>taMajorTick.length : any
+>taMajorTick : any
+>length : any
+>0 : 0
+
+        taMinorTick.length > 0 ? taMinorTick.length : 0) +
+>taMinorTick.length > 0 ? taMinorTick.length : 0 : any
+>taMinorTick.length > 0 : boolean
+>taMinorTick.length : any
+>taMinorTick : any
+>length : any
+>0 : 0
+>taMinorTick.length : any
+>taMinorTick : any
+>length : any
+>0 : 0
+
+        tsize + taTitleGap;
+>tsize : any
+>taTitleGap : any
+
+    axisVector = { x: isRtl ? -1 : 1, y: 0 };     // chart mirroring
+>axisVector = { x: isRtl ? -1 : 1, y: 0 } : { x: number; y: number; }
+>axisVector : any
+>{ x: isRtl ? -1 : 1, y: 0 } : { x: number; y: number; }
+>x : number
+>isRtl ? -1 : 1 : 1 | -1
+>isRtl : any
+>-1 : -1
+>1 : 1
+>1 : 1
+>y : number
+>0 : 0
+
+    switch (rotation) {
+>rotation : number
+
+        default:
+            if (rotation < (90 - centerAnchorLimit)) {
+>rotation < (90 - centerAnchorLimit) : boolean
+>rotation : number
+>(90 - centerAnchorLimit) : number
+>90 - centerAnchorLimit : number
+>90 : 90
+>centerAnchorLimit : any
+
+                labelOffset.y = leftBottom ? size : 0;
+>labelOffset.y = leftBottom ? size : 0 : any
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>leftBottom ? size : 0 : any
+>leftBottom : boolean
+>size : any
+>0 : 0
+
+            } else if (rotation < (90 + centerAnchorLimit)) {
+>rotation < (90 + centerAnchorLimit) : boolean
+>rotation : number
+>(90 + centerAnchorLimit) : any
+>90 + centerAnchorLimit : any
+>90 : 90
+>centerAnchorLimit : any
+
+                labelOffset.x = -size * 0.4;
+>labelOffset.x = -size * 0.4 : number
+>labelOffset.x : any
+>labelOffset : any
+>x : any
+>-size * 0.4 : number
+>-size : number
+>size : any
+>0.4 : 0.4
+
+            } else if (rotation < 180) {
+>rotation < 180 : boolean
+>rotation : number
+>180 : 180
+
+                labelOffset.y = leftBottom ? 0 : -size;
+>labelOffset.y = leftBottom ? 0 : -size : number
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>leftBottom ? 0 : -size : number
+>leftBottom : boolean
+>0 : 0
+>-size : number
+>size : any
+
+            } else if (rotation < (270 - centerAnchorLimit)) {
+>rotation < (270 - centerAnchorLimit) : boolean
+>rotation : number
+>(270 - centerAnchorLimit) : number
+>270 - centerAnchorLimit : number
+>270 : 270
+>centerAnchorLimit : any
+
+                labelOffset.y = leftBottom ? 0 : -size;
+>labelOffset.y = leftBottom ? 0 : -size : number
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>leftBottom ? 0 : -size : number
+>leftBottom : boolean
+>0 : 0
+>-size : number
+>size : any
+
+            } else if (rotation < (270 + centerAnchorLimit)) {
+>rotation < (270 + centerAnchorLimit) : boolean
+>rotation : number
+>(270 + centerAnchorLimit) : any
+>270 + centerAnchorLimit : any
+>270 : 270
+>centerAnchorLimit : any
+
+                labelOffset.y = leftBottom ? size * 0.4 : 0;
+>labelOffset.y = leftBottom ? size * 0.4 : 0 : number
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>leftBottom ? size * 0.4 : 0 : number
+>leftBottom : boolean
+>size * 0.4 : number
+>size : any
+>0.4 : 0.4
+>0 : 0
+
+            } else {
+                labelOffset.y = leftBottom ? size : 0;
+>labelOffset.y = leftBottom ? size : 0 : any
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>leftBottom ? size : 0 : any
+>leftBottom : boolean
+>size : any
+>0 : 0
+            }
+    }
+
+    titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0;
+>titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
+>titleRotation : number
+>(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
+>(taTitleOrientation && taTitleOrientation == "away") : any
+>taTitleOrientation && taTitleOrientation == "away" : any
+>taTitleOrientation : any
+>taTitleOrientation == "away" : boolean
+>taTitleOrientation : any
+>"away" : "away"
+>180 : 180
+>0 : 0
+
+    titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize);
+>titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize) : any
+>titlePos.y : any
+>titlePos : any
+>y : any
+>offsets.t - titleOffset + (titleRotation ? 0 : tsize) : any
+>offsets.t - titleOffset : number
+>offsets.t : any
+>offsets : any
+>t : any
+>titleOffset : any
+>(titleRotation ? 0 : tsize) : any
+>titleRotation ? 0 : tsize : any
+>titleRotation : number
+>0 : 0
+>tsize : any
+
+    switch (labelAlign) {
+>labelAlign : any
+
+        case "start":
+>"start" : "start"
+
+            labelAlign = "end";
+>labelAlign = "end" : "end"
+>labelAlign : any
+>"end" : "end"
+
+            break;
+        case "end":
+>"end" : "end"
+
+            labelAlign = "start";
+>labelAlign = "start" : "start"
+>labelAlign : any
+>"start" : "start"
+
+            break;
+        case "middle":
+>"middle" : "middle"
+
+            labelOffset.y -= size;
+>labelOffset.y -= size : number
+>labelOffset.y : any
+>labelOffset : any
+>y : any
+>size : any
+
+            break;
+    }
+
+    let _ = rotation;
+>_ : number
+>rotation : number
+}
+

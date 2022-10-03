@@ -1,0 +1,28 @@
+tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts(2,5): error TS2303: Circular definition of import alias 'self'.
+
+
+==== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType3_moduleA.ts (0 errors) ====
+    /// <reference path="recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts"/>
+    import moduleC = require("moduleC");
+    import ClassB = require("recursiveExportAssignmentAndFindAliasedType3_moduleB");
+    export var b: ClassB; // This should result in type ClassB
+==== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts (1 errors) ====
+    declare module "moduleC" {
+        import self = require("moduleD");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'self'.
+        export = self;
+    }
+    declare module "moduleD" {
+        import self = require("moduleE");
+        export = self;
+    }
+    declare module "moduleE" {
+        import self = require("moduleC");
+        export = self;
+    }
+    
+==== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType3_moduleB.ts (0 errors) ====
+    class ClassB { }
+    export = ClassB;
+    

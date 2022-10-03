@@ -1,0 +1,6 @@
+=== tests/cases/compiler/ParameterList5.ts ===
+function A(): (public B) => C {
+>A : Symbol(A, Decl(ParameterList5.ts, 0, 0))
+>B : Symbol(B, Decl(ParameterList5.ts, 0, 15))
+>C : Symbol(C)
+}

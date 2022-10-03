@@ -1,0 +1,102 @@
+=== tests/cases/conformance/salsa/a.js ===
+function Instance() {
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+    this.i = 'simple'
+>this.i : Symbol(Instance.i, Decl(a.js, 0, 21))
+>this : Symbol(Instance, Decl(a.js, 0, 0))
+>i : Symbol(Instance.i, Decl(a.js, 0, 21))
+}
+var i = new Instance();
+>i : Symbol(i, Decl(a.js, 3, 3))
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+Instance;
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+i;
+>i : Symbol(i, Decl(a.js, 3, 3))
+
+function StaticToo() {
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
+
+    this.i = 'more complex'
+>this.i : Symbol(StaticToo.i, Decl(a.js, 7, 22))
+>this : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
+>i : Symbol(StaticToo.i, Decl(a.js, 7, 22))
+}
+StaticToo.property = 'yep'
+>StaticToo.property : Symbol(StaticToo.property, Decl(a.js, 9, 1))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
+>property : Symbol(StaticToo.property, Decl(a.js, 9, 1))
+
+var s = new StaticToo();
+>s : Symbol(s, Decl(a.js, 11, 3))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
+
+s;
+>s : Symbol(s, Decl(a.js, 11, 3))
+
+StaticToo;
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
+
+// Both!
+function A () {
+>A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+
+    this.x = 1
+>this.x : Symbol(A.x, Decl(a.js, 16, 15))
+>this : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>x : Symbol(A.x, Decl(a.js, 16, 15))
+
+    /** @type {1} */
+    this.second = 1
+>this.second : Symbol(A.second, Decl(a.js, 17, 14))
+>this : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>second : Symbol(A.second, Decl(a.js, 17, 14))
+}
+/** @param {number} n */
+A.prototype.z = function f(n) {
+>A.prototype : Symbol(A.z, Decl(a.js, 20, 1))
+>A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>z : Symbol(A.z, Decl(a.js, 20, 1))
+>f : Symbol(f, Decl(a.js, 22, 15))
+>n : Symbol(n, Decl(a.js, 22, 27))
+
+    return n + this.x
+>n : Symbol(n, Decl(a.js, 22, 27))
+>this.x : Symbol(A.x, Decl(a.js, 16, 15))
+>this : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>x : Symbol(A.x, Decl(a.js, 16, 15))
+}
+/** @param {number} m */
+A.t = function g(m) {
+>A.t : Symbol(A.t, Decl(a.js, 24, 1))
+>A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>t : Symbol(A.t, Decl(a.js, 24, 1))
+>g : Symbol(g, Decl(a.js, 26, 5))
+>m : Symbol(m, Decl(a.js, 26, 17))
+
+    return m + 1
+>m : Symbol(m, Decl(a.js, 26, 17))
+}
+var a = new A()
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
+>A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+
+a.z(3)
+>a.z : Symbol(A.z, Decl(a.js, 20, 1))
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
+>z : Symbol(A.z, Decl(a.js, 20, 1))
+
+A.t(2)
+>A.t : Symbol(A.t, Decl(a.js, 24, 1))
+>A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
+>t : Symbol(A.t, Decl(a.js, 24, 1))
+
+a.second = 1
+>a.second : Symbol(A.second, Decl(a.js, 17, 14))
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
+>second : Symbol(A.second, Decl(a.js, 17, 14))
+

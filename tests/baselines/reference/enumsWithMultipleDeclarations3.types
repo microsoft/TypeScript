@@ -1,0 +1,10 @@
+=== tests/cases/compiler/enumsWithMultipleDeclarations3.ts ===
+module E {
+}
+
+enum E {
+>E : E
+
+  A
+>A : E.A
+}

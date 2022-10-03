@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/constructorFunctionTypeIsAssignableToBaseType.ts ===
+class Base {
+>Base : Symbol(Base, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 0, 0))
+
+    static foo: {
+>foo : Symbol(Base.foo, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 0, 12))
+
+        bar: Object;
+>bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 1, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 4, 1))
+>Base : Symbol(Base, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 0, 0))
+
+    // ok
+    static foo: {
+>foo : Symbol(Derived.foo, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 6, 28))
+
+        bar: number;
+>bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 8, 17))
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Symbol(Derived2, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 11, 1))
+>Base : Symbol(Base, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 0, 0))
+
+    // ok, use assignability here
+    static foo: {
+>foo : Symbol(Derived2.foo, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 13, 29))
+
+        bar: any;
+>bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 15, 17))
+    }
+}

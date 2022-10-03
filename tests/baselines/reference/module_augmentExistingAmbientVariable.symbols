@@ -1,0 +1,10 @@
+=== tests/cases/compiler/module_augmentExistingAmbientVariable.ts ===
+declare var console: any;
+>console : Symbol(console, Decl(module_augmentExistingAmbientVariable.ts, 0, 11))
+
+module console {
+>console : Symbol(console, Decl(module_augmentExistingAmbientVariable.ts, 0, 25))
+
+    export var x = 2;
+>x : Symbol(x, Decl(module_augmentExistingAmbientVariable.ts, 3, 14))
+}

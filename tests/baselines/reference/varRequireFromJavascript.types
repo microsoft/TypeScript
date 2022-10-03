@@ -1,0 +1,61 @@
+=== tests/cases/conformance/salsa/use.js ===
+var ex = require('./ex')
+>ex : typeof ex
+>require('./ex') : typeof ex
+>require : any
+>'./ex' : "./ex"
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : ex.Crunch
+>new ex.Crunch(1) : ex.Crunch
+>ex.Crunch : typeof ex.Crunch
+>ex : typeof ex
+>Crunch : typeof ex.Crunch
+>1 : 1
+
+crunch.n
+>crunch.n : number
+>crunch : ex.Crunch
+>n : number
+
+
+// types work
+/**
+ * @param {ex.Crunch} wrap
+ */
+function f(wrap) {
+>f : (wrap: ex.Crunch) => void
+>wrap : ex.Crunch
+
+    wrap.n
+>wrap.n : number
+>wrap : ex.Crunch
+>n : number
+}
+
+=== tests/cases/conformance/salsa/ex.js ===
+export class Crunch {
+>Crunch : Crunch
+
+    /** @param {number} n */
+    constructor(n) {
+>n : number
+
+        this.n = n
+>this.n = n : number
+>this.n : any
+>this : this
+>n : any
+>n : number
+    }
+    m() {
+>m : () => number
+
+        return this.n
+>this.n : number
+>this : this
+>n : number
+    }
+}
+

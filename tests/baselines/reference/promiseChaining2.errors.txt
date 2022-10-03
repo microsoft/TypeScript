@@ -1,0 +1,21 @@
+tests/cases/compiler/promiseChaining2.ts(7,50): error TS2322: Type 'string' is not assignable to type 'Function'.
+tests/cases/compiler/promiseChaining2.ts(7,67): error TS2322: Type 'number' is not assignable to type 'Function'.
+
+
+==== tests/cases/compiler/promiseChaining2.ts (2 errors) ====
+    // same example but with constraints on each type parameter
+    class Chain2<T extends { length: number }> {
+        constructor(public value: T) { }
+        then<S extends Function>(cb: (x: T) => S): Chain2<S> {
+            var result = cb(this.value);
+            // should get a fresh type parameter which each then call
+            var z = this.then(x => result).then(x => "abc").then(x => x.length);
+                                                     ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'Function'.
+!!! related TS6502 tests/cases/compiler/promiseChaining2.ts:4:34: The expected type comes from the return type of this signature.
+                                                                      ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Function'.
+!!! related TS6502 tests/cases/compiler/promiseChaining2.ts:4:34: The expected type comes from the return type of this signature.
+            return new Chain2(result);
+        }
+    }

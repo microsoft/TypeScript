@@ -1,0 +1,52 @@
+=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.js ===
+var Ns = {}
+>Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+
+Ns.One = function() {};
+>Ns.One : Symbol(Ns.One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 3))
+>Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>One : Symbol(Ns.One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 3))
+
+Ns.Two = function() {};
+>Ns.Two : Symbol(Ns.Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 7, 3))
+>Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>Two : Symbol(Ns.Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 7, 3))
+
+Ns.One.prototype = {
+>Ns.One.prototype : Symbol(Ns.One.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
+>Ns.One : Symbol(Ns.One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 3))
+>Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>One : Symbol(Ns.One, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 3))
+>prototype : Symbol(Ns.One.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23))
+
+  ok() {},
+>ok : Symbol(ok, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 4, 20))
+
+};
+Ns.Two.prototype = {
+>Ns.Two.prototype : Symbol(Ns.Two.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>Ns.Two : Symbol(Ns.Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 7, 3))
+>Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+>Two : Symbol(Ns.Two, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 7, 3))
+>prototype : Symbol(Ns.Two.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
+}
+
+=== tests/cases/conformance/salsa/other.js ===
+/**
+ * @type {Ns.One}
+ */
+var one;
+>one : Symbol(one, Decl(other.js, 3, 3))
+
+one.wat;
+>one : Symbol(one, Decl(other.js, 3, 3))
+
+/**
+ * @type {Ns.Two}
+ */
+var two;
+>two : Symbol(two, Decl(other.js, 8, 3))
+
+two.wat;
+>two : Symbol(two, Decl(other.js, 8, 3))
+

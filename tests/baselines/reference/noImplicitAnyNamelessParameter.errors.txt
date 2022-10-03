@@ -1,0 +1,37 @@
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(2,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string[]'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,17): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,25): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,19): error TS7051: Parameter has a name but no type. Did you mean 'arg0: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,22): error TS7051: Parameter has a name but no type. Did you mean 'arg1: number'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: boolean'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,29): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,32): error TS7051: Parameter has a name but no type. Did you mean 'arg2: object'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,40): error TS7051: Parameter has a name but no type. Did you mean 'arg3: undefined'?
+
+
+==== tests/cases/compiler/noImplicitAnyNamelessParameter.ts (9 errors) ====
+    class C { }
+    declare var a: { m(...string): void }
+                       ~~~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg0: string[]'?
+    declare var b: (string, C) => void;
+                    ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg0: string'?
+                            ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+    declare var c: { (C, number): void };
+                      ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg0: C'?
+                         ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg1: number'?
+    declare var d: { m(boolean, C, object, undefined): void }
+                       ~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg0: boolean'?
+                                ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+                                   ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg2: object'?
+                                           ~~~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg3: undefined'?
+    // note: null and void do not parse correctly without a preceding parameter name
+    

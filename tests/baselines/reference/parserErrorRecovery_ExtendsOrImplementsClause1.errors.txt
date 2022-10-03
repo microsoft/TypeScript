@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts(1,16): error TS1097: 'extends' list cannot be empty.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts (1 errors) ====
+    class C extends {
+                   
+!!! error TS1097: 'extends' list cannot be empty.
+    }

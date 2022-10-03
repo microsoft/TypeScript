@@ -1,0 +1,4 @@
+=== tests/cases/compiler/optionsSourcemapInlineSourcesSourceRoot.ts ===
+var a = 10;
+>a : Symbol(a, Decl(optionsSourcemapInlineSourcesSourceRoot.ts, 0, 3))
+

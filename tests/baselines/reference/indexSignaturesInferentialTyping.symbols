@@ -1,0 +1,37 @@
+=== tests/cases/compiler/indexSignaturesInferentialTyping.ts ===
+function foo<T>(items: { [index: number]: T }): T { return undefined; }
+>foo : Symbol(foo, Decl(indexSignaturesInferentialTyping.ts, 0, 0))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 0, 13))
+>items : Symbol(items, Decl(indexSignaturesInferentialTyping.ts, 0, 16))
+>index : Symbol(index, Decl(indexSignaturesInferentialTyping.ts, 0, 26))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 0, 13))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 0, 13))
+>undefined : Symbol(undefined)
+
+function bar<T>(items: { [index: string]: T }): T { return undefined; }
+>bar : Symbol(bar, Decl(indexSignaturesInferentialTyping.ts, 0, 71))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 1, 13))
+>items : Symbol(items, Decl(indexSignaturesInferentialTyping.ts, 1, 16))
+>index : Symbol(index, Decl(indexSignaturesInferentialTyping.ts, 1, 26))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 1, 13))
+>T : Symbol(T, Decl(indexSignaturesInferentialTyping.ts, 1, 13))
+>undefined : Symbol(undefined)
+
+var x1 = foo({ 0: 0, 1: 1 });       // type should be number
+>x1 : Symbol(x1, Decl(indexSignaturesInferentialTyping.ts, 3, 3))
+>foo : Symbol(foo, Decl(indexSignaturesInferentialTyping.ts, 0, 0))
+>0 : Symbol(0, Decl(indexSignaturesInferentialTyping.ts, 3, 14))
+>1 : Symbol(1, Decl(indexSignaturesInferentialTyping.ts, 3, 20))
+
+var x2 = bar({ 0: 0, 1: 1 });
+>x2 : Symbol(x2, Decl(indexSignaturesInferentialTyping.ts, 4, 3))
+>bar : Symbol(bar, Decl(indexSignaturesInferentialTyping.ts, 0, 71))
+>0 : Symbol(0, Decl(indexSignaturesInferentialTyping.ts, 4, 14))
+>1 : Symbol(1, Decl(indexSignaturesInferentialTyping.ts, 4, 20))
+
+var x3 = bar({ zero: 0, one: 1 });  // type should be number
+>x3 : Symbol(x3, Decl(indexSignaturesInferentialTyping.ts, 5, 3))
+>bar : Symbol(bar, Decl(indexSignaturesInferentialTyping.ts, 0, 71))
+>zero : Symbol(zero, Decl(indexSignaturesInferentialTyping.ts, 5, 14))
+>one : Symbol(one, Decl(indexSignaturesInferentialTyping.ts, 5, 23))
+

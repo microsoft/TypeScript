@@ -1,0 +1,28 @@
+tests/cases/compiler/dottedModuleName.ts(3,29): error TS1144: '{' or ';' expected.
+tests/cases/compiler/dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
+
+
+==== tests/cases/compiler/dottedModuleName.ts (2 errors) ====
+    module M {
+        export module N {
+    	export function f(x:number)=>2*x;
+    	                           ~~
+!!! error TS1144: '{' or ';' expected.
+    	                               ~
+!!! error TS2552: Cannot find name 'x'. Did you mean 'X'?
+    	export module X.Y.Z {
+    	    export var v2=f(v);
+    	}
+        }
+    }
+    
+    
+    
+    module M.N {
+        export module X {
+    	export module Y.Z {
+    	    export var v=f(10);
+    	}
+        }
+    }
+    

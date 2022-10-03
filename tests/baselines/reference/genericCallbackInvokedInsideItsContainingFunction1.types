@@ -1,0 +1,80 @@
+=== tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts ===
+function foo<T, U>(x:T, y:U, f: (v: T) => U) {
+>foo : <T, U>(x: T, y: U, f: (v: T) => U) => void
+>x : T
+>y : U
+>f : (v: T) => U
+>v : T
+
+    var r1 = f<number>(1);
+>r1 : U
+>f<number>(1) : U
+>f : (v: T) => U
+>1 : 1
+
+    var r2 = f(1);
+>r2 : U
+>f(1) : U
+>f : (v: T) => U
+>1 : 1
+
+    var r3 = f<any>(null);
+>r3 : U
+>f<any>(null) : U
+>f : (v: T) => U
+>null : null
+
+    var r4 = f(null);
+>r4 : U
+>f(null) : U
+>f : (v: T) => U
+>null : null
+
+    var r11 = f(x);
+>r11 : U
+>f(x) : U
+>f : (v: T) => U
+>x : T
+
+    var r21 = f<number>(x);
+>r21 : U
+>f<number>(x) : U
+>f : (v: T) => U
+>x : T
+
+    var r31 = f<any>(null);
+>r31 : U
+>f<any>(null) : U
+>f : (v: T) => U
+>null : null
+
+    var r41 = f(null);
+>r41 : U
+>f(null) : U
+>f : (v: T) => U
+>null : null
+
+    var r12 = f(y);
+>r12 : U
+>f(y) : U
+>f : (v: T) => U
+>y : U
+
+    var r22 = f<number>(y);
+>r22 : U
+>f<number>(y) : U
+>f : (v: T) => U
+>y : U
+
+    var r32 = f<any>(null);
+>r32 : U
+>f<any>(null) : U
+>f : (v: T) => U
+>null : null
+
+    var r42 = f(null);
+>r42 : U
+>f(null) : U
+>f : (v: T) => U
+>null : null
+}

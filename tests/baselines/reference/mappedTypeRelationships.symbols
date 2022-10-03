@@ -1,0 +1,838 @@
+=== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts ===
+function f1<T>(x: T, k: keyof T) {
+>f1 : Symbol(f1, Decl(mappedTypeRelationships.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 0, 12))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 0, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 0, 12))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 0, 20))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 0, 12))
+
+    return x[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 0, 15))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 0, 20))
+}
+
+function f2<T, K extends keyof T>(x: T, k: K) {
+>f2 : Symbol(f2, Decl(mappedTypeRelationships.ts, 2, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 4, 12))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 4, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 4, 12))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 4, 34))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 4, 12))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 4, 39))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 4, 14))
+
+    return x[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 4, 34))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 4, 39))
+}
+
+function f3<T, U extends T>(x: T, y: U, k: keyof T) {
+>f3 : Symbol(f3, Decl(mappedTypeRelationships.ts, 6, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 8, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 8, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 8, 12))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 8, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 8, 12))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 8, 33))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 8, 14))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 8, 39))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 8, 12))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 8, 28))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 8, 39))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 8, 33))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 8, 39))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 8, 33))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 8, 39))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 8, 28))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 8, 39))
+}
+
+function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
+>f4 : Symbol(f4, Decl(mappedTypeRelationships.ts, 11, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 13, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 13, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 13, 12))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 13, 27))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 13, 12))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 13, 47))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 13, 12))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 13, 52))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 13, 14))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 13, 58))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 13, 27))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 13, 47))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 13, 58))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 13, 52))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 13, 58))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 13, 52))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 13, 58))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 13, 47))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 13, 58))
+}
+
+function f5<T, U extends T>(x: T, y: U, k: keyof U) {
+>f5 : Symbol(f5, Decl(mappedTypeRelationships.ts, 16, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 18, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 18, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 18, 12))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 18, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 18, 12))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 18, 33))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 18, 14))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 18, 39))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 18, 14))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 18, 28))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 18, 39))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 18, 33))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 18, 39))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 18, 33))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 18, 39))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 18, 28))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 18, 39))
+}
+
+function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
+>f6 : Symbol(f6, Decl(mappedTypeRelationships.ts, 21, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 23, 12))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 23, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 23, 12))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 23, 27))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 23, 14))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 23, 47))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 23, 12))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 23, 52))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 23, 14))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 23, 58))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 23, 27))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 23, 47))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 23, 58))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 23, 52))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 23, 58))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 23, 52))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 23, 58))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 23, 47))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 23, 58))
+}
+
+function f10<T>(x: T, y: Partial<T>, k: keyof T) {
+>f10 : Symbol(f10, Decl(mappedTypeRelationships.ts, 26, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 28, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 28, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 28, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 28, 21))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 28, 13))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 28, 36))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 28, 13))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 28, 16))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 28, 36))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 28, 21))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 28, 36))
+
+    y[k] = x[k];
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 28, 21))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 28, 36))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 28, 16))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 28, 36))
+}
+
+function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
+>f11 : Symbol(f11, Decl(mappedTypeRelationships.ts, 31, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 33, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 33, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 33, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 33, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 33, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 33, 40))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 33, 13))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 33, 55))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 33, 15))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 33, 35))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 33, 55))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 33, 40))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 33, 55))
+
+    y[k] = x[k];
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 33, 40))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 33, 55))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 33, 35))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 33, 55))
+}
+
+function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
+>f12 : Symbol(f12, Decl(mappedTypeRelationships.ts, 36, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 38, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 38, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 38, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 38, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 38, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 38, 34))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 38, 15))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 38, 49))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 38, 13))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 38, 29))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 38, 49))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 38, 34))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 38, 49))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 38, 34))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 38, 49))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 38, 29))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 38, 49))
+}
+
+function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
+>f13 : Symbol(f13, Decl(mappedTypeRelationships.ts, 41, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 43, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 43, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 43, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 43, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 43, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 43, 48))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 43, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 43, 53))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 43, 15))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 43, 68))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 43, 28))
+
+    x[k] = y[k];  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 43, 48))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 43, 68))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 43, 53))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 43, 68))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 43, 53))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 43, 68))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 43, 48))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 43, 68))
+}
+
+function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
+>f20 : Symbol(f20, Decl(mappedTypeRelationships.ts, 46, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 48, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 48, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 48, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 48, 21))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 48, 13))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 48, 37))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 48, 13))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 48, 16))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 48, 37))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 48, 21))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 48, 37))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 48, 21))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 48, 37))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 48, 16))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 48, 37))
+}
+
+function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K) {
+>f21 : Symbol(f21, Decl(mappedTypeRelationships.ts, 51, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 53, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 53, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 53, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 53, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 53, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 53, 40))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 53, 13))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 53, 56))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 53, 15))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 53, 35))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 53, 56))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 53, 40))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 53, 56))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 53, 40))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 53, 56))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 53, 35))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 53, 56))
+}
+
+function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T) {
+>f22 : Symbol(f22, Decl(mappedTypeRelationships.ts, 56, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 58, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 58, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 58, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 58, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 58, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 58, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 58, 15))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 58, 50))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 58, 13))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 58, 29))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 58, 50))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 58, 34))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 58, 50))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 58, 34))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 58, 50))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 58, 29))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 58, 50))
+}
+
+function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
+>f23 : Symbol(f23, Decl(mappedTypeRelationships.ts, 61, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 63, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 63, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 63, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 63, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 63, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 63, 48))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 63, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 63, 53))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 63, 15))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 63, 69))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 63, 28))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 63, 48))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 63, 69))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 63, 53))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 63, 69))
+
+    y[k] = x[k];  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 63, 53))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 63, 69))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 63, 48))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 63, 69))
+}
+
+type Thing = { a: string, b: string };
+>Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
+>a : Symbol(a, Decl(mappedTypeRelationships.ts, 68, 14))
+>b : Symbol(b, Decl(mappedTypeRelationships.ts, 68, 25))
+
+function f30<T>(x: T, y: Partial<T>) {
+>f30 : Symbol(f30, Decl(mappedTypeRelationships.ts, 68, 38))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 70, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 70, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 70, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 70, 21))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 70, 13))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 70, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 70, 21))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 70, 21))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 70, 16))
+}
+
+function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
+>f31 : Symbol(f31, Decl(mappedTypeRelationships.ts, 73, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 75, 13))
+>Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 75, 30))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 75, 48))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 75, 13))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 75, 30))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 75, 48))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 75, 48))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 75, 30))
+}
+
+function f40<T>(x: T, y: Readonly<T>) {
+>f40 : Symbol(f40, Decl(mappedTypeRelationships.ts, 78, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 80, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 80, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 80, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 80, 21))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 80, 13))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 80, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 80, 21))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 80, 21))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 80, 16))
+}
+
+function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) {
+>f41 : Symbol(f41, Decl(mappedTypeRelationships.ts, 83, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 85, 13))
+>Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 85, 30))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 85, 49))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 85, 13))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 85, 30))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 85, 49))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 85, 49))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 85, 30))
+}
+
+type Item = {
+>Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
+
+    name: string;
+>name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+}
+
+type ItemMap = {
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeRelationships.ts, 92, 1))
+
+    [x: string]: Item;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 95, 5))
+>Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
+}
+
+function f50<T extends ItemMap>(obj: T, key: keyof T) {
+>f50 : Symbol(f50, Decl(mappedTypeRelationships.ts, 96, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 98, 13))
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeRelationships.ts, 92, 1))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 98, 32))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 98, 13))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 98, 39))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 98, 13))
+
+    let item: Item = obj[key];
+>item : Symbol(item, Decl(mappedTypeRelationships.ts, 99, 7))
+>Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 98, 32))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 98, 39))
+
+    return obj[key].name;
+>obj[key].name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 98, 32))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 98, 39))
+>name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+}
+
+function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
+>f51 : Symbol(f51, Decl(mappedTypeRelationships.ts, 101, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeRelationships.ts, 92, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 103, 31))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 103, 31))
+
+    let item: Item = obj[key];
+>item : Symbol(item, Decl(mappedTypeRelationships.ts, 104, 7))
+>Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+
+    return obj[key].name;
+>obj[key].name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+>name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+}
+
+type T1<T> = {
+>T1 : Symbol(T1, Decl(mappedTypeRelationships.ts, 106, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 108, 8))
+
+    [P in keyof T]: T[P];
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 109, 5))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 108, 8))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 108, 8))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 109, 5))
+}
+
+type T2<T> = {
+>T2 : Symbol(T2, Decl(mappedTypeRelationships.ts, 110, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 112, 8))
+
+    [P in keyof T]: T[P];
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 113, 5))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 112, 8))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 112, 8))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 113, 5))
+}
+
+function f60<U>(x: T1<U>, y: T2<U>) {
+>f60 : Symbol(f60, Decl(mappedTypeRelationships.ts, 114, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 116, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 116, 16))
+>T1 : Symbol(T1, Decl(mappedTypeRelationships.ts, 106, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 116, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 116, 25))
+>T2 : Symbol(T2, Decl(mappedTypeRelationships.ts, 110, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 116, 13))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 116, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 116, 25))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 116, 25))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 116, 16))
+}
+
+type Identity<T> = {
+>Identity : Symbol(Identity, Decl(mappedTypeRelationships.ts, 119, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 121, 14))
+
+    [P in keyof T]: T[P];
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 122, 5))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 121, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 121, 14))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 122, 5))
+}
+
+function f61<U>(x: Identity<U>, y: Partial<U>) {
+>f61 : Symbol(f61, Decl(mappedTypeRelationships.ts, 123, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 125, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 125, 16))
+>Identity : Symbol(Identity, Decl(mappedTypeRelationships.ts, 119, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 125, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 125, 31))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 125, 13))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 125, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 125, 31))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 125, 31))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 125, 16))
+}
+
+function f62<U>(x: Identity<U>, y: Readonly<U>) {
+>f62 : Symbol(f62, Decl(mappedTypeRelationships.ts, 128, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 130, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 130, 16))
+>Identity : Symbol(Identity, Decl(mappedTypeRelationships.ts, 119, 1))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 130, 13))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 130, 31))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 130, 13))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 130, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 130, 31))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 130, 31))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 130, 16))
+}
+
+function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
+>f70 : Symbol(f70, Decl(mappedTypeRelationships.ts, 133, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 135, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 135, 16))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 135, 22))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 135, 13))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 135, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 135, 22))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 135, 44))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 135, 51))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 135, 13))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 135, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 135, 51))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 135, 16))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 135, 44))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 135, 44))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 135, 16))
+}
+
+function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) {
+>f71 : Symbol(f71, Decl(mappedTypeRelationships.ts, 138, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 140, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 140, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 140, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 140, 29))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 140, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 140, 13))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 140, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 140, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 140, 57))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 140, 64))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 140, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 140, 15))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 140, 64))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 140, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 140, 57))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 140, 57))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 140, 29))
+}
+
+function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
+>f72 : Symbol(f72, Decl(mappedTypeRelationships.ts, 143, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 145, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 145, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 145, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 145, 29))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 145, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 145, 13))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 145, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 145, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 145, 57))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 145, 64))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 145, 15))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 145, 15))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 145, 64))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 145, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 145, 57))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 145, 57))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 145, 29))
+}
+
+function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
+>f73 : Symbol(f73, Decl(mappedTypeRelationships.ts, 148, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 150, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 150, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 150, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 150, 35))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 150, 41))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 150, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 150, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 150, 41))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 150, 57))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 150, 64))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 150, 13))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 150, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 150, 64))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 150, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 150, 57))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 150, 57))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 150, 35))
+}
+
+function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
+>f74 : Symbol(f74, Decl(mappedTypeRelationships.ts, 153, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 155, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 155, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 155, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 155, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 155, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 155, 48))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 155, 54))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 155, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 155, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 155, 54))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 155, 70))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 155, 77))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 155, 15))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 155, 15))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 155, 77))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 155, 48))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 155, 70))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 155, 70))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 155, 48))
+}
+
+function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
+>f75 : Symbol(f75, Decl(mappedTypeRelationships.ts, 158, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 160, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 160, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 160, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 160, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 160, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 160, 48))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 160, 54))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 160, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 160, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 160, 54))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 160, 70))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 160, 77))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 160, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 160, 15))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 160, 77))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 160, 48))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 160, 70))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 160, 70))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 160, 48))
+}
+
+function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
+>f76 : Symbol(f76, Decl(mappedTypeRelationships.ts, 163, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 165, 13))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 165, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 165, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 165, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 165, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 165, 48))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 165, 54))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 165, 28))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 165, 13))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 165, 54))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 165, 70))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 165, 77))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 165, 28))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 165, 15))
+>P : Symbol(P, Decl(mappedTypeRelationships.ts, 165, 77))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 165, 48))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 165, 70))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 165, 70))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 165, 48))
+}
+
+function f80<T>(t: T): Partial<T> {
+>f80 : Symbol(f80, Decl(mappedTypeRelationships.ts, 168, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 170, 13))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 170, 16))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 170, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 170, 13))
+
+    return t;
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 170, 16))
+}
+
+function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
+>f81 : Symbol(f81, Decl(mappedTypeRelationships.ts, 172, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 174, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 174, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 174, 13))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 174, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 174, 13))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 174, 40))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 174, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 174, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 174, 15))
+
+    return t[k];
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 174, 35))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 174, 40))
+}
+
+function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
+>f82 : Symbol(f82, Decl(mappedTypeRelationships.ts, 176, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 178, 13))
+>K1 : Symbol(K1, Decl(mappedTypeRelationships.ts, 178, 15))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 178, 13))
+>K2 : Symbol(K2, Decl(mappedTypeRelationships.ts, 178, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 178, 13))
+>K1 : Symbol(K1, Decl(mappedTypeRelationships.ts, 178, 15))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 178, 60))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 178, 13))
+>k1 : Symbol(k1, Decl(mappedTypeRelationships.ts, 178, 65))
+>K1 : Symbol(K1, Decl(mappedTypeRelationships.ts, 178, 15))
+>k2 : Symbol(k2, Decl(mappedTypeRelationships.ts, 178, 73))
+>K2 : Symbol(K2, Decl(mappedTypeRelationships.ts, 178, 35))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 178, 13))
+>K1 : Symbol(K1, Decl(mappedTypeRelationships.ts, 178, 15))
+>K2 : Symbol(K2, Decl(mappedTypeRelationships.ts, 178, 35))
+
+    return t[k1][k2];
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 178, 60))
+>k1 : Symbol(k1, Decl(mappedTypeRelationships.ts, 178, 65))
+>k2 : Symbol(k2, Decl(mappedTypeRelationships.ts, 178, 73))
+}
+
+// #31070
+type Numeric<T> = { [K in keyof T]?: number };
+>Numeric : Symbol(Numeric, Decl(mappedTypeRelationships.ts, 180, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 183, 13))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 183, 21))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 183, 13))
+
+function f90<T extends { x: number }>() {
+>f90 : Symbol(f90, Decl(mappedTypeRelationships.ts, 183, 46))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 184, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 184, 24))
+
+    const n: Numeric<T> = { x: 1 };
+>n : Symbol(n, Decl(mappedTypeRelationships.ts, 185, 9))
+>Numeric : Symbol(Numeric, Decl(mappedTypeRelationships.ts, 180, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 184, 13))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 185, 27))
+}
+
+function f<T extends { x: {} }>(): Partial<T> {
+>f : Symbol(f, Decl(mappedTypeRelationships.ts, 186, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 188, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+
+    return undefined! as T;
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
+}
+

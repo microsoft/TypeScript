@@ -1,0 +1,24 @@
+=== tests/cases/compiler/regexMatchAll.ts ===
+const matches = /\w/g[Symbol.matchAll]("matchAll");
+>matches : IterableIterator<RegExpMatchArray>
+>/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray>
+>/\w/g[Symbol.matchAll] : (str: string) => IterableIterator<RegExpMatchArray>
+>/\w/g : RegExp
+>Symbol.matchAll : unique symbol
+>Symbol : SymbolConstructor
+>matchAll : unique symbol
+>"matchAll" : "matchAll"
+
+const array = [...matches];
+>array : RegExpMatchArray[]
+>[...matches] : RegExpMatchArray[]
+>...matches : RegExpMatchArray
+>matches : IterableIterator<RegExpMatchArray>
+
+const { index, input } = array[0];
+>index : number
+>input : string
+>array[0] : RegExpMatchArray
+>array : RegExpMatchArray[]
+>0 : 0
+

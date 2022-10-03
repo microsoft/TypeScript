@@ -1,0 +1,56 @@
+=== tests/cases/compiler/parenthesisDoesNotBlockAliasSymbolCreation.ts ===
+export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };
+>InvalidKeys : Symbol(InvalidKeys, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 0))
+>K : Symbol(K, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 24))
+>P : Symbol(P, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 61))
+>K : Symbol(K, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 24))
+
+export type InvalidKeys2<K extends string|number|symbol> = (
+>InvalidKeys2 : Symbol(InvalidKeys2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 80))
+>K : Symbol(K, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 1, 25))
+
+    { [P in K]? : never }
+>P : Symbol(P, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 2, 7))
+>K : Symbol(K, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 1, 25))
+
+);
+
+export type A<T> = (
+>A : Symbol(A, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 3, 2))
+>T : Symbol(T, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 5, 14))
+
+    T & InvalidKeys<"a">
+>T : Symbol(T, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 5, 14))
+>InvalidKeys : Symbol(InvalidKeys, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 0))
+
+);
+export type A2<T> = (
+>A2 : Symbol(A2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 7, 2))
+>T : Symbol(T, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 8, 15))
+
+    T & InvalidKeys2<"a">
+>T : Symbol(T, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 8, 15))
+>InvalidKeys2 : Symbol(InvalidKeys2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 80))
+
+);
+
+export const a = null as A<{ x : number }>;
+>a : Symbol(a, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 12, 12))
+>A : Symbol(A, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 3, 2))
+>x : Symbol(x, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 12, 28))
+
+export const a2 = null as A2<{ x : number }>;
+>a2 : Symbol(a2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 13, 12))
+>A2 : Symbol(A2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 7, 2))
+>x : Symbol(x, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 13, 30))
+
+export const a3 = null as { x : number } & InvalidKeys<"a">;
+>a3 : Symbol(a3, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 14, 12))
+>x : Symbol(x, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 14, 27))
+>InvalidKeys : Symbol(InvalidKeys, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 0))
+
+export const a4 = null as { x : number } & InvalidKeys2<"a">;
+>a4 : Symbol(a4, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 15, 12))
+>x : Symbol(x, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 15, 27))
+>InvalidKeys2 : Symbol(InvalidKeys2, Decl(parenthesisDoesNotBlockAliasSymbolCreation.ts, 0, 80))
+

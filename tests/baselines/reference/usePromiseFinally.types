@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es2018/usePromiseFinally.ts ===
+let promise1 = new Promise(function(resolve, reject) {})
+>promise1 : Promise<unknown>
+>new Promise(function(resolve, reject) {})                .finally(function() {}) : Promise<unknown>
+>new Promise(function(resolve, reject) {})                .finally : (onfinally?: () => void) => Promise<unknown>
+>new Promise(function(resolve, reject) {}) : Promise<unknown>
+>Promise : PromiseConstructor
+>function(resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
+>reject : (reason?: any) => void
+
+                .finally(function() {});
+>finally : (onfinally?: () => void) => Promise<unknown>
+>function() {} : () => void
+

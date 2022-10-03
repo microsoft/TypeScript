@@ -1,0 +1,5 @@
+=== tests/cases/conformance/types/primitives/null/directReferenceToNull.ts ===
+var x: Null;
+>x : Symbol(x, Decl(directReferenceToNull.ts, 0, 3))
+>Null : Symbol(Null)
+

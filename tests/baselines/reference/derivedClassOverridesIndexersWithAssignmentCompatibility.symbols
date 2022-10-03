@@ -1,0 +1,34 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesIndexersWithAssignmentCompatibility.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 0, 0))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 1, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ok, use assignment compatibility
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 2, 1))
+>Base : Symbol(Base, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 0, 0))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 6, 5))
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 7, 1))
+
+    [x: number]: Object;
+>x : Symbol(x, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 10, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ok, use assignment compatibility
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 11, 1))
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 7, 1))
+
+    [x: number]: any;
+>x : Symbol(x, Decl(derivedClassOverridesIndexersWithAssignmentCompatibility.ts, 15, 5))
+}

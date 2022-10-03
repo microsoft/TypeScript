@@ -1,0 +1,57 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
+  Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
+        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
+          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
+            Type 'number' is not assignable to type 'State'.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (1 errors) ====
+    export interface StrategicState {
+        lastStrategyApplied?: string;
+    }
+    
+    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+        return function*(state) {
+            for (const next of gen(state)) {
+                if (next) {
+                    next.lastStrategyApplied = stratName;
+                }
+                yield next;
+            }
+        }
+    }
+    
+    export interface Strategy<T> {
+        (a: T): IterableIterator<T | undefined>;
+    }
+    
+    export interface State extends StrategicState {
+        foo: number;
+    }
+    
+    export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
+                                                                ~~~~~~~~
+!!! error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
+!!! error TS2345:   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
+!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
+!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
+!!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
+!!! error TS2345:             Type 'number' is not assignable to type 'State'.
+        yield 1;
+        return state;
+    });
+    
+    export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
+    });
+    
+    export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
+        return 1;
+    });
+    
+    export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
+        yield state;
+        return 1;
+    });

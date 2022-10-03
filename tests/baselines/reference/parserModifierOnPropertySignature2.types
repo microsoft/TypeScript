@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature2.ts ===
+interface Foo{
+    public
+>public : any
+
+    biz;
+>biz : any
+}
+

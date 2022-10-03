@@ -1,0 +1,52 @@
+=== tests/cases/compiler/reachabilityChecks7.ts ===
+// async function without return type annotation - error
+async function f1() {    
+>f1 : Symbol(f1, Decl(reachabilityChecks7.ts, 0, 0))
+}
+
+let x = async function() {
+>x : Symbol(x, Decl(reachabilityChecks7.ts, 4, 3))
+}
+
+// async function with which promised type is void - return can be omitted
+async function f2(): Promise<void> {
+>f2 : Symbol(f2, Decl(reachabilityChecks7.ts, 5, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    
+}
+
+async function f3(x) {
+>f3 : Symbol(f3, Decl(reachabilityChecks7.ts, 10, 1))
+>x : Symbol(x, Decl(reachabilityChecks7.ts, 12, 18))
+
+    if (x) return 10;
+>x : Symbol(x, Decl(reachabilityChecks7.ts, 12, 18))
+}
+
+async function f4(): Promise<number> {
+>f4 : Symbol(f4, Decl(reachabilityChecks7.ts, 14, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    
+}
+
+function voidFunc(): void {
+>voidFunc : Symbol(voidFunc, Decl(reachabilityChecks7.ts, 18, 1))
+}
+
+function calltoVoidFunc(x) {
+>calltoVoidFunc : Symbol(calltoVoidFunc, Decl(reachabilityChecks7.ts, 21, 1))
+>x : Symbol(x, Decl(reachabilityChecks7.ts, 23, 24))
+
+    if (x) return voidFunc();
+>x : Symbol(x, Decl(reachabilityChecks7.ts, 23, 24))
+>voidFunc : Symbol(voidFunc, Decl(reachabilityChecks7.ts, 18, 1))
+}
+
+declare function use(s: string): void;
+>use : Symbol(use, Decl(reachabilityChecks7.ts, 25, 1))
+>s : Symbol(s, Decl(reachabilityChecks7.ts, 27, 21))
+
+let x1 = () => { use("Test"); }
+>x1 : Symbol(x1, Decl(reachabilityChecks7.ts, 28, 3))
+>use : Symbol(use, Decl(reachabilityChecks7.ts, 25, 1))
+

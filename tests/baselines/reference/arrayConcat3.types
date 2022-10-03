@@ -1,0 +1,19 @@
+=== tests/cases/compiler/arrayConcat3.ts ===
+// TODO: remove lib hack when https://github.com/Microsoft/TypeScript/issues/20454 is fixed
+type Fn<T extends object> = <U extends T>(subj: U) => U
+>Fn : Fn<T>
+>subj : U
+
+function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) {
+>doStuff : <T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) => void
+>a : Fn<T>[]
+>b : Fn<T1>[]
+
+    b.concat(a);
+>b.concat(a) : Fn<T1>[]
+>b.concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (Fn<T1> | ConcatArray<Fn<T1>>)[]): Fn<T1>[]; }
+>b : Fn<T1>[]
+>concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (Fn<T1> | ConcatArray<Fn<T1>>)[]): Fn<T1>[]; }
+>a : Fn<T>[]
+}
+

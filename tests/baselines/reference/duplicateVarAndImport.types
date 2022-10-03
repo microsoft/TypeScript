@@ -1,0 +1,11 @@
+=== tests/cases/compiler/duplicateVarAndImport.ts ===
+// no error since module is not instantiated
+
+var a;
+>a : any
+
+module M { }
+import a = M;
+>a : any
+>M : error
+

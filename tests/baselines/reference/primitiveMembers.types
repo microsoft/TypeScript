@@ -1,0 +1,93 @@
+=== tests/cases/compiler/primitiveMembers.ts ===
+var x = 5;
+>x : number
+>5 : 5
+
+var r = /yo/;
+>r : RegExp
+>/yo/ : RegExp
+
+r.source;
+>r.source : string
+>r : RegExp
+>source : string
+
+x.toBAZ();
+>x.toBAZ() : any
+>x.toBAZ : any
+>x : number
+>toBAZ : any
+
+x.toString();
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+
+var n = 0;
+>n : number
+>0 : 0
+
+var N: Number;
+>N : Number
+
+n = N;  // should not work, as 'number' has a different brand
+>n = N : Number
+>n : number
+>N : Number
+
+N = n; // should work
+>N = n : number
+>N : Number
+>n : number
+
+var o: Object = {}
+>o : Object
+>{} : {}
+
+var f: Function = (x: string) => x.length;
+>f : Function
+>(x: string) => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+var r2: RegExp = /./g;
+>r2 : RegExp
+>/./g : RegExp
+
+var n2: Number = 34;
+>n2 : Number
+>34 : 34
+
+var s: String = "yo";
+>s : String
+>"yo" : "yo"
+
+var b: Boolean = true;
+>b : Boolean
+>true : true
+
+var n3 = 5 || {};
+>n3 : {}
+>5 || {} : 5 | {}
+>5 : 5
+>{} : {}
+
+
+class baz { public bar(): void { }; }
+>baz : baz
+>bar : () => void
+
+class foo extends baz { public bar(){ return undefined}; }
+>foo : foo
+>baz : baz
+>bar : () => any
+>undefined : undefined
+
+
+
+ 
+
+

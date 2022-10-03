@@ -1,0 +1,16 @@
+=== tests/cases/compiler/duplicateTypeParameters2.ts ===
+class A { public foo() { } }
+>A : Symbol(A, Decl(duplicateTypeParameters2.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(duplicateTypeParameters2.ts, 0, 9))
+
+class B { public bar() { } }
+>B : Symbol(B, Decl(duplicateTypeParameters2.ts, 0, 28))
+>bar : Symbol(B.bar, Decl(duplicateTypeParameters2.ts, 1, 9))
+
+interface I<T extends A, T extends B> {}
+>I : Symbol(I, Decl(duplicateTypeParameters2.ts, 1, 28))
+>T : Symbol(T, Decl(duplicateTypeParameters2.ts, 3, 12), Decl(duplicateTypeParameters2.ts, 3, 24))
+>A : Symbol(A, Decl(duplicateTypeParameters2.ts, 0, 0))
+>T : Symbol(T, Decl(duplicateTypeParameters2.ts, 3, 12), Decl(duplicateTypeParameters2.ts, 3, 24))
+>B : Symbol(B, Decl(duplicateTypeParameters2.ts, 0, 28))
+

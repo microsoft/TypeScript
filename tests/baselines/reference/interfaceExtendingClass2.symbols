@@ -1,0 +1,33 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(interfaceExtendingClass2.ts, 0, 0))
+
+    x: string;
+>x : Symbol(Foo.x, Decl(interfaceExtendingClass2.ts, 0, 11))
+
+    y() { }
+>y : Symbol(Foo.y, Decl(interfaceExtendingClass2.ts, 1, 14))
+
+    get Z() {
+>Z : Symbol(Foo.Z, Decl(interfaceExtendingClass2.ts, 2, 11))
+
+        return 1;
+    }
+    [x: string]: Object;
+>x : Symbol(x, Decl(interfaceExtendingClass2.ts, 6, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+interface I2 extends Foo { // error
+>I2 : Symbol(I2, Decl(interfaceExtendingClass2.ts, 7, 1))
+>Foo : Symbol(Foo, Decl(interfaceExtendingClass2.ts, 0, 0))
+
+    a: {
+>a : Symbol(I2.a, Decl(interfaceExtendingClass2.ts, 9, 26))
+
+        toString: () => {
+>toString : Symbol(toString, Decl(interfaceExtendingClass2.ts, 10, 8))
+
+            return 1;
+        };
+    }

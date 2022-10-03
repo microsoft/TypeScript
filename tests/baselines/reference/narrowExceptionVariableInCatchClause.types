@@ -1,0 +1,57 @@
+=== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts ===
+declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
+>isFooError : (x: any) => x is { type: 'foo'; dontPanic(): any; }
+>x : any
+>type : "foo"
+>dontPanic : () => any
+
+function tryCatch() {
+>tryCatch : () => void
+
+    try {
+        // do stuff...
+    }
+    catch (err) { // err is implicitly 'any' and cannot be annotated
+>err : any
+
+        if (isFooError(err)) {
+>isFooError(err) : boolean
+>isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
+>err : any
+
+            err.dontPanic(); // OK
+>err.dontPanic() : any
+>err.dontPanic : () => any
+>err : { type: "foo"; dontPanic(): any; }
+>dontPanic : () => any
+
+            err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
+>err.doPanic() : any
+>err.doPanic : any
+>err : { type: "foo"; dontPanic(): any; }
+>doPanic : any
+        }
+
+        else if (err instanceof Error) {
+>err instanceof Error : boolean
+>err : any
+>Error : ErrorConstructor
+
+            err.message;
+>err.message : string
+>err : Error
+>message : string
+
+            err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
+>err.massage : any
+>err : Error
+>massage : any
+        }
+
+        else {
+            throw err;
+>err : any
+        }
+    }
+}
+

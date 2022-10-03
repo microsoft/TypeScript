@@ -1,0 +1,71 @@
+=== tests/cases/compiler/es6ModuleLet.ts ===
+export let a = "hello";
+>a : string
+>"hello" : "hello"
+
+export let x: string = a, y = x;
+>x : string
+>a : string
+>y : string
+>x : string
+
+let b = y;
+>b : string
+>y : string
+
+let c: string = b, d = c;
+>c : string
+>b : string
+>d : string
+>c : string
+
+export module m1 {
+>m1 : typeof m1
+
+    export let k = a;
+>k : string
+>a : string
+
+    export let l: string = b, m = k;
+>l : string
+>b : string
+>m : string
+>k : string
+
+    let n = m1.k;
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
+
+    let o: string = n, p = k;
+>o : string
+>n : string
+>p : string
+>k : string
+}
+module m2 {
+>m2 : typeof m2
+
+    export let k = a;
+>k : string
+>a : string
+
+    export let l: string = b, m = k;
+>l : string
+>b : string
+>m : string
+>k : string
+
+    let n = m1.k;
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
+
+    let o: string = n, p = k;
+>o : string
+>n : string
+>p : string
+>k : string
+}

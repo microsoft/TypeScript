@@ -1,0 +1,19 @@
+{
+    "scenario": "referenceResolutionSameFileTwice_NoResolve",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/",
+    "inputFiles": [
+        "test.ts",
+        "../ReferenceResolution/test.ts"
+    ],
+    "noResolve": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "test.js",
+        "test.d.ts"
+    ]
+}

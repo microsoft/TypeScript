@@ -1,0 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts(1,6): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts(1,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts(1,15): error TS2304: Cannot find name 'b'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts (3 errors) ====
+    for (a = 1 in b) {
+         ~
+!!! error TS2304: Cannot find name 'a'.
+         ~~~~~
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+                  ~
+!!! error TS2304: Cannot find name 'b'.
+    }

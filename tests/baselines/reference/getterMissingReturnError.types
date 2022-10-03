@@ -1,0 +1,10 @@
+=== tests/cases/compiler/getterMissingReturnError.ts ===
+class test {
+>test : test
+
+    public get p2(){
+>p2 : void
+
+    }
+}
+

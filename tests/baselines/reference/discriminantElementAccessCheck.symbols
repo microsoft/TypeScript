@@ -1,0 +1,132 @@
+=== tests/cases/compiler/discriminantElementAccessCheck.ts ===
+type U = TypeA | TypeB;
+>U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
+>TypeA : Symbol(TypeA, Decl(discriminantElementAccessCheck.ts, 0, 23))
+>TypeB : Symbol(TypeB, Decl(discriminantElementAccessCheck.ts, 5, 1))
+
+interface TypeA {
+>TypeA : Symbol(TypeA, Decl(discriminantElementAccessCheck.ts, 0, 23))
+
+    kind: 'A';
+>kind : Symbol(TypeA.kind, Decl(discriminantElementAccessCheck.ts, 2, 17))
+
+    a: number;
+>a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+}
+interface TypeB {
+>TypeB : Symbol(TypeB, Decl(discriminantElementAccessCheck.ts, 5, 1))
+
+    kind: 'B';
+>kind : Symbol(TypeB.kind, Decl(discriminantElementAccessCheck.ts, 6, 17))
+
+    b: string;
+>b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+}
+
+function assertNever(x: never) {
+>assertNever : Symbol(assertNever, Decl(discriminantElementAccessCheck.ts, 9, 1))
+>x : Symbol(x, Decl(discriminantElementAccessCheck.ts, 11, 21))
+
+    return x;
+>x : Symbol(x, Decl(discriminantElementAccessCheck.ts, 11, 21))
+}
+
+function IfWithString(val: U) {
+>IfWithString : Symbol(IfWithString, Decl(discriminantElementAccessCheck.ts, 13, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+>U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
+
+    if (val['kind'] === 'B') {
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+>'kind' : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+
+        return val.b;
+>val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+>b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+
+    } else {
+        return val.a;
+>val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+>a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+    }
+}
+
+function SwitchWithString(val: U) {
+>SwitchWithString : Symbol(SwitchWithString, Decl(discriminantElementAccessCheck.ts, 21, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+>U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
+
+    switch (val['kind']) {
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+>'kind' : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+
+        case 'A':
+            return val.a;
+>val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+>a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+
+        case 'B':
+            return val.b;
+>val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+>b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+
+        default:
+            return assertNever(val);
+>assertNever : Symbol(assertNever, Decl(discriminantElementAccessCheck.ts, 9, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+    }
+}
+
+function IfWithTemplate(val: U) {
+>IfWithTemplate : Symbol(IfWithTemplate, Decl(discriminantElementAccessCheck.ts, 32, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+>U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
+
+    if (val[`kind`] === 'B') {
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+>`kind` : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+
+        return val.b;
+>val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+>b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+
+    } else {
+        return val.a;
+>val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+>a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+    }
+}
+
+function SwitchWithTemplate(val: U) {
+>SwitchWithTemplate : Symbol(SwitchWithTemplate, Decl(discriminantElementAccessCheck.ts, 40, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+>U : Symbol(U, Decl(discriminantElementAccessCheck.ts, 0, 0))
+
+    switch (val[`kind`]) {
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+>`kind` : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+
+        case 'A':
+            return val.a;
+>val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+>a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+
+        case 'B':
+            return val.b;
+>val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+>b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+
+        default:
+            return assertNever(val);
+>assertNever : Symbol(assertNever, Decl(discriminantElementAccessCheck.ts, 9, 1))
+>val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+    }
+}

@@ -1,0 +1,53 @@
+=== tests/cases/conformance/jsx/tsxAttributeErrors.tsx ===
+declare namespace JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		div: {
+>div : { text?: string; width?: number; }
+
+			text?: string;
+>text : string
+
+			width?: number;
+>width : number
+		}
+
+		span: any;
+>span : any
+	}
+}
+
+// Error, number is not assignable to string
+<div text={42} />;
+><div text={42} /> : JSX.Element
+>div : any
+>text : number
+>42 : 42
+
+// Error, string is not assignable to number
+<div width={'foo'} />;
+><div width={'foo'} /> : JSX.Element
+>div : any
+>width : string
+>'foo' : "foo"
+
+// Error, number is not assignable to string
+var attribs = { text: 100 };
+>attribs : { text: number; }
+>{ text: 100 } : { text: number; }
+>text : number
+>100 : 100
+
+<div {...attribs} />;
+><div {...attribs} /> : JSX.Element
+>div : any
+>attribs : { text: number; }
+
+// No errors here
+<span foo='bar' bar={'foo'} />;
+><span foo='bar' bar={'foo'} /> : JSX.Element
+>span : any
+>foo : string
+>bar : string
+>'foo' : "foo"
+

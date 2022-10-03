@@ -1,0 +1,32 @@
+=== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts ===
+class BaseClass {
+>BaseClass : BaseClass
+
+    constructor() {
+        this._init();
+>this._init() : void
+>this._init : () => void
+>this : this
+>_init : () => void
+    }
+    private _init() {
+>_init : () => void
+    }
+}
+class DerivedClass extends BaseClass {
+>DerivedClass : DerivedClass
+>BaseClass : BaseClass
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof BaseClass
+    }
+    private _init() {
+>_init : () => void
+    }
+}
+new DerivedClass();
+>new DerivedClass() : DerivedClass
+>DerivedClass : typeof DerivedClass
+

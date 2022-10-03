@@ -1,0 +1,58 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts ===
+interface Base {
+>Base : Symbol(Base, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 0))
+
+    x: {
+>x : Symbol(Base.x, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 16))
+
+        a?: string; b: string;
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes2.ts, 1, 8))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes2.ts, 2, 19))
+    }
+}
+
+interface Base2 {
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes2.ts, 4, 1))
+
+    x: {
+>x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes2.ts, 6, 17))
+
+        b: string; c?: number;
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes2.ts, 7, 8))
+>c : Symbol(c, Decl(interfaceWithMultipleBaseTypes2.ts, 8, 18))
+    }
+}
+
+interface Derived extends Base, Base2 {
+>Derived : Symbol(Derived, Decl(interfaceWithMultipleBaseTypes2.ts, 10, 1))
+>Base : Symbol(Base, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 0))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes2.ts, 4, 1))
+
+    x: { b: string }
+>x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes2.ts, 12, 39))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes2.ts, 13, 8))
+}
+
+interface Derived2 extends Base, Base2 { // error
+>Derived2 : Symbol(Derived2, Decl(interfaceWithMultipleBaseTypes2.ts, 14, 1))
+>Base : Symbol(Base, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 0))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes2.ts, 4, 1))
+
+    x: { a: number; b: string }
+>x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes2.ts, 16, 40))
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes2.ts, 17, 8))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes2.ts, 17, 19))
+}
+
+interface Derived3 extends Base, Base2 {
+>Derived3 : Symbol(Derived3, Decl(interfaceWithMultipleBaseTypes2.ts, 18, 1))
+>Base : Symbol(Base, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 0))
+>Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes2.ts, 4, 1))
+
+    x: { a: string; b: string }
+>x : Symbol(Derived3.x, Decl(interfaceWithMultipleBaseTypes2.ts, 20, 40))
+>a : Symbol(a, Decl(interfaceWithMultipleBaseTypes2.ts, 21, 8))
+>b : Symbol(b, Decl(interfaceWithMultipleBaseTypes2.ts, 21, 19))
+}
+
+

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/infinitelyExpandingTypes5.ts ===
+interface Query<T> {
+    foo(x: T): Query<T[]>;
+>foo : (x: T) => Query<T[]>
+>x : T
+}
+
+interface Enumerator<T> {
+    (action: (item: T, index: number) => boolean): boolean;
+>action : (item: T, index: number) => boolean
+>item : T
+>index : number
+}
+
+function from<T>(array: T[]): Query<T>;
+>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>array : T[]
+
+function from<T>(enumerator: Enumerator<T>): Query<T>;
+>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>enumerator : Enumerator<T>
+
+function from(arg: any): any {
+>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>arg : any
+
+    return undefined;
+>undefined : undefined
+}
+

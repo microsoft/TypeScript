@@ -1,0 +1,33 @@
+=== tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts ===
+interface Foo {
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+
+    bar: string;
+>bar : string
+}
+interface ObjectContaining<T> {
+  new (sample: Partial<T>): Partial<T>
+>sample : Partial<T>
+}
+declare let cafoo: ObjectContaining<{ a: number, foo: number }>;
+>cafoo : ObjectContaining<{ a: number; foo: number; }>
+>a : number
+>foo : number
+
+declare let cfoo: ObjectContaining<Foo>;
+>cfoo : ObjectContaining<Foo>
+
+cfoo = cafoo;
+>cfoo = cafoo : ObjectContaining<{ a: number; foo: number; }>
+>cfoo : ObjectContaining<Foo>
+>cafoo : ObjectContaining<{ a: number; foo: number; }>
+
+cafoo = cfoo;
+>cafoo = cfoo : ObjectContaining<Foo>
+>cafoo : ObjectContaining<{ a: number; foo: number; }>
+>cfoo : ObjectContaining<Foo>
+

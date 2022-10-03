@@ -1,0 +1,10 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring.ts(1,10): error TS2461: Type 'string' is not an array type.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring.ts(1,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+
+
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring.ts (2 errors) ====
+    for (var [a, b] in []) {}
+             ~~~~~~
+!!! error TS2461: Type 'string' is not an array type.
+             ~~~~~~
+!!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.

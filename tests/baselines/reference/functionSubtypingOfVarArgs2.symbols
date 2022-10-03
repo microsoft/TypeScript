@@ -1,0 +1,41 @@
+=== tests/cases/compiler/functionSubtypingOfVarArgs2.ts ===
+class EventBase {
+>EventBase : Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+
+    private _listeners: { (...args: any[]): void; }[] = [];
+>_listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>args : Symbol(args, Decl(functionSubtypingOfVarArgs2.ts, 1, 27))
+
+    add(listener: (...args: any[]) => void): void {
+>add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 3, 8))
+>args : Symbol(args, Decl(functionSubtypingOfVarArgs2.ts, 3, 19))
+
+        this._listeners.push(listener);
+>this._listeners.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this._listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>this : Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+>_listeners : Symbol(EventBase._listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 3, 8))
+    }
+}
+
+class StringEvent extends EventBase {
+>StringEvent : Symbol(StringEvent, Decl(functionSubtypingOfVarArgs2.ts, 6, 1))
+>EventBase : Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+
+    add(listener: (items: string, moreitems: number) => void ) {
+>add : Symbol(StringEvent.add, Decl(functionSubtypingOfVarArgs2.ts, 8, 37))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 9, 8))
+>items : Symbol(items, Decl(functionSubtypingOfVarArgs2.ts, 9, 19))
+>moreitems : Symbol(moreitems, Decl(functionSubtypingOfVarArgs2.ts, 9, 33))
+
+        super.add(listener);
+>super.add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>super : Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+>add : Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>listener : Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 9, 8))
+    }
+}
+

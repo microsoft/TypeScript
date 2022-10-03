@@ -1,0 +1,267 @@
+===================================================================
+JsFile: sourceMapValidationEnums.js
+mapUrl: sourceMapValidationEnums.js.map
+sourceRoot: 
+sources: sourceMapValidationEnums.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationEnums.js
+sourceFile:sourceMapValidationEnums.ts
+-------------------------------------------------------------------
+>>>var e;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^^^^^->
+1 >
+2 >enum 
+3 >    e {
+  >        x,
+  >        y,
+  >        x
+  >    }
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 6) Source(5, 2) + SourceIndex(0)
+---
+>>>(function (e) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^^^^^^->
+1->
+2 >enum 
+3 >           e
+1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 12) Source(1, 6) + SourceIndex(0)
+3 >Emitted(2, 13) Source(1, 7) + SourceIndex(0)
+---
+>>>    e[e["x"] = 0] = "x";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^
+3 >                       ^
+4 >                        ^->
+1-> {
+  >    
+2 >    x
+3 >                       
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 24) Source(2, 6) + SourceIndex(0)
+3 >Emitted(3, 25) Source(2, 6) + SourceIndex(0)
+---
+>>>    e[e["y"] = 1] = "y";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^
+3 >                       ^
+4 >                        ^->
+1->,
+  >    
+2 >    y
+3 >                       
+1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 24) Source(3, 6) + SourceIndex(0)
+3 >Emitted(4, 25) Source(3, 6) + SourceIndex(0)
+---
+>>>    e[e["x"] = 2] = "x";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^
+3 >                       ^
+1->,
+  >    
+2 >    x
+3 >                       
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(5, 24) Source(4, 6) + SourceIndex(0)
+3 >Emitted(5, 25) Source(4, 6) + SourceIndex(0)
+---
+>>>})(e || (e = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^
+6 >         ^
+7 >          ^^^^^^^^
+1 >
+  >
+2 >}
+3 > 
+4 >   e
+5 >    
+6 >         e
+7 >           {
+  >              x,
+  >              y,
+  >              x
+  >          }
+1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+3 >Emitted(6, 4) Source(1, 6) + SourceIndex(0)
+4 >Emitted(6, 5) Source(1, 7) + SourceIndex(0)
+5 >Emitted(6, 10) Source(1, 6) + SourceIndex(0)
+6 >Emitted(6, 11) Source(1, 7) + SourceIndex(0)
+7 >Emitted(6, 19) Source(5, 2) + SourceIndex(0)
+---
+>>>var e2;
+1 >
+2 >^^^^
+3 >    ^^
+4 >      ^^^^^^^^^^^->
+1 >
+  >
+2 >enum 
+3 >    e2 {
+  >        x = 10,
+  >        y = 10,
+  >        z,
+  >        x2
+  >    }
+1 >Emitted(7, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(6, 6) + SourceIndex(0)
+3 >Emitted(7, 7) Source(11, 2) + SourceIndex(0)
+---
+>>>(function (e2) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^
+4 >             ^^^^^^^^^^^^^^^->
+1->
+2 >enum 
+3 >           e2
+1->Emitted(8, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(8, 12) Source(6, 6) + SourceIndex(0)
+3 >Emitted(8, 14) Source(6, 8) + SourceIndex(0)
+---
+>>>    e2[e2["x"] = 10] = "x";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^
+4 >                           ^->
+1-> {
+  >    
+2 >    x = 10
+3 >                          
+1->Emitted(9, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(9, 27) Source(7, 11) + SourceIndex(0)
+3 >Emitted(9, 28) Source(7, 11) + SourceIndex(0)
+---
+>>>    e2[e2["y"] = 10] = "y";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^
+4 >                           ^->
+1->,
+  >    
+2 >    y = 10
+3 >                          
+1->Emitted(10, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(10, 27) Source(8, 11) + SourceIndex(0)
+3 >Emitted(10, 28) Source(8, 11) + SourceIndex(0)
+---
+>>>    e2[e2["z"] = 11] = "z";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^
+4 >                           ^^^->
+1->,
+  >    
+2 >    z
+3 >                          
+1->Emitted(11, 5) Source(9, 5) + SourceIndex(0)
+2 >Emitted(11, 27) Source(9, 6) + SourceIndex(0)
+3 >Emitted(11, 28) Source(9, 6) + SourceIndex(0)
+---
+>>>    e2[e2["x2"] = 12] = "x2";
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                            ^
+1->,
+  >    
+2 >    x2
+3 >                            
+1->Emitted(12, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(12, 29) Source(10, 7) + SourceIndex(0)
+3 >Emitted(12, 30) Source(10, 7) + SourceIndex(0)
+---
+>>>})(e2 || (e2 = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^^
+5 >     ^^^^^
+6 >          ^^
+7 >            ^^^^^^^^
+1 >
+  >
+2 >}
+3 > 
+4 >   e2
+5 >     
+6 >          e2
+7 >             {
+  >                x = 10,
+  >                y = 10,
+  >                z,
+  >                x2
+  >            }
+1 >Emitted(13, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(13, 4) Source(6, 6) + SourceIndex(0)
+4 >Emitted(13, 6) Source(6, 8) + SourceIndex(0)
+5 >Emitted(13, 11) Source(6, 6) + SourceIndex(0)
+6 >Emitted(13, 13) Source(6, 8) + SourceIndex(0)
+7 >Emitted(13, 21) Source(11, 2) + SourceIndex(0)
+---
+>>>var e3;
+1 >
+2 >^^^^
+3 >    ^^
+4 >      ^^^^^^^^^^^->
+1 >
+  >
+2 >enum 
+3 >    e3 {
+  >    }
+1 >Emitted(14, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(14, 5) Source(12, 6) + SourceIndex(0)
+3 >Emitted(14, 7) Source(13, 2) + SourceIndex(0)
+---
+>>>(function (e3) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^
+4 >             ^^^^^^^^->
+1->
+2 >enum 
+3 >           e3
+1->Emitted(15, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(15, 12) Source(12, 6) + SourceIndex(0)
+3 >Emitted(15, 14) Source(12, 8) + SourceIndex(0)
+---
+>>>})(e3 || (e3 = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^^
+5 >     ^^^^^
+6 >          ^^
+7 >            ^^^^^^^^
+8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >
+2 >}
+3 > 
+4 >   e3
+5 >     
+6 >          e3
+7 >             {
+  >            }
+1->Emitted(16, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
+3 >Emitted(16, 4) Source(12, 6) + SourceIndex(0)
+4 >Emitted(16, 6) Source(12, 8) + SourceIndex(0)
+5 >Emitted(16, 11) Source(12, 6) + SourceIndex(0)
+6 >Emitted(16, 13) Source(12, 8) + SourceIndex(0)
+7 >Emitted(16, 21) Source(13, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationEnums.js.map

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/exportImportNonInstantiatedModule.ts ===
+module A {
+    export interface I { x: number }
+>x : number
+}
+
+module B {
+>B : typeof B
+
+    export import A1 = A
+>A1 : any
+>A : error
+    
+}
+
+var x: B.A1.I = { x: 1 };
+>x : A.I
+>B : any
+>A1 : any
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+

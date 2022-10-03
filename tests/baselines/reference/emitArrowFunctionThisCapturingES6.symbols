@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturingES6.ts ===
+var f1 = () => {
+>f1 : Symbol(f1, Decl(emitArrowFunctionThisCapturingES6.ts, 0, 3))
+
+    this.age = 10
+>this : Symbol(globalThis)
+
+};
+
+var f2 = (x: string) => {
+>f2 : Symbol(f2, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 3))
+>x : Symbol(x, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 10))
+
+    this.name = x
+>this : Symbol(globalThis)
+>x : Symbol(x, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 10))
+}
+
+function foo(func: () => boolean){ }
+>foo : Symbol(foo, Decl(emitArrowFunctionThisCapturingES6.ts, 6, 1))
+>func : Symbol(func, Decl(emitArrowFunctionThisCapturingES6.ts, 8, 13))
+
+foo(() => {
+>foo : Symbol(foo, Decl(emitArrowFunctionThisCapturingES6.ts, 6, 1))
+
+    this.age = 100;
+>this : Symbol(globalThis)
+
+    return true;
+});
+

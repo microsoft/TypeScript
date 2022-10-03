@@ -1,0 +1,27 @@
+=== tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts ===
+class A {
+>A : A
+
+	constructor(f: () => string) {
+>f : () => string
+	}
+	public blah(): string { return ""; }
+>blah : () => string
+>"" : ""
+}
+
+class B extends A {
+>B : B
+>A : A
+
+	constructor() {
+		super(() => { return super.blah(); })
+>super(() => { return super.blah(); }) : void
+>super : typeof A
+>() => { return super.blah(); } : () => string
+>super.blah() : string
+>super.blah : () => string
+>super : A
+>blah : () => string
+	}
+}

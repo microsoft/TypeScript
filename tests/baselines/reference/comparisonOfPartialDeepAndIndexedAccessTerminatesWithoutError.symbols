@@ -1,0 +1,40 @@
+=== tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
+type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
+>PartialDeep : Symbol(PartialDeep, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 0))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 17))
+>K : Symbol(K, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 24))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 17))
+>PartialDeep : Symbol(PartialDeep, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 0))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 17))
+>K : Symbol(K, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 24))
+
+type Many<T> = T | readonly T[];
+>Many : Symbol(Many, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 59))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 10))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 10))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 10))
+
+interface Collection<T> {
+>Collection : Symbol(Collection, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 32))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 21))
+
+    sortBy(...iteratees: Many<PartialDeep<T>>[]): Collection<T>;
+>sortBy : Symbol(Collection.sortBy, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 25))
+>iteratees : Symbol(iteratees, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 4, 11))
+>Many : Symbol(Many, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 59))
+>PartialDeep : Symbol(PartialDeep, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 0))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 21))
+>Collection : Symbol(Collection, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 32))
+>T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 21))
+}
+
+const x: Collection<{x: number}> = (null as any as Collection<{x: number, y: number}>);
+>x : Symbol(x, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 7, 5))
+>Collection : Symbol(Collection, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 32))
+>x : Symbol(x, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 7, 21))
+>Collection : Symbol(Collection, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 1, 32))
+>x : Symbol(x, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 7, 63))
+>y : Symbol(y, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 7, 73))
+
+export {};
+

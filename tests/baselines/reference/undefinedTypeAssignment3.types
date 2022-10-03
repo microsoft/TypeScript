@@ -1,0 +1,5 @@
+=== tests/cases/compiler/undefinedTypeAssignment3.ts ===
+var undefined = null;
+>undefined : any
+>null : null
+

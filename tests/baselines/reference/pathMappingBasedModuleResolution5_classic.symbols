@@ -1,0 +1,57 @@
+=== c:/root/folder1/file1.ts ===
+import {x} from "folder2/file1"
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+
+import {y} from "folder3/file2"
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+
+import {z} from "components/file3"
+>z : Symbol(z, Decl(file1.ts, 2, 8))
+
+import {z1} from "file4"
+>z1 : Symbol(z1, Decl(file1.ts, 3, 8))
+
+declare function use(a: any): void;
+>use : Symbol(use, Decl(file1.ts, 3, 24))
+>a : Symbol(a, Decl(file1.ts, 5, 21))
+
+use(x.toExponential());
+>use : Symbol(use, Decl(file1.ts, 3, 24))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+use(y.toExponential());
+>use : Symbol(use, Decl(file1.ts, 3, 24))
+>y.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+use(z.toExponential());
+>use : Symbol(use, Decl(file1.ts, 3, 24))
+>z.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>z : Symbol(z, Decl(file1.ts, 2, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+use(z1.toExponential());
+>use : Symbol(use, Decl(file1.ts, 3, 24))
+>z1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>z1 : Symbol(z1, Decl(file1.ts, 3, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+=== c:/root/folder2/file1.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(file1.ts, 0, 10))
+
+=== c:/root/generated/folder3/file2.ts ===
+export var y = 1;
+>y : Symbol(y, Decl(file2.ts, 0, 10))
+
+=== c:/root/shared/components/file3.ts ===
+export var z = 1;
+>z : Symbol(z, Decl(file3.ts, 0, 10))
+
+=== c:/file4.ts ===
+export var z1 = 1;
+>z1 : Symbol(z1, Decl(file4.ts, 0, 10))
+

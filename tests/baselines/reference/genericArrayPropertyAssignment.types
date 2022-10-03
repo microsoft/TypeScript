@@ -1,0 +1,20 @@
+=== tests/cases/compiler/genericArrayPropertyAssignment.ts ===
+function isEmpty(list: {length:number;})
+>isEmpty : (list: {    length: number;}) => boolean
+>list : { length: number; }
+>length : number
+{
+return list.length ===0;
+>list.length ===0 : boolean
+>list.length : number
+>list : { length: number; }
+>length : number
+>0 : 0
+}
+ 
+isEmpty([]); // error
+>isEmpty([]) : boolean
+>isEmpty : (list: { length: number; }) => boolean
+>[] : undefined[]
+ 
+

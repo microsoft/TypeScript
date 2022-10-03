@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of54.ts ===
+for (let v of []) {
+>v : Symbol(v, Decl(for-of54.ts, 0, 8))
+
+    var v = 0;
+>v : Symbol(v, Decl(for-of54.ts, 1, 7))
+}

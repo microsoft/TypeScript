@@ -1,0 +1,190 @@
+tests/cases/compiler/returnTypeTypeArguments.ts(14,16): error TS2314: Generic type 'One<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(15,16): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(16,16): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(18,16): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(19,16): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(20,16): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(23,11): error TS2314: Generic type 'One<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(24,11): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(25,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(27,11): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(28,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(29,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(33,11): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(34,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(36,11): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(37,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(38,11): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(52,15): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(53,26): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(54,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(55,11): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(56,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(57,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(58,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(59,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(60,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(61,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(65,15): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(66,26): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(67,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(68,11): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(69,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(70,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(71,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(72,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(73,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/returnTypeTypeArguments.ts (37 errors) ====
+    class One<T>{
+        value: T;
+    }
+    class Two<T, U>{
+        value: T;
+        id: U;
+    }
+    class Three<T, U, V>{
+        value: T;
+        id: U;
+        name: V;
+    }
+    
+    function A1(): One { return null; }
+                   ~~~
+!!! error TS2314: Generic type 'One<T>' requires 1 type argument(s).
+    function A2(): Two { return null; }
+                   ~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+    function A3(): Three { return null; }
+                   ~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    
+    function B1(): Two<number> { return null; }
+                   ~~~~~~~~~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+    function B2(): Three<string> { return null; }
+                   ~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    function B3(): Three<string, number> { return null; }
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    
+    class C {
+        A1(): One { return null; }
+              ~~~
+!!! error TS2314: Generic type 'One<T>' requires 1 type argument(s).
+        A2(): Two { return null; }
+              ~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+        A3(): Three { return null; }
+              ~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    
+        B1(): Two<number> { return null; }
+              ~~~~~~~~~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+        B2(): Three<string> { return null; }
+              ~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+        B3(): Three<string, number> { return null; }
+              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    }
+    
+    class D<T> {
+        A2(): Two<T> { return null; }
+              ~~~~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+        A3(): Three<T> { return null; }
+              ~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    
+        B1(): Two<T> { return null; }
+              ~~~~~~
+!!! error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
+        B2(): Three<T> { return null; }
+              ~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+        B3(): Three<string, T> { return null; }
+              ~~~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).
+    }
+    
+    interface I<T> {
+        value: T;
+    }
+    
+    class Y<T>
+    {
+        value: T;
+    }
+    
+    class X<T>
+    {
+        p1: () => X;
+                  ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p2: { [idx: number]: X }
+                             ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p3: X[]
+            ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p4: I<X>
+              ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p5: X
+            ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p6: () => Y;
+                  ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p7: { [idx: number]: Y }
+                             ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p8: Y[]
+            ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p9: I<Y>
+              ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        pa: Y
+            ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+    }
+    
+    declare var a: {
+        p1: () => X;
+                  ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p2: { [idx: number]: X }
+                             ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p3: X[]
+            ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p4: I<X>
+              ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p5: X
+            ~
+!!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+        p6: () => Y;
+                  ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p7: { [idx: number]: Y }
+                             ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p8: Y[]
+            ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        p9: I<Y>
+              ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+        pa: Y
+            ~
+!!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+    };
+    

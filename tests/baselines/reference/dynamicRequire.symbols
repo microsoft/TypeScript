@@ -1,0 +1,10 @@
+=== tests/cases/compiler/a.js ===
+function foo(name) {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+>name : Symbol(name, Decl(a.js, 0, 13))
+
+    var s = require("t/" + name)
+>s : Symbol(s, Decl(a.js, 1, 7))
+>require : Symbol(require)
+>name : Symbol(name, Decl(a.js, 0, 13))
+}

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/deduplicateImportsInSystem.ts ===
+import {A} from "f1";
+>A : Symbol(A, Decl(deduplicateImportsInSystem.ts, 0, 8))
+
+import {B} from "f2";
+>B : Symbol(B, Decl(deduplicateImportsInSystem.ts, 1, 8))
+
+import {C} from "f3";
+>C : Symbol(C, Decl(deduplicateImportsInSystem.ts, 2, 8))
+
+import {D} from 'f2';
+>D : Symbol(D, Decl(deduplicateImportsInSystem.ts, 3, 8))
+
+import {E} from "f2";
+>E : Symbol(E, Decl(deduplicateImportsInSystem.ts, 4, 8))
+
+import {F} from 'f1';
+>F : Symbol(F, Decl(deduplicateImportsInSystem.ts, 5, 8))
+
+console.log(A + B + C + D + E + F)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A : Symbol(A, Decl(deduplicateImportsInSystem.ts, 0, 8))
+>B : Symbol(B, Decl(deduplicateImportsInSystem.ts, 1, 8))
+>C : Symbol(C, Decl(deduplicateImportsInSystem.ts, 2, 8))
+>D : Symbol(D, Decl(deduplicateImportsInSystem.ts, 3, 8))
+>E : Symbol(E, Decl(deduplicateImportsInSystem.ts, 4, 8))
+>F : Symbol(F, Decl(deduplicateImportsInSystem.ts, 5, 8))
+

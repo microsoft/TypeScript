@@ -1,0 +1,44 @@
+=== tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
+declare const MyClassDecorator: ClassDecorator;
+>MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+
+declare const MyMethodDecorator: MethodDecorator;
+>MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
+
+@MyClassDecorator
+>MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))
+
+class A {
+>A : Symbol(A, Decl(emitDecoratorMetadata_restArgs.ts, 1, 49))
+
+    constructor(...args) {}
+>args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 5, 16))
+
+    @MyMethodDecorator
+>MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
+
+    method(...args) {}
+>method : Symbol(A.method, Decl(emitDecoratorMetadata_restArgs.ts, 5, 27))
+>args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 7, 11))
+}
+
+@MyClassDecorator
+>MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))
+
+class B {
+>B : Symbol(B, Decl(emitDecoratorMetadata_restArgs.ts, 8, 1))
+
+    constructor(...args: number[]) {}
+>args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 12, 16))
+
+    @MyMethodDecorator
+>MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
+
+    method(this: this, ...args: string[]) {}
+>method : Symbol(B.method, Decl(emitDecoratorMetadata_restArgs.ts, 12, 37))
+>this : Symbol(this, Decl(emitDecoratorMetadata_restArgs.ts, 14, 11))
+>args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 14, 22))
+}
+

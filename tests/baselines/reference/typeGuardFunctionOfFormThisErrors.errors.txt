@@ -1,0 +1,101 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(23,1): error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
+  Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
+    Property 'follow' is missing in type 'LeadGuard' but required in type 'FollowerGuard'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(24,1): error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
+  Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
+    Property 'lead' is missing in type 'FollowerGuard' but required in type 'LeadGuard'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(26,1): error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
+  Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
+    Type 'LeadGuard' is not assignable to type 'FollowerGuard'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(27,1): error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
+  Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
+    Type 'FollowerGuard' is not assignable to type 'LeadGuard'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(29,32): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(55,7): error TS2339: Property 'follow' does not exist on type 'RoyalGuard'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(58,7): error TS2339: Property 'lead' does not exist on type 'RoyalGuard'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts (7 errors) ====
+    class RoyalGuard {
+        isLeader(): this is LeadGuard {
+            return this instanceof LeadGuard;
+        }
+        isFollower(): this is FollowerGuard {
+            return this instanceof FollowerGuard;
+        }
+    }
+    
+    class LeadGuard extends RoyalGuard {
+        lead(): void {};
+    }
+    
+    class FollowerGuard extends RoyalGuard {
+        follow(): void {};
+    }
+    
+    interface GuardInterface extends RoyalGuard {}
+    let a: RoyalGuard = new FollowerGuard();
+    let b: GuardInterface = new LeadGuard();
+    
+    // Mismatched guards shouldn't be assignable
+    b.isFollower = b.isLeader;
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
+!!! error TS2322:   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
+!!! error TS2322:     Property 'follow' is missing in type 'LeadGuard' but required in type 'FollowerGuard'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts:15:5: 'follow' is declared here.
+    b.isLeader = b.isFollower;
+    ~~~~~~~~~~
+!!! error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
+!!! error TS2322:   Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
+!!! error TS2322:     Property 'lead' is missing in type 'FollowerGuard' but required in type 'LeadGuard'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts:11:5: 'lead' is declared here.
+    
+    a.isFollower = a.isLeader;
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
+!!! error TS2322:   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
+!!! error TS2322:     Type 'LeadGuard' is not assignable to type 'FollowerGuard'.
+    a.isLeader = a.isFollower;
+    ~~~~~~~~~~
+!!! error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
+!!! error TS2322:   Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
+!!! error TS2322:     Type 'FollowerGuard' is not assignable to type 'LeadGuard'.
+    
+    function invalidGuard(c: any): this is number {
+                                   ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        return false;
+    }
+    
+    let c: number | number[];
+    if (invalidGuard(c)) {
+        c;
+    }
+    else {
+        c;
+    }
+    
+    let holder = {invalidGuard};
+    
+    if (holder.invalidGuard(c)) {
+        c;
+        holder;
+    }
+    else {
+        c;
+        holder;
+    }
+    
+    let detached = a.isFollower;
+    
+    if (detached()) {
+        a.follow();
+          ~~~~~~
+!!! error TS2339: Property 'follow' does not exist on type 'RoyalGuard'.
+    }
+    else {
+        a.lead();
+          ~~~~
+!!! error TS2339: Property 'lead' does not exist on type 'RoyalGuard'.
+    }

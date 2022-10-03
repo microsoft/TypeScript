@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/returns.js ===
+// @ts-check
+/**
+ * @returns {string} This comment is not currently exposed
+ */
+function f() {
+>f : () => string
+
+    return "hello";
+>"hello" : "hello"
+}
+
+/**
+ * @returns {string=} This comment is not currently exposed
+ */
+function f1() {
+>f1 : () => string | undefined
+
+    return "hello world";
+>"hello world" : "hello world"
+}
+
+/**
+ * @returns {string|number} This comment is not currently exposed
+ */
+function f2() {
+>f2 : () => string | number
+
+    return 5 || "hello";
+>5 || "hello" : "hello" | 5
+>5 : 5
+>"hello" : "hello"
+}

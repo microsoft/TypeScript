@@ -1,0 +1,108 @@
+=== tests/cases/conformance/internalModules/codeGeneration/exportCodeGen.ts ===
+// should replace all refs to 'x' in the body,
+// with fully qualified
+module A {
+>A : Symbol(A, Decl(exportCodeGen.ts, 0, 0))
+
+    export var x = 12;
+>x : Symbol(x, Decl(exportCodeGen.ts, 3, 14))
+
+    function lt12() {
+>lt12 : Symbol(lt12, Decl(exportCodeGen.ts, 3, 22))
+
+        return x < 12;
+>x : Symbol(x, Decl(exportCodeGen.ts, 3, 14))
+    }
+} 
+
+// should not fully qualify 'x'
+module B {
+>B : Symbol(B, Decl(exportCodeGen.ts, 7, 1))
+
+    var x = 12;
+>x : Symbol(x, Decl(exportCodeGen.ts, 11, 7))
+
+    function lt12() {
+>lt12 : Symbol(lt12, Decl(exportCodeGen.ts, 11, 15))
+
+        return x < 12;
+>x : Symbol(x, Decl(exportCodeGen.ts, 11, 7))
+    }
+}
+
+// not copied, since not exported
+module C {
+>C : Symbol(C, Decl(exportCodeGen.ts, 15, 1))
+
+    function no() {
+>no : Symbol(no, Decl(exportCodeGen.ts, 18, 10))
+
+        return false;
+    }
+}
+
+// copies, since exported
+module D {
+>D : Symbol(D, Decl(exportCodeGen.ts, 22, 1))
+
+    export function yes() {
+>yes : Symbol(yes, Decl(exportCodeGen.ts, 25, 10))
+
+        return true;
+    }
+}
+
+// validate all exportable statements
+module E {
+>E : Symbol(E, Decl(exportCodeGen.ts, 29, 1))
+
+    export enum Color { Red }
+>Color : Symbol(Color, Decl(exportCodeGen.ts, 32, 10))
+>Red : Symbol(Color.Red, Decl(exportCodeGen.ts, 33, 23))
+
+    export function fn() { }
+>fn : Symbol(fn, Decl(exportCodeGen.ts, 33, 29))
+
+    export interface I { id: number }
+>I : Symbol(I, Decl(exportCodeGen.ts, 34, 28))
+>id : Symbol(I.id, Decl(exportCodeGen.ts, 35, 24))
+
+    export class C { name: string }
+>C : Symbol(C, Decl(exportCodeGen.ts, 35, 37))
+>name : Symbol(C.name, Decl(exportCodeGen.ts, 36, 20))
+
+    export module M {
+>M : Symbol(M, Decl(exportCodeGen.ts, 36, 35))
+
+        export var x = 42;
+>x : Symbol(x, Decl(exportCodeGen.ts, 38, 18))
+    }
+}
+
+// validate all exportable statements,
+// which are not exported
+module F {
+>F : Symbol(F, Decl(exportCodeGen.ts, 40, 1))
+
+    enum Color { Red }
+>Color : Symbol(Color, Decl(exportCodeGen.ts, 44, 10))
+>Red : Symbol(Color.Red, Decl(exportCodeGen.ts, 45, 16))
+
+    function fn() { }
+>fn : Symbol(fn, Decl(exportCodeGen.ts, 45, 22))
+
+    interface I { id: number }
+>I : Symbol(I, Decl(exportCodeGen.ts, 46, 21))
+>id : Symbol(I.id, Decl(exportCodeGen.ts, 47, 17))
+
+    class C { name: string }
+>C : Symbol(C, Decl(exportCodeGen.ts, 47, 30))
+>name : Symbol(C.name, Decl(exportCodeGen.ts, 48, 13))
+
+    module M {
+>M : Symbol(M, Decl(exportCodeGen.ts, 48, 28))
+
+        var x = 42;
+>x : Symbol(x, Decl(exportCodeGen.ts, 50, 11))
+    }
+}

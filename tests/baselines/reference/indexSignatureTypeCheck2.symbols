@@ -1,0 +1,36 @@
+=== tests/cases/compiler/indexSignatureTypeCheck2.ts ===
+class IPropertySet {
+>IPropertySet : Symbol(IPropertySet, Decl(indexSignatureTypeCheck2.ts, 0, 0))
+
+    [index: string]: any
+>index : Symbol(index, Decl(indexSignatureTypeCheck2.ts, 1, 5))
+}
+
+var ps: IPropertySet = null;
+>ps : Symbol(ps, Decl(indexSignatureTypeCheck2.ts, 4, 3))
+>IPropertySet : Symbol(IPropertySet, Decl(indexSignatureTypeCheck2.ts, 0, 0))
+
+var index: any = "hello";
+>index : Symbol(index, Decl(indexSignatureTypeCheck2.ts, 5, 3))
+
+ps[index] = 12;
+>ps : Symbol(ps, Decl(indexSignatureTypeCheck2.ts, 4, 3))
+>index : Symbol(index, Decl(indexSignatureTypeCheck2.ts, 5, 3))
+
+interface indexErrors {
+>indexErrors : Symbol(indexErrors, Decl(indexSignatureTypeCheck2.ts, 6, 15))
+
+    [p2?: string];
+>p2 : Symbol(p2, Decl(indexSignatureTypeCheck2.ts, 9, 5))
+
+    [...p3: any[]];
+>p3 : Symbol(p3, Decl(indexSignatureTypeCheck2.ts, 10, 5))
+
+    [p4: string, p5?: string];
+>p4 : Symbol(p4, Decl(indexSignatureTypeCheck2.ts, 11, 5))
+>p5 : Symbol(p5, Decl(indexSignatureTypeCheck2.ts, 11, 16))
+
+    [p6: string, ...p7: any[]];
+>p6 : Symbol(p6, Decl(indexSignatureTypeCheck2.ts, 12, 5))
+>p7 : Symbol(p7, Decl(indexSignatureTypeCheck2.ts, 12, 16))
+}

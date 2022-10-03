@@ -1,0 +1,22 @@
+=== tests/cases/compiler/reachabilityChecks3.ts ===
+let x = 1;
+>x : Symbol(x, Decl(reachabilityChecks3.ts, 0, 3))
+
+loop: while (true) {
+    if (x == 100) {
+>x : Symbol(x, Decl(reachabilityChecks3.ts, 0, 3))
+
+        break;
+    }
+    else {
+        x++;
+>x : Symbol(x, Decl(reachabilityChecks3.ts, 0, 3))
+    }
+}
+{
+    x: 100
+}
+
+var y = () => { f: 1 }
+>y : Symbol(y, Decl(reachabilityChecks3.ts, 13, 3))
+

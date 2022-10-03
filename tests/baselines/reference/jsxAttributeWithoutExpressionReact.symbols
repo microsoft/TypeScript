@@ -1,0 +1,20 @@
+=== tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxAttributeWithoutExpressionReact.tsx, 0, 11))
+
+<View>
+    <ListView refreshControl={
+>refreshControl : Symbol(refreshControl, Decl(jsxAttributeWithoutExpressionReact.tsx, 2, 13))
+
+        <RefreshControl onRefresh={} refreshing={} />
+>onRefresh : Symbol(onRefresh, Decl(jsxAttributeWithoutExpressionReact.tsx, 3, 23))
+>refreshing : Symbol(refreshing, Decl(jsxAttributeWithoutExpressionReact.tsx, 3, 36))
+
+    } dataSource={this.state.ds} renderRow={}>
+>dataSource : Symbol(dataSource, Decl(jsxAttributeWithoutExpressionReact.tsx, 4, 5))
+>this : Symbol(globalThis)
+>renderRow : Symbol(renderRow, Decl(jsxAttributeWithoutExpressionReact.tsx, 4, 32))
+
+    </ListView>
+</View>
+

@@ -1,0 +1,1 @@
+class foo { public bar:(a:number)=>number = function(a){return a}; }

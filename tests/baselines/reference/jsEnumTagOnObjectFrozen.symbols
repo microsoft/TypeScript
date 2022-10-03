@@ -1,0 +1,88 @@
+=== tests/cases/compiler/usage.js ===
+const { Thing, useThing, cbThing } = require("./index");
+>Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+>useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
+>require : Symbol(require)
+>"./index" : Symbol("tests/cases/compiler/index", Decl(index.js, 0, 0))
+
+useThing(Thing.a);
+>useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>Thing.a : Symbol(a, Decl(index.js, 1, 29))
+>Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+>a : Symbol(a, Decl(index.js, 1, 29))
+
+/**
+ * @typedef {Object} LogEntry
+ * @property {string} type
+ * @property {number} time
+ */
+
+cbThing(type => {
+>cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
+>type : Symbol(type, Decl(usage.js, 10, 8))
+
+    /** @type {LogEntry} */
+    const logEntry = {
+>logEntry : Symbol(logEntry, Decl(usage.js, 12, 9))
+
+        time: Date.now(),
+>time : Symbol(time, Decl(usage.js, 12, 22))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+
+        type,
+>type : Symbol(type, Decl(usage.js, 13, 25))
+
+    };
+});
+
+=== tests/cases/compiler/index.js ===
+/** @enum {string} */
+const Thing = Object.freeze({
+>Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    a: "thing",
+>a : Symbol(a, Decl(index.js, 1, 29))
+
+    b: "chill"
+>b : Symbol(b, Decl(index.js, 2, 15))
+
+});
+
+exports.Thing = Thing;
+>exports.Thing : Symbol(Thing, Decl(index.js, 4, 3))
+>exports : Symbol(Thing, Decl(index.js, 4, 3))
+>Thing : Symbol(Thing, Decl(index.js, 4, 3))
+>Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
+
+/**
+ * @param {Thing} x
+ */
+function useThing(x) {}
+>useThing : Symbol(useThing, Decl(index.js, 6, 22))
+>x : Symbol(x, Decl(index.js, 11, 18))
+
+exports.useThing = useThing;
+>exports.useThing : Symbol(useThing, Decl(index.js, 11, 23))
+>exports : Symbol(useThing, Decl(index.js, 11, 23))
+>useThing : Symbol(useThing, Decl(index.js, 11, 23))
+>useThing : Symbol(useThing, Decl(index.js, 6, 22))
+
+/**
+ * @param {(x: Thing) => void} x
+ */
+function cbThing(x) {}
+>cbThing : Symbol(cbThing, Decl(index.js, 13, 28))
+>x : Symbol(x, Decl(index.js, 18, 17))
+
+exports.cbThing = cbThing;
+>exports.cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
+>exports : Symbol(cbThing, Decl(index.js, 18, 22))
+>cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
+>cbThing : Symbol(cbThing, Decl(index.js, 13, 28))
+

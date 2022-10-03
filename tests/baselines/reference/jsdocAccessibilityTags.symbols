@@ -1,0 +1,162 @@
+=== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js ===
+class A {
+>A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+
+    /**
+     * Ap docs
+     *
+     * @private
+     */
+    priv = 4;
+>priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+
+    /**
+     * Aq docs
+     *
+     * @protected
+     */
+    prot = 5;
+>prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+
+    /**
+     * Ar docs
+     *
+     * @public
+     */
+    pub = 6;
+>pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+
+    /** @public */
+    get ack() { return this.priv }
+>ack : Symbol(A.ack, Decl(jsdocAccessibilityTag.js, 18, 12), Decl(jsdocAccessibilityTag.js, 20, 34))
+>this.priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>this : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+>priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+
+    /** @private */
+    set ack(value) { }
+>ack : Symbol(A.ack, Decl(jsdocAccessibilityTag.js, 18, 12), Decl(jsdocAccessibilityTag.js, 20, 34))
+>value : Symbol(value, Decl(jsdocAccessibilityTag.js, 22, 12))
+}
+class C {
+>C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+
+    constructor() {
+        /**
+         * Cp docs
+         *
+         * @private
+         */
+        this.priv2 = 1;
+>this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+
+        /**
+         * Cq docs
+         *
+         * @protected
+         */
+        this.prot2 = 2;
+>this.prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+
+        /**
+         * Cr docs
+         *
+         * @public
+         */
+        this.pub2 = 3;
+>this.pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+>this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+    }
+    h() { return this.priv2 }
+>h : Symbol(C.h, Decl(jsdocAccessibilityTag.js, 44, 5))
+>this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>this : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+}
+class B extends A {
+>B : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+
+    m() {
+>m : Symbol(B.m, Decl(jsdocAccessibilityTag.js, 47, 19))
+
+        this.priv + this.prot + this.pub
+>this.priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>this : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>this.prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>this : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>this.pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+>this : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+    }
+}
+class D extends C {
+>D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+
+    n() {
+>n : Symbol(D.n, Decl(jsdocAccessibilityTag.js, 52, 19))
+
+        this.priv2 + this.prot2 + this.pub2
+>this.priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>this.prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>this.pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+>this : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+    }
+}
+new A().priv + new A().prot + new A().pub
+>new A().priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+>priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>new A().prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+>prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>new A().pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+>A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
+>pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+
+new B().priv + new B().prot + new B().pub
+>new B().priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>B : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>priv : Symbol(A.priv, Decl(jsdocAccessibilityTag.js, 0, 9))
+>new B().prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>B : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>prot : Symbol(A.prot, Decl(jsdocAccessibilityTag.js, 6, 13))
+>new B().pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+>B : Symbol(B, Decl(jsdocAccessibilityTag.js, 46, 1))
+>pub : Symbol(A.pub, Decl(jsdocAccessibilityTag.js, 12, 13))
+
+new C().priv2 + new C().prot2 + new C().pub2
+>new C().priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>new C().prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>new C().pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+>C : Symbol(C, Decl(jsdocAccessibilityTag.js, 23, 1))
+>pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+
+new D().priv2 + new D().prot2 + new D().pub2
+>new D().priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>priv2 : Symbol(C.priv2, Decl(jsdocAccessibilityTag.js, 25, 19))
+>new D().prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>prot2 : Symbol(C.prot2, Decl(jsdocAccessibilityTag.js, 31, 23))
+>new D().pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+>D : Symbol(D, Decl(jsdocAccessibilityTag.js, 51, 1))
+>pub2 : Symbol(C.pub2, Decl(jsdocAccessibilityTag.js, 37, 23))
+

@@ -1,0 +1,31 @@
+=== tests/cases/compiler/promises.ts ===
+interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 18))
+
+    then<U>(success?: (value: T) => U): Promise<U>;
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 22), Decl(promises.ts, 1, 51))
+>U : Symbol(U, Decl(promises.ts, 1, 9))
+>success : Symbol(success, Decl(promises.ts, 1, 12))
+>value : Symbol(value, Decl(promises.ts, 1, 23))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 18))
+>U : Symbol(U, Decl(promises.ts, 1, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 0))
+>U : Symbol(U, Decl(promises.ts, 1, 9))
+
+    then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 22), Decl(promises.ts, 1, 51))
+>U : Symbol(U, Decl(promises.ts, 2, 9))
+>success : Symbol(success, Decl(promises.ts, 2, 12))
+>value : Symbol(value, Decl(promises.ts, 2, 23))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 0))
+>U : Symbol(U, Decl(promises.ts, 2, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 0))
+>U : Symbol(U, Decl(promises.ts, 2, 9))
+
+    value: T;
+>value : Symbol(Promise.value, Decl(promises.ts, 2, 60))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promises.ts, 0, 18))
+}
+

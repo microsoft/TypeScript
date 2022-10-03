@@ -1,0 +1,22 @@
+=== /a.ts ===
+import foo from "foo";
+>foo : { bar(): number; }
+
+foo.bar();
+>foo.bar() : number
+>foo.bar : () => number
+>foo : { bar(): number; }
+>bar : () => number
+
+=== /node_modules/foo/index.js ===
+// Same as untypedModuleImport.ts but with --allowJs, so the package will actually be typed.
+
+exports.default = { bar() { return 0; } }
+>exports.default = { bar() { return 0; } } : { bar(): number; }
+>exports.default : { bar(): number; }
+>exports : typeof import("/node_modules/foo/index")
+>default : { bar(): number; }
+>{ bar() { return 0; } } : { bar(): number; }
+>bar : () => number
+>0 : 0
+

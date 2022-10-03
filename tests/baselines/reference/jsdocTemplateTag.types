@@ -1,0 +1,53 @@
+=== tests/cases/conformance/jsdoc/forgot.js ===
+/**
+ * @param {T} a
+ * @template T
+ */
+function f(a) {
+>f : <T>(a: T) => () => T
+>a : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let n = f(1)()
+>n : number
+>f(1)() : number
+>f(1) : () => number
+>f : <T>(a: T) => () => T
+>1 : 1
+
+/**
+ * @param {T} a
+ * @template T
+ * @returns {function(): T}
+ */
+function g(a) {
+>g : <T>(a: T) => () => T
+>a : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let s = g('hi')()
+>s : string
+>g('hi')() : string
+>g('hi') : () => string
+>g : <T>(a: T) => () => T
+>'hi' : "hi"
+
+/**
+ * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
+ */
+Element.prototype.animate = function(keyframes) {};
+>Element.prototype.animate = function(keyframes) {} : (keyframes: Array<any>) => void
+>Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
+>Element.prototype : Element
+>Element : { new (): Element; prototype: Element; }
+>prototype : Element
+>animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
+>function(keyframes) {} : (keyframes: Array<any>) => void
+>keyframes : any[]
+

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts ===
+declare const a1: 'literal' | undefined | null
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
+
+const aa1 = a1 ?? a1.toLowerCase()
+>aa1 : Symbol(aa1, Decl(nullishCoalescingOperator4.ts, 1, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
+
+const aa2 = a1 || a1.toLocaleUpperCase()
+>aa2 : Symbol(aa2, Decl(nullishCoalescingOperator4.ts, 2, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
+

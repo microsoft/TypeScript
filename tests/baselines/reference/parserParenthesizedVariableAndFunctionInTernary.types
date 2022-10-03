@@ -1,0 +1,12 @@
+=== tests/cases/conformance/parser/ecmascript5/parserParenthesizedVariableAndFunctionInTernary.ts ===
+let a: any;
+>a : any
+
+const c = true ? (a) : function() {};
+>c : any
+>true ? (a) : function() {} : any
+>true : true
+>(a) : any
+>a : any
+>function() {} : () => void
+

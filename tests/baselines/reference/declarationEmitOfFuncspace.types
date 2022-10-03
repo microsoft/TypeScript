@@ -1,0 +1,13 @@
+=== tests/cases/compiler/expando.ts ===
+// #27032
+function ExpandoMerge(n: number) {
+>ExpandoMerge : (n: number) => number
+>n : number
+
+    return n;
+>n : number
+}
+namespace ExpandoMerge {
+    export interface I { }
+}
+

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts ===
+class Foo { x: number }
+>Foo : Symbol(Foo, Decl(generatorTypeCheck20.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(generatorTypeCheck20.ts, 0, 11))
+
+class Baz { z: number }
+>Baz : Symbol(Baz, Decl(generatorTypeCheck20.ts, 0, 23))
+>z : Symbol(Baz.z, Decl(generatorTypeCheck20.ts, 1, 11))
+
+function* g(): IterableIterator<Foo> {
+>g : Symbol(g, Decl(generatorTypeCheck20.ts, 1, 23))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(generatorTypeCheck20.ts, 0, 0))
+
+    yield;
+    yield * [new Baz];
+>Baz : Symbol(Baz, Decl(generatorTypeCheck20.ts, 0, 23))
+}

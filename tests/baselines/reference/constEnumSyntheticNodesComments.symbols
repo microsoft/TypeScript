@@ -1,0 +1,60 @@
+=== tests/cases/compiler/constEnumSyntheticNodesComments.ts ===
+const enum En { A, B, C, D }
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+>A : Symbol(En.A, Decl(constEnumSyntheticNodesComments.ts, 0, 15))
+>B : Symbol(En.B, Decl(constEnumSyntheticNodesComments.ts, 0, 18))
+>C : Symbol(En.C, Decl(constEnumSyntheticNodesComments.ts, 0, 21))
+>D : Symbol(En.D, Decl(constEnumSyntheticNodesComments.ts, 0, 24))
+
+function assert<T>(x: T) {
+>assert : Symbol(assert, Decl(constEnumSyntheticNodesComments.ts, 0, 28))
+>T : Symbol(T, Decl(constEnumSyntheticNodesComments.ts, 2, 16))
+>x : Symbol(x, Decl(constEnumSyntheticNodesComments.ts, 2, 19))
+>T : Symbol(T, Decl(constEnumSyntheticNodesComments.ts, 2, 16))
+
+    return x;
+>x : Symbol(x, Decl(constEnumSyntheticNodesComments.ts, 2, 19))
+}
+
+function verify(a: En) {
+>verify : Symbol(verify, Decl(constEnumSyntheticNodesComments.ts, 4, 1))
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+
+    switch (a) {
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+
+        case En.A:
+>En.A : Symbol(En.A, Decl(constEnumSyntheticNodesComments.ts, 0, 15))
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+>A : Symbol(En.A, Decl(constEnumSyntheticNodesComments.ts, 0, 15))
+
+            return assert<0>(a);
+>assert : Symbol(assert, Decl(constEnumSyntheticNodesComments.ts, 0, 28))
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+
+        case En["B"]:
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+>"B" : Symbol(En.B, Decl(constEnumSyntheticNodesComments.ts, 0, 18))
+
+            return assert<1>(a);
+>assert : Symbol(assert, Decl(constEnumSyntheticNodesComments.ts, 0, 28))
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+
+        case En[`C`]:
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+>`C` : Symbol(En.C, Decl(constEnumSyntheticNodesComments.ts, 0, 21))
+
+            return assert<2>(a);
+>assert : Symbol(assert, Decl(constEnumSyntheticNodesComments.ts, 0, 28))
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+
+        case En["\u{44}"]:
+>En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
+>"\u{44}" : Symbol(En.D, Decl(constEnumSyntheticNodesComments.ts, 0, 24))
+
+            return assert<3>(a);
+>assert : Symbol(assert, Decl(constEnumSyntheticNodesComments.ts, 0, 28))
+>a : Symbol(a, Decl(constEnumSyntheticNodesComments.ts, 6, 16))
+    }
+}

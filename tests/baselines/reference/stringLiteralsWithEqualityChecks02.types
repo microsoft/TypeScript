@@ -1,0 +1,123 @@
+=== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts ===
+let x: "foo";
+>x : "foo"
+
+let y: "foo" | "bar";
+>y : "foo" | "bar"
+
+let b: boolean;
+>b : boolean
+
+b = x == y;
+>b = x == y : boolean
+>b : boolean
+>x == y : boolean
+>x : "foo"
+>y : "foo" | "bar"
+
+b = "foo" == y
+>b = "foo" == y : boolean
+>b : boolean
+>"foo" == y : boolean
+>"foo" : "foo"
+>y : "foo" | "bar"
+
+b = y == "foo";
+>b = y == "foo" : boolean
+>b : boolean
+>y == "foo" : boolean
+>y : "foo" | "bar"
+>"foo" : "foo"
+
+b = "foo" == "bar";
+>b = "foo" == "bar" : boolean
+>b : boolean
+>"foo" == "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+b = "bar" == x;
+>b = "bar" == x : boolean
+>b : boolean
+>"bar" == x : boolean
+>"bar" : "bar"
+>x : "foo"
+
+b = x == "bar";
+>b = x == "bar" : boolean
+>b : boolean
+>x == "bar" : boolean
+>x : "foo"
+>"bar" : "bar"
+
+b = y == "bar";
+>b = y == "bar" : boolean
+>b : boolean
+>y == "bar" : boolean
+>y : "foo" | "bar"
+>"bar" : "bar"
+
+b = "bar" == y;
+>b = "bar" == y : boolean
+>b : boolean
+>"bar" == y : boolean
+>"bar" : "bar"
+>y : "foo" | "bar"
+
+b = x != y;
+>b = x != y : boolean
+>b : boolean
+>x != y : boolean
+>x : "foo"
+>y : "foo" | "bar"
+
+b = "foo" != y
+>b = "foo" != y : boolean
+>b : boolean
+>"foo" != y : boolean
+>"foo" : "foo"
+>y : "foo" | "bar"
+
+b = y != "foo";
+>b = y != "foo" : boolean
+>b : boolean
+>y != "foo" : boolean
+>y : "foo" | "bar"
+>"foo" : "foo"
+
+b = "foo" != "bar";
+>b = "foo" != "bar" : boolean
+>b : boolean
+>"foo" != "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+b = "bar" != x;
+>b = "bar" != x : boolean
+>b : boolean
+>"bar" != x : boolean
+>"bar" : "bar"
+>x : "foo"
+
+b = x != "bar";
+>b = x != "bar" : boolean
+>b : boolean
+>x != "bar" : boolean
+>x : "foo"
+>"bar" : "bar"
+
+b = y != "bar";
+>b = y != "bar" : boolean
+>b : boolean
+>y != "bar" : boolean
+>y : "foo" | "bar"
+>"bar" : "bar"
+
+b = "bar" != y;
+>b = "bar" != y : boolean
+>b : boolean
+>"bar" != y : boolean
+>"bar" : "bar"
+>y : "foo" | "bar"
+
+

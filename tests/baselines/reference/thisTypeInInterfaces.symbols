@@ -1,0 +1,79 @@
+=== tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(thisTypeInInterfaces.ts, 0, 0))
+
+    x: this;
+>x : Symbol(I1.x, Decl(thisTypeInInterfaces.ts, 0, 14))
+
+    f(x: this): this;
+>f : Symbol(I1.f, Decl(thisTypeInInterfaces.ts, 1, 12))
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 2, 6))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(thisTypeInInterfaces.ts, 3, 1))
+
+    (x: this): this;
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 6, 5))
+
+    new (x: this): this;
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 7, 9))
+
+    [x: string]: this;
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 8, 5))
+}
+
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(thisTypeInInterfaces.ts, 9, 1))
+>T : Symbol(T, Decl(thisTypeInInterfaces.ts, 11, 14))
+
+    x: T;
+>x : Symbol(Foo.x, Decl(thisTypeInInterfaces.ts, 11, 18))
+>T : Symbol(T, Decl(thisTypeInInterfaces.ts, 11, 14))
+
+    y: this;
+>y : Symbol(Foo.y, Decl(thisTypeInInterfaces.ts, 12, 9))
+}
+
+interface I3 {
+>I3 : Symbol(I3, Decl(thisTypeInInterfaces.ts, 14, 1))
+
+    a: this[];
+>a : Symbol(I3.a, Decl(thisTypeInInterfaces.ts, 16, 14))
+
+    b: [this, this];
+>b : Symbol(I3.b, Decl(thisTypeInInterfaces.ts, 17, 14))
+
+    c: this | Date;
+>c : Symbol(I3.c, Decl(thisTypeInInterfaces.ts, 18, 20))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    d: this & Date;
+>d : Symbol(I3.d, Decl(thisTypeInInterfaces.ts, 19, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    e: (((this)));
+>e : Symbol(I3.e, Decl(thisTypeInInterfaces.ts, 20, 19))
+
+    f: (x: this) => this;
+>f : Symbol(I3.f, Decl(thisTypeInInterfaces.ts, 21, 18))
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 22, 8))
+
+    g: new (x: this) => this;
+>g : Symbol(I3.g, Decl(thisTypeInInterfaces.ts, 22, 25))
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 23, 12))
+
+    h: Foo<this>;
+>h : Symbol(I3.h, Decl(thisTypeInInterfaces.ts, 23, 29))
+>Foo : Symbol(Foo, Decl(thisTypeInInterfaces.ts, 9, 1))
+
+    i: Foo<this | (() => this)>;
+>i : Symbol(I3.i, Decl(thisTypeInInterfaces.ts, 24, 17))
+>Foo : Symbol(Foo, Decl(thisTypeInInterfaces.ts, 9, 1))
+
+    j: (x: any) => x is this;
+>j : Symbol(I3.j, Decl(thisTypeInInterfaces.ts, 25, 32))
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 26, 8))
+>x : Symbol(x, Decl(thisTypeInInterfaces.ts, 26, 8))
+}
+

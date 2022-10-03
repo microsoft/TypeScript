@@ -1,0 +1,239 @@
+=== tests/cases/compiler/returnTypeTypeArguments.ts ===
+class One<T>{
+>One : Symbol(One, Decl(returnTypeTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 0, 10))
+
+    value: T;
+>value : Symbol(One.value, Decl(returnTypeTypeArguments.ts, 0, 13))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 0, 10))
+}
+class Two<T, U>{
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 3, 10))
+>U : Symbol(U, Decl(returnTypeTypeArguments.ts, 3, 12))
+
+    value: T;
+>value : Symbol(Two.value, Decl(returnTypeTypeArguments.ts, 3, 16))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 3, 10))
+
+    id: U;
+>id : Symbol(Two.id, Decl(returnTypeTypeArguments.ts, 4, 13))
+>U : Symbol(U, Decl(returnTypeTypeArguments.ts, 3, 12))
+}
+class Three<T, U, V>{
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 7, 12))
+>U : Symbol(U, Decl(returnTypeTypeArguments.ts, 7, 14))
+>V : Symbol(V, Decl(returnTypeTypeArguments.ts, 7, 17))
+
+    value: T;
+>value : Symbol(Three.value, Decl(returnTypeTypeArguments.ts, 7, 21))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 7, 12))
+
+    id: U;
+>id : Symbol(Three.id, Decl(returnTypeTypeArguments.ts, 8, 13))
+>U : Symbol(U, Decl(returnTypeTypeArguments.ts, 7, 14))
+
+    name: V;
+>name : Symbol(Three.name, Decl(returnTypeTypeArguments.ts, 9, 10))
+>V : Symbol(V, Decl(returnTypeTypeArguments.ts, 7, 17))
+}
+
+function A1(): One { return null; }
+>A1 : Symbol(A1, Decl(returnTypeTypeArguments.ts, 11, 1))
+>One : Symbol(One, Decl(returnTypeTypeArguments.ts, 0, 0))
+
+function A2(): Two { return null; }
+>A2 : Symbol(A2, Decl(returnTypeTypeArguments.ts, 13, 35))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+
+function A3(): Three { return null; }
+>A3 : Symbol(A3, Decl(returnTypeTypeArguments.ts, 14, 35))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+
+function B1(): Two<number> { return null; }
+>B1 : Symbol(B1, Decl(returnTypeTypeArguments.ts, 15, 37))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+
+function B2(): Three<string> { return null; }
+>B2 : Symbol(B2, Decl(returnTypeTypeArguments.ts, 17, 43))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+
+function B3(): Three<string, number> { return null; }
+>B3 : Symbol(B3, Decl(returnTypeTypeArguments.ts, 18, 45))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+
+class C {
+>C : Symbol(C, Decl(returnTypeTypeArguments.ts, 19, 53))
+
+    A1(): One { return null; }
+>A1 : Symbol(C.A1, Decl(returnTypeTypeArguments.ts, 21, 9))
+>One : Symbol(One, Decl(returnTypeTypeArguments.ts, 0, 0))
+
+    A2(): Two { return null; }
+>A2 : Symbol(C.A2, Decl(returnTypeTypeArguments.ts, 22, 30))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+
+    A3(): Three { return null; }
+>A3 : Symbol(C.A3, Decl(returnTypeTypeArguments.ts, 23, 30))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+
+    B1(): Two<number> { return null; }
+>B1 : Symbol(C.B1, Decl(returnTypeTypeArguments.ts, 24, 32))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+
+    B2(): Three<string> { return null; }
+>B2 : Symbol(C.B2, Decl(returnTypeTypeArguments.ts, 26, 38))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+
+    B3(): Three<string, number> { return null; }
+>B3 : Symbol(C.B3, Decl(returnTypeTypeArguments.ts, 27, 40))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+}
+
+class D<T> {
+>D : Symbol(D, Decl(returnTypeTypeArguments.ts, 29, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+
+    A2(): Two<T> { return null; }
+>A2 : Symbol(D.A2, Decl(returnTypeTypeArguments.ts, 31, 12))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+
+    A3(): Three<T> { return null; }
+>A3 : Symbol(D.A3, Decl(returnTypeTypeArguments.ts, 32, 33))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+
+    B1(): Two<T> { return null; }
+>B1 : Symbol(D.B1, Decl(returnTypeTypeArguments.ts, 33, 35))
+>Two : Symbol(Two, Decl(returnTypeTypeArguments.ts, 2, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+
+    B2(): Three<T> { return null; }
+>B2 : Symbol(D.B2, Decl(returnTypeTypeArguments.ts, 35, 33))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+
+    B3(): Three<string, T> { return null; }
+>B3 : Symbol(D.B3, Decl(returnTypeTypeArguments.ts, 36, 35))
+>Three : Symbol(Three, Decl(returnTypeTypeArguments.ts, 6, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 31, 8))
+}
+
+interface I<T> {
+>I : Symbol(I, Decl(returnTypeTypeArguments.ts, 38, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 40, 12))
+
+    value: T;
+>value : Symbol(I.value, Decl(returnTypeTypeArguments.ts, 40, 16))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 40, 12))
+}
+
+class Y<T>
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 44, 8))
+{
+    value: T;
+>value : Symbol(Y.value, Decl(returnTypeTypeArguments.ts, 45, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 44, 8))
+}
+
+class X<T>
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+>T : Symbol(T, Decl(returnTypeTypeArguments.ts, 49, 8))
+{
+    p1: () => X;
+>p1 : Symbol(X.p1, Decl(returnTypeTypeArguments.ts, 50, 1))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p2: { [idx: number]: X }
+>p2 : Symbol(X.p2, Decl(returnTypeTypeArguments.ts, 51, 16))
+>idx : Symbol(idx, Decl(returnTypeTypeArguments.ts, 52, 11))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p3: X[]
+>p3 : Symbol(X.p3, Decl(returnTypeTypeArguments.ts, 52, 28))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p4: I<X>
+>p4 : Symbol(X.p4, Decl(returnTypeTypeArguments.ts, 53, 11))
+>I : Symbol(I, Decl(returnTypeTypeArguments.ts, 38, 1))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p5: X
+>p5 : Symbol(X.p5, Decl(returnTypeTypeArguments.ts, 54, 12))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p6: () => Y;
+>p6 : Symbol(X.p6, Decl(returnTypeTypeArguments.ts, 55, 9))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p7: { [idx: number]: Y }
+>p7 : Symbol(X.p7, Decl(returnTypeTypeArguments.ts, 56, 16))
+>idx : Symbol(idx, Decl(returnTypeTypeArguments.ts, 57, 11))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p8: Y[]
+>p8 : Symbol(X.p8, Decl(returnTypeTypeArguments.ts, 57, 28))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p9: I<Y>
+>p9 : Symbol(X.p9, Decl(returnTypeTypeArguments.ts, 58, 11))
+>I : Symbol(I, Decl(returnTypeTypeArguments.ts, 38, 1))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    pa: Y
+>pa : Symbol(X.pa, Decl(returnTypeTypeArguments.ts, 59, 12))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+}
+
+declare var a: {
+>a : Symbol(a, Decl(returnTypeTypeArguments.ts, 63, 11))
+
+    p1: () => X;
+>p1 : Symbol(p1, Decl(returnTypeTypeArguments.ts, 63, 16))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p2: { [idx: number]: X }
+>p2 : Symbol(p2, Decl(returnTypeTypeArguments.ts, 64, 16))
+>idx : Symbol(idx, Decl(returnTypeTypeArguments.ts, 65, 11))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p3: X[]
+>p3 : Symbol(p3, Decl(returnTypeTypeArguments.ts, 65, 28))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p4: I<X>
+>p4 : Symbol(p4, Decl(returnTypeTypeArguments.ts, 66, 11))
+>I : Symbol(I, Decl(returnTypeTypeArguments.ts, 38, 1))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p5: X
+>p5 : Symbol(p5, Decl(returnTypeTypeArguments.ts, 67, 12))
+>X : Symbol(X, Decl(returnTypeTypeArguments.ts, 47, 1))
+
+    p6: () => Y;
+>p6 : Symbol(p6, Decl(returnTypeTypeArguments.ts, 68, 9))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p7: { [idx: number]: Y }
+>p7 : Symbol(p7, Decl(returnTypeTypeArguments.ts, 69, 16))
+>idx : Symbol(idx, Decl(returnTypeTypeArguments.ts, 70, 11))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p8: Y[]
+>p8 : Symbol(p8, Decl(returnTypeTypeArguments.ts, 70, 28))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    p9: I<Y>
+>p9 : Symbol(p9, Decl(returnTypeTypeArguments.ts, 71, 11))
+>I : Symbol(I, Decl(returnTypeTypeArguments.ts, 38, 1))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+    pa: Y
+>pa : Symbol(pa, Decl(returnTypeTypeArguments.ts, 72, 12))
+>Y : Symbol(Y, Decl(returnTypeTypeArguments.ts, 42, 1))
+
+};
+

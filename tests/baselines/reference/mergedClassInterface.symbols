@@ -1,0 +1,92 @@
+=== tests/cases/conformance/classes/classDeclarations/file1.ts ===
+declare class C1 { }
+>C1 : Symbol(C1, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 20))
+
+interface C1 { }
+>C1 : Symbol(C1, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 20))
+
+interface C2 { }
+>C2 : Symbol(C2, Decl(file1.ts, 2, 16), Decl(file1.ts, 4, 16))
+
+declare class C2 { }
+>C2 : Symbol(C2, Decl(file1.ts, 2, 16), Decl(file1.ts, 4, 16))
+
+class C3 { }
+>C3 : Symbol(C3, Decl(file1.ts, 6, 20), Decl(file1.ts, 8, 12))
+
+interface C3 { }
+>C3 : Symbol(C3, Decl(file1.ts, 6, 20), Decl(file1.ts, 8, 12))
+
+interface C4 { }
+>C4 : Symbol(C4, Decl(file1.ts, 10, 16), Decl(file1.ts, 12, 16))
+
+class C4 { }
+>C4 : Symbol(C4, Decl(file1.ts, 10, 16), Decl(file1.ts, 12, 16))
+
+interface C5 {
+>C5 : Symbol(C5, Decl(file1.ts, 14, 12), Decl(file1.ts, 18, 1), Decl(file1.ts, 22, 1), Decl(file1.ts, 26, 1))
+
+    x1: number;
+>x1 : Symbol(C5.x1, Decl(file1.ts, 16, 14))
+}
+
+declare class C5 {
+>C5 : Symbol(C5, Decl(file1.ts, 14, 12), Decl(file1.ts, 18, 1), Decl(file1.ts, 22, 1), Decl(file1.ts, 26, 1))
+
+    x2: number;
+>x2 : Symbol(C5.x2, Decl(file1.ts, 20, 18))
+}
+
+interface C5 {
+>C5 : Symbol(C5, Decl(file1.ts, 14, 12), Decl(file1.ts, 18, 1), Decl(file1.ts, 22, 1), Decl(file1.ts, 26, 1))
+
+    x3: number;
+>x3 : Symbol(C5.x3, Decl(file1.ts, 24, 14))
+}
+
+interface C5 {
+>C5 : Symbol(C5, Decl(file1.ts, 14, 12), Decl(file1.ts, 18, 1), Decl(file1.ts, 22, 1), Decl(file1.ts, 26, 1))
+
+    x4: number;
+>x4 : Symbol(C5.x4, Decl(file1.ts, 28, 14))
+}
+
+// checks if properties actually were merged
+var c5 : C5;
+>c5 : Symbol(c5, Decl(file1.ts, 33, 3))
+>C5 : Symbol(C5, Decl(file1.ts, 14, 12), Decl(file1.ts, 18, 1), Decl(file1.ts, 22, 1), Decl(file1.ts, 26, 1))
+
+c5.x1;
+>c5.x1 : Symbol(C5.x1, Decl(file1.ts, 16, 14))
+>c5 : Symbol(c5, Decl(file1.ts, 33, 3))
+>x1 : Symbol(C5.x1, Decl(file1.ts, 16, 14))
+
+c5.x2;
+>c5.x2 : Symbol(C5.x2, Decl(file1.ts, 20, 18))
+>c5 : Symbol(c5, Decl(file1.ts, 33, 3))
+>x2 : Symbol(C5.x2, Decl(file1.ts, 20, 18))
+
+c5.x3;
+>c5.x3 : Symbol(C5.x3, Decl(file1.ts, 24, 14))
+>c5 : Symbol(c5, Decl(file1.ts, 33, 3))
+>x3 : Symbol(C5.x3, Decl(file1.ts, 24, 14))
+
+c5.x4;
+>c5.x4 : Symbol(C5.x4, Decl(file1.ts, 28, 14))
+>c5 : Symbol(c5, Decl(file1.ts, 33, 3))
+>x4 : Symbol(C5.x4, Decl(file1.ts, 28, 14))
+
+=== tests/cases/conformance/classes/classDeclarations/file2.ts ===
+declare class C6 { }
+>C6 : Symbol(C6, Decl(file2.ts, 0, 0), Decl(file3.ts, 0, 0))
+
+interface C7 { }
+>C7 : Symbol(C7, Decl(file2.ts, 0, 20), Decl(file3.ts, 0, 16))
+
+=== tests/cases/conformance/classes/classDeclarations/file3.ts ===
+interface C6 { }
+>C6 : Symbol(C6, Decl(file2.ts, 0, 0), Decl(file3.ts, 0, 0))
+
+declare class C7 { }
+>C7 : Symbol(C7, Decl(file2.ts, 0, 20), Decl(file3.ts, 0, 16))
+

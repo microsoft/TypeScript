@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/Symbols/symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/Symbols/symbolProperty53.ts(5,5): error TS2538: Type '(key: string) => symbol' cannot be used as an index type.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty53.ts (2 errors) ====
+    var obj = {
+        [Symbol.for]: 0
+        ~~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+    };
+    
+    obj[Symbol.for];
+        ~~~~~~~~~~
+!!! error TS2538: Type '(key: string) => symbol' cannot be used as an index type.

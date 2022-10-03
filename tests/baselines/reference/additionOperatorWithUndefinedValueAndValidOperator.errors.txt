@@ -1,0 +1,63 @@
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and '1'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(18,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.a'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(19,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.a'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(21,10): error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(22,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(23,11): error TS2365: Operator '+' cannot be applied to types 'E.a' and 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts(24,11): error TS2365: Operator '+' cannot be applied to types 'E.a' and 'undefined'.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts (10 errors) ====
+    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
+    
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: number;
+    var c: E;
+    var d: string;
+    
+    // undefined + any
+    var r1: any = undefined + a;
+    var r2: any = a + undefined;
+    
+    // undefined + number/enum
+    var r3 = undefined + b;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
+    var r4 = undefined + 1;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and '1'.
+    var r5 = undefined + c;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E'.
+    var r6 = undefined + E.a;
+             ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.a'.
+    var r7 = undefined + E['a'];
+             ~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.a'.
+    var r8 = b + undefined;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'undefined'.
+    var r9 = 1 + undefined;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
+    var r10 = c + undefined
+              ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'undefined'.
+    var r11 = E.a + undefined;
+              ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.a' and 'undefined'.
+    var r12 = E['a'] + undefined;
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.a' and 'undefined'.
+    
+    // undefined + string
+    var r13 = undefined + d;
+    var r14 = undefined + '';
+    var r15 = d + undefined;
+    var r16 = '' + undefined;

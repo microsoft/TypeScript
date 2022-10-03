@@ -1,0 +1,46 @@
+=== tests/cases/compiler/genericTypeWithMultipleBases2.ts ===
+export interface I1 {
+>I1 : Symbol(I1, Decl(genericTypeWithMultipleBases2.ts, 0, 0))
+
+    m1: () => void;
+>m1 : Symbol(I1.m1, Decl(genericTypeWithMultipleBases2.ts, 0, 21))
+}
+ 
+export interface I2 {
+>I2 : Symbol(I2, Decl(genericTypeWithMultipleBases2.ts, 2, 1))
+
+    m2: () => void;
+>m2 : Symbol(I2.m2, Decl(genericTypeWithMultipleBases2.ts, 4, 21))
+}
+ 
+export interface I3<T> extends I2, I1 {
+>I3 : Symbol(I3, Decl(genericTypeWithMultipleBases2.ts, 6, 1))
+>T : Symbol(T, Decl(genericTypeWithMultipleBases2.ts, 8, 20))
+>I2 : Symbol(I2, Decl(genericTypeWithMultipleBases2.ts, 2, 1))
+>I1 : Symbol(I1, Decl(genericTypeWithMultipleBases2.ts, 0, 0))
+
+    p1: T;
+>p1 : Symbol(I3.p1, Decl(genericTypeWithMultipleBases2.ts, 8, 39))
+>T : Symbol(T, Decl(genericTypeWithMultipleBases2.ts, 8, 20))
+}
+ 
+var x: I3<number>;
+>x : Symbol(x, Decl(genericTypeWithMultipleBases2.ts, 12, 3))
+>I3 : Symbol(I3, Decl(genericTypeWithMultipleBases2.ts, 6, 1))
+
+x.p1;
+>x.p1 : Symbol(I3.p1, Decl(genericTypeWithMultipleBases2.ts, 8, 39))
+>x : Symbol(x, Decl(genericTypeWithMultipleBases2.ts, 12, 3))
+>p1 : Symbol(I3.p1, Decl(genericTypeWithMultipleBases2.ts, 8, 39))
+
+x.m1();
+>x.m1 : Symbol(I1.m1, Decl(genericTypeWithMultipleBases2.ts, 0, 21))
+>x : Symbol(x, Decl(genericTypeWithMultipleBases2.ts, 12, 3))
+>m1 : Symbol(I1.m1, Decl(genericTypeWithMultipleBases2.ts, 0, 21))
+
+x.m2();
+>x.m2 : Symbol(I2.m2, Decl(genericTypeWithMultipleBases2.ts, 4, 21))
+>x : Symbol(x, Decl(genericTypeWithMultipleBases2.ts, 12, 3))
+>m2 : Symbol(I2.m2, Decl(genericTypeWithMultipleBases2.ts, 4, 21))
+
+

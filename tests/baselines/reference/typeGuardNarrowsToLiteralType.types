@@ -1,0 +1,34 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralType.ts ===
+declare function isFoo(value: string) : value is "foo";
+>isFoo : (value: string) => value is "foo"
+>value : string
+
+declare function doThis(value: "foo"): void;
+>doThis : (value: "foo") => void
+>value : "foo"
+
+declare function doThat(value: string) : void;
+>doThat : (value: string) => void
+>value : string
+
+let value: string;
+>value : string
+
+if (isFoo(value)) {
+>isFoo(value) : boolean
+>isFoo : (value: string) => value is "foo"
+>value : string
+
+    doThis(value);
+>doThis(value) : void
+>doThis : (value: "foo") => void
+>value : "foo"
+
+} else {
+    doThat(value);
+>doThat(value) : void
+>doThat : (value: string) => void
+>value : string
+}
+
+

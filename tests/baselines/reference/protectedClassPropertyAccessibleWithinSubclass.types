@@ -1,0 +1,78 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass.ts ===
+// no errors
+
+class B {
+>B : B
+
+    protected x: string;
+>x : string
+
+    protected static x: string;
+>x : string
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    protected get y() { return this.x; }
+>y : string
+>this.x : string
+>this : this
+>x : string
+
+    protected set y(x) { this.y = this.x; }
+>y : string
+>x : string
+>this.y = this.x : string
+>this.y : string
+>this : this
+>y : string
+>this.x : string
+>this : this
+>x : string
+
+    protected foo() { return this.x; }
+>foo : () => string
+>this.x : string
+>this : this
+>x : string
+
+    protected bar() { return this.foo(); }
+>bar : () => string
+>this.foo() : string
+>this.foo : () => string
+>this : this
+>foo : () => string
+
+    protected static get y() { return this.x; }
+>y : string
+>this.x : string
+>this : typeof C
+>x : string
+
+    protected static set y(x) { this.y = this.x; }
+>y : string
+>x : string
+>this.y = this.x : string
+>this.y : string
+>this : typeof C
+>y : string
+>this.x : string
+>this : typeof C
+>x : string
+
+    protected static foo() { return this.x; }
+>foo : () => string
+>this.x : string
+>this : typeof C
+>x : string
+
+    protected static bar() { this.foo(); }
+>bar : () => void
+>this.foo() : string
+>this.foo : () => string
+>this : typeof C
+>foo : () => string
+}
+

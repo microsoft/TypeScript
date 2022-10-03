@@ -1,0 +1,10 @@
+tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts(1,23): error TS2449: Class 'base' used before its declaration.
+
+
+==== tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts (1 errors) ====
+    class derived extends base { }
+                          ~~~~
+!!! error TS2449: Class 'base' used before its declaration.
+!!! related TS2728 tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts:3:7: 'base' is declared here.
+     
+    class base { constructor (public n: number) { } }

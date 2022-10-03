@@ -1,0 +1,36 @@
+=== tests/cases/conformance/types/primitives/number/validNumberAssignments.ts ===
+var x = 1;
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+
+var a: any = x;
+>a : Symbol(a, Decl(validNumberAssignments.ts, 2, 3))
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+
+var b: Object = x;
+>b : Symbol(b, Decl(validNumberAssignments.ts, 3, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+
+var c: number = x;
+>c : Symbol(c, Decl(validNumberAssignments.ts, 4, 3))
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+
+enum E { A };
+>E : Symbol(E, Decl(validNumberAssignments.ts, 4, 18))
+>A : Symbol(E.A, Decl(validNumberAssignments.ts, 5, 8))
+
+var d: E = x;
+>d : Symbol(d, Decl(validNumberAssignments.ts, 6, 3))
+>E : Symbol(E, Decl(validNumberAssignments.ts, 4, 18))
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+
+var e = E.A;
+>e : Symbol(e, Decl(validNumberAssignments.ts, 7, 3))
+>E.A : Symbol(E.A, Decl(validNumberAssignments.ts, 5, 8))
+>E : Symbol(E, Decl(validNumberAssignments.ts, 4, 18))
+>A : Symbol(E.A, Decl(validNumberAssignments.ts, 5, 8))
+
+e = x;
+>e : Symbol(e, Decl(validNumberAssignments.ts, 7, 3))
+>x : Symbol(x, Decl(validNumberAssignments.ts, 0, 3))
+

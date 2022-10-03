@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+// merge type alias and alias (should error, see #32367)
+class Cls {
+>Cls : Symbol(Cls, Decl(index1.js, 0, 0))
+
+    x = 12;
+>x : Symbol(Cls.x, Decl(index1.js, 1, 11))
+
+    static y = "ok"
+>y : Symbol(Cls.y, Decl(index1.js, 2, 11))
+}
+export default Cls;
+>Cls : Symbol(Cls, Decl(index1.js, 0, 0))
+
+/**
+ * @typedef {string | number} default
+ */
+
+=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+// merge type alias and class (error message improvement needed, see #32368)
+export default class C {};
+>C : Symbol(C, Decl(index2.js, 0, 0))
+
+/**
+ * @typedef {string | number} default
+ */
+
+=== tests/cases/conformance/jsdoc/declarations/index3.js ===
+// merge type alias and variable (behavior is borked, see #32366)
+const x = 12;
+>x : Symbol(x, Decl(index3.js, 1, 5))
+
+export {x as default};
+>x : Symbol(x, Decl(index3.js, 1, 5))
+>default : Symbol(default, Decl(index3.js, 2, 8), Decl(index3.js, 4, 3))
+
+/**
+ * @typedef {string | number} default
+ */
+

@@ -1,0 +1,75 @@
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(14,10): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(15,15): error TS2554: Expected 2 arguments, but got 5.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(16,15): error TS2554: Expected 2 arguments, but got 5.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(17,15): error TS2554: Expected 2 arguments, but got 6.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(18,12): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(19,5): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(20,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(22,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(23,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (12 errors) ====
+    declare const s2: [string, string];
+    declare const s3: [string, string, string];
+    declare const s2_: [string, string, ...string[]];
+    declare const s_: string[];
+    declare const n_: number[];
+    declare const s2n_: [string, string, ...number[]];
+    
+    declare function fs2(a: string, b: string): void;
+    declare function fs2_(a: string, b: string, ...c: string[]): void;
+    declare function fs2n_(a: string, b: string, ...c: number[]): void;
+    declare function fs5(a: string, b: string, c: string, d: string, e: string): void;
+    
+    // error
+    fs2('a', ...s2); // error on ...s2
+             ~~~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    fs2('a', 'b', 'c', ...s2); // error on 'c' and ...s2
+                  ~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 5.
+    fs2('a', 'b', ...s2, 'c'); // error on ...s2 and 'c'
+                  ~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 5.
+    fs2('a', 'b', 'c', ...s2, 'd'); // error on 'c', ...s2 and 'd'
+                  ~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 6.
+    fs2(...s2, 'a'); // error on 'a'
+               ~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    fs2(...s3); // error on ...s3
+        ~~~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    fs2_(...s_); // error on ...s_
+         ~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    fs2_(...s2n_); // error on ...s2n_
+         ~~~~~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    fs2_(...s_, ...s_); // error on ...s_
+         ~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    fs2_(...s_, ...s_, ...s_); // error on ...s_
+         ~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    // fs2n_(...s2, ...s_); //           FIXME: should be a type error
+    fs2n_(...s2_); // error on ...s2_
+          ~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    // ok
+    fs2_(...s2_);
+    fs2_(...s2_, ...s_);
+    fs2_(...s2_, ...s2_);
+    fs2_(...s_, ...s2_);
+         ~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    fs2n_(...s2n_);
+    fs2n_(...s2);
+    // fs2n_(...s2, ...n_); // FIXME: should compile
+    fs5(...s2, "foo", ...s2);
+    

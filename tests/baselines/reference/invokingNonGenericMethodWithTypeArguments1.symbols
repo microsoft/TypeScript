@@ -1,0 +1,10 @@
+=== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(invokingNonGenericMethodWithTypeArguments1.ts, 0, 0))
+
+    constructor() {
+        this.foo<string>();
+>this : Symbol(Foo, Decl(invokingNonGenericMethodWithTypeArguments1.ts, 0, 0))
+    }
+}
+

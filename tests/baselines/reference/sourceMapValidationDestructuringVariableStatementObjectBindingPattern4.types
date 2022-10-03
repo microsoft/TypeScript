@@ -1,0 +1,13 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts ===
+var {x = 500,
+>x : number
+>500 : 500
+
+     y} = { x: 20, y: "hi" };
+>y : string
+>{ x: 20, y: "hi" } : { x?: number; y: string; }
+>x : number
+>20 : 20
+>y : string
+>"hi" : "hi"
+

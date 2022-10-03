@@ -1,0 +1,51 @@
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(11,3): error TS2339: Property 'bar' does not exist on type 'Missing'.
+  Property 'bar' does not exist on type '{ foo: boolean; }'.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a read-only property.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(24,1): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'Both'.
+  Property '1' does not exist on type 'Both'.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(25,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'Both'.
+  Property '[sym]' does not exist on type 'Both'.
+
+
+==== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts (5 errors) ====
+    type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
+    declare var u: Two
+    u.foo = 'bye'
+    u.baz = 'hi'
+    type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean };
+    declare var v: Three
+    v.foo = false
+    type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boolean }
+    declare var m: Missing
+    m.foo = 'hi'
+    m.bar
+      ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'Missing'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ foo: boolean; }'.
+    type RO = { foo: number } | { readonly [s: string]: string }
+    declare var ro: RO
+    ro.foo = 'not allowed'
+       ~~~
+!!! error TS2540: Cannot assign to 'foo' because it is a read-only property.
+    type Num = { '0': string } | { [n: number]: number }
+    declare var num: Num
+    num[0] = 1
+    num['0'] = 'ok'
+    const sym = Symbol()
+    type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
+    declare var both: Both
+    both['s'] = 'ok'
+    both[0] = 1
+    both[1] = 0 // not ok
+    ~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'Both'.
+!!! error TS7053:   Property '1' does not exist on type 'Both'.
+    both[0] = 'not ok'
+    ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    both[sym] = 'not ok'
+    ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'Both'.
+!!! error TS7053:   Property '[sym]' does not exist on type 'Both'.
+    

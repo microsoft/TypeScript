@@ -1,0 +1,36 @@
+=== tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts ===
+const Bar = 'bar';
+>Bar : Symbol(Bar, Decl(declarationEmitClassMemberNameConflict2.ts, 0, 5))
+
+enum Hello {
+>Hello : Symbol(Hello, Decl(declarationEmitClassMemberNameConflict2.ts, 0, 18))
+
+    World
+>World : Symbol(Hello.World, Decl(declarationEmitClassMemberNameConflict2.ts, 2, 12))
+}
+
+enum Hello1 {
+>Hello1 : Symbol(Hello1, Decl(declarationEmitClassMemberNameConflict2.ts, 4, 1))
+
+    World1
+>World1 : Symbol(Hello1.World1, Decl(declarationEmitClassMemberNameConflict2.ts, 6, 13))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberNameConflict2.ts, 8, 1))
+
+    // Same names + string => OK
+    Bar = Bar;
+>Bar : Symbol(Foo.Bar, Decl(declarationEmitClassMemberNameConflict2.ts, 10, 11))
+>Bar : Symbol(Bar, Decl(declarationEmitClassMemberNameConflict2.ts, 0, 5))
+
+    // Same names + enum => OK
+    Hello = Hello;
+>Hello : Symbol(Foo.Hello, Decl(declarationEmitClassMemberNameConflict2.ts, 12, 14))
+>Hello : Symbol(Hello, Decl(declarationEmitClassMemberNameConflict2.ts, 0, 18))
+
+    // Different names + enum => OK
+    Hello2 = Hello1;
+>Hello2 : Symbol(Foo.Hello2, Decl(declarationEmitClassMemberNameConflict2.ts, 15, 18))
+>Hello1 : Symbol(Hello1, Decl(declarationEmitClassMemberNameConflict2.ts, 4, 1))
+}

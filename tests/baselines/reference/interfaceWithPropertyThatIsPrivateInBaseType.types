@@ -1,0 +1,24 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts ===
+class Base {
+>Base : Base
+
+    private x: number;
+>x : number
+}
+
+interface Foo extends Base { // error
+    x: number;
+>x : number
+}
+
+class Base2<T> {
+>Base2 : Base2<T>
+
+    private x: T;
+>x : T
+}
+
+interface Foo2<T> extends Base2<T> { // error
+    x: number;
+>x : number
+}

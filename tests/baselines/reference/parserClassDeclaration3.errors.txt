@@ -1,0 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts(1,20): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts(1,22): error TS1173: 'extends' clause must precede 'implements' clause.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts(1,30): error TS2304: Cannot find name 'B'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts (3 errors) ====
+    class C implements A extends B {
+                       ~
+!!! error TS2304: Cannot find name 'A'.
+                         ~~~~~~~
+!!! error TS1173: 'extends' clause must precede 'implements' clause.
+                                 ~
+!!! error TS2304: Cannot find name 'B'.
+    }

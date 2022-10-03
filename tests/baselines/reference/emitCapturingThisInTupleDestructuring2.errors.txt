@@ -1,0 +1,16 @@
+tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
+
+
+==== tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts (1 errors) ====
+    var array1: [number, number] = [1, 2];
+    
+    class B {
+        test: number;
+        test1: any;
+        test2: any;
+        method() {
+            () => [this.test, this.test1, this.test2] = array1; // even though there is a compiler error, we should still emit lexical capture for "this" 
+                                          ~~~~~~~~~~
+!!! error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
+        }
+    }

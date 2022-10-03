@@ -1,0 +1,30 @@
+=== tests/cases/compiler/accessorsEmit.ts ===
+class Result { }
+>Result : Symbol(Result, Decl(accessorsEmit.ts, 0, 0))
+
+class Test {
+>Test : Symbol(Test, Decl(accessorsEmit.ts, 0, 16))
+
+    get Property(): Result {
+>Property : Symbol(Test.Property, Decl(accessorsEmit.ts, 2, 12))
+>Result : Symbol(Result, Decl(accessorsEmit.ts, 0, 0))
+
+        var x = 1;
+>x : Symbol(x, Decl(accessorsEmit.ts, 4, 11))
+
+        return null;
+    }
+}
+
+class Test2 {
+>Test2 : Symbol(Test2, Decl(accessorsEmit.ts, 7, 1))
+
+    get Property() {
+>Property : Symbol(Test2.Property, Decl(accessorsEmit.ts, 9, 13))
+
+        var x = 1;
+>x : Symbol(x, Decl(accessorsEmit.ts, 11, 11))
+
+        return null;
+    }
+}

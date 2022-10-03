@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts ===
+declare let win: Window & typeof globalThis;
+>win : Symbol(win, Decl(globalThisUnknownNoImplicitAny.ts, 0, 11))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+
+// all accesses should be errors
+win.hi
+>win : Symbol(win, Decl(globalThisUnknownNoImplicitAny.ts, 0, 11))
+
+this.hi
+>this : Symbol(globalThis)
+
+globalThis.hi
+>globalThis : Symbol(globalThis)
+
+win['hi']
+>win : Symbol(win, Decl(globalThisUnknownNoImplicitAny.ts, 0, 11))
+
+this['hi']
+>this : Symbol(globalThis)
+
+globalThis['hi']
+>globalThis : Symbol(globalThis)
+

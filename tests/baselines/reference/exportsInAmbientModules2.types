@@ -1,0 +1,10 @@
+=== tests/cases/compiler/external.d.ts ===
+export default class C {}
+>C : C
+
+=== tests/cases/compiler/main.ts ===
+declare module "M" {
+>"M" : typeof import("M")
+
+    export * from "external"
+}

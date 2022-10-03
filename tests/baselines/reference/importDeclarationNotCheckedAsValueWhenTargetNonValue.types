@@ -1,0 +1,39 @@
+=== tests/cases/compiler/file.d.ts ===
+declare namespace dojox {
+>dojox : typeof dojox
+
+    namespace charting {
+>charting : typeof charting
+
+        namespace axis2d {
+>axis2d : typeof axis2d
+
+            export class Val { }
+>Val : Val
+
+            interface common {
+                createText: object;
+>createText : object
+            }
+            namespace common {
+                interface createText {
+                    gfx(): string
+>gfx : () => string
+                }
+            }
+        }
+    }
+}
+declare module "dojox/charting/axis2d/common.createText" {
+>"dojox/charting/axis2d/common.createText" : typeof import("dojox/charting/axis2d/common.createText")
+
+    import exp = dojox.charting.axis2d.common
+>exp : any
+>dojox : typeof dojox
+>charting : typeof dojox.charting
+>axis2d : typeof dojox.charting.axis2d
+>common : exp
+
+    export = exp;
+>exp : exp
+}

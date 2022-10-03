@@ -1,0 +1,7 @@
+=== tests/cases/compiler/continueInIterationStatement2.ts ===
+do {
+  continue;
+}
+while (true);
+>true : true
+

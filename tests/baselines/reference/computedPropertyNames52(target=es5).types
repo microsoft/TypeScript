@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames52.js ===
+const array = [];
+>array : any[]
+>[] : undefined[]
+
+for (let i = 0; i < 10; ++i) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>++i : number
+>i : number
+
+    array.push(class C {
+>array.push(class C {        [i] = () => C;        static [i] = 100;    }) : number
+>array.push : (...items: any[]) => number
+>array : any[]
+>push : (...items: any[]) => number
+>class C {        [i] = () => C;        static [i] = 100;    } : typeof C
+>C : typeof C
+
+        [i] = () => C;
+>[i] : () => typeof C
+>i : number
+>() => C : () => typeof C
+>C : typeof C
+
+        static [i] = 100;
+>[i] : number
+>i : number
+>100 : 100
+
+    })
+}
+

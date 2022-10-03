@@ -1,0 +1,53 @@
+=== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts ===
+let x: "foo";
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+let y: "foo" | "bar"; 
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+let z: "bar";
+>z : Symbol(z, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 3))
+
+declare function randBool(): boolean;
+>randBool : Symbol(randBool, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 13))
+
+switch (x) {
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+    case randBool() ? "foo" : "baz":
+>randBool : Symbol(randBool, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 13))
+
+        break;
+    case (randBool() ? ("bar") : "baz" ? "bar" : "baz"):
+>randBool : Symbol(randBool, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 13))
+
+        break;
+    case (("bar")):
+        break;
+    case (x, y, ("baz")):
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+        x;
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+        y;
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+        break;
+    case (("foo" || ("bar"))):
+        break;
+    case (("bar" || ("baz"))):
+        break;
+    case z || "baz":
+>z : Symbol(z, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 3))
+
+    case "baz" || z:
+>z : Symbol(z, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 3))
+
+        z;
+>z : Symbol(z, Decl(stringLiteralsWithSwitchStatements03.ts, 2, 3))
+
+        break;
+}
+

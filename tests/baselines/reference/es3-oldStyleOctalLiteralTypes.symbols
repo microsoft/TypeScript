@@ -1,0 +1,7 @@
+=== tests/cases/compiler/es3-oldStyleOctalLiteralTypes.ts ===
+let x: 010;
+>x : Symbol(x, Decl(es3-oldStyleOctalLiteralTypes.ts, 0, 3))
+
+let y: -020;
+>y : Symbol(y, Decl(es3-oldStyleOctalLiteralTypes.ts, 1, 3))
+

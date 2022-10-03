@@ -1,0 +1,73 @@
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(5,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(6,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(10,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(11,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(15,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(16,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(20,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(21,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(25,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(26,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(30,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/conformance/types/members/duplicateStringIndexers.ts(31,9): error TS2374: Duplicate index signature for type 'string'.
+
+
+==== tests/cases/conformance/types/members/duplicateStringIndexers.ts (12 errors) ====
+    // it is an error to have duplicate index signatures of the same kind in a type
+    
+    module test {
+        interface Number {
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    
+        interface String {
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    
+        interface Array<T> {
+            [x: string]: T;
+            ~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: T;
+            ~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    
+        class C {
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    
+        interface I {
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    
+        var a: {
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+    }
+    

@@ -1,0 +1,29 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts(12,1): error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
+  Types of parameters 'z' and 'z' are incompatible.
+    Type 'T' is not assignable to type 'I2<T>'.
+      Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
+        Type 'I2<T>' is not assignable to type 'T'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'I2<T>'.
+
+
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts (1 errors) ====
+    // some complex cases of assignment compat of generic signatures.
+    
+    interface I2<T> {
+        p: T
+    }
+    
+    var x: <T extends I2<T>>(z: T) => void
+    var y: <T extends I2<I2<T>>>(z: T) => void
+    
+    // These both do not make sense as we would eventually be comparing I2<T> to I2<I2<T>>, and they are self referencing anyway
+    x = y 
+    y = x 
+    ~
+!!! error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
+!!! error TS2322:   Types of parameters 'z' and 'z' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'I2<T>'.
+!!! error TS2322:       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
+!!! error TS2322:         Type 'I2<T>' is not assignable to type 'T'.
+!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'I2<T>'.
+    

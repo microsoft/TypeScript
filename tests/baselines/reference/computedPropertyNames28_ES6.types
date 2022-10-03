@@ -1,0 +1,28 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames28_ES6.ts ===
+class Base {
+>Base : Base
+}
+class C extends Base {
+>C : C
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+
+        var obj = {
+>obj : { prop(): void; }
+>{            [(super(), "prop")]() { }        } : { prop(): void; }
+
+            [(super(), "prop")]() { }
+>[(super(), "prop")] : () => void
+>(super(), "prop") : "prop"
+>super(), "prop" : "prop"
+>super() : void
+>super : typeof Base
+>"prop" : "prop"
+
+        };
+    }
+}

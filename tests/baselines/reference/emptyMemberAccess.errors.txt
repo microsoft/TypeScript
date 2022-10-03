@@ -1,0 +1,12 @@
+tests/cases/compiler/emptyMemberAccess.ts(3,5): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/emptyMemberAccess.ts (1 errors) ====
+    function getObj() {
+    
+       ().toString();
+        ~
+!!! error TS1109: Expression expected.
+    
+    }
+     

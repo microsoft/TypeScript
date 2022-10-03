@@ -1,0 +1,93 @@
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(4,18): error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(10,13): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(17,5): error TS2339: Property 'name' does not exist on type '() => void'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(20,6): error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(25,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(33,13): error TS2304: Cannot find name 'Proxy'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(36,1): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(44,5): error TS2550: Property 'includes' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(47,9): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts (12 errors) ====
+    // All will be error from using ES6 features but only include ES5 library
+    // Using Es6 array
+    function f(x: number, y: number, z: number) {
+        return Array.from(arguments);
+                     ~~~~
+!!! error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    
+    f(1, 2, 3);  // no error
+    
+    // Using ES6 collection
+    var m = new Map<string, number>();
+                ~~~
+!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    m.clear();
+    // Using ES6 iterable
+    m.keys();
+    
+    // Using ES6 function
+    function Baz() { }
+    Baz.name;
+        ~~~~
+!!! error TS2339: Property 'name' does not exist on type '() => void'.
+    
+    // Using ES6 math
+    Math.sign(1);
+         ~~~~
+!!! error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    // Using ES6 object
+    var o = {
+        a: 2,
+        [Symbol.hasInstance](value: any) {
+         ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+            return false;
+        }
+    };
+    o.hasOwnProperty(Symbol.hasInstance);
+                     ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    
+    // Using Es6 proxy
+    var t = {}
+    var p = new Proxy(t, {});
+                ~~~~~
+!!! error TS2304: Cannot find name 'Proxy'.
+    
+    // Using ES6 reflect
+    Reflect.isExtensible({});
+    ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    // Using Es6 regexp
+    var reg = new RegExp("/s");
+    reg.flags;
+        ~~~~~
+!!! error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    // Using ES6 string
+    var str = "Hello world";
+    str.includes("hello", 0);
+        ~~~~~~~~
+!!! error TS2550: Property 'includes' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    // Using ES6 symbol
+    var s = Symbol();
+            ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    
+    // Using ES6 wellknown-symbol
+    const o1 = {
+        [Symbol.hasInstance](value: any) {
+         ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+            return false;
+        }
+    }

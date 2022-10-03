@@ -1,0 +1,34 @@
+=== tests/cases/compiler/assigningFromObjectToAnythingElse.ts ===
+var x: Object;
+>x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var y: RegExp;
+>y : Symbol(y, Decl(assigningFromObjectToAnythingElse.ts, 1, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+y = x;
+>y : Symbol(y, Decl(assigningFromObjectToAnythingElse.ts, 1, 3))
+>x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 3))
+
+var a: String = Object.create<Object>("");
+>a : Symbol(a, Decl(assigningFromObjectToAnythingElse.ts, 4, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var c: String = Object.create<Number>(1);
+>c : Symbol(c, Decl(assigningFromObjectToAnythingElse.ts, 5, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var w: Error = new Object();
+>w : Symbol(w, Decl(assigningFromObjectToAnythingElse.ts, 7, 3))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

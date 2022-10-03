@@ -1,0 +1,12 @@
+=== tests/cases/conformance/salsa/a.js ===
+// #22973
+var ns = (function() {})();
+>ns : void
+>(function() {})() : void
+>(function() {}) : () => void
+>function() {} : () => void
+
+/** @type {ns.NotFound} */
+var crash;
+>crash : ns.NotFound
+

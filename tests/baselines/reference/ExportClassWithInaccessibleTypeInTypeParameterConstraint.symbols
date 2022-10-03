@@ -1,0 +1,58 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts ===
+module A {
+>A : Symbol(A, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 0))
+
+    class Point {
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 2, 17))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 3, 18))
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 14))
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+>x : Symbol(x, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 32))
+>y : Symbol(y, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 38))
+
+    export class Point3d extends Point {
+>Point3d : Symbol(Point3d, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 46))
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        z: number;
+>z : Symbol(Point3d.z, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 9, 40))
+    }
+
+    export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+>Origin3d : Symbol(Origin3d, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 14))
+>Point3d : Symbol(Point3d, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 7, 46))
+>x : Symbol(x, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 36))
+>y : Symbol(y, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 42))
+>z : Symbol(z, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 48))
+
+    export class Line<TPoint extends Point>{
+>Line : Symbol(Line, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 56))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 22))
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+        constructor(public start: TPoint, public end: TPoint) { }
+>start : Symbol(Line.start, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 20))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 22))
+>end : Symbol(Line.end, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 41))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 22))
+
+        static fromorigin2d(p: Point): Line<Point>{
+>fromorigin2d : Symbol(Line.fromorigin2d, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 65))
+>p : Symbol(p, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 18, 28))
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+>Line : Symbol(Line, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 13, 56))
+>Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
+
+            return null;
+        }
+    }
+}
+

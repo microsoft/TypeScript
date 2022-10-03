@@ -1,0 +1,17 @@
+=== /exports.ts ===
+export function Component() {}
+>Component : Symbol(Component, Decl(exports.ts, 0, 0))
+
+export interface ComponentProps {}
+>ComponentProps : Symbol(ComponentProps, Decl(exports.ts, 0, 30))
+
+=== /index.ts ===
+import { Component, ComponentProps } from "./exports.js";
+>Component : Symbol(Component, Decl(index.ts, 0, 8))
+>ComponentProps : Symbol(ComponentProps, Decl(index.ts, 0, 19))
+
+=== /index.fixed.ts ===
+import { Component, type ComponentProps } from "./exports.js";
+>Component : Symbol(Component, Decl(index.fixed.ts, 0, 8))
+>ComponentProps : Symbol(ComponentProps, Decl(index.fixed.ts, 0, 19))
+

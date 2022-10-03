@@ -1,0 +1,15 @@
+=== tests/cases/compiler/exportAssignmentVariable_B.ts ===
+import y = require("./exportAssignmentVariable_A");
+>y : Symbol(y, Decl(exportAssignmentVariable_B.ts, 0, 0))
+
+var n: number = y;
+>n : Symbol(n, Decl(exportAssignmentVariable_B.ts, 2, 3))
+>y : Symbol(y, Decl(exportAssignmentVariable_B.ts, 0, 0))
+
+=== tests/cases/compiler/exportAssignmentVariable_A.ts ===
+var x = 0;
+>x : Symbol(x, Decl(exportAssignmentVariable_A.ts, 0, 3))
+
+export = x;
+>x : Symbol(x, Decl(exportAssignmentVariable_A.ts, 0, 3))
+

@@ -1,0 +1,77 @@
+=== tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
+type A = { a: number };
+>A : Symbol(A, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 0))
+>a : Symbol(a, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 10))
+
+type B = { b: number };
+>B : Symbol(B, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 23))
+>b : Symbol(b, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 10))
+
+type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
+>X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 7))
+>K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 16))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 7))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 7))
+>K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 7))
+
+type P1<T> = { data: X<T> };
+>P1 : Symbol(P1, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 71))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 8))
+>data : Symbol(data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 14))
+>X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 8))
+
+type P2<T> = { data: X<T> };
+>P2 : Symbol(P2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 28))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 8))
+>data : Symbol(data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 14))
+>X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 8))
+
+interface I<T> {
+>I : Symbol(I, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 28))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+
+    fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
+>fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+>K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 7))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+>p1 : Symbol(p1, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 26))
+>P1 : Symbol(P1, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 71))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+>K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 7))
+>p2 : Symbol(p2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 45))
+>P2 : Symbol(P2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 28))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+>K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 7))
+}
+
+const i: I<A & B> = null as any;
+>i : Symbol(i, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 10, 5))
+>I : Symbol(I, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 28))
+>A : Symbol(A, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 0))
+>B : Symbol(B, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 23))
+
+const p2: P2<A> = null as any;
+>p2 : Symbol(p2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 11, 5))
+>P2 : Symbol(P2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 28))
+>A : Symbol(A, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 0))
+
+// Commenting out the below line will remove the error on the `const _i: I<A> = i;`
+i.fn(null as any, p2);
+>i.fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+>i : Symbol(i, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 10, 5))
+>fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+>p2 : Symbol(p2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 11, 5))
+
+const _i: I<A> = i;
+>_i : Symbol(_i, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 16, 5))
+>I : Symbol(I, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 28))
+>A : Symbol(A, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 0))
+>i : Symbol(i, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 10, 5))
+

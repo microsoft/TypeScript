@@ -1,0 +1,10 @@
+=== tests/cases/compiler/staticIndexSignatureAndNormalIndexSignature.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(staticIndexSignatureAndNormalIndexSignature.ts, 0, 0))
+
+    [p: string]: any;
+>p : Symbol(p, Decl(staticIndexSignatureAndNormalIndexSignature.ts, 1, 5))
+
+    static [p: string]: number;
+>p : Symbol(p, Decl(staticIndexSignatureAndNormalIndexSignature.ts, 2, 12))
+}

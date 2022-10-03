@@ -1,0 +1,36 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(5,9): error TS2378: A 'get' accessor must return a value.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(5,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(5,17): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(5,17): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(6,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,16): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts (8 errors) ====
+    var id;
+    class C {
+        [0 + 1]() { }
+        static [() => { }]() { }
+               ~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        get [delete id]() { }
+            ~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+            ~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+                    ~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+                    ~~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+        set [[0, 1]](v) { }
+            ~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        static get [<String>""]() { }
+                   ~~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value.
+                   ~~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        static set [id.toString()](v) { }
+    }

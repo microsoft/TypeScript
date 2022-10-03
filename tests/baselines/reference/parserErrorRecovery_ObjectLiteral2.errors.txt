@@ -1,0 +1,18 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(1,11): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,1): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,7): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,8): error TS1005: '}' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts (4 errors) ====
+    var v = { a
+              ~
+!!! error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+    return;
+    ~~~~~~
+!!! error TS1005: ',' expected.
+          ~
+!!! error TS1005: ':' expected.
+           
+!!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts:1:9: The parser expected to find a '}' to match the '{' token here.

@@ -1,0 +1,96 @@
+=== tests/cases/compiler/missingTypeArguments3.ts ===
+declare module linq {
+
+    interface Enumerable<T> {
+        OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
+>OrderByDescending : (keySelector?: string) => OrderedEnumerable<T>
+>keySelector : string
+
+        GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
+>GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
+>keySelector : (element: T) => TKey
+>element : T
+
+        GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
+>GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
+>keySelector : (element: T) => TKey
+>element : T
+>elementSelector : (element: T) => TElement
+>element : T
+
+        ToDictionary<TKey>(keySelector: (element: T) => TKey): Dictionary<TKey, T>;
+>ToDictionary : <TKey>(keySelector: (element: T) => TKey) => Dictionary<TKey, T>
+>keySelector : (element: T) => TKey
+>element : T
+    }
+
+    interface OrderedEnumerable<T> extends Enumerable<T> {
+        ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
+>ThenBy : <TCompare>(keySelector: (element: T) => TCompare) => OrderedEnumerable<T>
+>keySelector : (element: T) => TCompare
+>element : T
+    }
+
+    interface Grouping<TKey, TElement> extends Enumerable<TElement> {
+        Key(): TKey;
+>Key : () => TKey
+    }
+
+    interface Lookup<TKey, TElement> {
+        Count(): number;
+>Count : () => number
+
+        Get(key): Enumerable<any>;
+>Get : (key: any) => Enumerable<any>
+>key : any
+
+        Contains(key): boolean;
+>Contains : (key: any) => boolean
+>key : any
+
+        ToEnumerable(): Enumerable<Grouping<TKey, any>>;
+>ToEnumerable : () => Enumerable<Grouping<TKey, any>>
+    }
+
+    interface Dictionary<TKey, TValue> {
+        Add(key: TKey, value: TValue): void;
+>Add : (key: TKey, value: TValue) => void
+>key : TKey
+>value : TValue
+
+        Get(ke: TKey): TValue;
+>Get : (ke: TKey) => TValue
+>ke : TKey
+
+        Set(key: TKey, value: TValue): boolean;
+>Set : (key: TKey, value: TValue) => boolean
+>key : TKey
+>value : TValue
+
+        Contains(key: TKey): boolean;
+>Contains : (key: TKey) => boolean
+>key : TKey
+
+        Clear(): void;
+>Clear : () => void
+
+        Remove(key: TKey): void;
+>Remove : (key: TKey) => void
+>key : TKey
+
+        Count(): number;
+>Count : () => number
+
+        ToEnumerable(): Enumerable<KeyValuePair<TKey, TValue>>;
+>ToEnumerable : () => Enumerable<KeyValuePair<TKey, TValue>>
+    }
+
+    interface KeyValuePair<TKey, TValue> {
+        Key: TKey;
+>Key : TKey
+
+        Value: TValue;
+>Value : TValue
+    }
+}
+

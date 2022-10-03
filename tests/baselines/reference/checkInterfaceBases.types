@@ -1,0 +1,20 @@
+=== tests/cases/compiler/app.ts ===
+///<reference path='jquery.d.ts' />
+interface SecondEvent {
+    data: any;
+>data : any
+}
+interface Third extends JQueryEventObjectTest, SecondEvent {}
+
+=== tests/cases/compiler/jquery.d.ts ===
+interface JQueryEventObjectTest {
+    data: any;
+>data : any
+
+    which: number;
+>which : number
+
+    metaKey: any;
+>metaKey : any
+}
+

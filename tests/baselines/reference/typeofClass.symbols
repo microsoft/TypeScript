@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeofClass.ts ===
+class K {
+>K : Symbol(K, Decl(typeofClass.ts, 0, 0))
+
+    foo: number;
+>foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
+
+    static bar: string;
+>bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
+}
+
+var k1: K;
+>k1 : Symbol(k1, Decl(typeofClass.ts, 5, 3))
+>K : Symbol(K, Decl(typeofClass.ts, 0, 0))
+
+k1.foo;
+>k1.foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
+>k1 : Symbol(k1, Decl(typeofClass.ts, 5, 3))
+>foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
+
+k1.bar;
+>k1 : Symbol(k1, Decl(typeofClass.ts, 5, 3))
+
+var k2: typeof K;
+>k2 : Symbol(k2, Decl(typeofClass.ts, 8, 3))
+>K : Symbol(K, Decl(typeofClass.ts, 0, 0))
+
+k2.foo;
+>k2 : Symbol(k2, Decl(typeofClass.ts, 8, 3))
+
+k2.bar;
+>k2.bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
+>k2 : Symbol(k2, Decl(typeofClass.ts, 8, 3))
+>bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
+

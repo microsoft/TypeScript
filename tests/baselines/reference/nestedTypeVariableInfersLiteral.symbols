@@ -1,0 +1,78 @@
+=== tests/cases/compiler/nestedTypeVariableInfersLiteral.ts ===
+// https://github.com/Microsoft/TypeScript/issues/19632
+declare function direct<A extends string>(a: A | A[]): Record<A, string>
+>direct : Symbol(direct, Decl(nestedTypeVariableInfersLiteral.ts, 0, 0))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 1, 24))
+>a : Symbol(a, Decl(nestedTypeVariableInfersLiteral.ts, 1, 42))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 1, 24))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 1, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 1, 24))
+
+declare function nested<A extends string>(a: { fields: A }): Record<A, string>
+>nested : Symbol(nested, Decl(nestedTypeVariableInfersLiteral.ts, 1, 72))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 2, 24))
+>a : Symbol(a, Decl(nestedTypeVariableInfersLiteral.ts, 2, 42))
+>fields : Symbol(fields, Decl(nestedTypeVariableInfersLiteral.ts, 2, 46))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 2, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 2, 24))
+
+declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>
+>nestedUnion : Symbol(nestedUnion, Decl(nestedTypeVariableInfersLiteral.ts, 2, 78))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 3, 29))
+>a : Symbol(a, Decl(nestedTypeVariableInfersLiteral.ts, 3, 47))
+>fields : Symbol(fields, Decl(nestedTypeVariableInfersLiteral.ts, 3, 51))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 3, 29))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 3, 29))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nestedTypeVariableInfersLiteral.ts, 3, 29))
+
+const directUnionSingle = direct("z")
+>directUnionSingle : Symbol(directUnionSingle, Decl(nestedTypeVariableInfersLiteral.ts, 5, 5))
+>direct : Symbol(direct, Decl(nestedTypeVariableInfersLiteral.ts, 0, 0))
+
+const directUnionArray = direct(["z", "y"])
+>directUnionArray : Symbol(directUnionArray, Decl(nestedTypeVariableInfersLiteral.ts, 6, 5))
+>direct : Symbol(direct, Decl(nestedTypeVariableInfersLiteral.ts, 0, 0))
+
+const nestedSingle = nested({fields: "z"})
+>nestedSingle : Symbol(nestedSingle, Decl(nestedTypeVariableInfersLiteral.ts, 7, 5))
+>nested : Symbol(nested, Decl(nestedTypeVariableInfersLiteral.ts, 1, 72))
+>fields : Symbol(fields, Decl(nestedTypeVariableInfersLiteral.ts, 7, 29))
+
+const nestedUnionSingle = nestedUnion({fields: "z"})
+>nestedUnionSingle : Symbol(nestedUnionSingle, Decl(nestedTypeVariableInfersLiteral.ts, 8, 5))
+>nestedUnion : Symbol(nestedUnion, Decl(nestedTypeVariableInfersLiteral.ts, 2, 78))
+>fields : Symbol(fields, Decl(nestedTypeVariableInfersLiteral.ts, 8, 39))
+
+const nestedUnionArray = nestedUnion({fields: ["z", "y"]})
+>nestedUnionArray : Symbol(nestedUnionArray, Decl(nestedTypeVariableInfersLiteral.ts, 9, 5))
+>nestedUnion : Symbol(nestedUnion, Decl(nestedTypeVariableInfersLiteral.ts, 2, 78))
+>fields : Symbol(fields, Decl(nestedTypeVariableInfersLiteral.ts, 9, 38))
+
+declare function hasZField(arg: { z: string }): void
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>arg : Symbol(arg, Decl(nestedTypeVariableInfersLiteral.ts, 11, 27))
+>z : Symbol(z, Decl(nestedTypeVariableInfersLiteral.ts, 11, 33))
+
+hasZField(directUnionSingle) // ok
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>directUnionSingle : Symbol(directUnionSingle, Decl(nestedTypeVariableInfersLiteral.ts, 5, 5))
+
+hasZField(directUnionArray) // ok
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>directUnionArray : Symbol(directUnionArray, Decl(nestedTypeVariableInfersLiteral.ts, 6, 5))
+
+hasZField(nestedSingle) // ok
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>nestedSingle : Symbol(nestedSingle, Decl(nestedTypeVariableInfersLiteral.ts, 7, 5))
+
+hasZField(nestedUnionSingle) // ok
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>nestedUnionSingle : Symbol(nestedUnionSingle, Decl(nestedTypeVariableInfersLiteral.ts, 8, 5))
+
+hasZField(nestedUnionArray) // ok
+>hasZField : Symbol(hasZField, Decl(nestedTypeVariableInfersLiteral.ts, 9, 58))
+>nestedUnionArray : Symbol(nestedUnionArray, Decl(nestedTypeVariableInfersLiteral.ts, 9, 5))
+

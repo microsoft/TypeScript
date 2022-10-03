@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES6.ts ===
+enum E {
+>E : Symbol(E, Decl(computedPropertyNames7_ES6.ts, 0, 0))
+
+    member
+>member : Symbol(E.member, Decl(computedPropertyNames7_ES6.ts, 0, 8))
+}
+var v = {
+>v : Symbol(v, Decl(computedPropertyNames7_ES6.ts, 3, 3))
+
+    [E.member]: 0
+>[E.member] : Symbol([E.member], Decl(computedPropertyNames7_ES6.ts, 3, 9))
+>E.member : Symbol(E.member, Decl(computedPropertyNames7_ES6.ts, 0, 8))
+>E : Symbol(E, Decl(computedPropertyNames7_ES6.ts, 0, 0))
+>member : Symbol(E.member, Decl(computedPropertyNames7_ES6.ts, 0, 8))
+}

@@ -1,0 +1,751 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript.AstWalkerWithDetailCallback {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource13.ts, 0, 0))
+>AstWalkerWithDetailCallback : Symbol(AstWalkerWithDetailCallback, Decl(parserRealSource13.ts, 5, 18))
+
+    export interface AstWalkerDetailCallback {
+>AstWalkerDetailCallback : Symbol(AstWalkerDetailCallback, Decl(parserRealSource13.ts, 5, 47))
+
+        EmptyCallback? (pre, ast: AST): boolean;
+>EmptyCallback : Symbol(AstWalkerDetailCallback.EmptyCallback, Decl(parserRealSource13.ts, 6, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 7, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 7, 28))
+>AST : Symbol(AST)
+
+        EmptyExprCallback? (pre, ast: AST): boolean;
+>EmptyExprCallback : Symbol(AstWalkerDetailCallback.EmptyExprCallback, Decl(parserRealSource13.ts, 7, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 8, 28))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 8, 32))
+>AST : Symbol(AST)
+
+        TrueCallback? (pre, ast: AST): boolean;
+>TrueCallback : Symbol(AstWalkerDetailCallback.TrueCallback, Decl(parserRealSource13.ts, 8, 52))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 9, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 9, 27))
+>AST : Symbol(AST)
+
+        FalseCallback? (pre, ast: AST): boolean;
+>FalseCallback : Symbol(AstWalkerDetailCallback.FalseCallback, Decl(parserRealSource13.ts, 9, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 10, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 10, 28))
+>AST : Symbol(AST)
+
+        ThisCallback? (pre, ast: AST): boolean;
+>ThisCallback : Symbol(AstWalkerDetailCallback.ThisCallback, Decl(parserRealSource13.ts, 10, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 11, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 11, 27))
+>AST : Symbol(AST)
+
+        SuperCallback? (pre, ast: AST): boolean;
+>SuperCallback : Symbol(AstWalkerDetailCallback.SuperCallback, Decl(parserRealSource13.ts, 11, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 12, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 12, 28))
+>AST : Symbol(AST)
+
+        QStringCallback? (pre, ast: AST): boolean;
+>QStringCallback : Symbol(AstWalkerDetailCallback.QStringCallback, Decl(parserRealSource13.ts, 12, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 13, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 13, 30))
+>AST : Symbol(AST)
+
+        RegexCallback? (pre, ast: AST): boolean;
+>RegexCallback : Symbol(AstWalkerDetailCallback.RegexCallback, Decl(parserRealSource13.ts, 13, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 14, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 14, 28))
+>AST : Symbol(AST)
+
+        NullCallback? (pre, ast: AST): boolean;
+>NullCallback : Symbol(AstWalkerDetailCallback.NullCallback, Decl(parserRealSource13.ts, 14, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 15, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 15, 27))
+>AST : Symbol(AST)
+
+        ArrayLitCallback? (pre, ast: AST): boolean;
+>ArrayLitCallback : Symbol(AstWalkerDetailCallback.ArrayLitCallback, Decl(parserRealSource13.ts, 15, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 16, 27))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 16, 31))
+>AST : Symbol(AST)
+
+        ObjectLitCallback? (pre, ast: AST): boolean;
+>ObjectLitCallback : Symbol(AstWalkerDetailCallback.ObjectLitCallback, Decl(parserRealSource13.ts, 16, 51))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 17, 28))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 17, 32))
+>AST : Symbol(AST)
+
+        VoidCallback? (pre, ast: AST): boolean;
+>VoidCallback : Symbol(AstWalkerDetailCallback.VoidCallback, Decl(parserRealSource13.ts, 17, 52))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 18, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 18, 27))
+>AST : Symbol(AST)
+
+        CommaCallback? (pre, ast: AST): boolean;
+>CommaCallback : Symbol(AstWalkerDetailCallback.CommaCallback, Decl(parserRealSource13.ts, 18, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 19, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 19, 28))
+>AST : Symbol(AST)
+
+        PosCallback? (pre, ast: AST): boolean;
+>PosCallback : Symbol(AstWalkerDetailCallback.PosCallback, Decl(parserRealSource13.ts, 19, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 20, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 20, 26))
+>AST : Symbol(AST)
+
+        NegCallback? (pre, ast: AST): boolean;
+>NegCallback : Symbol(AstWalkerDetailCallback.NegCallback, Decl(parserRealSource13.ts, 20, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 21, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 21, 26))
+>AST : Symbol(AST)
+
+        DeleteCallback? (pre, ast: AST): boolean;
+>DeleteCallback : Symbol(AstWalkerDetailCallback.DeleteCallback, Decl(parserRealSource13.ts, 21, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 22, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 22, 29))
+>AST : Symbol(AST)
+
+        AwaitCallback? (pre, ast: AST): boolean;
+>AwaitCallback : Symbol(AstWalkerDetailCallback.AwaitCallback, Decl(parserRealSource13.ts, 22, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 23, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 23, 28))
+>AST : Symbol(AST)
+
+        InCallback? (pre, ast: AST): boolean;
+>InCallback : Symbol(AstWalkerDetailCallback.InCallback, Decl(parserRealSource13.ts, 23, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 24, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 24, 25))
+>AST : Symbol(AST)
+
+        DotCallback? (pre, ast: AST): boolean;
+>DotCallback : Symbol(AstWalkerDetailCallback.DotCallback, Decl(parserRealSource13.ts, 24, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 25, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 25, 26))
+>AST : Symbol(AST)
+
+        FromCallback? (pre, ast: AST): boolean;
+>FromCallback : Symbol(AstWalkerDetailCallback.FromCallback, Decl(parserRealSource13.ts, 25, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 26, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 26, 27))
+>AST : Symbol(AST)
+
+        IsCallback? (pre, ast: AST): boolean;
+>IsCallback : Symbol(AstWalkerDetailCallback.IsCallback, Decl(parserRealSource13.ts, 26, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 27, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 27, 25))
+>AST : Symbol(AST)
+
+        InstOfCallback? (pre, ast: AST): boolean;
+>InstOfCallback : Symbol(AstWalkerDetailCallback.InstOfCallback, Decl(parserRealSource13.ts, 27, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 28, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 28, 29))
+>AST : Symbol(AST)
+
+        TypeofCallback? (pre, ast: AST): boolean;
+>TypeofCallback : Symbol(AstWalkerDetailCallback.TypeofCallback, Decl(parserRealSource13.ts, 28, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 29, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 29, 29))
+>AST : Symbol(AST)
+
+        NumberLitCallback? (pre, ast: AST): boolean;
+>NumberLitCallback : Symbol(AstWalkerDetailCallback.NumberLitCallback, Decl(parserRealSource13.ts, 29, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 30, 28))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 30, 32))
+>AST : Symbol(AST)
+
+        NameCallback? (pre, identifierAst: Identifier): boolean;
+>NameCallback : Symbol(AstWalkerDetailCallback.NameCallback, Decl(parserRealSource13.ts, 30, 52))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 31, 23))
+>identifierAst : Symbol(identifierAst, Decl(parserRealSource13.ts, 31, 27))
+>Identifier : Symbol(Identifier)
+
+        TypeRefCallback? (pre, ast: AST): boolean;
+>TypeRefCallback : Symbol(AstWalkerDetailCallback.TypeRefCallback, Decl(parserRealSource13.ts, 31, 64))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 32, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 32, 30))
+>AST : Symbol(AST)
+
+        IndexCallback? (pre, ast: AST): boolean;
+>IndexCallback : Symbol(AstWalkerDetailCallback.IndexCallback, Decl(parserRealSource13.ts, 32, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 33, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 33, 28))
+>AST : Symbol(AST)
+
+        CallCallback? (pre, ast: AST): boolean;
+>CallCallback : Symbol(AstWalkerDetailCallback.CallCallback, Decl(parserRealSource13.ts, 33, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 34, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 34, 27))
+>AST : Symbol(AST)
+
+        NewCallback? (pre, ast: AST): boolean;
+>NewCallback : Symbol(AstWalkerDetailCallback.NewCallback, Decl(parserRealSource13.ts, 34, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 35, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 35, 26))
+>AST : Symbol(AST)
+
+        AsgCallback? (pre, ast: AST): boolean;
+>AsgCallback : Symbol(AstWalkerDetailCallback.AsgCallback, Decl(parserRealSource13.ts, 35, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 36, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 36, 26))
+>AST : Symbol(AST)
+
+        AsgAddCallback? (pre, ast: AST): boolean;
+>AsgAddCallback : Symbol(AstWalkerDetailCallback.AsgAddCallback, Decl(parserRealSource13.ts, 36, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 37, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 37, 29))
+>AST : Symbol(AST)
+
+        AsgSubCallback? (pre, ast: AST): boolean;
+>AsgSubCallback : Symbol(AstWalkerDetailCallback.AsgSubCallback, Decl(parserRealSource13.ts, 37, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 38, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 38, 29))
+>AST : Symbol(AST)
+
+        AsgDivCallback? (pre, ast: AST): boolean;
+>AsgDivCallback : Symbol(AstWalkerDetailCallback.AsgDivCallback, Decl(parserRealSource13.ts, 38, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 39, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 39, 29))
+>AST : Symbol(AST)
+
+        AsgMulCallback? (pre, ast: AST): boolean;
+>AsgMulCallback : Symbol(AstWalkerDetailCallback.AsgMulCallback, Decl(parserRealSource13.ts, 39, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 40, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 40, 29))
+>AST : Symbol(AST)
+
+        AsgModCallback? (pre, ast: AST): boolean;
+>AsgModCallback : Symbol(AstWalkerDetailCallback.AsgModCallback, Decl(parserRealSource13.ts, 40, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 41, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 41, 29))
+>AST : Symbol(AST)
+
+        AsgAndCallback? (pre, ast: AST): boolean;
+>AsgAndCallback : Symbol(AstWalkerDetailCallback.AsgAndCallback, Decl(parserRealSource13.ts, 41, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 42, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 42, 29))
+>AST : Symbol(AST)
+
+        AsgXorCallback? (pre, ast: AST): boolean;
+>AsgXorCallback : Symbol(AstWalkerDetailCallback.AsgXorCallback, Decl(parserRealSource13.ts, 42, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 43, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 43, 29))
+>AST : Symbol(AST)
+
+        AsgOrCallback? (pre, ast: AST): boolean;
+>AsgOrCallback : Symbol(AstWalkerDetailCallback.AsgOrCallback, Decl(parserRealSource13.ts, 43, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 44, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 44, 28))
+>AST : Symbol(AST)
+
+        AsgLshCallback? (pre, ast: AST): boolean;
+>AsgLshCallback : Symbol(AstWalkerDetailCallback.AsgLshCallback, Decl(parserRealSource13.ts, 44, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 45, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 45, 29))
+>AST : Symbol(AST)
+
+        AsgRshCallback? (pre, ast: AST): boolean;
+>AsgRshCallback : Symbol(AstWalkerDetailCallback.AsgRshCallback, Decl(parserRealSource13.ts, 45, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 46, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 46, 29))
+>AST : Symbol(AST)
+
+        AsgRs2Callback? (pre, ast: AST): boolean;
+>AsgRs2Callback : Symbol(AstWalkerDetailCallback.AsgRs2Callback, Decl(parserRealSource13.ts, 46, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 47, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 47, 29))
+>AST : Symbol(AST)
+
+        QMarkCallback? (pre, ast: AST): boolean;
+>QMarkCallback : Symbol(AstWalkerDetailCallback.QMarkCallback, Decl(parserRealSource13.ts, 47, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 48, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 48, 28))
+>AST : Symbol(AST)
+
+        LogOrCallback? (pre, ast: AST): boolean;
+>LogOrCallback : Symbol(AstWalkerDetailCallback.LogOrCallback, Decl(parserRealSource13.ts, 48, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 49, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 49, 28))
+>AST : Symbol(AST)
+
+        LogAndCallback? (pre, ast: AST): boolean;
+>LogAndCallback : Symbol(AstWalkerDetailCallback.LogAndCallback, Decl(parserRealSource13.ts, 49, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 50, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 50, 29))
+>AST : Symbol(AST)
+
+        OrCallback? (pre, ast: AST): boolean;
+>OrCallback : Symbol(AstWalkerDetailCallback.OrCallback, Decl(parserRealSource13.ts, 50, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 51, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 51, 25))
+>AST : Symbol(AST)
+
+        XorCallback? (pre, ast: AST): boolean;
+>XorCallback : Symbol(AstWalkerDetailCallback.XorCallback, Decl(parserRealSource13.ts, 51, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 52, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 52, 26))
+>AST : Symbol(AST)
+
+        AndCallback? (pre, ast: AST): boolean;
+>AndCallback : Symbol(AstWalkerDetailCallback.AndCallback, Decl(parserRealSource13.ts, 52, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 53, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 53, 26))
+>AST : Symbol(AST)
+
+        EqCallback? (pre, ast: AST): boolean;
+>EqCallback : Symbol(AstWalkerDetailCallback.EqCallback, Decl(parserRealSource13.ts, 53, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 54, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 54, 25))
+>AST : Symbol(AST)
+
+        NeCallback? (pre, ast: AST): boolean;
+>NeCallback : Symbol(AstWalkerDetailCallback.NeCallback, Decl(parserRealSource13.ts, 54, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 55, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 55, 25))
+>AST : Symbol(AST)
+
+        EqvCallback? (pre, ast: AST): boolean;
+>EqvCallback : Symbol(AstWalkerDetailCallback.EqvCallback, Decl(parserRealSource13.ts, 55, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 56, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 56, 26))
+>AST : Symbol(AST)
+
+        NEqvCallback? (pre, ast: AST): boolean;
+>NEqvCallback : Symbol(AstWalkerDetailCallback.NEqvCallback, Decl(parserRealSource13.ts, 56, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 57, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 57, 27))
+>AST : Symbol(AST)
+
+        LtCallback? (pre, ast: AST): boolean;
+>LtCallback : Symbol(AstWalkerDetailCallback.LtCallback, Decl(parserRealSource13.ts, 57, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 58, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 58, 25))
+>AST : Symbol(AST)
+
+        LeCallback? (pre, ast: AST): boolean;
+>LeCallback : Symbol(AstWalkerDetailCallback.LeCallback, Decl(parserRealSource13.ts, 58, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 59, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 59, 25))
+>AST : Symbol(AST)
+
+        GtCallback? (pre, ast: AST): boolean;
+>GtCallback : Symbol(AstWalkerDetailCallback.GtCallback, Decl(parserRealSource13.ts, 59, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 60, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 60, 25))
+>AST : Symbol(AST)
+
+        GeCallback? (pre, ast: AST): boolean;
+>GeCallback : Symbol(AstWalkerDetailCallback.GeCallback, Decl(parserRealSource13.ts, 60, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 61, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 61, 25))
+>AST : Symbol(AST)
+
+        AddCallback? (pre, ast: AST): boolean;
+>AddCallback : Symbol(AstWalkerDetailCallback.AddCallback, Decl(parserRealSource13.ts, 61, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 62, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 62, 26))
+>AST : Symbol(AST)
+
+        SubCallback? (pre, ast: AST): boolean;
+>SubCallback : Symbol(AstWalkerDetailCallback.SubCallback, Decl(parserRealSource13.ts, 62, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 63, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 63, 26))
+>AST : Symbol(AST)
+
+        MulCallback? (pre, ast: AST): boolean;
+>MulCallback : Symbol(AstWalkerDetailCallback.MulCallback, Decl(parserRealSource13.ts, 63, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 64, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 64, 26))
+>AST : Symbol(AST)
+
+        DivCallback? (pre, ast: AST): boolean;
+>DivCallback : Symbol(AstWalkerDetailCallback.DivCallback, Decl(parserRealSource13.ts, 64, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 65, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 65, 26))
+>AST : Symbol(AST)
+
+        ModCallback? (pre, ast: AST): boolean;
+>ModCallback : Symbol(AstWalkerDetailCallback.ModCallback, Decl(parserRealSource13.ts, 65, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 66, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 66, 26))
+>AST : Symbol(AST)
+
+        LshCallback? (pre, ast: AST): boolean;
+>LshCallback : Symbol(AstWalkerDetailCallback.LshCallback, Decl(parserRealSource13.ts, 66, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 67, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 67, 26))
+>AST : Symbol(AST)
+
+        RshCallback? (pre, ast: AST): boolean;
+>RshCallback : Symbol(AstWalkerDetailCallback.RshCallback, Decl(parserRealSource13.ts, 67, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 68, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 68, 26))
+>AST : Symbol(AST)
+
+        Rs2Callback? (pre, ast: AST): boolean;
+>Rs2Callback : Symbol(AstWalkerDetailCallback.Rs2Callback, Decl(parserRealSource13.ts, 68, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 69, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 69, 26))
+>AST : Symbol(AST)
+
+        NotCallback? (pre, ast: AST): boolean;
+>NotCallback : Symbol(AstWalkerDetailCallback.NotCallback, Decl(parserRealSource13.ts, 69, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 70, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 70, 26))
+>AST : Symbol(AST)
+
+        LogNotCallback? (pre, ast: AST): boolean;
+>LogNotCallback : Symbol(AstWalkerDetailCallback.LogNotCallback, Decl(parserRealSource13.ts, 70, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 71, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 71, 29))
+>AST : Symbol(AST)
+
+        IncPreCallback? (pre, ast: AST): boolean;
+>IncPreCallback : Symbol(AstWalkerDetailCallback.IncPreCallback, Decl(parserRealSource13.ts, 71, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 72, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 72, 29))
+>AST : Symbol(AST)
+
+        DecPreCallback? (pre, ast: AST): boolean;
+>DecPreCallback : Symbol(AstWalkerDetailCallback.DecPreCallback, Decl(parserRealSource13.ts, 72, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 73, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 73, 29))
+>AST : Symbol(AST)
+
+        IncPostCallback? (pre, ast: AST): boolean;
+>IncPostCallback : Symbol(AstWalkerDetailCallback.IncPostCallback, Decl(parserRealSource13.ts, 73, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 74, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 74, 30))
+>AST : Symbol(AST)
+
+        DecPostCallback? (pre, ast: AST): boolean;
+>DecPostCallback : Symbol(AstWalkerDetailCallback.DecPostCallback, Decl(parserRealSource13.ts, 74, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 75, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 75, 30))
+>AST : Symbol(AST)
+
+        TypeAssertionCallback? (pre, ast: AST): boolean;
+>TypeAssertionCallback : Symbol(AstWalkerDetailCallback.TypeAssertionCallback, Decl(parserRealSource13.ts, 75, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 76, 32))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 76, 36))
+>AST : Symbol(AST)
+
+        FuncDeclCallback? (pre, funcDecl: FuncDecl): boolean;
+>FuncDeclCallback : Symbol(AstWalkerDetailCallback.FuncDeclCallback, Decl(parserRealSource13.ts, 76, 56))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 77, 27))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource13.ts, 77, 31))
+>FuncDecl : Symbol(FuncDecl)
+
+        MemberCallback? (pre, ast: AST): boolean;
+>MemberCallback : Symbol(AstWalkerDetailCallback.MemberCallback, Decl(parserRealSource13.ts, 77, 61))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 78, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 78, 29))
+>AST : Symbol(AST)
+
+        VarDeclCallback? (pre, varDecl: VarDecl): boolean;
+>VarDeclCallback : Symbol(AstWalkerDetailCallback.VarDeclCallback, Decl(parserRealSource13.ts, 78, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 79, 26))
+>varDecl : Symbol(varDecl, Decl(parserRealSource13.ts, 79, 30))
+>VarDecl : Symbol(VarDecl)
+
+        ArgDeclCallback? (pre, ast: AST): boolean;
+>ArgDeclCallback : Symbol(AstWalkerDetailCallback.ArgDeclCallback, Decl(parserRealSource13.ts, 79, 58))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 80, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 80, 30))
+>AST : Symbol(AST)
+
+        ReturnCallback? (pre, ast: AST): boolean;
+>ReturnCallback : Symbol(AstWalkerDetailCallback.ReturnCallback, Decl(parserRealSource13.ts, 80, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 81, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 81, 29))
+>AST : Symbol(AST)
+
+        BreakCallback? (pre, ast: AST): boolean;
+>BreakCallback : Symbol(AstWalkerDetailCallback.BreakCallback, Decl(parserRealSource13.ts, 81, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 82, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 82, 28))
+>AST : Symbol(AST)
+
+        ContinueCallback? (pre, ast: AST): boolean;
+>ContinueCallback : Symbol(AstWalkerDetailCallback.ContinueCallback, Decl(parserRealSource13.ts, 82, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 83, 27))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 83, 31))
+>AST : Symbol(AST)
+
+        ThrowCallback? (pre, ast: AST): boolean;
+>ThrowCallback : Symbol(AstWalkerDetailCallback.ThrowCallback, Decl(parserRealSource13.ts, 83, 51))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 84, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 84, 28))
+>AST : Symbol(AST)
+
+        ForCallback? (pre, ast: AST): boolean;
+>ForCallback : Symbol(AstWalkerDetailCallback.ForCallback, Decl(parserRealSource13.ts, 84, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 85, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 85, 26))
+>AST : Symbol(AST)
+
+        ForInCallback? (pre, ast: AST): boolean;
+>ForInCallback : Symbol(AstWalkerDetailCallback.ForInCallback, Decl(parserRealSource13.ts, 85, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 86, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 86, 28))
+>AST : Symbol(AST)
+
+        IfCallback? (pre, ast: AST): boolean;
+>IfCallback : Symbol(AstWalkerDetailCallback.IfCallback, Decl(parserRealSource13.ts, 86, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 87, 21))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 87, 25))
+>AST : Symbol(AST)
+
+        WhileCallback? (pre, ast: AST): boolean;
+>WhileCallback : Symbol(AstWalkerDetailCallback.WhileCallback, Decl(parserRealSource13.ts, 87, 45))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 88, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 88, 28))
+>AST : Symbol(AST)
+
+        DoWhileCallback? (pre, ast: AST): boolean;
+>DoWhileCallback : Symbol(AstWalkerDetailCallback.DoWhileCallback, Decl(parserRealSource13.ts, 88, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 89, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 89, 30))
+>AST : Symbol(AST)
+
+        BlockCallback? (pre, block: Block): boolean;
+>BlockCallback : Symbol(AstWalkerDetailCallback.BlockCallback, Decl(parserRealSource13.ts, 89, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 90, 24))
+>block : Symbol(block, Decl(parserRealSource13.ts, 90, 28))
+>Block : Symbol(Block)
+
+        CaseCallback? (pre, ast: AST): boolean;
+>CaseCallback : Symbol(AstWalkerDetailCallback.CaseCallback, Decl(parserRealSource13.ts, 90, 52))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 91, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 91, 27))
+>AST : Symbol(AST)
+
+        SwitchCallback? (pre, ast: AST): boolean;
+>SwitchCallback : Symbol(AstWalkerDetailCallback.SwitchCallback, Decl(parserRealSource13.ts, 91, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 92, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 92, 29))
+>AST : Symbol(AST)
+
+        TryCallback? (pre, ast: AST): boolean;
+>TryCallback : Symbol(AstWalkerDetailCallback.TryCallback, Decl(parserRealSource13.ts, 92, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 93, 22))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 93, 26))
+>AST : Symbol(AST)
+
+        TryCatchCallback? (pre, ast: AST): boolean;
+>TryCatchCallback : Symbol(AstWalkerDetailCallback.TryCatchCallback, Decl(parserRealSource13.ts, 93, 46))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 94, 27))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 94, 31))
+>AST : Symbol(AST)
+
+        TryFinallyCallback? (pre, ast: AST): boolean;
+>TryFinallyCallback : Symbol(AstWalkerDetailCallback.TryFinallyCallback, Decl(parserRealSource13.ts, 94, 51))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 95, 29))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 95, 33))
+>AST : Symbol(AST)
+
+        FinallyCallback? (pre, ast: AST): boolean;
+>FinallyCallback : Symbol(AstWalkerDetailCallback.FinallyCallback, Decl(parserRealSource13.ts, 95, 53))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 96, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 96, 30))
+>AST : Symbol(AST)
+
+        CatchCallback? (pre, ast: AST): boolean;
+>CatchCallback : Symbol(AstWalkerDetailCallback.CatchCallback, Decl(parserRealSource13.ts, 96, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 97, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 97, 28))
+>AST : Symbol(AST)
+
+        ListCallback? (pre, astList: ASTList): boolean;
+>ListCallback : Symbol(AstWalkerDetailCallback.ListCallback, Decl(parserRealSource13.ts, 97, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 98, 23))
+>astList : Symbol(astList, Decl(parserRealSource13.ts, 98, 27))
+>ASTList : Symbol(ASTList)
+
+        ScriptCallback? (pre, script: Script): boolean;
+>ScriptCallback : Symbol(AstWalkerDetailCallback.ScriptCallback, Decl(parserRealSource13.ts, 98, 55))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 99, 25))
+>script : Symbol(script, Decl(parserRealSource13.ts, 99, 29))
+>Script : Symbol(Script)
+
+        ClassDeclarationCallback? (pre, ast: AST): boolean;
+>ClassDeclarationCallback : Symbol(AstWalkerDetailCallback.ClassDeclarationCallback, Decl(parserRealSource13.ts, 99, 55))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 100, 35))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 100, 39))
+>AST : Symbol(AST)
+
+        InterfaceDeclarationCallback? (pre, interfaceDecl: InterfaceDeclaration): boolean;
+>InterfaceDeclarationCallback : Symbol(AstWalkerDetailCallback.InterfaceDeclarationCallback, Decl(parserRealSource13.ts, 100, 59))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 101, 39))
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource13.ts, 101, 43))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
+
+        ModuleDeclarationCallback? (pre, moduleDecl: ModuleDeclaration): boolean;
+>ModuleDeclarationCallback : Symbol(AstWalkerDetailCallback.ModuleDeclarationCallback, Decl(parserRealSource13.ts, 101, 90))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 102, 36))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource13.ts, 102, 40))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+
+        ImportDeclarationCallback? (pre, ast: AST): boolean;
+>ImportDeclarationCallback : Symbol(AstWalkerDetailCallback.ImportDeclarationCallback, Decl(parserRealSource13.ts, 102, 81))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 103, 36))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 103, 40))
+>AST : Symbol(AST)
+
+        WithCallback? (pre, ast: AST): boolean;
+>WithCallback : Symbol(AstWalkerDetailCallback.WithCallback, Decl(parserRealSource13.ts, 103, 60))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 104, 23))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 104, 27))
+>AST : Symbol(AST)
+
+        LabelCallback? (pre, labelAST: AST): boolean;
+>LabelCallback : Symbol(AstWalkerDetailCallback.LabelCallback, Decl(parserRealSource13.ts, 104, 47))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 105, 24))
+>labelAST : Symbol(labelAST, Decl(parserRealSource13.ts, 105, 28))
+>AST : Symbol(AST)
+
+        LabeledStatementCallback? (pre, ast: AST): boolean;
+>LabeledStatementCallback : Symbol(AstWalkerDetailCallback.LabeledStatementCallback, Decl(parserRealSource13.ts, 105, 53))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 106, 35))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 106, 39))
+>AST : Symbol(AST)
+
+        EBStartCallback? (pre, ast: AST): boolean;
+>EBStartCallback : Symbol(AstWalkerDetailCallback.EBStartCallback, Decl(parserRealSource13.ts, 106, 59))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 107, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 107, 30))
+>AST : Symbol(AST)
+
+        GotoEBCallback? (pre, ast: AST): boolean;
+>GotoEBCallback : Symbol(AstWalkerDetailCallback.GotoEBCallback, Decl(parserRealSource13.ts, 107, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 108, 25))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 108, 29))
+>AST : Symbol(AST)
+
+        EndCodeCallback? (pre, ast: AST): boolean;
+>EndCodeCallback : Symbol(AstWalkerDetailCallback.EndCodeCallback, Decl(parserRealSource13.ts, 108, 49))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 109, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 109, 30))
+>AST : Symbol(AST)
+
+        ErrorCallback? (pre, ast: AST): boolean;
+>ErrorCallback : Symbol(AstWalkerDetailCallback.ErrorCallback, Decl(parserRealSource13.ts, 109, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 110, 24))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 110, 28))
+>AST : Symbol(AST)
+
+        CommentCallback? (pre, ast: AST): boolean;
+>CommentCallback : Symbol(AstWalkerDetailCallback.CommentCallback, Decl(parserRealSource13.ts, 110, 48))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 111, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 111, 30))
+>AST : Symbol(AST)
+
+        DebuggerCallback? (pre, ast: AST): boolean;
+>DebuggerCallback : Symbol(AstWalkerDetailCallback.DebuggerCallback, Decl(parserRealSource13.ts, 111, 50))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 112, 27))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 112, 31))
+>AST : Symbol(AST)
+
+        DefaultCallback? (pre, ast: AST): boolean;
+>DefaultCallback : Symbol(AstWalkerDetailCallback.DefaultCallback, Decl(parserRealSource13.ts, 112, 51))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 113, 26))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 113, 30))
+>AST : Symbol(AST)
+    }
+
+    export function walk(script: Script, callback: AstWalkerDetailCallback): void {
+>walk : Symbol(walk, Decl(parserRealSource13.ts, 114, 5))
+>script : Symbol(script, Decl(parserRealSource13.ts, 116, 25))
+>Script : Symbol(Script)
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 116, 40))
+>AstWalkerDetailCallback : Symbol(AstWalkerDetailCallback, Decl(parserRealSource13.ts, 5, 47))
+
+        var pre = (cur: AST, parent: AST) => {
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 117, 11))
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 117, 19))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource13.ts, 117, 28))
+>AST : Symbol(AST)
+
+            walker.options.goChildren = AstWalkerCallback(true, cur, callback);
+>walker : Symbol(walker, Decl(parserRealSource13.ts, 127, 11))
+>AstWalkerCallback : Symbol(AstWalkerCallback, Decl(parserRealSource13.ts, 129, 5))
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 117, 19))
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 116, 40))
+
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 117, 19))
+        }
+
+        var post = (cur: AST, parent: AST) => {
+>post : Symbol(post, Decl(parserRealSource13.ts, 122, 11))
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 122, 20))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource13.ts, 122, 29))
+>AST : Symbol(AST)
+
+            AstWalkerCallback(false, cur, callback);
+>AstWalkerCallback : Symbol(AstWalkerCallback, Decl(parserRealSource13.ts, 129, 5))
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 122, 20))
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 116, 40))
+
+            return cur;
+>cur : Symbol(cur, Decl(parserRealSource13.ts, 122, 20))
+        }
+
+        var walker = TypeScript.getAstWalkerFactory().getWalker(pre, post);
+>walker : Symbol(walker, Decl(parserRealSource13.ts, 127, 11))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource13.ts, 0, 0))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 117, 11))
+>post : Symbol(post, Decl(parserRealSource13.ts, 122, 11))
+
+        walker.walk(script, null);
+>walker : Symbol(walker, Decl(parserRealSource13.ts, 127, 11))
+>script : Symbol(script, Decl(parserRealSource13.ts, 116, 25))
+    }
+
+    function AstWalkerCallback(pre: boolean, ast: AST, callback: AstWalkerDetailCallback): boolean {
+>AstWalkerCallback : Symbol(AstWalkerCallback, Decl(parserRealSource13.ts, 129, 5))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 131, 31))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 131, 44))
+>AST : Symbol(AST)
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 131, 54))
+>AstWalkerDetailCallback : Symbol(AstWalkerDetailCallback, Decl(parserRealSource13.ts, 5, 47))
+
+        // See if the Callback needs to be handled using specific one or default one
+        var nodeType = ast.nodeType;
+>nodeType : Symbol(nodeType, Decl(parserRealSource13.ts, 133, 11))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 131, 44))
+
+        var callbackString = (<any>NodeType)._map[nodeType] + "Callback";
+>callbackString : Symbol(callbackString, Decl(parserRealSource13.ts, 134, 11))
+>nodeType : Symbol(nodeType, Decl(parserRealSource13.ts, 133, 11))
+
+        if (callback[callbackString]) {
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 131, 54))
+>callbackString : Symbol(callbackString, Decl(parserRealSource13.ts, 134, 11))
+
+            return callback[callbackString](pre, ast);
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 131, 54))
+>callbackString : Symbol(callbackString, Decl(parserRealSource13.ts, 134, 11))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 131, 31))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 131, 44))
+        }
+
+        if (callback.DefaultCallback) {
+>callback.DefaultCallback : Symbol(AstWalkerDetailCallback.DefaultCallback, Decl(parserRealSource13.ts, 112, 51))
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 131, 54))
+>DefaultCallback : Symbol(AstWalkerDetailCallback.DefaultCallback, Decl(parserRealSource13.ts, 112, 51))
+
+            return callback.DefaultCallback(pre, ast);
+>callback.DefaultCallback : Symbol(AstWalkerDetailCallback.DefaultCallback, Decl(parserRealSource13.ts, 112, 51))
+>callback : Symbol(callback, Decl(parserRealSource13.ts, 131, 54))
+>DefaultCallback : Symbol(AstWalkerDetailCallback.DefaultCallback, Decl(parserRealSource13.ts, 112, 51))
+>pre : Symbol(pre, Decl(parserRealSource13.ts, 131, 31))
+>ast : Symbol(ast, Decl(parserRealSource13.ts, 131, 44))
+        }
+
+        return true;
+    }
+}

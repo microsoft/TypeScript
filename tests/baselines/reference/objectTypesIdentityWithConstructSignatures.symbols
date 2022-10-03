@@ -1,0 +1,271 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithConstructSignatures.ts ===
+// object types are identical structurally
+
+class A {
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+    constructor(x: string) { }
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 3, 16))
+}
+
+class B {
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+    constructor(x: string) { }
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 7, 16))
+}
+
+class C<T> {
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithConstructSignatures.ts, 10, 8))
+
+    constructor(x: T) { }
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 11, 16))
+>T : Symbol(T, Decl(objectTypesIdentityWithConstructSignatures.ts, 10, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+    new(x: string);
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 15, 8))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithConstructSignatures.ts, 16, 1))
+>T : Symbol(T, Decl(objectTypesIdentityWithConstructSignatures.ts, 18, 13))
+
+    new(x: T): T;
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 19, 8))
+>T : Symbol(T, Decl(objectTypesIdentityWithConstructSignatures.ts, 18, 13))
+>T : Symbol(T, Decl(objectTypesIdentityWithConstructSignatures.ts, 18, 13))
+}
+
+var a: { new(x: string) }
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 13))
+
+function foo1(x: A);
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 24, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 25, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 24, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo1(x: A); // error
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 24, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 25, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 25, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo1(x: any) { }
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 24, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 25, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 26, 14))
+
+function foo1b(x: B);
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithConstructSignatures.ts, 26, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 28, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 29, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 28, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo1b(x: B); // error
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithConstructSignatures.ts, 26, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 28, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 29, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 29, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo1b(x: any) { }
+>foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithConstructSignatures.ts, 26, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 28, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 29, 21))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 30, 15))
+
+function foo1c(x: C<string>);
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithConstructSignatures.ts, 30, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 32, 29), Decl(objectTypesIdentityWithConstructSignatures.ts, 33, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 32, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo1c(x: C<string>); // error
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithConstructSignatures.ts, 30, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 32, 29), Decl(objectTypesIdentityWithConstructSignatures.ts, 33, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 33, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo1c(x: any) { }
+>foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithConstructSignatures.ts, 30, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 32, 29), Decl(objectTypesIdentityWithConstructSignatures.ts, 33, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 34, 15))
+
+function foo2(x: I);
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithConstructSignatures.ts, 34, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 36, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 37, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 36, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo2(x: I); // error
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithConstructSignatures.ts, 34, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 36, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 37, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 37, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(objectTypesIdentityWithConstructSignatures.ts, 34, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 36, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 37, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 38, 14))
+
+function foo3(x: typeof a);
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithConstructSignatures.ts, 38, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 40, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 41, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 40, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+
+function foo3(x: typeof a); // error
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithConstructSignatures.ts, 38, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 40, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 41, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 41, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(objectTypesIdentityWithConstructSignatures.ts, 38, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 40, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 41, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 42, 14))
+
+function foo5(x: A);
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithConstructSignatures.ts, 42, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 44, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 45, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 44, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo5(x: B); // error
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithConstructSignatures.ts, 42, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 44, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 45, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 45, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(objectTypesIdentityWithConstructSignatures.ts, 42, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 44, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 45, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 46, 14))
+
+function foo5b(x: A);
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithConstructSignatures.ts, 46, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 48, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 49, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 48, 15))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo5b(x: C<string>); // error
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithConstructSignatures.ts, 46, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 48, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 49, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 49, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo5b(x: any) { }
+>foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithConstructSignatures.ts, 46, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 48, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 49, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 50, 15))
+
+function foo6(x: A);
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithConstructSignatures.ts, 50, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 52, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 53, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 52, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo6(x: I); // ok 
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithConstructSignatures.ts, 50, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 52, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 53, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 53, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(objectTypesIdentityWithConstructSignatures.ts, 50, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 52, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 53, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 54, 14))
+
+function foo7(x: A);
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithConstructSignatures.ts, 54, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 56, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 57, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 56, 14))
+>A : Symbol(A, Decl(objectTypesIdentityWithConstructSignatures.ts, 0, 0))
+
+function foo7(x: typeof a); // ok
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithConstructSignatures.ts, 54, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 56, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 57, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 57, 14))
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(objectTypesIdentityWithConstructSignatures.ts, 54, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 56, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 57, 27))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 58, 14))
+
+function foo8(x: B);
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithConstructSignatures.ts, 58, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 60, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 61, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 60, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo8(x: I); // ok
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithConstructSignatures.ts, 58, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 60, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 61, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 61, 14))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo8(x: any) { }
+>foo8 : Symbol(foo8, Decl(objectTypesIdentityWithConstructSignatures.ts, 58, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 60, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 61, 20))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 62, 14))
+
+function foo9(x: B);
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithConstructSignatures.ts, 62, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 64, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 65, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 64, 14))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo9(x: C<string>); // error
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithConstructSignatures.ts, 62, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 64, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 65, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 65, 14))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo9(x: any) { }
+>foo9 : Symbol(foo9, Decl(objectTypesIdentityWithConstructSignatures.ts, 62, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 64, 20), Decl(objectTypesIdentityWithConstructSignatures.ts, 65, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 66, 14))
+
+function foo10(x: B);
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithConstructSignatures.ts, 66, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 68, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 69, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 68, 15))
+>B : Symbol(B, Decl(objectTypesIdentityWithConstructSignatures.ts, 4, 1))
+
+function foo10(x: typeof a); // ok
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithConstructSignatures.ts, 66, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 68, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 69, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 69, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+
+function foo10(x: any) { }
+>foo10 : Symbol(foo10, Decl(objectTypesIdentityWithConstructSignatures.ts, 66, 25), Decl(objectTypesIdentityWithConstructSignatures.ts, 68, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 69, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 70, 15))
+
+function foo12(x: I);
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithConstructSignatures.ts, 70, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 72, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 73, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 72, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo12(x: C<string>); // ok
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithConstructSignatures.ts, 70, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 72, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 73, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 73, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo12(x: any) { }
+>foo12 : Symbol(foo12, Decl(objectTypesIdentityWithConstructSignatures.ts, 70, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 72, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 73, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 74, 15))
+
+function foo12b(x: I2<string>);
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithConstructSignatures.ts, 74, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 76, 31), Decl(objectTypesIdentityWithConstructSignatures.ts, 77, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 76, 16))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithConstructSignatures.ts, 16, 1))
+
+function foo12b(x: C<string>); // ok
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithConstructSignatures.ts, 74, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 76, 31), Decl(objectTypesIdentityWithConstructSignatures.ts, 77, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 77, 16))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo12b(x: any) { }
+>foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithConstructSignatures.ts, 74, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 76, 31), Decl(objectTypesIdentityWithConstructSignatures.ts, 77, 30))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 78, 16))
+
+function foo13(x: I);
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithConstructSignatures.ts, 78, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 80, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 81, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 80, 15))
+>I : Symbol(I, Decl(objectTypesIdentityWithConstructSignatures.ts, 12, 1))
+
+function foo13(x: typeof a); // error
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithConstructSignatures.ts, 78, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 80, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 81, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 81, 15))
+>a : Symbol(a, Decl(objectTypesIdentityWithConstructSignatures.ts, 22, 3))
+
+function foo13(x: any) { }
+>foo13 : Symbol(foo13, Decl(objectTypesIdentityWithConstructSignatures.ts, 78, 27), Decl(objectTypesIdentityWithConstructSignatures.ts, 80, 21), Decl(objectTypesIdentityWithConstructSignatures.ts, 81, 28))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 82, 15))
+
+function foo15(x: I2<string>);
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithConstructSignatures.ts, 82, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 84, 30), Decl(objectTypesIdentityWithConstructSignatures.ts, 85, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 84, 15))
+>I2 : Symbol(I2, Decl(objectTypesIdentityWithConstructSignatures.ts, 16, 1))
+
+function foo15(x: C<number>); // ok
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithConstructSignatures.ts, 82, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 84, 30), Decl(objectTypesIdentityWithConstructSignatures.ts, 85, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 85, 15))
+>C : Symbol(C, Decl(objectTypesIdentityWithConstructSignatures.ts, 8, 1))
+
+function foo15(x: any) { }
+>foo15 : Symbol(foo15, Decl(objectTypesIdentityWithConstructSignatures.ts, 82, 26), Decl(objectTypesIdentityWithConstructSignatures.ts, 84, 30), Decl(objectTypesIdentityWithConstructSignatures.ts, 85, 29))
+>x : Symbol(x, Decl(objectTypesIdentityWithConstructSignatures.ts, 86, 15))
+

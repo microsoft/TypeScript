@@ -1,0 +1,59 @@
+=== tests/cases/conformance/async/es5/awaitCallExpression/awaitCallExpression1_es5.ts ===
+declare var a: boolean;
+>a : Symbol(a, Decl(awaitCallExpression1_es5.ts, 0, 11))
+
+declare var p: Promise<boolean>;
+>p : Symbol(p, Decl(awaitCallExpression1_es5.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
+>fn : Symbol(fn, Decl(awaitCallExpression1_es5.ts, 1, 32))
+>arg0 : Symbol(arg0, Decl(awaitCallExpression1_es5.ts, 2, 20))
+>arg1 : Symbol(arg1, Decl(awaitCallExpression1_es5.ts, 2, 34))
+>arg2 : Symbol(arg2, Decl(awaitCallExpression1_es5.ts, 2, 49))
+
+declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
+>o : Symbol(o, Decl(awaitCallExpression1_es5.ts, 3, 11))
+>fn : Symbol(fn, Decl(awaitCallExpression1_es5.ts, 3, 16))
+>arg0 : Symbol(arg0, Decl(awaitCallExpression1_es5.ts, 3, 20))
+>arg1 : Symbol(arg1, Decl(awaitCallExpression1_es5.ts, 3, 34))
+>arg2 : Symbol(arg2, Decl(awaitCallExpression1_es5.ts, 3, 49))
+
+declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+>pfn : Symbol(pfn, Decl(awaitCallExpression1_es5.ts, 4, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>arg0 : Symbol(arg0, Decl(awaitCallExpression1_es5.ts, 4, 28))
+>arg1 : Symbol(arg1, Decl(awaitCallExpression1_es5.ts, 4, 42))
+>arg2 : Symbol(arg2, Decl(awaitCallExpression1_es5.ts, 4, 57))
+
+declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+>po : Symbol(po, Decl(awaitCallExpression1_es5.ts, 5, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>fn : Symbol(fn, Decl(awaitCallExpression1_es5.ts, 5, 25))
+>arg0 : Symbol(arg0, Decl(awaitCallExpression1_es5.ts, 5, 29))
+>arg1 : Symbol(arg1, Decl(awaitCallExpression1_es5.ts, 5, 43))
+>arg2 : Symbol(arg2, Decl(awaitCallExpression1_es5.ts, 5, 58))
+
+declare function before(): void;
+>before : Symbol(before, Decl(awaitCallExpression1_es5.ts, 5, 84))
+
+declare function after(): void;
+>after : Symbol(after, Decl(awaitCallExpression1_es5.ts, 6, 32))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(awaitCallExpression1_es5.ts, 7, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    before();
+>before : Symbol(before, Decl(awaitCallExpression1_es5.ts, 5, 84))
+
+    var b = fn(a, a, a);
+>b : Symbol(b, Decl(awaitCallExpression1_es5.ts, 10, 7))
+>fn : Symbol(fn, Decl(awaitCallExpression1_es5.ts, 1, 32))
+>a : Symbol(a, Decl(awaitCallExpression1_es5.ts, 0, 11))
+>a : Symbol(a, Decl(awaitCallExpression1_es5.ts, 0, 11))
+>a : Symbol(a, Decl(awaitCallExpression1_es5.ts, 0, 11))
+
+    after();
+>after : Symbol(after, Decl(awaitCallExpression1_es5.ts, 6, 32))
+}

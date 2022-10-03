@@ -1,0 +1,77 @@
+tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts(66,13): error TS2345: Argument of type 'object | null' is not assignable to parameter of type 'object'.
+  Type 'null' is not assignable to type 'object'.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts (1 errors) ====
+    declare function obj(x: object): void;
+    
+    function f1(x: unknown) {
+        if (!x) {
+            return;
+        }
+        if (typeof x === 'object') {
+            obj(x);
+        }
+    }
+    
+    function f2(x: unknown) {
+        if (x === null) {
+            return;
+        }
+        if (typeof x === 'object') {
+            obj(x);
+        }
+    }
+    
+    function f3(x: unknown) {
+        if (x == null) {
+            return;
+        }
+        if (typeof x === 'object') {
+            obj(x);
+        }
+    }
+    
+    function f4(x: unknown) {
+        if (x == undefined) {
+            return;
+        }
+        if (typeof x === 'object') {
+            obj(x);
+        }
+    }
+    
+    function f5(x: unknown) {
+        if (!!true) {
+            if (!x) {
+                return;
+            }
+        }
+        else {
+            if (x === null) {
+                return;
+            }
+        }
+        if (typeof x === 'object') {
+            obj(x);
+        }
+    }
+    
+    function f6(x: unknown) {
+        if (x === null) {
+            x;
+        }
+        else {
+            x;
+            if (typeof x === 'object') {
+                obj(x);
+            }
+        }
+        if (typeof x === 'object') {
+            obj(x);  // Error
+                ~
+!!! error TS2345: Argument of type 'object | null' is not assignable to parameter of type 'object'.
+!!! error TS2345:   Type 'null' is not assignable to type 'object'.
+        }
+    }
+    

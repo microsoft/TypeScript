@@ -1,0 +1,20 @@
+=== tests/cases/compiler/genericConstraintSatisfaction1.ts ===
+interface I<S> {
+   f: <T extends S>(x: T) => void
+>f : <T extends S>(x: T) => void
+>x : T
+}
+ 
+var x: I<{s: string}>
+>x : I<{ s: string; }>
+>s : string
+
+x.f({s: 1})
+>x.f({s: 1}) : void
+>x.f : <T extends { s: string; }>(x: T) => void
+>x : I<{ s: string; }>
+>f : <T extends { s: string; }>(x: T) => void
+>{s: 1} : { s: number; }
+>s : number
+>1 : 1
+

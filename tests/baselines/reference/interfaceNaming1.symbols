@@ -1,0 +1,7 @@
+=== tests/cases/compiler/interfaceNaming1.ts ===
+interface { }
+interface interface{ }
+>interface : Symbol(interface, Decl(interfaceNaming1.ts, 0, 13))
+
+interface & { }
+

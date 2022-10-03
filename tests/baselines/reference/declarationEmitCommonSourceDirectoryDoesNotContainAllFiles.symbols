@@ -1,0 +1,16 @@
+=== /a/index.ts ===
+export * from "./src/"
+No type information for this code.=== /b/index.ts ===
+export * from "./src/"
+No type information for this code.=== /b/src/index.ts ===
+export class B {}
+>B : Symbol(B, Decl(index.ts, 0, 0))
+
+=== /a/src/index.ts ===
+import { B } from "b";
+>B : Symbol(B, Decl(index.ts, 0, 8))
+
+export default function () {
+	return new B();
+>B : Symbol(B, Decl(index.ts, 0, 8))
+}

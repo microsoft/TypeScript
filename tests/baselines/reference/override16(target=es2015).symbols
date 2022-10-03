@@ -1,0 +1,16 @@
+=== tests/cases/conformance/override/override16.ts ===
+class A {
+>A : Symbol(A, Decl(override16.ts, 0, 0))
+
+    foo?: string;
+>foo : Symbol(A.foo, Decl(override16.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(override16.ts, 2, 1))
+>A : Symbol(A, Decl(override16.ts, 0, 0))
+
+    override foo = "string";
+>foo : Symbol(B.foo, Decl(override16.ts, 4, 19))
+}
+

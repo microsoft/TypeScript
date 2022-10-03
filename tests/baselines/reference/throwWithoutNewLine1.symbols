@@ -1,0 +1,3 @@
+=== tests/cases/compiler/throwWithoutNewLine1.ts ===
+throw
+No type information for this code.

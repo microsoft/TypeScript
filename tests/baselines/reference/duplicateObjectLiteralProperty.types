@@ -1,0 +1,54 @@
+=== tests/cases/compiler/duplicateObjectLiteralProperty.ts ===
+var x = {
+>x : { a: { c: number; }; b: boolean; }
+>{    a: 1,    b: true, // OK    a: 56,   // Duplicate    \u0061: "ss", // Duplicate    a: {        c: 1,        "c": 56, // Duplicate    }} : { a: { c: number; }; b: boolean; }
+
+    a: 1,
+>a : number
+>1 : 1
+
+    b: true, // OK
+>b : boolean
+>true : true
+
+    a: 56,   // Duplicate
+>a : number
+>56 : 56
+
+    \u0061: "ss", // Duplicate
+>\u0061 : number
+>"ss" : "ss"
+
+    a: {
+>a : number
+>{        c: 1,        "c": 56, // Duplicate    } : { c: number; }
+
+        c: 1,
+>c : number
+>1 : 1
+
+        "c": 56, // Duplicate
+>"c" : number
+>56 : 56
+    }
+};
+
+
+var y = {
+>y : { readonly a: number; }
+>{    get a() { return 0; },    set a(v: number) { },    get a() { return 0; }} : { readonly a: number; }
+
+    get a() { return 0; },
+>a : number
+>0 : 0
+
+    set a(v: number) { },
+>a : number
+>v : number
+
+    get a() { return 0; }
+>a : number
+>0 : 0
+
+};
+

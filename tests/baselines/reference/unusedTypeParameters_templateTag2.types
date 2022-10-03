@@ -1,0 +1,40 @@
+=== /a.js ===
+/**
+ * @template T
+ * @template V
+ */
+class C1 {
+>C1 : C1<T, V>
+
+    constructor() {
+        /** @type {T} */
+        this.p;
+>this.p : T
+>this : this
+>p : T
+    }
+}
+
+/**
+ * @template T,V
+ */
+class C2 {
+>C2 : C2<T, V>
+
+    constructor() { }
+}
+
+/**
+ * @template T,V,X
+ */
+class C3 {
+>C3 : C3<T, V, X>
+
+    constructor() {
+        /** @type {T} */
+        this.p;
+>this.p : T
+>this : this
+>p : T
+    }
+}

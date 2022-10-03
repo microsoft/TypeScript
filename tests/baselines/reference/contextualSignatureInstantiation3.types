@@ -1,0 +1,76 @@
+=== tests/cases/compiler/contextualSignatureInstantiation3.ts ===
+function map<T, U>(items: T[], f: (x: T) => U): U[]{
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>items : T[]
+>f : (x: T) => U
+>x : T
+
+    return items.map(f);
+>items.map(f) : U[]
+>items.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>items : T[]
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>f : (x: T) => U
+}
+
+function identity<T>(x: T) {
+>identity : <T>(x: T) => T
+>x : T
+
+    return x;
+>x : T
+}
+
+function singleton<T>(x: T) {
+>singleton : <T>(x: T) => T[]
+>x : T
+
+    return [x];
+>[x] : T[]
+>x : T
+}
+
+var xs = [1, 2, 3];
+>xs : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+// Have compiler check that we get the correct types
+var v1: number[];
+>v1 : number[]
+
+var v1 = xs.map(identity);      // Error if not number[]
+>v1 : number[]
+>xs.map(identity) : number[]
+>xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>xs : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>identity : <T>(x: T) => T
+
+var v1 = map(xs, identity);     // Error if not number[]
+>v1 : number[]
+>map(xs, identity) : number[]
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>xs : number[]
+>identity : <T>(x: T) => T
+
+var v2: number[][];         
+>v2 : number[][]
+
+var v2 = xs.map(singleton);     // Error if not number[][]
+>v2 : number[][]
+>xs.map(singleton) : number[][]
+>xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>xs : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>singleton : <T>(x: T) => T[]
+
+var v2 = map(xs, singleton);    // Error if not number[][]
+>v2 : number[][]
+>map(xs, singleton) : number[][]
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>xs : number[]
+>singleton : <T>(x: T) => T[]
+

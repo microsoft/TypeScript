@@ -1,0 +1,54 @@
+tests/cases/compiler/complexClassRelationships.ts(2,23): error TS2449: Class 'Base' used before its declaration.
+
+
+==== tests/cases/compiler/complexClassRelationships.ts (1 errors) ====
+    // There should be no errors in this file
+    class Derived extends Base {
+                          ~~~~
+!!! error TS2449: Class 'Base' used before its declaration.
+!!! related TS2728 tests/cases/compiler/complexClassRelationships.ts:13:7: 'Base' is declared here.
+        public static createEmpty(): Derived {
+            var item = new Derived();
+            return item;
+        }
+    }
+    class BaseCollection<T extends Base> {
+        constructor(f: () => T) {
+            (item: Thing) => { return [item.Components]; };
+        }
+    }
+    class Base {
+        ownerCollection: BaseCollection<Base>;
+    }
+    
+    class Thing {
+        public get Components(): ComponentCollection<any> { return null }
+    }
+    
+    class ComponentCollection<T> {
+        private static sortComponents(p: Foo) {
+            return p.prop1;
+        }
+    }
+    
+    class Foo {
+        public get prop1() {
+            return new GenericType<string>(this);
+        }
+        public populate() {
+            this.prop2;
+        }
+        public get prop2(): BaseCollection<Derived> {
+            return new BaseCollection<Derived>(Derived.createEmpty);
+        }
+    }
+    
+    class GenericType<T> {
+        constructor(parent: FooBase) { }
+    }
+    
+    class FooBase {
+        public populate() {
+    
+        }
+    }

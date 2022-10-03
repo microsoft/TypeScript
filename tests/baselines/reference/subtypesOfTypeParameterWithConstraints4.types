@@ -1,0 +1,216 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts ===
+// checking whether other types are subtypes of type parameters with constraints
+
+class Foo { foo: number; }
+>Foo : Foo
+>foo : number
+
+function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
+>f : <T extends Foo, U extends Foo, V>(t: T, u: U, v: V) => void
+>t : T
+>u : U
+>v : V
+
+    // ok
+    var r = true ? t : u;
+>r : T | U
+>true ? t : u : T | U
+>true : true
+>t : T
+>u : U
+
+    var r = true ? u : t;
+>r : T | U
+>true ? u : t : T | U
+>true : true
+>u : U
+>t : T
+
+    // ok
+    var r2 = true ? t : v;
+>r2 : T | V
+>true ? t : v : T | V
+>true : true
+>t : T
+>v : V
+
+    var r2 = true ? v : t;
+>r2 : T | V
+>true ? v : t : T | V
+>true : true
+>v : V
+>t : T
+
+    // ok
+    var r3 = true ? v : u;
+>r3 : U | V
+>true ? v : u : U | V
+>true : true
+>v : V
+>u : U
+
+    var r3 = true ? u : v;
+>r3 : U | V
+>true ? u : v : U | V
+>true : true
+>u : U
+>v : V
+
+    // ok
+    var r4 = true ? t : new Foo();
+>r4 : Foo
+>true ? t : new Foo() : Foo
+>true : true
+>t : T
+>new Foo() : Foo
+>Foo : typeof Foo
+
+    var r4 = true ? new Foo() : t;
+>r4 : Foo
+>true ? new Foo() : t : Foo
+>true : true
+>new Foo() : Foo
+>Foo : typeof Foo
+>t : T
+
+    // ok
+    var r5 = true ? u : new Foo();
+>r5 : Foo
+>true ? u : new Foo() : Foo
+>true : true
+>u : U
+>new Foo() : Foo
+>Foo : typeof Foo
+
+    var r5 = true ? new Foo() : u;
+>r5 : Foo
+>true ? new Foo() : u : Foo
+>true : true
+>new Foo() : Foo
+>Foo : typeof Foo
+>u : U
+
+    // ok
+    var r6 = true ? v : new Foo();
+>r6 : Foo | V
+>true ? v : new Foo() : Foo | V
+>true : true
+>v : V
+>new Foo() : Foo
+>Foo : typeof Foo
+
+    var r6 = true ? new Foo() : v;
+>r6 : Foo | V
+>true ? new Foo() : v : Foo | V
+>true : true
+>new Foo() : Foo
+>Foo : typeof Foo
+>v : V
+
+}
+
+class B1<T> {
+>B1 : B1<T>
+
+    foo: T;
+>foo : T
+}
+
+class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
+>D1 : D1<T, U, V>
+>B1 : B1<Foo>
+
+    [x: string]: Foo;
+>x : string
+
+    foo: T; // ok
+>foo : T
+}
+
+class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
+>D2 : D2<T, U, V>
+>B1 : B1<Foo>
+
+    [x: string]: Foo;
+>x : string
+
+    foo: U; // ok
+>foo : U
+}
+
+class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
+>D3 : D3<T, U, V>
+>B1 : B1<Foo>
+
+    [x: string]: Foo;
+>x : string
+
+    foo: V; // error
+>foo : V
+}
+
+class D4<T extends Foo, U extends Foo, V> extends B1<T> {
+>D4 : D4<T, U, V>
+>B1 : B1<T>
+
+    [x: string]: T;
+>x : string
+
+    foo: T; // ok
+>foo : T
+}
+
+class D5<T extends Foo, U extends Foo, V> extends B1<T> {
+>D5 : D5<T, U, V>
+>B1 : B1<T>
+
+    [x: string]: T;
+>x : string
+
+    foo: U; // error
+>foo : U
+}
+
+class D6<T extends Foo, U extends Foo, V> extends B1<T> {
+>D6 : D6<T, U, V>
+>B1 : B1<T>
+
+    [x: string]: T;
+>x : string
+
+    foo: V; // error
+>foo : V
+}
+
+class D7<T extends Foo, U extends Foo, V> extends B1<U> {
+>D7 : D7<T, U, V>
+>B1 : B1<U>
+
+    [x: string]: U;
+>x : string
+
+    foo: T; // error
+>foo : T
+}
+
+class D8<T extends Foo, U extends Foo, V> extends B1<U> {
+>D8 : D8<T, U, V>
+>B1 : B1<U>
+
+    [x: string]: U;
+>x : string
+
+    foo: U; // ok
+>foo : U
+}
+
+class D9<T extends Foo, U extends Foo, V> extends B1<U> {
+>D9 : D9<T, U, V>
+>B1 : B1<U>
+
+    [x: string]: U;
+>x : string
+
+    foo: V; // error
+>foo : V
+}

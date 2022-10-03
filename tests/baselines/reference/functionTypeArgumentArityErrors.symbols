@@ -1,0 +1,72 @@
+=== tests/cases/compiler/functionTypeArgumentArityErrors.ts ===
+// Overloaded functions with default type arguments
+declare function f1<A = any>(): void;
+>f1 : Symbol(f1, Decl(functionTypeArgumentArityErrors.ts, 0, 0), Decl(functionTypeArgumentArityErrors.ts, 1, 37))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 1, 20))
+
+declare function f1<A, B, C, D = any>(): void;
+>f1 : Symbol(f1, Decl(functionTypeArgumentArityErrors.ts, 0, 0), Decl(functionTypeArgumentArityErrors.ts, 1, 37))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 2, 20))
+>B : Symbol(B, Decl(functionTypeArgumentArityErrors.ts, 2, 22))
+>C : Symbol(C, Decl(functionTypeArgumentArityErrors.ts, 2, 25))
+>D : Symbol(D, Decl(functionTypeArgumentArityErrors.ts, 2, 28))
+
+f1<number, number>();
+>f1 : Symbol(f1, Decl(functionTypeArgumentArityErrors.ts, 0, 0), Decl(functionTypeArgumentArityErrors.ts, 1, 37))
+
+f1<number, number, number, number, number>();
+>f1 : Symbol(f1, Decl(functionTypeArgumentArityErrors.ts, 0, 0), Decl(functionTypeArgumentArityErrors.ts, 1, 37))
+
+// Overloaded functions with no default type arguments
+declare function f2<A>(): void;
+>f2 : Symbol(f2, Decl(functionTypeArgumentArityErrors.ts, 4, 45), Decl(functionTypeArgumentArityErrors.ts, 7, 31))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 7, 20))
+
+declare function f2<A, B, C>(): void;
+>f2 : Symbol(f2, Decl(functionTypeArgumentArityErrors.ts, 4, 45), Decl(functionTypeArgumentArityErrors.ts, 7, 31))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 8, 20))
+>B : Symbol(B, Decl(functionTypeArgumentArityErrors.ts, 8, 22))
+>C : Symbol(C, Decl(functionTypeArgumentArityErrors.ts, 8, 25))
+
+f2<number, number>();
+>f2 : Symbol(f2, Decl(functionTypeArgumentArityErrors.ts, 4, 45), Decl(functionTypeArgumentArityErrors.ts, 7, 31))
+
+f2<number, number, number, number>();
+>f2 : Symbol(f2, Decl(functionTypeArgumentArityErrors.ts, 4, 45), Decl(functionTypeArgumentArityErrors.ts, 7, 31))
+
+// Overloaded non-generic functions
+declare function f3(): void;
+>f3 : Symbol(f3, Decl(functionTypeArgumentArityErrors.ts, 10, 37), Decl(functionTypeArgumentArityErrors.ts, 13, 28))
+
+declare function f3(a): void;
+>f3 : Symbol(f3, Decl(functionTypeArgumentArityErrors.ts, 10, 37), Decl(functionTypeArgumentArityErrors.ts, 13, 28))
+>a : Symbol(a, Decl(functionTypeArgumentArityErrors.ts, 14, 20))
+
+f3<number>();
+>f3 : Symbol(f3, Decl(functionTypeArgumentArityErrors.ts, 10, 37), Decl(functionTypeArgumentArityErrors.ts, 13, 28))
+
+// Generic function with default type parameters
+declare function f4<A, B, C = any>(): void;
+>f4 : Symbol(f4, Decl(functionTypeArgumentArityErrors.ts, 15, 13))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 18, 20))
+>B : Symbol(B, Decl(functionTypeArgumentArityErrors.ts, 18, 22))
+>C : Symbol(C, Decl(functionTypeArgumentArityErrors.ts, 18, 25))
+
+f4<number>();
+>f4 : Symbol(f4, Decl(functionTypeArgumentArityErrors.ts, 15, 13))
+
+f4<number, number, number, number>();
+>f4 : Symbol(f4, Decl(functionTypeArgumentArityErrors.ts, 15, 13))
+
+// Generic function with no default type arguments
+declare function f5<A, B>(): void;
+>f5 : Symbol(f5, Decl(functionTypeArgumentArityErrors.ts, 20, 37))
+>A : Symbol(A, Decl(functionTypeArgumentArityErrors.ts, 23, 20))
+>B : Symbol(B, Decl(functionTypeArgumentArityErrors.ts, 23, 22))
+
+f5<number>();
+>f5 : Symbol(f5, Decl(functionTypeArgumentArityErrors.ts, 20, 37))
+
+f5<number, number, number>();
+>f5 : Symbol(f5, Decl(functionTypeArgumentArityErrors.ts, 20, 37))
+

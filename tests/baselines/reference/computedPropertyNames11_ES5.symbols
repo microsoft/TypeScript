@@ -1,0 +1,63 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES5.ts ===
+var s: string;
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+
+var n: number;
+>n : Symbol(n, Decl(computedPropertyNames11_ES5.ts, 1, 3))
+
+var a: any;
+>a : Symbol(a, Decl(computedPropertyNames11_ES5.ts, 2, 3))
+
+var v = {
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 3, 3))
+
+    get [s]() { return 0; },
+>[s] : Symbol([s], Decl(computedPropertyNames11_ES5.ts, 3, 9))
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+
+    set [n](v) { },
+>[n] : Symbol([n], Decl(computedPropertyNames11_ES5.ts, 4, 28))
+>n : Symbol(n, Decl(computedPropertyNames11_ES5.ts, 1, 3))
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 5, 12))
+
+    get [s + s]() { return 0; },
+>[s + s] : Symbol([s + s], Decl(computedPropertyNames11_ES5.ts, 5, 19))
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+
+    set [s + n](v) { },
+>[s + n] : Symbol([s + n], Decl(computedPropertyNames11_ES5.ts, 6, 32))
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+>n : Symbol(n, Decl(computedPropertyNames11_ES5.ts, 1, 3))
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 7, 16))
+
+    get [+s]() { return 0; },
+>[+s] : Symbol([+s], Decl(computedPropertyNames11_ES5.ts, 7, 23))
+>s : Symbol(s, Decl(computedPropertyNames11_ES5.ts, 0, 3))
+
+    set [""](v) { },
+>[""] : Symbol([""], Decl(computedPropertyNames11_ES5.ts, 8, 29))
+>"" : Symbol([""], Decl(computedPropertyNames11_ES5.ts, 8, 29))
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 9, 13))
+
+    get [0]() { return 0; },
+>[0] : Symbol([0], Decl(computedPropertyNames11_ES5.ts, 9, 20))
+>0 : Symbol([0], Decl(computedPropertyNames11_ES5.ts, 9, 20))
+
+    set [a](v) { },
+>[a] : Symbol([a], Decl(computedPropertyNames11_ES5.ts, 10, 28))
+>a : Symbol(a, Decl(computedPropertyNames11_ES5.ts, 2, 3))
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 11, 12))
+
+    get [<any>true]() { return 0; },
+>[<any>true] : Symbol([<any>true], Decl(computedPropertyNames11_ES5.ts, 11, 19))
+
+    set [`hello bye`](v) { },
+>[`hello bye`] : Symbol([`hello bye`], Decl(computedPropertyNames11_ES5.ts, 12, 36))
+>`hello bye` : Symbol([`hello bye`], Decl(computedPropertyNames11_ES5.ts, 12, 36))
+>v : Symbol(v, Decl(computedPropertyNames11_ES5.ts, 13, 22))
+
+    get [`hello ${a} bye`]() { return 0; }
+>[`hello ${a} bye`] : Symbol([`hello ${a} bye`], Decl(computedPropertyNames11_ES5.ts, 13, 29))
+>a : Symbol(a, Decl(computedPropertyNames11_ES5.ts, 2, 3))
+}

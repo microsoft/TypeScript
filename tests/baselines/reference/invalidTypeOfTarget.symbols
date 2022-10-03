@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts ===
+var x1: typeof {};
+>x1 : Symbol(x1, Decl(invalidTypeOfTarget.ts, 0, 3))
+
+var x2: typeof (): void;
+>x2 : Symbol(x2, Decl(invalidTypeOfTarget.ts, 1, 3))
+
+var x3: typeof 1;
+>x3 : Symbol(x3, Decl(invalidTypeOfTarget.ts, 2, 3))
+
+var x4: typeof '';
+>x4 : Symbol(x4, Decl(invalidTypeOfTarget.ts, 3, 3))
+
+var x5: typeof [];
+>x5 : Symbol(x5, Decl(invalidTypeOfTarget.ts, 4, 3))
+
+var x6: typeof null;
+>x6 : Symbol(x6, Decl(invalidTypeOfTarget.ts, 5, 3))
+
+var x7: typeof function f() { };
+>x7 : Symbol(x7, Decl(invalidTypeOfTarget.ts, 6, 3))
+>f : Symbol(f, Decl(invalidTypeOfTarget.ts, 6, 23))
+
+var x8: typeof /123/;
+>x8 : Symbol(x8, Decl(invalidTypeOfTarget.ts, 7, 3))
+

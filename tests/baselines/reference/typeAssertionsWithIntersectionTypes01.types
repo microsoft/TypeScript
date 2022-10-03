@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts ===
+interface I1 {
+    p1: number
+>p1 : number
+}
+
+interface I2 extends I1 {
+    p2: number;
+>p2 : number
+}
+
+interface I3 {
+    p3: number;
+>p3 : number
+}
+
+var x = { p1: 10, p2: 20, p3: 30 };
+>x : { p1: number; p2: number; p3: number; }
+>{ p1: 10, p2: 20, p3: 30 } : { p1: number; p2: number; p3: number; }
+>p1 : number
+>10 : 10
+>p2 : number
+>20 : 20
+>p3 : number
+>30 : 30
+
+var y: I1 & I3 = x;
+>y : I1 & I3
+>x : { p1: number; p2: number; p3: number; }
+
+var z: I2 = x;
+>z : I2
+>x : { p1: number; p2: number; p3: number; }
+
+var a = <I1 & I3>z;
+>a : I1 & I3
+><I1 & I3>z : I1 & I3
+>z : I2
+
+var b = <I3>z;
+>b : I3
+><I3>z : I3
+>z : I2
+
+var c = <I2>z;
+>c : I2
+><I2>z : I2
+>z : I2
+
+var d = <I1>y;
+>d : I1
+><I1>y : I1
+>y : I1 & I3
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/server.ts ===
+export class c {
+>c : Symbol(c, Decl(server.ts, 0, 0))
+}
+export interface i {
+>i : Symbol(i, Decl(server.ts, 1, 1))
+}
+export module m {
+>m : Symbol(m, Decl(server.ts, 3, 1))
+
+    export var x = 10;
+>x : Symbol(x, Decl(server.ts, 5, 14))
+}
+export var x = 10;
+>x : Symbol(x, Decl(server.ts, 7, 10))
+
+export module uninstantiated {
+>uninstantiated : Symbol(uninstantiated, Decl(server.ts, 7, 18))
+}
+
+=== tests/cases/compiler/client.ts ===
+export { c } from "./server";
+>c : Symbol(c, Decl(client.ts, 0, 8))
+
+export { c as c2 } from "./server";
+>c : Symbol(c, Decl(server.ts, 0, 0))
+>c2 : Symbol(c2, Decl(client.ts, 1, 8))
+
+export { i, m as instantiatedModule } from "./server";
+>i : Symbol(i, Decl(client.ts, 2, 8))
+>m : Symbol(m, Decl(server.ts, 3, 1))
+>instantiatedModule : Symbol(instantiatedModule, Decl(client.ts, 2, 11))
+
+export { uninstantiated } from "./server";
+>uninstantiated : Symbol(uninstantiated, Decl(client.ts, 3, 8))
+
+export { x } from "./server";
+>x : Symbol(x, Decl(client.ts, 4, 8))
+

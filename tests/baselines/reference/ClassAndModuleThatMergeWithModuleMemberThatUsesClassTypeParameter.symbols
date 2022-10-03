@@ -1,0 +1,101 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts ===
+// all expected to be errors
+
+class clodule1<T>{
+>clodule1 : Symbol(clodule1, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 6, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
+
+    id: string;
+>id : Symbol(clodule1.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 18))
+
+    value: T;
+>value : Symbol(clodule1.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 4, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
+}
+
+module clodule1 {
+>clodule1 : Symbol(clodule1, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 6, 1))
+
+    function f(x: T) { }
+>f : Symbol(f, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 8, 17))
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 9, 15))
+>T : Symbol(T)
+}
+
+class clodule2<T>{
+>clodule2 : Symbol(clodule2, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 10, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 16, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
+
+    id: string;
+>id : Symbol(clodule2.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 18))
+
+    value: T;
+>value : Symbol(clodule2.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 14, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
+}
+
+module clodule2 {
+>clodule2 : Symbol(clodule2, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 10, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 16, 1))
+
+    var x: T;
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 19, 7))
+>T : Symbol(T)
+
+    class D<U extends T>{
+>D : Symbol(D, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 19, 13))
+>U : Symbol(U, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 12))
+>T : Symbol(T)
+
+        id: string;
+>id : Symbol(D.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 25))
+
+        value: U;
+>value : Symbol(D.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 22, 19))
+>U : Symbol(U, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 12))
+    }
+}
+
+class clodule3<T>{
+>clodule3 : Symbol(clodule3, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 25, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 31, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
+
+    id: string;
+>id : Symbol(clodule3.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 18))
+
+    value: T;
+>value : Symbol(clodule3.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 29, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
+}
+
+module clodule3 {
+>clodule3 : Symbol(clodule3, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 25, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 31, 1))
+
+    export var y = { id: T };
+>y : Symbol(y, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 34, 14))
+>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 34, 20))
+}
+
+class clodule4<T>{
+>clodule4 : Symbol(clodule4, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 35, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 41, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
+
+    id: string;
+>id : Symbol(clodule4.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 18))
+
+    value: T;
+>value : Symbol(clodule4.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 39, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
+}
+
+module clodule4 {
+>clodule4 : Symbol(clodule4, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 35, 1), Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 41, 1))
+
+    class D {
+>D : Symbol(D, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 43, 17))
+
+        name: T;
+>name : Symbol(D.name, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 44, 13))
+>T : Symbol(T)
+    }
+}
+

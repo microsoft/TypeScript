@@ -1,0 +1,10 @@
+=== tests/cases/compiler/exportRedeclarationTypeAliases.ts ===
+export type Foo = number;
+>Foo : Symbol(Foo, Decl(exportRedeclarationTypeAliases.ts, 0, 25), Decl(exportRedeclarationTypeAliases.ts, 1, 30), Decl(exportRedeclarationTypeAliases.ts, 0, 0))
+
+export function Foo(): number;
+>Foo : Symbol(Foo, Decl(exportRedeclarationTypeAliases.ts, 0, 25), Decl(exportRedeclarationTypeAliases.ts, 1, 30), Decl(exportRedeclarationTypeAliases.ts, 0, 0))
+
+export function Foo(): any {}
+>Foo : Symbol(Foo, Decl(exportRedeclarationTypeAliases.ts, 0, 25), Decl(exportRedeclarationTypeAliases.ts, 1, 30), Decl(exportRedeclarationTypeAliases.ts, 0, 0))
+

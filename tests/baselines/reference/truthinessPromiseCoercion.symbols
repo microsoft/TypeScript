@@ -1,0 +1,139 @@
+=== tests/cases/compiler/truthinessPromiseCoercion.ts ===
+declare const p: Promise<number>
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare const p2: null | Promise<number>
+>p2 : Symbol(p2, Decl(truthinessPromiseCoercion.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare const obj: { p: Promise<unknown> }
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function pf(): Promise<boolean>
+>pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+async function f() {
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+
+    if (p) {} // err
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+    if (!!p) {} // no err
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+    if (p2) {} // no err
+>p2 : Symbol(p2, Decl(truthinessPromiseCoercion.ts, 1, 13))
+
+    p ? f.arguments : f.arguments;
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+
+    !!p ? f.arguments : f.arguments;
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+
+    p2 ? f.arguments : f.arguments;
+>p2 : Symbol(p2, Decl(truthinessPromiseCoercion.ts, 1, 13))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+}
+
+// all ok
+async function g() {
+>g : Symbol(g, Decl(truthinessPromiseCoercion.ts, 13, 1))
+
+    if (p) {
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+        p;
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+    }
+    if (p && p.then.length) {}
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>p.then.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>p.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+
+    if (p) {
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+        if (p) {
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+            if (p) {
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+
+                !!await (((((((p)))))));
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+            }
+        }
+    }
+}
+
+async function h() {
+>h : Symbol(h, Decl(truthinessPromiseCoercion.ts, 28, 1))
+
+    if (obj.p) {} // error
+>obj.p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+
+    if (obj.p) {  // ok
+>obj.p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+
+        await obj.p;
+>obj.p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+    }
+    if (obj.p && await obj.p) {} // ok
+>obj.p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj.p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+>obj : Symbol(obj, Decl(truthinessPromiseCoercion.ts, 2, 13))
+>p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 2, 20))
+}
+
+async function i(): Promise<string> {
+>i : Symbol(i, Decl(truthinessPromiseCoercion.ts, 36, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    if (pf()) { // error
+>pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+
+        return "true";
+    }
+    if (pf()) { // error
+>pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+
+        pf().then();
+>pf().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+    }
+    return "false";
+}
+

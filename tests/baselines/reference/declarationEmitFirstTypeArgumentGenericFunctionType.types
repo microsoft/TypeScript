@@ -1,0 +1,49 @@
+=== tests/cases/compiler/declarationEmitFirstTypeArgumentGenericFunctionType.ts ===
+class X<A> {
+>X : X<A>
+}
+var prop11: X< <Tany>() => Tany >; // spaces before the first type argument
+>prop11 : X<(<Tany>() => Tany)>
+
+var prop12: X<(<Tany>() => Tany)>; // spaces before the first type argument
+>prop12 : X<(<Tany>() => Tany)>
+
+function f1() { // Inferred return type
+>f1 : () => X<(<Tany>() => Tany)>
+
+    return prop11;
+>prop11 : X<(<Tany>() => Tany)>
+}
+function f2() { // Inferred return type
+>f2 : () => X<(<Tany>() => Tany)>
+
+    return prop12;
+>prop12 : X<(<Tany>() => Tany)>
+}
+function f3(): X< <Tany>() => Tany> { // written with space before type argument
+>f3 : () => X<(<Tany>() => Tany)>
+
+    return prop11;
+>prop11 : X<(<Tany>() => Tany)>
+}
+function f4(): X<(<Tany>() => Tany)> { // written type with parenthesis
+>f4 : () => X<(<Tany>() => Tany)>
+
+    return prop12;
+>prop12 : X<(<Tany>() => Tany)>
+}
+class Y<A, B> {
+>Y : Y<A, B>
+}
+var prop2: Y<string[], <Tany>() => Tany>; // No space after second type argument
+>prop2 : Y<string[], <Tany>() => Tany>
+
+var prop2: Y<string[], <Tany>() => Tany>; // space after second type argument
+>prop2 : Y<string[], <Tany>() => Tany>
+
+var prop3: Y< <Tany>() => Tany, <Tany>() => Tany>; // space before first type argument
+>prop3 : Y<(<Tany>() => Tany), <Tany>() => Tany>
+
+var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type argument
+>prop4 : Y<(<Tany>() => Tany), <Tany>() => Tany>
+

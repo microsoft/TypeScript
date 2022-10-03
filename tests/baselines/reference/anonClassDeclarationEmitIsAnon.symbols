@@ -1,0 +1,68 @@
+=== tests/cases/compiler/wrapClass.ts ===
+export function wrapClass(param: any) {
+>wrapClass : Symbol(wrapClass, Decl(wrapClass.ts, 0, 0))
+>param : Symbol(param, Decl(wrapClass.ts, 0, 26))
+
+    return class Wrapped {
+>Wrapped : Symbol(Wrapped, Decl(wrapClass.ts, 1, 10))
+
+        foo() {
+>foo : Symbol(Wrapped.foo, Decl(wrapClass.ts, 1, 26))
+
+            return param;
+>param : Symbol(param, Decl(wrapClass.ts, 0, 26))
+        }
+    }
+}
+
+export type Constructor<T = {}> = new (...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(wrapClass.ts, 6, 1))
+>T : Symbol(T, Decl(wrapClass.ts, 8, 24))
+>args : Symbol(args, Decl(wrapClass.ts, 8, 39))
+>T : Symbol(T, Decl(wrapClass.ts, 8, 24))
+
+export function Timestamped<TBase extends Constructor>(Base: TBase) {
+>Timestamped : Symbol(Timestamped, Decl(wrapClass.ts, 8, 60))
+>TBase : Symbol(TBase, Decl(wrapClass.ts, 10, 28))
+>Constructor : Symbol(Constructor, Decl(wrapClass.ts, 6, 1))
+>Base : Symbol(Base, Decl(wrapClass.ts, 10, 55))
+>TBase : Symbol(TBase, Decl(wrapClass.ts, 10, 28))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(wrapClass.ts, 10, 55))
+
+        timestamp = Date.now();
+>timestamp : Symbol((Anonymous class).timestamp, Decl(wrapClass.ts, 11, 31))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+
+    };
+}
+
+=== tests/cases/compiler/index.ts ===
+import { wrapClass, Timestamped } from "./wrapClass";
+>wrapClass : Symbol(wrapClass, Decl(index.ts, 0, 8))
+>Timestamped : Symbol(Timestamped, Decl(index.ts, 0, 19))
+
+export default wrapClass(0);
+>wrapClass : Symbol(wrapClass, Decl(index.ts, 0, 8))
+
+// Simple class
+export class User {
+>User : Symbol(User, Decl(index.ts, 2, 28))
+
+    name = '';
+>name : Symbol(User.name, Decl(index.ts, 5, 19))
+}
+
+// User that is Timestamped
+export class TimestampedUser extends Timestamped(User) {
+>TimestampedUser : Symbol(TimestampedUser, Decl(index.ts, 7, 1))
+>Timestamped : Symbol(Timestamped, Decl(index.ts, 0, 19))
+>User : Symbol(User, Decl(index.ts, 2, 28))
+
+    constructor() {
+        super();
+    }
+}

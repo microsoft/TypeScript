@@ -1,0 +1,35 @@
+=== tests/cases/compiler/thisCapture1.ts ===
+class X {
+>X : X
+
+    private y = 0;
+>y : number
+>0 : 0
+
+    public getSettings(keys: string[]): any {
+>getSettings : (keys: string[]) => any
+>keys : string[]
+
+        var ret: any;
+>ret : any
+
+        return ret.always(() => {
+>ret.always(() => {            this.y = 0;        }).promise() : any
+>ret.always(() => {            this.y = 0;        }).promise : any
+>ret.always(() => {            this.y = 0;        }) : any
+>ret.always : any
+>ret : any
+>always : any
+>() => {            this.y = 0;        } : () => void
+
+            this.y = 0;
+>this.y = 0 : 0
+>this.y : number
+>this : this
+>y : number
+>0 : 0
+
+        }).promise();
+>promise : any
+    }
+}

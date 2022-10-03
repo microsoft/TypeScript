@@ -1,0 +1,43 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts ===
+interface I {
+    foo: string;
+>foo : string
+}
+class C extends I { } // error
+>C : C
+>I : any
+
+class C2 extends { foo: string; } { } // error
+>C2 : C2
+>{ foo: string; } : { foo: any; }
+>foo : any
+>string : any
+
+var x: { foo: string; }
+>x : { foo: string; }
+>foo : string
+
+class C3 extends x { } // error
+>C3 : C3
+>x : { foo: string; }
+
+module M { export var x = 1; }
+>M : typeof M
+>x : number
+>1 : 1
+
+class C4 extends M { } // error
+>C4 : C4
+>M : typeof M
+
+function foo() { }
+>foo : () => void
+
+class C5 extends foo { } // error
+>C5 : C5
+>foo : () => void
+
+class C6 extends []{ } // error
+>C6 : C6
+>[] : undefined[]
+

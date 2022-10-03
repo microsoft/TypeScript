@@ -1,0 +1,28 @@
+=== tests/cases/compiler/constraintPropagationThroughReturnTypes.ts ===
+function g<T>(x: T): T {
+>g : Symbol(g, Decl(constraintPropagationThroughReturnTypes.ts, 0, 0))
+>T : Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
+>x : Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 0, 14))
+>T : Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
+>T : Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
+
+  return x;
+>x : Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 0, 14))
+}
+ 
+function f<S extends { foo: string }>(x: S) {
+>f : Symbol(f, Decl(constraintPropagationThroughReturnTypes.ts, 2, 1))
+>S : Symbol(S, Decl(constraintPropagationThroughReturnTypes.ts, 4, 11))
+>foo : Symbol(foo, Decl(constraintPropagationThroughReturnTypes.ts, 4, 22))
+>x : Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 4, 38))
+>S : Symbol(S, Decl(constraintPropagationThroughReturnTypes.ts, 4, 11))
+
+  var y = g(x);
+>y : Symbol(y, Decl(constraintPropagationThroughReturnTypes.ts, 5, 5))
+>g : Symbol(g, Decl(constraintPropagationThroughReturnTypes.ts, 0, 0))
+>x : Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 4, 38))
+
+  y;
+>y : Symbol(y, Decl(constraintPropagationThroughReturnTypes.ts, 5, 5))
+}
+

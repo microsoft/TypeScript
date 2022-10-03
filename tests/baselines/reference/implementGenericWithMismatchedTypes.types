@@ -1,0 +1,37 @@
+=== tests/cases/compiler/implementGenericWithMismatchedTypes.ts ===
+// no errors because in the derived types the best common type for T's value is Object
+// and that matches the original signature for assignability since we treat its T's as Object
+
+interface IFoo<T> {
+    foo(x: T): T;
+>foo : (x: T) => T
+>x : T
+}
+class C<T> implements IFoo<T> { // error
+>C : C<T>
+
+    foo(x: string): number {
+>foo : (x: string) => number
+>x : string
+
+        return null;
+>null : null
+    }
+}
+
+interface IFoo2<T> {
+    foo(x: T): T;
+>foo : (x: T) => T
+>x : T
+}
+class C2<T> implements IFoo2<T> { // error
+>C2 : C2<T>
+
+    foo<Tstring>(x: Tstring): number {
+>foo : <Tstring>(x: Tstring) => number
+>x : Tstring
+
+        return null;
+>null : null
+    }
+}

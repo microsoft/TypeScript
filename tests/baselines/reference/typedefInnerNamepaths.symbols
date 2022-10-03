@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/bug25104.js ===
+class C {
+>C : Symbol(C, Decl(bug25104.js, 0, 0))
+
+    /**
+     * @typedef {C~A} C~B
+     * @typedef {object} C~A
+     */
+    /** @param {C~A} o */
+    constructor(o) {
+>o : Symbol(o, Decl(bug25104.js, 6, 16))
+    }
+}
+

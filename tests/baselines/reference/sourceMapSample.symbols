@@ -1,0 +1,101 @@
+=== tests/cases/compiler/sourceMapSample.ts ===
+module Foo.Bar {
+>Foo : Symbol(Foo, Decl(sourceMapSample.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(sourceMapSample.ts, 0, 11))
+
+    "use strict";
+
+    class Greeter {
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+
+        constructor(public greeting: string) {
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapSample.ts, 4, 20))
+        }
+
+        greet() {
+>greet : Symbol(Greeter.greet, Decl(sourceMapSample.ts, 5, 9))
+
+            return "<h1>" + this.greeting + "</h1>";
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapSample.ts, 4, 20))
+>this : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapSample.ts, 4, 20))
+        }
+    }
+
+
+    function foo(greeting: string): Foo.Bar.Greeter {
+>foo : Symbol(foo, Decl(sourceMapSample.ts, 10, 5))
+>greeting : Symbol(greeting, Decl(sourceMapSample.ts, 13, 17))
+>Foo : Symbol(Foo, Decl(sourceMapSample.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(sourceMapSample.ts, 0, 11))
+>Greeter : Symbol(Foo.Bar.Greeter)
+
+        return new Greeter(greeting);
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+>greeting : Symbol(greeting, Decl(sourceMapSample.ts, 13, 17))
+    }
+
+    var greeter = new Greeter("Hello, world!");
+>greeter : Symbol(greeter, Decl(sourceMapSample.ts, 17, 7))
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+
+    var str = greeter.greet();
+>str : Symbol(str, Decl(sourceMapSample.ts, 18, 7))
+>greeter.greet : Symbol(Greeter.greet, Decl(sourceMapSample.ts, 5, 9))
+>greeter : Symbol(greeter, Decl(sourceMapSample.ts, 17, 7))
+>greet : Symbol(Greeter.greet, Decl(sourceMapSample.ts, 5, 9))
+
+    function foo2(greeting: string, ...restGreetings: string[]) {
+>foo2 : Symbol(foo2, Decl(sourceMapSample.ts, 18, 30))
+>greeting : Symbol(greeting, Decl(sourceMapSample.ts, 20, 18))
+>restGreetings : Symbol(restGreetings, Decl(sourceMapSample.ts, 20, 35))
+
+        var greeters: Greeter[] = [];
+>greeters : Symbol(greeters, Decl(sourceMapSample.ts, 21, 11))
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+
+        greeters[0] = new Greeter(greeting);
+>greeters : Symbol(greeters, Decl(sourceMapSample.ts, 21, 11))
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+>greeting : Symbol(greeting, Decl(sourceMapSample.ts, 20, 18))
+
+        for (var i = 0; i < restGreetings.length; i++) {
+>i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
+>i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
+>restGreetings.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>restGreetings : Symbol(restGreetings, Decl(sourceMapSample.ts, 20, 35))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
+
+            greeters.push(new Greeter(restGreetings[i]));
+>greeters.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>greeters : Symbol(greeters, Decl(sourceMapSample.ts, 21, 11))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
+>restGreetings : Symbol(restGreetings, Decl(sourceMapSample.ts, 20, 35))
+>i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
+        }
+
+        return greeters;
+>greeters : Symbol(greeters, Decl(sourceMapSample.ts, 21, 11))
+    }
+
+    var b = foo2("Hello", "World", "!");
+>b : Symbol(b, Decl(sourceMapSample.ts, 30, 7))
+>foo2 : Symbol(foo2, Decl(sourceMapSample.ts, 18, 30))
+
+    for (var j = 0; j < b.length; j++) {
+>j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
+>j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(sourceMapSample.ts, 30, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
+
+        b[j].greet();
+>b[j].greet : Symbol(Greeter.greet, Decl(sourceMapSample.ts, 5, 9))
+>b : Symbol(b, Decl(sourceMapSample.ts, 30, 7))
+>j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
+>greet : Symbol(Greeter.greet, Decl(sourceMapSample.ts, 5, 9))
+    }
+}

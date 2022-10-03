@@ -1,0 +1,35 @@
+===================================================================
+JsFile: emitBOM.js
+mapUrl: emitBOM.js.map
+sourceRoot: 
+sources: emitBOM.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/emitBOM.js
+sourceFile:emitBOM.ts
+-------------------------------------------------------------------
+>>>// JS and d.ts output should have a BOM but not the sourcemap
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >// JS and d.ts output should have a BOM but not the sourcemap
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 62) Source(1, 62) + SourceIndex(0)
+---
+>>>var x;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >var 
+3 >    x
+4 >     ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+4 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=emitBOM.js.map

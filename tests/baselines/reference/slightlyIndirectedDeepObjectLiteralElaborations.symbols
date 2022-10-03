@@ -1,0 +1,45 @@
+=== tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 0))
+
+    a: {
+>a : Symbol(Foo.a, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 15))
+
+        b: {
+>b : Symbol(b, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 1, 8))
+
+            c: {
+>c : Symbol(c, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 2, 12))
+
+                d: string
+>d : Symbol(d, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 3, 16))
+            }
+        }
+    }
+}
+
+let q: Foo["a"] | undefined;
+>q : Symbol(q, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 10, 3))
+>Foo : Symbol(Foo, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 0))
+
+const x: Foo = (void 0, {
+>x : Symbol(x, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 11, 5))
+>Foo : Symbol(Foo, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 0))
+
+    a: q = {
+>a : Symbol(a, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 11, 25))
+>q : Symbol(q, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 10, 3))
+
+        b: ({
+>b : Symbol(b, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 12, 12))
+
+            c: {
+>c : Symbol(c, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 13, 13))
+
+                d: 42
+>d : Symbol(d, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 14, 16))
+            }
+        })
+    }
+});
+

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/nestedIndexer.ts ===
+function then(x) {
+>then : (x: any) => void
+>x : any
+
+var match: { [index: number]: string; }
+>match : { [index: number]: string; }
+>index : number
+
+}
+

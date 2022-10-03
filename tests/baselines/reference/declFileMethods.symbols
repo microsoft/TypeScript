@@ -1,0 +1,430 @@
+=== tests/cases/compiler/declFileMethods_0.ts ===
+export class c1 {
+>c1 : Symbol(c1, Decl(declFileMethods_0.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    public foo() {
+>foo : Symbol(c1.foo, Decl(declFileMethods_0.ts, 0, 17))
+    }
+    /** This is comment for function signature*/
+    public fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(c1.fooWithParameters, Decl(declFileMethods_0.ts, 3, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 5, 29))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_0.ts, 5, 68))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_0.ts, 8, 11))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 5, 29))
+    }
+    public fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : Symbol(c1.fooWithRestParameters, Decl(declFileMethods_0.ts, 9, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 10, 33))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 10, 43))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_0.ts, 10, 33))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 10, 43))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+
+    public fooWithOverloads(a: string): string;
+>fooWithOverloads : Symbol(c1.fooWithOverloads, Decl(declFileMethods_0.ts, 12, 5), Decl(declFileMethods_0.ts, 14, 47), Decl(declFileMethods_0.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 14, 28))
+
+    public fooWithOverloads(a: number): number;
+>fooWithOverloads : Symbol(c1.fooWithOverloads, Decl(declFileMethods_0.ts, 12, 5), Decl(declFileMethods_0.ts, 14, 47), Decl(declFileMethods_0.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 15, 28))
+
+    public fooWithOverloads(a: any): any {
+>fooWithOverloads : Symbol(c1.fooWithOverloads, Decl(declFileMethods_0.ts, 12, 5), Decl(declFileMethods_0.ts, 14, 47), Decl(declFileMethods_0.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 16, 28))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_0.ts, 16, 28))
+    }
+
+
+    /** This comment should appear for privateFoo*/
+    private privateFoo() {
+>privateFoo : Symbol(c1.privateFoo, Decl(declFileMethods_0.ts, 18, 5))
+    }
+    /** This is comment for function signature*/
+    private privateFooWithParameters(/** this is comment about a*/a: string,
+>privateFooWithParameters : Symbol(c1.privateFooWithParameters, Decl(declFileMethods_0.ts, 23, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 25, 37))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_0.ts, 25, 76))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_0.ts, 28, 11))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 25, 37))
+    }
+    private privateFooWithRestParameters(a: string, ...rests: string[]) {
+>privateFooWithRestParameters : Symbol(c1.privateFooWithRestParameters, Decl(declFileMethods_0.ts, 29, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 30, 41))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 30, 51))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_0.ts, 30, 41))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 30, 51))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    private privateFooWithOverloads(a: string): string;
+>privateFooWithOverloads : Symbol(c1.privateFooWithOverloads, Decl(declFileMethods_0.ts, 32, 5), Decl(declFileMethods_0.ts, 33, 55), Decl(declFileMethods_0.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 33, 36))
+
+    private privateFooWithOverloads(a: number): number;
+>privateFooWithOverloads : Symbol(c1.privateFooWithOverloads, Decl(declFileMethods_0.ts, 32, 5), Decl(declFileMethods_0.ts, 33, 55), Decl(declFileMethods_0.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 34, 36))
+
+    private privateFooWithOverloads(a: any): any {
+>privateFooWithOverloads : Symbol(c1.privateFooWithOverloads, Decl(declFileMethods_0.ts, 32, 5), Decl(declFileMethods_0.ts, 33, 55), Decl(declFileMethods_0.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 35, 36))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_0.ts, 35, 36))
+    }
+
+
+    /** This comment should appear for static foo*/
+    static staticFoo() {
+>staticFoo : Symbol(c1.staticFoo, Decl(declFileMethods_0.ts, 37, 5))
+    }
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/a: string,
+>staticFooWithParameters : Symbol(c1.staticFooWithParameters, Decl(declFileMethods_0.ts, 42, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 44, 35))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_0.ts, 44, 74))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_0.ts, 47, 11))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 44, 35))
+    }
+    static staticFooWithRestParameters(a: string, ...rests: string[]) {
+>staticFooWithRestParameters : Symbol(c1.staticFooWithRestParameters, Decl(declFileMethods_0.ts, 48, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 49, 39))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 49, 49))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_0.ts, 49, 39))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 49, 49))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    static staticFooWithOverloads(a: string): string;
+>staticFooWithOverloads : Symbol(c1.staticFooWithOverloads, Decl(declFileMethods_0.ts, 51, 5), Decl(declFileMethods_0.ts, 52, 53), Decl(declFileMethods_0.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 52, 34))
+
+    static staticFooWithOverloads(a: number): number;
+>staticFooWithOverloads : Symbol(c1.staticFooWithOverloads, Decl(declFileMethods_0.ts, 51, 5), Decl(declFileMethods_0.ts, 52, 53), Decl(declFileMethods_0.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 53, 34))
+
+    static staticFooWithOverloads(a: any): any {
+>staticFooWithOverloads : Symbol(c1.staticFooWithOverloads, Decl(declFileMethods_0.ts, 51, 5), Decl(declFileMethods_0.ts, 52, 53), Decl(declFileMethods_0.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 54, 34))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_0.ts, 54, 34))
+    }
+
+
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo() {
+>privateStaticFoo : Symbol(c1.privateStaticFoo, Decl(declFileMethods_0.ts, 56, 5))
+    }
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
+>privateStaticFooWithParameters : Symbol(c1.privateStaticFooWithParameters, Decl(declFileMethods_0.ts, 61, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 63, 50))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_0.ts, 63, 89))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_0.ts, 66, 11))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 63, 50))
+    }
+    private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
+>privateStaticFooWithRestParameters : Symbol(c1.privateStaticFooWithRestParameters, Decl(declFileMethods_0.ts, 67, 5))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 68, 54))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 68, 64))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_0.ts, 68, 54))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 68, 64))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    private static privateStaticFooWithOverloads(a: string): string;
+>privateStaticFooWithOverloads : Symbol(c1.privateStaticFooWithOverloads, Decl(declFileMethods_0.ts, 70, 5), Decl(declFileMethods_0.ts, 71, 68), Decl(declFileMethods_0.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 71, 49))
+
+    private static privateStaticFooWithOverloads(a: number): number;
+>privateStaticFooWithOverloads : Symbol(c1.privateStaticFooWithOverloads, Decl(declFileMethods_0.ts, 70, 5), Decl(declFileMethods_0.ts, 71, 68), Decl(declFileMethods_0.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 72, 49))
+
+    private static privateStaticFooWithOverloads(a: any): any {
+>privateStaticFooWithOverloads : Symbol(c1.privateStaticFooWithOverloads, Decl(declFileMethods_0.ts, 70, 5), Decl(declFileMethods_0.ts, 71, 68), Decl(declFileMethods_0.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 73, 49))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_0.ts, 73, 49))
+    }
+}
+
+export interface I1 {
+>I1 : Symbol(I1, Decl(declFileMethods_0.ts, 76, 1))
+
+    /** This comment should appear for foo*/
+    foo(): string;
+>foo : Symbol(I1.foo, Decl(declFileMethods_0.ts, 78, 21))
+
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(I1.fooWithParameters, Decl(declFileMethods_0.ts, 80, 18))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 83, 22))
+
+        /** this is comment for b*/
+        b: number): void;
+>b : Symbol(b, Decl(declFileMethods_0.ts, 83, 61))
+
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+>fooWithRestParameters : Symbol(I1.fooWithRestParameters, Decl(declFileMethods_0.ts, 85, 25))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 87, 26))
+>rests : Symbol(rests, Decl(declFileMethods_0.ts, 87, 36))
+
+    fooWithOverloads(a: string): string;
+>fooWithOverloads : Symbol(I1.fooWithOverloads, Decl(declFileMethods_0.ts, 87, 65), Decl(declFileMethods_0.ts, 89, 40))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 89, 21))
+
+    fooWithOverloads(a: number): number;
+>fooWithOverloads : Symbol(I1.fooWithOverloads, Decl(declFileMethods_0.ts, 87, 65), Decl(declFileMethods_0.ts, 89, 40))
+>a : Symbol(a, Decl(declFileMethods_0.ts, 90, 21))
+}
+
+=== tests/cases/compiler/declFileMethods_1.ts ===
+class c2 {
+>c2 : Symbol(c2, Decl(declFileMethods_1.ts, 0, 0))
+
+    /** This comment should appear for foo*/
+    public foo() {
+>foo : Symbol(c2.foo, Decl(declFileMethods_1.ts, 0, 10))
+    }
+    /** This is comment for function signature*/
+    public fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(c2.fooWithParameters, Decl(declFileMethods_1.ts, 3, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 5, 29))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_1.ts, 5, 68))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_1.ts, 8, 11))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 5, 29))
+    }
+    public fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : Symbol(c2.fooWithRestParameters, Decl(declFileMethods_1.ts, 9, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 10, 33))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 10, 43))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_1.ts, 10, 33))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 10, 43))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+
+    public fooWithOverloads(a: string): string;
+>fooWithOverloads : Symbol(c2.fooWithOverloads, Decl(declFileMethods_1.ts, 12, 5), Decl(declFileMethods_1.ts, 14, 47), Decl(declFileMethods_1.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 14, 28))
+
+    public fooWithOverloads(a: number): number;
+>fooWithOverloads : Symbol(c2.fooWithOverloads, Decl(declFileMethods_1.ts, 12, 5), Decl(declFileMethods_1.ts, 14, 47), Decl(declFileMethods_1.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 15, 28))
+
+    public fooWithOverloads(a: any): any {
+>fooWithOverloads : Symbol(c2.fooWithOverloads, Decl(declFileMethods_1.ts, 12, 5), Decl(declFileMethods_1.ts, 14, 47), Decl(declFileMethods_1.ts, 15, 47))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 16, 28))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_1.ts, 16, 28))
+    }
+
+
+    /** This comment should appear for privateFoo*/
+    private privateFoo() {
+>privateFoo : Symbol(c2.privateFoo, Decl(declFileMethods_1.ts, 18, 5))
+    }
+    /** This is comment for function signature*/
+    private privateFooWithParameters(/** this is comment about a*/a: string,
+>privateFooWithParameters : Symbol(c2.privateFooWithParameters, Decl(declFileMethods_1.ts, 23, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 25, 37))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_1.ts, 25, 76))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_1.ts, 28, 11))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 25, 37))
+    }
+    private privateFooWithRestParameters(a: string, ...rests: string[]) {
+>privateFooWithRestParameters : Symbol(c2.privateFooWithRestParameters, Decl(declFileMethods_1.ts, 29, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 30, 41))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 30, 51))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_1.ts, 30, 41))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 30, 51))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    private privateFooWithOverloads(a: string): string;
+>privateFooWithOverloads : Symbol(c2.privateFooWithOverloads, Decl(declFileMethods_1.ts, 32, 5), Decl(declFileMethods_1.ts, 33, 55), Decl(declFileMethods_1.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 33, 36))
+
+    private privateFooWithOverloads(a: number): number;
+>privateFooWithOverloads : Symbol(c2.privateFooWithOverloads, Decl(declFileMethods_1.ts, 32, 5), Decl(declFileMethods_1.ts, 33, 55), Decl(declFileMethods_1.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 34, 36))
+
+    private privateFooWithOverloads(a: any): any {
+>privateFooWithOverloads : Symbol(c2.privateFooWithOverloads, Decl(declFileMethods_1.ts, 32, 5), Decl(declFileMethods_1.ts, 33, 55), Decl(declFileMethods_1.ts, 34, 55))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 35, 36))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_1.ts, 35, 36))
+    }
+
+
+    /** This comment should appear for static foo*/
+    static staticFoo() {
+>staticFoo : Symbol(c2.staticFoo, Decl(declFileMethods_1.ts, 37, 5))
+    }
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/a: string,
+>staticFooWithParameters : Symbol(c2.staticFooWithParameters, Decl(declFileMethods_1.ts, 42, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 44, 35))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_1.ts, 44, 74))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_1.ts, 47, 11))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 44, 35))
+    }
+    static staticFooWithRestParameters(a: string, ...rests: string[]) {
+>staticFooWithRestParameters : Symbol(c2.staticFooWithRestParameters, Decl(declFileMethods_1.ts, 48, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 49, 39))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 49, 49))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_1.ts, 49, 39))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 49, 49))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    static staticFooWithOverloads(a: string): string;
+>staticFooWithOverloads : Symbol(c2.staticFooWithOverloads, Decl(declFileMethods_1.ts, 51, 5), Decl(declFileMethods_1.ts, 52, 53), Decl(declFileMethods_1.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 52, 34))
+
+    static staticFooWithOverloads(a: number): number;
+>staticFooWithOverloads : Symbol(c2.staticFooWithOverloads, Decl(declFileMethods_1.ts, 51, 5), Decl(declFileMethods_1.ts, 52, 53), Decl(declFileMethods_1.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 53, 34))
+
+    static staticFooWithOverloads(a: any): any {
+>staticFooWithOverloads : Symbol(c2.staticFooWithOverloads, Decl(declFileMethods_1.ts, 51, 5), Decl(declFileMethods_1.ts, 52, 53), Decl(declFileMethods_1.ts, 53, 53))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 54, 34))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_1.ts, 54, 34))
+    }
+
+
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo() {
+>privateStaticFoo : Symbol(c2.privateStaticFoo, Decl(declFileMethods_1.ts, 56, 5))
+    }
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
+>privateStaticFooWithParameters : Symbol(c2.privateStaticFooWithParameters, Decl(declFileMethods_1.ts, 61, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 63, 50))
+
+        /** this is comment for b*/
+        b: number) {
+>b : Symbol(b, Decl(declFileMethods_1.ts, 63, 89))
+
+        var d = a;
+>d : Symbol(d, Decl(declFileMethods_1.ts, 66, 11))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 63, 50))
+    }
+    private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
+>privateStaticFooWithRestParameters : Symbol(c2.privateStaticFooWithRestParameters, Decl(declFileMethods_1.ts, 67, 5))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 68, 54))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 68, 64))
+
+        return a + rests.join("");
+>a : Symbol(a, Decl(declFileMethods_1.ts, 68, 54))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 68, 64))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+    private static privateStaticFooWithOverloads(a: string): string;
+>privateStaticFooWithOverloads : Symbol(c2.privateStaticFooWithOverloads, Decl(declFileMethods_1.ts, 70, 5), Decl(declFileMethods_1.ts, 71, 68), Decl(declFileMethods_1.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 71, 49))
+
+    private static privateStaticFooWithOverloads(a: number): number;
+>privateStaticFooWithOverloads : Symbol(c2.privateStaticFooWithOverloads, Decl(declFileMethods_1.ts, 70, 5), Decl(declFileMethods_1.ts, 71, 68), Decl(declFileMethods_1.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 72, 49))
+
+    private static privateStaticFooWithOverloads(a: any): any {
+>privateStaticFooWithOverloads : Symbol(c2.privateStaticFooWithOverloads, Decl(declFileMethods_1.ts, 70, 5), Decl(declFileMethods_1.ts, 71, 68), Decl(declFileMethods_1.ts, 72, 68))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 73, 49))
+
+        return a;
+>a : Symbol(a, Decl(declFileMethods_1.ts, 73, 49))
+    }
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(declFileMethods_1.ts, 76, 1))
+
+    /** This comment should appear for foo*/
+    foo(): string;
+>foo : Symbol(I2.foo, Decl(declFileMethods_1.ts, 78, 14))
+
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(I2.fooWithParameters, Decl(declFileMethods_1.ts, 80, 18))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 83, 22))
+
+        /** this is comment for b*/
+        b: number): void;
+>b : Symbol(b, Decl(declFileMethods_1.ts, 83, 61))
+
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+>fooWithRestParameters : Symbol(I2.fooWithRestParameters, Decl(declFileMethods_1.ts, 85, 25))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 87, 26))
+>rests : Symbol(rests, Decl(declFileMethods_1.ts, 87, 36))
+
+    fooWithOverloads(a: string): string;
+>fooWithOverloads : Symbol(I2.fooWithOverloads, Decl(declFileMethods_1.ts, 87, 65), Decl(declFileMethods_1.ts, 89, 40))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 89, 21))
+
+    fooWithOverloads(a: number): number;
+>fooWithOverloads : Symbol(I2.fooWithOverloads, Decl(declFileMethods_1.ts, 87, 65), Decl(declFileMethods_1.ts, 89, 40))
+>a : Symbol(a, Decl(declFileMethods_1.ts, 90, 21))
+}
+

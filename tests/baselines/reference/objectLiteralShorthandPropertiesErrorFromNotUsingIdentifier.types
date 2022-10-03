@@ -1,0 +1,73 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
+// errors
+var y = {
+>y : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+
+    "stringLiteral",
+>"stringLiteral" : any
+> : any
+
+    42,
+>42 : any
+> : any
+
+    get e,
+>e : void
+
+    set f,
+>f : any
+
+    this,
+>this : any
+> : any
+
+    super,
+>super : any
+> : any
+
+    var,
+>var : any
+> : any
+
+    class,
+>class : any
+> : any
+
+    typeof
+>typeof : any
+
+};
+> : any
+
+var x = {
+>x : { a: any; "": any; ss: any; 1: any; }
+>{    a.b,    a["ss"],    a[1],} : { a: any; "": any; ss: any; 1: any; }
+
+    a.b,
+>a : any
+> : any
+>.b : any
+> : any
+>b : any
+
+    a["ss"],
+>a : any
+>["ss"] : any
+>"ss" : "ss"
+> : any
+
+    a[1],
+>a : any
+>[1] : any
+>1 : 1
+> : any
+
+};
+
+var v = { class };  // error
+>v : { class: any; }
+>{ class } : { class: any; }
+>class : any
+> : any
+

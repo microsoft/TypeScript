@@ -1,0 +1,8 @@
+tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings22_ES5.ts(1,27): error TS1199: Unterminated Unicode escape sequence.
+
+
+==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings22_ES5.ts (1 errors) ====
+    var x = "\u{00000000000067";
+                              
+!!! error TS1199: Unterminated Unicode escape sequence.
+    

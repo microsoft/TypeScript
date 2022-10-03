@@ -1,0 +1,38 @@
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+  'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(25,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts (2 errors) ====
+    interface Number {
+        doStuff(): string;
+    }
+    
+    interface NotNumber {
+        toString(radix?: number): string;
+        toFixed(fractionDigits?: number): string;
+        toExponential(fractionDigits?: number): string;
+        toPrecision(precision?: number): string;
+        valueOf(): number;
+        doStuff(): string;
+    }
+    
+    var x = 1;
+    var a: Number;
+    var b: NotNumber;
+    
+    a = x; 
+    a = b; 
+    
+    b = a; 
+    b = x; 
+    
+    x = a; // expected error
+    ~
+!!! error TS2322: Type 'Number' is not assignable to type 'number'.
+!!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+    x = b; // expected error
+    ~
+!!! error TS2322: Type 'NotNumber' is not assignable to type 'number'.
+    
+    

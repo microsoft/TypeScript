@@ -1,0 +1,13 @@
+=== tests/cases/compiler/exportDefaultVariable.ts ===
+// Regression test for #3018
+
+declare var io: any;
+>io : Symbol(io, Decl(exportDefaultVariable.ts, 2, 11))
+
+declare module 'module' {
+>'module' : Symbol("module", Decl(exportDefaultVariable.ts, 2, 20))
+
+    export default io;
+>io : Symbol(io, Decl(exportDefaultVariable.ts, 2, 11))
+}
+

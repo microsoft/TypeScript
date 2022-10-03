@@ -1,0 +1,11 @@
+=== tests/cases/compiler/commentOnClassMethod1.ts ===
+class WebControls {
+>WebControls : Symbol(WebControls, Decl(commentOnClassMethod1.ts, 0, 0))
+
+    /**
+     * Render a control
+     */
+    createControl(): any {
+>createControl : Symbol(WebControls.createControl, Decl(commentOnClassMethod1.ts, 0, 19))
+    }
+}

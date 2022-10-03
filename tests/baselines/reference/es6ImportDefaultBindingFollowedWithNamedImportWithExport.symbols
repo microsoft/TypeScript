@@ -1,0 +1,66 @@
+=== tests/cases/compiler/server.ts ===
+export var a = 10;
+>a : Symbol(a, Decl(server.ts, 0, 10))
+
+export var x = a;
+>x : Symbol(x, Decl(server.ts, 1, 10))
+>a : Symbol(a, Decl(server.ts, 0, 10))
+
+export var m = a;
+>m : Symbol(m, Decl(server.ts, 2, 10))
+>a : Symbol(a, Decl(server.ts, 0, 10))
+
+export default {};
+
+=== tests/cases/compiler/client.ts ===
+export import defaultBinding1, { } from "server";
+>defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 13))
+
+export import defaultBinding2, { a } from "server";
+>defaultBinding2 : Symbol(defaultBinding2, Decl(client.ts, 1, 13))
+>a : Symbol(a, Decl(client.ts, 1, 32))
+
+export var x1: number = a;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>a : Symbol(a, Decl(client.ts, 1, 32))
+
+export import defaultBinding3, { a as b } from "server";
+>defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 3, 13))
+>a : Symbol(a, Decl(server.ts, 0, 10))
+>b : Symbol(b, Decl(client.ts, 3, 32))
+
+export var x1: number = b;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>b : Symbol(b, Decl(client.ts, 3, 32))
+
+export import defaultBinding4, { x, a as y } from "server";
+>defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 5, 13))
+>x : Symbol(x, Decl(client.ts, 5, 32))
+>a : Symbol(a, Decl(server.ts, 0, 10))
+>y : Symbol(y, Decl(client.ts, 5, 35))
+
+export var x1: number = x;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>x : Symbol(x, Decl(client.ts, 5, 32))
+
+export var x1: number = y;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>y : Symbol(y, Decl(client.ts, 5, 35))
+
+export import defaultBinding5, { x as z,  } from "server";
+>defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 13))
+>x : Symbol(x, Decl(server.ts, 1, 10))
+>z : Symbol(z, Decl(client.ts, 8, 32))
+
+export var x1: number = z;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>z : Symbol(z, Decl(client.ts, 8, 32))
+
+export import defaultBinding6, { m,  } from "server";
+>defaultBinding6 : Symbol(defaultBinding6, Decl(client.ts, 10, 13))
+>m : Symbol(m, Decl(client.ts, 10, 32))
+
+export var x1: number = m;
+>x1 : Symbol(x1, Decl(client.ts, 2, 10), Decl(client.ts, 4, 10), Decl(client.ts, 6, 10), Decl(client.ts, 7, 10), Decl(client.ts, 9, 10) ... and 1 more)
+>m : Symbol(m, Decl(client.ts, 10, 32))
+

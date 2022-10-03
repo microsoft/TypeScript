@@ -1,0 +1,40 @@
+=== tests/cases/compiler/jsxInExtendsClause.tsx ===
+// https://github.com/Microsoft/TypeScript/issues/13157
+declare namespace React {
+>React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
+
+  interface ComponentClass<P> { new (): Component<P, {}>; }
+>ComponentClass : Symbol(ComponentClass, Decl(jsxInExtendsClause.tsx, 1, 25))
+>P : Symbol(P, Decl(jsxInExtendsClause.tsx, 2, 27))
+>Component : Symbol(Component, Decl(jsxInExtendsClause.tsx, 2, 59))
+>P : Symbol(P, Decl(jsxInExtendsClause.tsx, 2, 27))
+
+  class Component<A, B> {}
+>Component : Symbol(Component, Decl(jsxInExtendsClause.tsx, 2, 59))
+>A : Symbol(A, Decl(jsxInExtendsClause.tsx, 3, 18))
+>B : Symbol(B, Decl(jsxInExtendsClause.tsx, 3, 20))
+}
+declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
+>createComponentClass : Symbol(createComponentClass, Decl(jsxInExtendsClause.tsx, 4, 1))
+>P : Symbol(P, Decl(jsxInExtendsClause.tsx, 5, 38))
+>factory : Symbol(factory, Decl(jsxInExtendsClause.tsx, 5, 41))
+>React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(jsxInExtendsClause.tsx, 1, 25))
+>P : Symbol(P, Decl(jsxInExtendsClause.tsx, 5, 38))
+>React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(jsxInExtendsClause.tsx, 1, 25))
+>P : Symbol(P, Decl(jsxInExtendsClause.tsx, 5, 38))
+
+class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
+>Foo : Symbol(Foo, Decl(jsxInExtendsClause.tsx, 5, 106))
+>createComponentClass : Symbol(createComponentClass, Decl(jsxInExtendsClause.tsx, 4, 1))
+>React.Component : Symbol(React.Component, Decl(jsxInExtendsClause.tsx, 2, 59))
+>React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(jsxInExtendsClause.tsx, 2, 59))
+
+  render() {
+>render : Symbol((Anonymous class).render, Decl(jsxInExtendsClause.tsx, 6, 84))
+
+    return <span>Hello, world!</span>;
+  }
+}) {}

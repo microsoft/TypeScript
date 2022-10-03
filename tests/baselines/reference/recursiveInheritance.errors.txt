@@ -1,0 +1,19 @@
+tests/cases/compiler/recursiveInheritance.ts(1,11): error TS2310: Type 'I5' recursively references itself as a base type.
+tests/cases/compiler/recursiveInheritance.ts(5,11): error TS2310: Type 'i8' recursively references itself as a base type.
+tests/cases/compiler/recursiveInheritance.ts(6,11): error TS2310: Type 'i9' recursively references itself as a base type.
+
+
+==== tests/cases/compiler/recursiveInheritance.ts (3 errors) ====
+    interface I5 extends I5 { // error
+              ~~
+!!! error TS2310: Type 'I5' recursively references itself as a base type.
+        foo():void;
+    } 
+    
+    interface i8 extends i9 { } // error
+              ~~
+!!! error TS2310: Type 'i8' recursively references itself as a base type.
+    interface i9 extends i8 { } // error
+              ~~
+!!! error TS2310: Type 'i9' recursively references itself as a base type.
+    

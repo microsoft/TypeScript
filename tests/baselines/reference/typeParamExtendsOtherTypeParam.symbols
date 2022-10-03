@@ -1,0 +1,105 @@
+=== tests/cases/compiler/typeParamExtendsOtherTypeParam.ts ===
+class A<T, U extends T> { }
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>T : Symbol(T, Decl(typeParamExtendsOtherTypeParam.ts, 0, 8))
+>U : Symbol(U, Decl(typeParamExtendsOtherTypeParam.ts, 0, 10))
+>T : Symbol(T, Decl(typeParamExtendsOtherTypeParam.ts, 0, 8))
+
+class B<T extends Object, U extends T> {
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>T : Symbol(T, Decl(typeParamExtendsOtherTypeParam.ts, 1, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(typeParamExtendsOtherTypeParam.ts, 1, 25))
+>T : Symbol(T, Decl(typeParamExtendsOtherTypeParam.ts, 1, 8))
+
+    data: A<Object, Object>;
+>data : Symbol(B.data, Decl(typeParamExtendsOtherTypeParam.ts, 1, 40))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// Below 2 should compile without error 
+var x: A< { a: string }, { a: string; b: number }>;
+>x : Symbol(x, Decl(typeParamExtendsOtherTypeParam.ts, 6, 3))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 6, 11))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 6, 26))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 6, 37))
+
+var y: B< { a: string }, { a: string; b: number }>;
+>y : Symbol(y, Decl(typeParamExtendsOtherTypeParam.ts, 7, 3))
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 7, 11))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 7, 26))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 7, 37))
+
+
+// Below should be in error
+var x1: A<{ a: string;}, { b: string }>;
+>x1 : Symbol(x1, Decl(typeParamExtendsOtherTypeParam.ts, 11, 3))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 11, 11))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 11, 26))
+
+var x2: A<{ a: string;}, { a: number }>;
+>x2 : Symbol(x2, Decl(typeParamExtendsOtherTypeParam.ts, 12, 3))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 12, 11))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 12, 26))
+
+var x3: B<{ a: string;}, { b: string }>;
+>x3 : Symbol(x3, Decl(typeParamExtendsOtherTypeParam.ts, 13, 3))
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 13, 11))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 13, 26))
+
+var x4: B<{ a: string;}, { a: number }>;
+>x4 : Symbol(x4, Decl(typeParamExtendsOtherTypeParam.ts, 14, 3))
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 14, 11))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 14, 26))
+
+var x5: A<{ a: string; b: number }, { a: string }>;
+>x5 : Symbol(x5, Decl(typeParamExtendsOtherTypeParam.ts, 15, 3))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 15, 11))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 15, 22))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 15, 37))
+
+var x6: B<{ a: string; b: number }, { a: string }>;
+>x6 : Symbol(x6, Decl(typeParamExtendsOtherTypeParam.ts, 16, 3))
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 16, 11))
+>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 16, 22))
+>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 16, 37))
+
+interface I1 {
+>I1 : Symbol(I1, Decl(typeParamExtendsOtherTypeParam.ts, 16, 51))
+
+    a: string;
+>a : Symbol(I1.a, Decl(typeParamExtendsOtherTypeParam.ts, 18, 14))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(typeParamExtendsOtherTypeParam.ts, 20, 1))
+
+    a: string;
+>a : Symbol(I2.a, Decl(typeParamExtendsOtherTypeParam.ts, 22, 14))
+
+    b: number;
+>b : Symbol(I2.b, Decl(typeParamExtendsOtherTypeParam.ts, 23, 14))
+}
+
+var x7: A<I2, I1>;
+>x7 : Symbol(x7, Decl(typeParamExtendsOtherTypeParam.ts, 27, 3))
+>A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+>I2 : Symbol(I2, Decl(typeParamExtendsOtherTypeParam.ts, 20, 1))
+>I1 : Symbol(I1, Decl(typeParamExtendsOtherTypeParam.ts, 16, 51))
+
+var x8: B<I2, I1>;
+>x8 : Symbol(x8, Decl(typeParamExtendsOtherTypeParam.ts, 28, 3))
+>B : Symbol(B, Decl(typeParamExtendsOtherTypeParam.ts, 0, 27))
+>I2 : Symbol(I2, Decl(typeParamExtendsOtherTypeParam.ts, 20, 1))
+>I1 : Symbol(I1, Decl(typeParamExtendsOtherTypeParam.ts, 16, 51))
+

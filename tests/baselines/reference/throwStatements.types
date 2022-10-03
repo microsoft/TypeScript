@@ -1,0 +1,254 @@
+=== tests/cases/conformance/statements/throwStatements/throwStatements.ts ===
+// all legal
+
+interface I {
+    id: number;
+>id : number
+}
+
+class C implements I {
+>C : C
+
+    id: number;
+>id : number
+}
+
+class D<T>{
+>D : D<T>
+
+    source: T;
+>source : T
+
+    recurse: D<T>;
+>recurse : D<T>
+
+    wrapped: D<D<T>>
+>wrapped : D<D<T>>
+}
+
+function F(x: string): number { return 42; }
+>F : (x: string) => number
+>x : string
+>42 : 42
+
+module M {
+>M : typeof M
+
+    export class A {
+>A : A
+
+        name: string;
+>name : string
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : (x: number) => string
+>x : number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+}
+
+var aNumber = 9.9;
+>aNumber : number
+>9.9 : 9.9
+
+throw aNumber;
+>aNumber : number
+
+var aString = 'this is a string';
+>aString : string
+>'this is a string' : "this is a string"
+
+throw aString;
+>aString : string
+
+var aDate = new Date(12);
+>aDate : Date
+>new Date(12) : Date
+>Date : DateConstructor
+>12 : 12
+
+throw aDate;
+>aDate : Date
+
+var anObject = new Object();
+>anObject : Object
+>new Object() : Object
+>Object : ObjectConstructor
+
+throw anObject;
+>anObject : Object
+
+var anAny = null;
+>anAny : any
+>null : null
+
+throw anAny;
+>anAny : any
+
+var anOtherAny = <any> new C();
+>anOtherAny : any
+><any> new C() : any
+>new C() : C
+>C : typeof C
+
+throw anOtherAny;
+>anOtherAny : any
+
+var anUndefined = undefined;
+>anUndefined : any
+>undefined : undefined
+
+throw anUndefined;
+>anUndefined : any
+
+var aClass = new C();
+>aClass : C
+>new C() : C
+>C : typeof C
+
+throw aClass;
+>aClass : C
+
+var aGenericClass = new D<string>();
+>aGenericClass : D<string>
+>new D<string>() : D<string>
+>D : typeof D
+
+throw aGenericClass;
+>aGenericClass : D<string>
+
+var anObjectLiteral = { id: 12 };
+>anObjectLiteral : { id: number; }
+>{ id: 12 } : { id: number; }
+>id : number
+>12 : 12
+
+throw anObjectLiteral;
+>anObjectLiteral : { id: number; }
+
+var aFunction = F;
+>aFunction : (x: string) => number
+>F : (x: string) => number
+
+throw aFunction;
+>aFunction : (x: string) => number
+
+throw aFunction('');
+>aFunction('') : number
+>aFunction : (x: string) => number
+>'' : ""
+
+var aLambda = (x) => 2;
+>aLambda : (x: any) => number
+>(x) => 2 : (x: any) => number
+>x : any
+>2 : 2
+
+throw aLambda;
+>aLambda : (x: any) => number
+
+throw aLambda(1);
+>aLambda(1) : number
+>aLambda : (x: any) => number
+>1 : 1
+
+var aModule = M;
+>aModule : typeof M
+>M : typeof M
+
+throw aModule;
+>aModule : typeof M
+
+throw typeof M;
+>typeof M : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>M : typeof M
+
+var aClassInModule = new M.A();
+>aClassInModule : M.A
+>new M.A() : M.A
+>M.A : typeof M.A
+>M : typeof M
+>A : typeof M.A
+
+throw aClassInModule;
+>aClassInModule : M.A
+
+var aFunctionInModule = M.F2;
+>aFunctionInModule : (x: number) => string
+>M.F2 : (x: number) => string
+>M : typeof M
+>F2 : (x: number) => string
+
+throw aFunctionInModule;
+>aFunctionInModule : (x: number) => string
+
+// no initializer or annotation, so this is an 'any'
+var x;
+>x : any
+
+throw x;
+>x : any
+
+// literals
+throw 0.0;
+>0.0 : 0
+
+throw false;
+>false : false
+
+throw null;
+>null : null
+
+throw undefined;
+>undefined : undefined
+
+throw 'a string';
+>'a string' : "a string"
+
+throw function () { return 'a string' };
+>function () { return 'a string' } : () => string
+>'a string' : "a string"
+
+throw <T>(x:T) => 42;
+><T>(x:T) => 42 : <T>(x: T) => number
+>x : T
+>42 : 42
+
+throw { x: 12, y: 13 };
+>{ x: 12, y: 13 } : { x: number; y: number; }
+>x : number
+>12 : 12
+>y : number
+>13 : 13
+
+throw [];
+>[] : undefined[]
+
+throw ['a', ['b']];
+>['a', ['b']] : (string | string[])[]
+>'a' : "a"
+>['b'] : string[]
+>'b' : "b"
+
+throw /[a-z]/;
+>/[a-z]/ : RegExp
+
+throw new Date();
+>new Date() : Date
+>Date : DateConstructor
+
+throw new C();
+>new C() : C
+>C : typeof C
+
+throw new Object();
+>new Object() : Object
+>Object : ObjectConstructor
+
+throw new D<number>();
+>new D<number>() : D<number>
+>D : typeof D
+

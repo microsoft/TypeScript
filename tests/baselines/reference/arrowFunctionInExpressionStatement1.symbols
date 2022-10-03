@@ -1,0 +1,3 @@
+=== tests/cases/compiler/arrowFunctionInExpressionStatement1.ts ===
+() => 0;
+No type information for this code.

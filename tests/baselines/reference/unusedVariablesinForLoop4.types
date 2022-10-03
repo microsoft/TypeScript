@@ -1,0 +1,19 @@
+=== tests/cases/compiler/unusedVariablesinForLoop4.ts ===
+function f1 () {
+>f1 : () => void
+
+    for (const elem of ["a", "b", "c"]) {
+>elem : string
+>["a", "b", "c"] : string[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+        elem;
+>elem : string
+
+        var x = 20;
+>x : number
+>20 : 20
+    }
+}

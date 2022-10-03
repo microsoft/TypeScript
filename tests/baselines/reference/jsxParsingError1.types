@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		[s: string]: any;
+>s : string
+	}
+}
+
+// This should be a parse error
+const class1 = "foo";
+>class1 : "foo"
+>"foo" : "foo"
+
+const class2 = "bar";
+>class2 : "bar"
+>"bar" : "bar"
+
+const elem = <div className={class1, class2}/>;
+>elem : JSX.Element
+><div className={class1, class2}/> : JSX.Element
+>div : any
+>className : string
+>class1, class2 : "bar"
+>class1 : "foo"
+>class2 : "bar"
+

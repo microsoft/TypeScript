@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer.ts ===
+// private indexers not allowed
+
+class C {
+>C : Symbol(C, Decl(privateIndexer.ts, 0, 0))
+
+    private [x: string]: string;
+>x : Symbol(x, Decl(privateIndexer.ts, 3, 13))
+}
+
+class D {
+>D : Symbol(D, Decl(privateIndexer.ts, 4, 1))
+
+    private [x: number]: string;
+>x : Symbol(x, Decl(privateIndexer.ts, 7, 13))
+}
+
+class E<T> {
+>E : Symbol(E, Decl(privateIndexer.ts, 8, 1))
+>T : Symbol(T, Decl(privateIndexer.ts, 10, 8))
+
+    private [x: string]: T;
+>x : Symbol(x, Decl(privateIndexer.ts, 11, 13))
+>T : Symbol(T, Decl(privateIndexer.ts, 10, 8))
+}

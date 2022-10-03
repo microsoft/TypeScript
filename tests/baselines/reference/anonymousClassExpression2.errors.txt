@@ -1,0 +1,25 @@
+tests/cases/compiler/anonymousClassExpression2.ts(13,18): error TS2551: Property 'methodA' does not exist on type 'B'. Did you mean 'methodB'?
+
+
+==== tests/cases/compiler/anonymousClassExpression2.ts (1 errors) ====
+    // Fixes #14860
+    // note: repros with `while (0);` too
+    // but it's less inscrutable and more obvious to put it *inside* the loop
+    while (0) {
+        class A {
+            methodA() {
+                this; //note: a this reference of some kind is required to trigger the bug
+            }
+        }
+    
+        class B {
+            methodB() {
+                this.methodA; // error
+                     ~~~~~~~
+!!! error TS2551: Property 'methodA' does not exist on type 'B'. Did you mean 'methodB'?
+!!! related TS2728 tests/cases/compiler/anonymousClassExpression2.ts:12:9: 'methodB' is declared here.
+                this.methodB; // ok
+            }
+        }
+    }
+    

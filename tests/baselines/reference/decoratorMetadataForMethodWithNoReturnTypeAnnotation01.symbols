@@ -1,0 +1,22 @@
+=== tests/cases/compiler/decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts ===
+declare var decorator: any;
+>decorator : Symbol(decorator, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 0, 11))
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 0, 27))
+
+    constructor(test: string, test2: number) {
+>test : Symbol(test, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 3, 16))
+>test2 : Symbol(test2, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 3, 29))
+
+    }
+
+    @decorator
+>decorator : Symbol(decorator, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 0, 11))
+
+    doSomething() {
+>doSomething : Symbol(MyClass.doSomething, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 5, 5))
+
+    }
+}
+

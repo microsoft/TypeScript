@@ -1,0 +1,140 @@
+=== tests/cases/compiler/optionalPropertiesTest.ts ===
+var x: {p1:number; p2?:string; p3?:{():number;};};
+>x : Symbol(x, Decl(optionalPropertiesTest.ts, 0, 3))
+>p1 : Symbol(p1, Decl(optionalPropertiesTest.ts, 0, 8))
+>p2 : Symbol(p2, Decl(optionalPropertiesTest.ts, 0, 18))
+>p3 : Symbol(p3, Decl(optionalPropertiesTest.ts, 0, 30))
+
+interface IFoo
+>IFoo : Symbol(IFoo, Decl(optionalPropertiesTest.ts, 0, 50))
+{
+    id: number;
+>id : Symbol(IFoo.id, Decl(optionalPropertiesTest.ts, 3, 1))
+
+    name?: string;
+>name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
+
+    print?(): void;
+>print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
+}
+
+
+var foo: IFoo;
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>IFoo : Symbol(IFoo, Decl(optionalPropertiesTest.ts, 0, 50))
+
+foo = { id: 1234 };                // Ok
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>id : Symbol(id, Decl(optionalPropertiesTest.ts, 11, 7))
+
+foo = { id: 1234, name: "test" };  // Ok
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>id : Symbol(id, Decl(optionalPropertiesTest.ts, 12, 7))
+>name : Symbol(name, Decl(optionalPropertiesTest.ts, 12, 17))
+
+foo = { name: "test" };            // Error, id missing
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>name : Symbol(name, Decl(optionalPropertiesTest.ts, 13, 7))
+
+foo = {id: 1234, print:()=>{}}	   // Ok
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>id : Symbol(id, Decl(optionalPropertiesTest.ts, 14, 7))
+>print : Symbol(print, Decl(optionalPropertiesTest.ts, 14, 16))
+
+var s = foo.name || "default";
+>s : Symbol(s, Decl(optionalPropertiesTest.ts, 16, 3))
+>foo.name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
+
+if (foo.print !== undefined) foo.print();
+>foo.print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
+>undefined : Symbol(undefined)
+>foo.print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
+>foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+>print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
+
+interface i1 { M: () => void; };
+>i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+>M : Symbol(i1.M, Decl(optionalPropertiesTest.ts, 19, 14))
+
+interface i2 { M?: () => void; };
+>i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+>M : Symbol(i2.M, Decl(optionalPropertiesTest.ts, 20, 14))
+
+interface i3 { M: number; };
+>i3 : Symbol(i3, Decl(optionalPropertiesTest.ts, 20, 33))
+>M : Symbol(i3.M, Decl(optionalPropertiesTest.ts, 21, 14))
+
+interface i4 { M?: number; };
+>i4 : Symbol(i4, Decl(optionalPropertiesTest.ts, 21, 28))
+>M : Symbol(i4.M, Decl(optionalPropertiesTest.ts, 22, 14))
+
+var test1: i1 = {};
+>test1 : Symbol(test1, Decl(optionalPropertiesTest.ts, 24, 3))
+>i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+
+var test2: i3 = {};
+>test2 : Symbol(test2, Decl(optionalPropertiesTest.ts, 25, 3))
+>i3 : Symbol(i3, Decl(optionalPropertiesTest.ts, 20, 33))
+
+var test3: i2 = {};
+>test3 : Symbol(test3, Decl(optionalPropertiesTest.ts, 26, 3))
+>i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+
+var test4: i4 = {};
+>test4 : Symbol(test4, Decl(optionalPropertiesTest.ts, 27, 3))
+>i4 : Symbol(i4, Decl(optionalPropertiesTest.ts, 21, 28))
+
+var test5: i1 = { M: function () { } };
+>test5 : Symbol(test5, Decl(optionalPropertiesTest.ts, 28, 3))
+>i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+>M : Symbol(M, Decl(optionalPropertiesTest.ts, 28, 17))
+
+var test6: i3 = { M: 5 };
+>test6 : Symbol(test6, Decl(optionalPropertiesTest.ts, 29, 3))
+>i3 : Symbol(i3, Decl(optionalPropertiesTest.ts, 20, 33))
+>M : Symbol(M, Decl(optionalPropertiesTest.ts, 29, 17))
+
+var test7: i2 = { M: function () { } };
+>test7 : Symbol(test7, Decl(optionalPropertiesTest.ts, 30, 3))
+>i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+>M : Symbol(M, Decl(optionalPropertiesTest.ts, 30, 17))
+
+test7 = {};
+>test7 : Symbol(test7, Decl(optionalPropertiesTest.ts, 30, 3))
+
+var test8: i4 = { M: 5 }
+>test8 : Symbol(test8, Decl(optionalPropertiesTest.ts, 32, 3))
+>i4 : Symbol(i4, Decl(optionalPropertiesTest.ts, 21, 28))
+>M : Symbol(M, Decl(optionalPropertiesTest.ts, 32, 17))
+
+test8 = {};
+>test8 : Symbol(test8, Decl(optionalPropertiesTest.ts, 32, 3))
+
+var test9_1: i2;
+>test9_1 : Symbol(test9_1, Decl(optionalPropertiesTest.ts, 34, 3))
+>i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+
+var test9_2: i1;
+>test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 3))
+>i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+
+test9_1 = test9_2;
+>test9_1 : Symbol(test9_1, Decl(optionalPropertiesTest.ts, 34, 3))
+>test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 3))
+
+var test10_1: i1;
+>test10_1 : Symbol(test10_1, Decl(optionalPropertiesTest.ts, 37, 3))
+>i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+
+var test10_2: i2;
+>test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 3))
+>i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+
+test10_1 = test10_2;
+>test10_1 : Symbol(test10_1, Decl(optionalPropertiesTest.ts, 37, 3))
+>test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 3))
+

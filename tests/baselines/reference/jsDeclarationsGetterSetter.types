@@ -1,0 +1,114 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class A {
+>A : A
+
+    get x() {
+>x : number
+
+        return 12;
+>12 : 12
+    }
+}
+
+export class B {
+>B : B
+
+    /**
+     * @param {number} _arg
+     */
+    set x(_arg) {
+>x : number
+>_arg : number
+    }
+}
+
+export class C {
+>C : C
+
+    get x() {
+>x : number
+
+        return 12;
+>12 : 12
+    }
+    set x(_arg) {
+>x : number
+>_arg : number
+    }
+}
+
+export class D {}
+>D : D
+
+Object.defineProperty(D.prototype, "x", {
+>Object.defineProperty(D.prototype, "x", {    get() {        return 12;    }}) : D
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>D.prototype : D
+>D : typeof D
+>prototype : D
+>"x" : "x"
+>{    get() {        return 12;    }} : { get(): number; }
+
+    get() {
+>get : () => number
+
+        return 12;
+>12 : 12
+    }
+});
+
+export class E {}
+>E : E
+
+Object.defineProperty(E.prototype, "x", {
+>Object.defineProperty(E.prototype, "x", {    /**     * @param {number} _arg     */    set(_arg) {}}) : E
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>E.prototype : E
+>E : typeof E
+>prototype : E
+>"x" : "x"
+>{    /**     * @param {number} _arg     */    set(_arg) {}} : { set(_arg: number): void; }
+
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : (_arg: number) => void
+>_arg : number
+
+});
+
+export class F {}
+>F : F
+
+Object.defineProperty(F.prototype, "x", {
+>Object.defineProperty(F.prototype, "x", {    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}}) : F
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>F.prototype : F
+>F : typeof F
+>prototype : F
+>"x" : "x"
+>{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get(): number; set(_arg: number): void; }
+
+    get() {
+>get : () => number
+
+        return 12;
+>12 : 12
+
+    },
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : (_arg: number) => void
+>_arg : number
+
+});
+

@@ -1,0 +1,82 @@
+=== tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts ===
+// no error
+var numStrTuple: [number, string] = [5, "hello"];
+>numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
+
+var numStrTuple2: [number, string] = [5, "foo", true];
+>numStrTuple2 : Symbol(numStrTuple2, Decl(contextualTypeWithTuple.ts, 2, 3))
+
+var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
+>numStrBoolTuple : Symbol(numStrBoolTuple, Decl(contextualTypeWithTuple.ts, 3, 3))
+
+var objNumTuple: [{ a: string }, number] = [{ a: "world" }, 5];
+>objNumTuple : Symbol(objNumTuple, Decl(contextualTypeWithTuple.ts, 4, 3))
+>a : Symbol(a, Decl(contextualTypeWithTuple.ts, 4, 19))
+>a : Symbol(a, Decl(contextualTypeWithTuple.ts, 4, 45))
+
+var strTupleTuple: [string, [number, {}]] = ["bar", [5, { x: 1, y: 1 }]];
+>strTupleTuple : Symbol(strTupleTuple, Decl(contextualTypeWithTuple.ts, 5, 3))
+>x : Symbol(x, Decl(contextualTypeWithTuple.ts, 5, 57))
+>y : Symbol(y, Decl(contextualTypeWithTuple.ts, 5, 63))
+
+class C { }
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+
+class D { }
+>D : Symbol(D, Decl(contextualTypeWithTuple.ts, 6, 11))
+
+var unionTuple: [C, string | number] = [new C(), "foo"];
+>unionTuple : Symbol(unionTuple, Decl(contextualTypeWithTuple.ts, 8, 3))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+
+var unionTuple1: [C, string | number] = [new C(), "foo"];
+>unionTuple1 : Symbol(unionTuple1, Decl(contextualTypeWithTuple.ts, 9, 3))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+
+var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
+>unionTuple2 : Symbol(unionTuple2, Decl(contextualTypeWithTuple.ts, 10, 3))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+>D : Symbol(D, Decl(contextualTypeWithTuple.ts, 6, 11))
+>C : Symbol(C, Decl(contextualTypeWithTuple.ts, 5, 73))
+>D : Symbol(D, Decl(contextualTypeWithTuple.ts, 6, 11))
+
+var unionTuple3: [number, string| number] = [10, "foo"]; 
+>unionTuple3 : Symbol(unionTuple3, Decl(contextualTypeWithTuple.ts, 11, 3))
+
+numStrTuple = numStrTuple2;
+>numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
+>numStrTuple2 : Symbol(numStrTuple2, Decl(contextualTypeWithTuple.ts, 2, 3))
+
+numStrTuple = numStrBoolTuple;
+>numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
+>numStrBoolTuple : Symbol(numStrBoolTuple, Decl(contextualTypeWithTuple.ts, 3, 3))
+
+// error
+objNumTuple = [ {}, 5];
+>objNumTuple : Symbol(objNumTuple, Decl(contextualTypeWithTuple.ts, 4, 3))
+
+numStrBoolTuple = numStrTuple;
+>numStrBoolTuple : Symbol(numStrBoolTuple, Decl(contextualTypeWithTuple.ts, 3, 3))
+>numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
+
+var strStrTuple: [string, string] = ["foo", "bar", 5];
+>strStrTuple : Symbol(strStrTuple, Decl(contextualTypeWithTuple.ts, 19, 3))
+
+unionTuple = unionTuple1;
+>unionTuple : Symbol(unionTuple, Decl(contextualTypeWithTuple.ts, 8, 3))
+>unionTuple1 : Symbol(unionTuple1, Decl(contextualTypeWithTuple.ts, 9, 3))
+
+unionTuple = unionTuple2;
+>unionTuple : Symbol(unionTuple, Decl(contextualTypeWithTuple.ts, 8, 3))
+>unionTuple2 : Symbol(unionTuple2, Decl(contextualTypeWithTuple.ts, 10, 3))
+
+unionTuple2 = unionTuple;
+>unionTuple2 : Symbol(unionTuple2, Decl(contextualTypeWithTuple.ts, 10, 3))
+>unionTuple : Symbol(unionTuple, Decl(contextualTypeWithTuple.ts, 8, 3))
+
+numStrTuple = unionTuple3;
+>numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
+>unionTuple3 : Symbol(unionTuple3, Decl(contextualTypeWithTuple.ts, 11, 3))
+

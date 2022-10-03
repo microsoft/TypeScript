@@ -1,0 +1,61 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+const decorator = function <T>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator : <T>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>function <T>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props}></Component>} : <T>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>Component : React.StatelessComponent<T>
+>React : any
+>React : any
+
+    return (props) => <Component {...props}></Component>
+>(props) => <Component {...props}></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>props : T & { children?: React.ReactNode; }
+><Component {...props}></Component> : JSX.Element
+>Component : React.StatelessComponent<T>
+>props : T & { children?: React.ReactNode; }
+>Component : React.StatelessComponent<T>
+
+};
+
+const decorator2 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator2 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} x={2} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>x : number
+>Component : React.StatelessComponent<T>
+>React : any
+>React : any
+
+    return (props) => <Component {...props} x={2} ></Component>
+>(props) => <Component {...props} x={2} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>props : T & { children?: React.ReactNode; }
+><Component {...props} x={2} ></Component> : JSX.Element
+>Component : React.StatelessComponent<T>
+>props : T & { children?: React.ReactNode; }
+>x : number
+>2 : 2
+>Component : React.StatelessComponent<T>
+
+};
+
+const decorator3 = function <T extends { x: number }, U extends { x: number } >(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator3 : <T extends { x: number; }, U extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>function <T extends { x: number }, U extends { x: number } >(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component x={2} {...props} ></Component>} : <T extends { x: number; }, U extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>x : number
+>x : number
+>Component : React.StatelessComponent<T>
+>React : any
+>React : any
+
+    return (props) => <Component x={2} {...props} ></Component>
+>(props) => <Component x={2} {...props} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>props : T & { children?: React.ReactNode; }
+><Component x={2} {...props} ></Component> : JSX.Element
+>Component : React.StatelessComponent<T>
+>x : number
+>2 : 2
+>props : T & { children?: React.ReactNode; }
+>Component : React.StatelessComponent<T>
+
+};

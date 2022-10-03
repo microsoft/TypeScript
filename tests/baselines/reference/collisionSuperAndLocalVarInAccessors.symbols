@@ -1,0 +1,70 @@
+=== tests/cases/compiler/collisionSuperAndLocalVarInAccessors.ts ===
+var _super = 10; // No Error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 3))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
+
+    get prop1(): number {
+>prop1 : Symbol(Foo.prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
+
+        var _super = 10; // No error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 3, 11))
+
+        return 10;
+    }
+    set prop1(val: number) {
+>prop1 : Symbol(Foo.prop1, Decl(collisionSuperAndLocalVarInAccessors.ts, 1, 11), Decl(collisionSuperAndLocalVarInAccessors.ts, 5, 5))
+>val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 6, 14))
+
+        var _super = 10; // No error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 7, 11))
+    }
+}
+class b extends Foo {
+>b : Symbol(b, Decl(collisionSuperAndLocalVarInAccessors.ts, 9, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
+
+    get prop2(): number {
+>prop2 : Symbol(b.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
+
+        var _super = 10; // Should be error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 12, 11))
+
+        return 10;
+    }
+    set prop2(val: number) {
+>prop2 : Symbol(b.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 10, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 14, 5))
+>val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 15, 14))
+
+        var _super = 10; // Should be error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 16, 11))
+    }
+}
+class c extends Foo {
+>c : Symbol(c, Decl(collisionSuperAndLocalVarInAccessors.ts, 18, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInAccessors.ts, 0, 16))
+
+    get prop2(): number {
+>prop2 : Symbol(c.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
+
+        var x = () => {
+>x : Symbol(x, Decl(collisionSuperAndLocalVarInAccessors.ts, 21, 11))
+
+            var _super = 10; // Should be error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 22, 15))
+        }
+        return 10;
+    }
+    set prop2(val: number) {
+>prop2 : Symbol(c.prop2, Decl(collisionSuperAndLocalVarInAccessors.ts, 19, 21), Decl(collisionSuperAndLocalVarInAccessors.ts, 25, 5))
+>val : Symbol(val, Decl(collisionSuperAndLocalVarInAccessors.ts, 26, 14))
+
+        var x = () => {
+>x : Symbol(x, Decl(collisionSuperAndLocalVarInAccessors.ts, 27, 11))
+
+            var _super = 10; // Should be error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInAccessors.ts, 28, 15))
+        }
+    }
+}

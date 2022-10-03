@@ -1,0 +1,68 @@
+=== tests/cases/compiler/file1.ts ===
+class foo {}
+>foo : Symbol(foo, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12), Decl(file2.ts, 1, 10))
+
+namespace foo {
+>foo : Symbol(foo, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12), Decl(file2.ts, 1, 10))
+
+    export class A {}
+>A : Symbol(A, Decl(file1.ts, 1, 15), Decl(file2.ts, 4, 26))
+
+    export namespace B { export let a; }
+>B : Symbol(B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+>a : Symbol(a, Decl(file1.ts, 3, 35))
+}
+export = foo;
+>foo : Symbol(foo, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12), Decl(file2.ts, 1, 10))
+
+=== tests/cases/compiler/file2.ts ===
+import x = require("./file1"); 
+>x : Symbol(x, Decl(file2.ts, 0, 0))
+
+x.B.b = 1;
+>x.B.b : Symbol(x.B.b, Decl(file2.ts, 7, 18))
+>x.B : Symbol(x.B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+>x : Symbol(x, Decl(file2.ts, 0, 0))
+>B : Symbol(x.B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+>b : Symbol(x.B.b, Decl(file2.ts, 7, 18))
+
+// OK - './file1' is a namespace
+declare module "./file1" {
+>"./file1" : Symbol(x, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12), Decl(file2.ts, 1, 10))
+
+    interface A { a: number }
+>A : Symbol(A, Decl(file1.ts, 1, 15), Decl(file2.ts, 4, 26))
+>a : Symbol(A.a, Decl(file2.ts, 5, 17))
+
+    namespace B {
+>B : Symbol(B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+
+        export let b: number;
+>b : Symbol(b, Decl(file2.ts, 7, 18))
+    }
+}
+
+=== tests/cases/compiler/file3.ts ===
+import * as x from "./file1";
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+
+import "./file2";
+let a: x.A;
+>a : Symbol(a, Decl(file3.ts, 2, 3))
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+>A : Symbol(x.A, Decl(file1.ts, 1, 15), Decl(file2.ts, 4, 26))
+
+let b = a.a;
+>b : Symbol(b, Decl(file3.ts, 3, 3))
+>a.a : Symbol(x.A.a, Decl(file2.ts, 5, 17))
+>a : Symbol(a, Decl(file3.ts, 2, 3))
+>a : Symbol(x.A.a, Decl(file2.ts, 5, 17))
+
+let c = x.B.b;
+>c : Symbol(c, Decl(file3.ts, 4, 3))
+>x.B.b : Symbol(x.B.b, Decl(file2.ts, 7, 18))
+>x.B : Symbol(x.B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+>x : Symbol(x, Decl(file3.ts, 0, 6))
+>B : Symbol(x.B, Decl(file1.ts, 2, 21), Decl(file2.ts, 5, 29))
+>b : Symbol(x.B.b, Decl(file2.ts, 7, 18))
+

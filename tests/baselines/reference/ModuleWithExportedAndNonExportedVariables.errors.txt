@@ -1,0 +1,18 @@
+tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' does not exist on type 'typeof A'.
+
+
+==== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts (1 errors) ====
+    module A {
+        export var x = 'hello world'
+        var y = 12;
+    }
+    
+    
+    var x: string;
+    var x = A.x;
+    
+    // Error, since y is not exported
+    var y = A.y;
+              ~
+!!! error TS2339: Property 'y' does not exist on type 'typeof A'.
+    

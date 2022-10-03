@@ -1,0 +1,122 @@
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(24,15): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(25,22): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(26,22): error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(27,15): error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(32,12): error TS2395: Individual declarations in merged declaration 'inst' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(35,19): error TS2395: Individual declarations in merged declaration 'inst' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(42,9): error TS2395: Individual declarations in merged declaration 'v' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(43,16): error TS2395: Individual declarations in merged declaration 'v' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(44,9): error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(45,16): error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(49,12): error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(49,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(52,21): error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(56,11): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(57,12): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(58,19): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(64,11): error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(65,18): error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.
+
+
+==== tests/cases/compiler/duplicateSymbolsExportMatching.ts (18 errors) ====
+    module M {
+        export interface E { }
+        interface I { }
+    }
+    module M {
+        export interface E { } // ok
+        interface I { } // ok
+    }
+    
+    // Doesn't match export visibility, but it's in a different parent, so it's ok
+    module M {
+        interface E { } // ok
+        export interface I { } // ok
+    }
+    
+    module N {
+        interface I { }
+        interface I { } // ok
+        export interface E { }
+        export interface E { } // ok
+    }
+    
+    module N2 {
+        interface I { }
+                  ~
+!!! error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
+        export interface I { } // error
+                         ~
+!!! error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
+        export interface E { }
+                         ~
+!!! error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
+        interface E { } // error
+                  ~
+!!! error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
+    }
+    
+    // Should report error only once for instantiated module
+    module M {
+        module inst {
+               ~~~~
+!!! error TS2395: Individual declarations in merged declaration 'inst' must be all exported or all local.
+            var t;
+        }
+        export module inst { // one error
+                      ~~~~
+!!! error TS2395: Individual declarations in merged declaration 'inst' must be all exported or all local.
+            var t;
+        }
+    }
+    
+    // Variables of the same / different type
+    module M2 {
+        var v: string;
+            ~
+!!! error TS2395: Individual declarations in merged declaration 'v' must be all exported or all local.
+        export var v: string; // one error (visibility)
+                   ~
+!!! error TS2395: Individual declarations in merged declaration 'v' must be all exported or all local.
+        var w: number;
+            ~
+!!! error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
+        export var w: string; // two errors (visibility and type mismatch)
+                   ~
+!!! error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
+    }
+    
+    module M {
+        module F {
+               ~
+!!! error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
+               ~
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+            var t;
+        }
+        export function F() { } // Only one error for duplicate identifier (don't consider visibility)
+                        ~
+!!! error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
+    }
+    
+    module M {
+        class C { }
+              ~
+!!! error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+        module C { }
+               ~
+!!! error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+        export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+                      ~
+!!! error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+            var t;
+        }
+    }
+    
+    // Top level
+    interface D { }
+              ~
+!!! error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.
+    export interface D { }
+                     ~
+!!! error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.

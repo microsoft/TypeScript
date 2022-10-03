@@ -1,0 +1,92 @@
+=== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor7.ts ===
+declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>target : any
+>propertyKey : string
+>descriptor : TypedPropertyDescriptor<T>
+
+declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>target : any
+>propertyKey : string
+>descriptor : TypedPropertyDescriptor<T>
+
+class A {
+>A : A
+
+    @dec1 get x() { return 0; }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+class B {
+>B : B
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+
+    @dec2 set x(value: number) { }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+
+class C {
+>C : C
+
+    @dec1 set x(value: number) { }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+}
+
+class D {
+>D : D
+
+    set x(value: number) { }
+>x : number
+>value : number
+
+    @dec2 get x() { return 0; }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}
+
+class E {
+>E : E
+
+    @dec1 get x() { return 0; }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    @dec2 set x(value: number) { }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+
+class F {
+>F : F
+
+    @dec1 set x(value: number) { }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+
+    @dec2 get x() { return 0; }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}

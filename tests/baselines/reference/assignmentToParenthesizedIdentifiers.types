@@ -1,0 +1,325 @@
+=== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts ===
+var x: number;
+>x : number
+
+x = 3; // OK
+>x = 3 : 3
+>x : number
+>3 : 3
+
+(x) = 3; // OK
+>(x) = 3 : 3
+>(x) : number
+>x : number
+>3 : 3
+
+x = ''; // Error
+>x = '' : ""
+>x : number
+>'' : ""
+
+(x) = ''; // Error
+>(x) = '' : ""
+>(x) : number
+>x : number
+>'' : ""
+
+module M {
+>M : typeof M
+
+    export var y: number;
+>y : number
+}
+M.y = 3; // OK
+>M.y = 3 : 3
+>M.y : number
+>M : typeof M
+>y : number
+>3 : 3
+
+(M).y = 3; // OK
+>(M).y = 3 : 3
+>(M).y : number
+>(M) : typeof M
+>M : typeof M
+>y : number
+>3 : 3
+
+(M.y) = 3; // OK
+>(M.y) = 3 : 3
+>(M.y) : number
+>M.y : number
+>M : typeof M
+>y : number
+>3 : 3
+
+M.y = ''; // Error
+>M.y = '' : ""
+>M.y : number
+>M : typeof M
+>y : number
+>'' : ""
+
+(M).y = ''; // Error
+>(M).y = '' : ""
+>(M).y : number
+>(M) : typeof M
+>M : typeof M
+>y : number
+>'' : ""
+
+(M.y) = ''; // Error
+>(M.y) = '' : ""
+>(M.y) : number
+>M.y : number
+>M : typeof M
+>y : number
+>'' : ""
+
+M = { y: 3 }; // Error
+>M = { y: 3 } : { y: number; }
+>M : any
+>{ y: 3 } : { y: number; }
+>y : number
+>3 : 3
+
+(M) = { y: 3 }; // Error
+>(M) = { y: 3 } : { y: number; }
+>(M) : any
+>M : any
+>{ y: 3 } : { y: number; }
+>y : number
+>3 : 3
+
+module M2 {
+>M2 : typeof M2
+
+    export module M3 {
+>M3 : typeof M3
+
+        export var x: number;
+>x : number
+    }
+
+    M3 = { x: 3 }; // Error
+>M3 = { x: 3 } : { x: number; }
+>M3 : any
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+}
+M2.M3 = { x: 3 }; // OK
+>M2.M3 = { x: 3 } : { x: number; }
+>M2.M3 : typeof M2.M3
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+
+(M2).M3 = { x: 3 }; // OK
+>(M2).M3 = { x: 3 } : { x: number; }
+>(M2).M3 : typeof M2.M3
+>(M2) : typeof M2
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+
+(M2.M3) = { x: 3 }; // OK
+>(M2.M3) = { x: 3 } : { x: number; }
+>(M2.M3) : typeof M2.M3
+>M2.M3 : typeof M2.M3
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+
+M2.M3 = { x: '' }; // Error
+>M2.M3 = { x: '' } : { x: string; }
+>M2.M3 : typeof M2.M3
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: '' } : { x: string; }
+>x : string
+>'' : ""
+
+(M2).M3 = { x: '' }; // Error
+>(M2).M3 = { x: '' } : { x: string; }
+>(M2).M3 : typeof M2.M3
+>(M2) : typeof M2
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: '' } : { x: string; }
+>x : string
+>'' : ""
+
+(M2.M3) = { x: '' }; // Error
+>(M2.M3) = { x: '' } : { x: string; }
+>(M2.M3) : typeof M2.M3
+>M2.M3 : typeof M2.M3
+>M2 : typeof M2
+>M3 : typeof M2.M3
+>{ x: '' } : { x: string; }
+>x : string
+>'' : ""
+
+
+function fn() { }
+>fn : () => void
+
+fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
+>fn = () => 3 : () => number
+>fn : any
+>() => 3 : () => number
+>3 : 3
+
+(fn) = () => 3; // Should be error
+>(fn) = () => 3 : () => number
+>(fn) : any
+>fn : any
+>() => 3 : () => number
+>3 : 3
+
+function fn2(x: number, y: { t: number }) {
+>fn2 : (x: number, y: {    t: number;}) => void
+>x : number
+>y : { t: number; }
+>t : number
+
+    x = 3;
+>x = 3 : 3
+>x : number
+>3 : 3
+
+    (x) = 3; // OK
+>(x) = 3 : 3
+>(x) : number
+>x : number
+>3 : 3
+
+    x = ''; // Error
+>x = '' : ""
+>x : number
+>'' : ""
+
+    (x) = ''; // Error
+>(x) = '' : ""
+>(x) : number
+>x : number
+>'' : ""
+
+    (y).t = 3; // OK
+>(y).t = 3 : 3
+>(y).t : number
+>(y) : { t: number; }
+>y : { t: number; }
+>t : number
+>3 : 3
+
+    (y.t) = 3; // OK
+>(y.t) = 3 : 3
+>(y.t) : number
+>y.t : number
+>y : { t: number; }
+>t : number
+>3 : 3
+
+    (y).t = ''; // Error
+>(y).t = '' : ""
+>(y).t : number
+>(y) : { t: number; }
+>y : { t: number; }
+>t : number
+>'' : ""
+
+    (y.t) = ''; // Error
+>(y.t) = '' : ""
+>(y.t) : number
+>y.t : number
+>y : { t: number; }
+>t : number
+>'' : ""
+
+    y['t'] = 3; // OK
+>y['t'] = 3 : 3
+>y['t'] : number
+>y : { t: number; }
+>'t' : "t"
+>3 : 3
+
+    (y)['t'] = 3; // OK
+>(y)['t'] = 3 : 3
+>(y)['t'] : number
+>(y) : { t: number; }
+>y : { t: number; }
+>'t' : "t"
+>3 : 3
+
+    (y['t']) = 3; // OK
+>(y['t']) = 3 : 3
+>(y['t']) : number
+>y['t'] : number
+>y : { t: number; }
+>'t' : "t"
+>3 : 3
+
+    y['t'] = ''; // Error
+>y['t'] = '' : ""
+>y['t'] : number
+>y : { t: number; }
+>'t' : "t"
+>'' : ""
+
+    (y)['t'] = ''; // Error
+>(y)['t'] = '' : ""
+>(y)['t'] : number
+>(y) : { t: number; }
+>y : { t: number; }
+>'t' : "t"
+>'' : ""
+
+    (y['t']) = ''; // Error
+>(y['t']) = '' : ""
+>(y['t']) : number
+>y['t'] : number
+>y : { t: number; }
+>'t' : "t"
+>'' : ""
+}
+
+enum E {
+>E : E
+
+    A
+>A : E.A
+}
+E = undefined; // Error
+>E = undefined : undefined
+>E : any
+>undefined : undefined
+
+(E) = undefined; // Error
+>(E) = undefined : undefined
+>(E) : any
+>E : any
+>undefined : undefined
+
+class C {
+>C : C
+
+}
+
+C = undefined; // Error
+>C = undefined : undefined
+>C : any
+>undefined : undefined
+
+(C) = undefined; // Error
+>(C) = undefined : undefined
+>(C) : any
+>C : any
+>undefined : undefined
+

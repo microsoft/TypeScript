@@ -1,0 +1,33 @@
+=== tests/cases/compiler/typeArgumentInferenceOrdering.ts ===
+class C {
+>C : C
+
+    y: I;
+>y : I
+}
+
+interface I {
+    x(): Goo;
+>x : () => Goo
+}
+
+interface Goo {
+    p: string;
+>p : string
+}
+
+function foo<T>(f: { y: T }): T { return null }
+>foo : <T>(f: {    y: T;}) => T
+>f : { y: T; }
+>y : T
+>null : null
+
+var x = foo(new C()).x; // was Error that property x does not exist on type {}
+>x : () => Goo
+>foo(new C()).x : () => Goo
+>foo(new C()) : I
+>foo : <T>(f: { y: T; }) => T
+>new C() : C
+>C : typeof C
+>x : () => Goo
+

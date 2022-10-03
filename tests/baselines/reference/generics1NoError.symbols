@@ -1,0 +1,49 @@
+=== tests/cases/compiler/generics1NoError.ts ===
+interface A { a: string; }
+>A : Symbol(A, Decl(generics1NoError.ts, 0, 0))
+>a : Symbol(A.a, Decl(generics1NoError.ts, 0, 13))
+
+interface B extends A { b: string; }
+>B : Symbol(B, Decl(generics1NoError.ts, 0, 26))
+>A : Symbol(A, Decl(generics1NoError.ts, 0, 0))
+>b : Symbol(B.b, Decl(generics1NoError.ts, 1, 23))
+
+interface C extends B { c: string; }
+>C : Symbol(C, Decl(generics1NoError.ts, 1, 36))
+>B : Symbol(B, Decl(generics1NoError.ts, 0, 26))
+>c : Symbol(C.c, Decl(generics1NoError.ts, 2, 23))
+
+interface G<T, U extends B> {
+>G : Symbol(G, Decl(generics1NoError.ts, 2, 36))
+>T : Symbol(T, Decl(generics1NoError.ts, 3, 12))
+>U : Symbol(U, Decl(generics1NoError.ts, 3, 14))
+>B : Symbol(B, Decl(generics1NoError.ts, 0, 26))
+
+    x: T;
+>x : Symbol(G.x, Decl(generics1NoError.ts, 3, 29))
+>T : Symbol(T, Decl(generics1NoError.ts, 3, 12))
+
+    y: U;
+>y : Symbol(G.y, Decl(generics1NoError.ts, 4, 9))
+>U : Symbol(U, Decl(generics1NoError.ts, 3, 14))
+}
+var v1: G<A, C>;               // Ok
+>v1 : Symbol(v1, Decl(generics1NoError.ts, 7, 3))
+>G : Symbol(G, Decl(generics1NoError.ts, 2, 36))
+>A : Symbol(A, Decl(generics1NoError.ts, 0, 0))
+>C : Symbol(C, Decl(generics1NoError.ts, 1, 36))
+
+var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
+>v2 : Symbol(v2, Decl(generics1NoError.ts, 8, 3))
+>G : Symbol(G, Decl(generics1NoError.ts, 2, 36))
+>a : Symbol(a, Decl(generics1NoError.ts, 8, 11))
+>C : Symbol(C, Decl(generics1NoError.ts, 1, 36))
+
+var v4: G<G<A, B>, C>;         // Ok
+>v4 : Symbol(v4, Decl(generics1NoError.ts, 9, 3))
+>G : Symbol(G, Decl(generics1NoError.ts, 2, 36))
+>G : Symbol(G, Decl(generics1NoError.ts, 2, 36))
+>A : Symbol(A, Decl(generics1NoError.ts, 0, 0))
+>B : Symbol(B, Decl(generics1NoError.ts, 0, 26))
+>C : Symbol(C, Decl(generics1NoError.ts, 1, 36))
+

@@ -1,0 +1,89 @@
+=== tests/cases/conformance/classes/mixinAbstractClasses.ts ===
+interface Mixin {
+    mixinMethod(): void;
+>mixinMethod : () => void
+}
+
+function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
+>args : any
+>baseClass : TBaseClass
+>args : any
+
+    abstract class MixinClass extends baseClass implements Mixin {
+>MixinClass : MixinClass
+>baseClass : TBaseClass
+
+        mixinMethod() {
+>mixinMethod : () => void
+        }
+    }
+    return MixinClass;
+>MixinClass : ((abstract new (...args: any) => MixinClass) & { prototype: Mixin<any>.MixinClass; }) & TBaseClass
+}
+
+class ConcreteBase {
+>ConcreteBase : ConcreteBase
+
+    baseMethod() {}
+>baseMethod : () => void
+}
+
+abstract class AbstractBase {
+>AbstractBase : AbstractBase
+
+    abstract abstractBaseMethod(): void;
+>abstractBaseMethod : () => void
+}
+
+class DerivedFromConcrete extends Mixin(ConcreteBase) {
+>DerivedFromConcrete : DerivedFromConcrete
+>Mixin(ConcreteBase) : ConcreteBase & Mixin
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
+>ConcreteBase : typeof ConcreteBase
+}
+
+const wasConcrete = new DerivedFromConcrete();
+>wasConcrete : DerivedFromConcrete
+>new DerivedFromConcrete() : DerivedFromConcrete
+>DerivedFromConcrete : typeof DerivedFromConcrete
+
+wasConcrete.baseMethod();
+>wasConcrete.baseMethod() : void
+>wasConcrete.baseMethod : () => void
+>wasConcrete : DerivedFromConcrete
+>baseMethod : () => void
+
+wasConcrete.mixinMethod();
+>wasConcrete.mixinMethod() : void
+>wasConcrete.mixinMethod : () => void
+>wasConcrete : DerivedFromConcrete
+>mixinMethod : () => void
+
+class DerivedFromAbstract extends Mixin(AbstractBase) {
+>DerivedFromAbstract : DerivedFromAbstract
+>Mixin(AbstractBase) : AbstractBase & Mixin
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
+>AbstractBase : typeof AbstractBase
+
+    abstractBaseMethod() {}
+>abstractBaseMethod : () => void
+}
+
+const wasAbstract = new DerivedFromAbstract();
+>wasAbstract : DerivedFromAbstract
+>new DerivedFromAbstract() : DerivedFromAbstract
+>DerivedFromAbstract : typeof DerivedFromAbstract
+
+wasAbstract.abstractBaseMethod();
+>wasAbstract.abstractBaseMethod() : void
+>wasAbstract.abstractBaseMethod : () => void
+>wasAbstract : DerivedFromAbstract
+>abstractBaseMethod : () => void
+
+wasAbstract.mixinMethod();
+>wasAbstract.mixinMethod() : void
+>wasAbstract.mixinMethod : () => void
+>wasAbstract : DerivedFromAbstract
+>mixinMethod : () => void
+

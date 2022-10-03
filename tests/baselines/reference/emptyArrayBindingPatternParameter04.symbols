@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter04.ts ===
+function f([] = [1,2,3,4]) {
+>f : Symbol(f, Decl(emptyArrayBindingPatternParameter04.ts, 0, 0))
+
+    var x, y, z;
+>x : Symbol(x, Decl(emptyArrayBindingPatternParameter04.ts, 1, 7))
+>y : Symbol(y, Decl(emptyArrayBindingPatternParameter04.ts, 1, 10))
+>z : Symbol(z, Decl(emptyArrayBindingPatternParameter04.ts, 1, 13))
+}

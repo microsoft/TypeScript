@@ -1,0 +1,32 @@
+=== tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts ===
+export class Collection<TItem extends CollectionItem> {
+>Collection : Symbol(Collection, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 0))
+>TItem : Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
+>CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
+
+    _itemsByKey: { [key: string]: TItem; };
+>_itemsByKey : Symbol(Collection._itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
+>key : Symbol(key, Decl(genericWithIndexerOfTypeParameterType2.ts, 1, 20))
+>TItem : Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
+}
+
+export class List extends Collection<ListItem>{
+>List : Symbol(List, Decl(genericWithIndexerOfTypeParameterType2.ts, 2, 1))
+>Collection : Symbol(Collection, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 0))
+>ListItem : Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
+
+    Bar() {}
+>Bar : Symbol(List.Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
+}
+
+export class CollectionItem {}
+>CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
+
+export class ListItem extends CollectionItem {
+>ListItem : Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
+>CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
+
+    __isNew: boolean;
+>__isNew : Symbol(ListItem.__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
+}
+

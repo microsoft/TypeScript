@@ -1,0 +1,79 @@
+=== tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithInterface.ts ===
+var v0: T0;
+>v0 : Symbol(v0, Decl(circularTypeAliasForUnionWithInterface.ts, 0, 3))
+>T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithInterface.ts, 0, 11))
+
+type T0 = string | I0;
+>T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithInterface.ts, 0, 11))
+>I0 : Symbol(I0, Decl(circularTypeAliasForUnionWithInterface.ts, 1, 22))
+
+interface I0 {
+>I0 : Symbol(I0, Decl(circularTypeAliasForUnionWithInterface.ts, 1, 22))
+
+    x: T0;
+>x : Symbol(I0.x, Decl(circularTypeAliasForUnionWithInterface.ts, 2, 14))
+>T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithInterface.ts, 0, 11))
+}
+
+var v1: T1;
+>v1 : Symbol(v1, Decl(circularTypeAliasForUnionWithInterface.ts, 6, 3))
+>T1 : Symbol(T1, Decl(circularTypeAliasForUnionWithInterface.ts, 6, 11))
+
+type T1 = string | I1;
+>T1 : Symbol(T1, Decl(circularTypeAliasForUnionWithInterface.ts, 6, 11))
+>I1 : Symbol(I1, Decl(circularTypeAliasForUnionWithInterface.ts, 7, 22))
+
+interface I1 {
+>I1 : Symbol(I1, Decl(circularTypeAliasForUnionWithInterface.ts, 7, 22))
+
+    (): T1;
+>T1 : Symbol(T1, Decl(circularTypeAliasForUnionWithInterface.ts, 6, 11))
+}
+
+var v2: T2;
+>v2 : Symbol(v2, Decl(circularTypeAliasForUnionWithInterface.ts, 12, 3))
+>T2 : Symbol(T2, Decl(circularTypeAliasForUnionWithInterface.ts, 12, 11))
+
+type T2 = string | I2;
+>T2 : Symbol(T2, Decl(circularTypeAliasForUnionWithInterface.ts, 12, 11))
+>I2 : Symbol(I2, Decl(circularTypeAliasForUnionWithInterface.ts, 13, 22))
+
+interface I2 {
+>I2 : Symbol(I2, Decl(circularTypeAliasForUnionWithInterface.ts, 13, 22))
+
+    new (): T2;
+>T2 : Symbol(T2, Decl(circularTypeAliasForUnionWithInterface.ts, 12, 11))
+}
+
+var v3: T3;
+>v3 : Symbol(v3, Decl(circularTypeAliasForUnionWithInterface.ts, 18, 3))
+>T3 : Symbol(T3, Decl(circularTypeAliasForUnionWithInterface.ts, 18, 11))
+
+type T3 = string | I3;
+>T3 : Symbol(T3, Decl(circularTypeAliasForUnionWithInterface.ts, 18, 11))
+>I3 : Symbol(I3, Decl(circularTypeAliasForUnionWithInterface.ts, 19, 22))
+
+interface I3 {
+>I3 : Symbol(I3, Decl(circularTypeAliasForUnionWithInterface.ts, 19, 22))
+
+    [x: number]: T3;
+>x : Symbol(x, Decl(circularTypeAliasForUnionWithInterface.ts, 21, 5))
+>T3 : Symbol(T3, Decl(circularTypeAliasForUnionWithInterface.ts, 18, 11))
+}
+
+var v4: T4;
+>v4 : Symbol(v4, Decl(circularTypeAliasForUnionWithInterface.ts, 24, 3))
+>T4 : Symbol(T4, Decl(circularTypeAliasForUnionWithInterface.ts, 24, 11))
+
+type T4 = string | I4;
+>T4 : Symbol(T4, Decl(circularTypeAliasForUnionWithInterface.ts, 24, 11))
+>I4 : Symbol(I4, Decl(circularTypeAliasForUnionWithInterface.ts, 25, 22))
+
+interface I4 {
+>I4 : Symbol(I4, Decl(circularTypeAliasForUnionWithInterface.ts, 25, 22))
+
+    [x: string]: T4;
+>x : Symbol(x, Decl(circularTypeAliasForUnionWithInterface.ts, 27, 5))
+>T4 : Symbol(T4, Decl(circularTypeAliasForUnionWithInterface.ts, 24, 11))
+}
+

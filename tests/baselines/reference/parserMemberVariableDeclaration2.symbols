@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration2.ts ===
+class C {
+>C : Symbol(C, Decl(parserMemberVariableDeclaration2.ts, 0, 0))
+
+  static static Foo;
+>static : Symbol(C.static, Decl(parserMemberVariableDeclaration2.ts, 0, 9))
+>Foo : Symbol(C.Foo, Decl(parserMemberVariableDeclaration2.ts, 1, 15))
+}

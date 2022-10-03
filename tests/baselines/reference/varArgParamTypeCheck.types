@@ -1,0 +1,52 @@
+=== tests/cases/compiler/varArgParamTypeCheck.ts ===
+function sequence(...sequences:{():void;}[]) {
+>sequence : (...sequences: {    (): void;}[]) => void
+>sequences : (() => void)[]
+}
+
+function callback(clb:()=>void) {
+>callback : (clb: () => void) => void
+>clb : () => void
+}
+
+sequence(
+>sequence(    function bar() {    },    function foo() {        callback(()=>{            this();        });    },    function baz() {        callback(()=>{            this();        });    }) : void
+>sequence : (...sequences: (() => void)[]) => void
+
+    function bar() {
+>function bar() {    } : () => void
+>bar : () => void
+
+    },
+    function foo() {
+>function foo() {        callback(()=>{            this();        });    } : () => void
+>foo : () => void
+
+        callback(()=>{
+>callback(()=>{            this();        }) : void
+>callback : (clb: () => void) => void
+>()=>{            this();        } : () => void
+
+            this();
+>this() : any
+>this : any
+
+        });
+    },
+    function baz() {
+>function baz() {        callback(()=>{            this();        });    } : () => void
+>baz : () => void
+
+        callback(()=>{
+>callback(()=>{            this();        }) : void
+>callback : (clb: () => void) => void
+>()=>{            this();        } : () => void
+
+            this();
+>this() : any
+>this : any
+
+        });
+    }
+);
+

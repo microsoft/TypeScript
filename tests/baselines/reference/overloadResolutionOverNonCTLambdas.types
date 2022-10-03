@@ -1,0 +1,79 @@
+=== tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts ===
+module Bugs {
+>Bugs : typeof Bugs
+
+  class A {
+>A : A
+  }
+  
+  // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
+  function bug2(message:string, ...args:any[]):string {
+>bug2 : (message: string, ...args: any[]) => string
+>message : string
+>args : any[]
+
+    var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
+>result : string
+>message.replace(/\{(\d+)\}/g, function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    }) : string
+>message.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>message : string
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\{(\d+)\}/g : RegExp
+>function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
+>match : string
+>rest : any[]
+
+      var index= rest[0];
+>index : any
+>rest[0] : any
+>rest : any[]
+>0 : 0
+
+      return typeof args[index] !== 'undefined'
+>typeof args[index] !== 'undefined'        ? args[index]        : match : any
+>typeof args[index] !== 'undefined' : boolean
+>typeof args[index] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>args[index] : any
+>args : any[]
+>index : any
+>'undefined' : "undefined"
+
+        ? args[index]
+>args[index] : any
+>args : any[]
+>index : any
+
+        : match;
+>match : string
+
+    });
+    return result;
+>result : string
+  }
+}
+
+function bug3(f:(x:string)=>string) { return f("s") }
+>bug3 : (f: (x: string) => string) => string
+>f : (x: string) => string
+>x : string
+>f("s") : string
+>f : (x: string) => string
+>"s" : "s"
+
+function fprime(x:string):string { return x; }
+>fprime : (x: string) => string
+>x : string
+>x : string
+
+bug3(fprime);
+>bug3(fprime) : string
+>bug3 : (f: (x: string) => string) => string
+>fprime : (x: string) => string
+
+bug3(function(x:string):string { return x; });
+>bug3(function(x:string):string { return x; }) : string
+>bug3 : (f: (x: string) => string) => string
+>function(x:string):string { return x; } : (x: string) => string
+>x : string
+>x : string
+

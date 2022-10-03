@@ -1,0 +1,58 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts ===
+class C {
+>C : C
+
+    private x: string;
+>x : string
+}
+
+class D {
+>D : D
+
+    private x: string;
+>x : string
+}
+
+class X<T> {
+>X : X<T>
+
+    x: T;
+>x : T
+}
+
+function foo<T>(t: X<T>, t2: X<T>) {
+>foo : <T>(t: X<T>, t2: X<T>) => T
+>t : X<T>
+>t2 : X<T>
+
+    var x: T;
+>x : T
+
+    return x;
+>x : T
+}
+
+var c1 = new X<C>();
+>c1 : X<C>
+>new X<C>() : X<C>
+>X : typeof X
+
+var d1 = new X<D>();
+>d1 : X<D>
+>new X<D>() : X<D>
+>X : typeof X
+
+var r = foo(c1, d1); // error
+>r : C
+>foo(c1, d1) : C
+>foo : <T>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>d1 : X<D>
+
+var r2 = foo(c1, c1); // ok
+>r2 : C
+>foo(c1, c1) : C
+>foo : <T>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>c1 : X<C>
+

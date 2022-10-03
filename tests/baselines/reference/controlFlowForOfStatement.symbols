@@ -1,0 +1,28 @@
+=== tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts ===
+let obj: number[];
+>obj : Symbol(obj, Decl(controlFlowForOfStatement.ts, 0, 3))
+
+let x: string | number | boolean | RegExp;
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function a() {
+>a : Symbol(a, Decl(controlFlowForOfStatement.ts, 1, 42))
+
+    x = true;
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+
+    for (x of obj) {
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+>obj : Symbol(obj, Decl(controlFlowForOfStatement.ts, 0, 3))
+
+        x = x.toExponential();
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+    }
+    x; // string | boolean
+>x : Symbol(x, Decl(controlFlowForOfStatement.ts, 1, 3))
+}
+

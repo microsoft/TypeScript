@@ -1,0 +1,26 @@
+=== tests/cases/compiler/restUnion3.ts ===
+declare const nullAndUndefinedUnion: null | undefined;
+>nullAndUndefinedUnion : null | undefined
+>null : null
+
+var rest4: { };
+>rest4 : {}
+
+var {...rest4 } = nullAndUndefinedUnion;
+>rest4 : {}
+>nullAndUndefinedUnion : null | undefined
+
+declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined;
+>unionWithIntersection : never
+>n : number
+>s : string
+
+var rest5: { n: number, s: string };
+>rest5 : { n: number; s: string; }
+>n : number
+>s : string
+
+var {...rest5 } = unionWithIntersection;
+>rest5 : { n: number; s: string; }
+>unionWithIntersection : never
+

@@ -1,0 +1,115 @@
+=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts ===
+namespace Test1 {
+>Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType01.ts, 0, 0))
+
+    export interface Foo {
+>Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 0, 17))
+
+        bar: string;
+>bar : Symbol(Foo.bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 1, 26))
+    }
+
+    var x: Foo.bar = "";
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 5, 7))
+>Foo : Symbol(Foo)
+>bar : Symbol(Foo.bar)
+
+    var y: Test1.Foo.bar = "";
+>y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 6, 7))
+>Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType01.ts, 0, 0))
+>Foo : Symbol(Test1.Foo)
+>bar : Symbol(Test1.Foo.bar)
+}
+
+namespace Test2 {
+>Test2 : Symbol(Test2, Decl(errorForUsingPropertyOfTypeAsType01.ts, 7, 1))
+
+    export class Foo {
+>Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 9, 17))
+
+        bar: string;
+>bar : Symbol(Foo.bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 10, 22))
+    }
+
+    var x: Foo.bar = "";
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 14, 7))
+>Foo : Symbol(Foo)
+>bar : Symbol(Foo.bar)
+
+    var y: Test2.Foo.bar = "";
+>y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 15, 7))
+>Test2 : Symbol(Test2, Decl(errorForUsingPropertyOfTypeAsType01.ts, 7, 1))
+>Foo : Symbol(Test2.Foo)
+>bar : Symbol(Test2.Foo.bar)
+}
+
+namespace Test3 {
+>Test3 : Symbol(Test3, Decl(errorForUsingPropertyOfTypeAsType01.ts, 16, 1))
+
+    export type Foo = {
+>Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 18, 17))
+
+        bar: string;
+>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 19, 23))
+    }
+
+    var x: Foo.bar = "";
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 23, 7))
+>Foo : Symbol(Foo)
+>bar : Symbol(Foo.bar)
+
+    var y: Test3.Foo.bar = "";
+>y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 24, 7))
+>Test3 : Symbol(Test3, Decl(errorForUsingPropertyOfTypeAsType01.ts, 16, 1))
+>Foo : Symbol(Test3.Foo)
+>bar : Symbol(Test3.Foo.bar)
+}
+
+namespace Test4 {
+>Test4 : Symbol(Test4, Decl(errorForUsingPropertyOfTypeAsType01.ts, 25, 1))
+
+    export type Foo = { bar: number }
+>Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 27, 17))
+>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 28, 23))
+
+                    | { bar: string }
+>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 29, 23))
+
+    var x: Foo.bar = "";
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 31, 7))
+>Foo : Symbol(Foo)
+>bar : Symbol(Foo.bar)
+
+    var y: Test4.Foo.bar = "";
+>y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 32, 7))
+>Test4 : Symbol(Test4, Decl(errorForUsingPropertyOfTypeAsType01.ts, 25, 1))
+>Foo : Symbol(Test4.Foo)
+>bar : Symbol(Test4.Foo.bar)
+}
+
+namespace Test5 {
+>Test5 : Symbol(Test5, Decl(errorForUsingPropertyOfTypeAsType01.ts, 33, 1))
+
+    export type Foo = { bar: number }
+>Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 35, 17))
+>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 36, 23))
+
+                    | { wat: string }
+>wat : Symbol(wat, Decl(errorForUsingPropertyOfTypeAsType01.ts, 37, 23))
+
+    var x: Foo.bar = "";
+>x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 39, 7))
+>Foo : Symbol(Foo)
+>bar : Symbol(Foo.bar)
+
+    var y: Test5.Foo.bar = "";
+>y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 40, 7))
+>Test5 : Symbol(Test5, Decl(errorForUsingPropertyOfTypeAsType01.ts, 33, 1))
+>Foo : Symbol(Test5.Foo)
+>bar : Symbol(Test5.Foo.bar)
+}
+
+import lol = Test5.Foo.
+>lol : Symbol(lol, Decl(errorForUsingPropertyOfTypeAsType01.ts, 41, 1))
+>Test5 : Symbol(Test5, Decl(errorForUsingPropertyOfTypeAsType01.ts, 33, 1))
+

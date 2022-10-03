@@ -1,0 +1,20 @@
+=== tests/cases/compiler/file.tsx ===
+export const a = <div></div>;
+>a : Symbol(a, Decl(file.tsx, 0, 12))
+>div : Symbol(JSX.IntrinsicElements, Decl(index.d.ts, 0, 23))
+>div : Symbol(JSX.IntrinsicElements, Decl(index.d.ts, 0, 23))
+
+=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 0, 0))
+
+    interface IntrinsicElements { [x: string]: any; }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 0, 23))
+>x : Symbol(x, Decl(index.d.ts, 1, 35))
+}
+=== tests/cases/compiler/node_modules/@types/react/jsx-runtime.d.ts ===
+import './';
+No type information for this code.=== tests/cases/compiler/node_modules/@types/react/jsx-dev-runtime.d.ts ===
+import './';
+No type information for this code.
+No type information for this code.

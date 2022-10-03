@@ -1,0 +1,22 @@
+=== tests/cases/compiler/constDeclarations-ambient.ts ===
+// No error
+declare const c1: boolean;
+>c1 : Symbol(c1, Decl(constDeclarations-ambient.ts, 1, 13))
+
+declare const c2: number;
+>c2 : Symbol(c2, Decl(constDeclarations-ambient.ts, 2, 13))
+
+declare const c3, c4 :string, c5: any;
+>c3 : Symbol(c3, Decl(constDeclarations-ambient.ts, 3, 13))
+>c4 : Symbol(c4, Decl(constDeclarations-ambient.ts, 3, 17))
+>c5 : Symbol(c5, Decl(constDeclarations-ambient.ts, 3, 29))
+
+declare module M {
+>M : Symbol(M, Decl(constDeclarations-ambient.ts, 3, 38))
+
+    const c6;
+>c6 : Symbol(c6, Decl(constDeclarations-ambient.ts, 6, 9))
+
+    const c7: number;
+>c7 : Symbol(c7, Decl(constDeclarations-ambient.ts, 7, 9))
+}

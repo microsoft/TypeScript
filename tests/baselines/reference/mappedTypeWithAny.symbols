@@ -1,0 +1,177 @@
+=== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
+type Item = { value: string };
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+>value : Symbol(value, Decl(mappedTypeWithAny.ts, 0, 13))
+
+type ItemMap<T> = { [P in keyof T]: Item };
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeWithAny.ts, 0, 30))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 1, 13))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 1, 21))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 1, 13))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x0: keyof any;
+>x0 : Symbol(x0, Decl(mappedTypeWithAny.ts, 3, 11))
+
+declare let x1: { [P in any]: Item };
+>x1 : Symbol(x1, Decl(mappedTypeWithAny.ts, 4, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 4, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x2: { [P in string]: Item };
+>x2 : Symbol(x2, Decl(mappedTypeWithAny.ts, 5, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 5, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x3: { [P in keyof any]: Item };
+>x3 : Symbol(x3, Decl(mappedTypeWithAny.ts, 6, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 6, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x4: ItemMap<any>;
+>x4 : Symbol(x4, Decl(mappedTypeWithAny.ts, 7, 11))
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeWithAny.ts, 0, 30))
+
+// Repro from #19152
+
+type Data = {
+>Data : Symbol(Data, Decl(mappedTypeWithAny.ts, 7, 29))
+
+  value: string;
+>value : Symbol(value, Decl(mappedTypeWithAny.ts, 11, 13))
+}
+
+type StrictDataMap<T> = {
+>StrictDataMap : Symbol(StrictDataMap, Decl(mappedTypeWithAny.ts, 13, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 15, 19))
+
+  [P in keyof T]: Data
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 16, 3))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 15, 19))
+>Data : Symbol(Data, Decl(mappedTypeWithAny.ts, 7, 29))
+}
+
+declare let z: StrictDataMap<any>;
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+>StrictDataMap : Symbol(StrictDataMap, Decl(mappedTypeWithAny.ts, 13, 1))
+
+for (let id in z) {
+>id : Symbol(id, Decl(mappedTypeWithAny.ts, 20, 8))
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+
+  let data = z[id];
+>data : Symbol(data, Decl(mappedTypeWithAny.ts, 21, 5))
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+>id : Symbol(id, Decl(mappedTypeWithAny.ts, 20, 8))
+
+  let x = data.notAValue;  // Error
+>x : Symbol(x, Decl(mappedTypeWithAny.ts, 22, 5))
+>data : Symbol(data, Decl(mappedTypeWithAny.ts, 21, 5))
+}
+
+// Issue #46169.
+// We want mapped types whose constraint is `keyof T` to
+// map over `any` differently, depending on whether `T`
+// is constrained to array and tuple types.
+type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
+>Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 29, 40))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 29, 40))
+
+type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 30, 39))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 30, 39))
+
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. *Ideally*, when `U` is later instantiated with `any`,
+// the result should also be some sort of array; however, at the moment we don't seem
+// to have an easy way to preserve that information. More than just that, it would be
+// inconsistent for two instantiations of `Objectish<any>` to produce different outputs
+// depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+>IndirectArrayish : Symbol(IndirectArrayish, Decl(mappedTypeWithAny.ts, 30, 61))
+>U : Symbol(U, Decl(mappedTypeWithAny.ts, 39, 22))
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>U : Symbol(U, Decl(mappedTypeWithAny.ts, 39, 22))
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
+>bar : Symbol(bar, Decl(mappedTypeWithAny.ts, 39, 58))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 41, 13))
+>Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 41, 37))
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>indirectArrayish : Symbol(indirectArrayish, Decl(mappedTypeWithAny.ts, 41, 64))
+>IndirectArrayish : Symbol(IndirectArrayish, Decl(mappedTypeWithAny.ts, 30, 61))
+
+    let arr: any[];
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 42, 7))
+
+    arr = arrayish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 42, 7))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 41, 13))
+
+    arr = objectish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 42, 7))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 41, 37))
+
+    arr = indirectArrayish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 42, 7))
+>indirectArrayish : Symbol(indirectArrayish, Decl(mappedTypeWithAny.ts, 41, 64))
+}
+
+declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 46, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 48, 32))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 48, 58))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 48, 32))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 48, 80))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 48, 32))
+
+let abc: any[] = stringifyArray(void 0 as any);
+>abc : Symbol(abc, Decl(mappedTypeWithAny.ts, 49, 3))
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 46, 1))
+
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+>stringifyPair : Symbol(stringifyPair, Decl(mappedTypeWithAny.ts, 49, 47))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 51, 31))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 51, 62))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 51, 31))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 51, 84))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 51, 31))
+
+let def: [any, any] = stringifyPair(void 0 as any);
+>def : Symbol(def, Decl(mappedTypeWithAny.ts, 52, 3))
+>stringifyPair : Symbol(stringifyPair, Decl(mappedTypeWithAny.ts, 49, 47))
+
+// Repro from #46582
+
+type Evolvable<E extends Evolver> = {
+>Evolvable : Symbol(Evolvable, Decl(mappedTypeWithAny.ts, 52, 51))
+>E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 15))
+>Evolver : Symbol(Evolver, Decl(mappedTypeWithAny.ts, 58, 2))
+
+  [P in keyof E]: never;
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 57, 3))
+>E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 15))
+
+};
+type Evolver<T extends Evolvable<any> = any> = {
+>Evolver : Symbol(Evolver, Decl(mappedTypeWithAny.ts, 58, 2))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 13))
+>Evolvable : Symbol(Evolvable, Decl(mappedTypeWithAny.ts, 52, 51))
+
+  [key in keyof Partial<T>]: never;
+>key : Symbol(key, Decl(mappedTypeWithAny.ts, 60, 3))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 13))
+
+};
+

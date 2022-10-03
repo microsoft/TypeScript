@@ -1,0 +1,42 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(11,14): error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: unknown) => string; }'.
+  Types of property 'cb' are incompatible.
+    Type 'new <T>(x: T, y: T) => string' is not assignable to type 'new (t: unknown) => string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(13,14): error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
+  Types of property 'cb' are incompatible.
+    Type 'new (x: string, y: number) => string' is not assignable to type 'new (t: string) => string'.
+
+
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts (2 errors) ====
+    // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
+    
+    function foo<T, U>(arg: { cb: new(t: T) => U }) {
+        return new arg.cb(null);
+    }
+    
+    var arg: { cb: new<T>(x: T) => string };
+    var r = foo(arg); // {}
+    // more args not allowed
+    var arg2: { cb: new <T>(x: T, y: T) => string };
+    var r2 = foo(arg2); // error
+                 ~~~~
+!!! error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: unknown) => string; }'.
+!!! error TS2345:   Types of property 'cb' are incompatible.
+!!! error TS2345:     Type 'new <T>(x: T, y: T) => string' is not assignable to type 'new (t: unknown) => string'.
+    var arg3: { cb: new (x: string, y: number) => string };
+    var r3 = foo(arg3); // error
+                 ~~~~
+!!! error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
+!!! error TS2345:   Types of property 'cb' are incompatible.
+!!! error TS2345:     Type 'new (x: string, y: number) => string' is not assignable to type 'new (t: string) => string'.
+    
+    function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
+        return new arg.cb(null, null);
+    }
+    
+    // fewer args ok
+    var r4 = foo(arg); // {}
+    var arg4: { cb: new (x: string) => string };
+    var r6 = foo(arg4); // string
+    var arg5: { cb: new () => string };
+    var r7 = foo(arg5); // string
+    

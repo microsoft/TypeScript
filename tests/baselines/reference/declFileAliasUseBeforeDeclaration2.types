@@ -1,0 +1,20 @@
+=== tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts ===
+declare module "test" {
+>"test" : typeof import("test")
+
+    module A {
+>A : typeof A
+
+        class C {
+>C : C
+        }
+    }
+    class B extends E {
+>B : B
+>E : E
+    }
+    import E = A.C;
+>E : typeof E
+>A : typeof A
+>C : E
+}

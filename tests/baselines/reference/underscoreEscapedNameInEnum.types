@@ -1,0 +1,17 @@
+=== tests/cases/compiler/underscoreEscapedNameInEnum.ts ===
+enum E {
+>E : E
+
+    "__foo" = 1,
+>"__foo" : E
+>1 : 1
+
+    bar = E["__foo"] + 1
+>bar : E
+>E["__foo"] + 1 : number
+>E["__foo"] : E
+>E : typeof E
+>"__foo" : "__foo"
+>1 : 1
+}
+

@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser643728.ts ===
+interface C {
+    foo;
+>foo : any
+
+    new;
+>new : any
+}
+

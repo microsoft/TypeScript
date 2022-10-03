@@ -1,0 +1,126 @@
+=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES6.ts ===
+// ElementList:  ( Modified )
+//      Elisionopt   AssignmentExpression
+//      Elisionopt   SpreadElement
+//      ElementList, Elisionopt   AssignmentExpression
+//      ElementList, Elisionopt   SpreadElement
+
+// SpreadElement:
+//      ...   AssignmentExpression
+
+var a0 = [, , 2, 3, 4]
+>a0 : Symbol(a0, Decl(arrayLiterals2ES6.ts, 9, 3))
+
+var a1 = ["hello", "world"]
+>a1 : Symbol(a1, Decl(arrayLiterals2ES6.ts, 10, 3))
+
+var a2 = [, , , ...a0, "hello"];
+>a2 : Symbol(a2, Decl(arrayLiterals2ES6.ts, 11, 3))
+>a0 : Symbol(a0, Decl(arrayLiterals2ES6.ts, 9, 3))
+
+var a3 = [, , ...a0]
+>a3 : Symbol(a3, Decl(arrayLiterals2ES6.ts, 12, 3))
+>a0 : Symbol(a0, Decl(arrayLiterals2ES6.ts, 9, 3))
+
+var a4 = [() => 1, ];
+>a4 : Symbol(a4, Decl(arrayLiterals2ES6.ts, 13, 3))
+
+var a5 = [...a0, , ]
+>a5 : Symbol(a5, Decl(arrayLiterals2ES6.ts, 14, 3))
+>a0 : Symbol(a0, Decl(arrayLiterals2ES6.ts, 9, 3))
+
+// Each element expression in a non-empty array literal is processed as follows:
+//    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
+//      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
+//      the element expression is contextually typed by the type of that property.
+
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is contextually typed by a tuple-like type,
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var b0: [any, any, any] = [undefined, null, undefined];
+>b0 : Symbol(b0, Decl(arrayLiterals2ES6.ts, 25, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
+>b1 : Symbol(b1, Decl(arrayLiterals2ES6.ts, 26, 3))
+
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var [c0, c1] = [1, 2];        // tuple type [number, number]
+>c0 : Symbol(c0, Decl(arrayLiterals2ES6.ts, 32, 5))
+>c1 : Symbol(c1, Decl(arrayLiterals2ES6.ts, 32, 8))
+
+var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
+>c2 : Symbol(c2, Decl(arrayLiterals2ES6.ts, 33, 5))
+>c3 : Symbol(c3, Decl(arrayLiterals2ES6.ts, 33, 8))
+
+// The resulting type an array literal expression is determined as follows:
+//      - the resulting type is an array type with an element type that is the union of the types of the
+//        non - spread element expressions and the numeric index signature types of the spread element expressions
+var temp = ["s", "t", "r"];
+>temp : Symbol(temp, Decl(arrayLiterals2ES6.ts, 38, 3))
+
+var temp1 = [1, 2, 3];
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+
+var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
+>temp2 : Symbol(temp2, Decl(arrayLiterals2ES6.ts, 40, 3))
+
+interface myArray extends Array<Number> { }
+>myArray : Symbol(myArray, Decl(arrayLiterals2ES6.ts, 40, 67))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface myArray2 extends Array<Number|String> { }
+>myArray2 : Symbol(myArray2, Decl(arrayLiterals2ES6.ts, 42, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
+>d0 : Symbol(d0, Decl(arrayLiterals2ES6.ts, 44, 3))
+>temp : Symbol(temp, Decl(arrayLiterals2ES6.ts, 38, 3))
+
+var d1 = [...temp];            // has type string[]
+>d1 : Symbol(d1, Decl(arrayLiterals2ES6.ts, 45, 3))
+>temp : Symbol(temp, Decl(arrayLiterals2ES6.ts, 38, 3))
+
+var d2: number[] = [...temp1];
+>d2 : Symbol(d2, Decl(arrayLiterals2ES6.ts, 46, 3))
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+
+var d3: myArray = [...temp1];
+>d3 : Symbol(d3, Decl(arrayLiterals2ES6.ts, 47, 3))
+>myArray : Symbol(myArray, Decl(arrayLiterals2ES6.ts, 40, 67))
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+
+var d4: myArray2 = [...temp, ...temp1];
+>d4 : Symbol(d4, Decl(arrayLiterals2ES6.ts, 48, 3))
+>myArray2 : Symbol(myArray2, Decl(arrayLiterals2ES6.ts, 42, 43))
+>temp : Symbol(temp, Decl(arrayLiterals2ES6.ts, 38, 3))
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+
+var d5 = [...a2];
+>d5 : Symbol(d5, Decl(arrayLiterals2ES6.ts, 49, 3))
+>a2 : Symbol(a2, Decl(arrayLiterals2ES6.ts, 11, 3))
+
+var d6 = [...a3];
+>d6 : Symbol(d6, Decl(arrayLiterals2ES6.ts, 50, 3))
+>a3 : Symbol(a3, Decl(arrayLiterals2ES6.ts, 12, 3))
+
+var d7 = [...a4];
+>d7 : Symbol(d7, Decl(arrayLiterals2ES6.ts, 51, 3))
+>a4 : Symbol(a4, Decl(arrayLiterals2ES6.ts, 13, 3))
+
+var d8: number[][] = [[...temp1]]
+>d8 : Symbol(d8, Decl(arrayLiterals2ES6.ts, 52, 3))
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+
+var d9 = [[...temp1], ...["hello"]];
+>d9 : Symbol(d9, Decl(arrayLiterals2ES6.ts, 53, 3))
+>temp1 : Symbol(temp1, Decl(arrayLiterals2ES6.ts, 39, 3))
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/arrayIndexWithArrayFails.ts ===
+declare const arr1: (string | string[])[];
+>arr1 : Symbol(arr1, Decl(arrayIndexWithArrayFails.ts, 0, 13))
+
+declare const arr2: number[];
+>arr2 : Symbol(arr2, Decl(arrayIndexWithArrayFails.ts, 1, 13))
+
+const j = arr2[arr1[0]]; // should error
+>j : Symbol(j, Decl(arrayIndexWithArrayFails.ts, 2, 5))
+>arr2 : Symbol(arr2, Decl(arrayIndexWithArrayFails.ts, 1, 13))
+>arr1 : Symbol(arr1, Decl(arrayIndexWithArrayFails.ts, 0, 13))
+

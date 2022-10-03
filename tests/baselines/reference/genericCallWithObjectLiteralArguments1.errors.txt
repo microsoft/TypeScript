@@ -1,0 +1,30 @@
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(3,21): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(4,30): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(5,24): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(6,24): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts(7,31): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts (5 errors) ====
+    function foo<T>(n: { x: T; y: T }, m: T) { return m; }
+    // these are all errors
+    var x = foo({ x: 3, y: "" }, 4);
+                        ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts:1:28: The expected type comes from property 'y' which is declared here on type '{ x: number; y: number; }'
+    var x2 = foo<number>({ x: 3, y: "" }, 4); 
+                                 ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts:1:28: The expected type comes from property 'y' which is declared here on type '{ x: number; y: number; }'
+    var x3 = foo<string>({ x: 3, y: "" }, 4); 
+                           ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts:1:22: The expected type comes from property 'x' which is declared here on type '{ x: string; y: string; }'
+    var x4 = foo<number>({ x: "", y: 4 }, "");
+                           ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts:1:22: The expected type comes from property 'x' which is declared here on type '{ x: number; y: number; }'
+    var x5 = foo<string>({ x: "", y: 4 }, "");
+                                  ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts:1:28: The expected type comes from property 'y' which is declared here on type '{ x: string; y: string; }'

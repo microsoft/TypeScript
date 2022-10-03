@@ -1,0 +1,17 @@
+DifferentNamesSpecifiedWithAllowJs/tsconfig.json(3,5): error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+==== DifferentNamesSpecifiedWithAllowJs/tsconfig.json (1 errors) ====
+    {
+      "compilerOptions": {
+        "out": "test.js",
+        ~~~~~
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+        "allowJs": true
+      },
+      "files": [ "a.ts", "b.js" ]
+    }
+==== DifferentNamesSpecifiedWithAllowJs/a.ts (0 errors) ====
+    var test = 10;
+==== DifferentNamesSpecifiedWithAllowJs/b.js (0 errors) ====
+    var test2 = 10; // Should get compiled

@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the
+// other operand.
+
+enum E {
+>E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
+
+    a,
+>a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+
+    b
+>b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+}
+
+var a: any;
+>a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 8, 3))
+
+var b: number;
+>b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 9, 3))
+
+// operator **
+var r1 = null ** a;
+>r1 : Symbol(r1, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 12, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 8, 3))
+
+var r2 = null ** b;
+>r2 : Symbol(r2, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 13, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 9, 3))
+
+var r3 = null ** 1;
+>r3 : Symbol(r3, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 14, 3))
+
+var r4 = null ** E.a;
+>r4 : Symbol(r4, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 15, 3))
+>E.a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : Symbol(E.a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 3, 8))
+
+var r5 = a ** null;
+>r5 : Symbol(r5, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 16, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 8, 3))
+
+var r6 = b ** null;
+>r6 : Symbol(r6, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 17, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 9, 3))
+
+var r7 = 0 ** null;
+>r7 : Symbol(r7, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 18, 3))
+
+var r8 = E.b ** null;
+>r8 : Symbol(r8, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 19, 3))
+>E.b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : Symbol(E, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : Symbol(E.b, Decl(exponentiationOperatorWithNullValueAndValidOperands.ts, 4, 6))
+

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/commentsMultiModuleSingleFile.ts ===
+/** this is multi declare module*/
+module multiM {
+>multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+
+    /** class b*/
+    export class b {
+>b : Symbol(b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+    }
+
+    // class d
+    export class d {
+>d : Symbol(d, Decl(commentsMultiModuleSingleFile.ts, 4, 5))
+    }
+}
+
+/// this is multi module 2
+module multiM {
+>multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+
+    /** class c comment*/
+    export class c {
+>c : Symbol(c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+    }
+
+    /// class e
+    export class e {
+>e : Symbol(e, Decl(commentsMultiModuleSingleFile.ts, 15, 5))
+    }
+}
+new multiM.b();
+>multiM.b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+>multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+>b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+
+new multiM.c();
+>multiM.c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+>multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+>c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+

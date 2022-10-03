@@ -1,0 +1,64 @@
+=== tests/cases/compiler/baseConstraintOfDecorator.ts ===
+export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
+>classExtender : Symbol(classExtender, Decl(baseConstraintOfDecorator.ts, 0, 0))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 0, 30))
+>superClass : Symbol(superClass, Decl(baseConstraintOfDecorator.ts, 0, 41))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 0, 30))
+>_instanceModifier : Symbol(_instanceModifier, Decl(baseConstraintOfDecorator.ts, 0, 63))
+>instance : Symbol(instance, Decl(baseConstraintOfDecorator.ts, 0, 84))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 0, 98))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 0, 30))
+
+    return class decoratorFunc extends superClass {
+>decoratorFunc : Symbol(decoratorFunc, Decl(baseConstraintOfDecorator.ts, 1, 10))
+>superClass : Symbol(superClass, Decl(baseConstraintOfDecorator.ts, 0, 41))
+
+        constructor(...args: any[]) {
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 2, 20))
+
+            super(...args);
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 2, 20))
+
+            _instanceModifier(this, args);
+>_instanceModifier : Symbol(_instanceModifier, Decl(baseConstraintOfDecorator.ts, 0, 63))
+>this : Symbol(decoratorFunc, Decl(baseConstraintOfDecorator.ts, 1, 10))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 2, 20))
+        }
+    };
+}
+
+class MyClass { private x; }
+>MyClass : Symbol(MyClass, Decl(baseConstraintOfDecorator.ts, 7, 1))
+>x : Symbol(MyClass.x, Decl(baseConstraintOfDecorator.ts, 9, 15))
+
+export function classExtender2<TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
+>classExtender2 : Symbol(classExtender2, Decl(baseConstraintOfDecorator.ts, 9, 28))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 10, 31))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 10, 54))
+>MyClass : Symbol(MyClass, Decl(baseConstraintOfDecorator.ts, 7, 1))
+>superClass : Symbol(superClass, Decl(baseConstraintOfDecorator.ts, 10, 85))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 10, 31))
+>_instanceModifier : Symbol(_instanceModifier, Decl(baseConstraintOfDecorator.ts, 10, 107))
+>instance : Symbol(instance, Decl(baseConstraintOfDecorator.ts, 10, 128))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 10, 142))
+>TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 10, 31))
+
+    return class decoratorFunc extends superClass {
+>decoratorFunc : Symbol(decoratorFunc, Decl(baseConstraintOfDecorator.ts, 11, 10))
+>superClass : Symbol(superClass, Decl(baseConstraintOfDecorator.ts, 10, 85))
+
+        constructor(...args: any[]) {
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 12, 20))
+
+            super(...args);
+>super : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 10, 31))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 12, 20))
+
+            _instanceModifier(this, args);
+>_instanceModifier : Symbol(_instanceModifier, Decl(baseConstraintOfDecorator.ts, 10, 107))
+>this : Symbol(decoratorFunc, Decl(baseConstraintOfDecorator.ts, 11, 10))
+>args : Symbol(args, Decl(baseConstraintOfDecorator.ts, 12, 20))
+        }
+    };
+}
+

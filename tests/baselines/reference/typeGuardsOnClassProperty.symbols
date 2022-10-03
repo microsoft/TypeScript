@@ -1,0 +1,86 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// Note that the class's property must be copied to a local variable for
+// the type guard to have an effect
+class D {
+>D : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
+
+    data: string | string[];
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+
+    getData() {
+>getData : Symbol(D.getData, Decl(typeGuardsOnClassProperty.ts, 6, 28))
+
+        var data = this.data;
+>data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+
+        return typeof data === "string" ? data : data.join(" ");
+>data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
+>data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
+>data.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+
+    getData1() {
+>getData1 : Symbol(D.getData1, Decl(typeGuardsOnClassProperty.ts, 10, 5))
+
+        return typeof this.data === "string" ? this.data : this.data.join(" ");
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+var o: {
+>o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
+
+    prop1: number|string;
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+
+    prop2: boolean|string;
+>prop2 : Symbol(prop2, Decl(typeGuardsOnClassProperty.ts, 18, 25))
+
+} = {
+        prop1: "string" ,
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 20, 5))
+
+        prop2: true
+>prop2 : Symbol(prop2, Decl(typeGuardsOnClassProperty.ts, 21, 25))
+    }
+
+if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
+>o.prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+>o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+>o.prop1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>o.prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+>o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+var prop1 = o.prop1;
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
+>o.prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+>o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
+
+if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
+>prop1.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+

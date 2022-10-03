@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts(4,5): error TS1240: Unable to resolve signature of property decorator when called as an expression.
+
+
+==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts (1 errors) ====
+    declare function dec(target: Function, propertyKey: string | symbol, paramIndex: number): void;
+    
+    class C {
+        @dec prop;
+        ~~~~
+!!! error TS1240: Unable to resolve signature of property decorator when called as an expression.
+    }

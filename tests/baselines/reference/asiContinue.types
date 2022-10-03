@@ -1,0 +1,4 @@
+=== tests/cases/compiler/asiContinue.ts ===
+while (true) continue
+>true : true
+

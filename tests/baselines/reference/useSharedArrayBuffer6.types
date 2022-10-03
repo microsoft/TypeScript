@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es2017/useSharedArrayBuffer6.ts ===
+var foge = new SharedArrayBuffer(1024);
+>foge : SharedArrayBuffer
+>new SharedArrayBuffer(1024) : SharedArrayBuffer
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>1024 : 1024
+
+foge.length; // should error
+>foge.length : any
+>foge : SharedArrayBuffer
+>length : any
+
+var length = SharedArrayBuffer.length;
+>length : number
+>SharedArrayBuffer.length : number
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>length : number
+

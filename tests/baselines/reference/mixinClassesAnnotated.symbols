@@ -1,0 +1,192 @@
+=== tests/cases/conformance/classes/mixinClassesAnnotated.ts ===
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 0, 17))
+>args : Symbol(args, Decl(mixinClassesAnnotated.ts, 0, 26))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 0, 17))
+
+class Base {
+>Base : Symbol(Base, Decl(mixinClassesAnnotated.ts, 0, 47))
+
+    constructor(public x: number, public y: number) {}
+>x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+>y : Symbol(Base.y, Decl(mixinClassesAnnotated.ts, 3, 33))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotated.ts, 4, 1))
+>Base : Symbol(Base, Decl(mixinClassesAnnotated.ts, 0, 47))
+
+    constructor(x: number, y: number, public z: number) {
+>x : Symbol(x, Decl(mixinClassesAnnotated.ts, 7, 16))
+>y : Symbol(y, Decl(mixinClassesAnnotated.ts, 7, 26))
+>z : Symbol(Derived.z, Decl(mixinClassesAnnotated.ts, 7, 37))
+
+        super(x, y);
+>super : Symbol(Base, Decl(mixinClassesAnnotated.ts, 0, 47))
+>x : Symbol(x, Decl(mixinClassesAnnotated.ts, 7, 16))
+>y : Symbol(y, Decl(mixinClassesAnnotated.ts, 7, 26))
+    }
+}
+
+interface Printable {
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotated.ts, 10, 1), Decl(mixinClassesAnnotated.ts, 16, 5))
+
+    print(): void;
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotated.ts, 12, 21))
+}
+
+const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotated.ts, 10, 1), Decl(mixinClassesAnnotated.ts, 16, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 16, 19))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesAnnotated.ts, 0, 47))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 16, 48))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 16, 19))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotated.ts, 10, 1), Decl(mixinClassesAnnotated.ts, 16, 5))
+>message : Symbol(message, Decl(mixinClassesAnnotated.ts, 16, 90))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 16, 19))
+
+    class extends superClass {
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 16, 48))
+
+        static message = "hello";
+>message : Symbol((Anonymous class).message, Decl(mixinClassesAnnotated.ts, 17, 30))
+
+        print() {
+>print : Symbol((Anonymous class).print, Decl(mixinClassesAnnotated.ts, 18, 33))
+
+            const output = this.x + "," + this.y;
+>output : Symbol(output, Decl(mixinClassesAnnotated.ts, 20, 17))
+>this.x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnnotated.ts, 16, 115))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+>this.y : Symbol(Base.y, Decl(mixinClassesAnnotated.ts, 3, 33))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnnotated.ts, 16, 115))
+>y : Symbol(Base.y, Decl(mixinClassesAnnotated.ts, 3, 33))
+        }
+    }
+
+interface Tagged {
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
+
+    _tag: string;
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+}
+
+function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 28, 43))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
+
+    class C extends superClass {
+>C : Symbol(C, Decl(mixinClassesAnnotated.ts, 28, 84))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 28, 43))
+
+        _tag: string;
+>_tag : Symbol(C._tag, Decl(mixinClassesAnnotated.ts, 29, 32))
+
+        constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesAnnotated.ts, 31, 20))
+
+            super(...args);
+>super : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
+>args : Symbol(args, Decl(mixinClassesAnnotated.ts, 31, 20))
+
+            this._tag = "hello";
+>this._tag : Symbol(C._tag, Decl(mixinClassesAnnotated.ts, 29, 32))
+>this : Symbol(C, Decl(mixinClassesAnnotated.ts, 28, 84))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnnotated.ts, 29, 32))
+        }
+    }
+    return C;
+>C : Symbol(C, Decl(mixinClassesAnnotated.ts, 28, 84))
+}
+
+const Thing1 = Tagged(Derived);
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnnotated.ts, 39, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotated.ts, 4, 1))
+
+const Thing2 = Tagged(Printable(Derived));
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotated.ts, 40, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotated.ts, 10, 1), Decl(mixinClassesAnnotated.ts, 16, 5))
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotated.ts, 4, 1))
+
+Thing2.message;
+>Thing2.message : Symbol(message, Decl(mixinClassesAnnotated.ts, 16, 90))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotated.ts, 40, 5))
+>message : Symbol(message, Decl(mixinClassesAnnotated.ts, 16, 90))
+
+function f1() {
+>f1 : Symbol(f1, Decl(mixinClassesAnnotated.ts, 41, 15))
+
+    const thing = new Thing1(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 44, 9))
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnnotated.ts, 39, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 44, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+
+    thing._tag;
+>thing._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 44, 9))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(mixinClassesAnnotated.ts, 47, 1))
+
+    const thing = new Thing2(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 50, 9))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotated.ts, 40, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 50, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotated.ts, 3, 16))
+
+    thing._tag;
+>thing._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 50, 9))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+
+    thing.print();
+>thing.print : Symbol(Printable.print, Decl(mixinClassesAnnotated.ts, 12, 21))
+>thing : Symbol(thing, Decl(mixinClassesAnnotated.ts, 50, 9))
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotated.ts, 12, 21))
+}
+
+class Thing3 extends Thing2 {
+>Thing3 : Symbol(Thing3, Decl(mixinClassesAnnotated.ts, 54, 1))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotated.ts, 40, 5))
+
+    constructor(tag: string) {
+>tag : Symbol(tag, Decl(mixinClassesAnnotated.ts, 57, 16))
+
+        super(10, 20, 30);
+        this._tag = tag;
+>this._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+>this : Symbol(Thing3, Decl(mixinClassesAnnotated.ts, 54, 1))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
+>tag : Symbol(tag, Decl(mixinClassesAnnotated.ts, 57, 16))
+    }
+    test() {
+>test : Symbol(Thing3.test, Decl(mixinClassesAnnotated.ts, 60, 5))
+
+        this.print();
+>this.print : Symbol(Printable.print, Decl(mixinClassesAnnotated.ts, 12, 21))
+>this : Symbol(Thing3, Decl(mixinClassesAnnotated.ts, 54, 1))
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotated.ts, 12, 21))
+    }
+}
+

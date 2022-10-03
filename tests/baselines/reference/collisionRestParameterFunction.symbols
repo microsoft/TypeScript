@@ -1,0 +1,88 @@
+=== tests/cases/compiler/collisionRestParameterFunction.ts ===
+// Functions
+function f1(_i: number, ...restParameters) { //_i is error
+>f1 : Symbol(f1, Decl(collisionRestParameterFunction.ts, 0, 0))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 1, 12), Decl(collisionRestParameterFunction.ts, 2, 7))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterFunction.ts, 1, 23))
+
+    var _i = 10; // no error
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 1, 12), Decl(collisionRestParameterFunction.ts, 2, 7))
+}
+function f1NoError(_i: number) { // no error
+>f1NoError : Symbol(f1NoError, Decl(collisionRestParameterFunction.ts, 3, 1))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 4, 19), Decl(collisionRestParameterFunction.ts, 5, 7))
+
+    var _i = 10; // no error
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 4, 19), Decl(collisionRestParameterFunction.ts, 5, 7))
+}
+
+declare function f2(_i: number, ...restParameters); // no error - no code gen
+>f2 : Symbol(f2, Decl(collisionRestParameterFunction.ts, 6, 1))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 8, 20))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterFunction.ts, 8, 31))
+
+declare function f2NoError(_i: number); // no error
+>f2NoError : Symbol(f2NoError, Decl(collisionRestParameterFunction.ts, 8, 51))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 9, 27))
+
+function f3(...restParameters) {
+>f3 : Symbol(f3, Decl(collisionRestParameterFunction.ts, 9, 39))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterFunction.ts, 11, 12))
+
+    var _i = 10; // no error
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 12, 7))
+}
+function f3NoError() {
+>f3NoError : Symbol(f3NoError, Decl(collisionRestParameterFunction.ts, 13, 1))
+
+    var _i = 10; // no error
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 15, 7))
+}
+
+function f4(_i: number, ...rest); // no codegen no error
+>f4 : Symbol(f4, Decl(collisionRestParameterFunction.ts, 16, 1), Decl(collisionRestParameterFunction.ts, 18, 33), Decl(collisionRestParameterFunction.ts, 19, 33))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 18, 12))
+>rest : Symbol(rest, Decl(collisionRestParameterFunction.ts, 18, 23))
+
+function f4(_i: string, ...rest); // no codegen no error
+>f4 : Symbol(f4, Decl(collisionRestParameterFunction.ts, 16, 1), Decl(collisionRestParameterFunction.ts, 18, 33), Decl(collisionRestParameterFunction.ts, 19, 33))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 19, 12))
+>rest : Symbol(rest, Decl(collisionRestParameterFunction.ts, 19, 23))
+
+function f4(_i: any, ...rest) { // error
+>f4 : Symbol(f4, Decl(collisionRestParameterFunction.ts, 16, 1), Decl(collisionRestParameterFunction.ts, 18, 33), Decl(collisionRestParameterFunction.ts, 19, 33))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 20, 12))
+>rest : Symbol(rest, Decl(collisionRestParameterFunction.ts, 20, 20))
+}
+
+function f4NoError(_i: number); // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionRestParameterFunction.ts, 21, 1), Decl(collisionRestParameterFunction.ts, 23, 31), Decl(collisionRestParameterFunction.ts, 24, 31))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 23, 19))
+
+function f4NoError(_i: string); // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionRestParameterFunction.ts, 21, 1), Decl(collisionRestParameterFunction.ts, 23, 31), Decl(collisionRestParameterFunction.ts, 24, 31))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 24, 19))
+
+function f4NoError(_i: any) { // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionRestParameterFunction.ts, 21, 1), Decl(collisionRestParameterFunction.ts, 23, 31), Decl(collisionRestParameterFunction.ts, 24, 31))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 25, 19))
+}
+
+declare function f5(_i: number, ...rest); // no codegen no error
+>f5 : Symbol(f5, Decl(collisionRestParameterFunction.ts, 26, 1), Decl(collisionRestParameterFunction.ts, 28, 41))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 28, 20))
+>rest : Symbol(rest, Decl(collisionRestParameterFunction.ts, 28, 31))
+
+declare function f5(_i: string, ...rest); // no codegen no error
+>f5 : Symbol(f5, Decl(collisionRestParameterFunction.ts, 26, 1), Decl(collisionRestParameterFunction.ts, 28, 41))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 29, 20))
+>rest : Symbol(rest, Decl(collisionRestParameterFunction.ts, 29, 31))
+
+declare function f6(_i: number); // no codegen no error
+>f6 : Symbol(f6, Decl(collisionRestParameterFunction.ts, 29, 41), Decl(collisionRestParameterFunction.ts, 31, 32))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 31, 20))
+
+declare function f6(_i: string); // no codegen no error
+>f6 : Symbol(f6, Decl(collisionRestParameterFunction.ts, 29, 41), Decl(collisionRestParameterFunction.ts, 31, 32))
+>_i : Symbol(_i, Decl(collisionRestParameterFunction.ts, 32, 20))
+

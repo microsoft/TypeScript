@@ -1,0 +1,12 @@
+=== tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxImportForSideEffectsNonExtantNoError.tsx, 1, 6))
+
+import "./App.css"; // doesn't actually exist
+
+const tag = <div></div>;
+>tag : Symbol(tag, Decl(jsxImportForSideEffectsNonExtantNoError.tsx, 5, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/unusedLocalsInMethod1.ts ===
+class greeter {
+>greeter : greeter
+
+    public function1() {
+>function1 : () => void
+
+        var x = 10;
+>x : number
+>10 : 10
+    }
+}

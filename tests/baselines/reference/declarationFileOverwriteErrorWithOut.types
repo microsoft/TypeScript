@@ -1,0 +1,10 @@
+=== tests/cases/compiler/out.d.ts ===
+declare class c {
+>c : c
+}
+
+=== tests/cases/compiler/a.ts ===
+class d {
+>d : d
+}
+

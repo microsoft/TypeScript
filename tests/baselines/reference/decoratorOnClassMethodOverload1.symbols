@@ -1,0 +1,24 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethodOverload1.ts ===
+declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec : Symbol(dec, Decl(decoratorOnClassMethodOverload1.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClassMethodOverload1.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnClassMethodOverload1.ts, 0, 24))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethodOverload1.ts, 0, 36))
+>descriptor : Symbol(descriptor, Decl(decoratorOnClassMethodOverload1.ts, 0, 57))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassMethodOverload1.ts, 0, 21))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassMethodOverload1.ts, 0, 21))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassMethodOverload1.ts, 0, 126))
+
+    @dec
+>dec : Symbol(dec, Decl(decoratorOnClassMethodOverload1.ts, 0, 0))
+
+    method()
+>method : Symbol(C.method, Decl(decoratorOnClassMethodOverload1.ts, 2, 9), Decl(decoratorOnClassMethodOverload1.ts, 4, 12))
+
+    method() { }
+>method : Symbol(C.method, Decl(decoratorOnClassMethodOverload1.ts, 2, 9), Decl(decoratorOnClassMethodOverload1.ts, 4, 12))
+}

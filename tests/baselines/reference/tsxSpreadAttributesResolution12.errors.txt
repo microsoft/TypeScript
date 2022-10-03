@@ -1,0 +1,50 @@
+tests/cases/conformance/jsx/file.tsx(27,33): error TS2322: Type 'true' is not assignable to type 'false'.
+tests/cases/conformance/jsx/file.tsx(28,50): error TS2322: Type '3' is not assignable to type '2'.
+tests/cases/conformance/jsx/file.tsx(30,11): error TS2322: Type '{ y: true; x: 2; overwrite: string; }' is not assignable to type 'Prop'.
+  Types of property 'y' are incompatible.
+    Type 'true' is not assignable to type 'false'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    import React = require('react');
+    
+    const obj = {};
+    const obj1: {x: 2} = {
+        x: 2
+    }
+    const obj3: {y: false, overwrite: string} = {
+        y: false,
+        overwrite: "hi"
+    }
+    
+    interface Prop {
+        x: 2
+        y: false
+        overwrite: string
+    }
+    
+    class OverWriteAttr extends React.Component<Prop, {}> {
+        render() {
+            return <div>Hello</div>;
+        }
+    }
+    
+    let anyobj: any;
+    
+    // Error
+    let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
+                                    ~
+!!! error TS2322: Type 'true' is not assignable to type 'false'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:14:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+    let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
+                                                     ~
+!!! error TS2322: Type '3' is not assignable to type '2'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:13:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+    let x2 = <OverWriteAttr {...anyobj} x={3} />
+    let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
+              ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ y: true; x: 2; overwrite: string; }' is not assignable to type 'Prop'.
+!!! error TS2322:   Types of property 'y' are incompatible.
+!!! error TS2322:     Type 'true' is not assignable to type 'false'.
+    
+    

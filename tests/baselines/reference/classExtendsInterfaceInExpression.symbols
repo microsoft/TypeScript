@@ -1,0 +1,16 @@
+=== tests/cases/compiler/classExtendsInterfaceInExpression.ts ===
+interface A {}
+>A : Symbol(A, Decl(classExtendsInterfaceInExpression.ts, 0, 0))
+
+function factory(a: any): {new(): Object} {
+>factory : Symbol(factory, Decl(classExtendsInterfaceInExpression.ts, 0, 14))
+>a : Symbol(a, Decl(classExtendsInterfaceInExpression.ts, 2, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  return null;
+}
+
+class C extends factory(A) {}
+>C : Symbol(C, Decl(classExtendsInterfaceInExpression.ts, 4, 1))
+>factory : Symbol(factory, Decl(classExtendsInterfaceInExpression.ts, 0, 14))
+

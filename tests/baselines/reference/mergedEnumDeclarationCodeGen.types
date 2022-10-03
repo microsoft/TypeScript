@@ -1,0 +1,18 @@
+=== tests/cases/compiler/mergedEnumDeclarationCodeGen.ts ===
+enum E {
+>E : E
+
+    a,
+>a : E.a
+
+    b = a
+>b : E.a
+>a : E
+}
+enum E {
+>E : E
+
+    c = a
+>c : E.a
+>a : E
+}

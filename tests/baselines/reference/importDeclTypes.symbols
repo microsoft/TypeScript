@@ -1,0 +1,13 @@
+=== /node_modules/@types/foo-bar/index.d.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(Foo.bar, Decl(index.d.ts, 0, 22))
+}
+
+// This should error
+=== /a.ts ===
+import { Foo } from "@types/foo-bar";
+>Foo : Symbol(Foo, Decl(a.ts, 0, 8))
+

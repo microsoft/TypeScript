@@ -1,0 +1,24 @@
+tests/cases/compiler/withStatementErrors.ts(3,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+==== tests/cases/compiler/withStatementErrors.ts (1 errors) ====
+    declare var ooo:any;
+    
+    with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+        bing = true; // no error
+        bang = true; // no error
+        
+        function bar() {} // no error
+    
+        bar(); // no error
+    
+        class C {} // error   
+        
+        interface I {} // error
+        
+        module M {} // error
+            
+    }
+    

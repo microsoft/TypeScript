@@ -1,0 +1,536 @@
+=== tests/cases/compiler/module.ts ===
+export const c0 = "a";
+>c0 : Symbol(c0, Decl(module.ts, 0, 12))
+
+export const c1 = 1;
+>c1 : Symbol(c1, Decl(module.ts, 1, 12))
+
+export const s0 = Symbol();
+>s0 : Symbol(s0, Decl(module.ts, 2, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export interface T0 {
+>T0 : Symbol(T0, Decl(module.ts, 2, 27))
+
+    [c0]: number;
+>[c0] : Symbol(T0[c0], Decl(module.ts, 3, 21))
+>c0 : Symbol(c0, Decl(module.ts, 0, 12))
+
+    [c1]: string;
+>[c1] : Symbol(T0[c1], Decl(module.ts, 4, 17))
+>c1 : Symbol(c1, Decl(module.ts, 1, 12))
+
+    [s0]: boolean;
+>[s0] : Symbol(T0[s0], Decl(module.ts, 5, 17))
+>s0 : Symbol(s0, Decl(module.ts, 2, 12))
+}
+export declare class T1 implements T2 {
+>T1 : Symbol(T1, Decl(module.ts, 7, 1))
+>T2 : Symbol(T2, Decl(module.ts, 12, 1))
+
+    [c0]: number;
+>[c0] : Symbol(T1[c0], Decl(module.ts, 8, 39))
+>c0 : Symbol(c0, Decl(module.ts, 0, 12))
+
+    [c1]: string;
+>[c1] : Symbol(T1[c1], Decl(module.ts, 9, 17))
+>c1 : Symbol(c1, Decl(module.ts, 1, 12))
+
+    [s0]: boolean;
+>[s0] : Symbol(T1[s0], Decl(module.ts, 10, 17))
+>s0 : Symbol(s0, Decl(module.ts, 2, 12))
+}
+export declare class T2 extends T1 {
+>T2 : Symbol(T2, Decl(module.ts, 12, 1))
+>T1 : Symbol(T1, Decl(module.ts, 7, 1))
+}
+export declare type T3 = {
+>T3 : Symbol(T3, Decl(module.ts, 14, 1))
+
+    [c0]: number;
+>[c0] : Symbol([c0], Decl(module.ts, 15, 26))
+>c0 : Symbol(c0, Decl(module.ts, 0, 12))
+
+    [c1]: string;
+>[c1] : Symbol([c1], Decl(module.ts, 16, 17))
+>c1 : Symbol(c1, Decl(module.ts, 1, 12))
+
+    [s0]: boolean;
+>[s0] : Symbol([s0], Decl(module.ts, 17, 17))
+>s0 : Symbol(s0, Decl(module.ts, 2, 12))
+
+};
+
+=== tests/cases/compiler/main.ts ===
+import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
+>c0 : Symbol(c0, Decl(main.ts, 0, 8))
+>c1 : Symbol(c1, Decl(main.ts, 0, 12))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
+>T0 : Symbol(T0, Decl(main.ts, 0, 20))
+>T1 : Symbol(T1, Decl(main.ts, 0, 24))
+>T2 : Symbol(T2, Decl(main.ts, 0, 28))
+>T3 : Symbol(T3, Decl(main.ts, 0, 32))
+
+import * as M from "./module";
+>M : Symbol(M, Decl(main.ts, 1, 6))
+
+namespace N {
+>N : Symbol(N, Decl(main.ts, 1, 30))
+
+    export const c2 = "a";
+>c2 : Symbol(c2, Decl(main.ts, 4, 16))
+
+    export const c3 = 1;
+>c3 : Symbol(c3, Decl(main.ts, 5, 16))
+
+    export const s1: typeof s0 = s0;
+>s1 : Symbol(s1, Decl(main.ts, 6, 16))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
+
+    export interface T4 {
+>T4 : Symbol(T4, Decl(main.ts, 6, 36))
+
+        [N.c2]: number;
+>[N.c2] : Symbol(T4[N.c2], Decl(main.ts, 8, 25))
+>N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c2 : Symbol(c2, Decl(main.ts, 4, 16))
+
+        [N.c3]: string;
+>[N.c3] : Symbol(T4[N.c3], Decl(main.ts, 9, 23))
+>N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c3 : Symbol(c3, Decl(main.ts, 5, 16))
+
+        [N.s1]: boolean;
+>[N.s1] : Symbol(T4[N.s1], Decl(main.ts, 10, 23))
+>N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>s1 : Symbol(s1, Decl(main.ts, 6, 16))
+    }
+    export declare class T5 implements T4 {
+>T5 : Symbol(T5, Decl(main.ts, 12, 5))
+>T4 : Symbol(T4, Decl(main.ts, 6, 36))
+
+        [N.c2]: number;
+>[N.c2] : Symbol(T5[N.c2], Decl(main.ts, 13, 43))
+>N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c2 : Symbol(c2, Decl(main.ts, 4, 16))
+
+        [N.c3]: string;
+>[N.c3] : Symbol(T5[N.c3], Decl(main.ts, 14, 23))
+>N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c3 : Symbol(c3, Decl(main.ts, 5, 16))
+
+        [N.s1]: boolean;
+>[N.s1] : Symbol(T5[N.s1], Decl(main.ts, 15, 23))
+>N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>s1 : Symbol(s1, Decl(main.ts, 6, 16))
+    }
+    export declare class T6 extends T5 {
+>T6 : Symbol(T6, Decl(main.ts, 17, 5))
+>T5 : Symbol(T5, Decl(main.ts, 12, 5))
+    }
+    export declare type T7 = {
+>T7 : Symbol(T7, Decl(main.ts, 19, 5))
+
+        [N.c2]: number;
+>[N.c2] : Symbol([N.c2], Decl(main.ts, 20, 30))
+>N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c2 : Symbol(c2, Decl(main.ts, 4, 16))
+
+        [N.c3]: string;
+>[N.c3] : Symbol([N.c3], Decl(main.ts, 21, 23))
+>N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>c3 : Symbol(c3, Decl(main.ts, 5, 16))
+
+        [N.s1]: boolean;
+>[N.s1] : Symbol([N.s1], Decl(main.ts, 22, 23))
+>N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>s1 : Symbol(s1, Decl(main.ts, 6, 16))
+
+    };
+}
+
+export const c4 = "a";
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+export const c5 = 1;
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+export const s2: typeof s0 = s0;
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
+
+interface T8 {
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
+
+    [c4]: number;
+>[c4] : Symbol(T8[c4], Decl(main.ts, 31, 14))
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+    [c5]: string;
+>[c5] : Symbol(T8[c5], Decl(main.ts, 32, 17))
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+    [s2]: boolean;
+>[s2] : Symbol(T8[s2], Decl(main.ts, 33, 17))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+}
+declare class T9 implements T8 {
+>T9 : Symbol(T9, Decl(main.ts, 35, 1))
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
+
+    [c4]: number;
+>[c4] : Symbol(T9[c4], Decl(main.ts, 36, 32))
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+    [c5]: string;
+>[c5] : Symbol(T9[c5], Decl(main.ts, 37, 17))
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+    [s2]: boolean;
+>[s2] : Symbol(T9[s2], Decl(main.ts, 38, 17))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+}
+declare class T10 extends T9 {
+>T10 : Symbol(T10, Decl(main.ts, 40, 1))
+>T9 : Symbol(T9, Decl(main.ts, 35, 1))
+}
+declare type T11 = {
+>T11 : Symbol(T11, Decl(main.ts, 42, 1))
+
+    [c4]: number;
+>[c4] : Symbol([c4], Decl(main.ts, 43, 20))
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+    [c5]: string;
+>[c5] : Symbol([c5], Decl(main.ts, 44, 17))
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+    [s2]: boolean;
+>[s2] : Symbol([s2], Decl(main.ts, 45, 17))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+
+};
+
+interface T12 {
+>T12 : Symbol(T12, Decl(main.ts, 47, 2))
+
+    a: number;
+>a : Symbol(T12.a, Decl(main.ts, 49, 15))
+
+    1: string;
+>1 : Symbol(T12[1], Decl(main.ts, 50, 14))
+
+    [s2]: boolean;
+>[s2] : Symbol(T12[s2], Decl(main.ts, 51, 14))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+}
+declare class T13 implements T2 {
+>T13 : Symbol(T13, Decl(main.ts, 53, 1))
+>T2 : Symbol(T2, Decl(main.ts, 0, 28))
+
+    a: number;
+>a : Symbol(T13.a, Decl(main.ts, 54, 33))
+
+    1: string;
+>1 : Symbol(T13[1], Decl(main.ts, 55, 14))
+
+    [s2]: boolean;
+>[s2] : Symbol(T13[s2], Decl(main.ts, 56, 14))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+}
+declare class T14 extends T13 {
+>T14 : Symbol(T14, Decl(main.ts, 58, 1))
+>T13 : Symbol(T13, Decl(main.ts, 53, 1))
+}
+declare type T15 = {
+>T15 : Symbol(T15, Decl(main.ts, 60, 1))
+
+    a: number;
+>a : Symbol(a, Decl(main.ts, 61, 20))
+
+    1: string;
+>1 : Symbol(1, Decl(main.ts, 62, 14))
+
+    [s2]: boolean;
+>[s2] : Symbol([s2], Decl(main.ts, 63, 14))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+
+};
+
+declare class C {
+>C : Symbol(C, Decl(main.ts, 65, 2))
+
+    static a: number;
+>a : Symbol(C.a, Decl(main.ts, 67, 17))
+
+    static 1: string;
+>1 : Symbol(C[1], Decl(main.ts, 68, 21))
+
+    static [s2]: boolean;
+>[s2] : Symbol(C[s2], Decl(main.ts, 69, 21))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+}
+
+let t0: T0;
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>T0 : Symbol(T0, Decl(main.ts, 0, 20))
+
+let t1: T1;
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>T1 : Symbol(T1, Decl(main.ts, 0, 24))
+
+let t2: T2;
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>T2 : Symbol(T2, Decl(main.ts, 0, 28))
+
+let t3: T3;
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>T3 : Symbol(T3, Decl(main.ts, 0, 32))
+
+let t0_1: M.T0;
+>t0_1 : Symbol(t0_1, Decl(main.ts, 77, 3))
+>M : Symbol(M, Decl(main.ts, 1, 6))
+>T0 : Symbol(T0, Decl(module.ts, 2, 27))
+
+let t1_1: M.T1;
+>t1_1 : Symbol(t1_1, Decl(main.ts, 78, 3))
+>M : Symbol(M, Decl(main.ts, 1, 6))
+>T1 : Symbol(T1, Decl(module.ts, 7, 1))
+
+let t2_1: M.T2;
+>t2_1 : Symbol(t2_1, Decl(main.ts, 79, 3))
+>M : Symbol(M, Decl(main.ts, 1, 6))
+>T2 : Symbol(T2, Decl(module.ts, 12, 1))
+
+let t3_1: M.T3;
+>t3_1 : Symbol(t3_1, Decl(main.ts, 80, 3))
+>M : Symbol(M, Decl(main.ts, 1, 6))
+>T3 : Symbol(T3, Decl(module.ts, 14, 1))
+
+let t4: N.T4;
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>T4 : Symbol(N.T4, Decl(main.ts, 6, 36))
+
+let t5: N.T5;
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>T5 : Symbol(N.T5, Decl(main.ts, 12, 5))
+
+let t6: N.T6;
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>T6 : Symbol(N.T6, Decl(main.ts, 17, 5))
+
+let t7: N.T7;
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>N : Symbol(N, Decl(main.ts, 1, 30))
+>T7 : Symbol(N.T7, Decl(main.ts, 19, 5))
+
+let t8: T8;
+>t8 : Symbol(t8, Decl(main.ts, 85, 3))
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
+
+let t9: T9;
+>t9 : Symbol(t9, Decl(main.ts, 86, 3))
+>T9 : Symbol(T9, Decl(main.ts, 35, 1))
+
+let t10: T10;
+>t10 : Symbol(t10, Decl(main.ts, 87, 3))
+>T10 : Symbol(T10, Decl(main.ts, 40, 1))
+
+let t11: T11;
+>t11 : Symbol(t11, Decl(main.ts, 88, 3))
+>T11 : Symbol(T11, Decl(main.ts, 42, 1))
+
+let t12: T12;
+>t12 : Symbol(t12, Decl(main.ts, 89, 3))
+>T12 : Symbol(T12, Decl(main.ts, 47, 2))
+
+let t13: T13;
+>t13 : Symbol(t13, Decl(main.ts, 90, 3))
+>T13 : Symbol(T13, Decl(main.ts, 53, 1))
+
+let t14: T14;
+>t14 : Symbol(t14, Decl(main.ts, 91, 3))
+>T14 : Symbol(T14, Decl(main.ts, 58, 1))
+
+let t15: T15;
+>t15 : Symbol(t15, Decl(main.ts, 92, 3))
+>T15 : Symbol(T15, Decl(main.ts, 60, 1))
+
+// assignability
+t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t1 : Symbol(t1, Decl(main.ts, 74, 3))
+>t3 : Symbol(t3, Decl(main.ts, 76, 3))
+>t2 : Symbol(t2, Decl(main.ts, 75, 3))
+
+t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t4 : Symbol(t4, Decl(main.ts, 81, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t5 : Symbol(t5, Decl(main.ts, 82, 3))
+>t7 : Symbol(t7, Decl(main.ts, 84, 3))
+>t6 : Symbol(t6, Decl(main.ts, 83, 3))
+
+t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t12 : Symbol(t12, Decl(main.ts, 89, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t13 : Symbol(t13, Decl(main.ts, 90, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t14 : Symbol(t14, Decl(main.ts, 91, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t15 : Symbol(t15, Decl(main.ts, 92, 3))
+>t12 : Symbol(t12, Decl(main.ts, 89, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t13 : Symbol(t13, Decl(main.ts, 90, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t14 : Symbol(t14, Decl(main.ts, 91, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>t15 : Symbol(t15, Decl(main.ts, 92, 3))
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+
+t0 = C; // static side
+>t0 : Symbol(t0, Decl(main.ts, 73, 3))
+>C : Symbol(C, Decl(main.ts, 65, 2))
+
+// object literals
+export const o1 = {
+>o1 : Symbol(o1, Decl(main.ts, 101, 12))
+
+    [c4]: 1,
+>[c4] : Symbol([c4], Decl(main.ts, 101, 19))
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+    [c5]: "a",
+>[c5] : Symbol([c5], Decl(main.ts, 102, 12))
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+    [s2]: true
+>[s2] : Symbol([s2], Decl(main.ts, 103, 14))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+
+};
+
+// check element access types
+export const o1_c4 = o1[c4];
+>o1_c4 : Symbol(o1_c4, Decl(main.ts, 108, 12))
+>o1 : Symbol(o1, Decl(main.ts, 101, 12))
+>c4 : Symbol(c4, Decl(main.ts, 27, 12))
+
+export const o1_c5 = o1[c5];
+>o1_c5 : Symbol(o1_c5, Decl(main.ts, 109, 12))
+>o1 : Symbol(o1, Decl(main.ts, 101, 12))
+>c5 : Symbol(c5, Decl(main.ts, 28, 12))
+
+export const o1_s2 = o1[s2];
+>o1_s2 : Symbol(o1_s2, Decl(main.ts, 110, 12))
+>o1 : Symbol(o1, Decl(main.ts, 101, 12))
+>s2 : Symbol(s2, Decl(main.ts, 29, 12))
+
+export const o2: T0 = o1;
+>o2 : Symbol(o2, Decl(main.ts, 112, 12))
+>T0 : Symbol(T0, Decl(main.ts, 0, 20))
+>o1 : Symbol(o1, Decl(main.ts, 101, 12))
+
+// recursive declarations
+// (type parameter indirection courtesy of #20400)
+declare const rI: RI<"a">;
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>RI : Symbol(RI, Decl(main.ts, 117, 4))
+
+rI.x
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
+
+interface RI<T extends "a" | "b"> {
+>RI : Symbol(RI, Decl(main.ts, 117, 4))
+>T : Symbol(T, Decl(main.ts, 118, 13))
+
+    x: T;
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>T : Symbol(T, Decl(main.ts, 118, 13))
+
+    [rI.x]: "b";
+>[rI.x] : Symbol(RI[rI.x], Decl(main.ts, 119, 9))
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
+}
+
+declare const rC: RC<"a">;
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>RC : Symbol(RC, Decl(main.ts, 124, 4))
+
+rC.x
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
+
+declare class RC<T extends "a" | "b"> {
+>RC : Symbol(RC, Decl(main.ts, 124, 4))
+>T : Symbol(T, Decl(main.ts, 125, 17))
+
+    x: T;
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>T : Symbol(T, Decl(main.ts, 125, 17))
+
+    [rC.x]: "b";
+>[rC.x] : Symbol(RC[rC.x], Decl(main.ts, 126, 9))
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
+}
+

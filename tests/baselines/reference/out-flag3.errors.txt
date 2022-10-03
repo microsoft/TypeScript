@@ -1,0 +1,14 @@
+error TS5053: Option 'out' cannot be specified with option 'outFile'.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+!!! error TS5053: Option 'out' cannot be specified with option 'outFile'.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    // --out and --outFile error
+    
+    class A { }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    class B { }
+    

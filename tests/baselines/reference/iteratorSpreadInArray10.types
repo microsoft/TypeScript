@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray10.ts ===
+class SymbolIterator {
+>SymbolIterator : SymbolIterator
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+var array = [...new SymbolIterator];
+>array : any[]
+>[...new SymbolIterator] : any[]
+>...new SymbolIterator : any
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

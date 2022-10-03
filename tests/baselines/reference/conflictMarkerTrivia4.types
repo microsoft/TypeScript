@@ -1,0 +1,8 @@
+=== tests/cases/compiler/conflictMarkerTrivia4.ts ===
+const x = <div>
+>x : div
+><div> : div
+
+<<<<<<< HEAD
+> : any
+

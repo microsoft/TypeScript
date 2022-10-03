@@ -1,0 +1,49 @@
+=== tests/cases/compiler/es6ImportNamedImportMergeErrors_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+export var x = a;
+>x : number
+>a : number
+
+export var z = a;
+>z : number
+>a : number
+
+export var z1 = a;
+>z1 : number
+>a : number
+
+=== tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts ===
+import { a } from "./es6ImportNamedImportMergeErrors_0";
+>a : number
+
+interface a { } // shouldnt be error
+import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
+>x : number
+>x1 : number
+
+interface x1 { } // shouldnt be error
+import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+>x : number
+
+var x = 10; 
+>x : number
+>10 : 10
+
+import { x as x44 } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+>x : number
+>x44 : number
+
+var x44 = 10; 
+>x44 : number
+>10 : 10
+
+import { z } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+>z : number
+
+import { z1 as z } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+>z1 : number
+>z : number
+

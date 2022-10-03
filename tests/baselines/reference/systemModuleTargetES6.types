@@ -1,0 +1,33 @@
+=== tests/cases/compiler/systemModuleTargetES6.ts ===
+export class MyClass { }
+>MyClass : MyClass
+
+export class MyClass2 {
+>MyClass2 : MyClass2
+
+    static value = 42;
+>value : number
+>42 : 42
+
+    static getInstance() { return MyClass2.value; }
+>getInstance : () => number
+>MyClass2.value : number
+>MyClass2 : typeof MyClass2
+>value : number
+}
+
+export function myFunction() {
+>myFunction : () => MyClass
+
+    return new MyClass();
+>new MyClass() : MyClass
+>MyClass : typeof MyClass
+}
+
+export function myFunction2() {
+>myFunction2 : () => MyClass2
+
+    return new MyClass2();
+>new MyClass2() : MyClass2
+>MyClass2 : typeof MyClass2
+}

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/visSyntax.ts ===
+module M {
+>M : Symbol(M, Decl(visSyntax.ts, 0, 0))
+
+    export class C {
+>C : Symbol(C, Decl(visSyntax.ts, 0, 10))
+    }
+
+    export interface I {
+>I : Symbol(I, Decl(visSyntax.ts, 2, 5))
+	
+    }
+
+    export var x=10;
+>x : Symbol(x, Decl(visSyntax.ts, 8, 14))
+}
+

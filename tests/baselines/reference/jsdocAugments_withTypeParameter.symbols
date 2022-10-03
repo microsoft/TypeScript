@@ -1,0 +1,23 @@
+=== /a.d.ts ===
+declare class A<T> { x: T }
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+>T : Symbol(T, Decl(a.d.ts, 0, 16))
+>x : Symbol(A.x, Decl(a.d.ts, 0, 20))
+>T : Symbol(T, Decl(a.d.ts, 0, 16))
+
+=== /b.js ===
+/** @augments A<number> */
+class B extends A {
+>B : Symbol(B, Decl(b.js, 0, 0))
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+
+    m() {
+>m : Symbol(B.m, Decl(b.js, 1, 19))
+
+        return this.x;
+>this.x : Symbol(A.x, Decl(a.d.ts, 0, 20))
+>this : Symbol(B, Decl(b.js, 0, 0))
+>x : Symbol(A.x, Decl(a.d.ts, 0, 20))
+    }
+}
+

@@ -1,0 +1,59 @@
+=== tests/cases/conformance/async/es5/awaitCallExpression/awaitCallExpression2_es5.ts ===
+declare var a: boolean;
+>a : boolean
+
+declare var p: Promise<boolean>;
+>p : Promise<boolean>
+
+declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
+>fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
+>o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
+>fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+>pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+>po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
+>fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare function before(): void;
+>before : () => void
+
+declare function after(): void;
+>after : () => void
+
+async function func(): Promise<void> {
+>func : () => Promise<void>
+
+    before();
+>before() : void
+>before : () => void
+
+    var b = fn(await p, a, a);
+>b : void
+>fn(await p, a, a) : void
+>fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>await p : boolean
+>p : Promise<boolean>
+>a : boolean
+>a : boolean
+
+    after();
+>after() : void
+>after : () => void
+}

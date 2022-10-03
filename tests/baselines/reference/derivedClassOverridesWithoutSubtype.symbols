@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 0))
+
+    x: {
+>x : Symbol(Base.x, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 12))
+
+        foo: string;
+>foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 1, 8))
+    }
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassOverridesWithoutSubtype.ts, 4, 1))
+>Base : Symbol(Base, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 0))
+
+    x: {
+>x : Symbol(Derived.x, Decl(derivedClassOverridesWithoutSubtype.ts, 6, 28))
+
+        foo: any;
+>foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 7, 8))
+    }
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesWithoutSubtype.ts, 10, 1))
+
+    static y: {
+>y : Symbol(Base2.y, Decl(derivedClassOverridesWithoutSubtype.ts, 12, 13))
+
+        foo: string;
+>foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 13, 15))
+    }
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(derivedClassOverridesWithoutSubtype.ts, 16, 1))
+>Base2 : Symbol(Base2, Decl(derivedClassOverridesWithoutSubtype.ts, 10, 1))
+
+    static y: {
+>y : Symbol(Derived2.y, Decl(derivedClassOverridesWithoutSubtype.ts, 18, 30))
+
+        foo: any;
+>foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 19, 15))
+    }
+}

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/foo.ts ===
+export const x = 3;
+>x : Symbol(x, Decl(foo.ts, 0, 12))
+
+export const y = 5;
+>y : Symbol(y, Decl(foo.ts, 1, 12))
+
+=== tests/cases/compiler/bar.ts ===
+import * as foo from "./foo";
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+
+function f(map: { [k: string]: number }) {
+>f : Symbol(f, Decl(bar.ts, 0, 29))
+>map : Symbol(map, Decl(bar.ts, 2, 11))
+>k : Symbol(k, Decl(bar.ts, 2, 19))
+
+  // ...
+}
+
+f(foo);
+>f : Symbol(f, Decl(bar.ts, 0, 29))
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+

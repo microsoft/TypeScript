@@ -1,0 +1,225 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    a: number,
+>a : number
+
+    b: string
+>b : string
+}
+
+declare class MyComp<P> extends React.Component<P, {}> {
+>MyComp : MyComp<P>
+>React.Component : React.Component<P, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    internalProp: P;
+>internalProp : P
+}
+
+let x = <MyComp<Prop> a={10} b="hi" />; // OK
+>x : JSX.Element
+><MyComp<Prop> a={10} b="hi" /> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+
+x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
+>x = <MyComp<Prop> a={10} b="hi"></MyComp> : JSX.Element
+>x : JSX.Element
+><MyComp<Prop> a={10} b="hi"></MyComp> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+>MyComp : typeof MyComp
+
+x = <MyComp<Prop> a={10} b={20} />; // error
+>x = <MyComp<Prop> a={10} b={20} /> : JSX.Element
+>x : JSX.Element
+><MyComp<Prop> a={10} b={20} /> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : number
+>20 : 20
+
+x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
+>x = <MyComp<Prop> a={10} b={20}></MyComp> : JSX.Element
+>x : JSX.Element
+><MyComp<Prop> a={10} b={20}></MyComp> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : number
+>20 : 20
+>MyComp : typeof MyComp
+
+x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
+>x = <MyComp<Prop, Prop> a={10} b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp<Prop, Prop> a={10} b="hi" /> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+
+x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
+>x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp> : JSX.Element
+>x : JSX.Element
+><MyComp<Prop, Prop> a={10} b="hi"></MyComp> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+>MyComp : typeof MyComp
+
+x = <MyComp<> a={10} b="hi" />; // error
+>x = <MyComp<> a={10} b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp<> a={10} b="hi" /> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+
+x = <MyComp<> a={10} b="hi"></MyComp>; // error
+>x = <MyComp<> a={10} b="hi"></MyComp> : JSX.Element
+>x : JSX.Element
+><MyComp<> a={10} b="hi"></MyComp> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+>MyComp : typeof MyComp
+
+x= <MyComp<{}> /> // OK
+>x= <MyComp<{}> /> : JSX.Element
+>x : JSX.Element
+><MyComp<{}> /> : JSX.Element
+>MyComp : typeof MyComp
+
+x= <MyComp<{}>></MyComp> // OK
+>x= <MyComp<{}>></MyComp> : JSX.Element
+>x : JSX.Element
+><MyComp<{}>></MyComp> : JSX.Element
+>MyComp : typeof MyComp
+>MyComp : typeof MyComp
+
+declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
+>MyComp2 : MyComp2<P, P2>
+>a : string
+>React.Component : React.Component<P & P2, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    internalProp: [P, P2];
+>internalProp : [P, P2]
+}
+x = <MyComp2<{a: string, b: string}> a="a" b="b" />; // OK
+>x = <MyComp2<{a: string, b: string}> a="a" b="b" /> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string, b: string}> a="a" b="b" /> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+
+x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
+>x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<Prop> a={10} b="hi" />; // error
+>x = <MyComp2<Prop> a={10} b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp2<Prop> a={10} b="hi" /> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : number
+>10 : 10
+>b : string
+
+x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
+>x = <MyComp2<Prop> a={10} b="hi"></MyComp2> : JSX.Element
+>x : JSX.Element
+><MyComp2<Prop> a={10} b="hi"></MyComp2> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : number
+>10 : 10
+>b : string
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
+>x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: string}> a="hi" b="hi" /> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
+>x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
+>x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" /> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
+>x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : string
+>b : string
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
+>x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" /> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: number}> a="hi" b="hi" /> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : number
+>a : string
+>b : string
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
+>x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2> : JSX.Element
+>x : JSX.Element
+><MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2> : JSX.Element
+>MyComp2 : typeof MyComp2
+>a : string
+>b : number
+>a : string
+>b : string
+>MyComp2 : typeof MyComp2
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx ===
+/// <reference path="react16.d.ts" />
+import { Fragment, createElement } from "react"
+>Fragment : Symbol(Fragment, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 8))
+>createElement : Symbol(createElement, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 18))
+
+type CounterProps = {
+>CounterProps : Symbol(CounterProps, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 47))
+
+    count?: number
+>count : Symbol(count, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 3, 21))
+}
+
+export function Counter({ count = 0 }: CounterProps) {
+>Counter : Symbol(Counter, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 5, 1))
+>count : Symbol(count, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 7, 25))
+>CounterProps : Symbol(CounterProps, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 47))
+
+    const [cnt, setCnt] = null as any;
+>cnt : Symbol(cnt, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 8, 11))
+>setCnt : Symbol(setCnt, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 8, 15))
+
+    return <>
+        <p>{cnt}</p>
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>cnt : Symbol(cnt, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 8, 11))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+
+        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+>onClick : Symbol(onClick, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 11, 15))
+>setCnt : Symbol(setCnt, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 8, 15))
+>prev : Symbol(prev, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 11, 39))
+>prev : Symbol(prev, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 11, 39))
+>type : Symbol(type, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 11, 58))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+
+    </>
+}

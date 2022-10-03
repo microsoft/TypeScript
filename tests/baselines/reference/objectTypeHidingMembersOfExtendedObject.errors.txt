@@ -1,0 +1,67 @@
+tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(10,5): error TS2411: Property 'data' of type 'A' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(124,5): error TS2411: Property 'constructor' of type 'Function' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(127,5): error TS2411: Property 'toString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(130,5): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(133,5): error TS2411: Property 'valueOf' of type '() => Object' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(139,5): error TS2411: Property 'hasOwnProperty' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(145,5): error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(151,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
+
+
+==== tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts (1 errors) ====
+    class A {
+        foo: string;
+    }
+    
+    class B extends A {
+        bar: string;
+    }
+    
+    interface Object {
+        data: A;
+        ~~~~
+!!! error TS2411: Property 'data' of type 'A' is not assignable to 'string' index type 'Object'.
+        [x: string]: Object;
+    }
+    
+    class C {
+        valueOf() { }
+        data: B;
+        [x: string]: any;
+    }
+    
+    var c: C;
+    var r1: void = c.valueOf();
+    var r1b: B = c.data;
+    var r1c = r1b['hm']; // should be 'Object'
+    var r1d = c['hm']; // should be 'any'
+    
+    interface I {
+        valueOf(): void;
+        data: B;
+        [x: string]: any;
+    }
+    
+    var i: I;
+    var r2: void = i.valueOf();
+    var r2b: B = i.data;
+    var r2c = r2b['hm']; // should be 'Object'
+    var r2d = i['hm']; // should be 'any'
+    
+    var a = {
+        valueOf: () => { },
+        data: new B()
+    }
+    
+    var r3: void = a.valueOf();
+    var r3b: B = a.data;
+    var r3c = r3b['hm']; // should be 'Object'
+    var r3d = i['hm'];
+    
+    var b: {
+        valueOf(): void;
+        data: B;
+        [x: string]: any;
+    }
+    
+    var r4: void = b.valueOf();

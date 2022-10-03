@@ -1,0 +1,62 @@
+=== tests/cases/compiler/overloadResolutionWithAny.ts ===
+var func: {
+>func : Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+
+    (s: string): number;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 1, 5))
+
+    (s: any): string;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 2, 5))
+
+};
+
+func(""); // number
+>func : Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+
+func(3); // string
+>func : Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+
+var x: any;
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+
+func(x); // string
+>func : Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+
+var func2: {
+>func2 : Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+
+    (s: string, t: string): number;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 11, 5))
+>t : Symbol(t, Decl(overloadResolutionWithAny.ts, 11, 15))
+
+    (s: any, t: string): boolean;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 12, 5))
+>t : Symbol(t, Decl(overloadResolutionWithAny.ts, 12, 12))
+
+    (s: string, t: any): RegExp;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 13, 5))
+>t : Symbol(t, Decl(overloadResolutionWithAny.ts, 13, 15))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    (s: any, t: any): string;
+>s : Symbol(s, Decl(overloadResolutionWithAny.ts, 14, 5))
+>t : Symbol(t, Decl(overloadResolutionWithAny.ts, 14, 12))
+}
+
+func2(x, x); // string
+>func2 : Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+
+func2("", ""); // number
+>func2 : Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+
+func2(x, ""); // boolean
+>func2 : Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+
+func2("", x); // RegExp
+>func2 : Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>x : Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+

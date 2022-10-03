@@ -1,0 +1,17 @@
+{
+    "scenario": "--sourceroot is specified without specifying --sourcemap",
+    "projectRoot": "tests/cases/projects/outputdir_simple",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceRoot": "../src",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m1.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "m1.js",
+        "test.js"
+    ]
+}

@@ -1,0 +1,91 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+class RC1 extends React.Component<{x : number}, {}> {
+>RC1 : Symbol(RC1, Decl(file.tsx, 0, 32))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>x : Symbol(x, Decl(file.tsx, 2, 35))
+
+    render() {
+>render : Symbol(RC1.render, Decl(file.tsx, 2, 53))
+
+        return null;
+    }
+}
+
+class RC2 extends React.Component<{ x: string }, {}> {
+>RC2 : Symbol(RC2, Decl(file.tsx, 6, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>x : Symbol(x, Decl(file.tsx, 8, 35))
+
+    render() {
+>render : Symbol(RC2.render, Decl(file.tsx, 8, 54))
+
+        return null;
+    }
+    private method() { }
+>method : Symbol(RC2.method, Decl(file.tsx, 11, 5))
+}
+
+class RC3 extends React.Component<{}, {}> {
+>RC3 : Symbol(RC3, Decl(file.tsx, 13, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+
+    render() {
+>render : Symbol(RC3.render, Decl(file.tsx, 15, 43))
+
+        return null;
+    }
+}
+
+class RC4 extends React.Component<{}, {}> {
+>RC4 : Symbol(RC4, Decl(file.tsx, 19, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+
+    render() {
+>render : Symbol(RC4.render, Decl(file.tsx, 21, 43))
+
+        return null;
+    }
+}
+
+var RCComp = RC1 || RC2;
+>RCComp : Symbol(RCComp, Decl(file.tsx, 27, 3))
+>RC1 : Symbol(RC1, Decl(file.tsx, 0, 32))
+>RC2 : Symbol(RC2, Decl(file.tsx, 6, 1))
+
+var EmptyRCComp = RC3 || RC4;
+>EmptyRCComp : Symbol(EmptyRCComp, Decl(file.tsx, 28, 3))
+>RC3 : Symbol(RC3, Decl(file.tsx, 13, 1))
+>RC4 : Symbol(RC4, Decl(file.tsx, 19, 1))
+
+var PartRCComp = RC1 || RC4;
+>PartRCComp : Symbol(PartRCComp, Decl(file.tsx, 29, 3))
+>RC1 : Symbol(RC1, Decl(file.tsx, 0, 32))
+>RC4 : Symbol(RC4, Decl(file.tsx, 19, 1))
+
+// Error
+let a = <RCComp x />;
+>a : Symbol(a, Decl(file.tsx, 31, 3))
+>RCComp : Symbol(RCComp, Decl(file.tsx, 27, 3))
+>x : Symbol(x, Decl(file.tsx, 31, 15))
+
+let b = <PartRCComp x={10} />
+>b : Symbol(b, Decl(file.tsx, 32, 3))
+>PartRCComp : Symbol(PartRCComp, Decl(file.tsx, 29, 3))
+>x : Symbol(x, Decl(file.tsx, 32, 19))
+
+let c = <EmptyRCComp prop />;
+>c : Symbol(c, Decl(file.tsx, 33, 3))
+>EmptyRCComp : Symbol(EmptyRCComp, Decl(file.tsx, 28, 3))
+>prop : Symbol(prop, Decl(file.tsx, 33, 20))
+

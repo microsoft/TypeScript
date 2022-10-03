@@ -1,0 +1,103 @@
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(9,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(12,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(15,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(16,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(18,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(25,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(29,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(32,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+
+
+==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (20 errors) ====
+    // destructuring in variable declarations
+    let foo = "bar";
+    let {[foo]: bar} = {bar: "bar"};
+          ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    let {["bar"]: bar2} = {bar: "bar"};
+    let {[11]: bar2_1} = {11: "bar"};
+    
+    let foo2 = () => "bar";
+    let {[foo2()]: bar3} = {bar: "bar"};
+          ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    let [{[foo]: bar4}] = [{bar: "bar"}];
+           ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    let [{[foo2()]: bar5}] = [{bar: "bar"}];
+           ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    function f1({["bar"]: x}: { bar: number }) {}
+    function f2({[foo]: x}: { bar: number }) {}
+                  ~~~
+!!! error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+    function f3({[foo2()]: x}: { bar: number }) {}
+                  ~~~~~~
+!!! error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+    function f4([{[foo]: x}]: [{ bar: number }]) {}
+                   ~~~
+!!! error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+    function f5([{[foo2()]: x}]: [{ bar: number }]) {}
+                   ~~~~~~
+!!! error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+    
+    // report errors on type errors in computed properties used in destructuring
+    let [{[foo()]: bar6}] = [{bar: "bar"}];
+           ~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+           ~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
+           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+               ~~~~~~~~~~~~~
+!!! error TS2339: Property 'toExponential' does not exist on type 'string'.
+    
+    // destructuring assignment
+    ({[foo]: bar} = {bar: "bar"});
+       ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    ({["bar"]: bar2} = {bar: "bar"});
+    
+    ({[foo2()]: bar3} = {bar: "bar"});
+       ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    [{[foo]: bar4}] = [{bar: "bar"}];
+       ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    [{[foo2()]: bar5}] = [{bar: "bar"}];
+       ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+    
+    [{[foo()]: bar4}] = [{bar: "bar"}];
+       ~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+       ~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    [{[(1 + {})]: bar4}] = [{bar: "bar"}];
+       ~~~~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+        ~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+    

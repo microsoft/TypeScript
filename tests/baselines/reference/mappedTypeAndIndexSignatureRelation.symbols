@@ -1,0 +1,117 @@
+=== tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts ===
+type Same<T> = { [P in keyof T]: T[P] };
+>Same : Symbol(Same, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 10))
+>P : Symbol(P, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 18))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 10))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 10))
+>P : Symbol(P, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 18))
+
+type T1<T extends Record<PropertyKey, number>> = T;
+>T1 : Symbol(T1, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 40))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 2, 8))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 2, 8))
+
+type T2<U extends Record<PropertyKey, number>> = T1<Same<U>>;
+>T2 : Symbol(T2, Decl(mappedTypeAndIndexSignatureRelation.ts, 2, 51))
+>U : Symbol(U, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 8))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 40))
+>Same : Symbol(Same, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 0))
+>U : Symbol(U, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 8))
+
+// Repro from #38235
+
+type Foo<IdentifierT extends Record<PropertyKey, PropertyKey>> =
+>Foo : Symbol(Foo, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 61))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 7, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+    IdentifierT
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 7, 9))
+
+;
+
+type Bar<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
+>Bar : Symbol(Bar, Decl(mappedTypeAndIndexSignatureRelation.ts, 9, 1))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 11, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 11, 62))
+    {
+        [k in keyof T] : Foo<IdentifierT & { k : k }>
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 13, 9))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 11, 62))
+>Foo : Symbol(Foo, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 61))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 11, 9))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 13, 44))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 13, 9))
+    }
+;
+
+type Merge2<T> = { [k in keyof T] : T[k] }
+>Merge2 : Symbol(Merge2, Decl(mappedTypeAndIndexSignatureRelation.ts, 15, 1))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 12))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 20))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 12))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 12))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 20))
+
+type Bar2<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
+>Bar2 : Symbol(Bar2, Decl(mappedTypeAndIndexSignatureRelation.ts, 17, 42))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 18, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 18, 63))
+    {
+        [k in keyof T]: Foo<Merge2<IdentifierT & { k: k }>>
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 20, 9))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 18, 63))
+>Foo : Symbol(Foo, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 61))
+>Merge2 : Symbol(Merge2, Decl(mappedTypeAndIndexSignatureRelation.ts, 15, 1))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 18, 10))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 20, 50))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 20, 9))
+    }
+;
+
+type Identity<T> = T;
+>Identity : Symbol(Identity, Decl(mappedTypeAndIndexSignatureRelation.ts, 22, 1))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 24, 14))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 24, 14))
+
+type Merge3<T> = Identity<{ [k in keyof T] : T[k] }>
+>Merge3 : Symbol(Merge3, Decl(mappedTypeAndIndexSignatureRelation.ts, 24, 21))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 12))
+>Identity : Symbol(Identity, Decl(mappedTypeAndIndexSignatureRelation.ts, 22, 1))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 29))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 12))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 12))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 29))
+
+type Bar3<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
+>Bar3 : Symbol(Bar3, Decl(mappedTypeAndIndexSignatureRelation.ts, 25, 52))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 26, 10))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 26, 63))
+    {
+        [k in keyof T]: Foo<Merge3<IdentifierT & { k: k }>>
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 28, 9))
+>T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 26, 63))
+>Foo : Symbol(Foo, Decl(mappedTypeAndIndexSignatureRelation.ts, 3, 61))
+>Merge3 : Symbol(Merge3, Decl(mappedTypeAndIndexSignatureRelation.ts, 24, 21))
+>IdentifierT : Symbol(IdentifierT, Decl(mappedTypeAndIndexSignatureRelation.ts, 26, 10))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 28, 50))
+>k : Symbol(k, Decl(mappedTypeAndIndexSignatureRelation.ts, 28, 9))
+    }
+;
+

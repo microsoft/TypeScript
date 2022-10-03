@@ -1,0 +1,21 @@
+=== tests/cases/compiler/argumentsObjectIterator03_ES6.ts ===
+function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, number] {
+>asReversedTuple : (a: number, b: string, c: boolean) => [boolean, string, number]
+>a : number
+>b : string
+>c : boolean
+
+    let [x, y, z] = arguments;
+>x : any
+>y : any
+>z : any
+>arguments : IArguments
+    
+    return [z, y, x];
+>[z, y, x] : [any, any, any]
+>z : any
+>y : any
+>x : any
+}
+
+

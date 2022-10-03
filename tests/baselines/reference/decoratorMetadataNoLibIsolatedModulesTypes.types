@@ -1,0 +1,11 @@
+=== tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts ===
+export class B {
+>B : B
+
+    @Decorate
+>Decorate : any
+
+    member: Map<string, number>;
+>member : Map<string, number>
+}
+

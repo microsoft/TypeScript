@@ -1,0 +1,9 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target8.ts ===
+export const c = 0;
+>c : 0
+>0 : 0
+
+export let l = 1;
+>l : number
+>1 : 1
+

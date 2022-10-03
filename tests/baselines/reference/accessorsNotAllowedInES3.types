@@ -1,0 +1,14 @@
+=== tests/cases/compiler/accessorsNotAllowedInES3.ts ===
+class C {
+>C : C
+
+    get x(): number { return 1; }
+>x : number
+>1 : 1
+}
+var y = { get foo() { return 3; } };
+>y : { readonly foo: number; }
+>{ get foo() { return 3; } } : { readonly foo: number; }
+>foo : number
+>3 : 3
+

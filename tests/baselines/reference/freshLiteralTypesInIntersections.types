@@ -1,0 +1,23 @@
+=== tests/cases/compiler/freshLiteralTypesInIntersections.ts ===
+// Repro from #19657
+
+declare function func<A extends string, B extends A>(a: A, b: B[]): (ab: A & B) => void;
+>func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
+>a : A
+>b : B[]
+>ab : A & B
+
+const q = func("x" as "x" | "y", ["x"]);
+>q : (ab: "x") => void
+>func("x" as "x" | "y", ["x"]) : (ab: "x") => void
+>func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
+>"x" as "x" | "y" : "x" | "y"
+>"x" : "x"
+>["x"] : "x"[]
+>"x" : "x"
+
+q("x");
+>q("x") : void
+>q : (ab: "x") => void
+>"x" : "x"
+

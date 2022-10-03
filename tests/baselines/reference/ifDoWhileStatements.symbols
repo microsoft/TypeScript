@@ -1,0 +1,336 @@
+=== tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts ===
+interface I {
+>I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(ifDoWhileStatements.ts, 0, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+>I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(ifDoWhileStatements.ts, 4, 22))
+
+    name: string;
+>name : Symbol(C.name, Decl(ifDoWhileStatements.ts, 5, 15))
+}
+
+class C2 extends C {
+>C2 : Symbol(C2, Decl(ifDoWhileStatements.ts, 7, 1))
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+    valid: boolean;
+>valid : Symbol(C2.valid, Decl(ifDoWhileStatements.ts, 9, 20))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(ifDoWhileStatements.ts, 13, 11))
+>T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(ifDoWhileStatements.ts, 14, 14))
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(ifDoWhileStatements.ts, 15, 18))
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>T : Symbol(T, Decl(ifDoWhileStatements.ts, 13, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(ifDoWhileStatements.ts, 17, 1))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 19, 11))
+
+function F2(x: number): boolean { return x < 42; }
+>F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 19, 44))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 20, 12))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 20, 12))
+
+module M {
+>M : Symbol(M, Decl(ifDoWhileStatements.ts, 20, 50))
+
+    export class A {
+>A : Symbol(A, Decl(ifDoWhileStatements.ts, 22, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(ifDoWhileStatements.ts, 23, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 25, 5))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+module N {
+>N : Symbol(N, Decl(ifDoWhileStatements.ts, 28, 1))
+
+    export class A {
+>A : Symbol(A, Decl(ifDoWhileStatements.ts, 30, 10))
+
+        id: number;
+>id : Symbol(A.id, Decl(ifDoWhileStatements.ts, 31, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 33, 5))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+// literals
+if (true) { }
+while (true) { }
+do { }while(true)
+
+if (null) { }
+while (null) { }
+do { }while(null)
+
+if (undefined) { }
+>undefined : Symbol(undefined)
+
+while (undefined) { }
+>undefined : Symbol(undefined)
+
+do { }while(undefined)
+>undefined : Symbol(undefined)
+
+if (0.0) { }
+while (0.0) { }
+do { }while(0.0)
+
+if ('a string') { }
+while ('a string') { }
+do { }while('a string')
+
+if ('') { }
+while ('') { }
+do { }while('')
+
+if (/[a-z]/) { }
+while (/[a-z]/) { }
+do { }while(/[a-z]/)
+
+if ([]) { }
+while ([]) { }
+do { }while([])
+
+if ([1, 2]) { }
+while ([1, 2]) { }
+do { }while([1, 2])
+
+if ({}) { }
+while ({}) { }
+do { }while({})
+
+if ({ x: 1, y: 'a' }) { }
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 79, 5))
+>y : Symbol(y, Decl(ifDoWhileStatements.ts, 79, 11))
+
+while ({ x: 1, y: 'a' }) { }
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 80, 8))
+>y : Symbol(y, Decl(ifDoWhileStatements.ts, 80, 14))
+
+do { }while({ x: 1, y: 'a' })
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 81, 13))
+>y : Symbol(y, Decl(ifDoWhileStatements.ts, 81, 19))
+
+if (() => 43) { }
+while (() => 43) { }
+do { }while(() => 43)
+
+if (new C()) { }
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+while (new C()) { }
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+do { }while(new C())
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+if (new D<C>()) { }
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+while (new D<C>()) { }
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+do { }while(new D<C>())
+>D : Symbol(D, Decl(ifDoWhileStatements.ts, 11, 1))
+>C : Symbol(C, Decl(ifDoWhileStatements.ts, 2, 1))
+
+// references
+var a = true;
+>a : Symbol(a, Decl(ifDoWhileStatements.ts, 96, 3))
+
+if (a) { }
+>a : Symbol(a, Decl(ifDoWhileStatements.ts, 96, 3))
+
+while (a) { }
+>a : Symbol(a, Decl(ifDoWhileStatements.ts, 96, 3))
+
+do { }while(a)
+>a : Symbol(a, Decl(ifDoWhileStatements.ts, 96, 3))
+
+var b = null;
+>b : Symbol(b, Decl(ifDoWhileStatements.ts, 101, 3))
+
+if (b) { }
+>b : Symbol(b, Decl(ifDoWhileStatements.ts, 101, 3))
+
+while (b) { }
+>b : Symbol(b, Decl(ifDoWhileStatements.ts, 101, 3))
+
+do { }while(b)
+>b : Symbol(b, Decl(ifDoWhileStatements.ts, 101, 3))
+
+var c = undefined;
+>c : Symbol(c, Decl(ifDoWhileStatements.ts, 106, 3))
+>undefined : Symbol(undefined)
+
+if (c) { }
+>c : Symbol(c, Decl(ifDoWhileStatements.ts, 106, 3))
+
+while (c) { }
+>c : Symbol(c, Decl(ifDoWhileStatements.ts, 106, 3))
+
+do { }while(c)
+>c : Symbol(c, Decl(ifDoWhileStatements.ts, 106, 3))
+
+var d = 0.0;
+>d : Symbol(d, Decl(ifDoWhileStatements.ts, 111, 3))
+
+if (d) { }
+>d : Symbol(d, Decl(ifDoWhileStatements.ts, 111, 3))
+
+while (d) { }
+>d : Symbol(d, Decl(ifDoWhileStatements.ts, 111, 3))
+
+do { }while(d)
+>d : Symbol(d, Decl(ifDoWhileStatements.ts, 111, 3))
+
+var e = 'a string';
+>e : Symbol(e, Decl(ifDoWhileStatements.ts, 116, 3))
+
+if (e) { }
+>e : Symbol(e, Decl(ifDoWhileStatements.ts, 116, 3))
+
+while (e) { }
+>e : Symbol(e, Decl(ifDoWhileStatements.ts, 116, 3))
+
+do { }while(e)
+>e : Symbol(e, Decl(ifDoWhileStatements.ts, 116, 3))
+
+var f = '';
+>f : Symbol(f, Decl(ifDoWhileStatements.ts, 121, 3))
+
+if (f) { }
+>f : Symbol(f, Decl(ifDoWhileStatements.ts, 121, 3))
+
+while (f) { }
+>f : Symbol(f, Decl(ifDoWhileStatements.ts, 121, 3))
+
+do { }while(f)
+>f : Symbol(f, Decl(ifDoWhileStatements.ts, 121, 3))
+
+var g = /[a-z]/
+>g : Symbol(g, Decl(ifDoWhileStatements.ts, 126, 3))
+
+if (g) { }
+>g : Symbol(g, Decl(ifDoWhileStatements.ts, 126, 3))
+
+while (g) { }
+>g : Symbol(g, Decl(ifDoWhileStatements.ts, 126, 3))
+
+do { }while(g)
+>g : Symbol(g, Decl(ifDoWhileStatements.ts, 126, 3))
+
+var h = [];
+>h : Symbol(h, Decl(ifDoWhileStatements.ts, 131, 3))
+
+if (h) { }
+>h : Symbol(h, Decl(ifDoWhileStatements.ts, 131, 3))
+
+while (h) { }
+>h : Symbol(h, Decl(ifDoWhileStatements.ts, 131, 3))
+
+do { }while(h)
+>h : Symbol(h, Decl(ifDoWhileStatements.ts, 131, 3))
+
+var i = [1, 2];
+>i : Symbol(i, Decl(ifDoWhileStatements.ts, 136, 3))
+
+if (i) { }
+>i : Symbol(i, Decl(ifDoWhileStatements.ts, 136, 3))
+
+while (i) { }
+>i : Symbol(i, Decl(ifDoWhileStatements.ts, 136, 3))
+
+do { }while(i)
+>i : Symbol(i, Decl(ifDoWhileStatements.ts, 136, 3))
+
+var j = {};
+>j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
+
+if (j) { }
+>j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
+
+while (j) { }
+>j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
+
+do { }while(j)
+>j : Symbol(j, Decl(ifDoWhileStatements.ts, 141, 3))
+
+var k = { x: 1, y: 'a' };
+>k : Symbol(k, Decl(ifDoWhileStatements.ts, 146, 3))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 146, 9))
+>y : Symbol(y, Decl(ifDoWhileStatements.ts, 146, 15))
+
+if (k) { }
+>k : Symbol(k, Decl(ifDoWhileStatements.ts, 146, 3))
+
+while (k) { }
+>k : Symbol(k, Decl(ifDoWhileStatements.ts, 146, 3))
+
+do { }while(k)
+>k : Symbol(k, Decl(ifDoWhileStatements.ts, 146, 3))
+
+function fn(x?: string): I { return null; }
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+>x : Symbol(x, Decl(ifDoWhileStatements.ts, 151, 12))
+>I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
+
+if (fn()) { }
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+while (fn()) { }
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+do { }while(fn())
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+if (fn) { }
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+while (fn) { }
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+do { }while(fn)
+>fn : Symbol(fn, Decl(ifDoWhileStatements.ts, 149, 14))
+
+
+

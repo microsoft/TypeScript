@@ -1,0 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts(2,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts(2,8): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts(2,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts (3 errors) ====
+    "use strict";
+    delete a;
+           ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+           ~
+!!! error TS2304: Cannot find name 'a'.
+           ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

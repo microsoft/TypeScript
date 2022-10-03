@@ -1,0 +1,16 @@
+=== /exports.ts ===
+export function Component() {}
+>Component : () => void
+
+export interface ComponentProps {}
+
+=== /index.ts ===
+import { Component, ComponentProps } from "./exports.js";
+>Component : () => void
+>ComponentProps : any
+
+=== /index.fixed.ts ===
+import { Component, type ComponentProps } from "./exports.js";
+>Component : () => void
+>ComponentProps : any
+

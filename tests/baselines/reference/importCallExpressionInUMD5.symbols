@@ -1,0 +1,17 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : Symbol(foo, Decl(0.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+// https://github.com/microsoft/TypeScript/issues/36780
+async function func() {
+>func : Symbol(func, Decl(1.ts, 0, 0))
+
+    const packageName = '.';
+>packageName : Symbol(packageName, Decl(1.ts, 2, 9))
+
+    const packageJson = await import(packageName + '/package.json');
+>packageJson : Symbol(packageJson, Decl(1.ts, 3, 9))
+>packageName : Symbol(packageName, Decl(1.ts, 2, 9))
+}
+

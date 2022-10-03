@@ -1,0 +1,80 @@
+=== tests/cases/compiler/super.ts ===
+class Base {
+>Base : Symbol(Base, Decl(super.ts, 0, 0))
+
+    constructor() {
+        var x;
+>x : Symbol(x, Decl(super.ts, 2, 11))
+    }
+    public foo() {
+>foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
+
+        return "base";
+    }
+
+    public bar() {
+>bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
+
+        return "basebar";
+    }
+}
+
+class Sub1 extends Base {
+>Sub1 : Symbol(Sub1, Decl(super.ts, 11, 1))
+>Base : Symbol(Base, Decl(super.ts, 0, 0))
+
+    public foo() {
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+
+        return "sub1" + super.foo() + super.bar();
+>super.foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
+>super : Symbol(Base, Decl(super.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(super.ts, 3, 5))
+>super.bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
+>super : Symbol(Base, Decl(super.ts, 0, 0))
+>bar : Symbol(Base.bar, Decl(super.ts, 6, 5))
+    }
+}
+
+
+class SubSub1 extends Sub1 {
+>SubSub1 : Symbol(SubSub1, Decl(super.ts, 17, 1))
+>Sub1 : Symbol(Sub1, Decl(super.ts, 11, 1))
+
+    public foo() {
+>foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
+
+        return "subsub1" + super.foo();
+>super.foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+>super : Symbol(Sub1, Decl(super.ts, 11, 1))
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+    }
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(super.ts, 24, 1))
+
+    public foo() {
+>foo : Symbol(Base2.foo, Decl(super.ts, 26, 13))
+
+        super.foo();
+    }
+}
+
+var s = new Sub1();
+>s : Symbol(s, Decl(super.ts, 32, 3))
+>Sub1 : Symbol(Sub1, Decl(super.ts, 11, 1))
+
+var ss = new SubSub1();
+>ss : Symbol(ss, Decl(super.ts, 33, 3))
+>SubSub1 : Symbol(SubSub1, Decl(super.ts, 17, 1))
+
+s.foo() + ss.foo();
+>s.foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+>s : Symbol(s, Decl(super.ts, 32, 3))
+>foo : Symbol(Sub1.foo, Decl(super.ts, 13, 25))
+>ss.foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
+>ss : Symbol(ss, Decl(super.ts, 33, 3))
+>foo : Symbol(SubSub1.foo, Decl(super.ts, 20, 28))
+
+

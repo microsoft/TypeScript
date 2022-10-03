@@ -1,0 +1,128 @@
+=== tests/cases/compiler/asyncAwaitWithCapturedBlockScopeVar.ts ===
+async function fn1() {
+>fn1 : () => Promise<void>
+
+    let ar = [];
+>ar : any[]
+>[] : undefined[]
+
+    for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        ar.push(() => i);
+>ar.push(() => i) : number
+>ar.push : (...items: any[]) => number
+>ar : any[]
+>push : (...items: any[]) => number
+>() => i : () => number
+>i : number
+    }
+}
+
+async function fn2() {
+>fn2 : () => Promise<void>
+
+    let ar = [];
+>ar : any[]
+>[] : undefined[]
+
+    for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        ar.push(() => i);
+>ar.push(() => i) : number
+>ar.push : (...items: any[]) => number
+>ar : any[]
+>push : (...items: any[]) => number
+>() => i : () => number
+>i : number
+
+        break;
+    }
+}
+
+async function fn3() {
+>fn3 : () => Promise<void>
+
+    let ar = [];
+>ar : any[]
+>[] : undefined[]
+
+    for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        ar.push(() => i);
+>ar.push(() => i) : number
+>ar.push : (...items: any[]) => number
+>ar : any[]
+>push : (...items: any[]) => number
+>() => i : () => number
+>i : number
+
+        continue;
+    }
+}
+
+async function fn4(): Promise<number> {
+>fn4 : () => Promise<number>
+
+    let ar = [];
+>ar : any[]
+>[] : undefined[]
+
+    for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        ar.push(() => i);
+>ar.push(() => i) : number
+>ar.push : (...items: any[]) => number
+>ar : any[]
+>push : (...items: any[]) => number
+>() => i : () => number
+>i : number
+
+        return 1;
+>1 : 1
+    }
+}
+

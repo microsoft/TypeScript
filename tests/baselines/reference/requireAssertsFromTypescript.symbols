@@ -1,0 +1,45 @@
+=== tests/cases/conformance/salsa/38379.js ===
+const { art } = require('./ex')
+>art : Symbol(art, Decl(38379.js, 0, 7))
+>require : Symbol(require)
+>'./ex' : Symbol("tests/cases/conformance/salsa/ex", Decl(ex.d.ts, 0, 0))
+
+const artoo = require('./ex2')
+>artoo : Symbol(artoo, Decl(38379.js, 1, 5))
+>require : Symbol(require)
+>'./ex2' : Symbol("tests/cases/conformance/salsa/ex2", Decl(ex2.d.ts, 0, 0))
+
+let x = 1
+>x : Symbol(x, Decl(38379.js, 2, 3))
+
+art(x)
+>art : Symbol(art, Decl(38379.js, 0, 7))
+>x : Symbol(x, Decl(38379.js, 2, 3))
+
+let y = 1
+>y : Symbol(y, Decl(38379.js, 4, 3))
+
+artoo(y)
+>artoo : Symbol(artoo, Decl(38379.js, 1, 5))
+>y : Symbol(y, Decl(38379.js, 4, 3))
+
+=== tests/cases/conformance/salsa/ex.d.ts ===
+// based on assert in @types/node
+export function art(value: any, message?: string | Error): asserts value;
+>art : Symbol(art, Decl(ex.d.ts, 0, 0))
+>value : Symbol(value, Decl(ex.d.ts, 1, 20))
+>message : Symbol(message, Decl(ex.d.ts, 1, 31))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(ex.d.ts, 1, 20))
+
+=== tests/cases/conformance/salsa/ex2.d.ts ===
+declare function art(value: any, message?: string | Error): asserts value;
+>art : Symbol(art, Decl(ex2.d.ts, 0, 0))
+>value : Symbol(value, Decl(ex2.d.ts, 0, 21))
+>message : Symbol(message, Decl(ex2.d.ts, 0, 32))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(ex2.d.ts, 0, 21))
+
+export = art;
+>art : Symbol(art, Decl(ex2.d.ts, 0, 0))
+

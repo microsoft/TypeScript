@@ -1,0 +1,43 @@
+tests/cases/conformance/types/rest/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern.
+tests/cases/conformance/types/rest/objectRestNegative.ts(6,10): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+  Types of property 'a' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/rest/objectRestNegative.ts(9,31): error TS2462: A rest element must be last in a destructuring pattern.
+tests/cases/conformance/types/rest/objectRestNegative.ts(11,30): error TS7008: Member 'x' implicitly has an 'any' type.
+tests/cases/conformance/types/rest/objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
+tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
+
+
+==== tests/cases/conformance/types/rest/objectRestNegative.ts (6 errors) ====
+    let o = { a: 1, b: 'no' };
+    var { ...mustBeLast, a } = o;
+             ~~~~~~~~~~
+!!! error TS2462: A rest element must be last in a destructuring pattern.
+    
+    var b: string;
+    let notAssignable: { a: string };
+    ({ b, ...notAssignable } = o);
+             ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    
+    function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
+                                  ~~~~~~~~~~
+!!! error TS2462: A rest element must be last in a destructuring pattern.
+    }
+    function generic<T extends { x, y }>(t: T) {
+                                 ~
+!!! error TS7008: Member 'x' implicitly has an 'any' type.
+                                    ~
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
+        let { x, ...rest } = t;
+        return rest;
+    }
+    
+    let rest: { b: string }
+    ({a, ...rest.b + rest.b} = o);
+            ~~~~~~~~~~~~~~~
+!!! error TS2701: The target of an object rest assignment must be a variable or a property access.
+    

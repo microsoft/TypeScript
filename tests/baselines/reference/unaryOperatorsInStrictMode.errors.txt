@@ -1,0 +1,62 @@
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(3,3): error TS1100: Invalid use of 'eval' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(3,3): error TS2630: Cannot assign to 'eval' because it is a function.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(4,3): error TS1100: Invalid use of 'eval' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(4,3): error TS2630: Cannot assign to 'eval' because it is a function.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(5,3): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(5,3): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(6,3): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(6,3): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(7,1): error TS1100: Invalid use of 'eval' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(7,1): error TS2630: Cannot assign to 'eval' because it is a function.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(8,1): error TS1100: Invalid use of 'eval' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(8,1): error TS2630: Cannot assign to 'eval' because it is a function.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(9,1): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(9,1): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(10,1): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/compiler/unaryOperatorsInStrictMode.ts(10,1): error TS2304: Cannot find name 'arguments'.
+
+
+==== tests/cases/compiler/unaryOperatorsInStrictMode.ts (16 errors) ====
+    "use strict"
+    
+    ++eval;
+      ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+      ~~~~
+!!! error TS2630: Cannot assign to 'eval' because it is a function.
+    --eval;
+      ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+      ~~~~
+!!! error TS2630: Cannot assign to 'eval' because it is a function.
+    ++arguments;
+      ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+    --arguments;
+      ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+    eval++;
+    ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+    ~~~~
+!!! error TS2630: Cannot assign to 'eval' because it is a function.
+    eval--;
+    ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+    ~~~~
+!!! error TS2630: Cannot assign to 'eval' because it is a function.
+    arguments++;
+    ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+    arguments--;
+    ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+    

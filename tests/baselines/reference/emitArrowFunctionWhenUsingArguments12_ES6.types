@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12_ES6.ts ===
+class C {
+>C : C
+
+    f(arguments) {
+>f : (arguments: any) => void
+>arguments : any
+
+        var a = () => arguments;
+>a : () => any
+>() => arguments : () => any
+>arguments : any
+    }
+}

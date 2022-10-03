@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/** @callback Con - some kind of continuation
+ * @param {object | undefined} error
+ * @return {any} I don't even know what this should return
+ */
+module.exports = C
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 0, 0))
+>exports : Symbol(export=, Decl(mod1.js, 0, 0))
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+function C() {
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(mod1.js, 5, 14))
+>this : Symbol(C, Decl(mod1.js, 4, 18))
+>p : Symbol(C.p, Decl(mod1.js, 5, 14))
+}
+
+=== tests/cases/conformance/jsdoc/use.js ===
+/** @param {import('./mod1').Con} k */
+function f(k) {
+>f : Symbol(f, Decl(use.js, 0, 0))
+>k : Symbol(k, Decl(use.js, 1, 11))
+
+    if (1 === 2 - 1) {
+        // I guess basic math works!
+    }
+    return k({ ok: true})
+>k : Symbol(k, Decl(use.js, 1, 11))
+>ok : Symbol(ok, Decl(use.js, 5, 14))
+}
+
+

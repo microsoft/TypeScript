@@ -1,0 +1,67 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable1.ts ===
+// Interface
+interface IPoint {
+>IPoint : Symbol(IPoint, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 0, 0))
+
+    getDist(): number;
+>getDist : Symbol(IPoint.getDist, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 1, 18))
+}
+
+// Module
+module Shapes {
+>Shapes : Symbol(Shapes, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 3, 1))
+
+    // Class
+    export class Point implements IPoint {
+>Point : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>IPoint : Symbol(IPoint, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 0, 0))
+
+        public con: "hello";
+>con : Symbol(Point.con, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 9, 42))
+
+        // Constructor
+        constructor (public x: number, public y: number) { }
+>x : Symbol(Point.x, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 21))
+>y : Symbol(Point.y, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 38))
+
+        // Instance member
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+>getDist : Symbol(Point.getDist, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 60))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>this.x : Symbol(Point.x, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 21))
+>this : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>x : Symbol(Point.x, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 21))
+>this.x : Symbol(Point.x, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 21))
+>this : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>x : Symbol(Point.x, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 21))
+>this.y : Symbol(Point.y, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 38))
+>this : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>y : Symbol(Point.y, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 38))
+>this.y : Symbol(Point.y, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 38))
+>this : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>y : Symbol(Point.y, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 13, 38))
+
+        // Static member
+        static origin = new Point(0, 0);
+>origin : Symbol(Point.origin, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 16, 74))
+>Point : Symbol(Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+    }
+
+}
+
+// Local variables
+var p: IPoint = new Shapes.Point(3, 4);
+>p : Symbol(p, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 25, 3))
+>IPoint : Symbol(IPoint, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 0, 0))
+>Shapes.Point : Symbol(Shapes.Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+>Shapes : Symbol(Shapes, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 3, 1))
+>Point : Symbol(Shapes.Point, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 6, 15))
+
+var dist = p.getDist();
+>dist : Symbol(dist, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 26, 3))
+>p.getDist : Symbol(IPoint.getDist, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 1, 18))
+>p : Symbol(p, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 25, 3))
+>getDist : Symbol(IPoint.getDist, Decl(parserErrorRecovery_IncompleteMemberVariable1.ts, 1, 18))
+

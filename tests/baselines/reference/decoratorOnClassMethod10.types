@@ -1,0 +1,13 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts ===
+declare function dec(target: Function, paramIndex: number): void;
+>dec : (target: Function, paramIndex: number) => void
+>target : Function
+>paramIndex : number
+
+class C {
+>C : C
+
+    @dec method() {}
+>dec : (target: Function, paramIndex: number) => void
+>method : () => void
+}

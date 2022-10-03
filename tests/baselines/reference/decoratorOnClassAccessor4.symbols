@@ -1,0 +1,20 @@
+=== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor4.ts ===
+declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor4.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClassAccessor4.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnClassAccessor4.ts, 0, 24))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassAccessor4.ts, 0, 36))
+>descriptor : Symbol(descriptor, Decl(decoratorOnClassAccessor4.ts, 0, 57))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassAccessor4.ts, 0, 21))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(decoratorOnClassAccessor4.ts, 0, 21))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassAccessor4.ts, 0, 126))
+
+    @dec set accessor(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor4.ts, 0, 0))
+>accessor : Symbol(C.accessor, Decl(decoratorOnClassAccessor4.ts, 2, 9))
+>value : Symbol(value, Decl(decoratorOnClassAccessor4.ts, 3, 22))
+}

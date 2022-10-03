@@ -1,0 +1,22 @@
+=== tests/cases/compiler/f1.ts ===
+declare global {
+>global : any
+
+    interface Something {x}
+>x : any
+}
+export {};
+=== tests/cases/compiler/f2.ts ===
+declare global {
+>global : any
+
+    interface Something {y}
+>y : any
+}
+export {};
+=== tests/cases/compiler/f3.ts ===
+import "./f1";
+No type information for this code.import "./f2";
+No type information for this code.
+No type information for this code.
+No type information for this code.

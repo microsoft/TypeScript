@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts ===
+const [] = {}; // should be error
+const {} = undefined; // error correctly
+>undefined : Symbol(undefined)
+
+(([]) => 0)({}); // should be error
+(({}) => 0)(undefined); // should be error
+>undefined : Symbol(undefined)
+
+function foo({}: undefined) {
+>foo : Symbol(foo, Decl(destructuringAssignabilityCheck.ts, 3, 23))
+
+    return 0
+}
+function bar([]: {}) {
+>bar : Symbol(bar, Decl(destructuringAssignabilityCheck.ts, 7, 1))
+
+    return 0
+}
+
+const { }: undefined = 1
+
+const []: {} = {}
+

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/** @type {boolean} */
+var /** @type {string} */ x,
+>x : string
+
+    /** @type {number} */ y;
+>y : number
+

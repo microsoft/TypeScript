@@ -1,0 +1,28 @@
+tests/cases/compiler/staticMethodReferencingTypeArgument1.ts(9,33): error TS2302: Static members cannot reference class type parameters.
+tests/cases/compiler/staticMethodReferencingTypeArgument1.ts(10,29): error TS2302: Static members cannot reference class type parameters.
+tests/cases/compiler/staticMethodReferencingTypeArgument1.ts(10,43): error TS2302: Static members cannot reference class type parameters.
+
+
+==== tests/cases/compiler/staticMethodReferencingTypeArgument1.ts (3 errors) ====
+    module Editor {
+        export class List<T> {
+            next: List<T>;
+            prev: List<T>;
+    
+            constructor(public isHead: boolean, public data: T) {
+            }
+    
+            static MakeHead(): List<T> {
+                                    ~
+!!! error TS2302: Static members cannot reference class type parameters.
+                var entry: List<T> = new List<T>(true, null); // can't access T here
+                                ~
+!!! error TS2302: Static members cannot reference class type parameters.
+                                              ~
+!!! error TS2302: Static members cannot reference class type parameters.
+                entry.prev = entry;
+                entry.next = entry;
+                return entry;
+            }
+        }
+    }

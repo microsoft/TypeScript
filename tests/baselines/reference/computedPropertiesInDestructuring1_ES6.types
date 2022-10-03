@@ -1,0 +1,198 @@
+=== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts ===
+// destructuring in variable declarations
+let foo = "bar";
+>foo : string
+>"bar" : "bar"
+
+let {[foo]: bar} = {bar: "bar"};
+>foo : string
+>bar : any
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+let {["bar"]: bar2} = {bar: "bar"};
+>"bar" : "bar"
+>bar2 : string
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+let {[11]: bar2_1} = {11: "bar"};
+>11 : 11
+>bar2_1 : string
+>{11: "bar"} : { 11: string; }
+>11 : string
+>"bar" : "bar"
+
+let foo2 = () => "bar";
+>foo2 : () => string
+>() => "bar" : () => string
+>"bar" : "bar"
+
+let {[foo2()]: bar3} = {bar: "bar"};
+>foo2() : string
+>foo2 : () => string
+>bar3 : any
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+let [{[foo]: bar4}] = [{bar: "bar"}];
+>foo : string
+>bar4 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+let [{[foo2()]: bar5}] = [{bar: "bar"}];
+>foo2() : string
+>foo2 : () => string
+>bar5 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+function f1({["bar"]: x}: { bar: number }) {}
+>f1 : ({ ["bar"]: x }: {    bar: number;}) => void
+>"bar" : "bar"
+>x : number
+>bar : number
+
+function f2({[foo]: x}: { bar: number }) {}
+>f2 : ({ [foo]: x }: {    bar: number;}) => void
+>foo : string
+>x : any
+>bar : number
+
+function f3({[foo2()]: x}: { bar: number }) {}
+>f3 : ({ [foo2()]: x }: {    bar: number;}) => void
+>foo2() : string
+>foo2 : () => string
+>x : any
+>bar : number
+
+function f4([{[foo]: x}]: [{ bar: number }]) {}
+>f4 : ([{ [foo]: x }]: [{    bar: number;}]) => void
+>foo : string
+>x : any
+>bar : number
+
+function f5([{[foo2()]: x}]: [{ bar: number }]) {}
+>f5 : ([{ [foo2()]: x }]: [{    bar: number;}]) => void
+>foo2() : string
+>foo2 : () => string
+>x : any
+>bar : number
+
+// report errors on type errors in computed properties used in destructuring
+let [{[foo()]: bar6}] = [{bar: "bar"}];
+>foo() : any
+>foo : string
+>bar6 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
+>foo.toExponential() : any
+>foo.toExponential : any
+>foo : string
+>toExponential : any
+>bar7 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+// destructuring assignment
+({[foo]: bar} = {bar: "bar"});
+>({[foo]: bar} = {bar: "bar"}) : { bar: string; }
+>{[foo]: bar} = {bar: "bar"} : { bar: string; }
+>{[foo]: bar} : { [x: string]: any; }
+>[foo] : any
+>foo : string
+>bar : any
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+({["bar"]: bar2} = {bar: "bar"});
+>({["bar"]: bar2} = {bar: "bar"}) : { bar: string; }
+>{["bar"]: bar2} = {bar: "bar"} : { bar: string; }
+>{["bar"]: bar2} : { bar: string; }
+>["bar"] : string
+>"bar" : "bar"
+>bar2 : string
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+({[foo2()]: bar3} = {bar: "bar"});
+>({[foo2()]: bar3} = {bar: "bar"}) : { bar: string; }
+>{[foo2()]: bar3} = {bar: "bar"} : { bar: string; }
+>{[foo2()]: bar3} : { [x: string]: any; }
+>[foo2()] : any
+>foo2() : string
+>foo2 : () => string
+>bar3 : any
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+[{[foo]: bar4}] = [{bar: "bar"}];
+>[{[foo]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
+>[{[foo]: bar4}] : [{ [x: string]: any; }]
+>{[foo]: bar4} : { [x: string]: any; }
+>[foo] : any
+>foo : string
+>bar4 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+[{[foo2()]: bar5}] = [{bar: "bar"}];
+>[{[foo2()]: bar5}] = [{bar: "bar"}] : [{ bar: string; }]
+>[{[foo2()]: bar5}] : [{ [x: string]: any; }]
+>{[foo2()]: bar5} : { [x: string]: any; }
+>[foo2()] : any
+>foo2() : string
+>foo2 : () => string
+>bar5 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+[{[foo()]: bar4}] = [{bar: "bar"}];
+>[{[foo()]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
+>[{[foo()]: bar4}] : [{ [x: number]: any; }]
+>{[foo()]: bar4} : { [x: number]: any; }
+>[foo()] : any
+>foo() : any
+>foo : string
+>bar4 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+
+[{[(1 + {})]: bar4}] = [{bar: "bar"}];
+>[{[(1 + {})]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
+>[{[(1 + {})]: bar4}] : [{ [x: number]: any; }]
+>{[(1 + {})]: bar4} : { [x: number]: any; }
+>[(1 + {})] : any
+>(1 + {}) : any
+>1 + {} : any
+>1 : 1
+>{} : {}
+>bar4 : any
+>[{bar: "bar"}] : [{ bar: string; }]
+>{bar: "bar"} : { bar: string; }
+>bar : string
+>"bar" : "bar"
+

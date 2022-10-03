@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAccessInHeritageClause1.ts ===
+class B {}
+>B : B
+
+function foo() {
+>foo : () => { B: typeof B; }
+
+    return {B: B};
+>{B: B} : { B: typeof B; }
+>B : typeof B
+>B : typeof B
+}
+class C extends (foo()).B {}
+>C : C
+>(foo()).B : B
+>(foo()) : { B: typeof B; }
+>foo() : { B: typeof B; }
+>foo : () => { B: typeof B; }
+>B : typeof B
+

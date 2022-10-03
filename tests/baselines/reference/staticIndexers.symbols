@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts ===
+// static indexers not allowed
+
+class C {
+>C : Symbol(C, Decl(staticIndexers.ts, 0, 0))
+
+    static [x: string]: string;
+>x : Symbol(x, Decl(staticIndexers.ts, 3, 12))
+}
+
+class D {
+>D : Symbol(D, Decl(staticIndexers.ts, 4, 1))
+
+    static [x: number]: string;
+>x : Symbol(x, Decl(staticIndexers.ts, 7, 12))
+}
+
+class E<T> {
+>E : Symbol(E, Decl(staticIndexers.ts, 8, 1))
+>T : Symbol(T, Decl(staticIndexers.ts, 10, 8))
+
+    static [x: string]: T;
+>x : Symbol(x, Decl(staticIndexers.ts, 11, 12))
+>T : Symbol(T)
+}

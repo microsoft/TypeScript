@@ -1,0 +1,169 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts ===
+class B {
+>B : B
+
+    static readonly [s: string]: number;
+>s : string
+
+    static readonly [s: number]: 42 | 233
+>s : number
+}
+
+class D {
+>D : D
+
+    static [s: string]: number;
+>s : string
+
+    static [s: number]: 42 | 233
+>s : number
+}
+
+interface IB {
+    static [s: string]: number;
+>s : string
+
+    static [s: number]: 42 | 233;
+>s : number
+}
+
+declare const v: number
+>v : number
+
+declare const i: IB
+>i : IB
+
+if (v === 0) {
+>v === 0 : boolean
+>v : number
+>0 : 0
+
+    B.a = D.a
+>B.a = D.a : number
+>B.a : number
+>B : typeof B
+>a : number
+>D.a : number
+>D : typeof D
+>a : number
+
+    B[2] = D[2]
+>B[2] = D[2] : 42 | 233
+>B[2] : 42 | 233
+>B : typeof B
+>2 : 2
+>D[2] : 42 | 233
+>D : typeof D
+>2 : 2
+
+} else if (v === 1) {
+>v === 1 : boolean
+>v : number
+>1 : 1
+
+    D.a = B.a
+>D.a = B.a : number
+>D.a : number
+>D : typeof D
+>a : number
+>B.a : number
+>B : typeof B
+>a : number
+
+    D[2] = B[2]
+>D[2] = B[2] : 42 | 233
+>D[2] : 42 | 233
+>D : typeof D
+>2 : 2
+>B[2] : 42 | 233
+>B : typeof B
+>2 : 2
+
+} else if (v === 2) {
+>v === 2 : boolean
+>v : number
+>2 : 2
+
+    B.a = i.a
+>B.a = i.a : number
+>B.a : number
+>B : typeof B
+>a : number
+>i.a : number
+>i : IB
+>a : number
+
+    B[2] = i[2]
+>B[2] = i[2] : 42 | 233
+>B[2] : 42 | 233
+>B : typeof B
+>2 : 2
+>i[2] : 42 | 233
+>i : IB
+>2 : 2
+
+    D.a = i.a
+>D.a = i.a : number
+>D.a : number
+>D : typeof D
+>a : number
+>i.a : number
+>i : IB
+>a : number
+
+    D[2] = i [2]
+>D[2] = i [2] : 42 | 233
+>D[2] : 42 | 233
+>D : typeof D
+>2 : 2
+>i [2] : 42 | 233
+>i : IB
+>2 : 2
+
+} else if (v === 3) {
+>v === 3 : boolean
+>v : number
+>3 : 3
+
+    i.a = B.a
+>i.a = B.a : number
+>i.a : number
+>i : IB
+>a : number
+>B.a : number
+>B : typeof B
+>a : number
+
+    i[2] = B[2]
+>i[2] = B[2] : 42 | 233
+>i[2] : 42 | 233
+>i : IB
+>2 : 2
+>B[2] : 42 | 233
+>B : typeof B
+>2 : 2
+
+} else if (v === 4) {
+>v === 4 : boolean
+>v : number
+>4 : 4
+
+    i.a = D.a
+>i.a = D.a : number
+>i.a : number
+>i : IB
+>a : number
+>D.a : number
+>D : typeof D
+>a : number
+
+    i[2] = B[2]
+>i[2] = B[2] : 42 | 233
+>i[2] : 42 | 233
+>i : IB
+>2 : 2
+>B[2] : 42 | 233
+>B : typeof B
+>2 : 2
+}
+

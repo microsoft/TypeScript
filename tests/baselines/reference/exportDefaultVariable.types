@@ -1,0 +1,13 @@
+=== tests/cases/compiler/exportDefaultVariable.ts ===
+// Regression test for #3018
+
+declare var io: any;
+>io : any
+
+declare module 'module' {
+>'module' : typeof import("module")
+
+    export default io;
+>io : any
+}
+

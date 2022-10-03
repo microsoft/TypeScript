@@ -1,0 +1,6 @@
+=== tests/cases/compiler/es6ExportDefaultClassDeclaration2.ts ===
+export default class {
+    method() { }
+>method : () => void
+}
+

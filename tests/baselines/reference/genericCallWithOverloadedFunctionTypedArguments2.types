@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts ===
+// Function typed arguments with multiple signatures must be passed an implementation that matches all of them
+// Inferences are made quadratic-pairwise to and from these overload sets
+
+module NonGenericParameter {
+>NonGenericParameter : typeof NonGenericParameter
+
+    var a: {
+>a : { (x: boolean): boolean; (x: string): string; }
+
+        (x: boolean): boolean;
+>x : boolean
+
+        (x: string): string;
+>x : string
+    }
+
+    function foo4(cb: typeof a) {
+>foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
+>cb : { (x: boolean): boolean; (x: string): string; }
+>a : { (x: boolean): boolean; (x: string): string; }
+
+        return cb;
+>cb : { (x: boolean): boolean; (x: string): string; }
+    }
+
+    var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
+>r3 : { (x: boolean): boolean; (x: string): string; }
+>foo4(<T, U>(x: T) => { var r: U; return r }) : { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+><T, U>(x: T) => { var r: U; return r } : <T, U>(x: T) => U
+>x : T
+>r : U
+>r : U
+}
+
+module GenericParameter {
+>GenericParameter : typeof GenericParameter
+
+    function foo5<T>(cb: { (x: T): string; (x: number): T }) {
+>foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
+>cb : { (x: T): string; (x: number): T; }
+>x : T
+>x : number
+
+        return cb;
+>cb : { (x: T): string; (x: number): T; }
+    }
+
+    var r6 = foo5(<T>(x: T) => x); // ok
+>r6 : { (x: unknown): string; (x: number): unknown; }
+>foo5(<T>(x: T) => x) : { (x: unknown): string; (x: number): unknown; }
+>foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
+><T>(x: T) => x : <T>(x: T) => T
+>x : T
+>x : T
+
+    function foo6<T>(cb: { (x: T): string; (x: T, y?: T): string }) {
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>cb : { (x: T): string; (x: T, y?: T): string; }
+>x : T
+>x : T
+>y : T
+
+        return cb;
+>cb : { (x: T): string; (x: T, y?: T): string; }
+    }
+
+    var r10 = foo6(<T>(x: T, y: T) => ''); // error
+>r10 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo6(<T>(x: T, y: T) => '') : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+><T>(x: T, y: T) => '' : <T>(x: T, y: T) => string
+>x : T
+>y : T
+>'' : ""
+
+    function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>x : T
+>cb : { (x: T): string; (x: T, y?: T): string; }
+>x : T
+>x : T
+>y : T
+
+        return cb;
+>cb : { (x: T): string; (x: T, y?: T): string; }
+    }
+
+    var r13 = foo7(1, <T>(x: T) => x); // ok
+>r13 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7(1, <T>(x: T) => x) : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>1 : 1
+><T>(x: T) => x : <T>(x: T) => T
+>x : T
+>x : T
+
+    var a: { <T>(x: T): number; <T>(x: number): T; }
+>a : { <T>(x: T): number; <T>(x: number): T; }
+>x : T
+>x : number
+
+    var r14 = foo7(1, a); // ok
+>r14 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7(1, a) : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>1 : 1
+>a : { <T>(x: T): number; <T>(x: number): T; }
+}

@@ -1,0 +1,44 @@
+===================================================================
+JsFile: index.js
+mapUrl: ../src/myMapRoot/index.js.map
+sourceRoot: mySourceRoot/
+sources: index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/app/bin/index.js
+sourceFile:index.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>exports.__esModule = true;
+>>>exports.x = void 0;
+>>>/// <reference path="../lib/bar.d.ts" />
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >/// <reference path="../lib/bar.d.ts" />
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(4, 41) Source(1, 41) + SourceIndex(0)
+---
+>>>exports.x = y;
+1 >
+2 >^^^^^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^
+6 >             ^
+7 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >export const 
+2 >
+3 >        x
+4 >          = 
+5 >            y
+6 >             ;
+1 >Emitted(5, 1) Source(2, 14) + SourceIndex(0)
+2 >Emitted(5, 9) Source(2, 14) + SourceIndex(0)
+3 >Emitted(5, 10) Source(2, 15) + SourceIndex(0)
+4 >Emitted(5, 13) Source(2, 18) + SourceIndex(0)
+5 >Emitted(5, 14) Source(2, 19) + SourceIndex(0)
+6 >Emitted(5, 15) Source(2, 20) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=../src/myMapRoot/index.js.map

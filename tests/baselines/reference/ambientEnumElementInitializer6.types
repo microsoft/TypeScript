@@ -1,0 +1,12 @@
+=== tests/cases/compiler/ambientEnumElementInitializer6.ts ===
+declare module M {
+>M : typeof M
+
+    enum E {
+>E : E
+
+        e = 3
+>e : E.e
+>3 : 3
+    }
+}

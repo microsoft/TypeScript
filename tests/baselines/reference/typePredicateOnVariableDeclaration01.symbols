@@ -1,0 +1,4 @@
+=== tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration01.ts ===
+var x: this is string;
+>x : Symbol(x, Decl(typePredicateOnVariableDeclaration01.ts, 0, 3))
+

@@ -1,0 +1,46 @@
+=== tests/cases/compiler/contextualSignatureInstatiationCovariance.ts ===
+interface Animal { x }
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+>x : Symbol(Animal.x, Decl(contextualSignatureInstatiationCovariance.ts, 0, 18))
+
+interface TallThing { x2 }
+>TallThing : Symbol(TallThing, Decl(contextualSignatureInstatiationCovariance.ts, 0, 22))
+>x2 : Symbol(TallThing.x2, Decl(contextualSignatureInstatiationCovariance.ts, 1, 21))
+
+interface Giraffe extends Animal, TallThing { y }
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationCovariance.ts, 1, 26))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+>TallThing : Symbol(TallThing, Decl(contextualSignatureInstatiationCovariance.ts, 0, 22))
+>y : Symbol(Giraffe.y, Decl(contextualSignatureInstatiationCovariance.ts, 2, 45))
+
+var f2: <T extends Giraffe>(x: T, y: T) => void;
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationCovariance.ts, 4, 3))
+>T : Symbol(T, Decl(contextualSignatureInstatiationCovariance.ts, 4, 9))
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationCovariance.ts, 1, 26))
+>x : Symbol(x, Decl(contextualSignatureInstatiationCovariance.ts, 4, 28))
+>T : Symbol(T, Decl(contextualSignatureInstatiationCovariance.ts, 4, 9))
+>y : Symbol(y, Decl(contextualSignatureInstatiationCovariance.ts, 4, 33))
+>T : Symbol(T, Decl(contextualSignatureInstatiationCovariance.ts, 4, 9))
+
+var g2: (a: Animal, t: TallThing) => void;
+>g2 : Symbol(g2, Decl(contextualSignatureInstatiationCovariance.ts, 6, 3))
+>a : Symbol(a, Decl(contextualSignatureInstatiationCovariance.ts, 6, 9))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+>t : Symbol(t, Decl(contextualSignatureInstatiationCovariance.ts, 6, 19))
+>TallThing : Symbol(TallThing, Decl(contextualSignatureInstatiationCovariance.ts, 0, 22))
+
+g2 = f2; // While neither Animal nor TallThing satisfy the constraint, T is at worst a Giraffe and compatible with both via covariance.
+>g2 : Symbol(g2, Decl(contextualSignatureInstatiationCovariance.ts, 6, 3))
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationCovariance.ts, 4, 3))
+
+var h2: (a1: Animal, a2: Animal) => void;
+>h2 : Symbol(h2, Decl(contextualSignatureInstatiationCovariance.ts, 9, 3))
+>a1 : Symbol(a1, Decl(contextualSignatureInstatiationCovariance.ts, 9, 9))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+>a2 : Symbol(a2, Decl(contextualSignatureInstatiationCovariance.ts, 9, 20))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+
+h2 = f2; // Animal does not satisfy the constraint, but T is at worst a Giraffe and compatible with Animal via covariance.
+>h2 : Symbol(h2, Decl(contextualSignatureInstatiationCovariance.ts, 9, 3))
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationCovariance.ts, 4, 3))
+

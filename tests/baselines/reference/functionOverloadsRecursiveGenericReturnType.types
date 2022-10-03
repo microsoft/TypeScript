@@ -1,0 +1,32 @@
+=== tests/cases/compiler/functionOverloadsRecursiveGenericReturnType.ts ===
+class B<V>{
+>B : B<V>
+
+    private id: V;
+>id : V
+}
+
+class A<U>{
+>A : A<U>
+
+    GetEnumerator: () => B<U>;
+>GetEnumerator : () => B<U>
+}
+
+function Choice<T>(args: T[]): A<T>;
+>Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
+>args : T[]
+
+function Choice<T>(...v_args: T[]): A<T>;
+>Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
+>v_args : T[]
+
+function Choice<T>(...v_args: any[]): A<T>{
+>Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
+>v_args : any[]
+
+    return new A<T>();
+>new A<T>() : A<T>
+>A : typeof A
+}
+

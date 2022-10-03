@@ -1,0 +1,8 @@
+=== tests/cases/compiler/castNewObjectBug.ts ===
+interface Foo { }
+var xx = <Foo> new Object();
+>xx : Foo
+><Foo> new Object() : Foo
+>new Object() : Object
+>Object : ObjectConstructor
+

@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts(7,9): error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
+  Type 'void' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts (1 errors) ====
+    class C {
+        foo() {
+            C.prototype.foo = () => { }
+        }
+    
+        bar(x: number): number {
+            C.prototype.bar = () => { } // error
+            ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+            C.prototype.bar = (x) => x; // ok
+            C.prototype.bar = (x: number) => 1; // ok
+            return 1;
+        }
+    }

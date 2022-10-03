@@ -1,0 +1,817 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder/index.cts ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder/index.mts ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.ts ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.cts ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.mts ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.ts ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.mts ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.cts ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/index.mts ===
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.mts, 0, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.mts, 1, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.mts, 2, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.mts, 3, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.mts, 4, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.mts, 5, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.mts, 6, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.mts, 7, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.mts, 8, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.mts, 9, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.mts, 10, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.mts, 11, 6))
+
+// The next ones should all fail - esm format files have no index resolution or extension resolution
+import * as m13 from "./";
+>m13 : Symbol(m13, Decl(index.mts, 13, 6))
+
+import * as m14 from "./index";
+>m14 : Symbol(m14, Decl(index.mts, 14, 6))
+
+import * as m15 from "./subfolder";
+>m15 : Symbol(m15, Decl(index.mts, 15, 6))
+
+import * as m16 from "./subfolder/";
+>m16 : Symbol(m16, Decl(index.mts, 16, 6))
+
+import * as m17 from "./subfolder/index";
+>m17 : Symbol(m17, Decl(index.mts, 17, 6))
+
+import * as m18 from "./subfolder2";
+>m18 : Symbol(m18, Decl(index.mts, 18, 6))
+
+import * as m19 from "./subfolder2/";
+>m19 : Symbol(m19, Decl(index.mts, 19, 6))
+
+import * as m20 from "./subfolder2/index";
+>m20 : Symbol(m20, Decl(index.mts, 20, 6))
+
+import * as m21 from "./subfolder2/another";
+>m21 : Symbol(m21, Decl(index.mts, 21, 6))
+
+import * as m22 from "./subfolder2/another/";
+>m22 : Symbol(m22, Decl(index.mts, 22, 6))
+
+import * as m23 from "./subfolder2/another/index";
+>m23 : Symbol(m23, Decl(index.mts, 23, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.mts, 0, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.mts, 1, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.mts, 2, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.mts, 3, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.mts, 4, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.mts, 5, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.mts, 6, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.mts, 7, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.mts, 8, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.mts, 9, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.mts, 10, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.mts, 11, 6))
+
+void m13;
+>m13 : Symbol(m13, Decl(index.mts, 13, 6))
+
+void m14;
+>m14 : Symbol(m14, Decl(index.mts, 14, 6))
+
+void m15;
+>m15 : Symbol(m15, Decl(index.mts, 15, 6))
+
+void m16;
+>m16 : Symbol(m16, Decl(index.mts, 16, 6))
+
+void m17;
+>m17 : Symbol(m17, Decl(index.mts, 17, 6))
+
+void m18;
+>m18 : Symbol(m18, Decl(index.mts, 18, 6))
+
+void m19;
+>m19 : Symbol(m19, Decl(index.mts, 19, 6))
+
+void m20;
+>m20 : Symbol(m20, Decl(index.mts, 20, 6))
+
+void m21;
+>m21 : Symbol(m21, Decl(index.mts, 21, 6))
+
+void m22;
+>m22 : Symbol(m22, Decl(index.mts, 22, 6))
+
+void m23;
+>m23 : Symbol(m23, Decl(index.mts, 23, 6))
+
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+import m24 = require("./");
+>m24 : Symbol(m24, Decl(index.mts, 46, 9))
+
+import m25 = require("./index");
+>m25 : Symbol(m25, Decl(index.mts, 49, 27))
+
+import m26 = require("./subfolder");
+>m26 : Symbol(m26, Decl(index.mts, 50, 32))
+
+import m27 = require("./subfolder/");
+>m27 : Symbol(m27, Decl(index.mts, 51, 36))
+
+import m28 = require("./subfolder/index");
+>m28 : Symbol(m28, Decl(index.mts, 52, 37))
+
+import m29 = require("./subfolder2");
+>m29 : Symbol(m29, Decl(index.mts, 53, 42))
+
+import m30 = require("./subfolder2/");
+>m30 : Symbol(m30, Decl(index.mts, 54, 37))
+
+import m31 = require("./subfolder2/index");
+>m31 : Symbol(m31, Decl(index.mts, 55, 38))
+
+import m32 = require("./subfolder2/another");
+>m32 : Symbol(m32, Decl(index.mts, 56, 43))
+
+import m33 = require("./subfolder2/another/");
+>m33 : Symbol(m33, Decl(index.mts, 57, 45))
+
+import m34 = require("./subfolder2/another/index");
+>m34 : Symbol(m34, Decl(index.mts, 58, 46))
+
+void m24;
+>m24 : Symbol(m24, Decl(index.mts, 46, 9))
+
+void m25;
+>m25 : Symbol(m25, Decl(index.mts, 49, 27))
+
+void m26;
+>m26 : Symbol(m26, Decl(index.mts, 50, 32))
+
+void m27;
+>m27 : Symbol(m27, Decl(index.mts, 51, 36))
+
+void m28;
+>m28 : Symbol(m28, Decl(index.mts, 52, 37))
+
+void m29;
+>m29 : Symbol(m29, Decl(index.mts, 53, 42))
+
+void m30;
+>m30 : Symbol(m30, Decl(index.mts, 54, 37))
+
+void m31;
+>m31 : Symbol(m31, Decl(index.mts, 55, 38))
+
+void m32;
+>m32 : Symbol(m32, Decl(index.mts, 56, 43))
+
+void m33;
+>m33 : Symbol(m33, Decl(index.mts, 57, 45))
+
+void m34;
+>m34 : Symbol(m34, Decl(index.mts, 58, 46))
+
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+const _m35 = import("./");
+>_m35 : Symbol(_m35, Decl(index.mts, 73, 5))
+
+const _m36 = import("./index");
+>_m36 : Symbol(_m36, Decl(index.mts, 74, 5))
+
+const _m37 = import("./subfolder");
+>_m37 : Symbol(_m37, Decl(index.mts, 75, 5))
+
+const _m38 = import("./subfolder/");
+>_m38 : Symbol(_m38, Decl(index.mts, 76, 5))
+
+const _m39 = import("./subfolder/index");
+>_m39 : Symbol(_m39, Decl(index.mts, 77, 5))
+
+const _m40 = import("./subfolder2");
+>_m40 : Symbol(_m40, Decl(index.mts, 78, 5))
+
+const _m41 = import("./subfolder2/");
+>_m41 : Symbol(_m41, Decl(index.mts, 79, 5))
+
+const _m42 = import("./subfolder2/index");
+>_m42 : Symbol(_m42, Decl(index.mts, 80, 5))
+
+const _m43 = import("./subfolder2/another");
+>_m43 : Symbol(_m43, Decl(index.mts, 81, 5))
+
+const _m44 = import("./subfolder2/another/");
+>_m44 : Symbol(_m44, Decl(index.mts, 82, 5))
+
+const _m45 = import("./subfolder2/another/index");
+>_m45 : Symbol(_m45, Decl(index.mts, 83, 5))
+
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mts, 86, 5))
+
+export {x};
+>x : Symbol(m2.x, Decl(index.mts, 87, 8))
+
+=== tests/cases/conformance/node/index.cts ===
+// ESM-format imports below should issue errors
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.cts, 1, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.cts, 2, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.cts, 3, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.cts, 4, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.cts, 5, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.cts, 6, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.cts, 7, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.cts, 8, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.cts, 9, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.cts, 10, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.cts, 11, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.cts, 12, 6))
+
+// The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
+import * as m13 from "./";
+>m13 : Symbol(m13, Decl(index.cts, 14, 6))
+
+import * as m14 from "./index";
+>m14 : Symbol(m14, Decl(index.cts, 15, 6))
+
+import * as m15 from "./subfolder";
+>m15 : Symbol(m15, Decl(index.cts, 16, 6))
+
+import * as m16 from "./subfolder/";
+>m16 : Symbol(m16, Decl(index.cts, 17, 6))
+
+import * as m17 from "./subfolder/index";
+>m17 : Symbol(m17, Decl(index.cts, 18, 6))
+
+import * as m18 from "./subfolder2";
+>m18 : Symbol(m18, Decl(index.cts, 19, 6))
+
+import * as m19 from "./subfolder2/";
+>m19 : Symbol(m19, Decl(index.cts, 20, 6))
+
+import * as m20 from "./subfolder2/index";
+>m20 : Symbol(m20, Decl(index.cts, 21, 6))
+
+import * as m21 from "./subfolder2/another";
+>m21 : Symbol(m21, Decl(index.cts, 22, 6))
+
+import * as m22 from "./subfolder2/another/";
+>m22 : Symbol(m22, Decl(index.cts, 23, 6))
+
+import * as m23 from "./subfolder2/another/index";
+>m23 : Symbol(m23, Decl(index.cts, 24, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.cts, 1, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.cts, 2, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.cts, 3, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.cts, 4, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.cts, 5, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.cts, 6, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.cts, 7, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.cts, 8, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.cts, 9, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.cts, 10, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.cts, 11, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.cts, 12, 6))
+
+void m13;
+>m13 : Symbol(m13, Decl(index.cts, 14, 6))
+
+void m14;
+>m14 : Symbol(m14, Decl(index.cts, 15, 6))
+
+void m15;
+>m15 : Symbol(m15, Decl(index.cts, 16, 6))
+
+void m16;
+>m16 : Symbol(m16, Decl(index.cts, 17, 6))
+
+void m17;
+>m17 : Symbol(m17, Decl(index.cts, 18, 6))
+
+void m18;
+>m18 : Symbol(m18, Decl(index.cts, 19, 6))
+
+void m19;
+>m19 : Symbol(m19, Decl(index.cts, 20, 6))
+
+void m20;
+>m20 : Symbol(m20, Decl(index.cts, 21, 6))
+
+void m21;
+>m21 : Symbol(m21, Decl(index.cts, 22, 6))
+
+void m22;
+>m22 : Symbol(m22, Decl(index.cts, 23, 6))
+
+void m23;
+>m23 : Symbol(m23, Decl(index.cts, 24, 6))
+
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+import m24 = require("./");
+>m24 : Symbol(m24, Decl(index.cts, 47, 9))
+
+import m25 = require("./index");
+>m25 : Symbol(m25, Decl(index.cts, 50, 27))
+
+import m26 = require("./subfolder");
+>m26 : Symbol(m26, Decl(index.cts, 51, 32))
+
+import m27 = require("./subfolder/");
+>m27 : Symbol(m27, Decl(index.cts, 52, 36))
+
+import m28 = require("./subfolder/index");
+>m28 : Symbol(m28, Decl(index.cts, 53, 37))
+
+import m29 = require("./subfolder2");
+>m29 : Symbol(m29, Decl(index.cts, 54, 42))
+
+import m30 = require("./subfolder2/");
+>m30 : Symbol(m30, Decl(index.cts, 55, 37))
+
+import m31 = require("./subfolder2/index");
+>m31 : Symbol(m31, Decl(index.cts, 56, 38))
+
+import m32 = require("./subfolder2/another");
+>m32 : Symbol(m32, Decl(index.cts, 57, 43))
+
+import m33 = require("./subfolder2/another/");
+>m33 : Symbol(m33, Decl(index.cts, 58, 45))
+
+import m34 = require("./subfolder2/another/index");
+>m34 : Symbol(m34, Decl(index.cts, 59, 46))
+
+void m24;
+>m24 : Symbol(m24, Decl(index.cts, 47, 9))
+
+void m25;
+>m25 : Symbol(m25, Decl(index.cts, 50, 27))
+
+void m26;
+>m26 : Symbol(m26, Decl(index.cts, 51, 32))
+
+void m27;
+>m27 : Symbol(m27, Decl(index.cts, 52, 36))
+
+void m28;
+>m28 : Symbol(m28, Decl(index.cts, 53, 37))
+
+void m29;
+>m29 : Symbol(m29, Decl(index.cts, 54, 42))
+
+void m30;
+>m30 : Symbol(m30, Decl(index.cts, 55, 37))
+
+void m31;
+>m31 : Symbol(m31, Decl(index.cts, 56, 38))
+
+void m32;
+>m32 : Symbol(m32, Decl(index.cts, 57, 43))
+
+void m33;
+>m33 : Symbol(m33, Decl(index.cts, 58, 45))
+
+void m34;
+>m34 : Symbol(m34, Decl(index.cts, 59, 46))
+
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+const _m35 = import("./");
+>_m35 : Symbol(_m35, Decl(index.cts, 74, 5))
+
+const _m36 = import("./index");
+>_m36 : Symbol(_m36, Decl(index.cts, 75, 5))
+
+const _m37 = import("./subfolder");
+>_m37 : Symbol(_m37, Decl(index.cts, 76, 5))
+
+const _m38 = import("./subfolder/");
+>_m38 : Symbol(_m38, Decl(index.cts, 77, 5))
+
+const _m39 = import("./subfolder/index");
+>_m39 : Symbol(_m39, Decl(index.cts, 78, 5))
+
+const _m40 = import("./subfolder2");
+>_m40 : Symbol(_m40, Decl(index.cts, 79, 5))
+
+const _m41 = import("./subfolder2/");
+>_m41 : Symbol(_m41, Decl(index.cts, 80, 5))
+
+const _m42 = import("./subfolder2/index");
+>_m42 : Symbol(_m42, Decl(index.cts, 81, 5))
+
+const _m43 = import("./subfolder2/another");
+>_m43 : Symbol(_m43, Decl(index.cts, 82, 5))
+
+const _m44 = import("./subfolder2/another/");
+>_m44 : Symbol(_m44, Decl(index.cts, 83, 5))
+
+const _m45 = import("./subfolder2/another/index");
+>_m45 : Symbol(_m45, Decl(index.cts, 84, 5))
+
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cts, 86, 5))
+
+export {x};
+>x : Symbol(m3.x, Decl(index.cts, 87, 8))
+
+=== tests/cases/conformance/node/index.ts ===
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.ts, 0, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.ts, 1, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.ts, 2, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.ts, 3, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.ts, 4, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.ts, 5, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.ts, 6, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.ts, 7, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.ts, 8, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.ts, 9, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.ts, 10, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.ts, 11, 6))
+
+// The next ones shouldn't all work - esm format files have no index resolution or extension resolution
+import * as m13 from "./";
+>m13 : Symbol(m13, Decl(index.ts, 13, 6))
+
+import * as m14 from "./index";
+>m14 : Symbol(m14, Decl(index.ts, 14, 6))
+
+import * as m15 from "./subfolder";
+>m15 : Symbol(m15, Decl(index.ts, 15, 6))
+
+import * as m16 from "./subfolder/";
+>m16 : Symbol(m16, Decl(index.ts, 16, 6))
+
+import * as m17 from "./subfolder/index";
+>m17 : Symbol(m17, Decl(index.ts, 17, 6))
+
+import * as m18 from "./subfolder2";
+>m18 : Symbol(m18, Decl(index.ts, 18, 6))
+
+import * as m19 from "./subfolder2/";
+>m19 : Symbol(m19, Decl(index.ts, 19, 6))
+
+import * as m20 from "./subfolder2/index";
+>m20 : Symbol(m20, Decl(index.ts, 20, 6))
+
+import * as m21 from "./subfolder2/another";
+>m21 : Symbol(m21, Decl(index.ts, 21, 6))
+
+import * as m22 from "./subfolder2/another/";
+>m22 : Symbol(m22, Decl(index.ts, 22, 6))
+
+import * as m23 from "./subfolder2/another/index";
+>m23 : Symbol(m23, Decl(index.ts, 23, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.ts, 0, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.ts, 1, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.ts, 2, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.ts, 3, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.ts, 4, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.ts, 5, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.ts, 6, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.ts, 7, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.ts, 8, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.ts, 9, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.ts, 10, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.ts, 11, 6))
+
+void m13;
+>m13 : Symbol(m13, Decl(index.ts, 13, 6))
+
+void m14;
+>m14 : Symbol(m14, Decl(index.ts, 14, 6))
+
+void m15;
+>m15 : Symbol(m15, Decl(index.ts, 15, 6))
+
+void m16;
+>m16 : Symbol(m16, Decl(index.ts, 16, 6))
+
+void m17;
+>m17 : Symbol(m17, Decl(index.ts, 17, 6))
+
+void m18;
+>m18 : Symbol(m18, Decl(index.ts, 18, 6))
+
+void m19;
+>m19 : Symbol(m19, Decl(index.ts, 19, 6))
+
+void m20;
+>m20 : Symbol(m20, Decl(index.ts, 20, 6))
+
+void m21;
+>m21 : Symbol(m21, Decl(index.ts, 21, 6))
+
+void m22;
+>m22 : Symbol(m22, Decl(index.ts, 22, 6))
+
+void m23;
+>m23 : Symbol(m23, Decl(index.ts, 23, 6))
+
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+import m24 = require("./");
+>m24 : Symbol(m24, Decl(index.ts, 46, 9))
+
+import m25 = require("./index");
+>m25 : Symbol(m25, Decl(index.ts, 49, 27))
+
+import m26 = require("./subfolder");
+>m26 : Symbol(m26, Decl(index.ts, 50, 32))
+
+import m27 = require("./subfolder/");
+>m27 : Symbol(m27, Decl(index.ts, 51, 36))
+
+import m28 = require("./subfolder/index");
+>m28 : Symbol(m28, Decl(index.ts, 52, 37))
+
+import m29 = require("./subfolder2");
+>m29 : Symbol(m29, Decl(index.ts, 53, 42))
+
+import m30 = require("./subfolder2/");
+>m30 : Symbol(m30, Decl(index.ts, 54, 37))
+
+import m31 = require("./subfolder2/index");
+>m31 : Symbol(m31, Decl(index.ts, 55, 38))
+
+import m32 = require("./subfolder2/another");
+>m32 : Symbol(m32, Decl(index.ts, 56, 43))
+
+import m33 = require("./subfolder2/another/");
+>m33 : Symbol(m33, Decl(index.ts, 57, 45))
+
+import m34 = require("./subfolder2/another/index");
+>m34 : Symbol(m34, Decl(index.ts, 58, 46))
+
+void m24;
+>m24 : Symbol(m24, Decl(index.ts, 46, 9))
+
+void m25;
+>m25 : Symbol(m25, Decl(index.ts, 49, 27))
+
+void m26;
+>m26 : Symbol(m26, Decl(index.ts, 50, 32))
+
+void m27;
+>m27 : Symbol(m27, Decl(index.ts, 51, 36))
+
+void m28;
+>m28 : Symbol(m28, Decl(index.ts, 52, 37))
+
+void m29;
+>m29 : Symbol(m29, Decl(index.ts, 53, 42))
+
+void m30;
+>m30 : Symbol(m30, Decl(index.ts, 54, 37))
+
+void m31;
+>m31 : Symbol(m31, Decl(index.ts, 55, 38))
+
+void m32;
+>m32 : Symbol(m32, Decl(index.ts, 56, 43))
+
+void m33;
+>m33 : Symbol(m33, Decl(index.ts, 57, 45))
+
+void m34;
+>m34 : Symbol(m34, Decl(index.ts, 58, 46))
+
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+const _m35 = import("./");
+>_m35 : Symbol(_m35, Decl(index.ts, 73, 5))
+
+const _m36 = import("./index");
+>_m36 : Symbol(_m36, Decl(index.ts, 74, 5))
+
+const _m37 = import("./subfolder");
+>_m37 : Symbol(_m37, Decl(index.ts, 75, 5))
+
+const _m38 = import("./subfolder/");
+>_m38 : Symbol(_m38, Decl(index.ts, 76, 5))
+
+const _m39 = import("./subfolder/index");
+>_m39 : Symbol(_m39, Decl(index.ts, 77, 5))
+
+const _m40 = import("./subfolder2");
+>_m40 : Symbol(_m40, Decl(index.ts, 78, 5))
+
+const _m41 = import("./subfolder2/");
+>_m41 : Symbol(_m41, Decl(index.ts, 79, 5))
+
+const _m42 = import("./subfolder2/index");
+>_m42 : Symbol(_m42, Decl(index.ts, 80, 5))
+
+const _m43 = import("./subfolder2/another");
+>_m43 : Symbol(_m43, Decl(index.ts, 81, 5))
+
+const _m44 = import("./subfolder2/another/");
+>_m44 : Symbol(_m44, Decl(index.ts, 82, 5))
+
+const _m45 = import("./subfolder2/another/index");
+>_m45 : Symbol(_m45, Decl(index.ts, 83, 5))
+
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.ts, 85, 5))
+
+export {x};
+>x : Symbol(m1.x, Decl(index.ts, 86, 8))
+

@@ -1,0 +1,5 @@
+
+1  >debugger;
+    ~~~~~~~~~                                     => Pos: (0 to 8)  SpanInfo: {"start":0,"length":8}
+    >debugger
+    >:=> (line 1, col 0) to (line 1, col 8)

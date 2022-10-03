@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/a.js ===
+/// <reference path='./requires.d.ts' />
+var mod1 = require('./mod1')
+>mod1 : Symbol(mod1, Decl(a.js, 1, 3))
+>require : Symbol(require, Decl(requires.d.ts, 0, 37))
+>'./mod1' : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+
+mod1.toFixed(12)
+>mod1.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>mod1 : Symbol(mod1, Decl(a.js, 1, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+mod1.f() // error, 'f' is not a property on 'number'
+>mod1 : Symbol(mod1, Decl(a.js, 1, 3))
+
+=== tests/cases/conformance/salsa/requires.d.ts ===
+declare var module: { exports: any };
+>module : Symbol(module, Decl(requires.d.ts, 0, 11))
+>exports : Symbol(exports, Decl(requires.d.ts, 0, 21))
+
+declare function require(name: string): any;
+>require : Symbol(require, Decl(requires.d.ts, 0, 37))
+>name : Symbol(name, Decl(requires.d.ts, 1, 25))
+
+=== tests/cases/conformance/salsa/mod1.js ===
+/// <reference path='./requires.d.ts' />
+module.exports = 1
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 0, 0))
+>exports : Symbol(export=, Decl(mod1.js, 0, 0))
+
+module.exports.f = function () { }
+>module.exports : Symbol(f, Decl(mod1.js, 1, 18))
+>module : Symbol(module, Decl(mod1.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>f : Symbol(f, Decl(mod1.js, 1, 18))
+

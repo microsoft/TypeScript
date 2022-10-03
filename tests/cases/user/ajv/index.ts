@@ -1,0 +1,1 @@
+import ajv = require("ajv");

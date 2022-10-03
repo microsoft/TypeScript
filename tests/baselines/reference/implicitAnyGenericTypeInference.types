@@ -1,0 +1,30 @@
+=== tests/cases/compiler/implicitAnyGenericTypeInference.ts ===
+interface Comparer<T> {
+    compareTo<U>(x: T, y: U): U;
+>compareTo : <U>(x: T, y: U) => U
+>x : T
+>y : U
+}
+
+var c: Comparer<any>;
+>c : Comparer<any>
+
+c = { compareTo: (x, y) => { return y; } };
+>c = { compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
+>c : Comparer<any>
+>{ compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
+>compareTo : <U>(x: any, y: U) => U
+>(x, y) => { return y; } : <U>(x: any, y: U) => U
+>x : any
+>y : U
+>y : U
+
+var r = c.compareTo(1, '');
+>r : string
+>c.compareTo(1, '') : ""
+>c.compareTo : <U>(x: any, y: U) => U
+>c : Comparer<any>
+>compareTo : <U>(x: any, y: U) => U
+>1 : 1
+>'' : ""
+

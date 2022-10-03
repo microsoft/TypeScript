@@ -1,0 +1,51 @@
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(20,1): error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Foo'.
+  Cannot assign a 'protected' constructor type to a 'public' constructor type.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(21,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
+  Cannot assign a 'private' constructor type to a 'public' constructor type.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(27,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
+  Cannot assign a 'private' constructor type to a 'protected' constructor type.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts (3 errors) ====
+    class Foo {
+         constructor(public x: number) { }
+    }
+    
+    class Bar {
+        public constructor(public x: number) { }
+    }
+    
+    class Baz {
+        protected constructor(public x: number) { }
+    }
+    
+    class Qux {
+         private constructor(public x: number) { }
+    }
+    
+    // b is public
+    let a = Foo;
+    a = Bar;
+    a = Baz; // error Baz is protected
+    ~
+!!! error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Foo'.
+!!! error TS2322:   Cannot assign a 'protected' constructor type to a 'public' constructor type.
+    a = Qux; // error Qux is private
+    ~
+!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
+!!! error TS2322:   Cannot assign a 'private' constructor type to a 'public' constructor type.
+    
+    // b is protected
+    let b = Baz;
+    b = Foo;
+    b = Bar;
+    b = Qux; // error Qux is private
+    ~
+!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
+!!! error TS2322:   Cannot assign a 'private' constructor type to a 'protected' constructor type.
+    
+    // c is private
+    let c = Qux;
+    c = Foo;
+    c = Bar;
+    c = Baz;

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/arguments.ts ===
+function f() {
+>f : Symbol(f, Decl(arguments.ts, 0, 0))
+
+    var x=arguments[12];
+>x : Symbol(x, Decl(arguments.ts, 1, 7))
+>arguments : Symbol(arguments)
+
+    (() => arguments)();
+>arguments : Symbol(arguments)
+}
+
+(() => arguments)();
+
+interface I {
+>I : Symbol(I, Decl(arguments.ts, 5, 20))
+
+    method(args: typeof arguments): void;
+>method : Symbol(I.method, Decl(arguments.ts, 7, 13))
+>args : Symbol(args, Decl(arguments.ts, 8, 11))
+
+    fn: (args: typeof arguments) => void;
+>fn : Symbol(I.fn, Decl(arguments.ts, 8, 41))
+>args : Symbol(args, Decl(arguments.ts, 9, 9))
+
+    (args: typeof arguments): void;
+>args : Symbol(args, Decl(arguments.ts, 10, 5))
+
+    new (args: typeof arguments): void;
+>args : Symbol(args, Decl(arguments.ts, 11, 9))
+
+    construct: new (args: typeof arguments) => void;
+>construct : Symbol(I.construct, Decl(arguments.ts, 11, 39))
+>args : Symbol(args, Decl(arguments.ts, 12, 20))
+}

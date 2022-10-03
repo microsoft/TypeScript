@@ -1,0 +1,22 @@
+=== tests/cases/compiler/unionTypeWithLeadingOperator.ts ===
+type A = | string;
+>A : Symbol(A, Decl(unionTypeWithLeadingOperator.ts, 0, 0))
+
+type B =
+>B : Symbol(B, Decl(unionTypeWithLeadingOperator.ts, 0, 18))
+
+  | { type: "INCREMENT" }
+>type : Symbol(type, Decl(unionTypeWithLeadingOperator.ts, 2, 5))
+
+  | { type: "DECREMENT" };
+>type : Symbol(type, Decl(unionTypeWithLeadingOperator.ts, 3, 5))
+
+type C = [| 0 | 1, | "foo" | "bar"];
+>C : Symbol(C, Decl(unionTypeWithLeadingOperator.ts, 3, 26))
+
+export type D = 
+>D : Symbol(D, Decl(unionTypeWithLeadingOperator.ts, 5, 36))
+
+  /*leading0*/
+  | /*leading1*/ 1 /*trailing1*/ 
+  | /*leading2*/ 2 /*trailing2*/;

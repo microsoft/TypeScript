@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts ===
+switch (e) {
+No type information for this code.    case 1:
+No type information for this code.       1 + 
+No type information for this code.    case 2:
+No type information for this code.       1 + 
+No type information for this code.    default:
+No type information for this code.}
+No type information for this code.

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/controlFlowDestructuringParameters.ts ===
+// Repro for #8376
+
+
+[{ x: 1 }].map(
+>[{ x: 1 }].map(  ({ x }) => x) : number[]
+>[{ x: 1 }].map : <U>(callbackfn: (value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: any) => U[]
+>[{ x: 1 }] : { x: number; }[]
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+>map : <U>(callbackfn: (value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: any) => U[]
+
+  ({ x }) => x
+>({ x }) => x : ({ x }: { x: number; }) => number
+>x : number
+>x : number
+
+);
+

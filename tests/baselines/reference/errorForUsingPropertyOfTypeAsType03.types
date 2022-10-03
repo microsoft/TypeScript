@@ -1,0 +1,66 @@
+=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts ===
+namespace Test1 {
+>Test1 : typeof Test1
+
+    enum Color {
+>Color : Color
+
+        Red,
+>Red : Color.Red
+
+        Green,
+>Green : Color.Green
+
+        Blue
+>Blue : Color.Blue
+    }
+
+    type C1 = Color;
+>C1 : Color
+
+    type C2 = typeof Color;
+>C2 : typeof Color
+>Color : typeof Color
+
+    let a1: Color.Red.toString;
+>a1 : Color.Red.toString
+>Color : any
+>Red : any
+
+    let a2: Color.Red["toString"];
+>a2 : (radix?: number) => string
+>Color : any
+
+    let a3: Color["Red"]["toString"];
+>a3 : any
+
+    //let b1: (typeof Color).Red.toString;
+    //let b2: (typeof Color).Red["toString"];
+    let b3: (typeof Color)["Red"]["toString"];
+>b3 : (radix?: number) => string
+>Color : typeof Color
+
+    let c1: C1.Red.toString;
+>c1 : C1.Red.toString
+>C1 : any
+>Red : any
+
+    let c2: C1.Red["toString"];
+>c2 : C1.Red
+>C1 : any
+
+    let c3: C1["Red"]["toString"];
+>c3 : any
+
+    let d1: C2.Red.toString;
+>d1 : C2.Red.toString
+>C2 : any
+>Red : any
+
+    let d2: C2.Red["toString"];
+>d2 : C2.Red
+>C2 : any
+
+    let d3: C2["Red"]["toString"];
+>d3 : (radix?: number) => string
+}

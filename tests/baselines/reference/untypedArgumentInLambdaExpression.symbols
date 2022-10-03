@@ -1,0 +1,15 @@
+=== tests/cases/compiler/untypedArgumentInLambdaExpression.ts ===
+declare function f(fn: (a: string) => string);
+>f : Symbol(f, Decl(untypedArgumentInLambdaExpression.ts, 0, 0))
+>fn : Symbol(fn, Decl(untypedArgumentInLambdaExpression.ts, 0, 19))
+>a : Symbol(a, Decl(untypedArgumentInLambdaExpression.ts, 0, 24))
+ 
+f((input): string => {
+>f : Symbol(f, Decl(untypedArgumentInLambdaExpression.ts, 0, 0))
+>input : Symbol(input, Decl(untypedArgumentInLambdaExpression.ts, 2, 3))
+
+    return "." + input;
+>input : Symbol(input, Decl(untypedArgumentInLambdaExpression.ts, 2, 3))
+
+});
+ 

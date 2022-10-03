@@ -1,0 +1,14 @@
+tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts(3,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts (1 errors) ====
+    function bar() {
+        var x = {
+            get _extraOccluded() {
+                ~~~~~~~~~~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                var occluded = 0;
+                return occluded;
+            },
+        }
+    }

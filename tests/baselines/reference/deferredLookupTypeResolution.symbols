@@ -1,0 +1,77 @@
+=== tests/cases/compiler/deferredLookupTypeResolution.ts ===
+// Repro from #17456
+
+type StringContains<S extends string, L extends string> = (
+>StringContains : Symbol(StringContains, Decl(deferredLookupTypeResolution.ts, 0, 0))
+>S : Symbol(S, Decl(deferredLookupTypeResolution.ts, 2, 20))
+>L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 2, 37))
+
+    { [K in S]:      'true' } &
+>K : Symbol(K, Decl(deferredLookupTypeResolution.ts, 3, 7))
+>S : Symbol(S, Decl(deferredLookupTypeResolution.ts, 2, 20))
+
+    { [key: string]: 'false' }
+>key : Symbol(key, Decl(deferredLookupTypeResolution.ts, 4, 7))
+
+  )[L]
+>L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 2, 37))
+
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution.ts, 5, 6))
+>O : Symbol(O, Decl(deferredLookupTypeResolution.ts, 7, 18))
+>L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 7, 20))
+>StringContains : Symbol(StringContains, Decl(deferredLookupTypeResolution.ts, 0, 0))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(deferredLookupTypeResolution.ts, 7, 18))
+>L : Symbol(L, Decl(deferredLookupTypeResolution.ts, 7, 20))
+
+type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
+>First : Symbol(First, Decl(deferredLookupTypeResolution.ts, 7, 84))
+>T : Symbol(T, Decl(deferredLookupTypeResolution.ts, 9, 11))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution.ts, 5, 6))
+>T : Symbol(T, Decl(deferredLookupTypeResolution.ts, 9, 11))
+
+type T1 = ObjectHasKey<{ a: string }, 'a'>;  // 'true'
+>T1 : Symbol(T1, Decl(deferredLookupTypeResolution.ts, 9, 37))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution.ts, 5, 6))
+>a : Symbol(a, Decl(deferredLookupTypeResolution.ts, 11, 24))
+
+type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
+>T2 : Symbol(T2, Decl(deferredLookupTypeResolution.ts, 11, 43))
+>ObjectHasKey : Symbol(ObjectHasKey, Decl(deferredLookupTypeResolution.ts, 5, 6))
+>a : Symbol(a, Decl(deferredLookupTypeResolution.ts, 12, 24))
+
+// Verify that mapped type isn't eagerly resolved in type-to-string operation
+
+declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
+>f1 : Symbol(f1, Decl(deferredLookupTypeResolution.ts, 12, 43))
+>A : Symbol(A, Decl(deferredLookupTypeResolution.ts, 16, 20))
+>B : Symbol(B, Decl(deferredLookupTypeResolution.ts, 16, 37))
+>a : Symbol(a, Decl(deferredLookupTypeResolution.ts, 16, 56))
+>A : Symbol(A, Decl(deferredLookupTypeResolution.ts, 16, 20))
+>b : Symbol(b, Decl(deferredLookupTypeResolution.ts, 16, 61))
+>B : Symbol(B, Decl(deferredLookupTypeResolution.ts, 16, 37))
+>P : Symbol(P, Decl(deferredLookupTypeResolution.ts, 16, 72))
+>A : Symbol(A, Decl(deferredLookupTypeResolution.ts, 16, 20))
+>B : Symbol(B, Decl(deferredLookupTypeResolution.ts, 16, 37))
+
+function f2<A extends string>(a: A) {
+>f2 : Symbol(f2, Decl(deferredLookupTypeResolution.ts, 16, 91))
+>A : Symbol(A, Decl(deferredLookupTypeResolution.ts, 18, 12))
+>a : Symbol(a, Decl(deferredLookupTypeResolution.ts, 18, 30))
+>A : Symbol(A, Decl(deferredLookupTypeResolution.ts, 18, 12))
+
+    return f1(a, 'x');
+>f1 : Symbol(f1, Decl(deferredLookupTypeResolution.ts, 12, 43))
+>a : Symbol(a, Decl(deferredLookupTypeResolution.ts, 18, 30))
+}
+
+function f3(x: 'a' | 'b') {
+>f3 : Symbol(f3, Decl(deferredLookupTypeResolution.ts, 20, 1))
+>x : Symbol(x, Decl(deferredLookupTypeResolution.ts, 22, 12))
+
+    return f2(x);
+>f2 : Symbol(f2, Decl(deferredLookupTypeResolution.ts, 16, 91))
+>x : Symbol(x, Decl(deferredLookupTypeResolution.ts, 22, 12))
+}
+

@@ -1,0 +1,161 @@
+=== tests/cases/compiler/spreadInvalidArgumentType.ts ===
+enum E { v1, v2 };
+>E : Symbol(E, Decl(spreadInvalidArgumentType.ts, 0, 0))
+>v1 : Symbol(E.v1, Decl(spreadInvalidArgumentType.ts, 0, 8))
+>v2 : Symbol(E.v2, Decl(spreadInvalidArgumentType.ts, 0, 12))
+
+function f<T extends { b: string }>(p1: T, p2: T[]) {
+>f : Symbol(f, Decl(spreadInvalidArgumentType.ts, 0, 18))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>b : Symbol(b, Decl(spreadInvalidArgumentType.ts, 2, 22))
+>p1 : Symbol(p1, Decl(spreadInvalidArgumentType.ts, 2, 36))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>p2 : Symbol(p2, Decl(spreadInvalidArgumentType.ts, 2, 42))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+
+    var t: T;
+>t : Symbol(t, Decl(spreadInvalidArgumentType.ts, 3, 7))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+
+    var i: T["b"];
+>i : Symbol(i, Decl(spreadInvalidArgumentType.ts, 5, 7))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+
+    var k: keyof T;
+>k : Symbol(k, Decl(spreadInvalidArgumentType.ts, 6, 7))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+
+    var mapped_generic: {[P in keyof T]: T[P]};
+>mapped_generic : Symbol(mapped_generic, Decl(spreadInvalidArgumentType.ts, 8, 7))
+>P : Symbol(P, Decl(spreadInvalidArgumentType.ts, 8, 26))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>P : Symbol(P, Decl(spreadInvalidArgumentType.ts, 8, 26))
+
+    var mapped: {[P in "b"]: T[P]};
+>mapped : Symbol(mapped, Decl(spreadInvalidArgumentType.ts, 9, 7))
+>P : Symbol(P, Decl(spreadInvalidArgumentType.ts, 9, 18))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>P : Symbol(P, Decl(spreadInvalidArgumentType.ts, 9, 18))
+
+    var union_generic: T | { a: number };
+>union_generic : Symbol(union_generic, Decl(spreadInvalidArgumentType.ts, 11, 7))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 11, 28))
+
+    var union_primitive: { a: number } | number;
+>union_primitive : Symbol(union_primitive, Decl(spreadInvalidArgumentType.ts, 12, 7))
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 12, 26))
+
+    var intersection_generic: T & { a: number };
+>intersection_generic : Symbol(intersection_generic, Decl(spreadInvalidArgumentType.ts, 14, 7))
+>T : Symbol(T, Decl(spreadInvalidArgumentType.ts, 2, 11))
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 14, 35))
+
+    var intersection_primitive: { a: number } | string;
+>intersection_primitive : Symbol(intersection_primitive, Decl(spreadInvalidArgumentType.ts, 15, 7))
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 15, 33))
+
+    var num: number;
+>num : Symbol(num, Decl(spreadInvalidArgumentType.ts, 17, 7))
+
+    var str: number;
+>str : Symbol(str, Decl(spreadInvalidArgumentType.ts, 18, 7))
+
+    var literal_string: "string";
+>literal_string : Symbol(literal_string, Decl(spreadInvalidArgumentType.ts, 19, 7))
+
+    var literal_number: 42;
+>literal_number : Symbol(literal_number, Decl(spreadInvalidArgumentType.ts, 20, 7))
+
+    var u: undefined;
+>u : Symbol(u, Decl(spreadInvalidArgumentType.ts, 22, 7))
+
+    var n: null;
+>n : Symbol(n, Decl(spreadInvalidArgumentType.ts, 23, 7))
+
+    var a: any;
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 24, 7))
+
+
+    var e: E;
+>e : Symbol(e, Decl(spreadInvalidArgumentType.ts, 27, 7))
+>E : Symbol(E, Decl(spreadInvalidArgumentType.ts, 0, 0))
+
+    var o1 = { ...p1 };  // OK, generic type paramterre
+>o1 : Symbol(o1, Decl(spreadInvalidArgumentType.ts, 29, 7))
+>p1 : Symbol(p1, Decl(spreadInvalidArgumentType.ts, 2, 36))
+
+    var o2 = { ...p2 };  // OK
+>o2 : Symbol(o2, Decl(spreadInvalidArgumentType.ts, 30, 7))
+>p2 : Symbol(p2, Decl(spreadInvalidArgumentType.ts, 2, 42))
+
+    var o3 = { ...t };   // OK, generic type paramter
+>o3 : Symbol(o3, Decl(spreadInvalidArgumentType.ts, 31, 7))
+>t : Symbol(t, Decl(spreadInvalidArgumentType.ts, 3, 7))
+
+    var o4 = { ...i };   // Error, index access
+>o4 : Symbol(o4, Decl(spreadInvalidArgumentType.ts, 32, 7))
+>i : Symbol(i, Decl(spreadInvalidArgumentType.ts, 5, 7))
+
+    var o5 = { ...k };   // Error, index
+>o5 : Symbol(o5, Decl(spreadInvalidArgumentType.ts, 33, 7))
+>k : Symbol(k, Decl(spreadInvalidArgumentType.ts, 6, 7))
+
+    var o6 = { ...mapped_generic }; // OK, generic mapped object type
+>o6 : Symbol(o6, Decl(spreadInvalidArgumentType.ts, 34, 7))
+>mapped_generic : Symbol(mapped_generic, Decl(spreadInvalidArgumentType.ts, 8, 7))
+
+    var o7 = { ...mapped };  // OK, non-generic mapped type
+>o7 : Symbol(o7, Decl(spreadInvalidArgumentType.ts, 35, 7))
+>mapped : Symbol(mapped, Decl(spreadInvalidArgumentType.ts, 9, 7))
+
+    var o8 = { ...union_generic };  // OK, union with generic type parameter
+>o8 : Symbol(o8, Decl(spreadInvalidArgumentType.ts, 37, 7))
+>union_generic : Symbol(union_generic, Decl(spreadInvalidArgumentType.ts, 11, 7))
+
+    var o9 = { ...union_primitive };  // Error, union with generic type parameter
+>o9 : Symbol(o9, Decl(spreadInvalidArgumentType.ts, 38, 7))
+>union_primitive : Symbol(union_primitive, Decl(spreadInvalidArgumentType.ts, 12, 7))
+
+    var o10 = { ...intersection_generic };  // OK, intersection with generic type parameter
+>o10 : Symbol(o10, Decl(spreadInvalidArgumentType.ts, 40, 7))
+>intersection_generic : Symbol(intersection_generic, Decl(spreadInvalidArgumentType.ts, 14, 7))
+
+    var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
+>o11 : Symbol(o11, Decl(spreadInvalidArgumentType.ts, 41, 7))
+>intersection_primitive : Symbol(intersection_primitive, Decl(spreadInvalidArgumentType.ts, 15, 7))
+
+    var o12 = { ...num };  // Error
+>o12 : Symbol(o12, Decl(spreadInvalidArgumentType.ts, 43, 7))
+>num : Symbol(num, Decl(spreadInvalidArgumentType.ts, 17, 7))
+
+    var o13 = { ...str };  // Error
+>o13 : Symbol(o13, Decl(spreadInvalidArgumentType.ts, 44, 7))
+>str : Symbol(str, Decl(spreadInvalidArgumentType.ts, 18, 7))
+
+    var o14 = { ...u };  // error, undefined-only not allowed
+>o14 : Symbol(o14, Decl(spreadInvalidArgumentType.ts, 46, 7))
+>u : Symbol(u, Decl(spreadInvalidArgumentType.ts, 22, 7))
+
+    var o15 = { ...n };  // error, null-only not allowed
+>o15 : Symbol(o15, Decl(spreadInvalidArgumentType.ts, 47, 7))
+>n : Symbol(n, Decl(spreadInvalidArgumentType.ts, 23, 7))
+
+    var o16 = { ...a };  // OK
+>o16 : Symbol(o16, Decl(spreadInvalidArgumentType.ts, 49, 7))
+>a : Symbol(a, Decl(spreadInvalidArgumentType.ts, 24, 7))
+
+    var o17 = { ...literal_string };  // Error
+>o17 : Symbol(o17, Decl(spreadInvalidArgumentType.ts, 51, 7))
+>literal_string : Symbol(literal_string, Decl(spreadInvalidArgumentType.ts, 19, 7))
+
+    var o18 = { ...literal_number };  // Error
+>o18 : Symbol(o18, Decl(spreadInvalidArgumentType.ts, 52, 7))
+>literal_number : Symbol(literal_number, Decl(spreadInvalidArgumentType.ts, 20, 7))
+
+    var o19 = { ...e };  // Error, enum
+>o19 : Symbol(o19, Decl(spreadInvalidArgumentType.ts, 54, 7))
+>e : Symbol(e, Decl(spreadInvalidArgumentType.ts, 27, 7))
+}
+

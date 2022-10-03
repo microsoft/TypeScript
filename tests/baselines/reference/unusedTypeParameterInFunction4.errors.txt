@@ -1,0 +1,12 @@
+tests/cases/compiler/unusedTypeParameterInFunction4.ts(1,13): error TS6133: 'X' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedTypeParameterInFunction4.ts (1 errors) ====
+    function f1<X, Y, Z>() {
+                ~
+!!! error TS6133: 'X' is declared but its value is never read.
+        var a: Y;
+        var b: Z;
+        a;
+        b;
+    }

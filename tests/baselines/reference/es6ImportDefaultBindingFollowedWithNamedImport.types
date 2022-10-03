@@ -1,0 +1,68 @@
+=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+export var x = a;
+>x : number
+>a : number
+
+export var m = a;
+>m : number
+>a : number
+
+export default {};
+>{} : {}
+
+=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_1.ts ===
+import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding1 : {}
+
+import defaultBinding2, { a } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding2 : {}
+>a : number
+
+var x1: number = a;
+>x1 : number
+>a : number
+
+import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding3 : {}
+>a : number
+>b : number
+
+var x1: number = b;
+>x1 : number
+>b : number
+
+import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding4 : {}
+>x : number
+>a : number
+>y : number
+
+var x1: number = x;
+>x1 : number
+>x : number
+
+var x1: number = y;
+>x1 : number
+>y : number
+
+import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding5 : {}
+>x : number
+>z : number
+
+var x1: number = z;
+>x1 : number
+>z : number
+
+import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
+>defaultBinding6 : {}
+>m : number
+
+var x1: number = m;
+>x1 : number
+>m : number
+

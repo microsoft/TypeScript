@@ -1,0 +1,306 @@
+=== tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts ===
+let cond: boolean;
+>cond : boolean
+
+function a() {
+>a : () => void
+
+    let x: string | number;
+>x : string | number
+
+    x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x; // string
+>x : string
+    }
+}
+function b() {
+>b : () => void
+
+    let x: string | number;
+>x : string | number
+
+    x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x; // string
+>x : string
+
+        x = 42;
+>x = 42 : 42
+>x : string | number
+>42 : 42
+
+        break;
+    }
+}
+function c() {
+>c : () => void
+
+    let x: string | number;
+>x : string | number
+
+    x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x; // string
+>x : string
+
+        x = undefined;
+>x = undefined : undefined
+>x : string | number
+>undefined : undefined
+
+        if (typeof x === "string") continue;
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+        break;
+    }
+}
+function d() {
+>d : () => void
+
+    let x: string | number;
+>x : string | number
+
+    x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+    while (x = x.length) {
+>x = x.length : number
+>x : string | number
+>x.length : number
+>x : string
+>length : number
+
+        x; // number
+>x : number
+
+        x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+    }
+}
+function e() {
+>e : () => void
+
+    let x: string | number;
+>x : string | number
+
+    x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x; // string | number
+>x : string | number
+
+        x = 42;
+>x = 42 : 42
+>x : string | number
+>42 : 42
+
+        x; // number
+>x : number
+    }
+    x; // string | number
+>x : string | number
+}
+function f() {
+>f : () => void
+
+    let x: string | number | boolean | RegExp | Function;
+>x : string | number | boolean | Function | RegExp
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean | Function | RegExp
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        if (cond) {
+>cond : true
+
+            x = 42;
+>x = 42 : 42
+>x : string | number | boolean | Function | RegExp
+>42 : 42
+
+            break;
+        }
+        if (cond) {
+>cond : true
+
+            x = true;
+>x = true : true
+>x : string | number | boolean | Function | RegExp
+>true : true
+
+            continue;
+        }
+        x = /a/;
+>x = /a/ : RegExp
+>x : string | number | boolean | Function | RegExp
+>/a/ : RegExp
+    }
+    x; // string | number | boolean | RegExp
+>x : string | number | true | RegExp
+}
+function g() {
+>g : () => void
+
+    let x: string | number | boolean | RegExp | Function;
+>x : string | number | boolean | Function | RegExp
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean | Function | RegExp
+>"" : ""
+
+    while (true) {
+>true : true
+
+        if (cond) {
+>cond : boolean
+
+            x = 42;
+>x = 42 : 42
+>x : string | number | boolean | Function | RegExp
+>42 : 42
+
+            break;
+        }
+        if (cond) {
+>cond : boolean
+
+            x = true;
+>x = true : true
+>x : string | number | boolean | Function | RegExp
+>true : true
+
+            continue;
+        }
+        x = /a/;
+>x = /a/ : RegExp
+>x : string | number | boolean | Function | RegExp
+>/a/ : RegExp
+    }
+    x; // number
+>x : number
+}
+function h1() {
+>h1 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (x > 1) {
+>x > 1 : boolean
+>x : string | number
+>1 : 1
+
+        x; // string | number
+>x : string | number
+
+        x = 1;
+>x = 1 : 1
+>x : string | number | boolean
+>1 : 1
+
+        x; // number
+>x : number
+    }
+    x; // string | number
+>x : string | number
+}
+declare function len(s: string | number): number;
+>len : (s: string | number) => number
+>s : string | number
+
+function h2() {
+>h2 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string | number) => number
+>x : string | number
+
+        x; // number
+>x : number
+    }
+    x; // string | number
+>x : string | number
+}
+function h3() {
+>h3 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x; // string | number
+>x : string | number
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string | number) => number
+>x : string | number
+    }
+    x; // string | number
+>x : string | number
+}
+

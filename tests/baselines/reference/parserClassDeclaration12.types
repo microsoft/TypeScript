@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration12.ts ===
+class C {
+>C : C
+
+   constructor();
+   constructor(a) { }
+>a : any
+}

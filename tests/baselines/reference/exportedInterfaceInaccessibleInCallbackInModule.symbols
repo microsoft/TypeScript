@@ -1,0 +1,42 @@
+=== tests/cases/compiler/exportedInterfaceInaccessibleInCallbackInModule.ts ===
+export interface ProgressCallback {
+>ProgressCallback : Symbol(ProgressCallback, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 0, 0))
+
+	(progress:any):any;
+>progress : Symbol(progress, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 1, 2))
+}	
+
+// --- Generic promise
+export declare class TPromise<V> {
+>TPromise : Symbol(TPromise, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 2, 1))
+>V : Symbol(V, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 5, 30))
+	
+	constructor(init:(complete: (value:V)=>void, error:(err:any)=>void, progress:ProgressCallback)=>void, oncancel?: any);
+>init : Symbol(init, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 13))
+>complete : Symbol(complete, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 19))
+>value : Symbol(value, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 30))
+>V : Symbol(V, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 5, 30))
+>error : Symbol(error, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 45))
+>err : Symbol(err, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 53))
+>progress : Symbol(progress, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 68))
+>ProgressCallback : Symbol(ProgressCallback, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 0, 0))
+>oncancel : Symbol(oncancel, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 102))
+	
+    // removing this method fixes the error squiggle.....
+	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
+>then : Symbol(TPromise.then, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 119))
+>U : Symbol(U, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 13))
+>success : Symbol(success, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 16))
+>value : Symbol(value, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 27))
+>V : Symbol(V, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 5, 30))
+>TPromise : Symbol(TPromise, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 2, 1))
+>U : Symbol(U, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 13))
+>error : Symbol(error, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 49))
+>err : Symbol(err, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 59))
+>TPromise : Symbol(TPromise, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 2, 1))
+>U : Symbol(U, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 13))
+>progress : Symbol(progress, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 81))
+>ProgressCallback : Symbol(ProgressCallback, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 0, 0))
+>TPromise : Symbol(TPromise, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 2, 1))
+>U : Symbol(U, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 13))
+}

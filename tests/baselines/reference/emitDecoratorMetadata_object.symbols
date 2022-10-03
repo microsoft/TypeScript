@@ -1,0 +1,26 @@
+=== tests/cases/compiler/emitDecoratorMetadata_object.ts ===
+declare const MyClassDecorator: ClassDecorator;
+>MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_object.ts, 0, 13))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+
+declare const MyMethodDecorator: MethodDecorator;
+>MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_object.ts, 1, 13))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
+
+@MyClassDecorator
+>MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_object.ts, 0, 13))
+
+class A {
+>A : Symbol(A, Decl(emitDecoratorMetadata_object.ts, 1, 49))
+
+    constructor(hi: object) {}
+>hi : Symbol(hi, Decl(emitDecoratorMetadata_object.ts, 5, 16))
+
+    @MyMethodDecorator
+>MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_object.ts, 1, 13))
+
+    method(there: object) {}
+>method : Symbol(A.method, Decl(emitDecoratorMetadata_object.ts, 5, 30))
+>there : Symbol(there, Decl(emitDecoratorMetadata_object.ts, 7, 11))
+}
+

@@ -1,0 +1,86 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(5,8): error TS2304: Cannot find name 'W'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(15,8): error TS2304: Cannot find name 'W'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(19,43): error TS2304: Cannot find name 'V'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(20,47): error TS2304: Cannot find name 'X'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(28,44): error TS2304: Cannot find name 'W'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(29,47): error TS2304: Cannot find name 'Y'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(38,47): error TS2304: Cannot find name 'X'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(38,53): error TS2304: Cannot find name 'Y'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(46,30): error TS2304: Cannot find name 'V'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(46,36): error TS2304: Cannot find name 'X'.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts (10 errors) ====
+    // Type parameters are in scope in their own and other type parameter lists
+    // Some negative cases
+    
+    class C<T, U extends T, V extends U> {
+        z: W; // error
+           ~
+!!! error TS2304: Cannot find name 'W'.
+        foo<W extends V>(x: W): T {
+            var r: T;
+            return x;
+        }
+    }
+    
+    interface I<T, U extends T, V extends U> {
+        x: T;
+        y: U;
+        z: W; // error
+           ~
+!!! error TS2304: Cannot find name 'W'.
+        foo<W extends V>(x: W): T;
+    }
+    
+    function foo<T, U extends T>(x: T, y: U): V { // error
+                                              ~
+!!! error TS2304: Cannot find name 'V'.
+        function bar<V extends T, W extends U>(): X { // error
+                                                  ~
+!!! error TS2304: Cannot find name 'X'.
+            function baz<X extends W, Y extends V>(a: X, b: Y): T {
+                x = y;
+                return y;
+            }
+        }
+    }
+    
+    function foo2<U extends T, T>(x: T, y: U): W { // error
+                                               ~
+!!! error TS2304: Cannot find name 'W'.
+        function bar<V extends T, W extends U>(): Y { // error
+                                                  ~
+!!! error TS2304: Cannot find name 'Y'.
+            function baz<X extends W, Y extends V>(a: X, b: Y): T {
+                x = y;
+                return y;
+            }
+        }
+    }
+    
+    var f3 = <T, U extends T>(x: T, y: U) => {
+        function bar<V extends T, W extends U>(r: X, s: Y) { // error
+                                                  ~
+!!! error TS2304: Cannot find name 'X'.
+                                                        ~
+!!! error TS2304: Cannot find name 'Y'.
+            var g = <X extends W, Y extends V>(a: X, b: Y): T => {
+                x = y;
+                return y;
+            }
+        }
+    }
+    
+    var f4 = <U extends T, T>(x: V, y: X) => { // error
+                                 ~
+!!! error TS2304: Cannot find name 'V'.
+                                       ~
+!!! error TS2304: Cannot find name 'X'.
+        function bar<V extends T, W extends U>() {
+            var g = <X extends W, Y extends V>(a: X, b: Y): T => {
+                x = y;
+                return y;
+            }
+        }
+    }

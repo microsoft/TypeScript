@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts ===
+var x: {
+>x : Symbol(x, Decl(objectTypeLiteralSyntax2.ts, 0, 3))
+
+    foo: string,
+>foo : Symbol(foo, Decl(objectTypeLiteralSyntax2.ts, 0, 8))
+
+    bar: string
+>bar : Symbol(bar, Decl(objectTypeLiteralSyntax2.ts, 1, 16))
+}
+
+// ASI makes this work
+var y: {
+>y : Symbol(y, Decl(objectTypeLiteralSyntax2.ts, 6, 3))
+
+    foo: string
+>foo : Symbol(foo, Decl(objectTypeLiteralSyntax2.ts, 6, 8))
+
+    bar: string
+>bar : Symbol(bar, Decl(objectTypeLiteralSyntax2.ts, 7, 15))
+}
+
+var z: { foo: string bar: string }
+>z : Symbol(z, Decl(objectTypeLiteralSyntax2.ts, 11, 3))
+>foo : Symbol(foo, Decl(objectTypeLiteralSyntax2.ts, 11, 8))
+>bar : Symbol(bar, Decl(objectTypeLiteralSyntax2.ts, 11, 20))
+

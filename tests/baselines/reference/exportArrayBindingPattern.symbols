@@ -1,0 +1,10 @@
+=== tests/cases/compiler/exportArrayBindingPattern.ts ===
+// issue: https://github.com/Microsoft/TypeScript/issues/10778
+const [a, , b] = [1, 2, 3];
+>a : Symbol(a, Decl(exportArrayBindingPattern.ts, 1, 7))
+>b : Symbol(b, Decl(exportArrayBindingPattern.ts, 1, 11))
+
+export { a, b };
+>a : Symbol(a, Decl(exportArrayBindingPattern.ts, 2, 8))
+>b : Symbol(b, Decl(exportArrayBindingPattern.ts, 2, 11))
+

@@ -1,0 +1,42 @@
+=== tests/cases/compiler/file2.ts ===
+/// <reference path="file1.ts" />
+
+
+/// ====================================
+
+
+function bar() { }
+>bar : () => void
+
+
+
+=== tests/cases/compiler/file0.ts ===
+/// <reference path="file1.ts" />
+/// <reference path="file2.ts" />
+/// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
+var x = 10;
+>x : number
+>10 : 10
+
+/// <reference path="file1.ts" />
+var y = "hello";
+>y : string
+>"hello" : "hello"
+
+
+/// <reference path="file2.ts" />
+
+=== tests/cases/compiler/file1.ts ===
+/// <reference path="file0.ts" />
+
+function foo() { }
+>foo : () => void
+
+
+/// <reference path="file0.ts" />
+
+
+var z = "world";
+>z : string
+>"world" : "world"
+

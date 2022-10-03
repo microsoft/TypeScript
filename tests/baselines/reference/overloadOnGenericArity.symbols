@@ -1,0 +1,16 @@
+=== tests/cases/compiler/overloadOnGenericArity.ts ===
+interface Test {
+>Test : Symbol(Test, Decl(overloadOnGenericArity.ts, 0, 0))
+
+    then<U>(p: string): string;
+>then : Symbol(Test.then, Decl(overloadOnGenericArity.ts, 0, 16), Decl(overloadOnGenericArity.ts, 1, 31))
+>U : Symbol(U, Decl(overloadOnGenericArity.ts, 1, 9))
+>p : Symbol(p, Decl(overloadOnGenericArity.ts, 1, 12))
+
+    then(p: string): Date; // Error: Overloads cannot differ only by return type
+>then : Symbol(Test.then, Decl(overloadOnGenericArity.ts, 0, 16), Decl(overloadOnGenericArity.ts, 1, 31))
+>p : Symbol(p, Decl(overloadOnGenericArity.ts, 2, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+  
+

@@ -1,0 +1,165 @@
+=== tests/cases/compiler/unusedLocalsAndParameters.ts ===
+export { };
+
+// function declaration paramter
+function f(a) {
+>f : (a: any) => void
+>a : any
+}
+f(0);
+>f(0) : void
+>f : (a: any) => void
+>0 : 0
+
+// function expression paramter
+var fexp = function (a) {
+>fexp : (a: any) => void
+>function (a) {} : (a: any) => void
+>a : any
+
+};
+
+fexp(0);
+>fexp(0) : void
+>fexp : (a: any) => void
+>0 : 0
+
+// arrow function paramter
+var farrow = (a) => {
+>farrow : (a: any) => void
+>(a) => {} : (a: any) => void
+>a : any
+
+};
+
+class C {
+>C : C
+
+    // Method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+    }
+}
+
+var E = class {
+>E : typeof E
+>class {    // Method declaration paramter    method(a) {    }    // Accessor declaration paramter    set x(v: number) {    }} : typeof E
+
+    // Method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+    }
+}
+
+var o = {
+>o : { method(a: any): void; x: number; }
+>{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method(a: any): void; x: number; }
+
+    // Object literal method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+
+    },
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+    }
+};
+
+o;
+>o : { method(a: any): void; x: number; }
+
+// in a for..in statment
+for (let i in o) {
+>i : string
+>o : { method(a: any): void; x: number; }
+}
+
+// in a for..of statment
+for (let i of [1, 2, 3]) {
+>i : number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+}
+
+// in a for. statment
+for (let i = 0, n; i < 10; i++) {
+>i : number
+>0 : 0
+>n : any
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+}
+
+// in a block
+
+const condition = false;
+>condition : false
+>false : false
+
+if (condition) {
+>condition : false
+
+    const c = 0;
+>c : 0
+>0 : 0
+}
+
+// in try/catch/finally
+try {
+    const a = 0;
+>a : 0
+>0 : 0
+}
+catch (e) {
+>e : any
+
+    const c = 1;
+>c : 1
+>1 : 1
+}
+finally {
+    const c = 0;
+>c : 0
+>0 : 0
+}
+
+
+// in a namespace
+namespace N {
+>N : typeof N
+
+    var x;
+>x : any
+}
+
+for (let x: y) {
+>x : y
+
+    z(x);
+>z : any
+>(x) : y
+>x : y
+}
+> : any
+> : any
+

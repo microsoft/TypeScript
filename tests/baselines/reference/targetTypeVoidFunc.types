@@ -1,0 +1,26 @@
+=== tests/cases/compiler/targetTypeVoidFunc.ts ===
+function f1(): { new (): number; } {
+>f1 : () => {    new (): number;}
+
+    return function () { return; }
+>function () { return; } : () => void
+
+}; 
+
+var x = f1();
+>x : new () => number
+>f1() : new () => number
+>f1 : () => new () => number
+
+var y = new x();
+>y : number
+>new x() : number
+>x : new () => number
+
+var z = new (f1())();
+>z : number
+>new (f1())() : number
+>(f1()) : new () => number
+>f1() : new () => number
+>f1 : () => new () => number
+

@@ -1,0 +1,40 @@
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(6,27): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(8,21): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(10,16): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(12,16): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(14,21): error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts(16,15): error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/conformance/types/forAwait/types.forAwait.es2018.2.ts (6 errors) ====
+    declare const asyncIterable: AsyncIterable<number>;
+    declare const iterable: Iterable<number>;
+    async function f() {
+        let y: number;
+        let z: string;
+        for await (const x of {}) {
+                              ~~
+!!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+        }
+        for await (y of {}) {
+                        ~~
+!!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+        }
+        for await (z of asyncIterable) {
+                   ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        }
+        for await (z of iterable) {
+                   ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        }
+        for (const x of asyncIterable) {
+                        ~~~~~~~~~~~~~
+!!! error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+        }
+        for (y of asyncIterable) {
+                  ~~~~~~~~~~~~~
+!!! error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
+        }
+    }
+    

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/classOverloadForFunction.ts ===
+class foo { };
+>foo : Symbol(foo, Decl(classOverloadForFunction.ts, 0, 14), Decl(classOverloadForFunction.ts, 0, 0))
+
+function foo() {}
+>foo : Symbol(foo, Decl(classOverloadForFunction.ts, 0, 14), Decl(classOverloadForFunction.ts, 0, 0))
+

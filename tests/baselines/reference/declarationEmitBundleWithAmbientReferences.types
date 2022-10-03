@@ -1,0 +1,32 @@
+=== tests/cases/compiler/lib/lib.d.ts ===
+declare module "lib/result" {
+>"lib/result" : typeof import("lib/result")
+
+    export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
+>Result : Result<E, T>
+
+    export interface Failure<E extends Error> { }
+    export interface Success<T> { }
+}
+
+=== tests/cases/compiler/src/datastore_result.ts ===
+import { Result } from "lib/result";
+>Result : any
+
+export type T<T> = Result<Error, T>;
+>T : import("tests/cases/compiler/src/datastore_result").T<T>
+
+=== tests/cases/compiler/src/conditional_directive_field.ts ===
+import * as DatastoreResult from "src/datastore_result";
+>DatastoreResult : typeof DatastoreResult
+
+export const build = (): DatastoreResult.T<string> => {
+>build : () => DatastoreResult.T<string>
+>(): DatastoreResult.T<string> => {	return null;} : () => DatastoreResult.T<string>
+>DatastoreResult : any
+
+	return null;
+>null : null
+
+};
+

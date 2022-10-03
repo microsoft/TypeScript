@@ -1,0 +1,44 @@
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithBooleanType.ts (1 errors) ====
+    // ! operator on boolean type
+    var BOOLEAN: boolean;
+    
+    function foo(): boolean { return true; }
+    
+    class A {
+        public a: boolean;
+        static foo() { return false; }
+    }
+    module M {
+        export var n: boolean;
+    }
+    
+    var objA = new A();
+    
+    // boolean type var
+    var ResultIsBoolean1 = !BOOLEAN;
+    
+    // boolean type literal
+    var ResultIsBoolean2 = !true;
+    var ResultIsBoolean3 = !{ x: true, y: false };
+    
+    // boolean type expressions
+    var ResultIsBoolean4 = !objA.a;
+    var ResultIsBoolean5 = !M.n;
+    var ResultIsBoolean6 = !foo();
+    var ResultIsBoolean7 = !A.foo();
+    
+    // multiple ! operators
+    var ResultIsBoolean = !!BOOLEAN;
+    
+    // miss assignment operators
+    !true;
+    !BOOLEAN;
+    !foo();
+    !true, false;
+    ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    !objA.a;
+    !M.n;

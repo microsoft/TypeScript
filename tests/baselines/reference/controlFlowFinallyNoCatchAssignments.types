@@ -1,0 +1,46 @@
+=== tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts ===
+let x: number;
+>x : number
+
+x = Math.random();
+>x = Math.random() : number
+>x : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+let a: number;
+>a : number
+
+try {
+    if (x) {
+>x : number
+
+        a = 1;
+>a = 1 : 1
+>a : number
+>1 : 1
+
+    } else {
+        a = 2;
+>a = 2 : 2
+>a : number
+>2 : 2
+    }
+} finally {
+    console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+}
+
+console.log(a); // <- error here
+>console.log(a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a : number
+

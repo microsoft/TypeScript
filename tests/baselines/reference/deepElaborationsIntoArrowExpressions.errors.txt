@@ -1,0 +1,37 @@
+tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts(4,14): error TS2322: Type '"b"' is not assignable to type '"a"'.
+tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts(12,20): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts(16,14): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts(18,18): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts (4 errors) ====
+    const a: {
+        y(): "a"
+    } = {
+        y: () => "b"
+                 ~~~
+!!! error TS2322: Type '"b"' is not assignable to type '"a"'.
+!!! related TS6502 tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts:2:5: The expected type comes from the return type of this signature.
+    };
+    
+    interface Foo {
+        a: number;
+    }
+    
+    function foo1(): () => Foo {
+        return () => ({a: ''});
+                       ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'
+    }
+    
+    function foo3(): Foo[] {
+        return [{a: ''}];
+                 ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'
+    }
+    var y: Foo[] = [{a: ''}]
+                     ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'

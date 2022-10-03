@@ -1,0 +1,74 @@
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(1,13): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(1,17): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(1,21): error TS2300: Duplicate identifier 'b'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(1,27): error TS2300: Duplicate identifier 'b'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(2,14): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(2,17): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(3,14): error TS2300: Duplicate identifier 'b'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(3,19): error TS2300: Duplicate identifier 'b'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(4,14): error TS2300: Duplicate identifier 'c'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(4,17): error TS2300: Duplicate identifier 'c'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(4,22): error TS2300: Duplicate identifier 'c'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(5,14): error TS2300: Duplicate identifier 'd'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(5,20): error TS2300: Duplicate identifier 'd'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,14): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,21): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,27): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,34): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,39): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(6,48): error TS2300: Duplicate identifier 'e'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(7,14): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts(7,20): error TS2300: Duplicate identifier 'f'.
+
+
+==== tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts (21 errors) ====
+    function f0(a, [a, [b]], {b}) { }
+                ~
+!!! error TS2300: Duplicate identifier 'a'.
+                    ~
+!!! error TS2300: Duplicate identifier 'a'.
+                        ~
+!!! error TS2300: Duplicate identifier 'b'.
+                              ~
+!!! error TS2300: Duplicate identifier 'b'.
+    function f1([a, a]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'a'.
+                    ~
+!!! error TS2300: Duplicate identifier 'a'.
+    function f2({b}, {b}) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'b'.
+                      ~
+!!! error TS2300: Duplicate identifier 'b'.
+    function f3([c,[c],[[c]]]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'c'.
+                    ~
+!!! error TS2300: Duplicate identifier 'c'.
+                         ~
+!!! error TS2300: Duplicate identifier 'c'.
+    function f4({d, d:{d}}) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'd'.
+                       ~
+!!! error TS2300: Duplicate identifier 'd'.
+    function f5({e, e: {e}}, {e}, [d,e, [[e]]], ...e) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'e'.
+                        ~
+!!! error TS2300: Duplicate identifier 'e'.
+                              ~
+!!! error TS2300: Duplicate identifier 'e'.
+                                     ~
+!!! error TS2300: Duplicate identifier 'e'.
+                                          ~
+!!! error TS2300: Duplicate identifier 'e'.
+                                                   ~
+!!! error TS2300: Duplicate identifier 'e'.
+    function f6([f, ...f]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'f'.
+                       ~
+!!! error TS2300: Duplicate identifier 'f'.
+    function f7(a, func = (a) => { return 1 }) { }  // not error

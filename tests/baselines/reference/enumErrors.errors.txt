@@ -1,0 +1,132 @@
+tests/cases/conformance/enums/enumErrors.ts(2,6): error TS2431: Enum name cannot be 'any'.
+tests/cases/conformance/enums/enumErrors.ts(3,6): error TS2431: Enum name cannot be 'number'.
+tests/cases/conformance/enums/enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'.
+tests/cases/conformance/enums/enumErrors.ts(5,6): error TS2431: Enum name cannot be 'boolean'.
+tests/cases/conformance/enums/enumErrors.ts(9,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'Number'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(26,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'true'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(27,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'Date'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(28,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'Window & typeof globalThis'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(29,9): error TS18033: Only numeric enums can have computed members, but this expression has type '{}'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(30,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'string'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumErrors.ts(36,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(37,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(39,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(40,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(48,18): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(49,24): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(49,26): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/enums/enumErrors.ts(50,28): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(50,30): error TS2452: An enum member cannot have a numeric name.
+tests/cases/conformance/enums/enumErrors.ts(50,31): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(53,16): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(53,22): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(53,30): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+tests/cases/conformance/enums/enumErrors.ts(53,33): error TS2452: An enum member cannot have a numeric name.
+
+
+==== tests/cases/conformance/enums/enumErrors.ts (25 errors) ====
+    // Enum named with PredefinedTypes
+    enum any { }
+         ~~~
+!!! error TS2431: Enum name cannot be 'any'.
+    enum number { }
+         ~~~~~~
+!!! error TS2431: Enum name cannot be 'number'.
+    enum string { }
+         ~~~~~~
+!!! error TS2431: Enum name cannot be 'string'.
+    enum boolean { }
+         ~~~~~~~
+!!! error TS2431: Enum name cannot be 'boolean'.
+    
+    // Enum with computed member initializer of type Number
+    enum E5 {
+        C = new Number(30)
+            ~~~~~~~~~~~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'Number'. If you do not need exhaustiveness checks, consider using an object literal instead.
+    }
+    
+    enum E9 {
+        A,
+        B = A
+    }
+    
+    //Enum with computed member intializer of different enum type
+    // Bug 707850: This should be allowed
+    enum E10 {
+        A = E9.A,
+        B = E9.B
+    }
+    
+    // Enum with computed member intializer of other types
+    enum E11 {
+        A = true,
+            ~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'true'. If you do not need exhaustiveness checks, consider using an object literal instead.
+        B = new Date(),
+            ~~~~~~~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'Date'. If you do not need exhaustiveness checks, consider using an object literal instead.
+        C = window,
+            ~~~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'Window & typeof globalThis'. If you do not need exhaustiveness checks, consider using an object literal instead.
+        D = {},
+            ~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type '{}'. If you do not need exhaustiveness checks, consider using an object literal instead.
+        E = (() => 'foo')(),
+            ~~~~~~~~~~~~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'string'. If you do not need exhaustiveness checks, consider using an object literal instead.
+    }
+    
+    // Enum with string valued member and computed member initializers
+    enum E12 {
+        A = '',
+        B = new Date(),
+            ~~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        C = window,
+            ~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        D = {},
+            ~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        E = 1 + 1,
+            ~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        F = (() => 'foo')(),
+            ~~~~~~~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+    }
+    
+    // Enum with incorrect syntax
+    enum E13 {
+        postComma,
+        postValueComma = 1,
+    
+        postSemicolon;
+                     ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+        postColonValueComma: 2,
+                           ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                             ~
+!!! error TS2452: An enum member cannot have a numeric name.
+        postColonValueSemicolon: 3;
+                               ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~
+!!! error TS2452: An enum member cannot have a numeric name.
+                                  ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+    };
+    
+    enum E14 { a, b: any "hello" += 1, c, d}
+                   ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                         ~~~~~~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                    ~
+!!! error TS2452: An enum member cannot have a numeric name.
+    

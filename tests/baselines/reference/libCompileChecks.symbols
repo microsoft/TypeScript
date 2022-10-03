@@ -1,0 +1,4 @@
+=== tests/cases/compiler/libCompileChecks.ts ===
+// This test is effectively the 'lib check' for all our .d.ts files because we use skipLibCheck
+No type information for this code.// as false everywhere.
+No type information for this code.

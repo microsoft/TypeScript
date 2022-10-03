@@ -1,0 +1,61 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+// Should emit 'react-router' in the AMD dependency list
+import React = require('react');
+>React : any
+
+import ReactRouter = require('react-router');
+>ReactRouter : typeof ReactRouter
+
+import Route = ReactRouter.Route;
+>Route : any
+>ReactRouter : typeof ReactRouter
+>Route : any
+
+var routes1 = <Route />;
+>routes1 : error
+><Route /> : error
+>Route : any
+
+module M {
+>M : typeof M
+
+	export var X: any;
+>X : any
+}
+module M {
+>M : typeof M
+
+	// Should emit 'M.X' in both opening and closing tags
+	var y = <X></X>;
+>y : error
+><X></X> : error
+>X : any
+>X : any
+}
+
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module 'react' {
+>'react' : typeof import("react")
+
+	var x: any;
+>x : any
+
+	export = x;
+>x : any
+}
+
+declare module ReactRouter {
+>ReactRouter : typeof ReactRouter
+
+	var Route: any;
+>Route : any
+
+	interface Thing { }
+}
+declare module 'react-router' {
+>'react-router' : typeof import("react-router")
+
+	export = ReactRouter;
+>ReactRouter : typeof ReactRouter
+}
+

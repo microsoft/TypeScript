@@ -1,0 +1,70 @@
+=== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts ===
+// typeof  operator on enum type
+
+enum ENUM { };
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+>A : Symbol(ENUM1.A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(typeofOperatorWithEnumType.ts, 3, 18))
+
+// enum type var
+var ResultIsString1 = typeof ENUM;
+>ResultIsString1 : Symbol(ResultIsString1, Decl(typeofOperatorWithEnumType.ts, 6, 3))
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+
+var ResultIsString2 = typeof ENUM1;
+>ResultIsString2 : Symbol(ResultIsString2, Decl(typeofOperatorWithEnumType.ts, 7, 3))
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+
+// enum type expressions
+var ResultIsString3 = typeof ENUM1["A"];
+>ResultIsString3 : Symbol(ResultIsString3, Decl(typeofOperatorWithEnumType.ts, 10, 3))
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+>"A" : Symbol(ENUM1.A, Decl(typeofOperatorWithEnumType.ts, 3, 12))
+
+var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
+>ResultIsString4 : Symbol(ResultIsString4, Decl(typeofOperatorWithEnumType.ts, 11, 3))
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+
+// multiple typeof  operators
+var ResultIsString5 = typeof typeof ENUM;
+>ResultIsString5 : Symbol(ResultIsString5, Decl(typeofOperatorWithEnumType.ts, 14, 3))
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+
+var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
+>ResultIsString6 : Symbol(ResultIsString6, Decl(typeofOperatorWithEnumType.ts, 15, 3))
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+>ENUM1.B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+
+// miss assignment operators
+typeof ENUM;
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+
+typeof ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+
+typeof ENUM1["B"];
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(typeofOperatorWithEnumType.ts, 3, 15))
+
+typeof ENUM, ENUM1;
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+
+// use typeof in type query
+enum z { };
+>z : Symbol(z, Decl(typeofOperatorWithEnumType.ts, 21, 19))
+
+z: typeof ENUM;
+>ENUM : Symbol(ENUM, Decl(typeofOperatorWithEnumType.ts, 0, 0))
+
+z: typeof ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(typeofOperatorWithEnumType.ts, 2, 14))
+

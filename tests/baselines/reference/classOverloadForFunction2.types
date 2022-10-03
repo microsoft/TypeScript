@@ -1,0 +1,7 @@
+=== tests/cases/compiler/classOverloadForFunction2.ts ===
+function bar(): string;
+>bar : typeof bar
+
+class bar {}
+>bar : bar
+

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+}
+
+interface Obj1 {
+	new(n: string): {};
+>n : string
+}
+var obj1: Obj1;
+>obj1 : Obj1
+
+<obj1 x={10} />; // OK
+><obj1 x={10} /> : JSX.Element
+>obj1 : Obj1
+>x : number
+>10 : 10
+

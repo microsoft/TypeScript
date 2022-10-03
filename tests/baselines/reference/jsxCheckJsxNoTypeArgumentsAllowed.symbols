@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsx/component.d.ts ===
+import * as React from "react";
+>React : Symbol(React, Decl(component.d.ts, 0, 6))
+
+export declare class MyComp<P> extends React.Component<P, {}> {
+>MyComp : Symbol(MyComp, Decl(component.d.ts, 0, 31))
+>P : Symbol(P, Decl(component.d.ts, 1, 28))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(component.d.ts, 0, 6))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>P : Symbol(P, Decl(component.d.ts, 1, 28))
+
+    internalProp: P;
+>internalProp : Symbol(MyComp.internalProp, Decl(component.d.ts, 1, 63))
+>P : Symbol(P, Decl(component.d.ts, 1, 28))
+}
+
+export interface Prop {
+>Prop : Symbol(Prop, Decl(component.d.ts, 3, 1))
+
+    a: number,
+>a : Symbol(Prop.a, Decl(component.d.ts, 5, 23))
+
+    b: string
+>b : Symbol(Prop.b, Decl(component.d.ts, 6, 14))
+}
+
+=== tests/cases/conformance/jsx/file.jsx ===
+import { MyComp, Prop } from "./component";
+>MyComp : Symbol(MyComp, Decl(file.jsx, 0, 8))
+>Prop : Symbol(Prop, Decl(file.jsx, 0, 16))
+
+import * as React from "react";
+>React : Symbol(React, Decl(file.jsx, 1, 6))
+
+let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
+>x : Symbol(x, Decl(file.jsx, 3, 3))
+>MyComp : Symbol(MyComp, Decl(file.jsx, 0, 8))
+

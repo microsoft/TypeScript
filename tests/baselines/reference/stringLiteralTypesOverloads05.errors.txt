@@ -1,0 +1,18 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts(6,10): error TS2394: This overload signature is not compatible with its implementation signature.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts (1 errors) ====
+    interface Animal { animal: {} };
+    interface Dog extends Animal { dog: {} }
+    interface Cat extends Animal { cat: {} }
+    interface Moose extends Animal { moose: {} }
+    
+    function doThing(x: "dog"): Dog;
+             ~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts:9:10: The implementation signature is declared here.
+    function doThing(x: "cat"): Cat;
+    function doThing(x: string): Animal;
+    function doThing(x: string, y?: string): Moose {
+        return undefined;
+    }

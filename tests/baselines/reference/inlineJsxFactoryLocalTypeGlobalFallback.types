@@ -1,0 +1,88 @@
+=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            [e: string]: {};
+>e : string
+        }
+        interface Element {
+            __domBrand: void;
+>__domBrand : void
+
+            children: Element[];
+>children : Element[]
+
+            props: {};
+>props : {}
+        }
+        interface ElementAttributesProperty { props: any; }
+>props : any
+
+        interface ElementChildrenAttribute { children: any; }
+>children : any
+    }
+}
+export function dom(): JSX.Element;
+>dom : () => JSX.Element
+>JSX : any
+
+=== tests/cases/conformance/jsx/inline/renderer2.d.ts ===
+export namespace predom {
+    namespace JSX {
+        interface IntrinsicElements {
+            [e: string]: {};
+>e : string
+        }
+        interface Element {
+            __predomBrand: void;
+>__predomBrand : void
+
+            children: Element[];
+>children : Element[]
+
+            props: {};
+>props : {}
+        }
+        interface ElementAttributesProperty { props: any; }
+>props : any
+
+        interface ElementChildrenAttribute { children: any; }
+>children : any
+    }
+}
+export function predom(): predom.JSX.Element;
+>predom : () => predom.JSX.Element
+>predom : any
+>JSX : any
+
+=== tests/cases/conformance/jsx/inline/component.tsx ===
+/** @jsx predom */
+import { predom } from "./renderer2"
+>predom : () => predom.JSX.Element
+
+export default <h></h>
+><h></h> : predom.JSX.Element
+>h : any
+>h : any
+
+=== tests/cases/conformance/jsx/inline/index.tsx ===
+/** @jsx dom */
+import { dom } from "./renderer"
+>dom : () => JSX.Element
+
+import prerendered from "./component";
+>prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+
+let elem = prerendered;
+>elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+
+elem = <h></h>; // Expect assignability error here
+>elem = <h></h> : JSX.Element
+>elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+><h></h> : JSX.Element
+>h : any
+>h : any
+

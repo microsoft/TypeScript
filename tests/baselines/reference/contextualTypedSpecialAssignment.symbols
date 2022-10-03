@@ -1,0 +1,179 @@
+=== tests/cases/conformance/salsa/test.js ===
+/** @typedef {{
+    status: 'done'
+    m(n: number): void
+}} DoneStatus */
+
+// property assignment
+var ns = {}
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+
+/** @type {DoneStatus} */
+ns.x = {
+>ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+
+    status: 'done',
+>status : Symbol(status, Decl(test.js, 8, 8))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 9, 19))
+>n : Symbol(n, Decl(test.js, 10, 6))
+}
+
+ns.x = {
+>ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+
+    status: 'done',
+>status : Symbol(status, Decl(test.js, 13, 8))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 14, 19))
+>n : Symbol(n, Decl(test.js, 15, 6))
+}
+ns.x
+>ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+>x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
+
+
+// this-property assignment
+class Thing {
+>Thing : Symbol(Thing, Decl(test.js, 17, 4))
+
+    constructor() {
+        /** @type {DoneStatus} */
+        this.s = {
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>this : Symbol(Thing, Decl(test.js, 17, 4))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+
+            status: 'done',
+>status : Symbol(status, Decl(test.js, 24, 18))
+
+            m(n) { }
+>m : Symbol(m, Decl(test.js, 25, 27))
+>n : Symbol(n, Decl(test.js, 26, 14))
+        }
+    }
+
+    fail() {
+>fail : Symbol(Thing.fail, Decl(test.js, 28, 5))
+
+        this.s = {
+>this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+>this : Symbol(Thing, Decl(test.js, 17, 4))
+>s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
+
+            status: 'done',
+>status : Symbol(status, Decl(test.js, 31, 18))
+
+            m(n) { }
+>m : Symbol(m, Decl(test.js, 32, 27))
+>n : Symbol(n, Decl(test.js, 33, 14))
+        }
+    }
+}
+
+// exports-property assignment
+
+/** @type {DoneStatus} */
+exports.x = {
+>exports.x : Symbol(x, Decl(test.js, 36, 1))
+>exports : Symbol(x, Decl(test.js, 36, 1))
+>x : Symbol(x, Decl(test.js, 36, 1))
+
+    status: "done",
+>status : Symbol(status, Decl(test.js, 41, 13))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 42, 19))
+>n : Symbol(n, Decl(test.js, 43, 6))
+}
+exports.x
+>exports.x : Symbol(x, Decl(test.js, 36, 1))
+>exports : Symbol("tests/cases/conformance/salsa/test", Decl(test.js, 0, 0))
+>x : Symbol(x, Decl(test.js, 36, 1))
+
+/** @type {DoneStatus} */
+module.exports.y = {
+>module.exports.y : Symbol(y, Decl(test.js, 45, 9))
+>module.exports : Symbol(y, Decl(test.js, 45, 9))
+>module : Symbol(module, Decl(test.js, 45, 9))
+>exports : Symbol(module.exports, Decl(test.js, 0, 0))
+>y : Symbol(y, Decl(test.js, 45, 9))
+
+    status: "done",
+>status : Symbol(status, Decl(test.js, 48, 20))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 49, 19))
+>n : Symbol(n, Decl(test.js, 50, 6))
+}
+module.exports.y
+>module.exports.y : Symbol(y, Decl(test.js, 45, 9))
+>module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
+>module : Symbol(module, Decl(test.js, 45, 9))
+>exports : Symbol(module.exports, Decl(test.js, 0, 0))
+>y : Symbol(y, Decl(test.js, 45, 9))
+
+// prototype-property assignment
+/** @type {DoneStatus} */
+Thing.prototype.x = {
+>Thing.prototype.x : Symbol(Thing.x, Decl(test.js, 52, 16))
+>Thing.prototype : Symbol(Thing.x, Decl(test.js, 52, 16))
+>Thing : Symbol(Thing, Decl(test.js, 17, 4))
+>prototype : Symbol(Thing.prototype)
+>x : Symbol(Thing.x, Decl(test.js, 52, 16))
+
+    status: 'done',
+>status : Symbol(status, Decl(test.js, 56, 21))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 57, 19))
+>n : Symbol(n, Decl(test.js, 58, 6))
+}
+Thing.prototype.x
+>Thing.prototype.x : Symbol(Thing.x, Decl(test.js, 52, 16))
+>Thing.prototype : Symbol(Thing.prototype)
+>Thing : Symbol(Thing, Decl(test.js, 17, 4))
+>prototype : Symbol(Thing.prototype)
+>x : Symbol(Thing.x, Decl(test.js, 52, 16))
+
+// prototype assignment
+function F() {
+>F : Symbol(F, Decl(test.js, 60, 17), Decl(test.js, 64, 1))
+}
+/** @type {DoneStatus} */
+F.prototype = {
+>F.prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
+>F : Symbol(F, Decl(test.js, 60, 17), Decl(test.js, 64, 1))
+>prototype : Symbol(F.prototype, Decl(test.js, 64, 1))
+
+    status: "done",
+>status : Symbol(status, Decl(test.js, 66, 15))
+
+    m(n) { }
+>m : Symbol(m, Decl(test.js, 67, 19))
+>n : Symbol(n, Decl(test.js, 68, 6))
+}
+
+=== tests/cases/conformance/salsa/mod.js ===
+// module.exports assignment
+/** @type {{ status: 'done', m(n: number): void }} */
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+>module : Symbol(export=, Decl(mod.js, 0, 0))
+>exports : Symbol(export=, Decl(mod.js, 0, 0))
+
+    status: "done",
+>status : Symbol(status, Decl(mod.js, 2, 18))
+
+    m(n) { }
+>m : Symbol(m, Decl(mod.js, 3, 19))
+>n : Symbol(n, Decl(mod.js, 4, 6))
+}
+

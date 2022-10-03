@@ -1,0 +1,40 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(1,17): error TS2449: Class 'E' used before its declaration.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(3,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(5,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(7,7): error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(7,21): error TS2449: Class 'E2' used before its declaration.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(9,7): error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts(11,7): error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts (8 errors) ====
+    class C extends E { foo: string; } // error
+          ~
+!!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+                    ~
+!!! error TS2449: Class 'E' used before its declaration.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts:5:7: 'E' is declared here.
+    
+    class D extends C { bar: string; }
+          ~
+!!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+    
+    class E extends D { baz: number; }
+          ~
+!!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+    
+    class C2<T> extends E2<T> { foo: T; } // error
+          ~~
+!!! error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
+                        ~~
+!!! error TS2449: Class 'E2' used before its declaration.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts:11:7: 'E2' is declared here.
+    
+    class D2<T> extends C2<T> { bar: T; }
+          ~~
+!!! error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+    
+    class E2<T> extends D2<T> { baz: T; }
+          ~~
+!!! error TS2506: 'E2' is referenced directly or indirectly in its own base expression.

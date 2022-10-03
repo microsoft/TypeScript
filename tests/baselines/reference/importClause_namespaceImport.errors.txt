@@ -1,0 +1,41 @@
+/b.ts(2,1): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+/b.ts(3,1): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+/b.ts(4,8): error TS2749: 'types.Value' refers to a value, but is being used as a type here. Did you mean 'typeof types.Value'?
+/b.ts(5,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+/b.ts(6,7): error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
+/b.ts(8,13): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /a.ts (0 errors) ====
+    export class A { a!: string }
+    export class B { b!: number }
+    export type C<T> = T;
+    export const Value = {};
+    
+==== /b.ts (6 errors) ====
+    import type * as types from './a';
+    types;
+    ~~~~~
+!!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
+    types.Value;
+    ~~~~~
+!!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
+    let v: types.Value;
+           ~~~~~~~~~~~
+!!! error TS2749: 'types.Value' refers to a value, but is being used as a type here. Did you mean 'typeof types.Value'?
+    const a: types.A = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:18: 'a' is declared here.
+    const b: types.B = {};
+          ~
+!!! error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
+!!! related TS2728 /a.ts:2:18: 'b' is declared here.
+    const c: types.C<string> = "";
+    const d = { types };
+                ~~~~~
+!!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
+    

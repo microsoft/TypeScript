@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts ===
+declare class FooBase {
+>FooBase : Symbol(FooBase, Decl(parserClassDeclaration18.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(parserClassDeclaration18.ts, 1, 16))
+
+    constructor(n: number);
+>n : Symbol(n, Decl(parserClassDeclaration18.ts, 2, 16))
+
+    constructor(x: any) {
+>x : Symbol(x, Decl(parserClassDeclaration18.ts, 3, 16))
+    }
+    bar1():void;
+>bar1 : Symbol(FooBase.bar1, Decl(parserClassDeclaration18.ts, 4, 5))
+}

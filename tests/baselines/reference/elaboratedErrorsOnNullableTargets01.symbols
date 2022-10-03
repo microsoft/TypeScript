@@ -1,0 +1,19 @@
+=== tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts ===
+export declare let x: null | { foo: { bar: string | null } | undefined } | undefined;
+>x : Symbol(x, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 18))
+>foo : Symbol(foo, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 30))
+>bar : Symbol(bar, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 37))
+
+export declare let y: { foo: { bar: number | undefined } };
+>y : Symbol(y, Decl(elaboratedErrorsOnNullableTargets01.ts, 1, 18))
+>foo : Symbol(foo, Decl(elaboratedErrorsOnNullableTargets01.ts, 1, 23))
+>bar : Symbol(bar, Decl(elaboratedErrorsOnNullableTargets01.ts, 1, 30))
+
+x = y;
+>x : Symbol(x, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 18))
+>y : Symbol(y, Decl(elaboratedErrorsOnNullableTargets01.ts, 1, 18))
+
+y = x;
+>y : Symbol(y, Decl(elaboratedErrorsOnNullableTargets01.ts, 1, 18))
+>x : Symbol(x, Decl(elaboratedErrorsOnNullableTargets01.ts, 0, 18))
+

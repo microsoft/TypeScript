@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/modules/importEmptyFromModuleNotExisted.ts ===
+import {} from 'module-not-existed'
+No type information for this code.
+No type information for this code.

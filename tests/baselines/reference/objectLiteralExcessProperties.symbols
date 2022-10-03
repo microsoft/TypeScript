@@ -1,0 +1,143 @@
+=== tests/cases/compiler/objectLiteralExcessProperties.ts ===
+interface Book {
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+
+    foreword: string;
+>foreword : Symbol(Book.foreword, Decl(objectLiteralExcessProperties.ts, 0, 16))
+}
+
+interface Cover {
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+
+    color?: string;
+>color : Symbol(Cover.color, Decl(objectLiteralExcessProperties.ts, 4, 17))
+}
+
+var b1: Book = { forword: "oops" };
+>b1 : Symbol(b1, Decl(objectLiteralExcessProperties.ts, 8, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>forword : Symbol(forword, Decl(objectLiteralExcessProperties.ts, 8, 16))
+
+var b2: Book | string = { foreward: "nope" };
+>b2 : Symbol(b2, Decl(objectLiteralExcessProperties.ts, 10, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>foreward : Symbol(foreward, Decl(objectLiteralExcessProperties.ts, 10, 25))
+
+var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
+>b3 : Symbol(b3, Decl(objectLiteralExcessProperties.ts, 12, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>foreword : Symbol(foreword, Decl(objectLiteralExcessProperties.ts, 12, 28))
+>forwards : Symbol(forwards, Decl(objectLiteralExcessProperties.ts, 12, 51))
+
+var b4: Book & Cover = { foreword: "hi", colour: "blue" };
+>b4 : Symbol(b4, Decl(objectLiteralExcessProperties.ts, 14, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+>foreword : Symbol(foreword, Decl(objectLiteralExcessProperties.ts, 14, 24))
+>colour : Symbol(colour, Decl(objectLiteralExcessProperties.ts, 14, 40))
+
+var b5: Book & Cover = { foreward: "hi", color: "blue" };
+>b5 : Symbol(b5, Decl(objectLiteralExcessProperties.ts, 16, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+>foreward : Symbol(foreward, Decl(objectLiteralExcessProperties.ts, 16, 24))
+>color : Symbol(color, Decl(objectLiteralExcessProperties.ts, 16, 40))
+
+var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
+>b6 : Symbol(b6, Decl(objectLiteralExcessProperties.ts, 18, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+>foreword : Symbol(foreword, Decl(objectLiteralExcessProperties.ts, 18, 24))
+>color : Symbol(color, Decl(objectLiteralExcessProperties.ts, 18, 40))
+>price : Symbol(price, Decl(objectLiteralExcessProperties.ts, 18, 55))
+
+var b7: Book & number = { foreword: "hi", price: 10.99 };
+>b7 : Symbol(b7, Decl(objectLiteralExcessProperties.ts, 20, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>foreword : Symbol(foreword, Decl(objectLiteralExcessProperties.ts, 20, 25))
+>price : Symbol(price, Decl(objectLiteralExcessProperties.ts, 20, 41))
+
+var b8: Cover | Cover[] = { couleur : "non" };
+>b8 : Symbol(b8, Decl(objectLiteralExcessProperties.ts, 22, 3))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+>couleur : Symbol(couleur, Decl(objectLiteralExcessProperties.ts, 22, 27))
+
+var b9: Book | Book[] = { forewarned: "still no" };
+>b9 : Symbol(b9, Decl(objectLiteralExcessProperties.ts, 24, 3))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+>forewarned : Symbol(forewarned, Decl(objectLiteralExcessProperties.ts, 24, 25))
+
+interface Indexed {
+>Indexed : Symbol(Indexed, Decl(objectLiteralExcessProperties.ts, 24, 51))
+
+    [n: number]: Cover;
+>n : Symbol(n, Decl(objectLiteralExcessProperties.ts, 27, 5))
+>Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+}
+
+var b10: Indexed = { 0: { }, '1': { } }; // ok
+>b10 : Symbol(b10, Decl(objectLiteralExcessProperties.ts, 30, 3))
+>Indexed : Symbol(Indexed, Decl(objectLiteralExcessProperties.ts, 24, 51))
+>0 : Symbol(0, Decl(objectLiteralExcessProperties.ts, 30, 20))
+>'1' : Symbol('1', Decl(objectLiteralExcessProperties.ts, 30, 28))
+
+var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
+>b11 : Symbol(b11, Decl(objectLiteralExcessProperties.ts, 32, 3))
+>Indexed : Symbol(Indexed, Decl(objectLiteralExcessProperties.ts, 24, 51))
+>0 : Symbol(0, Decl(objectLiteralExcessProperties.ts, 32, 20))
+>colour : Symbol(colour, Decl(objectLiteralExcessProperties.ts, 32, 25))
+
+// Repros inspired by #28752
+
+function test<T extends IFoo>() {
+>test : Symbol(test, Decl(objectLiteralExcessProperties.ts, 32, 45))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>IFoo : Symbol(IFoo)
+
+    // No excess property checks on generic types
+    const obj1: T = { name: "test" };
+>obj1 : Symbol(obj1, Decl(objectLiteralExcessProperties.ts, 38, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 38, 21))
+
+    // No excess property checks on intersections involving generics
+    const obj2: T & { prop: boolean } = { name: "test", prop: true };
+>obj2 : Symbol(obj2, Decl(objectLiteralExcessProperties.ts, 40, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 40, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 40, 41))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 40, 55))
+
+    // Excess property checks only on non-generic parts of unions
+    const obj3: T | { prop: boolean } = { name: "test", prop: true };
+>obj3 : Symbol(obj3, Decl(objectLiteralExcessProperties.ts, 42, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 42, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 42, 41))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 42, 55))
+
+    // Excess property checks only on non-generic parts of unions
+    const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
+>obj4 : Symbol(obj4, Decl(objectLiteralExcessProperties.ts, 44, 9))
+>T : Symbol(T, Decl(objectLiteralExcessProperties.ts, 36, 14))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 44, 21))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 44, 41))
+>name : Symbol(name, Decl(objectLiteralExcessProperties.ts, 44, 60))
+>prop : Symbol(prop, Decl(objectLiteralExcessProperties.ts, 44, 74))
+
+    // No excess property checks when union includes 'object' type
+    const obj5: object | { x: string } = { z: 'abc' }
+>obj5 : Symbol(obj5, Decl(objectLiteralExcessProperties.ts, 46, 9))
+>x : Symbol(x, Decl(objectLiteralExcessProperties.ts, 46, 26))
+>z : Symbol(z, Decl(objectLiteralExcessProperties.ts, 46, 42))
+
+    // The 'object' type has no effect on intersections
+    const obj6: object & { x: string } = { z: 'abc' }
+>obj6 : Symbol(obj6, Decl(objectLiteralExcessProperties.ts, 48, 9))
+>x : Symbol(x, Decl(objectLiteralExcessProperties.ts, 48, 26))
+>z : Symbol(z, Decl(objectLiteralExcessProperties.ts, 48, 42))
+}
+

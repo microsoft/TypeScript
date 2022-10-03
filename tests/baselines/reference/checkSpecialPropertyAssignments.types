@@ -1,0 +1,31 @@
+=== tests/cases/conformance/salsa/bug24252.js ===
+var A = {};
+>A : typeof A
+>{} : {}
+
+A.B = class {
+>A.B = class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
+
+    m() {
+>m : () => void
+
+        /** @type {string[]} */
+        var x = [];
+>x : string[]
+>[] : undefined[]
+
+        /** @type {number[]} */
+        var y;
+>y : number[]
+
+        y = x;
+>y = x : string[]
+>y : number[]
+>x : string[]
+    }
+};
+

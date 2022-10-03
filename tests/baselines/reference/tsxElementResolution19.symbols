@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module "react" {
+>"react" : Symbol("react", Decl(react.d.ts, 0, 0))
+
+}
+
+=== tests/cases/conformance/jsx/file1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
+
+    interface Element { }
+>Element : Symbol(Element, Decl(file1.tsx, 0, 20))
+}
+export class MyClass { }
+>MyClass : Symbol(MyClass, Decl(file1.tsx, 2, 1))
+
+=== tests/cases/conformance/jsx/file2.tsx ===
+// Should not elide React import
+import * as React from 'react';
+>React : Symbol(React, Decl(file2.tsx, 1, 6))
+
+import {MyClass} from './file1';
+>MyClass : Symbol(MyClass, Decl(file2.tsx, 2, 8))
+
+<MyClass />;
+>MyClass : Symbol(MyClass, Decl(file2.tsx, 2, 8))
+

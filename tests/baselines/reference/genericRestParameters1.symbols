@@ -1,0 +1,642 @@
+=== tests/cases/conformance/types/rest/genericRestParameters1.ts ===
+declare let f1: (...x: [number, string, boolean]) => void;
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 0, 17))
+
+declare let f2: (x0: number, x1: string, x2: boolean) => void;
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>x0 : Symbol(x0, Decl(genericRestParameters1.ts, 1, 17))
+>x1 : Symbol(x1, Decl(genericRestParameters1.ts, 1, 28))
+>x2 : Symbol(x2, Decl(genericRestParameters1.ts, 1, 40))
+
+f1 = f2;
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+
+f2 = f1;
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+
+declare const t3: [number, string, boolean];
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+
+declare const t2: [string, boolean];
+>t2 : Symbol(t2, Decl(genericRestParameters1.ts, 7, 13))
+
+declare const t1: [boolean];
+>t1 : Symbol(t1, Decl(genericRestParameters1.ts, 8, 13))
+
+declare const t0: [];
+>t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
+
+declare const ns: [number, string];
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+
+declare const sn: [string, number];
+>sn : Symbol(sn, Decl(genericRestParameters1.ts, 12, 13))
+
+f1(42, "hello", true);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+
+f1(t3[0], t3[1], t3[2]);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>0 : Symbol(0)
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>1 : Symbol(1)
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>2 : Symbol(2)
+
+f1(...t3);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+
+f1(42, ...t2);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>t2 : Symbol(t2, Decl(genericRestParameters1.ts, 7, 13))
+
+f1(42, "hello", ...t1);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>t1 : Symbol(t1, Decl(genericRestParameters1.ts, 8, 13))
+
+f1(42, "hello", true, ...t0);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
+
+f1(ns[0], ns[1], true);
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+>0 : Symbol(0)
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+>1 : Symbol(1)
+
+f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+>f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+
+f2(42, "hello", true);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+
+f2(t3[0], t3[1], t3[2]);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>0 : Symbol(0)
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>1 : Symbol(1)
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+>2 : Symbol(2)
+
+f2(...t3);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+
+f2(42, ...t2);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>t2 : Symbol(t2, Decl(genericRestParameters1.ts, 7, 13))
+
+f2(42, "hello", ...t1);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>t1 : Symbol(t1, Decl(genericRestParameters1.ts, 8, 13))
+
+f2(42, "hello", true, ...t0);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
+
+f2(ns[0], ns[1], true);
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+>0 : Symbol(0)
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+>1 : Symbol(1)
+
+f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
+>f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+
+declare function f10<T extends unknown[]>(...args: T): T;
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 32, 21))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 32, 42))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 32, 21))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 32, 21))
+
+const x10 = f10(42, "hello", true);  // [number, string, boolean]
+>x10 : Symbol(x10, Decl(genericRestParameters1.ts, 34, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+
+const x11 = f10(42, "hello");  // [number, string]
+>x11 : Symbol(x11, Decl(genericRestParameters1.ts, 35, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+
+const x12 = f10(42);  // [number]
+>x12 : Symbol(x12, Decl(genericRestParameters1.ts, 36, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+
+const x13 = f10();  // []
+>x13 : Symbol(x13, Decl(genericRestParameters1.ts, 37, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+
+const x14 = f10(...t3);  // [number, string, boolean]
+>x14 : Symbol(x14, Decl(genericRestParameters1.ts, 38, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+
+const x15 = f10(42, ...t2);  // [number, string, boolean]
+>x15 : Symbol(x15, Decl(genericRestParameters1.ts, 39, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>t2 : Symbol(t2, Decl(genericRestParameters1.ts, 7, 13))
+
+const x16 = f10(42, "hello", ...t1);  // [number, string, boolean]
+>x16 : Symbol(x16, Decl(genericRestParameters1.ts, 40, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>t1 : Symbol(t1, Decl(genericRestParameters1.ts, 8, 13))
+
+const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
+>x17 : Symbol(x17, Decl(genericRestParameters1.ts, 41, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
+
+const x18 = f10(...ns, true);  // (string | number | boolean)[]
+>x18 : Symbol(x18, Decl(genericRestParameters1.ts, 42, 5))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+
+function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
+>g10 : Symbol(g10, Decl(genericRestParameters1.ts, 42, 29))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 44, 13))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 44, 32))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 44, 13))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 44, 66))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 44, 32))
+
+    let x1 = f10(...u);  // U
+>x1 : Symbol(x1, Decl(genericRestParameters1.ts, 45, 7))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
+
+    let x2 = f10(...v);  // V
+>x2 : Symbol(x2, Decl(genericRestParameters1.ts, 46, 7))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 44, 66))
+
+    let x3 = f10(1, ...u);  // [number, ...string[]]
+>x3 : Symbol(x3, Decl(genericRestParameters1.ts, 47, 7))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
+
+    let x4 = f10(...u, ...v);  // (string | number)[]
+>x4 : Symbol(x4, Decl(genericRestParameters1.ts, 48, 7))
+>f10 : Symbol(f10, Decl(genericRestParameters1.ts, 30, 16))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 44, 61))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 44, 66))
+}
+
+declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 51, 21))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 51, 62))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 51, 21))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 51, 21))
+
+const z10 = f11(42, "hello", true);  // [42, "hello", true]
+>z10 : Symbol(z10, Decl(genericRestParameters1.ts, 53, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+
+const z11 = f11(42, "hello");  // [42, "hello"]
+>z11 : Symbol(z11, Decl(genericRestParameters1.ts, 54, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+
+const z12 = f11(42);  // [42]
+>z12 : Symbol(z12, Decl(genericRestParameters1.ts, 55, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+
+const z13 = f11();  // []
+>z13 : Symbol(z13, Decl(genericRestParameters1.ts, 56, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+
+const z14 = f11(...t3);  // [number, string, boolean]
+>z14 : Symbol(z14, Decl(genericRestParameters1.ts, 57, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
+
+const z15 = f11(42, ...t2);  // [42, string, boolean]
+>z15 : Symbol(z15, Decl(genericRestParameters1.ts, 58, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>t2 : Symbol(t2, Decl(genericRestParameters1.ts, 7, 13))
+
+const z16 = f11(42, "hello", ...t1);  // [42, "hello", boolean]
+>z16 : Symbol(z16, Decl(genericRestParameters1.ts, 59, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>t1 : Symbol(t1, Decl(genericRestParameters1.ts, 8, 13))
+
+const z17 = f11(42, "hello", true, ...t0);  // [42, "hello", true]
+>z17 : Symbol(z17, Decl(genericRestParameters1.ts, 60, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>t0 : Symbol(t0, Decl(genericRestParameters1.ts, 9, 13))
+
+const z18 = f11(...ns, true);  // (string | number | true)[]
+>z18 : Symbol(z18, Decl(genericRestParameters1.ts, 61, 5))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
+
+function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
+>g11 : Symbol(g11, Decl(genericRestParameters1.ts, 61, 29))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 63, 13))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 63, 32))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 63, 13))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 63, 66))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 63, 32))
+
+    let x1 = f11(...u);  // U
+>x1 : Symbol(x1, Decl(genericRestParameters1.ts, 64, 7))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
+
+    let x2 = f11(...v);  // V
+>x2 : Symbol(x2, Decl(genericRestParameters1.ts, 65, 7))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 63, 66))
+
+    let x3 = f11(1, ...u);  // [1, ...string[]]
+>x3 : Symbol(x3, Decl(genericRestParameters1.ts, 66, 7))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
+
+    let x4 = f11(...u, ...v);  // (string | number)[]
+>x4 : Symbol(x4, Decl(genericRestParameters1.ts, 67, 7))
+>f11 : Symbol(f11, Decl(genericRestParameters1.ts, 49, 1))
+>u : Symbol(u, Decl(genericRestParameters1.ts, 63, 61))
+>v : Symbol(v, Decl(genericRestParameters1.ts, 63, 66))
+}
+
+function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 70, 14))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 70, 34))
+>f : Symbol(f, Decl(genericRestParameters1.ts, 70, 38))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 70, 42))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 70, 14))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 70, 34))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 70, 59))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 70, 14))
+
+    return f(...args);
+>f : Symbol(f, Decl(genericRestParameters1.ts, 70, 38))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 70, 59))
+}
+
+function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
+>callr : Symbol(callr, Decl(genericRestParameters1.ts, 72, 1))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 74, 15))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 74, 35))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 74, 39))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 74, 15))
+>f : Symbol(f, Decl(genericRestParameters1.ts, 74, 47))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 74, 52))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 74, 15))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 74, 35))
+
+    return f(...args);
+>f : Symbol(f, Decl(genericRestParameters1.ts, 74, 47))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 74, 39))
+}
+
+declare function f15(a: string, b: number): string | number;
+>f15 : Symbol(f15, Decl(genericRestParameters1.ts, 76, 1))
+>a : Symbol(a, Decl(genericRestParameters1.ts, 78, 21))
+>b : Symbol(b, Decl(genericRestParameters1.ts, 78, 31))
+
+declare function f16<A, B>(a: A, b: B): A | B;
+>f16 : Symbol(f16, Decl(genericRestParameters1.ts, 78, 60))
+>A : Symbol(A, Decl(genericRestParameters1.ts, 79, 21))
+>B : Symbol(B, Decl(genericRestParameters1.ts, 79, 23))
+>a : Symbol(a, Decl(genericRestParameters1.ts, 79, 27))
+>A : Symbol(A, Decl(genericRestParameters1.ts, 79, 21))
+>b : Symbol(b, Decl(genericRestParameters1.ts, 79, 32))
+>B : Symbol(B, Decl(genericRestParameters1.ts, 79, 23))
+>A : Symbol(A, Decl(genericRestParameters1.ts, 79, 21))
+>B : Symbol(B, Decl(genericRestParameters1.ts, 79, 23))
+
+let x20 = call((x, y) => x + y, 10, 20);  // number
+>x20 : Symbol(x20, Decl(genericRestParameters1.ts, 81, 3))
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 81, 16))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 81, 18))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 81, 16))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 81, 18))
+
+let x21 = call((x, y) => x + y, 10, "hello");  // string
+>x21 : Symbol(x21, Decl(genericRestParameters1.ts, 82, 3))
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 82, 16))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 82, 18))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 82, 16))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 82, 18))
+
+let x22 = call(f15, "hello", 42);  // string | number
+>x22 : Symbol(x22, Decl(genericRestParameters1.ts, 83, 3))
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>f15 : Symbol(f15, Decl(genericRestParameters1.ts, 76, 1))
+
+let x23 = call(f16, "hello", 42);  // unknown
+>x23 : Symbol(x23, Decl(genericRestParameters1.ts, 84, 3))
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>f16 : Symbol(f16, Decl(genericRestParameters1.ts, 78, 60))
+
+let x24 = call<[string, number], string | number>(f16, "hello", 42);  // string | number
+>x24 : Symbol(x24, Decl(genericRestParameters1.ts, 85, 3))
+>call : Symbol(call, Decl(genericRestParameters1.ts, 68, 1))
+>f16 : Symbol(f16, Decl(genericRestParameters1.ts, 78, 60))
+
+let x30 = callr(sn, (x, y) => x + y);  // string
+>x30 : Symbol(x30, Decl(genericRestParameters1.ts, 87, 3))
+>callr : Symbol(callr, Decl(genericRestParameters1.ts, 72, 1))
+>sn : Symbol(sn, Decl(genericRestParameters1.ts, 12, 13))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 87, 21))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 87, 23))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 87, 21))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 87, 23))
+
+let x31 = callr(sn, f15);  // string | number
+>x31 : Symbol(x31, Decl(genericRestParameters1.ts, 88, 3))
+>callr : Symbol(callr, Decl(genericRestParameters1.ts, 72, 1))
+>sn : Symbol(sn, Decl(genericRestParameters1.ts, 12, 13))
+>f15 : Symbol(f15, Decl(genericRestParameters1.ts, 76, 1))
+
+let x32 = callr(sn, f16);  // string | number
+>x32 : Symbol(x32, Decl(genericRestParameters1.ts, 89, 3))
+>callr : Symbol(callr, Decl(genericRestParameters1.ts, 72, 1))
+>sn : Symbol(sn, Decl(genericRestParameters1.ts, 12, 13))
+>f16 : Symbol(f16, Decl(genericRestParameters1.ts, 78, 60))
+
+function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 91, 14))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 91, 16))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 91, 37))
+>f : Symbol(f, Decl(genericRestParameters1.ts, 91, 41))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 91, 45))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 91, 14))
+>rest : Symbol(rest, Decl(genericRestParameters1.ts, 91, 50))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 91, 16))
+>V : Symbol(V, Decl(genericRestParameters1.ts, 91, 37))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 91, 68))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 91, 14))
+
+    return (...rest: U) => f(x, ...rest);
+>rest : Symbol(rest, Decl(genericRestParameters1.ts, 92, 12))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 91, 16))
+>f : Symbol(f, Decl(genericRestParameters1.ts, 91, 41))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 91, 68))
+>rest : Symbol(rest, Decl(genericRestParameters1.ts, 92, 12))
+}
+
+declare const f20: (x: number, y: string, z: boolean) => string[];
+>f20 : Symbol(f20, Decl(genericRestParameters1.ts, 95, 13))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 95, 20))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 95, 30))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 95, 41))
+
+const f21 = bind(f20, 42);  // (y: string, z: boolean) => string[]
+>f21 : Symbol(f21, Decl(genericRestParameters1.ts, 97, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>f20 : Symbol(f20, Decl(genericRestParameters1.ts, 95, 13))
+
+const f22 = bind(f21, "hello");  // (z: boolean) => string[]
+>f22 : Symbol(f22, Decl(genericRestParameters1.ts, 98, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>f21 : Symbol(f21, Decl(genericRestParameters1.ts, 97, 5))
+
+const f23 = bind(f22, true);  // () => string[]
+>f23 : Symbol(f23, Decl(genericRestParameters1.ts, 99, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>f22 : Symbol(f22, Decl(genericRestParameters1.ts, 98, 5))
+
+f20(42, "hello", true);
+>f20 : Symbol(f20, Decl(genericRestParameters1.ts, 95, 13))
+
+f21("hello", true);
+>f21 : Symbol(f21, Decl(genericRestParameters1.ts, 97, 5))
+
+f22(true);
+>f22 : Symbol(f22, Decl(genericRestParameters1.ts, 98, 5))
+
+f23();
+>f23 : Symbol(f23, Decl(genericRestParameters1.ts, 99, 5))
+
+declare const g20: (x: number, y?: string, z?: boolean) => string[];
+>g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 106, 20))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 106, 30))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 106, 42))
+
+const g21 = bind(g20, 42);  // (y: string, z: boolean) => string[]
+>g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
+
+const g22 = bind(g21, "hello");  // (z: boolean) => string[]
+>g22 : Symbol(g22, Decl(genericRestParameters1.ts, 109, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
+
+const g23 = bind(g22, true);  // () => string[]
+>g23 : Symbol(g23, Decl(genericRestParameters1.ts, 110, 5))
+>bind : Symbol(bind, Decl(genericRestParameters1.ts, 89, 25))
+>g22 : Symbol(g22, Decl(genericRestParameters1.ts, 109, 5))
+
+g20(42, "hello", true);
+>g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
+
+g20(42, "hello");
+>g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
+
+g20(42);
+>g20 : Symbol(g20, Decl(genericRestParameters1.ts, 106, 13))
+
+g21("hello", true);
+>g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
+
+g21("hello");
+>g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
+
+g21();
+>g21 : Symbol(g21, Decl(genericRestParameters1.ts, 108, 5))
+
+g22(true);
+>g22 : Symbol(g22, Decl(genericRestParameters1.ts, 109, 5))
+
+g22();
+>g22 : Symbol(g22, Decl(genericRestParameters1.ts, 109, 5))
+
+g23();
+>g23 : Symbol(g23, Decl(genericRestParameters1.ts, 110, 5))
+
+declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
+>f30 : Symbol(f30, Decl(genericRestParameters1.ts, 120, 6))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 122, 21))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 122, 23))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 122, 36))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 122, 21))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 122, 53))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 122, 21))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 122, 58))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 122, 23))
+>U : Symbol(U, Decl(genericRestParameters1.ts, 122, 23))
+
+const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
+>c30 : Symbol(c30, Decl(genericRestParameters1.ts, 124, 5))
+>f30 : Symbol(f30, Decl(genericRestParameters1.ts, 120, 6))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 124, 19))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 124, 19))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 124, 32))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 124, 32))
+
+type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
+>T01 : Symbol(T01, Decl(genericRestParameters1.ts, 124, 45))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 126, 23))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 126, 33))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 126, 44))
+
+type T02 = Parameters<(...args: [number, string, boolean]) => void>;
+>T02 : Symbol(T02, Decl(genericRestParameters1.ts, 126, 66))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 127, 23))
+
+type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
+>T03 : Symbol(T03, Decl(genericRestParameters1.ts, 127, 68))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 128, 38))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 128, 48))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 128, 59))
+
+type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
+>T04 : Symbol(T04, Decl(genericRestParameters1.ts, 128, 81))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 129, 38))
+
+type T05<T> = Parameters<(...args: T[]) => void>;
+>T05 : Symbol(T05, Decl(genericRestParameters1.ts, 129, 83))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 130, 26))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
+
+type T06<T> = ConstructorParameters<new (...args: []) => void>;
+>T06 : Symbol(T06, Decl(genericRestParameters1.ts, 130, 49))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 131, 9))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 131, 41))
+
+type T07<T extends any[]> = Parameters<(...args: T) => void>;
+>T07 : Symbol(T07, Decl(genericRestParameters1.ts, 131, 63))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 132, 40))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
+
+type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
+>T08 : Symbol(T08, Decl(genericRestParameters1.ts, 132, 61))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 133, 55))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
+
+type T09 = Parameters<Function>;
+>T09 : Symbol(T09, Decl(genericRestParameters1.ts, 133, 76))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type Record1 = {
+>Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
+
+  move: [number, 'left' | 'right'];
+>move : Symbol(move, Decl(genericRestParameters1.ts, 136, 16))
+
+  jump: [number, 'up' | 'down'];
+>jump : Symbol(jump, Decl(genericRestParameters1.ts, 137, 35))
+
+  stop: string;
+>stop : Symbol(stop, Decl(genericRestParameters1.ts, 138, 32))
+
+  done: [];
+>done : Symbol(done, Decl(genericRestParameters1.ts, 139, 15))
+}
+
+type EventType<T> = {
+>EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 141, 1))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+
+  emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>e : Symbol(e, Decl(genericRestParameters1.ts, 144, 36))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>payload : Symbol(payload, Decl(genericRestParameters1.ts, 144, 41))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+}
+
+declare var events: EventType<Record1>;
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 141, 1))
+>Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
+
+events.emit('move', 10, 'left');
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+
+events.emit('jump', 20, 'up');
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+
+events.emit('stop', 'Bye!');
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+
+events.emit('done');
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+
+// Repro from #25871
+
+declare var ff1: (... args: any[]) => void;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 155, 18))
+
+declare var ff2: () => void;
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 157, 11))
+
+declare var ff3: (...args: []) => void;
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 158, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 158, 18))
+
+declare var ff4: (a: never) => void;
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 159, 11))
+>a : Symbol(a, Decl(genericRestParameters1.ts, 159, 18))
+
+ff1 = ff2;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 157, 11))
+
+ff1 = ff3;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 158, 11))
+
+ff1 = ff4;  // Error
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 159, 11))
+

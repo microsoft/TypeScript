@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts ===
+var x: TypeModule1.
+>x : Symbol(x, Decl(parserUnfinishedTypeNameBeforeKeyword1.ts, 0, 3))
+>TypeModule1 : Symbol(TypeModule1)
+
+module TypeModule2 {
+> : Symbol(unknown)
+>TypeModule2 : Symbol(TypeModule2, Decl(parserUnfinishedTypeNameBeforeKeyword1.ts, 0, 19))
+}
+

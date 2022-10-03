@@ -1,0 +1,17 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of31.ts ===
+var a: string, b: number;
+>a : Symbol(a, Decl(ES5For-of31.ts, 0, 3))
+>b : Symbol(b, Decl(ES5For-of31.ts, 0, 14))
+
+for ({ a: b = 1, b: a = ""} of []) {
+>a : Symbol(a, Decl(ES5For-of31.ts, 2, 6))
+>b : Symbol(b, Decl(ES5For-of31.ts, 0, 14))
+>b : Symbol(b, Decl(ES5For-of31.ts, 2, 16))
+>a : Symbol(a, Decl(ES5For-of31.ts, 0, 3))
+
+    a;
+>a : Symbol(a, Decl(ES5For-of31.ts, 0, 3))
+
+    b;
+>b : Symbol(b, Decl(ES5For-of31.ts, 0, 14))
+}

@@ -1,0 +1,28 @@
+=== tests/cases/compiler/file.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(file.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(file.ts, 0, 11))
+}
+
+declare global {
+>global : Symbol(global, Decl(file.ts, 2, 1))
+
+    var module: any; // Just here to remove unrelated error from test
+>module : Symbol(module, Decl(file.ts, 5, 7))
+}
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(file.ts, 0, 0))
+
+=== tests/cases/compiler/something.js ===
+/** @typedef {typeof import("./file")} Foo */
+
+/** @typedef {(foo: Foo) => string} FooFun */
+
+module.exports = /** @type {FooFun} */(void 0);
+>module.exports : Symbol(module.exports, Decl(something.js, 0, 0))
+>module : Symbol(export=, Decl(something.js, 0, 0))
+>exports : Symbol(export=, Decl(something.js, 0, 0))
+

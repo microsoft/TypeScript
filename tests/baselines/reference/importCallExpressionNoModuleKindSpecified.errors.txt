@@ -1,0 +1,41 @@
+error TS2468: Cannot find global value 'Promise'.
+tests/cases/conformance/dynamicImport/2.ts(3,24): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/dynamicImport/2.ts(5,27): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/dynamicImport/2.ts(8,12): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/dynamicImport/2.ts(10,29): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+    export class B {
+        print() { return "I am B"}
+    }
+    
+    export function foo() { return "foo" }
+    
+==== tests/cases/conformance/dynamicImport/1.ts (0 errors) ====
+    export function backup() { return "backup"; }
+    
+==== tests/cases/conformance/dynamicImport/2.ts (4 errors) ====
+    declare var console: any;
+    class C {
+        private myModule = import("./0");
+                           ~~~~~~~~~~~~~
+!!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+        method() {
+            const loadAsync = import("./0");
+                              ~~~~~~~~~~~~~
+!!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+            this.myModule.then(Zero => {
+                console.log(Zero.foo());
+            }, async err => {
+               ~~~~~~~~~~~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+                console.log(err);
+                let one = await import("./1");
+                                ~~~~~~~~~~~~~
+!!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+                console.log(one.backup());
+            });
+        }
+    }

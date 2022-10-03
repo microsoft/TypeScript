@@ -1,0 +1,240 @@
+===================================================================
+JsFile: sourceMapValidationForIn.js
+mapUrl: sourceMapValidationForIn.js.map
+sourceRoot: 
+sources: sourceMapValidationForIn.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationForIn.js
+sourceFile:sourceMapValidationForIn.ts
+-------------------------------------------------------------------
+>>>for (var x in String) {
+1 >
+2 >^^^^^
+3 >     ^^^^
+4 >         ^
+5 >          ^^^^
+6 >              ^^^^^^
+7 >                    ^^
+1 >
+2 >for (
+3 >     var 
+4 >         x
+5 >           in 
+6 >              String
+7 >                    ) 
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+---
+>>>    WScript.Echo(x);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^
+5 >                ^
+6 >                 ^
+7 >                  ^
+8 >                   ^
+1 >{
+  >    
+2 >    WScript
+3 >           .
+4 >            Echo
+5 >                (
+6 >                 x
+7 >                  )
+8 >                   ;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+5 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
+6 >Emitted(2, 19) Source(2, 19) + SourceIndex(0)
+7 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+8 >Emitted(2, 21) Source(2, 21) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>for (x in String) {
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^
+5 >          ^^^^^^
+6 >                ^^
+7 >                  ^^^->
+1->
+  >
+2 >for (
+3 >     x
+4 >       in 
+5 >          String
+6 >                ) 
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
+3 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+4 >Emitted(4, 11) Source(4, 11) + SourceIndex(0)
+5 >Emitted(4, 17) Source(4, 17) + SourceIndex(0)
+6 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
+---
+>>>    WScript.Echo(x);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^
+5 >                ^
+6 >                 ^
+7 >                  ^
+8 >                   ^
+1->{
+  >    
+2 >    WScript
+3 >           .
+4 >            Echo
+5 >                (
+6 >                 x
+7 >                  )
+8 >                   ;
+1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 12) Source(5, 12) + SourceIndex(0)
+3 >Emitted(5, 13) Source(5, 13) + SourceIndex(0)
+4 >Emitted(5, 17) Source(5, 17) + SourceIndex(0)
+5 >Emitted(5, 18) Source(5, 18) + SourceIndex(0)
+6 >Emitted(5, 19) Source(5, 19) + SourceIndex(0)
+7 >Emitted(5, 20) Source(5, 20) + SourceIndex(0)
+8 >Emitted(5, 21) Source(5, 21) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
+---
+>>>for (var x2 in String) {
+1->
+2 >^^^^^
+3 >     ^^^^
+4 >         ^^
+5 >           ^^^^
+6 >               ^^^^^^
+7 >                     ^^
+1->
+  >
+2 >for (
+3 >     var 
+4 >         x2
+5 >            in 
+6 >               String
+7 >                     )
+  >                     
+1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
+3 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
+4 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
+5 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
+6 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
+7 >Emitted(7, 24) Source(8, 1) + SourceIndex(0)
+---
+>>>    WScript.Echo(x2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^
+5 >                ^
+6 >                 ^^
+7 >                   ^
+8 >                    ^
+1 >{
+  >    
+2 >    WScript
+3 >           .
+4 >            Echo
+5 >                (
+6 >                 x2
+7 >                   )
+8 >                    ;
+1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
+2 >Emitted(8, 12) Source(9, 12) + SourceIndex(0)
+3 >Emitted(8, 13) Source(9, 13) + SourceIndex(0)
+4 >Emitted(8, 17) Source(9, 17) + SourceIndex(0)
+5 >Emitted(8, 18) Source(9, 18) + SourceIndex(0)
+6 >Emitted(8, 20) Source(9, 20) + SourceIndex(0)
+7 >Emitted(8, 21) Source(9, 21) + SourceIndex(0)
+8 >Emitted(8, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
+---
+>>>for (x in String) {
+1->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^
+5 >          ^^^^^^
+6 >                ^^
+7 >                  ^^^->
+1->
+  >
+2 >for (
+3 >     x
+4 >       in 
+5 >          String
+6 >                )
+  >                
+1->Emitted(10, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(10, 6) Source(11, 6) + SourceIndex(0)
+3 >Emitted(10, 7) Source(11, 7) + SourceIndex(0)
+4 >Emitted(10, 11) Source(11, 11) + SourceIndex(0)
+5 >Emitted(10, 17) Source(11, 17) + SourceIndex(0)
+6 >Emitted(10, 19) Source(12, 1) + SourceIndex(0)
+---
+>>>    WScript.Echo(x);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^
+5 >                ^
+6 >                 ^
+7 >                  ^
+8 >                   ^
+1->{
+  >    
+2 >    WScript
+3 >           .
+4 >            Echo
+5 >                (
+6 >                 x
+7 >                  )
+8 >                   ;
+1->Emitted(11, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(11, 12) Source(13, 12) + SourceIndex(0)
+3 >Emitted(11, 13) Source(13, 13) + SourceIndex(0)
+4 >Emitted(11, 17) Source(13, 17) + SourceIndex(0)
+5 >Emitted(11, 18) Source(13, 18) + SourceIndex(0)
+6 >Emitted(11, 19) Source(13, 19) + SourceIndex(0)
+7 >Emitted(11, 20) Source(13, 20) + SourceIndex(0)
+8 >Emitted(11, 21) Source(13, 21) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(12, 2) Source(14, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationForIn.js.map

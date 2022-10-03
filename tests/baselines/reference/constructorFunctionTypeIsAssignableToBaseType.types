@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/constructorFunctionTypeIsAssignableToBaseType.ts ===
+class Base {
+>Base : Base
+
+    static foo: {
+>foo : { bar: Object; }
+
+        bar: Object;
+>bar : Object
+    }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    // ok
+    static foo: {
+>foo : { bar: number; }
+
+        bar: number;
+>bar : number
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Derived2
+>Base : Base
+
+    // ok, use assignability here
+    static foo: {
+>foo : { bar: any; }
+
+        bar: any;
+>bar : any
+    }
+}

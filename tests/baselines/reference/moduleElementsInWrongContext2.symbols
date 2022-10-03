@@ -1,0 +1,67 @@
+=== tests/cases/compiler/moduleElementsInWrongContext2.ts ===
+function blah () {
+>blah : Symbol(blah, Decl(moduleElementsInWrongContext2.ts, 0, 0))
+
+    module M { }
+>M : Symbol(M, Decl(moduleElementsInWrongContext2.ts, 0, 18))
+
+    export namespace N {
+>N : Symbol(N, Decl(moduleElementsInWrongContext2.ts, 1, 16))
+
+        export interface I { }
+>I : Symbol(I, Decl(moduleElementsInWrongContext2.ts, 2, 24))
+    }
+
+    namespace Q.K { }
+>Q : Symbol(Q, Decl(moduleElementsInWrongContext2.ts, 4, 5))
+>K : Symbol(K, Decl(moduleElementsInWrongContext2.ts, 6, 16))
+
+    declare module "ambient" {
+>"ambient" : Symbol("ambient", Decl(moduleElementsInWrongContext2.ts, 6, 21))
+
+    }
+
+    export = M;
+>M : Symbol(M, Decl(moduleElementsInWrongContext2.ts, 0, 18))
+
+    var v;
+>v : Symbol(v, Decl(moduleElementsInWrongContext2.ts, 14, 7))
+
+    function foo() { }
+>foo : Symbol(foo, Decl(moduleElementsInWrongContext2.ts, 14, 10), Decl(moduleElementsInWrongContext2.ts, 17, 12))
+
+    export * from "ambient";
+    export { foo };
+>foo : Symbol(foo, Decl(moduleElementsInWrongContext2.ts, 14, 10), Decl(moduleElementsInWrongContext2.ts, 17, 12))
+
+    export { baz as b } from "ambient";
+>b : Symbol(b, Decl(moduleElementsInWrongContext2.ts, 18, 12))
+
+    export default v;
+>v : Symbol(v, Decl(moduleElementsInWrongContext2.ts, 14, 7))
+
+    export default class C { }
+>C : Symbol(C, Decl(moduleElementsInWrongContext2.ts, 19, 21))
+
+    export function bee() { }
+>bee : Symbol(bee, Decl(moduleElementsInWrongContext2.ts, 20, 30))
+
+    import I = M;
+>I : Symbol(I, Decl(moduleElementsInWrongContext2.ts, 21, 29))
+>M : Symbol(M, Decl(moduleElementsInWrongContext2.ts, 0, 18))
+
+    import I2 = require("foo");
+>I2 : Symbol(I2, Decl(moduleElementsInWrongContext2.ts, 22, 17))
+
+    import * as Foo from "ambient";
+>Foo : Symbol(Foo, Decl(moduleElementsInWrongContext2.ts, 24, 10))
+
+    import bar from "ambient";
+>bar : Symbol(bar, Decl(moduleElementsInWrongContext2.ts, 25, 10))
+
+    import { baz } from "ambient";
+>baz : Symbol(baz, Decl(moduleElementsInWrongContext2.ts, 26, 12))
+
+    import "ambient";
+}
+

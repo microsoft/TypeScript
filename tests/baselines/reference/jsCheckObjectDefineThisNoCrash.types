@@ -1,0 +1,31 @@
+=== tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js ===
+class C {
+>C : C
+
+    constructor() {
+        // Neither of the following should be recognized as declarations yet
+        Object.defineProperty(this, "_prop", { value: {} });
+>Object.defineProperty(this, "_prop", { value: {} }) : this
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>this : this
+>"_prop" : "_prop"
+>{ value: {} } : { value: {}; }
+>value : {}
+>{} : {}
+
+        Object.defineProperty(this._prop, "num", { value: 12 });
+>Object.defineProperty(this._prop, "num", { value: 12 }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>this._prop : any
+>this : this
+>_prop : any
+>"num" : "num"
+>{ value: 12 } : { value: number; }
+>value : number
+>12 : 12
+    }
+}

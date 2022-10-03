@@ -1,0 +1,52 @@
+=== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts ===
+"use strict"
+>"use strict" : "use strict"
+
+label: function fn() { }
+>label : any
+>fn : () => void
+
+label: function* gen() { }
+>label : any
+>gen : () => Generator<never, void, unknown>
+
+label: async function gen1() { }
+>label : any
+>gen1 : () => Promise<void>
+
+label: enum E {}
+>label : any
+>E : E
+
+label: interface I {}
+>label : any
+
+label: class C { }
+>label : any
+>C : C
+
+label: var a = 1;
+>label : any
+>a : number
+>1 : 1
+
+label: let b = 1;
+>label : any
+>b : number
+>1 : 1
+
+label: const c = 1;
+>label : any
+>c : 1
+>1 : 1
+
+label: module M { }
+>label : any
+
+label: namespace N {}
+>label : any
+
+label: type T = {}
+>label : any
+>T : {}
+

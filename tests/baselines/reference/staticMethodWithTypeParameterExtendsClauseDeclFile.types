@@ -1,0 +1,32 @@
+=== tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts ===
+class privateClass {
+>privateClass : privateClass
+}
+
+export class publicClass {
+>publicClass : publicClass
+}
+
+export class publicClassWithWithPrivateTypeParameters {
+>publicClassWithWithPrivateTypeParameters : publicClassWithWithPrivateTypeParameters
+
+    private static myPrivateStaticMethod1<T extends privateClass>() { // do not emit extends clause
+>myPrivateStaticMethod1 : <T extends privateClass>() => void
+    }
+    private myPrivateMethod1<T extends privateClass>() { // do not emit extends clause
+>myPrivateMethod1 : <T extends privateClass>() => void
+    }
+    private static myPrivateStaticMethod2<T extends publicClass>() { // do not emit extends clause
+>myPrivateStaticMethod2 : <T extends publicClass>() => void
+    }
+    private myPrivateMethod2<T extends publicClass>() { // do not emit extends clause
+>myPrivateMethod2 : <T extends publicClass>() => void
+    }
+    public static myPublicStaticMethod<T extends publicClass>() {
+>myPublicStaticMethod : <T extends publicClass>() => void
+    }
+    public myPublicMethod<T extends publicClass>() {
+>myPublicMethod : <T extends publicClass>() => void
+    }
+}
+

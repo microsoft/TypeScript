@@ -1,0 +1,11 @@
+=== tests/cases/compiler/testFiles/app.ts ===
+// Note in the out result we are using same folder name only different in casing
+// Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
+class c {
+>c : Symbol(c, Decl(app.ts, 0, 0))
+}
+
+=== tests/cases/compiler/testFiles/app2.ts ===
+class d {
+>d : Symbol(d, Decl(app2.ts, 0, 0))
+}

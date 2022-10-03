@@ -1,0 +1,17 @@
+=== /Helpers.ts ===
+export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+>StringKeyOf : Symbol(StringKeyOf, Decl(Helpers.ts, 0, 0))
+>TObj : Symbol(TObj, Decl(Helpers.ts, 0, 24))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TObj : Symbol(TObj, Decl(Helpers.ts, 0, 24))
+
+=== /FromFactor.ts ===
+export type RowToColumns<TColumns> = {
+>RowToColumns : Symbol(RowToColumns, Decl(FromFactor.ts, 0, 0))
+>TColumns : Symbol(TColumns, Decl(FromFactor.ts, 0, 25))
+
+    [TName in StringKeyOf<TColumns>]: any;
+>TName : Symbol(TName, Decl(FromFactor.ts, 1, 5))
+>StringKeyOf : Symbol(StringKeyOf)
+>TColumns : Symbol(TColumns, Decl(FromFactor.ts, 0, 25))
+}

@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts ===
+let getX: (c: C) => number;
+>getX : Symbol(getX, Decl(classStaticBlock16.ts, 0, 3))
+>c : Symbol(c, Decl(classStaticBlock16.ts, 0, 11))
+>C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+
+  #x = 1
+>#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
+
+  constructor(x: number) {
+>x : Symbol(x, Decl(classStaticBlock16.ts, 3, 14))
+
+    this.#x = x;
+>this.#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
+>this : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+>x : Symbol(x, Decl(classStaticBlock16.ts, 3, 14))
+  }
+
+  static {
+    // getX has privileged access to #x
+    getX = (obj: C) => obj.#x;
+>getX : Symbol(getX, Decl(classStaticBlock16.ts, 0, 3))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 9, 12))
+>C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+>obj.#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 9, 12))
+
+    getY = (obj: D) => obj.#y;
+>getY : Symbol(getY, Decl(classStaticBlock16.ts, 14, 3))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 10, 12))
+>D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 10, 12))
+  }
+}
+
+let getY: (c: D) => number;
+>getY : Symbol(getY, Decl(classStaticBlock16.ts, 14, 3))
+>c : Symbol(c, Decl(classStaticBlock16.ts, 14, 11))
+>D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+
+class D {
+>D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+
+  #y = 1
+>#y : Symbol(D.#y, Decl(classStaticBlock16.ts, 15, 9))
+
+  static {
+    // getY has privileged access to y
+    getX = (obj: C) => obj.#x;
+>getX : Symbol(getX, Decl(classStaticBlock16.ts, 0, 3))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 20, 12))
+>C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 20, 12))
+
+    getY = (obj: D) => obj.#y;
+>getY : Symbol(getY, Decl(classStaticBlock16.ts, 14, 3))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 21, 12))
+>D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+>obj.#y : Symbol(D.#y, Decl(classStaticBlock16.ts, 15, 9))
+>obj : Symbol(obj, Decl(classStaticBlock16.ts, 21, 12))
+  }
+}

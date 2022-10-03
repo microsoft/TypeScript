@@ -1,0 +1,29 @@
+=== tests/cases/compiler/optionalParamAssignmentCompat.ts ===
+interface I1 {
+    (p1: number, p2: string): void;
+>p1 : number
+>p2 : string
+}
+interface I2 {
+    p1: I1;
+>p1 : I1
+
+    m1(p1?: string): I1;
+>m1 : (p1?: string) => I1
+>p1 : string
+}
+var i2: I2;
+>i2 : I2
+
+var c: I1 = i2.p1; // should be ok
+>c : I1
+>i2.p1 : I1
+>i2 : I2
+>p1 : I1
+
+var d: I1 = i2.m1; // should error
+>d : I1
+>i2.m1 : (p1?: string) => I1
+>i2 : I2
+>m1 : (p1?: string) => I1
+

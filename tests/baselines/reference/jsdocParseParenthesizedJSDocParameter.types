@@ -1,0 +1,11 @@
+=== tests/cases/conformance/jsdoc/paren.js ===
+/** @type {function((string)): string} */
+var x = s => s.toString()
+>x : (arg0: string) => string
+>s => s.toString() : (s: string) => string
+>s : string
+>s.toString() : string
+>s.toString : () => string
+>s : string
+>toString : () => string
+

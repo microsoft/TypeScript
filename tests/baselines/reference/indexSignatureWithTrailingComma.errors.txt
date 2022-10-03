@@ -1,0 +1,24 @@
+tests/cases/compiler/indexSignatureWithTrailingComma.ts(2,17): error TS1025: An index signature cannot have a trailing comma.
+tests/cases/compiler/indexSignatureWithTrailingComma.ts(6,17): error TS1025: An index signature cannot have a trailing comma.
+tests/cases/compiler/indexSignatureWithTrailingComma.ts(10,17): error TS1025: An index signature cannot have a trailing comma.
+
+
+==== tests/cases/compiler/indexSignatureWithTrailingComma.ts (3 errors) ====
+    type A = {
+        [key: string,]: string;
+                    ~
+!!! error TS1025: An index signature cannot have a trailing comma.
+    };
+    
+    interface B {
+        [key: string,]: string;
+                    ~
+!!! error TS1025: An index signature cannot have a trailing comma.
+    }
+    
+    class C {
+        [key: string,]: null;
+                    ~
+!!! error TS1025: An index signature cannot have a trailing comma.
+    }
+    

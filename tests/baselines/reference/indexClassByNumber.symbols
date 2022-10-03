@@ -1,0 +1,13 @@
+=== tests/cases/compiler/indexClassByNumber.ts ===
+// Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
+
+class foo { }
+>foo : Symbol(foo, Decl(indexClassByNumber.ts, 0, 0))
+
+var f = new foo();
+>f : Symbol(f, Decl(indexClassByNumber.ts, 4, 3))
+>foo : Symbol(foo, Decl(indexClassByNumber.ts, 0, 0))
+
+f[0] = 4; // Shouldn't be allowed
+>f : Symbol(f, Decl(indexClassByNumber.ts, 4, 3))
+

@@ -1,0 +1,185 @@
+=== tests/cases/compiler/vararg.ts ===
+module M {
+>M : typeof M
+
+    export class C {
+>C : C
+
+        public f(x:string,...rest:number[]) {
+>f : (x: string, ...rest: number[]) => string
+>x : string
+>rest : number[]
+
+            var sum=0;
+>sum : number
+>0 : 0
+
+            for (var i=0;i<rest.length;i++) {
+>i : number
+>0 : 0
+>i<rest.length : boolean
+>i : number
+>rest.length : number
+>rest : number[]
+>length : number
+>i++ : number
+>i : number
+
+                sum+=rest[i];
+>sum+=rest[i] : number
+>sum : number
+>rest[i] : number
+>rest : number[]
+>i : number
+            }
+            result+=(x+": "+sum);
+>result+=(x+": "+sum) : string
+>result : string
+>(x+": "+sum) : string
+>x+": "+sum : string
+>x+": " : string
+>x : string
+>": " : ": "
+>sum : number
+
+            return result;
+>result : string
+        }
+
+        public fnope(x:string,...rest:number) {
+>fnope : (x: string, ...rest: number) => void
+>x : string
+>rest : number
+    
+        }
+
+        public fonly(...rest:string[]) {
+>fonly : (...rest: string[]) => any
+>rest : string[]
+
+            builder="";
+>builder="" : ""
+>builder : any
+>"" : ""
+
+            for (var i=0;i<rest.length;i++) {
+>i : number
+>0 : 0
+>i<rest.length : boolean
+>i : number
+>rest.length : number
+>rest : string[]
+>length : number
+>i++ : number
+>i : number
+
+                builder+=rest[i];
+>builder+=rest[i] : string
+>builder : any
+>rest[i] : string
+>rest : string[]
+>i : number
+            }
+            return builder;
+>builder : any
+        }
+    }
+}
+
+var x=new M.C();
+>x : M.C
+>new M.C() : M.C
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+
+var result="";
+>result : string
+>"" : ""
+
+result+=x.f(x,3,3); // bad first param
+>result+=x.f(x,3,3) : string
+>result : string
+>x.f(x,3,3) : string
+>x.f : (x: string, ...rest: number[]) => string
+>x : M.C
+>f : (x: string, ...rest: number[]) => string
+>x : M.C
+>3 : 3
+>3 : 3
+
+result+=x.f(3,"hello",3); // bad second param
+>result+=x.f(3,"hello",3) : string
+>result : string
+>x.f(3,"hello",3) : string
+>x.f : (x: string, ...rest: number[]) => string
+>x : M.C
+>f : (x: string, ...rest: number[]) => string
+>3 : 3
+>"hello" : "hello"
+>3 : 3
+
+result+=x.f("hello",3,3,3,3,3); // ok
+>result+=x.f("hello",3,3,3,3,3) : string
+>result : string
+>x.f("hello",3,3,3,3,3) : string
+>x.f : (x: string, ...rest: number[]) => string
+>x : M.C
+>f : (x: string, ...rest: number[]) => string
+>"hello" : "hello"
+>3 : 3
+>3 : 3
+>3 : 3
+>3 : 3
+>3 : 3
+
+result+=x.f("hello"); // ok varargs length 0
+>result+=x.f("hello") : string
+>result : string
+>x.f("hello") : string
+>x.f : (x: string, ...rest: number[]) => string
+>x : M.C
+>f : (x: string, ...rest: number[]) => string
+>"hello" : "hello"
+
+result+=x.fonly(3); // ok conversion
+>result+=x.fonly(3) : string
+>result : string
+>x.fonly(3) : any
+>x.fonly : (...rest: string[]) => any
+>x : M.C
+>fonly : (...rest: string[]) => any
+>3 : 3
+
+result+=x.fonly(x); // bad param
+>result+=x.fonly(x) : string
+>result : string
+>x.fonly(x) : any
+>x.fonly : (...rest: string[]) => any
+>x : M.C
+>fonly : (...rest: string[]) => any
+>x : M.C
+
+result+=x.fonly("a"); // ok 
+>result+=x.fonly("a") : string
+>result : string
+>x.fonly("a") : any
+>x.fonly : (...rest: string[]) => any
+>x : M.C
+>fonly : (...rest: string[]) => any
+>"a" : "a"
+
+result+=x.fonly("a","b","c","d"); //ok 
+>result+=x.fonly("a","b","c","d") : string
+>result : string
+>x.fonly("a","b","c","d") : any
+>x.fonly : (...rest: string[]) => any
+>x : M.C
+>fonly : (...rest: string[]) => any
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>"d" : "d"
+
+
+

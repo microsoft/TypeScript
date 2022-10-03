@@ -1,0 +1,879 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts ===
+class Base {
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+    public a: string;
+>a : Symbol(Base.a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+    public b: string;
+>b : Symbol(Derived.b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 4, 28))
+}
+
+var a1: { new (): Base };
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b1: { new (): Base };
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a2: { new (a: number, b: string): Base };
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 15))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 25))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b2: { new (a: number, b: string): Base };
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 15))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 25))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a3: { new (a: number, b: string): Base };
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 15))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 25))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b3: { new (a: number): Base };
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a4: { new (a: number, b: string): Base };
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 15))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 25))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b4: { new (): Base };
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a5: { new (a: Base): Base };
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b5: { new (a: Derived): Base };
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 15))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a6: { new (a: Derived, b: Base): Base };
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 15))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 26))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b6: { new (a: Base, b: Derived): Base };
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 23))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a7: { new (): Base };
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b7: { new (): Derived };
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+
+var a8: { new (a?: Base): Base };
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b8: { new (a?: Derived): Base };
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 15))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var a9: { new (...a: Base[]): Base };
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+var b9: { new (...a: Derived[]): Base };
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 15))
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
+
+//var a10: { <T, U extends T>(t: T, u: U): T[] };
+//var b10: { <A, B extends A>(a: A, b: B): A[] };
+
+// operator <
+var r1a1 = a1 < b1;
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 39, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r1a2 = a2 < b2;
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 40, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r1a3 = a3 < b3;
+>r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 41, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r1a4 = a4 < b4;
+>r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 42, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r1a5 = a5 < b5;
+>r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 43, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r1a6 = a6 < b6;
+>r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 44, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r1a7 = a7 < b7;
+>r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 45, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r1a8 = a8 < b8;
+>r1a8 : Symbol(r1a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 46, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r1a9 = a9 < b9;
+>r1a9 : Symbol(r1a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 47, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r1a10 = a10 < b10;
+
+var r1b1 = b1 < a1;
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 50, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r1b2 = b2 < a2;
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 51, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r1b3 = b3 < a3;
+>r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 52, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r1b4 = b4 < a4;
+>r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 53, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r1b5 = b5 < a5;
+>r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 54, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r1b6 = b6 < a6;
+>r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 55, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r1b7 = b7 < a7;
+>r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 56, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r1b8 = b8 < a8;
+>r1b8 : Symbol(r1b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 57, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r1b9 = b9 < a9;
+>r1b9 : Symbol(r1b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 58, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r1b10 = b10 < a10;
+
+// operator >
+var r2a1 = a1 > b1;
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 62, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r2a2 = a2 > b2;
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 63, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r2a3 = a3 > b3;
+>r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 64, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r2a4 = a4 > b4;
+>r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 65, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r2a5 = a5 > b5;
+>r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 66, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r2a6 = a6 > b6;
+>r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 67, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r2a7 = a7 > b7;
+>r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 68, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r2a8 = a8 > b8;
+>r2a8 : Symbol(r2a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 69, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r2a9 = a9 > b9;
+>r2a9 : Symbol(r2a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 70, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r2a10 = a10 > b10;
+
+var r2b1 = b1 > a1;
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 73, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r2b2 = b2 > a2;
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 74, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r2b3 = b3 > a3;
+>r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 75, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r2b4 = b4 > a4;
+>r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 76, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r2b5 = b5 > a5;
+>r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 77, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r2b6 = b6 > a6;
+>r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 78, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r2b7 = b7 > a7;
+>r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 79, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r2b8 = b8 > a8;
+>r2b8 : Symbol(r2b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 80, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r2b9 = b9 > a9;
+>r2b9 : Symbol(r2b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 81, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r2b10 = b10 > a10;
+
+// operator <=
+var r3a1 = a1 <= b1;
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 85, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r3a2 = a2 <= b2;
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 86, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r3a3 = a3 <= b3;
+>r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 87, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r3a4 = a4 <= b4;
+>r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 88, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r3a5 = a5 <= b5;
+>r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 89, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r3a6 = a6 <= b6;
+>r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 90, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r3a7 = a7 <= b7;
+>r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 91, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r3a8 = a8 <= b8;
+>r3a8 : Symbol(r3a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 92, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r3a9 = a9 <= b9;
+>r3a9 : Symbol(r3a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 93, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r3a10 = a10 <= b10;
+
+var r3b1 = b1 <= a1;
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 96, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r3b2 = b2 <= a2;
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 97, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r3b3 = b3 <= a3;
+>r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 98, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r3b4 = b4 <= a4;
+>r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 99, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r3b5 = b5 <= a5;
+>r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 100, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r3b6 = b6 <= a6;
+>r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 101, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r3b7 = b7 <= a7;
+>r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 102, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r3b8 = b8 <= a8;
+>r3b8 : Symbol(r3b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 103, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r3b9 = b9 <= a9;
+>r3b9 : Symbol(r3b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 104, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r3b10 = b10 <= a10;
+
+// operator >=
+var r4a1 = a1 >= b1;
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 108, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r4a2 = a2 >= b2;
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 109, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r4a3 = a3 >= b3;
+>r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 110, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r4a4 = a4 >= b4;
+>r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 111, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r4a5 = a5 >= b5;
+>r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 112, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r4a6 = a6 >= b6;
+>r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 113, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r4a7 = a7 >= b7;
+>r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 114, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r4a8 = a8 >= b8;
+>r4a8 : Symbol(r4a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 115, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r4a9 = a9 >= b9;
+>r4a9 : Symbol(r4a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 116, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r4a10 = a10 >= b10;
+
+var r4b1 = b1 >= a1;
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 119, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r4b2 = b2 >= a2;
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 120, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r4b3 = b3 >= a3;
+>r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 121, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r4b4 = b4 >= a4;
+>r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 122, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r4b5 = b5 >= a5;
+>r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 123, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r4b6 = b6 >= a6;
+>r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 124, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r4b7 = b7 >= a7;
+>r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 125, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r4b8 = b8 >= a8;
+>r4b8 : Symbol(r4b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 126, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r4b9 = b9 >= a9;
+>r4b9 : Symbol(r4b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 127, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r4b10 = b10 >= a10;
+
+// operator ==
+var r5a1 = a1 == b1;
+>r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 131, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r5a2 = a2 == b2;
+>r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 132, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r5a3 = a3 == b3;
+>r5a3 : Symbol(r5a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 133, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r5a4 = a4 == b4;
+>r5a4 : Symbol(r5a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 134, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r5a5 = a5 == b5;
+>r5a5 : Symbol(r5a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 135, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r5a6 = a6 == b6;
+>r5a6 : Symbol(r5a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 136, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r5a7 = a7 == b7;
+>r5a7 : Symbol(r5a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 137, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r5a8 = a8 == b8;
+>r5a8 : Symbol(r5a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 138, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r5a9 = a9 == b9;
+>r5a9 : Symbol(r5a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 139, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r5a10 = a10 == b10;
+
+var r5b1 = b1 == a1;
+>r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 142, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r5b2 = b2 == a2;
+>r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 143, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r5b3 = b3 == a3;
+>r5b3 : Symbol(r5b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 144, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r5b4 = b4 == a4;
+>r5b4 : Symbol(r5b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 145, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r5b5 = b5 == a5;
+>r5b5 : Symbol(r5b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 146, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r5b6 = b6 == a6;
+>r5b6 : Symbol(r5b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 147, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r5b7 = b7 == a7;
+>r5b7 : Symbol(r5b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 148, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r5b8 = b8 == a8;
+>r5b8 : Symbol(r5b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 149, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r5b9 = b9 == a9;
+>r5b9 : Symbol(r5b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 150, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r5b10 = b10 == a10;
+
+// operator !=
+var r6a1 = a1 != b1;
+>r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 154, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r6a2 = a2 != b2;
+>r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 155, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r6a3 = a3 != b3;
+>r6a3 : Symbol(r6a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 156, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r6a4 = a4 != b4;
+>r6a4 : Symbol(r6a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 157, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r6a5 = a5 != b5;
+>r6a5 : Symbol(r6a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 158, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r6a6 = a6 != b6;
+>r6a6 : Symbol(r6a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 159, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r6a7 = a7 != b7;
+>r6a7 : Symbol(r6a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 160, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r6a8 = a8 != b8;
+>r6a8 : Symbol(r6a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 161, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r6a9 = a9 != b9;
+>r6a9 : Symbol(r6a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 162, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r6a10 = a10 != b10;
+
+var r6b1 = b1 != a1;
+>r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 165, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r6b2 = b2 != a2;
+>r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 166, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r6b3 = b3 != a3;
+>r6b3 : Symbol(r6b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 167, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r6b4 = b4 != a4;
+>r6b4 : Symbol(r6b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 168, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r6b5 = b5 != a5;
+>r6b5 : Symbol(r6b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 169, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r6b6 = b6 != a6;
+>r6b6 : Symbol(r6b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 170, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r6b7 = b7 != a7;
+>r6b7 : Symbol(r6b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 171, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r6b8 = b8 != a8;
+>r6b8 : Symbol(r6b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 172, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r6b9 = b9 != a9;
+>r6b9 : Symbol(r6b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 173, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r6b10 = b10 != a10;
+
+// operator ===
+var r7a1 = a1 === b1;
+>r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 177, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r7a2 = a2 === b2;
+>r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 178, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r7a3 = a3 === b3;
+>r7a3 : Symbol(r7a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 179, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r7a4 = a4 === b4;
+>r7a4 : Symbol(r7a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 180, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r7a5 = a5 === b5;
+>r7a5 : Symbol(r7a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 181, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r7a6 = a6 === b6;
+>r7a6 : Symbol(r7a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 182, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r7a7 = a7 === b7;
+>r7a7 : Symbol(r7a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 183, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r7a8 = a8 === b8;
+>r7a8 : Symbol(r7a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 184, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r7a9 = a9 === b9;
+>r7a9 : Symbol(r7a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 185, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r7a10 = a10 === b10;
+
+var r7b1 = b1 === a1;
+>r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 188, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r7b2 = b2 === a2;
+>r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 189, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r7b3 = b3 === a3;
+>r7b3 : Symbol(r7b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 190, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r7b4 = b4 === a4;
+>r7b4 : Symbol(r7b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 191, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r7b5 = b5 === a5;
+>r7b5 : Symbol(r7b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 192, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r7b6 = b6 === a6;
+>r7b6 : Symbol(r7b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 193, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r7b7 = b7 === a7;
+>r7b7 : Symbol(r7b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 194, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r7b8 = b8 === a8;
+>r7b8 : Symbol(r7b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 195, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r7b9 = b9 === a9;
+>r7b9 : Symbol(r7b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 196, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r7b10 = b10 === a10;
+
+// operator !==
+var r8a1 = a1 !== b1;
+>r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 200, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+
+var r8a2 = a2 !== b2;
+>r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 201, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+
+var r8a3 = a3 !== b3;
+>r8a3 : Symbol(r8a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 202, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+
+var r8a4 = a4 !== b4;
+>r8a4 : Symbol(r8a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 203, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+
+var r8a5 = a5 !== b5;
+>r8a5 : Symbol(r8a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 204, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+
+var r8a6 = a6 !== b6;
+>r8a6 : Symbol(r8a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 205, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+
+var r8a7 = a7 !== b7;
+>r8a7 : Symbol(r8a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 206, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+
+var r8a8 = a8 !== b8;
+>r8a8 : Symbol(r8a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 207, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+
+var r8a9 = a9 !== b9;
+>r8a9 : Symbol(r8a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 208, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+
+//var r8a10 = a10 !== b10;
+
+var r8b1 = b1 !== a1;
+>r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 211, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 9, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 8, 3))
+
+var r8b2 = b2 !== a2;
+>r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 212, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 12, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 11, 3))
+
+var r8b3 = b3 !== a3;
+>r8b3 : Symbol(r8b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 213, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 15, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 14, 3))
+
+var r8b4 = b4 !== a4;
+>r8b4 : Symbol(r8b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 214, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 18, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 17, 3))
+
+var r8b5 = b5 !== a5;
+>r8b5 : Symbol(r8b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 215, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 21, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 20, 3))
+
+var r8b6 = b6 !== a6;
+>r8b6 : Symbol(r8b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 216, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 24, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 23, 3))
+
+var r8b7 = b7 !== a7;
+>r8b7 : Symbol(r8b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 217, 3))
+>b7 : Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 27, 3))
+>a7 : Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 26, 3))
+
+var r8b8 = b8 !== a8;
+>r8b8 : Symbol(r8b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 218, 3))
+>b8 : Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 30, 3))
+>a8 : Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 29, 3))
+
+var r8b9 = b9 !== a9;
+>r8b9 : Symbol(r8b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 219, 3))
+>b9 : Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 33, 3))
+>a9 : Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 32, 3))
+
+//var r8b10 = b10 !== a10;

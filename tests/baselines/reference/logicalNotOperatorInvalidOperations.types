@@ -1,0 +1,25 @@
+=== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorInvalidOperations.ts ===
+// Unary operator !
+var b: number;
+>b : number
+
+// operand before !
+var BOOLEAN1 = b!;  //expect error
+>BOOLEAN1 : number
+>b! : number
+>b : number
+
+// miss parentheses
+var BOOLEAN2 = !b + b;
+>BOOLEAN2 : any
+>!b + b : any
+>!b : boolean
+>b : number
+>b : number
+
+// miss an operand
+var BOOLEAN3 =!;
+>BOOLEAN3 : boolean
+>! : boolean
+> : any
+

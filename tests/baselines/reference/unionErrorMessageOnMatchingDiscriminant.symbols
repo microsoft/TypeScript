@@ -1,0 +1,53 @@
+=== tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts ===
+type A = {
+>A : Symbol(A, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 0))
+
+    type: 'a',
+>type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 10))
+
+    data: { a: string }
+>data : Symbol(data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 1, 14))
+>a : Symbol(a, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 2, 11))
+
+};
+
+type B = {
+>B : Symbol(B, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 3, 2))
+
+    type: 'b',
+>type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 5, 10))
+
+    data: null
+>data : Symbol(data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 6, 14))
+
+};
+
+type C = {
+>C : Symbol(C, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 8, 2))
+
+    type: 'c',
+>type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 10, 10))
+
+    payload: string
+>payload : Symbol(payload, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 11, 14))
+
+};
+
+type Union = A | B | C;
+>Union : Symbol(Union, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 13, 2))
+>A : Symbol(A, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 0))
+>B : Symbol(B, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 3, 2))
+>C : Symbol(C, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 8, 2))
+
+// error
+const foo: Union = {
+>foo : Symbol(foo, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 18, 5))
+>Union : Symbol(Union, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 13, 2))
+
+    type: 'a',
+>type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 18, 20))
+
+    data: null
+>data : Symbol(data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 19, 14))
+
+};

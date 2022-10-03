@@ -1,0 +1,86 @@
+=== tests/cases/compiler/letDeclarations-access.ts ===
+let x = 0
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+// No errors
+
+x = 1;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x += 2;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x -= 3;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x *= 4;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x /= 5;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x %= 6;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x <<= 7;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x >>= 8;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x >>>= 9;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x &= 10;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x |= 11;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x ^= 12;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x++;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x--;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+++x;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+--x;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+var a = x + 1;
+>a : Symbol(a, Decl(letDeclarations-access.ts, 22, 3))
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+function f(v: number) { }
+>f : Symbol(f, Decl(letDeclarations-access.ts, 22, 14))
+>v : Symbol(v, Decl(letDeclarations-access.ts, 24, 11))
+
+f(x);
+>f : Symbol(f, Decl(letDeclarations-access.ts, 22, 14))
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+if (x) { }
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+(x);
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+-x;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
++x;
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+
+x.toString();
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

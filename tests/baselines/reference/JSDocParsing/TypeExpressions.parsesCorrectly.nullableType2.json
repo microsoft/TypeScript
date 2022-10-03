@@ -1,0 +1,17 @@
+{
+    "kind": "JSDocNullableType",
+    "pos": 1,
+    "end": 8,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "type": {
+        "kind": "NumberKeyword",
+        "pos": 1,
+        "end": 7,
+        "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 1
+    },
+    "postfix": true
+}

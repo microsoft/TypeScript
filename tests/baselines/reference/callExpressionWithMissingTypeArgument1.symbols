@@ -1,0 +1,6 @@
+=== tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts ===
+Foo<a,,b>();
+>a : Symbol(a)
+> : Symbol(unknown)
+>b : Symbol(b)
+

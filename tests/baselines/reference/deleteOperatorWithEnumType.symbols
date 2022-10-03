@@ -1,0 +1,60 @@
+=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts ===
+// delete  operator on enum type
+
+enum ENUM { };
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>A : Symbol(ENUM1.A, Decl(deleteOperatorWithEnumType.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(deleteOperatorWithEnumType.ts, 3, 18))
+
+// enum type var
+var ResultIsBoolean1 = delete ENUM;
+>ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(deleteOperatorWithEnumType.ts, 6, 3))
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+
+var ResultIsBoolean2 = delete ENUM1;
+>ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(deleteOperatorWithEnumType.ts, 7, 3))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+
+// enum type expressions
+var ResultIsBoolean3 = delete ENUM1["A"];
+>ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(deleteOperatorWithEnumType.ts, 10, 3))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"A" : Symbol(ENUM1.A, Decl(deleteOperatorWithEnumType.ts, 3, 12))
+
+var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
+>ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(deleteOperatorWithEnumType.ts, 11, 3))
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+
+// multiple delete  operators
+var ResultIsBoolean5 = delete delete ENUM;
+>ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(deleteOperatorWithEnumType.ts, 14, 3))
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+
+var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
+>ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(deleteOperatorWithEnumType.ts, 15, 3))
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"B" : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+
+// miss assignment operators
+delete ENUM;
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+
+delete ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+
+delete ENUM1.B;
+>ENUM1.B : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>B : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+
+delete ENUM, ENUM1;
+>ENUM : Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+

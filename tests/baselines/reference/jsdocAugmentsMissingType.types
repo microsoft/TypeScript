@@ -1,0 +1,24 @@
+=== /a.js ===
+class A { constructor() { this.x = 0; } }
+>A : A
+>this.x = 0 : 0
+>this.x : any
+>this : this
+>x : any
+>0 : 0
+
+/** @augments */
+class B extends A {
+>B : B
+>A : typeof A
+
+    m() {
+>m : () => void
+
+        this.x
+>this.x : any
+>this : this
+>x : any
+    }
+}
+

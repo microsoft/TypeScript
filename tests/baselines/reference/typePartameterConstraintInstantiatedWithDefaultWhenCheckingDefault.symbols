@@ -1,0 +1,87 @@
+=== tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts ===
+// tricky interface
+interface Settable<T, V> {
+>Settable : Symbol(Settable, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 0, 0))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 19))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 21))
+
+    set(value: V): T;
+>set : Symbol(Settable.set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 26))
+>value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 2, 8))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 21))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 19))
+}
+
+// implement
+class Identity<V> implements Settable<Identity<V>, V> {
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+>Settable : Symbol(Settable, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 0, 0))
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+
+    readonly item: V;
+>item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+
+    constructor(value: V) {
+>value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 8, 16))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+
+        this.item = value;
+>this.item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+>this : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+>value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 8, 16))
+    }
+    public set(value: V): Identity<V> {
+>set : Symbol(Identity.set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 10, 5))
+>value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 11, 15))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+
+        return new Identity<V>(value);
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+>value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 11, 15))
+    }
+}
+
+// generic parameter default
+interface Test1<V, T extends Settable<T, V> = Identity<V>> { };
+>Test1 : Symbol(Test1, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 14, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 17, 16))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 17, 18))
+>Settable : Symbol(Settable, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 0, 0))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 17, 18))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 17, 16))
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 17, 16))
+
+let test1: Test1<number>;
+>test1 : Symbol(test1, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 18, 3))
+>Test1 : Symbol(Test1, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 14, 1))
+
+// not generic parameter default
+interface Test2Base<V, T extends Settable<T, V>> { };
+>Test2Base : Symbol(Test2Base, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 18, 25))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 20))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 22))
+>Settable : Symbol(Settable, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 0, 0))
+>T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 22))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 20))
+
+type Test2<V> = Test2Base<V, Identity<V>>;
+>Test2 : Symbol(Test2, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 53))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 22, 11))
+>Test2Base : Symbol(Test2Base, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 18, 25))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 22, 11))
+>Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+>V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 22, 11))
+
+let test2: Test2<number>;
+>test2 : Symbol(test2, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 23, 3))
+>Test2 : Symbol(Test2, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 21, 53))
+

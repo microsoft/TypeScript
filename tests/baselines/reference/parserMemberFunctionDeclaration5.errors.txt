@@ -1,0 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts(2,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts(2,19): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts (2 errors) ====
+    class C {
+        declare Foo() { }
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+                      ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    }

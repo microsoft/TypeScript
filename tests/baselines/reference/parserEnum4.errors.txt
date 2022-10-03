@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum4.ts(2,9): error TS1132: Enum member expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum4.ts (1 errors) ====
+        export enum SignatureFlags {
+            ,
+            ~
+!!! error TS1132: Enum member expected.
+        }

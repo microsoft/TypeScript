@@ -1,0 +1,38 @@
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(6,10): error TS7008: Member 'y' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(6,13): error TS7008: Member 'z' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(7,18): error TS7008: Member 'z1' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(8,12): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(9,10): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(10,22): error TS7006: Parameter 'y3' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts (6 errors) ====
+    class C {
+        constructor() { }
+    }
+    
+    // this should be an error
+    var x: { y; z; }             // error at "y,z"
+             ~
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
+                ~
+!!! error TS7008: Member 'z' implicitly has an 'any' type.
+    var x1: { y1: C; z1; };      // error at "z1" 
+                     ~~
+!!! error TS7008: Member 'z1' implicitly has an 'any' type.
+    var x11: { new (); };        // error at "new"
+               ~~~~~~~
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+    var x2: (y2) => number;      // error at "y2"
+             ~~
+!!! error TS7006: Parameter 'y2' implicitly has an 'any' type.
+    var x3: (x3: string, y3) => void ; // error at "y3"
+                         ~~
+!!! error TS7006: Parameter 'y3' implicitly has an 'any' type.
+    
+    // this should not be an error
+    var bar: { a: number; b: number };
+    var foo: { littleC: C; c: string };
+    var x4: new () => any;
+    var x5: () => any;
+    

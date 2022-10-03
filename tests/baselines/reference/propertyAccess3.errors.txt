@@ -1,0 +1,8 @@
+tests/cases/compiler/propertyAccess3.ts(2,5): error TS2339: Property 'toBAZ' does not exist on type 'boolean'.
+
+
+==== tests/cases/compiler/propertyAccess3.ts (1 errors) ====
+    var foo: boolean;
+    foo.toBAZ();
+        ~~~~~
+!!! error TS2339: Property 'toBAZ' does not exist on type 'boolean'.

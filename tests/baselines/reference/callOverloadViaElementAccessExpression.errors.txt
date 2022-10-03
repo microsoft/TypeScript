@@ -1,0 +1,20 @@
+tests/cases/compiler/callOverloadViaElementAccessExpression.ts(10,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/callOverloadViaElementAccessExpression.ts(11,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/callOverloadViaElementAccessExpression.ts (2 errors) ====
+    class C {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: any): any {
+            return null;
+        }
+    }
+    
+    var c = new C();
+    var r: string = c['foo'](1);
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    var r2: number = c['foo']('');
+        ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

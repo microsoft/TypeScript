@@ -1,0 +1,56 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty21.ts ===
+interface I<T, U> {
+>I : Symbol(I, Decl(symbolProperty21.ts, 0, 0))
+>T : Symbol(T, Decl(symbolProperty21.ts, 0, 12))
+>U : Symbol(U, Decl(symbolProperty21.ts, 0, 14))
+
+    [Symbol.unscopables]: T;
+>[Symbol.unscopables] : Symbol(I[Symbol.unscopables], Decl(symbolProperty21.ts, 0, 19))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(symbolProperty21.ts, 0, 12))
+
+    [Symbol.isConcatSpreadable]: U;
+>[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(symbolProperty21.ts, 1, 28))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(symbolProperty21.ts, 0, 14))
+}
+
+declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
+>foo : Symbol(foo, Decl(symbolProperty21.ts, 3, 1))
+>T : Symbol(T, Decl(symbolProperty21.ts, 5, 21))
+>U : Symbol(U, Decl(symbolProperty21.ts, 5, 23))
+>p : Symbol(p, Decl(symbolProperty21.ts, 5, 27))
+>I : Symbol(I, Decl(symbolProperty21.ts, 0, 0))
+>T : Symbol(T, Decl(symbolProperty21.ts, 5, 21))
+>U : Symbol(U, Decl(symbolProperty21.ts, 5, 23))
+>t : Symbol(t, Decl(symbolProperty21.ts, 5, 41))
+>T : Symbol(T, Decl(symbolProperty21.ts, 5, 21))
+>u : Symbol(u, Decl(symbolProperty21.ts, 5, 47))
+>U : Symbol(U, Decl(symbolProperty21.ts, 5, 23))
+
+foo({
+>foo : Symbol(foo, Decl(symbolProperty21.ts, 3, 1))
+
+    [Symbol.isConcatSpreadable]: "",
+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty21.ts, 7, 5))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [Symbol.toPrimitive]: 0,
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty21.ts, 8, 36))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    [Symbol.unscopables]: true
+>[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(symbolProperty21.ts, 9, 28))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+});

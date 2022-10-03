@@ -1,0 +1,12 @@
+tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+    export function foo() { return "foo"; }
+    
+==== tests/cases/conformance/dynamicImport/1.ts (1 errors) ====
+    "use strict"
+    var p1 = import("./0");
+    function arguments() { }
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.

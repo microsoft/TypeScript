@@ -1,0 +1,20 @@
+tests/cases/compiler/file2.ts(1,8): error TS6133: 'c' is declared but its value is never read.
+
+
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    import c = require('./file1')
+           ~
+!!! error TS6133: 'c' is declared but its value is never read.
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    export class Calculator {
+        handleChar() {}
+    }
+    
+    export function test() {
+    
+    }
+    
+    export function test2() {
+    
+    }
+    

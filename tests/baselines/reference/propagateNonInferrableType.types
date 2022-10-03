@@ -1,0 +1,16 @@
+=== tests/cases/compiler/propagateNonInferrableType.ts ===
+declare function resolver<T>(): () => void;
+>resolver : <T>() => () => void
+
+declare function wrapResolver<T>(resolverFunction: () => void): void;
+>wrapResolver : <T>(resolverFunction: () => void) => void
+>resolverFunction : () => void
+
+wrapResolver(resolver() || []);
+>wrapResolver(resolver() || []) : void
+>wrapResolver : <T>(resolverFunction: () => void) => void
+>resolver() || [] : () => void
+>resolver() : () => void
+>resolver : <T>() => () => void
+>[] : never[]
+

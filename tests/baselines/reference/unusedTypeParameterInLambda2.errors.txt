@@ -1,0 +1,14 @@
+tests/cases/compiler/unusedTypeParameterInLambda2.ts(3,17): error TS6133: 'T' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedTypeParameterInLambda2.ts (1 errors) ====
+    class A {
+        public f1() {
+            return <T, X>() => {
+                    ~
+!!! error TS6133: 'T' is declared but its value is never read.
+                var a: X;
+                a;
+            }
+        }
+    }

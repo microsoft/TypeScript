@@ -1,0 +1,82 @@
+=== tests/cases/compiler/declarationNoDanglingGenerics.ts ===
+const kindCache: { [kind: string]: boolean } = {};
+>kindCache : Symbol(kindCache, Decl(declarationNoDanglingGenerics.ts, 0, 5))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 0, 20))
+
+function register(kind: string): void | never {
+>register : Symbol(register, Decl(declarationNoDanglingGenerics.ts, 0, 50))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
+
+  if (kindCache[kind]) {
+>kindCache : Symbol(kindCache, Decl(declarationNoDanglingGenerics.ts, 0, 5))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
+
+    throw new Error(`Class with kind "${kind}" is already registered.`);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
+  }
+  kindCache[kind] = true;
+>kindCache : Symbol(kindCache, Decl(declarationNoDanglingGenerics.ts, 0, 5))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
+}
+
+function ClassFactory<TKind extends string>(kind: TKind) {
+>ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+>TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+>TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+
+  register(kind);
+>register : Symbol(register, Decl(declarationNoDanglingGenerics.ts, 0, 50))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+
+  return class {
+    static readonly THE_KIND: TKind = kind;
+>THE_KIND : Symbol((Anonymous class).THE_KIND, Decl(declarationNoDanglingGenerics.ts, 12, 16))
+>TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+
+    readonly kind: TKind = kind;
+>kind : Symbol((Anonymous class).kind, Decl(declarationNoDanglingGenerics.ts, 13, 43))
+>TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+
+  };
+}
+
+class Kinds {
+>Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+
+  static readonly A = "A";
+>A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+
+  static readonly B = "B";
+>B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+
+  static readonly C = "C";
+>C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+}
+
+export class AKind extends ClassFactory(Kinds.A) {
+>AKind : Symbol(AKind, Decl(declarationNoDanglingGenerics.ts, 22, 1))
+>ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+>Kinds.A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+>Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+>A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+}
+
+export class BKind extends ClassFactory(Kinds.B) {
+>BKind : Symbol(BKind, Decl(declarationNoDanglingGenerics.ts, 25, 1))
+>ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+>Kinds.B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+>Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+>B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+}
+
+export class CKind extends ClassFactory(Kinds.C) {
+>CKind : Symbol(CKind, Decl(declarationNoDanglingGenerics.ts, 28, 1))
+>ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+>Kinds.C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+>Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+>C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+}

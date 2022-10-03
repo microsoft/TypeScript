@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts ===
+interface X { x: string }
+>X : Symbol(X, Decl(intersectionAsWeakTypeSource.ts, 0, 0))
+>x : Symbol(X.x, Decl(intersectionAsWeakTypeSource.ts, 0, 13))
+
+interface Y { y: number }
+>Y : Symbol(Y, Decl(intersectionAsWeakTypeSource.ts, 0, 25))
+>y : Symbol(Y.y, Decl(intersectionAsWeakTypeSource.ts, 1, 13))
+
+interface Z { z?: boolean }
+>Z : Symbol(Z, Decl(intersectionAsWeakTypeSource.ts, 1, 25))
+>z : Symbol(Z.z, Decl(intersectionAsWeakTypeSource.ts, 2, 13))
+
+type XY = X & Y;
+>XY : Symbol(XY, Decl(intersectionAsWeakTypeSource.ts, 2, 27))
+>X : Symbol(X, Decl(intersectionAsWeakTypeSource.ts, 0, 0))
+>Y : Symbol(Y, Decl(intersectionAsWeakTypeSource.ts, 0, 25))
+
+const xy: XY = {x: 'x', y: 10};
+>xy : Symbol(xy, Decl(intersectionAsWeakTypeSource.ts, 5, 5))
+>XY : Symbol(XY, Decl(intersectionAsWeakTypeSource.ts, 2, 27))
+>x : Symbol(x, Decl(intersectionAsWeakTypeSource.ts, 5, 16))
+>y : Symbol(y, Decl(intersectionAsWeakTypeSource.ts, 5, 23))
+
+const z1: Z = xy; // error, {xy} doesn't overlap with {z}
+>z1 : Symbol(z1, Decl(intersectionAsWeakTypeSource.ts, 7, 5))
+>Z : Symbol(Z, Decl(intersectionAsWeakTypeSource.ts, 1, 25))
+>xy : Symbol(xy, Decl(intersectionAsWeakTypeSource.ts, 5, 5))
+
+
+interface ViewStyle {
+>ViewStyle : Symbol(ViewStyle, Decl(intersectionAsWeakTypeSource.ts, 7, 17))
+
+    view: number
+>view : Symbol(ViewStyle.view, Decl(intersectionAsWeakTypeSource.ts, 10, 21))
+
+    styleMedia: string
+>styleMedia : Symbol(ViewStyle.styleMedia, Decl(intersectionAsWeakTypeSource.ts, 11, 16))
+}
+type Brand<T> = number & { __brand: T }
+>Brand : Symbol(Brand, Decl(intersectionAsWeakTypeSource.ts, 13, 1))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 14, 11))
+>__brand : Symbol(__brand, Decl(intersectionAsWeakTypeSource.ts, 14, 26))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 14, 11))
+
+declare function create<T extends { [s: string]: ViewStyle }>(styles: T): { [P in keyof T]: Brand<T[P]> };
+>create : Symbol(create, Decl(intersectionAsWeakTypeSource.ts, 14, 39))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 15, 24))
+>s : Symbol(s, Decl(intersectionAsWeakTypeSource.ts, 15, 37))
+>ViewStyle : Symbol(ViewStyle, Decl(intersectionAsWeakTypeSource.ts, 7, 17))
+>styles : Symbol(styles, Decl(intersectionAsWeakTypeSource.ts, 15, 62))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 15, 24))
+>P : Symbol(P, Decl(intersectionAsWeakTypeSource.ts, 15, 77))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 15, 24))
+>Brand : Symbol(Brand, Decl(intersectionAsWeakTypeSource.ts, 13, 1))
+>T : Symbol(T, Decl(intersectionAsWeakTypeSource.ts, 15, 24))
+>P : Symbol(P, Decl(intersectionAsWeakTypeSource.ts, 15, 77))
+
+const wrapped = create({ first: { view: 0, styleMedia: "???" } });
+>wrapped : Symbol(wrapped, Decl(intersectionAsWeakTypeSource.ts, 16, 5))
+>create : Symbol(create, Decl(intersectionAsWeakTypeSource.ts, 14, 39))
+>first : Symbol(first, Decl(intersectionAsWeakTypeSource.ts, 16, 24))
+>view : Symbol(view, Decl(intersectionAsWeakTypeSource.ts, 16, 33))
+>styleMedia : Symbol(styleMedia, Decl(intersectionAsWeakTypeSource.ts, 16, 42))
+
+const vs: ViewStyle = wrapped.first // error, first is a branded number
+>vs : Symbol(vs, Decl(intersectionAsWeakTypeSource.ts, 17, 5))
+>ViewStyle : Symbol(ViewStyle, Decl(intersectionAsWeakTypeSource.ts, 7, 17))
+>wrapped.first : Symbol(first, Decl(intersectionAsWeakTypeSource.ts, 16, 24))
+>wrapped : Symbol(wrapped, Decl(intersectionAsWeakTypeSource.ts, 16, 5))
+>first : Symbol(first, Decl(intersectionAsWeakTypeSource.ts, 16, 24))
+

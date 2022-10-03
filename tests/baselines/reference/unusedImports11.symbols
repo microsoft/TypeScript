@@ -1,0 +1,42 @@
+=== tests/cases/compiler/a.ts ===
+import { Member } from './b';
+>Member : Symbol(Member, Decl(a.ts, 0, 8))
+
+import d, { Member as M } from './b';
+>d : Symbol(d, Decl(a.ts, 1, 6))
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
+>M : Symbol(M, Decl(a.ts, 1, 11))
+
+import * as ns from './b';
+>ns : Symbol(ns, Decl(a.ts, 2, 6))
+
+import r = require("./b");
+>r : Symbol(r, Decl(a.ts, 2, 26))
+
+new Member();
+>Member : Symbol(Member, Decl(a.ts, 0, 8))
+
+new d();
+>d : Symbol(d, Decl(a.ts, 1, 6))
+
+new M();
+>M : Symbol(M, Decl(a.ts, 1, 11))
+
+new ns.Member();
+>ns.Member : Symbol(Member, Decl(b.ts, 0, 0))
+>ns : Symbol(ns, Decl(a.ts, 2, 6))
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
+
+new r.Member();
+>r.Member : Symbol(Member, Decl(b.ts, 0, 0))
+>r : Symbol(r, Decl(a.ts, 2, 26))
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+export class Member {}
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
+
+export default Member;
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
+
+

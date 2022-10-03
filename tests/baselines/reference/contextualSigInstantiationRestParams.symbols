@@ -1,0 +1,20 @@
+=== tests/cases/compiler/contextualSigInstantiationRestParams.ts ===
+declare function toInstantiate<A, B>(a?: A, b?: B): B;
+>toInstantiate : Symbol(toInstantiate, Decl(contextualSigInstantiationRestParams.ts, 0, 0))
+>A : Symbol(A, Decl(contextualSigInstantiationRestParams.ts, 0, 31))
+>B : Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
+>a : Symbol(a, Decl(contextualSigInstantiationRestParams.ts, 0, 37))
+>A : Symbol(A, Decl(contextualSigInstantiationRestParams.ts, 0, 31))
+>b : Symbol(b, Decl(contextualSigInstantiationRestParams.ts, 0, 43))
+>B : Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
+>B : Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
+
+declare function contextual(...s: string[]): string
+>contextual : Symbol(contextual, Decl(contextualSigInstantiationRestParams.ts, 0, 54))
+>s : Symbol(s, Decl(contextualSigInstantiationRestParams.ts, 1, 28))
+
+var sig: typeof contextual = toInstantiate;
+>sig : Symbol(sig, Decl(contextualSigInstantiationRestParams.ts, 3, 3))
+>contextual : Symbol(contextual, Decl(contextualSigInstantiationRestParams.ts, 0, 54))
+>toInstantiate : Symbol(toInstantiate, Decl(contextualSigInstantiationRestParams.ts, 0, 0))
+

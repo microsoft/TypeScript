@@ -1,0 +1,149 @@
+=== tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts ===
+interface Base<T, U> {
+    x: T;
+>x : T
+
+    y: U;
+>y : U
+}
+
+// Error, no Base constructor function
+class D0 extends Base<string, string> {
+>D0 : D0
+>Base : any
+}
+
+interface BaseConstructor {
+    new (x: string, y: string): Base<string, string>;
+>x : string
+>y : string
+
+    new <T>(x: T): Base<T, T>;
+>x : T
+
+    new <T>(x: T, y: T): Base<T, T>;
+>x : T
+>y : T
+
+    new <T, U>(x: T, y: U): Base<T, U>;
+>x : T
+>y : U
+}
+
+declare function getBase(): BaseConstructor;
+>getBase : () => BaseConstructor
+
+class D1 extends getBase() {
+>D1 : D1
+>getBase() : Base<string, string>
+>getBase : () => BaseConstructor
+
+    constructor() {
+        super("abc", "def");
+>super("abc", "def") : void
+>super : BaseConstructor
+>"abc" : "abc"
+>"def" : "def"
+
+        this.x = "x";
+>this.x = "x" : "x"
+>this.x : string
+>this : this
+>x : string
+>"x" : "x"
+
+        this.y = "y";
+>this.y = "y" : "y"
+>this.y : string
+>this : this
+>y : string
+>"y" : "y"
+    }
+}
+
+class D2 extends getBase() <number> {
+>D2 : D2
+>getBase() : Base<number, number>
+>getBase : () => BaseConstructor
+
+    constructor() {
+        super(10);
+>super(10) : void
+>super : BaseConstructor
+>10 : 10
+
+        super(10, 20);
+>super(10, 20) : void
+>super : BaseConstructor
+>10 : 10
+>20 : 20
+
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+
+        this.y = 2;
+>this.y = 2 : 2
+>this.y : number
+>this : this
+>y : number
+>2 : 2
+    }
+}
+
+class D3 extends getBase() <string, number> {
+>D3 : D3
+>getBase() : Base<string, number>
+>getBase : () => BaseConstructor
+
+    constructor() {
+        super("abc", 42);
+>super("abc", 42) : void
+>super : BaseConstructor
+>"abc" : "abc"
+>42 : 42
+
+        this.x = "x";
+>this.x = "x" : "x"
+>this.x : string
+>this : this
+>x : string
+>"x" : "x"
+
+        this.y = 2;
+>this.y = 2 : 2
+>this.y : number
+>this : this
+>y : number
+>2 : 2
+    }
+}
+
+// Error, no constructors with three type arguments
+class D4 extends getBase() <string, string, string> {
+>D4 : D4
+>getBase() : BaseConstructor
+>getBase : () => BaseConstructor
+}
+
+interface BadBaseConstructor {
+    new (x: string): Base<string, string>;
+>x : string
+
+    new (x: number): Base<number, number>;
+>x : number
+}
+
+declare function getBadBase(): BadBaseConstructor;
+>getBadBase : () => BadBaseConstructor
+
+// Error, constructor return types differ
+class D5 extends getBadBase() {
+>D5 : D5
+>getBadBase() : Base<string, string>
+>getBadBase : () => BadBaseConstructor
+}
+

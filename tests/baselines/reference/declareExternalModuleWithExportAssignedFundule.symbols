@@ -1,0 +1,42 @@
+=== tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts ===
+declare module "express" {
+>"express" : Symbol("express", Decl(declareExternalModuleWithExportAssignedFundule.ts, 0, 0))
+
+    export = express;
+>express : Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+
+    function express(): express.ExpressServer;
+>express : Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+>express : Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+>ExpressServer : Symbol(express.ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+
+    module express {
+>express : Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+
+        export interface ExpressServer {
+>ExpressServer : Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+
+            enable(name: string): ExpressServer;
+>enable : Symbol(ExpressServer.enable, Decl(declareExternalModuleWithExportAssignedFundule.ts, 8, 40))
+>name : Symbol(name, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 19))
+>ExpressServer : Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+
+            post(path: RegExp, handler: (req: Function) => void ): void;
+>post : Symbol(ExpressServer.post, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 48))
+>path : Symbol(path, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 17))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>handler : Symbol(handler, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 30))
+>req : Symbol(req, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 41))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        }
+
+        export class ExpressServerRequest {
+>ExpressServerRequest : Symbol(ExpressServerRequest, Decl(declareExternalModuleWithExportAssignedFundule.ts, 14, 9))
+
+        }
+
+    }
+
+}
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/raiseErrorOnParameterProperty.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(raiseErrorOnParameterProperty.ts, 0, 0))
+
+  constructor(public x: X) {
+>x : Symbol(C1.x, Decl(raiseErrorOnParameterProperty.ts, 1, 14))
+>X : Symbol(X)
+  }
+}
+var c1 = new C1(0);
+>c1 : Symbol(c1, Decl(raiseErrorOnParameterProperty.ts, 4, 3))
+>C1 : Symbol(C1, Decl(raiseErrorOnParameterProperty.ts, 0, 0))
+ 
+

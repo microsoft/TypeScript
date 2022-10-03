@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationEmitIndexTypeNotFound.ts ===
+export interface Test {
+>Test : Symbol(Test, Decl(declarationEmitIndexTypeNotFound.ts, 0, 0))
+
+    [index: TypeNotFound]: any;
+>index : Symbol(index, Decl(declarationEmitIndexTypeNotFound.ts, 1, 5))
+>TypeNotFound : Symbol(TypeNotFound)
+}
+

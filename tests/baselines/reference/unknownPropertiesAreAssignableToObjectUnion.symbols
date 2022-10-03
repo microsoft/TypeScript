@@ -1,0 +1,11 @@
+=== tests/cases/compiler/unknownPropertiesAreAssignableToObjectUnion.ts ===
+const x: Object | string = { x: 0 };
+>x : Symbol(x, Decl(unknownPropertiesAreAssignableToObjectUnion.ts, 0, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unknownPropertiesAreAssignableToObjectUnion.ts, 0, 28))
+
+const y: Object | undefined = { x: 0 };
+>y : Symbol(y, Decl(unknownPropertiesAreAssignableToObjectUnion.ts, 1, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unknownPropertiesAreAssignableToObjectUnion.ts, 1, 31))
+

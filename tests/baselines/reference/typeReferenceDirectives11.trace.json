@@ -1,0 +1,13 @@
+[
+    "======== Resolving module './mod1' from '/mod2.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/mod1', target file type 'TypeScript'.",
+    "File '/mod1.ts' exist - use it as a name resolution result.",
+    "======== Module name './mod1' was successfully resolved to '/mod1.ts'. ========",
+    "======== Resolving type reference directive 'lib', containing file '/__inferred type names__.ts', root directory '/types'. ========",
+    "Resolving with primary search path '/types'.",
+    "File '/types/lib/package.json' does not exist.",
+    "File '/types/lib/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'.",
+    "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========"
+]

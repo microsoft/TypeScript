@@ -1,0 +1,24 @@
+=== tests/cases/compiler/contextualPropertyOfGenericMappedType.ts ===
+// Repro for #24694
+
+declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
+>f : Symbol(f, Decl(contextualPropertyOfGenericMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(contextualPropertyOfGenericMappedType.ts, 2, 19))
+>data : Symbol(data, Decl(contextualPropertyOfGenericMappedType.ts, 2, 37))
+>T : Symbol(T, Decl(contextualPropertyOfGenericMappedType.ts, 2, 19))
+>handlers : Symbol(handlers, Decl(contextualPropertyOfGenericMappedType.ts, 2, 45))
+>P : Symbol(P, Decl(contextualPropertyOfGenericMappedType.ts, 2, 59))
+>T : Symbol(T, Decl(contextualPropertyOfGenericMappedType.ts, 2, 19))
+>value : Symbol(value, Decl(contextualPropertyOfGenericMappedType.ts, 2, 75))
+>T : Symbol(T, Decl(contextualPropertyOfGenericMappedType.ts, 2, 19))
+>P : Symbol(P, Decl(contextualPropertyOfGenericMappedType.ts, 2, 59))
+>prop : Symbol(prop, Decl(contextualPropertyOfGenericMappedType.ts, 2, 87))
+>P : Symbol(P, Decl(contextualPropertyOfGenericMappedType.ts, 2, 59))
+
+f({ data: 0 }, { data(value, key) {} });
+>f : Symbol(f, Decl(contextualPropertyOfGenericMappedType.ts, 0, 0))
+>data : Symbol(data, Decl(contextualPropertyOfGenericMappedType.ts, 3, 3))
+>data : Symbol(data, Decl(contextualPropertyOfGenericMappedType.ts, 3, 16))
+>value : Symbol(value, Decl(contextualPropertyOfGenericMappedType.ts, 3, 22))
+>key : Symbol(key, Decl(contextualPropertyOfGenericMappedType.ts, 3, 28))
+

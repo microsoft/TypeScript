@@ -1,0 +1,4 @@
+=== tests/cases/compiler/downlevelLetConst11.ts ===
+"use strict";
+No type information for this code.let
+No type information for this code.

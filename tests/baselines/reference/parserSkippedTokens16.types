@@ -1,0 +1,28 @@
+=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts ===
+foo(): Bar { }
+>foo() : any
+>foo : any
+>Bar : any
+
+function Foo      () ¬   { }
+>Foo : () => any
+
+4+:5
+>4+ : any
+>4 : 4
+> : any
+>5 : 5
+
+module M {
+>M : typeof M
+
+function a(
+>a : (T: any) => void
+
+    : T) { }
+>T : any
+}
+var x       =
+>x : any
+> : any
+

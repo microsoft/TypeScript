@@ -1,0 +1,20 @@
+=== /mod2.ts ===
+import {foo} from "./mod1";
+>foo : () => Lib
+
+export const bar = foo();
+>bar : Lib
+>foo() : Lib
+>foo : () => Lib
+
+=== /types/lib/index.d.ts ===
+interface Lib { x }
+>x : any
+
+=== /mod1.ts ===
+export function foo(): Lib { return {x: 1} }
+>foo : () => Lib
+>{x: 1} : { x: number; }
+>x : number
+>1 : 1
+

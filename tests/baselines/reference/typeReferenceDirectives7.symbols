@@ -1,0 +1,22 @@
+=== /app.ts ===
+/// <reference types="lib"/>
+
+export let $ = 1;
+>$ : Symbol($, Decl(app.ts, 2, 10))
+
+export let x: typeof $;
+>x : Symbol(x, Decl(app.ts, 4, 10))
+>$ : Symbol($, Decl(app.ts, 2, 10))
+
+export let y = () => x
+>y : Symbol(y, Decl(app.ts, 5, 10))
+>x : Symbol(x, Decl(app.ts, 4, 10))
+
+=== /types/lib/index.d.ts ===
+// local value shadows global - no need to add type reference directive 
+   
+declare let $: { x: number }
+>$ : Symbol($, Decl(index.d.ts, 2, 11))
+>x : Symbol(x, Decl(index.d.ts, 2, 16))
+
+

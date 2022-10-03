@@ -1,0 +1,33 @@
+=== tests/cases/compiler/targetTypeObjectLiteralToAny.ts ===
+function suggest(){ 
+>suggest : () => void
+
+	var TypeScriptKeywords:string[];  
+>TypeScriptKeywords : string[]
+
+	var result:any;	
+>result : any
+					
+	TypeScriptKeywords.forEach(function(keyword) {						
+>TypeScriptKeywords.forEach(function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	}) : void
+>TypeScriptKeywords.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>TypeScriptKeywords : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	} : (keyword: string) => void
+>keyword : string
+
+		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any
+>result.push({text:keyword, type:"keyword"}) : any
+>result.push : any
+>result : any
+>push : any
+>{text:keyword, type:"keyword"} : { text: string; type: string; }
+>text : string
+>keyword : string
+>type : string
+>"keyword" : "keyword"
+
+	});			
+}
+
+

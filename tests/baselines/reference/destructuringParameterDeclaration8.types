@@ -1,0 +1,70 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts ===
+// explicit type annotation should cause `method` to have type 'x' | 'y'
+// both inside and outside `test`.
+function test({
+>test : ({ method, nested: { p } }: {    method?: 'x' | 'y';    nested?: {        p: 'a' | 'b';    };}) => void
+
+    method = 'z',
+>method : "x" | "y"
+>'z' : "z"
+
+    nested: { p = 'c' }
+>nested : any
+>p : "a" | "b"
+>'c' : "c"
+
+}: {
+    method?: 'x' | 'y',
+>method : "x" | "y"
+
+    nested?: { p: 'a' | 'b' }
+>nested : { p: 'a' | 'b'; }
+>p : "a" | "b"
+
+})
+{
+    method
+>method : "x" | "y"
+
+    p
+>p : "a" | "b"
+}
+
+test({});
+>test({}) : void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+>{} : {}
+
+test({ method: 'x', nested: { p: 'a' } })
+>test({ method: 'x', nested: { p: 'a' } }) : void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+>{ method: 'x', nested: { p: 'a' } } : { method: "x"; nested: { p: "a"; }; }
+>method : "x"
+>'x' : "x"
+>nested : { p: "a"; }
+>{ p: 'a' } : { p: "a"; }
+>p : "a"
+>'a' : "a"
+
+test({ method: 'z', nested: { p: 'b' } })
+>test({ method: 'z', nested: { p: 'b' } }) : void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+>{ method: 'z', nested: { p: 'b' } } : { method: "z"; nested: { p: "b"; }; }
+>method : "z"
+>'z' : "z"
+>nested : { p: "b"; }
+>{ p: 'b' } : { p: "b"; }
+>p : "b"
+>'b' : "b"
+
+test({ method: 'one', nested: { p: 'a' } })
+>test({ method: 'one', nested: { p: 'a' } }) : void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+>{ method: 'one', nested: { p: 'a' } } : { method: "one"; nested: { p: "a"; }; }
+>method : "one"
+>'one' : "one"
+>nested : { p: "a"; }
+>{ p: 'a' } : { p: "a"; }
+>p : "a"
+>'a' : "a"
+

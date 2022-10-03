@@ -1,0 +1,133 @@
+=== tests/cases/compiler/qualify.ts ===
+module M {
+>M : typeof M
+
+    export var m=0;
+>m : number
+>0 : 0
+
+    export module N {
+>N : typeof N
+
+        export var n=1;
+>n : number
+>1 : 1
+    }
+}
+
+module M {
+>M : typeof M
+
+    export module N {
+>N : typeof N
+
+        var y=m;
+>y : number
+>m : number
+
+        var x=n+y;
+>x : number
+>n+y : number
+>n : number
+>y : number
+    }
+}
+
+
+module T {
+>T : typeof T
+
+    export interface I {
+        p;
+>p : any
+    }
+    export module U {
+>U : typeof U
+
+        var z:I=3;
+>z : I
+>3 : 3
+
+        export interface I2 {
+            q;
+>q : any
+        }
+    }
+}
+
+module Peer {
+>Peer : typeof Peer
+
+    export module U2 {
+>U2 : typeof U2
+
+        var z:T.U.I2=3;
+>z : T.U.I2
+>T : any
+>U : any
+>3 : 3
+    }
+}
+
+module Everest {
+>Everest : typeof Everest
+
+    export module K1 {
+        export interface I3 {
+            zeep;
+>zeep : any
+        }
+    }
+    export module K2 {
+>K2 : typeof K2
+
+        export interface I4 {
+            z;
+>z : any
+        }
+        var v1:I4;
+>v1 : I4
+
+        var v2:K1.I3=v1;
+>v2 : K1.I3
+>K1 : any
+>v1 : I4
+
+        var v3:K1.I3[]=v1;
+>v3 : K1.I3[]
+>K1 : any
+>v1 : I4
+
+        var v4:()=>K1.I3=v1;
+>v4 : () => K1.I3
+>K1 : any
+>v1 : I4
+
+        var v5:(k:K1.I3)=>void=v1;
+>v5 : (k: K1.I3) => void
+>k : K1.I3
+>K1 : any
+>v1 : I4
+
+        var v6:{k:K1.I3;}=v1;
+>v6 : { k: K1.I3; }
+>k : K1.I3
+>K1 : any
+>v1 : I4
+    }
+}
+
+interface I {
+    k;
+>k : any
+}
+
+var y:I;
+>y : I
+
+var x:T.I=y;
+>x : T.I
+>T : any
+>y : I
+
+

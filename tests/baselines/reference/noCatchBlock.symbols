@@ -1,0 +1,7 @@
+=== tests/cases/compiler/noCatchBlock.ts ===
+try {
+No type information for this code. // ...
+No type information for this code.} finally {
+No type information for this code. // N.B. No 'catch' block
+No type information for this code.}
+No type information for this code.

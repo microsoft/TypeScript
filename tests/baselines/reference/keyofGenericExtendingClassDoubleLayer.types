@@ -1,0 +1,31 @@
+=== tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts ===
+class Model<Attributes = any> {
+>Model : Model<Attributes>
+
+    public createdAt: Date;
+>createdAt : Date
+}
+
+type ModelAttributes<T> = Omit<T, keyof Model>;
+>ModelAttributes : ModelAttributes<T>
+
+class AutoModel<T> extends Model<ModelAttributes<T>> {}
+>AutoModel : AutoModel<T>
+>Model : Model<ModelAttributes<T>>
+
+class PersonModel extends AutoModel<PersonModel> {
+>PersonModel : PersonModel
+>AutoModel : AutoModel<PersonModel>
+
+    public age: number;
+>age : number
+
+    toJson() {
+>toJson : () => void
+
+        let x: keyof this = 'createdAt';
+>x : keyof this
+>'createdAt' : "createdAt"
+    }
+}
+

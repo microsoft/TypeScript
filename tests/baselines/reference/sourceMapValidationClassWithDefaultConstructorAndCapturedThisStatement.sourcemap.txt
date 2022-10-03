@@ -1,0 +1,124 @@
+===================================================================
+JsFile: sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js
+mapUrl: sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map
+sourceRoot: 
+sources: sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js
+sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts
+-------------------------------------------------------------------
+>>>var Greeter = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function Greeter() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+---
+>>>        var _this = this;
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^
+1->
+2 >        class Greeter {
+  >            public a = 10;
+  >            public returnA = () => this.a;
+  >        }
+1->Emitted(3, 9) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 26) Source(4, 2) + SourceIndex(0)
+---
+>>>        this.a = 10;
+1 >^^^^^^^^
+2 >        ^^^^^^
+3 >              ^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >        a
+3 >               = 
+4 >                 10
+5 >                   ;
+1 >Emitted(4, 9) Source(2, 12) + SourceIndex(0)
+2 >Emitted(4, 15) Source(2, 13) + SourceIndex(0)
+3 >Emitted(4, 18) Source(2, 16) + SourceIndex(0)
+4 >Emitted(4, 20) Source(2, 18) + SourceIndex(0)
+5 >Emitted(4, 21) Source(2, 19) + SourceIndex(0)
+---
+>>>        this.returnA = function () { return _this.a; };
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^
+3 >                    ^^^
+4 >                       ^^^^^^^^^^^^^^
+5 >                                     ^^^^^^^
+6 >                                            ^^^^^
+7 >                                                 ^
+8 >                                                  ^
+9 >                                                   ^^
+10>                                                     ^
+11>                                                      ^
+1->
+  >    public 
+2 >        returnA
+3 >                     = 
+4 >                       () => 
+5 >                                     
+6 >                                            this
+7 >                                                 .
+8 >                                                  a
+9 >                                                   
+10>                                                     this.a
+11>                                                      ;
+1->Emitted(5, 9) Source(3, 12) + SourceIndex(0)
+2 >Emitted(5, 21) Source(3, 19) + SourceIndex(0)
+3 >Emitted(5, 24) Source(3, 22) + SourceIndex(0)
+4 >Emitted(5, 38) Source(3, 28) + SourceIndex(0)
+5 >Emitted(5, 45) Source(3, 28) + SourceIndex(0)
+6 >Emitted(5, 50) Source(3, 32) + SourceIndex(0)
+7 >Emitted(5, 51) Source(3, 33) + SourceIndex(0)
+8 >Emitted(5, 52) Source(3, 34) + SourceIndex(0)
+9 >Emitted(5, 54) Source(3, 28) + SourceIndex(0)
+10>Emitted(5, 55) Source(3, 34) + SourceIndex(0)
+11>Emitted(5, 56) Source(3, 35) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >    }
+1 >Emitted(6, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>    return Greeter;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+2 >    }
+1->Emitted(7, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(7, 19) Source(4, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class Greeter {
+  >     public a = 10;
+  >     public returnA = () => this.a;
+  > }
+1 >Emitted(8, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(8, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(8, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

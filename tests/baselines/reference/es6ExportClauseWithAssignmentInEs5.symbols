@@ -1,0 +1,39 @@
+=== tests/cases/compiler/server.ts ===
+var foo = 2;
+>foo : Symbol(foo, Decl(server.ts, 0, 3))
+
+foo = 3;
+>foo : Symbol(foo, Decl(server.ts, 0, 3))
+
+var baz = 3;
+>baz : Symbol(baz, Decl(server.ts, 3, 3))
+
+baz = 4;
+>baz : Symbol(baz, Decl(server.ts, 3, 3))
+
+var buzz = 10;
+>buzz : Symbol(buzz, Decl(server.ts, 6, 3))
+
+buzz += 3;
+>buzz : Symbol(buzz, Decl(server.ts, 6, 3))
+
+var bizz = 8;
+>bizz : Symbol(bizz, Decl(server.ts, 9, 3))
+
+bizz++; // compiles to exports.bizz = (bizz++, bizz)
+>bizz : Symbol(bizz, Decl(server.ts, 9, 3))
+
+bizz--; // similarly
+>bizz : Symbol(bizz, Decl(server.ts, 9, 3))
+
+++bizz; // compiles to exports.bizz = ++bizz
+>bizz : Symbol(bizz, Decl(server.ts, 9, 3))
+
+export { foo, baz, baz as quux, buzz, bizz };
+>foo : Symbol(foo, Decl(server.ts, 14, 8))
+>baz : Symbol(baz, Decl(server.ts, 14, 13))
+>baz : Symbol(baz, Decl(server.ts, 3, 3))
+>quux : Symbol(quux, Decl(server.ts, 14, 18))
+>buzz : Symbol(buzz, Decl(server.ts, 14, 31))
+>bizz : Symbol(bizz, Decl(server.ts, 14, 37))
+

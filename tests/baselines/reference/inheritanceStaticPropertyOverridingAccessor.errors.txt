@@ -1,0 +1,20 @@
+tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts (2 errors) ====
+    class a {
+        static get x(): () => string {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;;
+        }
+        static set x(aValue: () => string) {
+                   ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    class b extends a {
+        static x: () => string;
+    }

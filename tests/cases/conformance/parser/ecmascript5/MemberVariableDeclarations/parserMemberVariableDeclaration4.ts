@@ -1,0 +1,3 @@
+class C {
+  export Foo;
+}

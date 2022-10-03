@@ -1,0 +1,41 @@
+lib.es5.d.ts(124,5): error TS2411: Property 'constructor' of type 'Function' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(127,5): error TS2411: Property 'toString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(130,5): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(133,5): error TS2411: Property 'valueOf' of type '() => Object' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(139,5): error TS2411: Property 'hasOwnProperty' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(145,5): error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(151,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
+
+
+==== tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts (0 errors) ====
+    // object types can define string indexers that are more specific than the default 'any' that would be returned
+    // no errors expected below 
+    
+    interface Object {
+        [x: string]: Object;
+    }
+    var o = {};
+    var r = o['']; // should be Object
+    
+    class C {
+        foo: string;
+        [x: string]: string;
+    }
+    var c: C;
+    var r2: string = c[''];
+    
+    interface I {
+        bar: string;
+        [x: string]: string;
+    }
+    var i: I;
+    var r3: string = i[''];
+    
+    var o2: {
+        baz: string;
+        [x: string]: string;
+    }
+    var r4: string = o2[''];
+    
+    
+    

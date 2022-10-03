@@ -1,0 +1,22 @@
+=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrorsES3.ts ===
+var e1 = { get a() { return 4; } };
+>e1 : { readonly a: number; }
+>{ get a() { return 4; } } : { readonly a: number; }
+>a : number
+>4 : 4
+
+var e2 = { set a(n) { } };
+>e2 : { a: any; }
+>{ set a(n) { } } : { a: any; }
+>a : any
+>n : any
+
+var e3 = { get a() { return ''; }, set a(n) { } };
+>e3 : { a: string; }
+>{ get a() { return ''; }, set a(n) { } } : { a: string; }
+>a : string
+>'' : ""
+>a : string
+>n : string
+
+

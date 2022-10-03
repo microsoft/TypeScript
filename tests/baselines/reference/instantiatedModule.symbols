@@ -1,0 +1,195 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/instantiatedModule.ts ===
+// adding the var makes this an instantiated module
+
+module M {
+>M : Symbol(M, Decl(instantiatedModule.ts, 0, 0))
+
+    export interface Point { x: number; y: number }
+>Point : Symbol(Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+>x : Symbol(Point.x, Decl(instantiatedModule.ts, 3, 28))
+>y : Symbol(Point.y, Decl(instantiatedModule.ts, 3, 39))
+
+    export var Point = 1;
+>Point : Symbol(Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+}
+
+// primary expression
+var m: typeof M;
+>m : Symbol(m, Decl(instantiatedModule.ts, 8, 3), Decl(instantiatedModule.ts, 9, 3))
+>M : Symbol(M, Decl(instantiatedModule.ts, 0, 0))
+
+var m = M;
+>m : Symbol(m, Decl(instantiatedModule.ts, 8, 3), Decl(instantiatedModule.ts, 9, 3))
+>M : Symbol(M, Decl(instantiatedModule.ts, 0, 0))
+
+var a1: number;
+>a1 : Symbol(a1, Decl(instantiatedModule.ts, 11, 3), Decl(instantiatedModule.ts, 12, 3), Decl(instantiatedModule.ts, 13, 3))
+
+var a1 = M.Point;
+>a1 : Symbol(a1, Decl(instantiatedModule.ts, 11, 3), Decl(instantiatedModule.ts, 12, 3), Decl(instantiatedModule.ts, 13, 3))
+>M.Point : Symbol(M.Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+>M : Symbol(M, Decl(instantiatedModule.ts, 0, 0))
+>Point : Symbol(M.Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+
+var a1 = m.Point;
+>a1 : Symbol(a1, Decl(instantiatedModule.ts, 11, 3), Decl(instantiatedModule.ts, 12, 3), Decl(instantiatedModule.ts, 13, 3))
+>m.Point : Symbol(M.Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+>m : Symbol(m, Decl(instantiatedModule.ts, 8, 3), Decl(instantiatedModule.ts, 9, 3))
+>Point : Symbol(M.Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+
+var p1: { x: number; y: number; }
+>p1 : Symbol(p1, Decl(instantiatedModule.ts, 15, 3), Decl(instantiatedModule.ts, 16, 3))
+>x : Symbol(x, Decl(instantiatedModule.ts, 15, 9))
+>y : Symbol(y, Decl(instantiatedModule.ts, 15, 20))
+
+var p1: M.Point;
+>p1 : Symbol(p1, Decl(instantiatedModule.ts, 15, 3), Decl(instantiatedModule.ts, 16, 3))
+>M : Symbol(M, Decl(instantiatedModule.ts, 0, 0))
+>Point : Symbol(M.Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
+
+// making the point a class instead of an interface 
+// makes this an instantiated mmodule
+module M2 {
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+
+    export class Point {
+>Point : Symbol(Point, Decl(instantiatedModule.ts, 20, 11))
+
+        x: number;
+>x : Symbol(Point.x, Decl(instantiatedModule.ts, 21, 24))
+
+        y: number;
+>y : Symbol(Point.y, Decl(instantiatedModule.ts, 22, 18))
+
+        static Origin(): Point {
+>Origin : Symbol(Point.Origin, Decl(instantiatedModule.ts, 23, 18))
+>Point : Symbol(Point, Decl(instantiatedModule.ts, 20, 11))
+
+            return { x: 0, y: 0 };
+>x : Symbol(x, Decl(instantiatedModule.ts, 25, 20))
+>y : Symbol(y, Decl(instantiatedModule.ts, 25, 26))
+        }
+    }
+}
+
+var m2: typeof M2;
+>m2 : Symbol(m2, Decl(instantiatedModule.ts, 30, 3), Decl(instantiatedModule.ts, 31, 3))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+
+var m2 = M2;
+>m2 : Symbol(m2, Decl(instantiatedModule.ts, 30, 3), Decl(instantiatedModule.ts, 31, 3))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+
+// static side of the class
+var a2: typeof M2.Point;
+>a2 : Symbol(a2, Decl(instantiatedModule.ts, 34, 3), Decl(instantiatedModule.ts, 35, 3), Decl(instantiatedModule.ts, 36, 3))
+>M2.Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+var a2 = m2.Point;
+>a2 : Symbol(a2, Decl(instantiatedModule.ts, 34, 3), Decl(instantiatedModule.ts, 35, 3), Decl(instantiatedModule.ts, 36, 3))
+>m2.Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>m2 : Symbol(m2, Decl(instantiatedModule.ts, 30, 3), Decl(instantiatedModule.ts, 31, 3))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+var a2 = M2.Point;
+>a2 : Symbol(a2, Decl(instantiatedModule.ts, 34, 3), Decl(instantiatedModule.ts, 35, 3), Decl(instantiatedModule.ts, 36, 3))
+>M2.Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+var o: M2.Point = a2.Origin();
+>o : Symbol(o, Decl(instantiatedModule.ts, 37, 3))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>a2.Origin : Symbol(M2.Point.Origin, Decl(instantiatedModule.ts, 23, 18))
+>a2 : Symbol(a2, Decl(instantiatedModule.ts, 34, 3), Decl(instantiatedModule.ts, 35, 3), Decl(instantiatedModule.ts, 36, 3))
+>Origin : Symbol(M2.Point.Origin, Decl(instantiatedModule.ts, 23, 18))
+
+var p2: { x: number; y: number }
+>p2 : Symbol(p2, Decl(instantiatedModule.ts, 39, 3), Decl(instantiatedModule.ts, 40, 3), Decl(instantiatedModule.ts, 41, 3), Decl(instantiatedModule.ts, 42, 3))
+>x : Symbol(x, Decl(instantiatedModule.ts, 39, 9))
+>y : Symbol(y, Decl(instantiatedModule.ts, 39, 20))
+
+var p2: M2.Point;
+>p2 : Symbol(p2, Decl(instantiatedModule.ts, 39, 3), Decl(instantiatedModule.ts, 40, 3), Decl(instantiatedModule.ts, 41, 3), Decl(instantiatedModule.ts, 42, 3))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+var p2 = new m2.Point();
+>p2 : Symbol(p2, Decl(instantiatedModule.ts, 39, 3), Decl(instantiatedModule.ts, 40, 3), Decl(instantiatedModule.ts, 41, 3), Decl(instantiatedModule.ts, 42, 3))
+>m2.Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>m2 : Symbol(m2, Decl(instantiatedModule.ts, 30, 3), Decl(instantiatedModule.ts, 31, 3))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+var p2 = new M2.Point();
+>p2 : Symbol(p2, Decl(instantiatedModule.ts, 39, 3), Decl(instantiatedModule.ts, 40, 3), Decl(instantiatedModule.ts, 41, 3), Decl(instantiatedModule.ts, 42, 3))
+>M2.Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+>M2 : Symbol(M2, Decl(instantiatedModule.ts, 16, 16))
+>Point : Symbol(M2.Point, Decl(instantiatedModule.ts, 20, 11))
+
+module M3 {
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+
+    export enum Color { Blue, Red }
+>Color : Symbol(Color, Decl(instantiatedModule.ts, 44, 11))
+>Blue : Symbol(Color.Blue, Decl(instantiatedModule.ts, 45, 23))
+>Red : Symbol(Color.Red, Decl(instantiatedModule.ts, 45, 29))
+}
+
+var m3: typeof M3;
+>m3 : Symbol(m3, Decl(instantiatedModule.ts, 48, 3), Decl(instantiatedModule.ts, 49, 3))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+
+var m3 = M3;
+>m3 : Symbol(m3, Decl(instantiatedModule.ts, 48, 3), Decl(instantiatedModule.ts, 49, 3))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+
+var a3: typeof M3.Color;
+>a3 : Symbol(a3, Decl(instantiatedModule.ts, 51, 3), Decl(instantiatedModule.ts, 52, 3), Decl(instantiatedModule.ts, 53, 3))
+>M3.Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+
+var a3 = m3.Color;
+>a3 : Symbol(a3, Decl(instantiatedModule.ts, 51, 3), Decl(instantiatedModule.ts, 52, 3), Decl(instantiatedModule.ts, 53, 3))
+>m3.Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>m3 : Symbol(m3, Decl(instantiatedModule.ts, 48, 3), Decl(instantiatedModule.ts, 49, 3))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+
+var a3 = M3.Color;
+>a3 : Symbol(a3, Decl(instantiatedModule.ts, 51, 3), Decl(instantiatedModule.ts, 52, 3), Decl(instantiatedModule.ts, 53, 3))
+>M3.Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+
+var blue: M3.Color = a3.Blue;
+>blue : Symbol(blue, Decl(instantiatedModule.ts, 54, 3))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>a3.Blue : Symbol(M3.Color.Blue, Decl(instantiatedModule.ts, 45, 23))
+>a3 : Symbol(a3, Decl(instantiatedModule.ts, 51, 3), Decl(instantiatedModule.ts, 52, 3), Decl(instantiatedModule.ts, 53, 3))
+>Blue : Symbol(M3.Color.Blue, Decl(instantiatedModule.ts, 45, 23))
+
+var p3: M3.Color;
+>p3 : Symbol(p3, Decl(instantiatedModule.ts, 56, 3), Decl(instantiatedModule.ts, 57, 3), Decl(instantiatedModule.ts, 58, 3))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+
+var p3 = M3.Color.Red;
+>p3 : Symbol(p3, Decl(instantiatedModule.ts, 56, 3), Decl(instantiatedModule.ts, 57, 3), Decl(instantiatedModule.ts, 58, 3))
+>M3.Color.Red : Symbol(M3.Color.Red, Decl(instantiatedModule.ts, 45, 29))
+>M3.Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>M3 : Symbol(M3, Decl(instantiatedModule.ts, 42, 24))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>Red : Symbol(M3.Color.Red, Decl(instantiatedModule.ts, 45, 29))
+
+var p3 = m3.Color.Blue;
+>p3 : Symbol(p3, Decl(instantiatedModule.ts, 56, 3), Decl(instantiatedModule.ts, 57, 3), Decl(instantiatedModule.ts, 58, 3))
+>m3.Color.Blue : Symbol(M3.Color.Blue, Decl(instantiatedModule.ts, 45, 23))
+>m3.Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>m3 : Symbol(m3, Decl(instantiatedModule.ts, 48, 3), Decl(instantiatedModule.ts, 49, 3))
+>Color : Symbol(M3.Color, Decl(instantiatedModule.ts, 44, 11))
+>Blue : Symbol(M3.Color.Blue, Decl(instantiatedModule.ts, 45, 23))
+

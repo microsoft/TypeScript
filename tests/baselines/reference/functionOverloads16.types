@@ -1,0 +1,18 @@
+=== tests/cases/compiler/functionOverloads16.ts ===
+function foo(foo:{a:string;}):string;
+>foo : { (foo: {    a: string;}): string; (foo: { a: string; }): number; }
+>foo : { a: string; }
+>a : string
+
+function foo(foo:{a:string;}):number;
+>foo : { (foo: { a: string; }): string; (foo: {    a: string;}): number; }
+>foo : { a: string; }
+>a : string
+
+function foo(foo:{a:string; b?:number;}):any { return "" }
+>foo : { (foo: { a: string; }): string; (foo: { a: string; }): number; }
+>foo : { a: string; b?: number; }
+>a : string
+>b : number
+>"" : ""
+

@@ -1,0 +1,23 @@
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2352: Conversion of type '{ c: null; }' to type 'IFoo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b
+
+
+==== tests/cases/compiler/noImplicitAnyInCastExpression.ts (1 errors) ====
+    // verify no noImplictAny errors reported with cast expression
+    
+    interface IFoo {
+        a: number;
+        b: string;
+    }
+    
+    // Expr type not assignable to target type
+    (<IFoo>{ a: null });
+    
+    // Expr type assignable to target type
+    (<IFoo>{ a: 2, b: undefined });
+    
+    // Neither types is assignable to each other
+    (<IFoo>{ c: null });
+     ~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type '{ c: null; }' to type 'IFoo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/salsa/a.js ===
+/// <reference path='./requires.d.ts' />
+var mod1 = require('./mod1')
+>mod1 : number
+>require('./mod1') : number
+>require : (name: string) => any
+>'./mod1' : "./mod1"
+
+mod1.toFixed(12)
+>mod1.toFixed(12) : string
+>mod1.toFixed : (fractionDigits?: number) => string
+>mod1 : number
+>toFixed : (fractionDigits?: number) => string
+>12 : 12
+
+mod1.f() // error, 'f' is not a property on 'number'
+>mod1.f() : any
+>mod1.f : any
+>mod1 : number
+>f : any
+
+=== tests/cases/conformance/salsa/requires.d.ts ===
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+=== tests/cases/conformance/salsa/mod1.js ===
+/// <reference path='./requires.d.ts' />
+module.exports = 1
+>module.exports = 1 : number
+>module.exports : number
+>module : { exports: number; }
+>exports : number
+>1 : 1
+
+module.exports.f = function () { }
+>module.exports.f = function () { } : () => void
+>module.exports.f : any
+>module.exports : number
+>module : { exports: number; }
+>exports : number
+>f : any
+>function () { } : () => void
+

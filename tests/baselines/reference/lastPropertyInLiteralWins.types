@@ -1,0 +1,51 @@
+=== tests/cases/compiler/lastPropertyInLiteralWins.ts ===
+interface Thing {
+    thunk: (str: string) => void;
+>thunk : (str: string) => void
+>str : string
+}
+function test(thing: Thing) {
+>test : (thing: Thing) => void
+>thing : Thing
+
+    thing.thunk("str");
+>thing.thunk("str") : void
+>thing.thunk : (str: string) => void
+>thing : Thing
+>thunk : (str: string) => void
+>"str" : "str"
+}
+test({ // Should error, as last one wins, and is wrong type
+>test({ // Should error, as last one wins, and is wrong type    thunk: (str: string) => {},    thunk: (num: number) => {}}) : void
+>test : (thing: Thing) => void
+>{ // Should error, as last one wins, and is wrong type    thunk: (str: string) => {},    thunk: (num: number) => {}} : { thunk: (num: number) => void; }
+
+    thunk: (str: string) => {},
+>thunk : (str: string) => void
+>(str: string) => {} : (str: string) => void
+>str : string
+
+    thunk: (num: number) => {}
+>thunk : (str: string) => void
+>(num: number) => {} : (num: number) => void
+>num : number
+
+});
+
+test({ // Should be OK.  Last 'thunk' is of correct type
+>test({ // Should be OK.  Last 'thunk' is of correct type    thunk: (num: number) => {},    thunk: (str: string) => {}}) : void
+>test : (thing: Thing) => void
+>{ // Should be OK.  Last 'thunk' is of correct type    thunk: (num: number) => {},    thunk: (str: string) => {}} : { thunk: (str: string) => void; }
+
+    thunk: (num: number) => {},
+>thunk : (num: number) => void
+>(num: number) => {} : (num: number) => void
+>num : number
+
+    thunk: (str: string) => {}
+>thunk : (num: number) => void
+>(str: string) => {} : (str: string) => void
+>str : string
+
+});
+

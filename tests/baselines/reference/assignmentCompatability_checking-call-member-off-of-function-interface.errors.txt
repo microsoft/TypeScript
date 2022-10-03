@@ -1,0 +1,62 @@
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(10,1): error TS2322: Type 'string' is not assignable to type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(11,1): error TS2741: Property 'call' is missing in type 'string[]' but required in type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(12,1): error TS2322: Type 'number' is not assignable to type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(13,1): error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(22,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(23,4): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(24,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Callable'.
+tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,4): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Callable'.
+  Property 'call' is missing in type '{}' but required in type 'Callable'.
+
+
+==== tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts (8 errors) ====
+    // 3.8.4 Assignment Compatibility 
+    
+    interface Callable {
+        call(blah: any); // also works for 'apply'
+    }
+    
+    var x: Callable;
+    
+    // Should fail
+    x = '';
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'Callable'.
+    x = [''];
+    ~
+!!! error TS2741: Property 'call' is missing in type 'string[]' but required in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+    x = 4;
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'Callable'.
+    x = {};
+    ~
+!!! error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+    
+    // Should work
+    function f() { };
+    x = f;
+    
+    function fn(c: Callable) { }
+    
+    // Should Fail
+    fn('');
+       ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Callable'.
+    fn(['']);
+       ~~~~
+!!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Callable'.
+    fn(4);
+       ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Callable'.
+    fn({});
+       ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Callable'.
+!!! error TS2345:   Property 'call' is missing in type '{}' but required in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+    
+    
+    // Should work
+    fn(a => { });
+    

@@ -1,0 +1,14 @@
+tests/cases/compiler/ambientStatement1.ts(2,6): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientStatement1.ts(4,22): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+==== tests/cases/compiler/ambientStatement1.ts (2 errors) ====
+        declare module M1 {
+        	while(true);
+        	~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+        
+        	export var v1 = () => false;
+        	                ~~~~~~~~~~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+        }

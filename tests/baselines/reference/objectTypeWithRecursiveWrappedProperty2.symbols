@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty2.ts ===
+// Basic recursive type
+
+class List<T> {
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))
+
+    data: T;
+>data : Symbol(List.data, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 15))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))
+
+    next: List<List<T>>;
+>next : Symbol(List.next, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 3, 12))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+>T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))
+}
+
+var list1 = new List<number>();
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 7, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+
+var list2 = new List<number>();
+>list2 : Symbol(list2, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 8, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+
+var list3 = new List<string>();
+>list3 : Symbol(list3, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 9, 3))
+>List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+
+list1 = list2; // ok
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 7, 3))
+>list2 : Symbol(list2, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 8, 3))
+
+list1 = list3; // error
+>list1 : Symbol(list1, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 7, 3))
+>list3 : Symbol(list3, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 9, 3))
+

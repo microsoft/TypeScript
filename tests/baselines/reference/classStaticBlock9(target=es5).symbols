@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts ===
+class A {
+>A : Symbol(A, Decl(classStaticBlock9.ts, 0, 0))
+
+    static bar = A.foo + 1
+>bar : Symbol(A.bar, Decl(classStaticBlock9.ts, 0, 9))
+>A.foo : Symbol(A.foo, Decl(classStaticBlock9.ts, 4, 5))
+>A : Symbol(A, Decl(classStaticBlock9.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(classStaticBlock9.ts, 4, 5))
+
+    static {
+        A.foo + 2;
+>A.foo : Symbol(A.foo, Decl(classStaticBlock9.ts, 4, 5))
+>A : Symbol(A, Decl(classStaticBlock9.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(classStaticBlock9.ts, 4, 5))
+    }
+    static foo = 1;
+>foo : Symbol(A.foo, Decl(classStaticBlock9.ts, 4, 5))
+}
+

@@ -1,0 +1,91 @@
+=== tests/cases/conformance/jsx/checkJsxUnionSFXContextualTypeInferredCorrectly.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 6))
+
+interface PS {
+>PS : Symbol(PS, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 26))
+
+    multi: false
+>multi : Symbol(PS.multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 4, 14))
+
+    value: string | undefined
+>value : Symbol(PS.value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 5, 16))
+
+    onChange: (selection: string | undefined) => void
+>onChange : Symbol(PS.onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 6, 29))
+>selection : Symbol(selection, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 7, 15))
+}
+
+interface PM {
+>PM : Symbol(PM, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 8, 1))
+
+    multi: true
+>multi : Symbol(PM.multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 10, 14))
+
+    value: string[]
+>value : Symbol(PM.value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 11, 15))
+
+    onChange: (selection: string[]) => void
+>onChange : Symbol(PM.onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 12, 19))
+>selection : Symbol(selection, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 13, 15))
+}
+
+export function ComponentWithUnion(props: PM | PS) {
+>ComponentWithUnion : Symbol(ComponentWithUnion, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 14, 1))
+>props : Symbol(props, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 16, 35))
+>PM : Symbol(PM, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 8, 1))
+>PS : Symbol(PS, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 26))
+
+    return <h1></h1>;
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+}
+
+// Usage with React tsx
+export function HereIsTheError() {
+>HereIsTheError : Symbol(HereIsTheError, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 18, 1))
+
+    return (
+        <ComponentWithUnion
+>ComponentWithUnion : Symbol(ComponentWithUnion, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 14, 1))
+
+            multi={false}
+>multi : Symbol(multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 23, 27))
+
+            value={'s'}
+>value : Symbol(value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 24, 25))
+
+            onChange={val => console.log(val)} // <- this throws an error
+>onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 25, 23))
+>val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
+
+        />
+    );
+}
+
+// Usage with pure TypeScript
+ComponentWithUnion({
+>ComponentWithUnion : Symbol(ComponentWithUnion, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 14, 1))
+
+    multi: false,
+>multi : Symbol(multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 32, 20))
+
+    value: 's',
+>value : Symbol(value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 33, 17))
+
+    onChange: val => console.log(val) // <- this works fine
+>onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 34, 15))
+>val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
+
+});
+

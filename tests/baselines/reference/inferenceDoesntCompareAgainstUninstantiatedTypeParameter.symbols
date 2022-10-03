@@ -1,0 +1,88 @@
+=== tests/cases/compiler/inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
+class ClassA<TEntityClass>  {
+>ClassA : Symbol(ClassA, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 0))
+>TEntityClass : Symbol(TEntityClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 13))
+
+    constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {
+>entity : Symbol(ClassA.entity, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 1, 16))
+>TEntityClass : Symbol(TEntityClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 13))
+>settings : Symbol(ClassA.settings, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 1, 46))
+>SettingsInterface : Symbol(SettingsInterface, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 8, 1))
+>TEntityClass : Symbol(TEntityClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 13))
+
+    }
+}
+export interface ValueInterface<TValueClass> {
+>ValueInterface : Symbol(ValueInterface, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 4, 1))
+>TValueClass : Symbol(TValueClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 5, 32))
+
+    func?: (row: TValueClass) => any;
+>func : Symbol(ValueInterface.func, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 5, 46))
+>row : Symbol(row, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 6, 12))
+>TValueClass : Symbol(TValueClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 5, 32))
+
+    value?: string;
+>value : Symbol(ValueInterface.value, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 6, 37))
+}
+export interface SettingsInterface<TClass> {
+>SettingsInterface : Symbol(SettingsInterface, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 8, 1))
+>TClass : Symbol(TClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 9, 35))
+
+    values?: (row: TClass) => ValueInterface<TClass>[],
+>values : Symbol(SettingsInterface.values, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 9, 44))
+>row : Symbol(row, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 10, 14))
+>TClass : Symbol(TClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 9, 35))
+>ValueInterface : Symbol(ValueInterface, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 4, 1))
+>TClass : Symbol(TClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 9, 35))
+}
+class ConcreteClass {
+>ConcreteClass : Symbol(ConcreteClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 11, 1))
+
+    theName = 'myClass';
+>theName : Symbol(ConcreteClass.theName, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 12, 21))
+}
+
+var thisGetsTheFalseError = new ClassA(new ConcreteClass(), {
+>thisGetsTheFalseError : Symbol(thisGetsTheFalseError, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 16, 3))
+>ClassA : Symbol(ClassA, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 0))
+>ConcreteClass : Symbol(ConcreteClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 11, 1))
+
+    values: o => [
+>values : Symbol(values, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 16, 61))
+>o : Symbol(o, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 17, 11))
+        {
+            value: o.theName,
+>value : Symbol(value, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 18, 9))
+>o.theName : Symbol(ConcreteClass.theName, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 12, 21))
+>o : Symbol(o, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 17, 11))
+>theName : Symbol(ConcreteClass.theName, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 12, 21))
+
+            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+>func : Symbol(func, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 19, 29))
+>x : Symbol(x, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 20, 17))
+        }
+    ]
+});
+
+var thisIsOk = new ClassA<ConcreteClass>(new ConcreteClass(), {
+>thisIsOk : Symbol(thisIsOk, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 25, 3))
+>ClassA : Symbol(ClassA, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 0))
+>ConcreteClass : Symbol(ConcreteClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 11, 1))
+>ConcreteClass : Symbol(ConcreteClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 11, 1))
+
+    values: o => [
+>values : Symbol(values, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 25, 63))
+>o : Symbol(o, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 26, 11))
+        {
+            value: o.theName,
+>value : Symbol(value, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 27, 9))
+>o.theName : Symbol(ConcreteClass.theName, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 12, 21))
+>o : Symbol(o, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 26, 11))
+>theName : Symbol(ConcreteClass.theName, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 12, 21))
+
+            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+>func : Symbol(func, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 28, 29))
+>x : Symbol(x, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 29, 17))
+        }
+    ]
+});

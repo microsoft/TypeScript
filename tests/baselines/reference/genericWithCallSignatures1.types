@@ -1,0 +1,29 @@
+=== tests/cases/compiler/genericWithCallSignatures_1.ts ===
+///<reference path="genericWithCallSignatures_0.ts"/>
+class MyClass {
+>MyClass : MyClass
+
+    public callableThing: CallableExtention<string>;
+>callableThing : CallableExtention<string>
+
+    public myMethod() {
+>myMethod : () => void
+
+        var x = <string> this.callableThing();
+>x : string
+><string> this.callableThing() : string
+>this.callableThing() : string
+>this.callableThing : CallableExtention<string>
+>this : this
+>callableThing : CallableExtention<string>
+    }
+}
+=== tests/cases/compiler/genericWithCallSignatures_0.ts ===
+interface Callable<T> {
+    (): T;
+    (value: T): void;
+>value : T
+}
+
+interface CallableExtention<T> extends Callable<T> { }
+

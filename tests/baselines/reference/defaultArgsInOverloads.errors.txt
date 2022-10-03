@@ -1,0 +1,37 @@
+tests/cases/compiler/defaultArgsInOverloads.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/defaultArgsInOverloads.ts(7,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/defaultArgsInOverloads.ts(10,13): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/defaultArgsInOverloads.ts(16,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/defaultArgsInOverloads.ts(19,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+
+
+==== tests/cases/compiler/defaultArgsInOverloads.ts (5 errors) ====
+    function fun(a: string);
+    function fun(a = 3);
+                 ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    function fun(a = null) { }
+    
+    class C {
+    	fun(a: string);
+    	fun(a = 3);
+    	    ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    	fun(a = null) { }
+    	static fun(a: string);
+    	static fun(a = 3);
+    	           ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    	static fun(a = null) { }
+    }
+    
+    interface I {
+        fun(a: string);
+        fun(a = 3);
+            ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    }
+    
+    var f: (a = 3) => number;
+            ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

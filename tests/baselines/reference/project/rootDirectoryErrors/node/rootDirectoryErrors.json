@@ -1,0 +1,22 @@
+{
+    "scenario": "rootDirectory: Files outside the rootDirectory",
+    "projectRoot": "tests/cases/projects/rootDirectory",
+    "inputFiles": [
+        "FolderA/FolderB/fileB.ts"
+    ],
+    "outDir": "outdir/simple",
+    "rootDir": "FolderA/FolderB/FolderC",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "FolderA/FolderB/FolderC/fileC.ts",
+        "FolderA/FolderB/fileB.ts"
+    ],
+    "emittedFiles": [
+        "outdir/simple/fileC.js",
+        "outdir/simple/fileC.d.ts",
+        "FolderA/FolderB/fileB.js",
+        "FolderA/FolderB/fileB.d.ts"
+    ]
+}

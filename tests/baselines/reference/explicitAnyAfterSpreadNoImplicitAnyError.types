@@ -1,0 +1,13 @@
+=== tests/cases/compiler/explicitAnyAfterSpreadNoImplicitAnyError.ts ===
+({ a: [], ...(null as any) });
+>({ a: [], ...(null as any) }) : any
+>{ a: [], ...(null as any) } : any
+>a : undefined[]
+>[] : undefined[]
+>(null as any) : any
+>null as any : any
+>null : null
+
+let x: any;
+>x : any
+

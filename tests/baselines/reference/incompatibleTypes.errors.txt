@@ -1,0 +1,151 @@
+tests/cases/compiler/incompatibleTypes.ts(6,12): error TS2416: Property 'p1' in type 'C1' is not assignable to the same property in base type 'IFoo1'.
+  Type '() => string' is not assignable to type '() => number'.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/incompatibleTypes.ts(16,12): error TS2416: Property 'p1' in type 'C2' is not assignable to the same property in base type 'IFoo2'.
+  Type '(n: number) => number' is not assignable to type '(s: string) => number'.
+    Types of parameters 'n' and 's' are incompatible.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/incompatibleTypes.ts(26,12): error TS2416: Property 'p1' in type 'C3' is not assignable to the same property in base type 'IFoo3'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/incompatibleTypes.ts(34,12): error TS2416: Property 'p1' in type 'C4' is not assignable to the same property in base type 'IFoo4'.
+  Type '{ c: { b: string; }; d: string; }' is missing the following properties from type '{ a: { a: string; }; b: string; }': a, b
+tests/cases/compiler/incompatibleTypes.ts(42,5): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(i: IFoo1): void', gave the following error.
+    Argument of type 'C1' is not assignable to parameter of type 'IFoo1'.
+      The types returned by 'p1()' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+  Overload 2 of 2, '(i: IFoo2): void', gave the following error.
+    Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
+      The types returned by 'p1(...)' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/incompatibleTypes.ts(49,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
+    Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
+      Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+  Overload 2 of 2, '(s: { c: { b: string; }; d: string; }): string', gave the following error.
+    Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
+      Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
+tests/cases/compiler/incompatibleTypes.ts(66,47): error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
+  Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+tests/cases/compiler/incompatibleTypes.ts(72,5): error TS2322: Type 'number' is not assignable to type '() => string'.
+tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assignable to type '() => any'.
+
+
+==== tests/cases/compiler/incompatibleTypes.ts (9 errors) ====
+    interface IFoo1 {
+        p1(): number;
+    }
+    
+    class C1 implements IFoo1 { // incompatible on the return type
+        public p1() {
+               ~~
+!!! error TS2416: Property 'p1' in type 'C1' is not assignable to the same property in base type 'IFoo1'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => number'.
+!!! error TS2416:     Type 'string' is not assignable to type 'number'.
+            return "s";
+        }
+    }
+    
+    interface IFoo2 {
+        p1(s:string): number;
+    }
+    
+    class C2 implements IFoo2 { // incompatible on the param type
+        public p1(n:number) {
+               ~~
+!!! error TS2416: Property 'p1' in type 'C2' is not assignable to the same property in base type 'IFoo2'.
+!!! error TS2416:   Type '(n: number) => number' is not assignable to type '(s: string) => number'.
+!!! error TS2416:     Types of parameters 'n' and 's' are incompatible.
+!!! error TS2416:       Type 'string' is not assignable to type 'number'.
+            return 0;
+        }
+    }
+    
+    interface IFoo3 {
+        p1: string;
+    }
+    
+    class C3 implements IFoo3 { // incompatible on the property type
+        public p1: number;
+               ~~
+!!! error TS2416: Property 'p1' in type 'C3' is not assignable to the same property in base type 'IFoo3'.
+!!! error TS2416:   Type 'number' is not assignable to type 'string'.
+    }
+    
+    interface IFoo4 {
+        p1: { a: { a: string; }; b: string; };
+    }
+    
+    class C4 implements IFoo4 { // incompatible on the property type
+        public p1: { c: { b: string; }; d: string; };
+               ~~
+!!! error TS2416: Property 'p1' in type 'C4' is not assignable to the same property in base type 'IFoo4'.
+!!! error TS2416:   Type '{ c: { b: string; }; d: string; }' is missing the following properties from type '{ a: { a: string; }; b: string; }': a, b
+    }
+    
+    function if1(i: IFoo1): void;
+    function if1(i: IFoo2): void;
+    function if1(a: any) { }
+    var c1: C1;
+    var c2: C2;
+    if1(c1);
+        ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(i: IFoo1): void', gave the following error.
+!!! error TS2769:     Argument of type 'C1' is not assignable to parameter of type 'IFoo1'.
+!!! error TS2769:       The types returned by 'p1()' are incompatible between these types.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(i: IFoo2): void', gave the following error.
+!!! error TS2769:     Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
+!!! error TS2769:       The types returned by 'p1(...)' are incompatible between these types.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
+!!! related TS2793 tests/cases/compiler/incompatibleTypes.ts:39:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    
+    
+    function of1(n: { a: { a: string; }; b: string; }): number;
+    function of1(s: { c: { b: string; }; d: string; }): string;
+    function of1(a: any) { return null; }
+    
+    of1({ e: 0, f: 0 });
+          ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
+!!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
+!!! error TS2769:       Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+!!! error TS2769:   Overload 2 of 2, '(s: { c: { b: string; }; d: string; }): string', gave the following error.
+!!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
+!!! error TS2769:       Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
+!!! related TS2793 tests/cases/compiler/incompatibleTypes.ts:47:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    
+    interface IMap {
+     [key:string]:string;
+    }
+    
+    function foo(fn:() => void) {
+     
+    }
+    
+    function bar() {
+     var map:IMap;
+     foo(() => {
+      map = {};
+     });
+    }
+    
+    var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
+                                                  ~~~~
+!!! error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+    
+    var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+    
+    
+    
+    var i1c1: { (): string; } = 5;
+        ~~~~
+!!! error TS2322: Type 'number' is not assignable to type '() => string'.
+    
+    var fp1: () =>any = a => 0;
+        ~~~
+!!! error TS2322: Type '(a: any) => number' is not assignable to type '() => any'.
+    

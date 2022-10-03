@@ -1,0 +1,69 @@
+=== tests/cases/conformance/statements/returnStatements/returnStatements.ts ===
+// all the following should be valid
+function fn1(): number { return 1; }
+>fn1 : Symbol(fn1, Decl(returnStatements.ts, 0, 0))
+
+function fn2(): string { return ''; }
+>fn2 : Symbol(fn2, Decl(returnStatements.ts, 1, 36))
+
+function fn3(): void { return undefined; }
+>fn3 : Symbol(fn3, Decl(returnStatements.ts, 2, 37))
+>undefined : Symbol(undefined)
+
+function fn4(): void { return; }
+>fn4 : Symbol(fn4, Decl(returnStatements.ts, 3, 42))
+
+function fn5(): boolean { return true; }
+>fn5 : Symbol(fn5, Decl(returnStatements.ts, 4, 32))
+
+function fn6(): Date { return new Date(12); }
+>fn6 : Symbol(fn6, Decl(returnStatements.ts, 5, 40))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function fn7(): any { return null; }
+>fn7 : Symbol(fn7, Decl(returnStatements.ts, 6, 45))
+
+function fn8(): any { return; } // OK, eq. to 'return undefined'
+>fn8 : Symbol(fn8, Decl(returnStatements.ts, 7, 36))
+
+interface I { id: number }
+>I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+>id : Symbol(I.id, Decl(returnStatements.ts, 10, 13))
+
+class C implements I {
+>C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+>I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+
+    id: number;
+>id : Symbol(C.id, Decl(returnStatements.ts, 11, 22))
+
+    dispose() {}
+>dispose : Symbol(C.dispose, Decl(returnStatements.ts, 12, 15))
+}
+class D extends C {
+>D : Symbol(D, Decl(returnStatements.ts, 14, 1))
+>C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+
+    name: string;
+>name : Symbol(D.name, Decl(returnStatements.ts, 15, 19))
+}
+function fn10(): I { return { id: 12 }; } 
+>fn10 : Symbol(fn10, Decl(returnStatements.ts, 17, 1))
+>I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+>id : Symbol(id, Decl(returnStatements.ts, 18, 29))
+
+function fn11(): I { return new C(); }
+>fn11 : Symbol(fn11, Decl(returnStatements.ts, 18, 41))
+>I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+>C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+
+function fn12(): C { return new D(); }
+>fn12 : Symbol(fn12, Decl(returnStatements.ts, 20, 38))
+>C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+>D : Symbol(D, Decl(returnStatements.ts, 14, 1))
+
+function fn13(): C { return null; }
+>fn13 : Symbol(fn13, Decl(returnStatements.ts, 21, 38))
+>C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+

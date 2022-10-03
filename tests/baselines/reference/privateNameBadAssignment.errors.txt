@@ -1,0 +1,36 @@
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(1,1): error TS2304: Cannot find name 'exports'.
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(11,9): error TS2304: Cannot find name 'exports'.
+tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(12,14): error TS2339: Property '#foo' does not exist on type 'C'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts (6 errors) ====
+    exports.#nope = 1;           // Error (outside class body)
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+            ~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    function A() { }
+    A.prototype.#no = 2;         // Error (outside class body)
+                ~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    
+    class B {}
+    B.#foo = 3;                  // Error (outside class body)
+      ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'typeof B'.
+    
+    class C {
+        #bar = 6;
+        constructor () {
+            exports.#bar = 6;    // Error
+            ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+            this.#foo = 3;       // Error (undeclared)
+                 ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'C'.
+        }
+    }
+    

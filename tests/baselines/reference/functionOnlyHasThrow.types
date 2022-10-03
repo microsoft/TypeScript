@@ -1,0 +1,9 @@
+=== tests/cases/compiler/functionOnlyHasThrow.ts ===
+function clone():number {
+>clone : () => number
+
+	throw new Error("To be implemented");
+>new Error("To be implemented") : Error
+>Error : ErrorConstructor
+>"To be implemented" : "To be implemented"
+}

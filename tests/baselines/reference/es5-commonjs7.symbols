@@ -1,0 +1,7 @@
+=== tests/cases/compiler/test.d.ts ===
+export default undefined;
+>undefined : Symbol(undefined)
+
+export var __esModule;
+>__esModule : Symbol(__esModule, Decl(test.d.ts, 1, 10))
+

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declarationFunctionTypeNonlocalShouldNotBeAnError.ts ===
+namespace foo {
+>foo : typeof foo
+
+    function bar(): void {}
+>bar : () => void
+
+    export const obj = {
+>obj : { bar: () => void; }
+>{        bar    } : { bar: () => void; }
+
+        bar
+>bar : () => void
+    }
+}
+

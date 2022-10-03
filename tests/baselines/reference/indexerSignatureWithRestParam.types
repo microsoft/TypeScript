@@ -1,0 +1,12 @@
+=== tests/cases/compiler/indexerSignatureWithRestParam.ts ===
+interface I {
+    [...x]: string;
+>x : any[]
+}
+
+class C {
+>C : C
+
+    [...x]: string
+>x : any[]
+}

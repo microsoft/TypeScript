@@ -1,0 +1,9 @@
+=== tests/cases/compiler/commentOnArrayElement2.ts ===
+const array = [
+>array : Symbol(array, Decl(commentOnArrayElement2.ts, 0, 5))
+
+    /* element 1*/
+    1 /* end of element 1 */,
+    2
+    /* end of element 2 */
+];

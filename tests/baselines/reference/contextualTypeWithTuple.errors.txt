@@ -1,0 +1,71 @@
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(3,5): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+  Source has 3 element(s) but target allows only 2.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(15,1): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+  Source has 3 element(s) but target allows only 2.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(18,17): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(19,1): error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
+  Source has 2 element(s) but target requires 3.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(20,5): error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
+  Source has 3 element(s) but target allows only 2.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(23,1): error TS2322: Type '[C, string | number, D]' is not assignable to type '[C, string | number]'.
+  Source has 3 element(s) but target allows only 2.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(24,1): error TS2322: Type '[C, string | number]' is not assignable to type '[C, string | number, D]'.
+  Source has 2 element(s) but target requires 3.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS2322: Type '[number, string | number]' is not assignable to type '[number, string]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts (8 errors) ====
+    // no error
+    var numStrTuple: [number, string] = [5, "hello"];
+    var numStrTuple2: [number, string] = [5, "foo", true];
+        ~~~~~~~~~~~~
+!!! error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Source has 3 element(s) but target allows only 2.
+    var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
+    var objNumTuple: [{ a: string }, number] = [{ a: "world" }, 5];
+    var strTupleTuple: [string, [number, {}]] = ["bar", [5, { x: 1, y: 1 }]];
+    class C { }
+    class D { }
+    var unionTuple: [C, string | number] = [new C(), "foo"];
+    var unionTuple1: [C, string | number] = [new C(), "foo"];
+    var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
+    var unionTuple3: [number, string| number] = [10, "foo"]; 
+    
+    numStrTuple = numStrTuple2;
+    numStrTuple = numStrBoolTuple;
+    ~~~~~~~~~~~
+!!! error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Source has 3 element(s) but target allows only 2.
+    
+    // error
+    objNumTuple = [ {}, 5];
+                    ~~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
+!!! related TS2728 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21: 'a' is declared here.
+    numStrBoolTuple = numStrTuple;
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
+!!! error TS2322:   Source has 2 element(s) but target requires 3.
+    var strStrTuple: [string, string] = ["foo", "bar", 5];
+        ~~~~~~~~~~~
+!!! error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
+!!! error TS2322:   Source has 3 element(s) but target allows only 2.
+    
+    unionTuple = unionTuple1;
+    unionTuple = unionTuple2;
+    ~~~~~~~~~~
+!!! error TS2322: Type '[C, string | number, D]' is not assignable to type '[C, string | number]'.
+!!! error TS2322:   Source has 3 element(s) but target allows only 2.
+    unionTuple2 = unionTuple;
+    ~~~~~~~~~~~
+!!! error TS2322: Type '[C, string | number]' is not assignable to type '[C, string | number, D]'.
+!!! error TS2322:   Source has 2 element(s) but target requires 3.
+    numStrTuple = unionTuple3;
+    ~~~~~~~~~~~
+!!! error TS2322: Type '[number, string | number]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.

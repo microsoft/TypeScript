@@ -1,0 +1,147 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts ===
+var a: object
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+
+declare var b: object | null
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+
+declare var c: object | undefined
+>c : Symbol(c, Decl(nonPrimitiveStrictNull.ts, 2, 11))
+
+declare var d: object | null | undefined
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+var e: object | null
+>e : Symbol(e, Decl(nonPrimitiveStrictNull.ts, 4, 3))
+
+a.toString; // error
+>a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+a = undefined; // error
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+a = null; // error
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+
+a = b; // error
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+
+a = c; // error
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>c : Symbol(c, Decl(nonPrimitiveStrictNull.ts, 2, 11))
+
+a = d; // error
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+e = a; // ok
+>e : Symbol(e, Decl(nonPrimitiveStrictNull.ts, 4, 3))
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+
+a = e; // ok
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>e : Symbol(e, Decl(nonPrimitiveStrictNull.ts, 4, 3))
+
+if (typeof b !== 'object') {
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+
+    b.toString(); // error, never
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+}
+
+if (typeof b === 'object') {
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+
+    a = b; // error, b is not narrowed
+>a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+}
+
+if (typeof d === 'object') {
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+    b = d; // ok
+>b : Symbol(b, Decl(nonPrimitiveStrictNull.ts, 1, 11))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+    d.toString(); // error, object | null
+>d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+} else {
+    d.toString(); // error, undefined
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+}
+
+if (d == null) {
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+    d.toString(); // error, undefined | null
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+} else {
+    d.toString(); // object
+>d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+if (d === null) {
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+    d.toString(); // error, null
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+} else {
+    d.toString(); // error, object | undefined
+>d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+if (typeof d === 'undefined') {
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+    d.toString(); // error, undefined
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+
+} else {
+    d.toString(); // error, object | null
+>d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+interface Proxy<T extends object> {}
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>T : Symbol(T, Decl(nonPrimitiveStrictNull.ts, 48, 16))
+
+var x: Proxy<number>; // error
+>x : Symbol(x, Decl(nonPrimitiveStrictNull.ts, 50, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+
+var y: Proxy<null>; // error
+>y : Symbol(y, Decl(nonPrimitiveStrictNull.ts, 51, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+
+var z: Proxy<undefined>; // error
+>z : Symbol(z, Decl(nonPrimitiveStrictNull.ts, 52, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+
+interface Blah {
+>Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
+
+  foo: number;
+>foo : Symbol(Blah.foo, Decl(nonPrimitiveStrictNull.ts, 54, 16))
+}
+
+var u: Proxy<Blah>; // ok
+>u : Symbol(u, Decl(nonPrimitiveStrictNull.ts, 58, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveStrictNull.ts, 46, 1))
+>Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
+

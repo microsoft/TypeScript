@@ -1,0 +1,50 @@
+=== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 2, 6))
+
+function test<P>(wrappedProps: P) {
+>test : Symbol(test, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 2, 26))
+>P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
+>wrappedProps : Symbol(wrappedProps, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 17))
+>P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
+
+    let MySFC = function(props: P) {
+>MySFC : Symbol(MySFC, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 5, 7))
+>props : Symbol(props, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 5, 25))
+>P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
+
+        return <>hello</>;
+    };
+    class MyComponent extends React.Component<P> {
+>MyComponent : Symbol(MyComponent, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 7, 6))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 2, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
+
+        render() {
+>render : Symbol(MyComponent.render, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 8, 50))
+
+            return <>hello</>;
+        }
+    }
+    let x = <MySFC />;  // should error
+>x : Symbol(x, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 13, 7))
+>MySFC : Symbol(MySFC, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 5, 7))
+
+    let y = <MyComponent />;  // should error
+>y : Symbol(y, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 14, 7))
+>MyComponent : Symbol(MyComponent, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 7, 6))
+
+    let z = <MySFC {...wrappedProps} /> // should work
+>z : Symbol(z, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 16, 7))
+>MySFC : Symbol(MySFC, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 5, 7))
+>wrappedProps : Symbol(wrappedProps, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 17))
+
+    let q = <MyComponent {...wrappedProps} /> // should work
+>q : Symbol(q, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 17, 7))
+>MyComponent : Symbol(MyComponent, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 7, 6))
+>wrappedProps : Symbol(wrappedProps, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 17))
+}

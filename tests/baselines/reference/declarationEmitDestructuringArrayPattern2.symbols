@@ -1,0 +1,40 @@
+=== tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts ===
+var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
+>x10 : Symbol(x10, Decl(declarationEmitDestructuringArrayPattern2.ts, 0, 5))
+>y10 : Symbol(y10, Decl(declarationEmitDestructuringArrayPattern2.ts, 0, 11))
+>z10 : Symbol(z10, Decl(declarationEmitDestructuringArrayPattern2.ts, 0, 17))
+
+var [x11 = 0, y11 = ""] = [1, "hello"];
+>x11 : Symbol(x11, Decl(declarationEmitDestructuringArrayPattern2.ts, 2, 5))
+>y11 : Symbol(y11, Decl(declarationEmitDestructuringArrayPattern2.ts, 2, 13))
+
+var [a11, b11, c11] = [];
+>a11 : Symbol(a11, Decl(declarationEmitDestructuringArrayPattern2.ts, 3, 5))
+>b11 : Symbol(b11, Decl(declarationEmitDestructuringArrayPattern2.ts, 3, 9))
+>c11 : Symbol(c11, Decl(declarationEmitDestructuringArrayPattern2.ts, 3, 14))
+
+var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello", { x12: 5, y12: true }]];
+>a2 : Symbol(a2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 5))
+>b2 : Symbol(b2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 10))
+>x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 15))
+>y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 50))
+>c2 : Symbol(c2, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 20))
+>x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 41))
+>y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 50))
+>x12 : Symbol(x12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 83))
+>y12 : Symbol(y12, Decl(declarationEmitDestructuringArrayPattern2.ts, 5, 91))
+
+var [x13, y13] = [1, "hello"];
+>x13 : Symbol(x13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 5))
+>y13 : Symbol(y13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 9))
+
+var [a3, b3] = [[x13, y13], { x: x13, y: y13 }];
+>a3 : Symbol(a3, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 5))
+>b3 : Symbol(b3, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 8))
+>x13 : Symbol(x13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 5))
+>y13 : Symbol(y13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 9))
+>x : Symbol(x, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 29))
+>x13 : Symbol(x13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 5))
+>y : Symbol(y, Decl(declarationEmitDestructuringArrayPattern2.ts, 8, 37))
+>y13 : Symbol(y13, Decl(declarationEmitDestructuringArrayPattern2.ts, 7, 9))
+

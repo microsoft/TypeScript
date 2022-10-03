@@ -1,0 +1,67 @@
+=== tests/cases/compiler/elaboratedErrors.ts ===
+interface FileSystem {
+>FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+
+  read: number;
+>read : Symbol(FileSystem.read, Decl(elaboratedErrors.ts, 0, 22))
+}
+
+function fn(s: WorkerFS): void;
+>fn : Symbol(fn, Decl(elaboratedErrors.ts, 2, 1), Decl(elaboratedErrors.ts, 4, 31), Decl(elaboratedErrors.ts, 5, 33))
+>s : Symbol(s, Decl(elaboratedErrors.ts, 4, 12))
+>WorkerFS : Symbol(WorkerFS, Decl(elaboratedErrors.ts, 6, 39))
+
+function fn(s: FileSystem): void;
+>fn : Symbol(fn, Decl(elaboratedErrors.ts, 2, 1), Decl(elaboratedErrors.ts, 4, 31), Decl(elaboratedErrors.ts, 5, 33))
+>s : Symbol(s, Decl(elaboratedErrors.ts, 5, 12))
+>FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+
+function fn(s: FileSystem|WorkerFS) { }
+>fn : Symbol(fn, Decl(elaboratedErrors.ts, 2, 1), Decl(elaboratedErrors.ts, 4, 31), Decl(elaboratedErrors.ts, 5, 33))
+>s : Symbol(s, Decl(elaboratedErrors.ts, 6, 12))
+>FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+>WorkerFS : Symbol(WorkerFS, Decl(elaboratedErrors.ts, 6, 39))
+
+// This should issue a large error, not a small one
+class WorkerFS implements FileSystem {
+>WorkerFS : Symbol(WorkerFS, Decl(elaboratedErrors.ts, 6, 39))
+>FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+
+  read: string;
+>read : Symbol(WorkerFS.read, Decl(elaboratedErrors.ts, 9, 38))
+}
+
+interface Alpha { x: string; }
+>Alpha : Symbol(Alpha, Decl(elaboratedErrors.ts, 11, 1))
+>x : Symbol(Alpha.x, Decl(elaboratedErrors.ts, 13, 17))
+
+interface Beta { y: number; }
+>Beta : Symbol(Beta, Decl(elaboratedErrors.ts, 13, 30))
+>y : Symbol(Beta.y, Decl(elaboratedErrors.ts, 14, 16))
+
+var x: Alpha;
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+>Alpha : Symbol(Alpha, Decl(elaboratedErrors.ts, 11, 1))
+
+var y: Beta;
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+>Beta : Symbol(Beta, Decl(elaboratedErrors.ts, 13, 30))
+
+// Only one of these errors should be large
+x = y;
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+
+x = y;
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+
+// Only one of these errors should be large
+y = x;
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+
+y = x;
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+

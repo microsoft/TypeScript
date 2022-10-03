@@ -1,0 +1,42 @@
+=== tests/cases/conformance/controlFlow/controlFlowIteration.ts ===
+let cond: boolean;
+>cond : boolean
+
+function ff() {
+>ff : () => void
+
+    let x: string | undefined;
+>x : string | undefined
+
+    while (true) {
+>true : true
+
+        if (cond) {
+>cond : boolean
+
+            x = "";
+>x = "" : ""
+>x : string | undefined
+>"" : ""
+        }
+        else {
+            if (x) {
+>x : string | undefined
+
+                x.length;
+>x.length : number
+>x : string
+>length : number
+            }
+            if (x) {
+>x : string | undefined
+
+                x.length;
+>x.length : number
+>x : string
+>length : number
+            }
+        }
+    }
+}
+

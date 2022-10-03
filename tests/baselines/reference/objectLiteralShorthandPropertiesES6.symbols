@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesES6.ts ===
+var a, b, c;
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 0, 3))
+>b : Symbol(b, Decl(objectLiteralShorthandPropertiesES6.ts, 0, 6))
+>c : Symbol(c, Decl(objectLiteralShorthandPropertiesES6.ts, 0, 9))
+
+var x1 = {
+>x1 : Symbol(x1, Decl(objectLiteralShorthandPropertiesES6.ts, 2, 3))
+
+    a
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 2, 10))
+
+};
+
+var x2 = {
+>x2 : Symbol(x2, Decl(objectLiteralShorthandPropertiesES6.ts, 6, 3))
+
+    a,
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 6, 10))
+}
+
+var x3 = {
+>x3 : Symbol(x3, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 3))
+
+    a: 0,
+>a : Symbol(a, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 10))
+
+    b,
+>b : Symbol(b, Decl(objectLiteralShorthandPropertiesES6.ts, 11, 9))
+
+    c,
+>c : Symbol(c, Decl(objectLiteralShorthandPropertiesES6.ts, 12, 6))
+
+    d() { },
+>d : Symbol(d, Decl(objectLiteralShorthandPropertiesES6.ts, 13, 6))
+
+    x3,
+>x3 : Symbol(x3, Decl(objectLiteralShorthandPropertiesES6.ts, 14, 12))
+
+    parent: x3
+>parent : Symbol(parent, Decl(objectLiteralShorthandPropertiesES6.ts, 15, 7))
+>x3 : Symbol(x3, Decl(objectLiteralShorthandPropertiesES6.ts, 10, 3))
+
+};
+
+

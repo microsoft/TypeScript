@@ -1,0 +1,169 @@
+=== tests/cases/conformance/ambient/ambientDeclarations.ts ===
+// Ambient variable without type annotation
+declare var n;
+>n : Symbol(n, Decl(ambientDeclarations.ts, 1, 11))
+
+// Ambient variable with type annotation
+declare var m: string;
+>m : Symbol(m, Decl(ambientDeclarations.ts, 4, 11))
+
+// Ambient function with no type annotations
+declare function fn1();
+>fn1 : Symbol(fn1, Decl(ambientDeclarations.ts, 4, 22))
+
+// Ambient function with type annotations
+declare function fn2(n: string): number;
+>fn2 : Symbol(fn2, Decl(ambientDeclarations.ts, 7, 23))
+>n : Symbol(n, Decl(ambientDeclarations.ts, 10, 21))
+
+// Ambient function with valid overloads
+declare function fn3(n: string): number;
+>fn3 : Symbol(fn3, Decl(ambientDeclarations.ts, 10, 40))
+>n : Symbol(n, Decl(ambientDeclarations.ts, 13, 21))
+
+declare function fn4(n: number, y: number): string;
+>fn4 : Symbol(fn4, Decl(ambientDeclarations.ts, 13, 40))
+>n : Symbol(n, Decl(ambientDeclarations.ts, 14, 21))
+>y : Symbol(y, Decl(ambientDeclarations.ts, 14, 31))
+
+// Ambient function with optional parameters
+declare function fn5(x, y?);
+>fn5 : Symbol(fn5, Decl(ambientDeclarations.ts, 14, 51))
+>x : Symbol(x, Decl(ambientDeclarations.ts, 17, 21))
+>y : Symbol(y, Decl(ambientDeclarations.ts, 17, 23))
+
+declare function fn6(e?);
+>fn6 : Symbol(fn6, Decl(ambientDeclarations.ts, 17, 28))
+>e : Symbol(e, Decl(ambientDeclarations.ts, 18, 21))
+
+declare function fn7(x, y?, ...z);
+>fn7 : Symbol(fn7, Decl(ambientDeclarations.ts, 18, 25))
+>x : Symbol(x, Decl(ambientDeclarations.ts, 19, 21))
+>y : Symbol(y, Decl(ambientDeclarations.ts, 19, 23))
+>z : Symbol(z, Decl(ambientDeclarations.ts, 19, 27))
+
+declare function fn8(y?, ...z: number[]);
+>fn8 : Symbol(fn8, Decl(ambientDeclarations.ts, 19, 34))
+>y : Symbol(y, Decl(ambientDeclarations.ts, 20, 21))
+>z : Symbol(z, Decl(ambientDeclarations.ts, 20, 24))
+
+declare function fn9(...q: {}[]);
+>fn9 : Symbol(fn9, Decl(ambientDeclarations.ts, 20, 41))
+>q : Symbol(q, Decl(ambientDeclarations.ts, 21, 21))
+
+declare function fn10<T>(...q: T[]);
+>fn10 : Symbol(fn10, Decl(ambientDeclarations.ts, 21, 33))
+>T : Symbol(T, Decl(ambientDeclarations.ts, 22, 22))
+>q : Symbol(q, Decl(ambientDeclarations.ts, 22, 25))
+>T : Symbol(T, Decl(ambientDeclarations.ts, 22, 22))
+
+// Ambient class
+declare class cls {
+>cls : Symbol(cls, Decl(ambientDeclarations.ts, 22, 36))
+
+    constructor();
+    method(): cls;
+>method : Symbol(cls.method, Decl(ambientDeclarations.ts, 26, 18))
+>cls : Symbol(cls, Decl(ambientDeclarations.ts, 22, 36))
+
+    static static(p): number;
+>static : Symbol(cls.static, Decl(ambientDeclarations.ts, 27, 18))
+>p : Symbol(p, Decl(ambientDeclarations.ts, 28, 18))
+
+    static q;
+>q : Symbol(cls.q, Decl(ambientDeclarations.ts, 28, 29))
+
+    private fn();
+>fn : Symbol(cls.fn, Decl(ambientDeclarations.ts, 29, 13))
+
+    private static fns();
+>fns : Symbol(cls.fns, Decl(ambientDeclarations.ts, 30, 17))
+}
+
+// Ambient enum
+declare enum E1 {
+>E1 : Symbol(E1, Decl(ambientDeclarations.ts, 32, 1))
+
+    x,
+>x : Symbol(E1.x, Decl(ambientDeclarations.ts, 35, 17))
+
+    y,
+>y : Symbol(E1.y, Decl(ambientDeclarations.ts, 36, 6))
+
+    z
+>z : Symbol(E1.z, Decl(ambientDeclarations.ts, 37, 6))
+}
+
+// Ambient enum with integer literal initializer
+declare enum E2 {
+>E2 : Symbol(E2, Decl(ambientDeclarations.ts, 39, 1))
+
+    q,
+>q : Symbol(E2.q, Decl(ambientDeclarations.ts, 42, 17))
+
+    a = 1,
+>a : Symbol(E2.a, Decl(ambientDeclarations.ts, 43, 6))
+
+    b,
+>b : Symbol(E2.b, Decl(ambientDeclarations.ts, 44, 10))
+
+    c = 2,
+>c : Symbol(E2.c, Decl(ambientDeclarations.ts, 45, 6))
+
+    d
+>d : Symbol(E2.d, Decl(ambientDeclarations.ts, 46, 10))
+}
+
+// Ambient enum members are always exported with or without export keyword
+declare enum E3 {
+>E3 : Symbol(E3, Decl(ambientDeclarations.ts, 48, 1), Decl(ambientDeclarations.ts, 53, 1))
+
+    A
+>A : Symbol(E3.A, Decl(ambientDeclarations.ts, 51, 17))
+}
+declare module E3 {
+>E3 : Symbol(E3, Decl(ambientDeclarations.ts, 48, 1), Decl(ambientDeclarations.ts, 53, 1))
+
+    var B;
+>B : Symbol(B, Decl(ambientDeclarations.ts, 55, 7))
+}
+var x = E3.B;
+>x : Symbol(x, Decl(ambientDeclarations.ts, 57, 3))
+>E3.B : Symbol(E3.B, Decl(ambientDeclarations.ts, 55, 7))
+>E3 : Symbol(E3, Decl(ambientDeclarations.ts, 48, 1), Decl(ambientDeclarations.ts, 53, 1))
+>B : Symbol(E3.B, Decl(ambientDeclarations.ts, 55, 7))
+
+// Ambient module
+declare module M1 {
+>M1 : Symbol(M1, Decl(ambientDeclarations.ts, 57, 13))
+
+    var x;
+>x : Symbol(x, Decl(ambientDeclarations.ts, 61, 7))
+
+    function fn(): number;
+>fn : Symbol(fn, Decl(ambientDeclarations.ts, 61, 10))
+}
+
+// Ambient module members are always exported with or without export keyword
+var p = M1.x;
+>p : Symbol(p, Decl(ambientDeclarations.ts, 66, 3))
+>M1.x : Symbol(M1.x, Decl(ambientDeclarations.ts, 61, 7))
+>M1 : Symbol(M1, Decl(ambientDeclarations.ts, 57, 13))
+>x : Symbol(M1.x, Decl(ambientDeclarations.ts, 61, 7))
+
+var q = M1.fn();
+>q : Symbol(q, Decl(ambientDeclarations.ts, 67, 3))
+>M1.fn : Symbol(M1.fn, Decl(ambientDeclarations.ts, 61, 10))
+>M1 : Symbol(M1, Decl(ambientDeclarations.ts, 57, 13))
+>fn : Symbol(M1.fn, Decl(ambientDeclarations.ts, 61, 10))
+
+// Ambient external module in the global module
+// Ambient external module with a string literal name that is a top level external module name
+declare module 'external1' {
+>'external1' : Symbol("external1", Decl(ambientDeclarations.ts, 67, 16))
+
+    var q;
+>q : Symbol(q, Decl(ambientDeclarations.ts, 72, 7))
+}
+
+

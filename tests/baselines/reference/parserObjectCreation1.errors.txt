@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/Generics/parserObjectCreation1.ts(1,5): error TS2322: Type 'number[][]' is not assignable to type 'number[]'.
+  Type 'number[]' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserObjectCreation1.ts (1 errors) ====
+    var autoToken: number[] = new Array<number[]>(1);
+        ~~~~~~~~~
+!!! error TS2322: Type 'number[][]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'number[]' is not assignable to type 'number'.

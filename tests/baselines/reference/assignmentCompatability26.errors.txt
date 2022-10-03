@@ -1,0 +1,19 @@
+tests/cases/compiler/assignmentCompatability26.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: string; }'.
+  Types of property 'one' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/assignmentCompatability26.ts (1 errors) ====
+    module __test1__ {
+        export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+        export var __val__obj4 = obj4;
+    }
+    module __test2__ {
+        export var aa:{one:string;};;
+        export var __val__aa = aa;
+    }
+    __test2__.__val__aa = __test1__.__val__obj4
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: string; }'.
+!!! error TS2322:   Types of property 'one' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.

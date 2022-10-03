@@ -1,0 +1,60 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts ===
+// Derived type indexer must be subtype of base type indexer
+
+interface Base { foo: string; }
+>foo : string
+
+interface Derived extends Base { bar: string; }
+>bar : string
+
+interface Derived2 extends Derived { baz: string; }
+>baz : string
+
+var a: A;
+>a : A
+
+var b1: { [x: string]: string; }
+>b1 : { [x: string]: string; }
+>x : string
+
+a = b1; // error
+>a = b1 : { [x: string]: string; }
+>a : A
+>b1 : { [x: string]: string; }
+
+b1 = a; // error
+>b1 = a : A
+>b1 : { [x: string]: string; }
+>a : A
+
+module Generics {
+>Generics : typeof Generics
+
+    class A<T extends Derived> {
+>A : A<T>
+
+        [x: string]: T;
+>x : string
+    }
+   
+    function foo<T extends Derived>() {
+>foo : <T extends Derived>() => void
+
+        var a: A<T>;
+>a : A<T>
+
+        var b: { [x: string]: string; }
+>b : { [x: string]: string; }
+>x : string
+
+        a = b; // error
+>a = b : { [x: string]: string; }
+>a : A<T>
+>b : { [x: string]: string; }
+
+        b = a; // error
+>b = a : A<T>
+>b : { [x: string]: string; }
+>a : A<T>
+    }
+}

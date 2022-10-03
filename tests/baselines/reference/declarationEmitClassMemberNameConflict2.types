@@ -1,0 +1,37 @@
+=== tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts ===
+const Bar = 'bar';
+>Bar : "bar"
+>'bar' : "bar"
+
+enum Hello {
+>Hello : Hello
+
+    World
+>World : Hello.World
+}
+
+enum Hello1 {
+>Hello1 : Hello1
+
+    World1
+>World1 : Hello1.World1
+}
+
+class Foo {
+>Foo : Foo
+
+    // Same names + string => OK
+    Bar = Bar;
+>Bar : string
+>Bar : "bar"
+
+    // Same names + enum => OK
+    Hello = Hello;
+>Hello : typeof Hello
+>Hello : typeof Hello
+
+    // Different names + enum => OK
+    Hello2 = Hello1;
+>Hello2 : typeof Hello1
+>Hello1 : typeof Hello1
+}

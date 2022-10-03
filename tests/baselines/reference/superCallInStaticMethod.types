@@ -1,0 +1,110 @@
+=== tests/cases/compiler/superCallInStaticMethod.ts ===
+class Doing {
+>Doing : Doing
+
+    public static staticMethod() {
+>staticMethod : () => void
+    }
+}
+
+class Other extends Doing {
+>Other : Other
+>Doing : Doing
+
+    // in static method
+    public static staticMethod() {
+>staticMethod : () => void
+
+        super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+    }
+
+    // in a lambda inside a static method
+    public static lambdaInsideAStaticMethod() {
+>lambdaInsideAStaticMethod : () => void
+
+        () => {
+>() => {            super.staticMethod();        } : () => void
+
+            super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+        }
+    }
+
+    // in an object literal inside a static method
+    public static objectLiteralInsideAStaticMethod() {
+>objectLiteralInsideAStaticMethod : () => { a: () => void; b: void; }
+
+        return {
+>{            a: () => {                super.staticMethod();            },            b: super.staticMethod()        } : { a: () => void; b: void; }
+
+            a: () => {
+>a : () => void
+>() => {                super.staticMethod();            } : () => void
+
+                super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+
+            },
+            b: super.staticMethod()
+>b : void
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+
+        };
+    }
+
+    // in a getter
+    public static get staticGetter() {
+>staticGetter : number
+
+        super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+
+        return 0;
+>0 : 0
+    }
+
+    // in a setter
+    public static set staticGetter(value: number) {
+>staticGetter : number
+>value : number
+
+        super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+    }
+
+    // in static method
+    public static initializerInAStaticMethod(a = super.staticMethod()) {
+>initializerInAStaticMethod : (a?: void) => void
+>a : void
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+
+        super.staticMethod();
+>super.staticMethod() : void
+>super.staticMethod : () => void
+>super : typeof Doing
+>staticMethod : () => void
+    }
+}
+

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/moduleVariableArrayIndexer.ts ===
+module Bar {
+>Bar : typeof Bar
+
+    export var a = 1;
+>a : number
+>1 : 1
+
+    var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
+>t : any
+>undefined[a][a] : any
+>undefined[a] : any
+>undefined : undefined
+>a : number
+>a : number
+}
+

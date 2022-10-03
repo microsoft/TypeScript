@@ -1,0 +1,50 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+/**
+ * Foos a bar together using an `a` and a `b`
+ * @param {number} a
+ * @param {string} b
+ */
+export function foo(a, b) {}
+>foo : Symbol(foo, Decl(source.js, 0, 0))
+>a : Symbol(a, Decl(source.js, 5, 20))
+>b : Symbol(b, Decl(source.js, 5, 22))
+
+/**
+ * Legacy - DO NOT USE
+ */
+export class Aleph {
+>Aleph : Symbol(Aleph, Decl(source.js, 5, 28))
+
+    /**
+     * Impossible to construct.
+     * @param {Aleph} a
+     * @param {null} b
+     */
+    constructor(a, b) {
+>a : Symbol(a, Decl(source.js, 16, 16))
+>b : Symbol(b, Decl(source.js, 16, 18))
+
+        /**
+         * Field is always null
+         */
+        this.field = b;
+>this.field : Symbol(Aleph.field, Decl(source.js, 16, 23))
+>this : Symbol(Aleph, Decl(source.js, 5, 28))
+>field : Symbol(Aleph.field, Decl(source.js, 16, 23))
+>b : Symbol(b, Decl(source.js, 16, 18))
+    }
+
+    /**
+     * Doesn't actually do anything
+     * @returns {void}
+     */
+    doIt() {}
+>doIt : Symbol(Aleph.doIt, Decl(source.js, 21, 5))
+}
+
+/**
+ * Not the speed of light
+ */
+export const c = 12;
+>c : Symbol(c, Decl(source.js, 33, 12))
+

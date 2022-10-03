@@ -1,0 +1,31 @@
+=== tests/cases/compiler/enumIndexer.ts ===
+enum MyEnumType {
+>MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+
+    foo, bar
+>foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+>bar : Symbol(MyEnumType.bar, Decl(enumIndexer.ts, 1, 8))
+}
+var _arr = [{ key: 'foo' }, { key: 'bar' }]
+>_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+>key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>key : Symbol(key, Decl(enumIndexer.ts, 3, 29))
+
+var enumValue = MyEnumType.foo;
+>enumValue : Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
+>MyEnumType.foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+>MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+>foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+
+var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
+>x : Symbol(x, Decl(enumIndexer.ts, 5, 3))
+>_arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
+>MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+>o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
+>key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>enumValue : Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
+

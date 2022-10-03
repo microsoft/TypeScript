@@ -1,0 +1,61 @@
+=== tests/cases/compiler/parameterListAsTupleType.ts ===
+function foo(a: number, b: string) {
+>foo : (a: number, b: string) => boolean
+>a : number
+>b : string
+
+  return true;
+>true : true
+}
+type Foops = Parameters<typeof foo>;
+>Foops : [a: number, b: string]
+>foo : (a: number, b: string) => boolean
+
+const x = (a: number) => 5;
+>x : (a: number) => number
+>(a: number) => 5 : (a: number) => number
+>a : number
+>5 : 5
+
+type Xps = Parameters<typeof x>;
+>Xps : [a: number]
+>x : (a: number) => number
+
+const a: Xps = ['should-not-work']; // works, but shouldn't
+>a : [a: number]
+>['should-not-work'] : [string]
+>'should-not-work' : "should-not-work"
+
+function t(...args: Xps) {} // should work
+>t : (a: number) => void
+>args : [a: number]
+
+class C {
+>C : C
+
+    constructor(a: number, b: string) {
+>a : number
+>b : string
+    }
+}
+
+type Cps = Parameters<typeof C>; // should not work
+>Cps : never
+>C : typeof C
+
+type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
+>Ccps : [a: number, b: string]
+>C : typeof C
+
+class D {
+>D : D
+
+    constructor(a: number, ...rest: string[]) {
+>a : number
+>rest : string[]
+    }
+}
+type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
+>Dcps : [a: number, ...rest: string[]]
+>D : typeof D
+

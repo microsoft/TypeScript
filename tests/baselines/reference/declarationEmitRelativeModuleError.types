@@ -1,0 +1,10 @@
+=== tests/cases/compiler/declarationEmitRelativeModuleError.ts ===
+declare module "b:block" { // <-- no error anymore
+>"b:block" : typeof import("b:block")
+    
+}
+
+declare module "b:/block" { // <-- still an error
+>"b:/block" : typeof import("b:/block")
+    
+}

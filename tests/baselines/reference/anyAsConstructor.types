@@ -1,0 +1,31 @@
+=== tests/cases/conformance/types/any/anyAsConstructor.ts ===
+// any is considered an untyped function call
+// can be called except with type arguments which is an error
+
+var x: any;
+>x : any
+
+var a = new x();
+>a : any
+>new x() : any
+>x : any
+
+var b = new x('hello');
+>b : any
+>new x('hello') : any
+>x : any
+>'hello' : "hello"
+
+var c = new x(x);
+>c : any
+>new x(x) : any
+>x : any
+>x : any
+
+// grammar allows this for constructors
+var d = new x<any>(x); // no error
+>d : any
+>new x<any>(x) : any
+>x : any
+>x : any
+

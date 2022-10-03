@@ -1,0 +1,10 @@
+=== tests/cases/conformance/statements/withStatements/withStatements.ts ===
+var x = 12;
+>x : Symbol(x, Decl(withStatements.ts, 0, 3))
+
+with (x) {
+>x : Symbol(x, Decl(withStatements.ts, 0, 3))
+
+    name = 'twelve'
+    id = 12
+}

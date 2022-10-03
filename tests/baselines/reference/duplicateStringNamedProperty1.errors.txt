@@ -1,0 +1,13 @@
+tests/cases/compiler/duplicateStringNamedProperty1.ts(2,5): error TS2300: Duplicate identifier 'artist'.
+tests/cases/compiler/duplicateStringNamedProperty1.ts(3,5): error TS2300: Duplicate identifier 'artist'.
+
+
+==== tests/cases/compiler/duplicateStringNamedProperty1.ts (2 errors) ====
+    export interface Album {
+        "artist": string;
+        ~~~~~~~~
+!!! error TS2300: Duplicate identifier 'artist'.
+        artist: string;
+        ~~~~~~
+!!! error TS2300: Duplicate identifier 'artist'.
+    }

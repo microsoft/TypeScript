@@ -1,0 +1,47 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty15.ts ===
+class C { }
+>C : Symbol(C, Decl(symbolProperty15.ts, 0, 0))
+
+interface I {
+>I : Symbol(I, Decl(symbolProperty15.ts, 0, 11))
+
+    [Symbol.iterator]?: { x };
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty15.ts, 1, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty15.ts, 2, 25))
+}
+
+declare function foo(i: I): I;
+>foo : Symbol(foo, Decl(symbolProperty15.ts, 3, 1), Decl(symbolProperty15.ts, 5, 30))
+>i : Symbol(i, Decl(symbolProperty15.ts, 5, 21))
+>I : Symbol(I, Decl(symbolProperty15.ts, 0, 11))
+>I : Symbol(I, Decl(symbolProperty15.ts, 0, 11))
+
+declare function foo(a: any): any;
+>foo : Symbol(foo, Decl(symbolProperty15.ts, 3, 1), Decl(symbolProperty15.ts, 5, 30))
+>a : Symbol(a, Decl(symbolProperty15.ts, 6, 21))
+
+declare function bar(i: C): C;
+>bar : Symbol(bar, Decl(symbolProperty15.ts, 6, 34), Decl(symbolProperty15.ts, 8, 30))
+>i : Symbol(i, Decl(symbolProperty15.ts, 8, 21))
+>C : Symbol(C, Decl(symbolProperty15.ts, 0, 0))
+>C : Symbol(C, Decl(symbolProperty15.ts, 0, 0))
+
+declare function bar(a: any): any;
+>bar : Symbol(bar, Decl(symbolProperty15.ts, 6, 34), Decl(symbolProperty15.ts, 8, 30))
+>a : Symbol(a, Decl(symbolProperty15.ts, 9, 21))
+
+foo(new C);
+>foo : Symbol(foo, Decl(symbolProperty15.ts, 3, 1), Decl(symbolProperty15.ts, 5, 30))
+>C : Symbol(C, Decl(symbolProperty15.ts, 0, 0))
+
+var i: I;
+>i : Symbol(i, Decl(symbolProperty15.ts, 12, 3))
+>I : Symbol(I, Decl(symbolProperty15.ts, 0, 11))
+
+bar(i);
+>bar : Symbol(bar, Decl(symbolProperty15.ts, 6, 34), Decl(symbolProperty15.ts, 8, 30))
+>i : Symbol(i, Decl(symbolProperty15.ts, 12, 3))
+

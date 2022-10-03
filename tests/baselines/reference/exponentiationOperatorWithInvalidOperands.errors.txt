@@ -1,0 +1,239 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(15,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(17,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(18,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(19,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(22,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(24,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(24,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(25,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(25,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(26,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(26,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(29,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(31,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(32,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(33,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(35,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(36,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(36,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(37,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(38,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(38,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(39,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(39,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(40,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(40,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(42,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(43,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(43,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(44,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(45,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(45,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(46,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(46,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(47,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(47,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(49,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(50,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(50,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(51,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(52,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(52,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(53,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(53,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(54,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(54,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(57,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(59,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(60,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(61,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(64,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(66,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(67,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts(68,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts (56 errors) ====
+    // these operators require their operands to be of type Any, the Number primitive type, or
+    // an enum type
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: boolean;
+    var c: number;
+    var d: string;
+    var e: { a: number };
+    var f: Number;
+    
+    // All of the below should be an error unless otherwise noted
+    // operator **
+    var r1a1 = a ** a; //ok
+    var r1a2 = a ** b;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1a3 = a ** c; //ok
+    var r1a4 = a ** d;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1a5 = a ** e;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1a6 = a ** f;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1b1 = b ** a;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1b2 = b ** b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1b3 = b ** c;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1b4 = b ** d;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1b5 = b ** e;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1b6 = b ** f;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1c1 = c ** a; //ok
+    var r1c2 = c ** b;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1c3 = c ** c; //ok
+    var r1c4 = c ** d;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1c5 = c ** e;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1c6 = c ** f;
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1d1 = d ** a;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1d2 = d ** b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1d3 = d ** c;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1d4 = d ** d;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1d5 = d ** e;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1d6 = d ** f;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1e1 = e ** a;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1e2 = e ** b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1e3 = e ** c;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1e4 = e ** d;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1e5 = e ** e;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1e6 = e ** f;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1f1 = f ** a;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1f2 = f ** b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1f3 = f ** c;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1f4 = f ** d;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1f5 = f ** e;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1f6 = f ** f;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                    ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1g1 = E.a ** a; //ok
+    var r1g2 = E.a ** b;
+                      ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1g3 = E.a ** c; //ok
+    var r1g4 = E.a ** d;
+                      ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1g5 = E.a ** e;
+                      ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1g6 = E.a ** f;
+                      ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    var r1h1 = a ** E.b; //ok
+    var r1h2 = b ** E.b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1h3 = c ** E.b; //ok
+    var r1h4 = d ** E.b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1h5 = e ** E.b;
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    var r1h6 = f ** E.b
+               ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/breakTarget2.ts ===
+target:
+>target : any
+
+while (true) {
+>true : true
+
+  break target;
+>target : any
+}

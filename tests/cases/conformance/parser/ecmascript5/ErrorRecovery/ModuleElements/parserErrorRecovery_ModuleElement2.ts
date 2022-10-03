@@ -1,0 +1,8 @@
+function foo() {
+}
+
+function foo() {
+}
+
+)
+)

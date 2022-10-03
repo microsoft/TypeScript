@@ -1,0 +1,8 @@
+=== tests/cases/conformance/async/es6/asyncGetter_es6.ts ===
+class C {
+>C : C
+
+  async get foo() {
+>foo : void
+  }
+}

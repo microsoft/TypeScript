@@ -1,0 +1,58 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts ===
+declare var console: {
+>console : Symbol(console, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 11))
+
+    log(msg: string): void;
+>log : Symbol(log, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 22))
+>msg : Symbol(msg, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 1, 8))
+}
+type MultiSkilledRobot = [string, [string, string]];
+>MultiSkilledRobot : Symbol(MultiSkilledRobot, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 2, 1))
+
+var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+>multiRobotA : Symbol(multiRobotA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 4, 3))
+>MultiSkilledRobot : Symbol(MultiSkilledRobot, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 2, 1))
+
+var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+>multiRobotB : Symbol(multiRobotB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 5, 3))
+>MultiSkilledRobot : Symbol(MultiSkilledRobot, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 2, 1))
+
+let [, skillA] = multiRobotA;
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 7, 6))
+>multiRobotA : Symbol(multiRobotA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 4, 3))
+
+let [nameMB] = multiRobotB;
+>nameMB : Symbol(nameMB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 8, 5))
+>multiRobotB : Symbol(multiRobotB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 5, 3))
+
+let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
+>nameMA : Symbol(nameMA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 9, 5))
+>primarySkillA : Symbol(primarySkillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 9, 14))
+>secondarySkillA : Symbol(secondarySkillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 9, 28))
+>multiRobotA : Symbol(multiRobotA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 4, 3))
+
+let [nameMC] = ["roomba", ["vacuum", "mopping"]];
+>nameMC : Symbol(nameMC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 11, 5))
+
+let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
+>nameMC2 : Symbol(nameMC2, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 12, 5))
+>primarySkillC : Symbol(primarySkillC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 12, 15))
+>secondarySkillC : Symbol(secondarySkillC, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 12, 29))
+
+let [...multiRobotAInfo] = multiRobotA;
+>multiRobotAInfo : Symbol(multiRobotAInfo, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 14, 5))
+>multiRobotA : Symbol(multiRobotA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 4, 3))
+
+if (nameMB == nameMA) {
+>nameMB : Symbol(nameMB, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 8, 5))
+>nameMA : Symbol(nameMA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 9, 5))
+
+    console.log(skillA[0] + skillA[1]);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 22))
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 7, 6))
+>0 : Symbol(0)
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 7, 6))
+>1 : Symbol(1)
+}

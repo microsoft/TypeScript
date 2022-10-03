@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericStaticAnyTypeFunction.ts ===
+class A {
+>A : A
+
+    static one<T>(source: T, value: number): T {
+>one : <T>(source: T, value: number) => T
+>source : T
+>value : number
+
+        return source;
+>source : T
+
+    }
+    static goo() { return 0; }
+>goo : () => number
+>0 : 0
+
+    static two<T>(source: T): T {
+>two : <T>(source: T) => T
+>source : T
+
+        return this.one<T>(source, 42); // should not error
+>this.one<T>(source, 42) : T
+>this.one : <T>(source: T, value: number) => T
+>this : typeof A
+>one : <T>(source: T, value: number) => T
+>source : T
+>42 : 42
+
+    }
+
+}
+
+
+

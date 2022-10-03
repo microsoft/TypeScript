@@ -1,0 +1,33 @@
+{
+    "kind": "ArrayType",
+    "pos": 1,
+    "end": 6,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "elementType": {
+        "kind": "ArrayType",
+        "pos": 1,
+        "end": 4,
+        "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 1,
+        "elementType": {
+            "kind": "TypeReference",
+            "pos": 1,
+            "end": 2,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "typeName": {
+                "kind": "Identifier",
+                "pos": 1,
+                "end": 2,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "a"
+            }
+        }
+    }
+}

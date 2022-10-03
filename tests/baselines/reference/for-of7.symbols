@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of7.ts ===
+v;
+for (let v of [0]) { }
+>v : Symbol(v, Decl(for-of7.ts, 1, 8))
+

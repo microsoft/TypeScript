@@ -1,0 +1,32 @@
+=== /a.js ===
+exports.x = 0;
+>exports.x : Symbol(x, Decl(a.js, 0, 0))
+>exports : Symbol(x, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 0, 0))
+
+exports.x;
+>exports.x : Symbol(x, Decl(a.js, 0, 0))
+>exports : Symbol("/a", Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 0, 0))
+
+// Works nested
+{
+    // 'exports' does not provide a contextual type to a function-class
+    exports.Cls = function() {
+>exports.Cls : Symbol(Cls, Decl(a.js, 4, 1))
+>exports : Symbol(Cls, Decl(a.js, 4, 1))
+>Cls : Symbol(Cls, Decl(a.js, 4, 1))
+
+        this.x = 0;
+>this.x : Symbol(Cls.x, Decl(a.js, 6, 30))
+>this : Symbol(Cls, Decl(a.js, 6, 17))
+>x : Symbol(Cls.x, Decl(a.js, 6, 30))
+    }
+}
+
+const instance = new exports.Cls();
+>instance : Symbol(instance, Decl(a.js, 11, 5))
+>exports.Cls : Symbol(Cls, Decl(a.js, 4, 1))
+>exports : Symbol("/a", Decl(a.js, 0, 0))
+>Cls : Symbol(Cls, Decl(a.js, 4, 1))
+

@@ -1,0 +1,74 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import * as React from "react";
+>React : Symbol(React, Decl(file.tsx, 0, 6))
+
+interface BaseProps<T> {
+>BaseProps : Symbol(BaseProps, Decl(file.tsx, 0, 31))
+>T : Symbol(T, Decl(file.tsx, 1, 20))
+
+  initialValues: T;
+>initialValues : Symbol(BaseProps.initialValues, Decl(file.tsx, 1, 24))
+>T : Symbol(T, Decl(file.tsx, 1, 20))
+
+  nextValues: (cur: T) => T;
+>nextValues : Symbol(BaseProps.nextValues, Decl(file.tsx, 2, 19))
+>cur : Symbol(cur, Decl(file.tsx, 3, 15))
+>T : Symbol(T, Decl(file.tsx, 1, 20))
+>T : Symbol(T, Decl(file.tsx, 1, 20))
+}
+declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
+>GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
+>Props : Symbol(Props, Decl(file.tsx, 5, 31))
+>Values : Symbol(Values, Decl(file.tsx, 5, 42))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 6))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>Props : Symbol(Props, Decl(file.tsx, 5, 31))
+>BaseProps : Symbol(BaseProps, Decl(file.tsx, 0, 31))
+>Values : Symbol(Values, Decl(file.tsx, 5, 42))
+
+  iv: Values;
+>iv : Symbol(GenericComponent.iv, Decl(file.tsx, 5, 116))
+>Values : Symbol(Values, Decl(file.tsx, 5, 42))
+}
+
+let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
+>a : Symbol(a, Decl(file.tsx, 9, 3))
+>GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
+>initialValues : Symbol(initialValues, Decl(file.tsx, 9, 25))
+>x : Symbol(x, Decl(file.tsx, 9, 42))
+>nextValues : Symbol(nextValues, Decl(file.tsx, 9, 52))
+>a : Symbol(a, Decl(file.tsx, 9, 65))
+>a : Symbol(a, Decl(file.tsx, 9, 65))
+
+let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
+>b : Symbol(b, Decl(file.tsx, 10, 3))
+>GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
+>initialValues : Symbol(initialValues, Decl(file.tsx, 10, 25))
+>nextValues : Symbol(nextValues, Decl(file.tsx, 10, 44))
+>a : Symbol(a, Decl(file.tsx, 10, 57))
+>a : Symbol(a, Decl(file.tsx, 10, 57))
+
+let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
+>c : Symbol(c, Decl(file.tsx, 11, 3))
+>GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
+>initialValues : Symbol(initialValues, Decl(file.tsx, 11, 25))
+>x : Symbol(x, Decl(file.tsx, 11, 42))
+>nextValues : Symbol(nextValues, Decl(file.tsx, 11, 52))
+>a : Symbol(a, Decl(file.tsx, 11, 65))
+>x : Symbol(x, Decl(file.tsx, 11, 72))
+>a.x : Symbol(x, Decl(file.tsx, 11, 42))
+>a : Symbol(a, Decl(file.tsx, 11, 65))
+>x : Symbol(x, Decl(file.tsx, 11, 42))
+
+let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
+>d : Symbol(d, Decl(file.tsx, 12, 3))
+>GenericComponent : Symbol(GenericComponent, Decl(file.tsx, 4, 1))
+>initialValues : Symbol(initialValues, Decl(file.tsx, 12, 25))
+>x : Symbol(x, Decl(file.tsx, 12, 42))
+>nextValues : Symbol(nextValues, Decl(file.tsx, 12, 52))
+>a : Symbol(a, Decl(file.tsx, 12, 65))
+>a.x : Symbol(x, Decl(file.tsx, 12, 42))
+>a : Symbol(a, Decl(file.tsx, 12, 65))
+>x : Symbol(x, Decl(file.tsx, 12, 42))
+

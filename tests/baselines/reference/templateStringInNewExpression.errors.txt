@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/templates/templateStringInNewExpression.ts(1,5): error TS2351: This expression is not constructable.
+  Type 'String' has no construct signatures.
+
+
+==== tests/cases/conformance/es6/templates/templateStringInNewExpression.ts (1 errors) ====
+    new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
+        ~~~~~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'String' has no construct signatures.

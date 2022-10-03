@@ -1,0 +1,29 @@
+=== tests/cases/conformance/types/thisType/fluentInterfaces.ts ===
+interface A {
+    foo(): this;
+>foo : () => this
+}
+interface B extends A {
+    bar(): this;
+>bar : () => this
+}
+interface C extends B {
+    baz(): this;
+>baz : () => this
+}
+var c: C;
+>c : C
+
+var z = c.foo().bar().baz();  // Fluent pattern
+>z : C
+>c.foo().bar().baz() : C
+>c.foo().bar().baz : () => C
+>c.foo().bar() : C
+>c.foo().bar : () => C
+>c.foo() : C
+>c.foo : () => C
+>c : C
+>foo : () => C
+>bar : () => C
+>baz : () => C
+

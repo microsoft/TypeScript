@@ -1,0 +1,38 @@
+=== tests/cases/compiler/typeArgumentConstraintResolution1.ts ===
+function foo1<T extends Date>(test: T);
+>foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
+>test : T
+
+function foo1<T extends Number>(test: string);
+>foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
+>test : string
+
+function foo1<T extends String>(test: any) { }
+>foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
+>test : any
+
+foo1<Date>(""); // should error
+>foo1<Date>("") : any
+>foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
+>"" : ""
+
+
+
+function foo2<T extends Date>(test: T): T;
+>foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
+>test : T
+
+function foo2<T extends Number>(test: string): T; 
+>foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
+>test : string
+
+function foo2<T extends String>(test: any): any { return null; }
+>foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
+>test : any
+>null : null
+
+foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'
+>foo2<Date>("") : Date
+>foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
+>"" : ""
+

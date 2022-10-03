@@ -1,0 +1,14 @@
+[
+    "======== Resolving type reference directive 'jquery', containing file '/a/b/consumer.ts', root directory not set. ========",
+    "Root directory cannot be determined, skipping primary search paths.",
+    "Looking up in 'node_modules' folder, initial location '/a/b'.",
+    "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
+    "Found 'package.json' at '/a/node_modules/jquery/package.json'.",
+    "'package.json' does not have a 'typesVersions' field.",
+    "File '/a/node_modules/jquery.d.ts' does not exist.",
+    "'package.json' does not have a 'typings' field.",
+    "'package.json' has 'types' field 'dist/jquery.d.ts' that references '/a/node_modules/jquery/dist/jquery.d.ts'.",
+    "File '/a/node_modules/jquery/dist/jquery.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/a/node_modules/jquery/dist/jquery.d.ts', result '/a/node_modules/jquery/dist/jquery.d.ts'.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/a/node_modules/jquery/dist/jquery.d.ts', primary: false. ========"
+]

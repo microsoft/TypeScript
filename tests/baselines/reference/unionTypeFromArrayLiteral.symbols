@@ -1,0 +1,80 @@
+=== tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts ===
+// The resulting type an array literal expression is determined as follows:
+// If the array literal is empty, the resulting type is an array type with the element type Undefined.
+// Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
+// Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+
+var arr1 = [1, 2]; // number[]
+>arr1 : Symbol(arr1, Decl(unionTypeFromArrayLiteral.ts, 5, 3))
+
+var arr2 = ["hello", true]; // (string | number)[]
+>arr2 : Symbol(arr2, Decl(unionTypeFromArrayLiteral.ts, 6, 3))
+
+var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
+>arr3Tuple : Symbol(arr3Tuple, Decl(unionTypeFromArrayLiteral.ts, 7, 3))
+
+var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
+>arr4Tuple : Symbol(arr4Tuple, Decl(unionTypeFromArrayLiteral.ts, 8, 3))
+
+var arrEmpty = [];
+>arrEmpty : Symbol(arrEmpty, Decl(unionTypeFromArrayLiteral.ts, 9, 3))
+
+var arr5Tuple: {
+>arr5Tuple : Symbol(arr5Tuple, Decl(unionTypeFromArrayLiteral.ts, 10, 3))
+
+    0: string;
+>0 : Symbol(0, Decl(unionTypeFromArrayLiteral.ts, 10, 16))
+
+    5: number;
+>5 : Symbol(5, Decl(unionTypeFromArrayLiteral.ts, 11, 14))
+
+} = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
+class C { foo() { } }
+>C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+>foo : Symbol(C.foo, Decl(unionTypeFromArrayLiteral.ts, 14, 9))
+
+class D { foo2() { } }
+>D : Symbol(D, Decl(unionTypeFromArrayLiteral.ts, 14, 21))
+>foo2 : Symbol(D.foo2, Decl(unionTypeFromArrayLiteral.ts, 15, 9))
+
+class E extends C { foo3() { } }
+>E : Symbol(E, Decl(unionTypeFromArrayLiteral.ts, 15, 22))
+>C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+>foo3 : Symbol(E.foo3, Decl(unionTypeFromArrayLiteral.ts, 16, 19))
+
+class F extends C { foo4() { } }
+>F : Symbol(F, Decl(unionTypeFromArrayLiteral.ts, 16, 32))
+>C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+>foo4 : Symbol(F.foo4, Decl(unionTypeFromArrayLiteral.ts, 17, 19))
+
+var c: C, d: D, e: E, f: F;
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
+>C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
+>D : Symbol(D, Decl(unionTypeFromArrayLiteral.ts, 14, 21))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+>E : Symbol(E, Decl(unionTypeFromArrayLiteral.ts, 15, 22))
+>f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 21))
+>F : Symbol(F, Decl(unionTypeFromArrayLiteral.ts, 16, 32))
+
+var arr6 = [c, d];  // (C | D)[]
+>arr6 : Symbol(arr6, Decl(unionTypeFromArrayLiteral.ts, 19, 3))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
+
+var arr7 = [c, d, e]; // (C | D)[]
+>arr7 : Symbol(arr7, Decl(unionTypeFromArrayLiteral.ts, 20, 3))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+
+var arr8 = [c, e]; // C[]
+>arr8 : Symbol(arr8, Decl(unionTypeFromArrayLiteral.ts, 21, 3))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+
+var arr9 = [e, f]; // (E|F)[]
+>arr9 : Symbol(arr9, Decl(unionTypeFromArrayLiteral.ts, 22, 3))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+>f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 21))
+

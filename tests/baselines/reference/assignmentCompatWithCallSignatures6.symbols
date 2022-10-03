@@ -1,0 +1,259 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts ===
+// checking assignment compatibility relations for function types. All valid
+
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithCallSignatures6.ts, 2, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures6.ts, 2, 27))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(assignmentCompatWithCallSignatures6.ts, 3, 28))
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures6.ts, 3, 43))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures6.ts, 2, 27))
+>baz : Symbol(Derived2.baz, Decl(assignmentCompatWithCallSignatures6.ts, 4, 32))
+
+class OtherDerived extends Base { bing: string; }
+>OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithCallSignatures6.ts, 4, 47))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+>bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithCallSignatures6.ts, 5, 33))
+
+interface A {
+>A : Symbol(A, Decl(assignmentCompatWithCallSignatures6.ts, 5, 49))
+
+    a: <T>(x: T) => T[];
+>a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 8, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
+
+    a2: <T>(x: T) => string[];
+>a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 9, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 9, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 9, 9))
+
+    a3: <T>(x: T) => void;
+>a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 10, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 10, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 10, 9))
+
+    a4: <T,U>(x: T, y: U) => string;
+>a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 11, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 11, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 11, 14))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 11, 9))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures6.ts, 11, 19))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 11, 11))
+
+    a5: <T,U>(x: (arg: T) => U) => T;
+>a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 12, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 12, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 12, 14))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures6.ts, 12, 18))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 12, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 12, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 12, 9))
+
+    a6: <T extends Base>(x: (arg: T) => Derived) => T;
+>a6 : Symbol(A.a6, Decl(assignmentCompatWithCallSignatures6.ts, 12, 37))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 13, 9))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 13, 25))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures6.ts, 13, 29))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 13, 9))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures6.ts, 2, 27))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 13, 9))
+
+    a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+>a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 14, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 14, 13))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 14, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 14, 10))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures6.ts, 14, 27))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 14, 32))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 14, 10))
+>bar : Symbol(bar, Decl(assignmentCompatWithCallSignatures6.ts, 14, 40))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 14, 10))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+
+    a15: <T>(x: { a: T; b: T }) => T[];
+>a15 : Symbol(A.a15, Decl(assignmentCompatWithCallSignatures6.ts, 14, 59))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 15, 13))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures6.ts, 15, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 15, 23))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
+
+    a16: <T extends Base>(x: { a: T; b: T }) => T[];
+>a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 16, 10))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 16, 26))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures6.ts, 16, 30))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 16, 10))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 16, 36))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 16, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 16, 10))
+}
+
+var x: A;
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>A : Symbol(A, Decl(assignmentCompatWithCallSignatures6.ts, 5, 49))
+
+var b: <T>(x: T) => T[]; 
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 21, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 21, 8))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 21, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 21, 8))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 21, 8))
+
+x.a = b;
+>x.a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 21, 3))
+
+b = x.a;
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 21, 3))
+>x.a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+
+var b2: <T>(x: T) => string[]; 
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures6.ts, 24, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 24, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 24, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 24, 9))
+
+x.a2 = b2;
+>x.a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures6.ts, 24, 3))
+
+b2 = x.a2;
+>b2 : Symbol(b2, Decl(assignmentCompatWithCallSignatures6.ts, 24, 3))
+>x.a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+
+var b3: <T>(x: T) => T;
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures6.ts, 27, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 27, 9))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 27, 12))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 27, 9))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 27, 9))
+
+x.a3 = b3;
+>x.a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures6.ts, 27, 3))
+
+b3 = x.a3;
+>b3 : Symbol(b3, Decl(assignmentCompatWithCallSignatures6.ts, 27, 3))
+>x.a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+
+var b4: <T, U>(x: T, y: U) => string; 
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures6.ts, 30, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 30, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 30, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 30, 15))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 30, 9))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures6.ts, 30, 20))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 30, 11))
+
+x.a4 = b4;
+>x.a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures6.ts, 30, 3))
+
+b4 = x.a4;
+>b4 : Symbol(b4, Decl(assignmentCompatWithCallSignatures6.ts, 30, 3))
+>x.a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+
+var b5: <T, U>(x: (arg: T) => U) => T; 
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures6.ts, 33, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 33, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 33, 11))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 33, 15))
+>arg : Symbol(arg, Decl(assignmentCompatWithCallSignatures6.ts, 33, 19))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 33, 9))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 33, 11))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 33, 9))
+
+x.a5 = b5;
+>x.a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures6.ts, 33, 3))
+
+b5 = x.a5;
+>b5 : Symbol(b5, Decl(assignmentCompatWithCallSignatures6.ts, 33, 3))
+>x.a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+
+var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures6.ts, 36, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 36, 10))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 36, 12))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 36, 16))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 36, 20))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 36, 10))
+>y : Symbol(y, Decl(assignmentCompatWithCallSignatures6.ts, 36, 30))
+>foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 36, 35))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 36, 12))
+>bar : Symbol(bar, Decl(assignmentCompatWithCallSignatures6.ts, 36, 43))
+>U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 36, 12))
+>Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
+
+x.a11 = b11;
+>x.a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures6.ts, 36, 3))
+
+b11 = x.a11;
+>b11 : Symbol(b11, Decl(assignmentCompatWithCallSignatures6.ts, 36, 3))
+>x.a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+
+var b16: <T>(x: { a: T; b: T }) => T[]; 
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures6.ts, 39, 3))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 39, 10))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 39, 13))
+>a : Symbol(a, Decl(assignmentCompatWithCallSignatures6.ts, 39, 17))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 39, 10))
+>b : Symbol(b, Decl(assignmentCompatWithCallSignatures6.ts, 39, 23))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 39, 10))
+>T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 39, 10))
+
+x.a16 = b16;
+>x.a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures6.ts, 39, 3))
+
+b16 = x.a16;
+>b16 : Symbol(b16, Decl(assignmentCompatWithCallSignatures6.ts, 39, 3))
+>x.a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+>x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 19, 3))
+>a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+

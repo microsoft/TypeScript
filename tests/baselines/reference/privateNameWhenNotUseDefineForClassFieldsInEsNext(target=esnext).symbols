@@ -1,0 +1,126 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts ===
+class TestWithStatics {
+>TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+    #prop = 0
+>#prop : Symbol(TestWithStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 23))
+
+    static dd = new TestWithStatics().#prop; // OK
+>dd : Symbol(TestWithStatics.dd, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 1, 13))
+>new TestWithStatics().#prop : Symbol(TestWithStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 23))
+>TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+    static ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : Symbol(TestWithStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 2, 44))
+>"X_ z_ zz" : Symbol(TestWithStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 2, 44))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+
+        #foo  = 10
+>#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+
+        m() {
+>m : Symbol(Inner.m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 4, 18))
+
+            new TestWithStatics().#prop // OK
+>new TestWithStatics().#prop : Symbol(TestWithStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 23))
+>TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+        }
+        static C = class InnerInner {
+>C : Symbol(Inner.C, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 7, 9))
+>InnerInner : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 8, 18))
+
+            m() {
+>m : Symbol(InnerInner.m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 8, 37))
+
+                new TestWithStatics().#prop // OK
+>new TestWithStatics().#prop : Symbol(TestWithStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 23))
+>TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+                new Inner().#foo; // OK
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+            }
+        }
+
+        static M(){
+>M : Symbol(Inner.M, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 13, 9))
+
+            return class {
+                m() {
+>m : Symbol((Anonymous class).m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 16, 26))
+
+                    new TestWithStatics().#prop // OK
+>new TestWithStatics().#prop : Symbol(TestWithStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 23))
+>TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+                }
+            }
+        }
+    }
+}
+
+class TestNonStatics {
+>TestNonStatics : Symbol(TestNonStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 24, 1))
+
+    #prop = 0
+>#prop : Symbol(TestNonStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 26, 22))
+
+    dd = new TestNonStatics().#prop; // OK
+>dd : Symbol(TestNonStatics.dd, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 27, 13))
+>new TestNonStatics().#prop : Symbol(TestNonStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 26, 22))
+>TestNonStatics : Symbol(TestNonStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 24, 1))
+
+    ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : Symbol(TestNonStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 28, 36))
+>"X_ z_ zz" : Symbol(TestNonStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 28, 36))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 18))
+
+        #foo  = 10
+>#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 32))
+
+        m() {
+>m : Symbol(Inner.m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 30, 18))
+
+            new TestNonStatics().#prop // Ok
+>new TestNonStatics().#prop : Symbol(TestNonStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 26, 22))
+>TestNonStatics : Symbol(TestNonStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 24, 1))
+        }
+        C = class InnerInner {
+>C : Symbol(Inner.C, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 33, 9))
+>InnerInner : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 34, 11))
+
+            m() {
+>m : Symbol(InnerInner.m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 34, 30))
+
+                new TestNonStatics().#prop // Ok
+>new TestNonStatics().#prop : Symbol(TestNonStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 26, 22))
+>TestNonStatics : Symbol(TestNonStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 24, 1))
+
+                new Inner().#foo; // Ok
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 32))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 18))
+            }
+        }
+
+        static M(){
+>M : Symbol(Inner.M, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 39, 9))
+
+            return class {
+                m() {
+>m : Symbol((Anonymous class).m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 42, 26))
+
+                    new TestNonStatics().#prop // OK
+>new TestNonStatics().#prop : Symbol(TestNonStatics.#prop, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 26, 22))
+>TestNonStatics : Symbol(TestNonStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 24, 1))
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 32))
+>Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 18))
+                }
+            }
+        }
+    }
+}

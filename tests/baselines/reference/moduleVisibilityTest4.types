@@ -1,0 +1,35 @@
+=== tests/cases/compiler/moduleVisibilityTest4.ts ===
+module M {
+    export type nums = number;
+>nums : number
+}
+
+namespace N {
+    export type nums = number;
+>nums : number
+}
+
+let a1: M.num;
+>a1 : M.num
+>M : any
+
+let b1: M.nums;
+>b1 : number
+>M : any
+
+let c1: M.bar;
+>c1 : M.bar
+>M : any
+
+let a2: N.num;
+>a2 : N.num
+>N : any
+
+let b2: N.nums;
+>b2 : number
+>N : any
+
+let c2: N.bar;
+>c2 : N.bar
+>N : any
+

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts ===
+export default abstract class A {}
+>A : Symbol(A, Decl(classAbstractManyKeywords.ts, 0, 0))
+
+export abstract class B {}
+>B : Symbol(B, Decl(classAbstractManyKeywords.ts, 0, 34))
+
+default abstract class C {}
+>C : Symbol(C, Decl(classAbstractManyKeywords.ts, 2, 7))
+
+import abstract class D {}
+>abstract : Symbol(abstract, Decl(classAbstractManyKeywords.ts, 2, 27))
+>D : Symbol(D, Decl(classAbstractManyKeywords.ts, 3, 15))
+

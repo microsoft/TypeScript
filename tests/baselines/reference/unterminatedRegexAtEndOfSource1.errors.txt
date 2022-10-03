@@ -1,0 +1,7 @@
+tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts(1,10): error TS1161: Unterminated regular expression literal.
+
+
+==== tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts (1 errors) ====
+    var a = /
+             
+!!! error TS1161: Unterminated regular expression literal.

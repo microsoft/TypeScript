@@ -1,0 +1,18 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts(2,18): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts(4,5): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts(4,18): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts (3 errors) ====
+    class C  {
+        private a(): boolean {
+                     ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+    
+        private b(): boolean {
+        ~~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                     ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        }
+    }

@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperatorES6.ts ===
+var x = `abc${ new String("Hi") }def`;
+>x : Symbol(x, Decl(templateStringWithEmbeddedNewOperatorES6.ts, 0, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+

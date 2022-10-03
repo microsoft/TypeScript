@@ -1,0 +1,65 @@
+=== tests/cases/compiler/genericConstraint2.ts ===
+interface Comparable<T> {
+>Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
+>T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
+
+    comparer(other: T): number;
+>comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
+>other : Symbol(other, Decl(genericConstraint2.ts, 1, 13))
+>T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
+}
+
+function compare<T extends Comparable<T>>(x: T, y: T): number {
+>compare : Symbol(compare, Decl(genericConstraint2.ts, 2, 1))
+>T : Symbol(T, Decl(genericConstraint2.ts, 4, 17))
+>Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
+>T : Symbol(T, Decl(genericConstraint2.ts, 4, 17))
+>x : Symbol(x, Decl(genericConstraint2.ts, 4, 42))
+>T : Symbol(T, Decl(genericConstraint2.ts, 4, 17))
+>y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+>T : Symbol(T, Decl(genericConstraint2.ts, 4, 17))
+
+    if (x == null) return y == null ? 0 : -1;
+>x : Symbol(x, Decl(genericConstraint2.ts, 4, 42))
+>y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+
+    if (y == null) return 1;
+>y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+
+    return x.comparer(y);
+>x.comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
+>x : Symbol(x, Decl(genericConstraint2.ts, 4, 42))
+>comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
+>y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+}
+
+class ComparableString implements Comparable<string>{
+>ComparableString : Symbol(ComparableString, Decl(genericConstraint2.ts, 8, 1))
+>Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
+
+    constructor(public currentValue: string) { }
+>currentValue : Symbol(ComparableString.currentValue, Decl(genericConstraint2.ts, 11, 16))
+
+    localeCompare(other) {
+>localeCompare : Symbol(ComparableString.localeCompare, Decl(genericConstraint2.ts, 11, 48))
+>other : Symbol(other, Decl(genericConstraint2.ts, 13, 18))
+
+        return 0;
+    }
+}
+
+var a = new ComparableString("a");
+>a : Symbol(a, Decl(genericConstraint2.ts, 18, 3))
+>ComparableString : Symbol(ComparableString, Decl(genericConstraint2.ts, 8, 1))
+
+var b = new ComparableString("b");
+>b : Symbol(b, Decl(genericConstraint2.ts, 19, 3))
+>ComparableString : Symbol(ComparableString, Decl(genericConstraint2.ts, 8, 1))
+
+var c = compare<ComparableString>(a, b);
+>c : Symbol(c, Decl(genericConstraint2.ts, 20, 3))
+>compare : Symbol(compare, Decl(genericConstraint2.ts, 2, 1))
+>ComparableString : Symbol(ComparableString, Decl(genericConstraint2.ts, 8, 1))
+>a : Symbol(a, Decl(genericConstraint2.ts, 18, 3))
+>b : Symbol(b, Decl(genericConstraint2.ts, 19, 3))
+

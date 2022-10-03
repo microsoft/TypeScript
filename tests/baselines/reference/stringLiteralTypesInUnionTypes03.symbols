@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
+type T = number | "foo" | "bar";
+>T : Symbol(T, Decl(stringLiteralTypesInUnionTypes03.ts, 0, 0))
+
+var x: "foo" | "bar" | number;
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+
+var y: T = undefined;
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+>T : Symbol(T, Decl(stringLiteralTypesInUnionTypes03.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+if (x === "foo") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+
+    let a = x;
+>a : Symbol(a, Decl(stringLiteralTypesInUnionTypes03.ts, 6, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+}
+else if (x !== "bar") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+
+    let b = x || y;
+>b : Symbol(b, Decl(stringLiteralTypesInUnionTypes03.ts, 9, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+}
+else {
+    let c = x;
+>c : Symbol(c, Decl(stringLiteralTypesInUnionTypes03.ts, 12, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+
+    let d = y;
+>d : Symbol(d, Decl(stringLiteralTypesInUnionTypes03.ts, 13, 7))
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+
+    let e: (typeof x) | (typeof y) = c || d;
+>e : Symbol(e, Decl(stringLiteralTypesInUnionTypes03.ts, 14, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+>c : Symbol(c, Decl(stringLiteralTypesInUnionTypes03.ts, 12, 7))
+>d : Symbol(d, Decl(stringLiteralTypesInUnionTypes03.ts, 13, 7))
+}
+
+x = y;
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+
+y = x;
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 2, 3))
+

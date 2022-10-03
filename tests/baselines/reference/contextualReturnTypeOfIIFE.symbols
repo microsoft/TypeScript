@@ -1,0 +1,28 @@
+=== tests/cases/compiler/contextualReturnTypeOfIIFE.ts ===
+const test1: Promise<[one: number, two: string]> = (async () => {
+>test1 : Symbol(test1, Decl(contextualReturnTypeOfIIFE.ts, 0, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    return [1, 'two'];
+})();
+
+const test2: Promise<[one: number, two: string]> = new Promise(
+>test2 : Symbol(test2, Decl(contextualReturnTypeOfIIFE.ts, 4, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    (resolve) => resolve([1, 'two']),
+>resolve : Symbol(resolve, Decl(contextualReturnTypeOfIIFE.ts, 5, 5))
+>resolve : Symbol(resolve, Decl(contextualReturnTypeOfIIFE.ts, 5, 5))
+
+);
+
+const obj: { foo: [one: number, two: string] } = {
+>obj : Symbol(obj, Decl(contextualReturnTypeOfIIFE.ts, 8, 5))
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE.ts, 8, 12))
+
+    foo: (() => [1, 'two'])()
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE.ts, 8, 50))
+
+};
+

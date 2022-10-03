@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts ===
+class C {
+>C : C
+
+    constructor() {
+        super(); // error
+>super() : void
+>super : any
+    }
+}
+
+class D<T> {
+>D : D<T>
+
+    public constructor(public x: T) {
+>x : T
+
+        super(); // error
+>super() : void
+>super : any
+    }
+}

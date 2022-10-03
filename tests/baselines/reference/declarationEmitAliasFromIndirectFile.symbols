@@ -1,0 +1,65 @@
+=== tests/cases/compiler/locale.d.ts ===
+export type Locale = {
+>Locale : Symbol(Locale, Decl(locale.d.ts, 0, 0))
+
+    weekdays: {
+>weekdays : Symbol(weekdays, Decl(locale.d.ts, 0, 22))
+
+        shorthand: [string, string, string, string, string, string, string];
+>shorthand : Symbol(shorthand, Decl(locale.d.ts, 1, 15))
+
+        longhand: [string, string, string, string, string, string, string];
+>longhand : Symbol(longhand, Decl(locale.d.ts, 2, 76))
+
+    };
+};
+export type CustomLocale = {
+>CustomLocale : Symbol(CustomLocale, Decl(locale.d.ts, 5, 2))
+
+    weekdays: {
+>weekdays : Symbol(weekdays, Decl(locale.d.ts, 6, 28))
+
+        shorthand: [string, string, string, string, string, string, string];
+>shorthand : Symbol(shorthand, Decl(locale.d.ts, 7, 15))
+
+        longhand: [string, string, string, string, string, string, string];
+>longhand : Symbol(longhand, Decl(locale.d.ts, 8, 76))
+
+    };
+};
+export type key = "ar" | "bg";
+>key : Symbol(key, Decl(locale.d.ts, 11, 2))
+
+=== tests/cases/compiler/instance.d.ts ===
+import { Locale, CustomLocale, key as LocaleKey } from "./locale";
+>Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
+>CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
+>key : Symbol(LocaleKey, Decl(locale.d.ts, 11, 2))
+>LocaleKey : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
+
+export interface FlatpickrFn {
+>FlatpickrFn : Symbol(FlatpickrFn, Decl(instance.d.ts, 0, 66))
+
+    l10ns: {[k in LocaleKey]?: CustomLocale } & { default: Locale };
+>l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
+>k : Symbol(k, Decl(instance.d.ts, 2, 13))
+>LocaleKey : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
+>CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
+>default : Symbol(default, Decl(instance.d.ts, 2, 49))
+>Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
+}
+
+=== tests/cases/compiler/app.ts ===
+import { FlatpickrFn } from "./instance";
+>FlatpickrFn : Symbol(FlatpickrFn, Decl(app.ts, 0, 8))
+
+const fp = { l10ns: {} } as FlatpickrFn;
+>fp : Symbol(fp, Decl(app.ts, 1, 5))
+>l10ns : Symbol(l10ns, Decl(app.ts, 1, 12))
+>FlatpickrFn : Symbol(FlatpickrFn, Decl(app.ts, 0, 8))
+
+export default fp.l10ns;
+>fp.l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
+>fp : Symbol(fp, Decl(app.ts, 1, 5))
+>l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
+

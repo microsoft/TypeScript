@@ -1,0 +1,84 @@
+=== tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts ===
+class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+}
+class g<T> {
+>g : Symbol(g, Decl(declFileTypeAnnotationTypeLiteral.ts, 1, 1))
+>T : Symbol(T, Decl(declFileTypeAnnotationTypeLiteral.ts, 2, 8))
+}
+module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
+
+    export class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
+    }
+}
+
+// Object literal with everything
+var x: {
+>x : Symbol(x, Decl(declFileTypeAnnotationTypeLiteral.ts, 10, 3))
+
+    // Call signatures
+    (a: number): c;
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 12, 5))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+    (a: string): g<string>;
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 13, 5))
+>g : Symbol(g, Decl(declFileTypeAnnotationTypeLiteral.ts, 1, 1))
+
+    // Construct signatures
+    new (a: number): c;
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 16, 9))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+    new (a: string): m.c;
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 17, 9))
+>m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
+
+    // Indexers
+    [n: number]: c;
+>n : Symbol(n, Decl(declFileTypeAnnotationTypeLiteral.ts, 20, 5))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+    [n: string]: c;
+>n : Symbol(n, Decl(declFileTypeAnnotationTypeLiteral.ts, 21, 5))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+    // Properties
+    a: c;
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 21, 19))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+    b: g<string>;
+>b : Symbol(b, Decl(declFileTypeAnnotationTypeLiteral.ts, 24, 9))
+>g : Symbol(g, Decl(declFileTypeAnnotationTypeLiteral.ts, 1, 1))
+
+    // methods
+    m1(): g<number>;
+>m1 : Symbol(m1, Decl(declFileTypeAnnotationTypeLiteral.ts, 25, 17))
+>g : Symbol(g, Decl(declFileTypeAnnotationTypeLiteral.ts, 1, 1))
+
+    m2(a: string, b?: number, ...c: c[]): string;
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationTypeLiteral.ts, 28, 20))
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 29, 7))
+>b : Symbol(b, Decl(declFileTypeAnnotationTypeLiteral.ts, 29, 17))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 29, 29))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
+
+};
+
+
+// Function type
+var y: (a: string) => string;
+>y : Symbol(y, Decl(declFileTypeAnnotationTypeLiteral.ts, 34, 3))
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 34, 8))
+
+// constructor type
+var z: new (a: string) => m.c;
+>z : Symbol(z, Decl(declFileTypeAnnotationTypeLiteral.ts, 37, 3))
+>a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 37, 12))
+>m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
+

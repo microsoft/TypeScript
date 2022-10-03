@@ -1,0 +1,450 @@
+=== tests/cases/compiler/declFileMethods_0.ts ===
+export class c1 {
+>c1 : c1
+
+    /** This comment should appear for foo*/
+    public foo() {
+>foo : () => void
+    }
+    /** This is comment for function signature*/
+    public fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    public fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+
+    public fooWithOverloads(a: string): string;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    public fooWithOverloads(a: number): number;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    public fooWithOverloads(a: any): any {
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for privateFoo*/
+    private privateFoo() {
+>privateFoo : () => void
+    }
+    /** This is comment for function signature*/
+    private privateFooWithParameters(/** this is comment about a*/a: string,
+>privateFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    private privateFooWithRestParameters(a: string, ...rests: string[]) {
+>privateFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    private privateFooWithOverloads(a: string): string;
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    private privateFooWithOverloads(a: number): number;
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    private privateFooWithOverloads(a: any): any {
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for static foo*/
+    static staticFoo() {
+>staticFoo : () => void
+    }
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/a: string,
+>staticFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    static staticFooWithRestParameters(a: string, ...rests: string[]) {
+>staticFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    static staticFooWithOverloads(a: string): string;
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    static staticFooWithOverloads(a: number): number;
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    static staticFooWithOverloads(a: any): any {
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo() {
+>privateStaticFoo : () => void
+    }
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
+>privateStaticFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
+>privateStaticFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    private static privateStaticFooWithOverloads(a: string): string;
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    private static privateStaticFooWithOverloads(a: number): number;
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    private static privateStaticFooWithOverloads(a: any): any {
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+}
+
+export interface I1 {
+    /** This comment should appear for foo*/
+    foo(): string;
+>foo : () => string
+
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number): void;
+>b : number
+
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+    fooWithOverloads(a: string): string;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    fooWithOverloads(a: number): number;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+}
+
+=== tests/cases/compiler/declFileMethods_1.ts ===
+class c2 {
+>c2 : c2
+
+    /** This comment should appear for foo*/
+    public foo() {
+>foo : () => void
+    }
+    /** This is comment for function signature*/
+    public fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    public fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+
+    public fooWithOverloads(a: string): string;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    public fooWithOverloads(a: number): number;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    public fooWithOverloads(a: any): any {
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for privateFoo*/
+    private privateFoo() {
+>privateFoo : () => void
+    }
+    /** This is comment for function signature*/
+    private privateFooWithParameters(/** this is comment about a*/a: string,
+>privateFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    private privateFooWithRestParameters(a: string, ...rests: string[]) {
+>privateFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    private privateFooWithOverloads(a: string): string;
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    private privateFooWithOverloads(a: number): number;
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    private privateFooWithOverloads(a: any): any {
+>privateFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for static foo*/
+    static staticFoo() {
+>staticFoo : () => void
+    }
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/a: string,
+>staticFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    static staticFooWithRestParameters(a: string, ...rests: string[]) {
+>staticFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    static staticFooWithOverloads(a: string): string;
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    static staticFooWithOverloads(a: number): number;
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    static staticFooWithOverloads(a: any): any {
+>staticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+
+
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo() {
+>privateStaticFoo : () => void
+    }
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
+>privateStaticFooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number) {
+>b : number
+
+        var d = a;
+>d : string
+>a : string
+    }
+    private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
+>privateStaticFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+        return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+    }
+    private static privateStaticFooWithOverloads(a: string): string;
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    private static privateStaticFooWithOverloads(a: number): number;
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+    private static privateStaticFooWithOverloads(a: any): any {
+>privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+        return a;
+>a : any
+    }
+}
+
+interface I2 {
+    /** This comment should appear for foo*/
+    foo(): string;
+>foo : () => string
+
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : (a: string, b: number) => void
+>a : string
+
+        /** this is comment for b*/
+        b: number): void;
+>b : number
+
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+    fooWithOverloads(a: string): string;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+    fooWithOverloads(a: number): number;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+}
+

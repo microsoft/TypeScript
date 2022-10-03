@@ -1,0 +1,23 @@
+=== tests/cases/compiler/extendConstructSignatureInInterface.ts ===
+interface C {
+>C : Symbol(C, Decl(extendConstructSignatureInInterface.ts, 0, 0))
+
+    new(x: number): C;
+>x : Symbol(x, Decl(extendConstructSignatureInInterface.ts, 1, 8))
+>C : Symbol(C, Decl(extendConstructSignatureInInterface.ts, 0, 0))
+}
+
+var CStatic: C;
+>CStatic : Symbol(CStatic, Decl(extendConstructSignatureInInterface.ts, 4, 3))
+>C : Symbol(C, Decl(extendConstructSignatureInInterface.ts, 0, 0))
+
+class E extends CStatic {
+>E : Symbol(E, Decl(extendConstructSignatureInInterface.ts, 4, 15))
+>CStatic : Symbol(CStatic, Decl(extendConstructSignatureInInterface.ts, 4, 3))
+}
+
+var e: E = new E(1);
+>e : Symbol(e, Decl(extendConstructSignatureInInterface.ts, 8, 3))
+>E : Symbol(E, Decl(extendConstructSignatureInInterface.ts, 4, 15))
+>E : Symbol(E, Decl(extendConstructSignatureInInterface.ts, 4, 15))
+

@@ -1,0 +1,54 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(4,9): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(5,15): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(6,14): error TS2339: Property 'z' does not exist on type 'C'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(7,20): error TS2339: Property 'z' does not exist on type 'C'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(9,9): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(14,9): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(15,15): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(16,14): error TS2339: Property 'z' does not exist on type 'D<T>'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(17,20): error TS2339: Property 'z' does not exist on type 'D<T>'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts(19,9): error TS2304: Cannot find name 'z'.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts (10 errors) ====
+    // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+    
+    class C {
+        a = z; // error
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        b: typeof z; // error
+                  ~
+!!! error TS2304: Cannot find name 'z'.
+        c = this.z; // error
+                 ~
+!!! error TS2339: Property 'z' does not exist on type 'C'.
+        d: typeof this.z; // error
+                       ~
+!!! error TS2339: Property 'z' does not exist on type 'C'.
+        constructor(x) {
+            z = 1;
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        }
+    }
+    
+    class D<T> {
+        a = z; // error
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        b: typeof z; // error
+                  ~
+!!! error TS2304: Cannot find name 'z'.
+        c = this.z; // error
+                 ~
+!!! error TS2339: Property 'z' does not exist on type 'D<T>'.
+        d: typeof this.z; // error
+                       ~
+!!! error TS2339: Property 'z' does not exist on type 'D<T>'.
+        constructor(x: T) {
+            z = 1;
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        }
+    }

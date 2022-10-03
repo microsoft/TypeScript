@@ -1,0 +1,4 @@
+=== tests/cases/conformance/ambient/ambientDeclarationsPatterns_tooManyAsterisks.ts ===
+declare module "too*many*asterisks" { }
+>"too*many*asterisks" : typeof import("too*many*asterisks")
+

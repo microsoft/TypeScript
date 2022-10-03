@@ -1,0 +1,37 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts ===
+class clodule<T> {
+>clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 5, 1))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 14))
+
+    id: string;
+>id : Symbol(clodule.id, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 18))
+
+    value: T;
+>value : Symbol(clodule.value, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 1, 15))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 14))
+
+    private static sfn(id: string) { return 42; }
+>sfn : Symbol(clodule.sfn, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 2, 13))
+>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 4, 23))
+}
+
+module clodule {
+>clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 5, 1))
+
+    // error: duplicate identifier expected
+    export function fn<T>(x: T, y: T): number {
+>fn : Symbol(fn, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 7, 16))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 9, 23))
+>x : Symbol(x, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 9, 26))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 9, 23))
+>y : Symbol(y, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 9, 31))
+>T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 9, 23))
+
+        return clodule.sfn('a');
+>clodule.sfn : Symbol(clodule.sfn, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 2, 13))
+>clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 5, 1))
+>sfn : Symbol(clodule.sfn, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 2, 13))
+    }
+}
+
+

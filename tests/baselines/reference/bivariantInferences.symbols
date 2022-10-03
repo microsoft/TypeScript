@@ -1,0 +1,31 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/bivariantInferences.ts ===
+// Repro from #27337
+
+interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(bivariantInferences.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(bivariantInferences.ts, 2, 16))
+
+    equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
+>equalsShallow : Symbol(Array.equalsShallow, Decl(bivariantInferences.ts, 2, 20))
+>T : Symbol(T, Decl(bivariantInferences.ts, 3, 18))
+>this : Symbol(this, Decl(bivariantInferences.ts, 3, 21))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(bivariantInferences.ts, 3, 18))
+>other : Symbol(other, Decl(bivariantInferences.ts, 3, 44))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(bivariantInferences.ts, 3, 18))
+}
+
+declare const a: (string | number)[] | null[] | undefined[] | {}[];
+>a : Symbol(a, Decl(bivariantInferences.ts, 6, 13))
+
+declare const b: (string | number)[] | null[] | undefined[] | {}[];
+>b : Symbol(b, Decl(bivariantInferences.ts, 7, 13))
+
+let x = a.equalsShallow(b);
+>x : Symbol(x, Decl(bivariantInferences.ts, 9, 3))
+>a.equalsShallow : Symbol(Array.equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
+>a : Symbol(a, Decl(bivariantInferences.ts, 6, 13))
+>equalsShallow : Symbol(Array.equalsShallow, Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20), Decl(bivariantInferences.ts, 2, 20))
+>b : Symbol(b, Decl(bivariantInferences.ts, 7, 13))
+

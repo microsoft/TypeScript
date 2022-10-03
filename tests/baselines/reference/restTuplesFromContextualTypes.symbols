@@ -1,0 +1,392 @@
+=== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts ===
+declare const t1: [number, boolean, string];
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+(function (a, b, c){})(...t1);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 2, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 2, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 2, 16))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+(function (...x){})(...t1);
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 3, 11))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+(function (a, ...x){})(...t1);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 4, 11))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 4, 13))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+(function (a, b, ...x){})(...t1);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 5, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 5, 13))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 5, 16))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+(function (a, b, c, ...x){})(...t1);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 6, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 6, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 6, 16))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 6, 19))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+declare function f1(cb: (...args: typeof t1) => void): void;
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>cb : Symbol(cb, Decl(restTuplesFromContextualTypes.ts, 8, 20))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 8, 25))
+>t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
+
+f1((a, b, c) => {})
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 10, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 10, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 10, 9))
+
+f1((...x) => {})
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 11, 4))
+
+f1((a, ...x) => {})
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 12, 4))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 12, 6))
+
+f1((a, b, ...x) => {})
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 13, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 13, 6))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 13, 9))
+
+f1((a, b, c, ...x) => {})
+>f1 : Symbol(f1, Decl(restTuplesFromContextualTypes.ts, 6, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 14, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 14, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 14, 9))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 14, 12))
+
+declare const t2: [number, boolean, ...string[]];
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+(function (a, b, c){})(...t2);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 18, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 18, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 18, 16))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+(function (...x){})(...t2);
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 19, 11))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+(function (a, ...x){})(...t2);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 20, 11))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 20, 13))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+(function (a, b, ...x){})(...t2);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 21, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 21, 13))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 21, 16))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+(function (a, b, c, ...x){})(...t2);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 22, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 22, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 22, 16))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 22, 19))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+declare function f2(cb: (...args: typeof t2) => void): void;
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>cb : Symbol(cb, Decl(restTuplesFromContextualTypes.ts, 24, 20))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 24, 25))
+>t2 : Symbol(t2, Decl(restTuplesFromContextualTypes.ts, 16, 13))
+
+f2((a, b, c) => {})
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 26, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 26, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 26, 9))
+
+f2((...x) => {})
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 27, 4))
+
+f2((a, ...x) => {})
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 28, 4))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 28, 6))
+
+f2((a, b, ...x) => {})
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 29, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 29, 6))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 29, 9))
+
+f2((a, b, c, ...x) => {})
+>f2 : Symbol(f2, Decl(restTuplesFromContextualTypes.ts, 22, 36))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 30, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 30, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 30, 9))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 30, 12))
+
+declare const t3: [boolean, ...string[]];
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+(function (a, b, c){})(1, ...t3);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 34, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 34, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 34, 16))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+(function (...x){})(1, ...t3);
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 35, 11))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+(function (a, ...x){})(1, ...t3);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 36, 11))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 36, 13))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+(function (a, b, ...x){})(1, ...t3);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 37, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 37, 13))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 37, 16))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+(function (a, b, c, ...x){})(1, ...t3);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 38, 11))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 38, 13))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 38, 16))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 38, 19))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>cb : Symbol(cb, Decl(restTuplesFromContextualTypes.ts, 40, 20))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 40, 25))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 40, 35))
+>t3 : Symbol(t3, Decl(restTuplesFromContextualTypes.ts, 32, 13))
+
+f3((a, b, c) => {})
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 42, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 42, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 42, 9))
+
+f3((...x) => {})
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 43, 4))
+
+f3((a, ...x) => {})
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 44, 4))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 44, 6))
+
+f3((a, b, ...x) => {})
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 45, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 45, 6))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 45, 9))
+
+f3((a, b, c, ...x) => {})
+>f3 : Symbol(f3, Decl(restTuplesFromContextualTypes.ts, 38, 39))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 46, 4))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 46, 6))
+>c : Symbol(c, Decl(restTuplesFromContextualTypes.ts, 46, 9))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 46, 12))
+
+function f4<T extends any[]>(t: T) {
+>f4 : Symbol(f4, Decl(restTuplesFromContextualTypes.ts, 46, 25))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 48, 12))
+>t : Symbol(t, Decl(restTuplesFromContextualTypes.ts, 48, 29))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 48, 12))
+
+    (function(...x){})(...t);
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 49, 14))
+>t : Symbol(t, Decl(restTuplesFromContextualTypes.ts, 48, 29))
+
+    (function(a, ...x){})(1, ...t);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 50, 14))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 50, 16))
+>t : Symbol(t, Decl(restTuplesFromContextualTypes.ts, 48, 29))
+
+    (function(a, ...x){})(1, 2, ...t);
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 51, 14))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 51, 16))
+>t : Symbol(t, Decl(restTuplesFromContextualTypes.ts, 48, 29))
+
+    function f(cb: (x: number, ...args: T) => void) {}
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 51, 38))
+>cb : Symbol(cb, Decl(restTuplesFromContextualTypes.ts, 52, 15))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 52, 20))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 52, 30))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 48, 12))
+
+    f((...x) => {});
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 51, 38))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 53, 7))
+
+    f((a, ...x) => {});
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 51, 38))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 54, 7))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 54, 9))
+
+    f((a, b, ...x) => {});
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 51, 38))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 55, 7))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 55, 9))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 55, 12))
+}
+
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 58, 20))
+>U : Symbol(U, Decl(restTuplesFromContextualTypes.ts, 58, 36))
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 58, 40))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 58, 44))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 58, 20))
+>U : Symbol(U, Decl(restTuplesFromContextualTypes.ts, 58, 36))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 58, 64))
+>T : Symbol(T, Decl(restTuplesFromContextualTypes.ts, 58, 20))
+>U : Symbol(U, Decl(restTuplesFromContextualTypes.ts, 58, 36))
+
+let g0 = f5(() => "hello");
+>g0 : Symbol(g0, Decl(restTuplesFromContextualTypes.ts, 60, 3))
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+
+let g1 = f5((x, y) => 42);
+>g1 : Symbol(g1, Decl(restTuplesFromContextualTypes.ts, 61, 3))
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 61, 13))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 61, 15))
+
+let g2 = f5((x: number, y) => 42);
+>g2 : Symbol(g2, Decl(restTuplesFromContextualTypes.ts, 62, 3))
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 62, 13))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 62, 23))
+
+let g3 = f5((x: number, y: number) => x + y);
+>g3 : Symbol(g3, Decl(restTuplesFromContextualTypes.ts, 63, 3))
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 63, 13))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 63, 23))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 63, 13))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 63, 23))
+
+let g4 = f5((...args) => true);
+>g4 : Symbol(g4, Decl(restTuplesFromContextualTypes.ts, 64, 3))
+>f5 : Symbol(f5, Decl(restTuplesFromContextualTypes.ts, 56, 1))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 64, 13))
+
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+>pipe : Symbol(pipe, Decl(restTuplesFromContextualTypes.ts, 64, 31))
+>A : Symbol(A, Decl(restTuplesFromContextualTypes.ts, 66, 22))
+>B : Symbol(B, Decl(restTuplesFromContextualTypes.ts, 66, 38))
+>C : Symbol(C, Decl(restTuplesFromContextualTypes.ts, 66, 41))
+>f : Symbol(f, Decl(restTuplesFromContextualTypes.ts, 66, 45))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 66, 49))
+>A : Symbol(A, Decl(restTuplesFromContextualTypes.ts, 66, 22))
+>B : Symbol(B, Decl(restTuplesFromContextualTypes.ts, 66, 38))
+>g : Symbol(g, Decl(restTuplesFromContextualTypes.ts, 66, 66))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 66, 71))
+>B : Symbol(B, Decl(restTuplesFromContextualTypes.ts, 66, 38))
+>C : Symbol(C, Decl(restTuplesFromContextualTypes.ts, 66, 41))
+>args : Symbol(args, Decl(restTuplesFromContextualTypes.ts, 66, 85))
+>A : Symbol(A, Decl(restTuplesFromContextualTypes.ts, 66, 22))
+>C : Symbol(C, Decl(restTuplesFromContextualTypes.ts, 66, 41))
+
+let g5 = pipe(() => true, b => 42);
+>g5 : Symbol(g5, Decl(restTuplesFromContextualTypes.ts, 68, 3))
+>pipe : Symbol(pipe, Decl(restTuplesFromContextualTypes.ts, 64, 31))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 68, 25))
+
+let g6 = pipe(x => "hello", s => s.length);
+>g6 : Symbol(g6, Decl(restTuplesFromContextualTypes.ts, 69, 3))
+>pipe : Symbol(pipe, Decl(restTuplesFromContextualTypes.ts, 64, 31))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 69, 14))
+>s : Symbol(s, Decl(restTuplesFromContextualTypes.ts, 69, 27))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(restTuplesFromContextualTypes.ts, 69, 27))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+let g7 = pipe((x, y) => 42, x => "" + x);
+>g7 : Symbol(g7, Decl(restTuplesFromContextualTypes.ts, 70, 3))
+>pipe : Symbol(pipe, Decl(restTuplesFromContextualTypes.ts, 64, 31))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 70, 15))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 70, 17))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 70, 27))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 70, 27))
+
+let g8 = pipe((x: number, y: string) => 42, x => "" + x);
+>g8 : Symbol(g8, Decl(restTuplesFromContextualTypes.ts, 71, 3))
+>pipe : Symbol(pipe, Decl(restTuplesFromContextualTypes.ts, 64, 31))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 71, 15))
+>y : Symbol(y, Decl(restTuplesFromContextualTypes.ts, 71, 25))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 71, 43))
+>x : Symbol(x, Decl(restTuplesFromContextualTypes.ts, 71, 43))
+
+// Repro from #25288
+
+declare var tuple: [number, string];
+>tuple : Symbol(tuple, Decl(restTuplesFromContextualTypes.ts, 75, 11))
+
+(function foo(a, b){}(...tuple));
+>foo : Symbol(foo, Decl(restTuplesFromContextualTypes.ts, 76, 1))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 76, 14))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 76, 16))
+>tuple : Symbol(tuple, Decl(restTuplesFromContextualTypes.ts, 75, 11))
+
+// Repro from #25289
+
+declare function take(cb: (a: number, b: string) => void): void;
+>take : Symbol(take, Decl(restTuplesFromContextualTypes.ts, 76, 33))
+>cb : Symbol(cb, Decl(restTuplesFromContextualTypes.ts, 80, 22))
+>a : Symbol(a, Decl(restTuplesFromContextualTypes.ts, 80, 27))
+>b : Symbol(b, Decl(restTuplesFromContextualTypes.ts, 80, 37))
+
+(function foo(...rest){}(1, ''));
+>foo : Symbol(foo, Decl(restTuplesFromContextualTypes.ts, 82, 1))
+>rest : Symbol(rest, Decl(restTuplesFromContextualTypes.ts, 82, 14))
+
+take(function(...rest){});
+>take : Symbol(take, Decl(restTuplesFromContextualTypes.ts, 76, 33))
+>rest : Symbol(rest, Decl(restTuplesFromContextualTypes.ts, 83, 14))
+
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+>ArgsUnion : Symbol(ArgsUnion, Decl(restTuplesFromContextualTypes.ts, 83, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 87, 52))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 88, 23))
+>ArgsUnion : Symbol(ArgsUnion, Decl(restTuplesFromContextualTypes.ts, 83, 26))
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+>funcUnionTupleNoRest : Symbol(funcUnionTupleNoRest, Decl(restTuplesFromContextualTypes.ts, 90, 5))
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 87, 52))
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 90, 46))
+>strOrErr : Symbol(strOrErr, Decl(restTuplesFromContextualTypes.ts, 90, 50))
+
+  return num;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 90, 46))
+
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+>funcUnionTupleRest : Symbol(funcUnionTupleRest, Decl(restTuplesFromContextualTypes.ts, 94, 5))
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 87, 52))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 94, 44))
+
+  const [num, strOrErr] = params;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 95, 9))
+>strOrErr : Symbol(strOrErr, Decl(restTuplesFromContextualTypes.ts, 95, 13))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 94, 44))
+
+  return num;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 95, 9))
+
+};
+

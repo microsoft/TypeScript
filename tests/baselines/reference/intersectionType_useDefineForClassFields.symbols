@@ -1,0 +1,26 @@
+=== tests/cases/compiler/intersectionType_useDefineForClassFields.ts ===
+type Foo<T> = {
+>Foo : Symbol(Foo, Decl(intersectionType_useDefineForClassFields.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionType_useDefineForClassFields.ts, 0, 9))
+
+    [k in keyof T & string]: any
+>k : Symbol(k, Decl(intersectionType_useDefineForClassFields.ts, 1, 5))
+>T : Symbol(T, Decl(intersectionType_useDefineForClassFields.ts, 0, 9))
+}
+
+function bar<T>(_p: T): { new(): Foo<T> } {
+>bar : Symbol(bar, Decl(intersectionType_useDefineForClassFields.ts, 2, 1))
+>T : Symbol(T, Decl(intersectionType_useDefineForClassFields.ts, 4, 13))
+>_p : Symbol(_p, Decl(intersectionType_useDefineForClassFields.ts, 4, 16))
+>T : Symbol(T, Decl(intersectionType_useDefineForClassFields.ts, 4, 13))
+>Foo : Symbol(Foo, Decl(intersectionType_useDefineForClassFields.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionType_useDefineForClassFields.ts, 4, 13))
+
+    return null as any;
+}
+
+class Baz extends bar({ x: 1 }) {
+>Baz : Symbol(Baz, Decl(intersectionType_useDefineForClassFields.ts, 6, 1))
+>bar : Symbol(bar, Decl(intersectionType_useDefineForClassFields.ts, 2, 1))
+>x : Symbol(x, Decl(intersectionType_useDefineForClassFields.ts, 8, 23))
+}

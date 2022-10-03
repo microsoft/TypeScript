@@ -1,0 +1,29 @@
+=== tests/cases/compiler/genericPrototypeProperty3.ts ===
+class BaseEvent {
+>BaseEvent : BaseEvent
+
+    target: {};
+>target : {}
+}
+
+class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}
+>MyEvent : MyEvent<T>
+>BaseEvent : BaseEvent
+
+    target: T;
+>target : T
+}
+class BaseEventWrapper {
+>BaseEventWrapper : BaseEventWrapper
+
+    t: BaseEvent;
+>t : BaseEvent
+}
+
+class MyEventWrapper extends BaseEventWrapper {
+>MyEventWrapper : MyEventWrapper
+>BaseEventWrapper : BaseEventWrapper
+
+    t: MyEvent<any>;
+>t : MyEvent<any>
+}

@@ -1,0 +1,151 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator2.ts ===
+var temp = 10;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+++temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp++ ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp + temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp - temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp * temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp / temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp % temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp++ ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- ** -temp;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp++ ** +temp;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- + temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- - temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- * temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- / temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+temp-- % temp ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp + 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp - 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp * 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp / 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+--temp % 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+++temp + 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+++temp - 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+++temp * 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+++temp / 2 ** 3;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** temp++;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** temp--;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp ** 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp ** 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** temp++ ** 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** temp-- ** 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp + 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp - 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp * 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp / 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** ++temp % 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp + 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp - 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp * 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp / 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+
+3 ** --temp % 2;
+>temp : Symbol(temp, Decl(emitExponentiationOperator2.ts, 0, 3))
+

@@ -1,0 +1,19 @@
+{
+    "scenario": "declarations_IndirectImport should result in error",
+    "projectRoot": "tests/cases/projects/declarations_IndirectImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m4.ts",
+        "m5.ts",
+        "useModule.ts"
+    ],
+    "emittedFiles": [
+        "m4.js",
+        "m5.js",
+        "useModule.js"
+    ]
+}

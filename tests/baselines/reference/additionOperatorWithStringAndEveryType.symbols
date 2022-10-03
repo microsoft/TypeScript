@@ -1,0 +1,136 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts ===
+enum E { a, b, c }
+>E : Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
+>b : Symbol(E.b, Decl(additionOperatorWithStringAndEveryType.ts, 0, 11))
+>c : Symbol(E.c, Decl(additionOperatorWithStringAndEveryType.ts, 0, 14))
+
+var a: any;
+>a : Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
+
+var b: boolean;
+>b : Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
+
+var c: number;
+>c : Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
+
+var d: string;
+>d : Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
+
+var e: Object;
+>e : Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var f: void;
+>f : Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
+
+var g: E;
+>g : Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
+>E : Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+
+var x: string;
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+// string could plus every type, and the result is always string
+// string as left operand
+var r1 = x + a;
+>r1 : Symbol(r1, Decl(additionOperatorWithStringAndEveryType.ts, 14, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>a : Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
+
+var r2 = x + b;
+>r2 : Symbol(r2, Decl(additionOperatorWithStringAndEveryType.ts, 15, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>b : Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
+
+var r3 = x + c;
+>r3 : Symbol(r3, Decl(additionOperatorWithStringAndEveryType.ts, 16, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>c : Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
+
+var r4 = x + d;
+>r4 : Symbol(r4, Decl(additionOperatorWithStringAndEveryType.ts, 17, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>d : Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
+
+var r5 = x + e;
+>r5 : Symbol(r5, Decl(additionOperatorWithStringAndEveryType.ts, 18, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>e : Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
+
+var r6 = x + f;
+>r6 : Symbol(r6, Decl(additionOperatorWithStringAndEveryType.ts, 19, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>f : Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
+
+var r7 = x + g;
+>r7 : Symbol(r7, Decl(additionOperatorWithStringAndEveryType.ts, 20, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>g : Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
+
+// string as right operand
+var r8 = a + x;
+>r8 : Symbol(r8, Decl(additionOperatorWithStringAndEveryType.ts, 23, 3))
+>a : Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r9 = b + x;
+>r9 : Symbol(r9, Decl(additionOperatorWithStringAndEveryType.ts, 24, 3))
+>b : Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r10 = c + x;
+>r10 : Symbol(r10, Decl(additionOperatorWithStringAndEveryType.ts, 25, 3))
+>c : Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r11 = d + x;
+>r11 : Symbol(r11, Decl(additionOperatorWithStringAndEveryType.ts, 26, 3))
+>d : Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r12 = e + x;
+>r12 : Symbol(r12, Decl(additionOperatorWithStringAndEveryType.ts, 27, 3))
+>e : Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r13 = f + x;
+>r13 : Symbol(r13, Decl(additionOperatorWithStringAndEveryType.ts, 28, 3))
+>f : Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r14 = g + x;
+>r14 : Symbol(r14, Decl(additionOperatorWithStringAndEveryType.ts, 29, 3))
+>g : Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+// other cases
+var r15 = x + E;
+>r15 : Symbol(r15, Decl(additionOperatorWithStringAndEveryType.ts, 32, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>E : Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+
+var r16 = x + E.a;
+>r16 : Symbol(r16, Decl(additionOperatorWithStringAndEveryType.ts, 33, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
+>E : Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
+
+var r17 = x + '';
+>r17 : Symbol(r17, Decl(additionOperatorWithStringAndEveryType.ts, 34, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r18 = x + 0;
+>r18 : Symbol(r18, Decl(additionOperatorWithStringAndEveryType.ts, 35, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+
+var r19 = x + { a: '' };
+>r19 : Symbol(r19, Decl(additionOperatorWithStringAndEveryType.ts, 36, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>a : Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 36, 15))
+
+var r20 = x + [];
+>r20 : Symbol(r20, Decl(additionOperatorWithStringAndEveryType.ts, 37, 3))
+>x : Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+

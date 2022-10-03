@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts ===
+interface I {
+>I : Symbol(I, Decl(computedPropertyNamesContextualType8_ES6.ts, 0, 0))
+
+    [s: string]: boolean;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType8_ES6.ts, 1, 5))
+
+    [s: number]: boolean;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType8_ES6.ts, 2, 5))
+}
+
+var o: I = {
+>o : Symbol(o, Decl(computedPropertyNamesContextualType8_ES6.ts, 5, 3))
+>I : Symbol(I, Decl(computedPropertyNamesContextualType8_ES6.ts, 0, 0))
+
+    [""+"foo"]: "",
+>[""+"foo"] : Symbol([""+"foo"], Decl(computedPropertyNamesContextualType8_ES6.ts, 5, 12))
+
+    [""+"bar"]: 0
+>[""+"bar"] : Symbol([""+"bar"], Decl(computedPropertyNamesContextualType8_ES6.ts, 6, 19))
+}

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/shorthandOfExportedEntity02_targetES5_CommonJS.ts ===
+export const test = "test";
+>test : "test"
+>"test" : "test"
+
+export function foo () {
+>foo : () => void
+
+  const x = { test };
+>x : { test: string; }
+>{ test } : { test: string; }
+>test : string
+}
+

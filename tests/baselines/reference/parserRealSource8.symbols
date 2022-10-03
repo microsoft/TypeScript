@@ -1,0 +1,1385 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource8.ts, 0, 0))
+
+    export class AssignScopeContext {
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        constructor (public scopeChain: ScopeChain,
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>ScopeChain : Symbol(ScopeChain)
+
+                     public typeFlow: TypeFlow,
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>TypeFlow : Symbol(TypeFlow)
+
+                     public modDeclChain: ModuleDeclaration[]) {
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+        }
+    }
+
+    export function pushAssignScope(scope: SymbolScope,
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>scope : Symbol(scope, Decl(parserRealSource8.ts, 14, 36))
+>SymbolScope : Symbol(SymbolScope)
+
+        context: AssignScopeContext,
+>context : Symbol(context, Decl(parserRealSource8.ts, 14, 55))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        type: Type,
+>type : Symbol(type, Decl(parserRealSource8.ts, 15, 36))
+>Type : Symbol(Type)
+
+        classType: Type,
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 16, 19))
+>Type : Symbol(Type)
+
+        fnc: FuncDecl) {
+>fnc : Symbol(fnc, Decl(parserRealSource8.ts, 17, 24))
+>FuncDecl : Symbol(FuncDecl)
+
+        var chain = new ScopeChain(null, context.scopeChain, scope);
+>chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 14, 55))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>scope : Symbol(scope, Decl(parserRealSource8.ts, 14, 36))
+
+        chain.thisType = type;
+>chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
+>type : Symbol(type, Decl(parserRealSource8.ts, 15, 36))
+
+        chain.classType = classType;
+>chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 16, 19))
+
+        chain.fnc = fnc;
+>chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
+>fnc : Symbol(fnc, Decl(parserRealSource8.ts, 17, 24))
+
+        context.scopeChain = chain;
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 14, 55))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
+    }
+
+    export function popAssignScope(context: AssignScopeContext) {
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 27, 35))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        context.scopeChain = context.scopeChain.previous;
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 27, 35))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 27, 35))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+    }
+
+    export function instanceCompare(a: Symbol, b: Symbol) {
+>instanceCompare : Symbol(instanceCompare, Decl(parserRealSource8.ts, 29, 5))
+>a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(parserRealSource8.ts, 31, 46))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        if (((a == null) || (!a.isInstanceProperty()))) {
+>a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
+>a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
+
+            return b;
+>b : Symbol(b, Decl(parserRealSource8.ts, 31, 46))
+        }
+        else {
+            return a;
+>a : Symbol(a, Decl(parserRealSource8.ts, 31, 36))
+        }
+    }
+
+    export function instanceFilterStop(s: Symbol) {
+>instanceFilterStop : Symbol(instanceFilterStop, Decl(parserRealSource8.ts, 38, 5))
+>s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        return s.isInstanceProperty();
+>s : Symbol(s, Decl(parserRealSource8.ts, 40, 39))
+    }
+
+    export class ScopeSearchFilter {
+>ScopeSearchFilter : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+
+        constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
+>select : Symbol(ScopeSearchFilter.select, Decl(parserRealSource8.ts, 46, 21))
+>a : Symbol(a, Decl(parserRealSource8.ts, 46, 37))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(parserRealSource8.ts, 46, 47))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+                            public stop: (s: Symbol) =>boolean) { }
+>stop : Symbol(ScopeSearchFilter.stop, Decl(parserRealSource8.ts, 46, 68))
+>s : Symbol(s, Decl(parserRealSource8.ts, 47, 42))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        public result: Symbol = null;
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        public reset() {
+>reset : Symbol(ScopeSearchFilter.reset, Decl(parserRealSource8.ts, 49, 37))
+
+            this.result = null;
+>this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+        }
+
+        public update(b: Symbol): boolean {
+>update : Symbol(ScopeSearchFilter.update, Decl(parserRealSource8.ts, 53, 9))
+>b : Symbol(b, Decl(parserRealSource8.ts, 55, 22))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+            this.result = this.select(this.result, b);
+>this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this.select : Symbol(ScopeSearchFilter.select, Decl(parserRealSource8.ts, 46, 21))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>select : Symbol(ScopeSearchFilter.select, Decl(parserRealSource8.ts, 46, 21))
+>this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>b : Symbol(b, Decl(parserRealSource8.ts, 55, 22))
+
+            if (this.result) {
+>this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+
+                return this.stop(this.result);
+>this.stop : Symbol(ScopeSearchFilter.stop, Decl(parserRealSource8.ts, 46, 68))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>stop : Symbol(ScopeSearchFilter.stop, Decl(parserRealSource8.ts, 46, 68))
+>this.result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+>this : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>result : Symbol(ScopeSearchFilter.result, Decl(parserRealSource8.ts, 47, 67))
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+    export var instanceFilter = new ScopeSearchFilter(instanceCompare, instanceFilterStop);
+>instanceFilter : Symbol(instanceFilter, Decl(parserRealSource8.ts, 66, 14))
+>ScopeSearchFilter : Symbol(ScopeSearchFilter, Decl(parserRealSource8.ts, 42, 5))
+>instanceCompare : Symbol(instanceCompare, Decl(parserRealSource8.ts, 29, 5))
+>instanceFilterStop : Symbol(instanceFilterStop, Decl(parserRealSource8.ts, 38, 5))
+
+    export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
+>preAssignModuleScopes : Symbol(preAssignModuleScopes, Decl(parserRealSource8.ts, 66, 91))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 68, 42))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var moduleDecl = <ModuleDeclaration>ast;
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 68, 42))
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 70, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
+
+        if (moduleDecl.name && moduleDecl.mod) {
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+
+            moduleDecl.name.sym = moduleDecl.mod.symbol;
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+        }
+
+        var mod = moduleDecl.mod;
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+
+        // We're likely here because of error recovery
+        if (!mod) {
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+
+            return;
+        }
+
+        memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol);
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 70, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+
+        mod.memberScope = memberScope;
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 70, 11))
+
+        context.modDeclChain.push(moduleDecl);
+>context.modDeclChain.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>context.modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+
+        context.typeFlow.checker.currentModDecl = moduleDecl;
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+
+        aggScope = new SymbolAggregateScope(mod.symbol);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+
+        aggScope.addParentScope(memberScope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 70, 11))
+
+        aggScope.addParentScope(context.scopeChain.scope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+        pushAssignScope(aggScope, context, null, null, null);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+
+        mod.containedScope = aggScope;
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+
+        if (mod.symbol) {
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+
+            context.typeFlow.addLocalsFromScope(mod.containedScope, mod.symbol, moduleDecl.vars, mod.members.privateMembers, true);
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+>moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+>mod : Symbol(mod, Decl(parserRealSource8.ts, 77, 11))
+        }
+    }
+
+    export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
+>preAssignClassScopes : Symbol(preAssignClassScopes, Decl(parserRealSource8.ts, 96, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var classDecl = <InterfaceDeclaration>ast;
+>classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
+
+        if (classDecl.name && classDecl.type) {
+>classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+>classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+
+            classDecl.name.sym = classDecl.type.symbol;
+>classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+>classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+        }
+
+        var classType = ast.type;
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
+
+        if (classType) {
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            var classSym = classType.symbol;
+>classSym : Symbol(classSym, Decl(parserRealSource8.ts, 110, 15))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType);
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            aggScope = new SymbolAggregateScope(classType.symbol);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            aggScope.addParentScope(memberScope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+
+            aggScope.addParentScope(context.scopeChain.scope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            classType.containedScope = aggScope;
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+
+            classType.memberScope = memberScope;
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+
+            var instanceType = classType.instanceType;
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType);
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+
+            instanceType.memberScope = memberScope;
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+
+            aggScope = new SymbolAggregateScope(instanceType.symbol);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+
+            aggScope.addParentScope(context.scopeChain.scope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            pushAssignScope(aggScope, context, instanceType, classType, null);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+>classType : Symbol(classType, Decl(parserRealSource8.ts, 107, 11))
+
+            instanceType.containedScope = aggScope;
+>instanceType : Symbol(instanceType, Decl(parserRealSource8.ts, 120, 15))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+        }
+        else {
+            ast.type = context.typeFlow.anyType;
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+        }
+    }
+
+    export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
+>preAssignInterfaceScopes : Symbol(preAssignInterfaceScopes, Decl(parserRealSource8.ts, 133, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var interfaceDecl = <InterfaceDeclaration>ast;
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
+
+        var memberScope: SymbolTableScope = null;
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+
+        var aggScope: SymbolAggregateScope = null;
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
+
+        if (interfaceDecl.name && interfaceDecl.type) {
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+
+            interfaceDecl.name.sym = interfaceDecl.type.symbol;
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+>interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+        }
+
+        var interfaceType = ast.type;
+>interfaceType : Symbol(interfaceType, Decl(parserRealSource8.ts, 144, 11))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
+
+        memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType);
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>interfaceType : Symbol(interfaceType, Decl(parserRealSource8.ts, 144, 11))
+
+        interfaceType.memberScope = memberScope;
+>interfaceType : Symbol(interfaceType, Decl(parserRealSource8.ts, 144, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+
+        aggScope = new SymbolAggregateScope(interfaceType.symbol);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>interfaceType : Symbol(interfaceType, Decl(parserRealSource8.ts, 144, 11))
+
+        aggScope.addParentScope(memberScope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+
+        aggScope.addParentScope(context.scopeChain.scope);
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+        pushAssignScope(aggScope, context, null, null, null);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
+
+        interfaceType.containedScope = aggScope;
+>interfaceType : Symbol(interfaceType, Decl(parserRealSource8.ts, 144, 11))
+>aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+    }
+
+    export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
+>preAssignWithScopes : Symbol(preAssignWithScopes, Decl(parserRealSource8.ts, 152, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 154, 40))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var withStmt = <WithStatement>ast;
+>withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
+>WithStatement : Symbol(WithStatement)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 154, 40))
+
+        var withType = withStmt.type;
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
+
+        var members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+>members : Symbol(members, Decl(parserRealSource8.ts, 158, 11))
+
+        var ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource8.ts, 159, 11))
+
+        var withType = new Type();
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+
+        var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
+>withSymbol : Symbol(withSymbol, Decl(parserRealSource8.ts, 162, 11))
+>withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+
+        withType.members = members;
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>members : Symbol(members, Decl(parserRealSource8.ts, 158, 11))
+
+        withType.ambientMembers = ambientMembers;
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource8.ts, 159, 11))
+
+        withType.symbol = withSymbol;
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>withSymbol : Symbol(withSymbol, Decl(parserRealSource8.ts, 162, 11))
+
+        withType.setHasImplementation();
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+
+        withStmt.type = withType;
+>withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+
+        var withScope = new TypeScript.SymbolScopeBuilder(withType.members, withType.ambientMembers, null, null, context.scopeChain.scope, withType.symbol);
+>withScope : Symbol(withScope, Decl(parserRealSource8.ts, 169, 11))
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource8.ts, 0, 0))
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+
+        pushAssignScope(withScope, context, null, null, null);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>withScope : Symbol(withScope, Decl(parserRealSource8.ts, 169, 11))
+>context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
+
+        withType.containedScope = withScope;
+>withType : Symbol(withType, Decl(parserRealSource8.ts, 156, 11), Decl(parserRealSource8.ts, 161, 11))
+>withScope : Symbol(withScope, Decl(parserRealSource8.ts, 169, 11))
+    }
+
+    export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
+>preAssignFuncDeclScopes : Symbol(preAssignFuncDeclScopes, Decl(parserRealSource8.ts, 173, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var funcDecl = <FuncDecl>ast;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>FuncDecl : Symbol(FuncDecl)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
+
+        var container: Symbol = null;
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        var localContainer: Symbol = null;
+>localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+        if (funcDecl.type) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            localContainer = ast.type.symbol;
+>localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
+        }
+
+        var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+        var isInnerStatic = isStatic && context.scopeChain.fnc != null;
+>isInnerStatic : Symbol(isInnerStatic, Decl(parserRealSource8.ts, 185, 11))
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+        // for inner static functions, use the parent's member scope, so local vars cannot be captured
+        var parentScope = isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>isInnerStatic : Symbol(isInnerStatic, Decl(parserRealSource8.ts, 185, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+        // if this is not a method, but enclosed by class, use constructor as
+        // the enclosing scope
+        // REVIEW: Some twisted logic here - this needs to be cleaned up once old classes are removed
+        //  - if it's a new class, always use the contained scope, since we initialize the constructor scope below
+        if (context.scopeChain.thisType &&
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            var instType = context.scopeChain.thisType;
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                if (!funcDecl.isMethod() || isStatic) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+
+                    parentScope = instType.constructorScope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+                }
+                else {
+                    // use constructor scope if a method as well
+                    parentScope = instType.containedScope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+                }
+            }
+            else {
+                if (context.scopeChain.previous.scope.container &&
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                    context.scopeChain.previous.scope.container.declAST &&
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                    (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor) {
+>FuncDecl : Symbol(FuncDecl)
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                        // if the parent is the class constructor, use the constructor scope
+                    parentScope = instType.constructorScope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+                }
+                else if (isStatic && context.scopeChain.classType) {
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                    parentScope = context.scopeChain.classType.containedScope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+                }
+                else {
+                    // else, use the contained scope
+                    parentScope = instType.containedScope;
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+                }
+            }
+            container = instType.symbol;
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+>instType : Symbol(instType, Decl(parserRealSource8.ts, 195, 15))
+        }
+        else if (funcDecl.isConstructor && context.scopeChain.thisType) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            // sets the container to the class type's symbol (which is shared by the instance type)
+            container = context.scopeChain.thisType.symbol;
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+        }
+
+        if (funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment)) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            if (context.scopeChain.fnc && context.scopeChain.fnc.type) {
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                container = context.scopeChain.fnc.type.symbol;
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+            }
+
+            var funcScope = null;
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+
+            var outerFnc: FuncDecl = context.scopeChain.fnc;
+>outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>FuncDecl : Symbol(FuncDecl)
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            var nameText = funcDecl.name ? funcDecl.name.actualText : null;
+>nameText : Symbol(nameText, Decl(parserRealSource8.ts, 237, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            var fgSym: TypeSymbol = null;
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>TypeSymbol : Symbol(TypeSymbol)
+
+            if (isStatic) {
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+
+                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
+                // compatibility tests
+                if (outerFnc.type.members == null && container.getType().memberScope) {
+>outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                    outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers;
+>outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>SymbolScopeBuilder : Symbol(SymbolScopeBuilder)
+>TypeSymbol : Symbol(TypeSymbol)
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+                }
+                funcScope = context.scopeChain.fnc.type.memberScope;
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl;
+>outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+            }
+            else {
+
+                if (!funcDecl.isConstructor &&
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                    container &&
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                    container.declAST &&
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                    container.declAST.nodeType == NodeType.FuncDecl &&
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                    (<FuncDecl>container.declAST).isConstructor &&
+>FuncDecl : Symbol(FuncDecl)
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                    !funcDecl.isMethod()) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                    funcScope = context.scopeChain.thisType.constructorScope;//locals;
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+                }
+                else {
+                    funcScope = context.scopeChain.scope;
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+                }
+            }
+
+            // REVIEW: We don't search for another sym for accessors to prevent us from
+            // accidentally coalescing function signatures with the same name (E.g., a function
+            // 'f' the outer scope and a setter 'f' in an object literal within that scope)
+            if (nameText && nameText != "__missing" && !funcDecl.isAccessor()) {
+>nameText : Symbol(nameText, Decl(parserRealSource8.ts, 237, 15))
+>nameText : Symbol(nameText, Decl(parserRealSource8.ts, 237, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                if (isStatic) {
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+
+                    fgSym = funcScope.findLocal(nameText, false, false);
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>nameText : Symbol(nameText, Decl(parserRealSource8.ts, 237, 15))
+                }
+                else {
+                    // REVIEW: This logic should be symmetric with preCollectClassTypes
+                    fgSym = funcScope.findLocal(nameText, false, false);
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>nameText : Symbol(nameText, Decl(parserRealSource8.ts, 237, 15))
+                }
+            }
+
+            context.typeFlow.checker.createFunctionSignature(funcDecl, container,
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                                                            funcScope, fgSym, fgSym == null);
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+
+            // it's a getter or setter for a class property                     
+            if (!funcDecl.accessorSymbol && 
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                (funcDecl.fncFlags & FncFlags.ClassMethod) &&
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                container && 
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+
+                ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || 
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                    (fgSym && fgSym.isAccessor())) 
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+            {
+                funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+>funcScope : Symbol(funcScope, Decl(parserRealSource8.ts, 235, 15))
+>container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
+            }
+
+            funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+        }
+
+        // Set the symbol for functions and their overloads
+        if (funcDecl.name && funcDecl.type) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            funcDecl.name.sym = funcDecl.type.symbol;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+        }
+
+        // Keep track of the original scope type, because target typing might override
+        // the "type" member. We need the original "Scope type" for completion list, etc.
+        funcDecl.scopeType = funcDecl.type;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+        // Overloads have no scope, so bail here
+        if (funcDecl.isOverload) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            return;
+        }
+
+        var funcTable = new StringHashTable();
+>funcTable : Symbol(funcTable, Decl(parserRealSource8.ts, 308, 11))
+
+        var funcMembers = new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable()));
+>funcMembers : Symbol(funcMembers, Decl(parserRealSource8.ts, 309, 11))
+>funcTable : Symbol(funcTable, Decl(parserRealSource8.ts, 308, 11))
+
+        var ambientFuncTable = new StringHashTable();
+>ambientFuncTable : Symbol(ambientFuncTable, Decl(parserRealSource8.ts, 310, 11))
+
+        var ambientFuncMembers = new ScopedMembers(new DualStringHashTable(ambientFuncTable, new StringHashTable()));
+>ambientFuncMembers : Symbol(ambientFuncMembers, Decl(parserRealSource8.ts, 311, 11))
+>ambientFuncTable : Symbol(ambientFuncTable, Decl(parserRealSource8.ts, 310, 11))
+
+        var funcStaticTable = new StringHashTable();
+>funcStaticTable : Symbol(funcStaticTable, Decl(parserRealSource8.ts, 312, 11))
+
+        var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
+>funcStaticMembers : Symbol(funcStaticMembers, Decl(parserRealSource8.ts, 313, 11))
+>funcStaticTable : Symbol(funcStaticTable, Decl(parserRealSource8.ts, 312, 11))
+
+        var ambientFuncStaticTable = new StringHashTable();
+>ambientFuncStaticTable : Symbol(ambientFuncStaticTable, Decl(parserRealSource8.ts, 314, 11))
+
+        var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
+>ambientFuncStaticMembers : Symbol(ambientFuncStaticMembers, Decl(parserRealSource8.ts, 315, 11))
+>ambientFuncStaticTable : Symbol(ambientFuncStaticTable, Decl(parserRealSource8.ts, 314, 11))
+
+        // REVIEW: Is it a problem that this is being set twice for properties and constructors?
+        funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+
+        var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+>funcMembers : Symbol(funcMembers, Decl(parserRealSource8.ts, 309, 11))
+>ambientFuncMembers : Symbol(ambientFuncMembers, Decl(parserRealSource8.ts, 311, 11))
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+>localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
+
+        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+>statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+>funcStaticMembers : Symbol(funcStaticMembers, Decl(parserRealSource8.ts, 313, 11))
+>ambientFuncStaticMembers : Symbol(ambientFuncStaticMembers, Decl(parserRealSource8.ts, 315, 11))
+>parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
+
+        if (funcDecl.isConstructor && context.scopeChain.thisType) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            context.scopeChain.thisType.constructorScope = locals;
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+        }
+
+        // basically, there are two problems
+        // - Above, for new classes, we were overwriting the constructor scope with the containing scope.  This caused constructor params to be
+        // in scope everywhere
+        // - Below, we're setting the contained scope table to the same table we were overwriting the constructor scope with, which we need to
+        // fish lambda params, etc, out (see funcTable below)
+        //
+        // A good first approach to solving this would be to change addLocalsFromScope to take a scope instead of a table, and add to the
+        // constructor scope as appropriate
+
+        funcDecl.symbols = funcTable;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcTable : Symbol(funcTable, Decl(parserRealSource8.ts, 308, 11))
+
+        if (!funcDecl.isSpecialFn()) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            var group = funcDecl.type;
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            var signature = funcDecl.signature;
+>signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            if (!funcDecl.isConstructor) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                group.containedScope = locals;
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+
+                locals.container = group.symbol;
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+
+                group.memberScope = statics;
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+>statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+
+                statics.container = group.symbol;
+>statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+            }
+            funcDecl.enclosingFnc = context.scopeChain.fnc;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
+>group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
+>isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            // for mapping when type checking
+            var fgSym = <TypeSymbol>ast.type.symbol;
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>TypeSymbol : Symbol(TypeSymbol)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
+
+            if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                                                    funcTable, false);
+>funcTable : Symbol(funcTable, Decl(parserRealSource8.ts, 308, 11))
+
+                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+>fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+                                                    funcStaticTable, false);
+>funcStaticTable : Symbol(funcStaticTable, Decl(parserRealSource8.ts, 312, 11))
+            }
+            if (signature.parameters) {
+>signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
+
+                var len = signature.parameters.length;
+>len : Symbol(len, Decl(parserRealSource8.ts, 360, 19))
+>signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
+
+                for (var i = 0; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource8.ts, 361, 24))
+>i : Symbol(i, Decl(parserRealSource8.ts, 361, 24))
+>len : Symbol(len, Decl(parserRealSource8.ts, 360, 19))
+>i : Symbol(i, Decl(parserRealSource8.ts, 361, 24))
+
+                    var paramSym: ParameterSymbol = signature.parameters[i];
+>paramSym : Symbol(paramSym, Decl(parserRealSource8.ts, 362, 23))
+>ParameterSymbol : Symbol(ParameterSymbol)
+>signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
+>i : Symbol(i, Decl(parserRealSource8.ts, 361, 24))
+
+                    context.typeFlow.checker.resolveTypeLink(locals,
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+
+                                                                paramSym.parameter.typeLink, true);
+>paramSym : Symbol(paramSym, Decl(parserRealSource8.ts, 362, 23))
+                }
+            }
+            context.typeFlow.checker.resolveTypeLink(locals, signature.returnType,
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+>signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
+
+                                                        funcDecl.isSignature());
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+        }
+
+        if (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+
+            var thisType = (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) ? context.scopeChain.thisType : null;
+>thisType : Symbol(thisType, Decl(parserRealSource8.ts, 372, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            pushAssignScope(locals, context, thisType, null, funcDecl);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
+>context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
+>thisType : Symbol(thisType, Decl(parserRealSource8.ts, 372, 15))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+        }
+    }
+
+    export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
+>preAssignCatchScopes : Symbol(preAssignCatchScopes, Decl(parserRealSource8.ts, 375, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 377, 41))
+>AST : Symbol(AST)
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+
+        var catchBlock = <Catch>ast;
+>catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 378, 11))
+>Catch : Symbol(Catch)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 377, 41))
+
+        if (catchBlock.param) {
+>catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 378, 11))
+
+            var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
+>catchTable : Symbol(catchTable, Decl(parserRealSource8.ts, 380, 15))
+
+            var catchLocals = new SymbolScopeBuilder(catchTable, null, null, null, context.scopeChain.scope,
+>catchLocals : Symbol(catchLocals, Decl(parserRealSource8.ts, 381, 15))
+>catchTable : Symbol(catchTable, Decl(parserRealSource8.ts, 380, 15))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+                                                   context.scopeChain.scope.container);
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+
+            catchBlock.containedScope = catchLocals;
+>catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 378, 11))
+>catchLocals : Symbol(catchLocals, Decl(parserRealSource8.ts, 381, 15))
+
+            pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc);
+>pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
+>catchLocals : Symbol(catchLocals, Decl(parserRealSource8.ts, 381, 15))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+        }
+    }
+
+    export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
+>preAssignScopes : Symbol(preAssignScopes, Decl(parserRealSource8.ts, 386, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource8.ts, 388, 45))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 388, 58))
+>IAstWalker : Symbol(IAstWalker)
+
+        var context:AssignScopeContext = walker.state;
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 388, 58))
+
+        var go = true;
+>go : Symbol(go, Decl(parserRealSource8.ts, 390, 11))
+
+        if (ast) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+            if (ast.nodeType == NodeType.List) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                var list = <ASTList>ast;
+>list : Symbol(list, Decl(parserRealSource8.ts, 394, 19))
+>ASTList : Symbol(ASTList)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                list.enclosingScope = context.scopeChain.scope;
+>list : Symbol(list, Decl(parserRealSource8.ts, 394, 19))
+>context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+>scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+            }
+            else if (ast.nodeType == NodeType.ModuleDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignModuleScopes(ast, context);
+>preAssignModuleScopes : Symbol(preAssignModuleScopes, Decl(parserRealSource8.ts, 66, 91))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignClassScopes(ast, context);
+>preAssignClassScopes : Symbol(preAssignClassScopes, Decl(parserRealSource8.ts, 96, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignInterfaceScopes(ast, context);
+>preAssignInterfaceScopes : Symbol(preAssignInterfaceScopes, Decl(parserRealSource8.ts, 133, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.With) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignWithScopes(ast, context);
+>preAssignWithScopes : Symbol(preAssignWithScopes, Decl(parserRealSource8.ts, 152, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.FuncDecl) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignFuncDeclScopes(ast, context);
+>preAssignFuncDeclScopes : Symbol(preAssignFuncDeclScopes, Decl(parserRealSource8.ts, 173, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.Catch) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                preAssignCatchScopes(ast, context);
+>preAssignCatchScopes : Symbol(preAssignCatchScopes, Decl(parserRealSource8.ts, 375, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
+            }
+            else if (ast.nodeType == NodeType.TypeRef) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+
+                go = false;
+>go : Symbol(go, Decl(parserRealSource8.ts, 390, 11))
+            }
+        }
+        walker.options.goChildren = go;
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 388, 58))
+>go : Symbol(go, Decl(parserRealSource8.ts, 390, 11))
+
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+    }
+
+    export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
+>postAssignScopes : Symbol(postAssignScopes, Decl(parserRealSource8.ts, 421, 5))
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+>AST : Symbol(AST)
+>parent : Symbol(parent, Decl(parserRealSource8.ts, 423, 46))
+>AST : Symbol(AST)
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 423, 59))
+>IAstWalker : Symbol(IAstWalker)
+
+        var context:AssignScopeContext = walker.state;
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 423, 59))
+
+        var go = true;
+>go : Symbol(go, Decl(parserRealSource8.ts, 425, 11))
+
+        if (ast) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+            if (ast.nodeType == NodeType.ModuleDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                var prevModDecl = <ModuleDeclaration>ast;
+>prevModDecl : Symbol(prevModDecl, Decl(parserRealSource8.ts, 428, 19))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+
+                context.modDeclChain.pop();
+>context.modDeclChain.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>context.modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+
+                if (context.modDeclChain.length >= 1) {
+>context.modDeclChain.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>context.modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+                    context.typeFlow.checker.currentModDecl = context.modDeclChain[context.modDeclChain.length - 1];
+>context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>context.modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context.modDeclChain.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>context.modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+>modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+                }
+            }
+            else if (ast.nodeType == NodeType.ClassDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+            }
+            else if (ast.nodeType == NodeType.InterfaceDeclaration) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+            }
+            else if (ast.nodeType == NodeType.With) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+            }
+            else if (ast.nodeType == NodeType.FuncDecl) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                var funcDecl = <FuncDecl>ast;
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 447, 19))
+>FuncDecl : Symbol(FuncDecl)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 447, 19))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 447, 19))
+>funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 447, 19))
+
+                    popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+                }
+            }
+            else if (ast.nodeType == NodeType.Catch) {
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                var catchBlock = <Catch>ast;
+>catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 453, 19))
+>Catch : Symbol(Catch)
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+
+                if (catchBlock.param) {
+>catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 453, 19))
+
+                    popAssignScope(context);
+>popAssignScope : Symbol(popAssignScope, Decl(parserRealSource8.ts, 25, 5))
+>context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
+                }
+            }
+            else {
+                go = false;
+>go : Symbol(go, Decl(parserRealSource8.ts, 425, 11))
+            }
+        }
+        walker.options.goChildren = go;
+>walker : Symbol(walker, Decl(parserRealSource8.ts, 423, 59))
+>go : Symbol(go, Decl(parserRealSource8.ts, 425, 11))
+
+        return ast;
+>ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+    }
+}

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/recursiveGenericSignatureInstantiation.ts ===
+function f6<T>(x: T) {
+>f6 : <T>(x: T) => any
+>x : T
+
+    return f6(x);
+>f6(x) : any
+>f6 : <T>(x: T) => any
+>x : T
+}
+

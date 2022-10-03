@@ -1,0 +1,787 @@
+=== tests/cases/compiler/arrayBestCommonTypes.ts ===
+module EmptyTypes {
+>EmptyTypes : typeof EmptyTypes
+
+    interface iface { }
+    class base implements iface { }
+>base : base
+
+    class base2 implements iface { }
+>base2 : base2
+
+    class derived extends base { }
+>derived : derived
+>base : base
+
+
+    class f {
+>f : f
+
+        public voidIfAny(x: boolean, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : boolean
+>y : boolean
+
+        public voidIfAny(x: string, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : string
+>y : boolean
+
+        public voidIfAny(x: number, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : number
+>y : boolean
+
+        public voidIfAny(x: any, y = false): any { return null; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : any
+>y : boolean
+>false : false
+>null : null
+
+        public x() {
+>x : () => void
+
+            <number>(this.voidIfAny([4, 2][0]));
+><number>(this.voidIfAny([4, 2][0])) : number
+>(this.voidIfAny([4, 2][0])) : number
+>this.voidIfAny([4, 2][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[4, 2][0] : number
+>[4, 2] : number[]
+>4 : 4
+>2 : 2
+>0 : 0
+
+            <number>(this.voidIfAny([4, 2, undefined][0]));
+><number>(this.voidIfAny([4, 2, undefined][0])) : number
+>(this.voidIfAny([4, 2, undefined][0])) : number
+>this.voidIfAny([4, 2, undefined][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[4, 2, undefined][0] : number
+>[4, 2, undefined] : number[]
+>4 : 4
+>2 : 2
+>undefined : undefined
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, 2, 4][0]));
+><number>(this.voidIfAny([undefined, 2, 4][0])) : number
+>(this.voidIfAny([undefined, 2, 4][0])) : number
+>this.voidIfAny([undefined, 2, 4][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, 2, 4][0] : number
+>[undefined, 2, 4] : number[]
+>undefined : undefined
+>2 : 2
+>4 : 4
+>0 : 0
+
+            <number>(this.voidIfAny([null, 2, 4][0]));
+><number>(this.voidIfAny([null, 2, 4][0])) : number
+>(this.voidIfAny([null, 2, 4][0])) : number
+>this.voidIfAny([null, 2, 4][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[null, 2, 4][0] : number
+>[null, 2, 4] : number[]
+>null : null
+>2 : 2
+>4 : 4
+>0 : 0
+
+            <number>(this.voidIfAny([2, 4, null][0]));
+><number>(this.voidIfAny([2, 4, null][0])) : number
+>(this.voidIfAny([2, 4, null][0])) : number
+>this.voidIfAny([2, 4, null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[2, 4, null][0] : number
+>[2, 4, null] : number[]
+>2 : 2
+>4 : 4
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, 4, null][0]));
+><number>(this.voidIfAny([undefined, 4, null][0])) : number
+>(this.voidIfAny([undefined, 4, null][0])) : number
+>this.voidIfAny([undefined, 4, null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, 4, null][0] : number
+>[undefined, 4, null] : number[]
+>undefined : undefined
+>4 : 4
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny(['', "q"][0]));
+><number>(this.voidIfAny(['', "q"][0])) : number
+>(this.voidIfAny(['', "q"][0])) : number
+>this.voidIfAny(['', "q"][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>['', "q"][0] : string
+>['', "q"] : string[]
+>'' : ""
+>"q" : "q"
+>0 : 0
+
+            <number>(this.voidIfAny(['', "q", undefined][0]));
+><number>(this.voidIfAny(['', "q", undefined][0])) : number
+>(this.voidIfAny(['', "q", undefined][0])) : number
+>this.voidIfAny(['', "q", undefined][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>['', "q", undefined][0] : string
+>['', "q", undefined] : string[]
+>'' : ""
+>"q" : "q"
+>undefined : undefined
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, "q", ''][0]));
+><number>(this.voidIfAny([undefined, "q", ''][0])) : number
+>(this.voidIfAny([undefined, "q", ''][0])) : number
+>this.voidIfAny([undefined, "q", ''][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, "q", ''][0] : string
+>[undefined, "q", ''] : string[]
+>undefined : undefined
+>"q" : "q"
+>'' : ""
+>0 : 0
+
+            <number>(this.voidIfAny([null, "q", ''][0]));
+><number>(this.voidIfAny([null, "q", ''][0])) : number
+>(this.voidIfAny([null, "q", ''][0])) : number
+>this.voidIfAny([null, "q", ''][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[null, "q", ''][0] : string
+>[null, "q", ''] : string[]
+>null : null
+>"q" : "q"
+>'' : ""
+>0 : 0
+
+            <number>(this.voidIfAny(["q", '', null][0]));
+><number>(this.voidIfAny(["q", '', null][0])) : number
+>(this.voidIfAny(["q", '', null][0])) : number
+>this.voidIfAny(["q", '', null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>["q", '', null][0] : string
+>["q", '', null] : string[]
+>"q" : "q"
+>'' : ""
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, '', null][0]));
+><number>(this.voidIfAny([undefined, '', null][0])) : number
+>(this.voidIfAny([undefined, '', null][0])) : number
+>this.voidIfAny([undefined, '', null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, '', null][0] : string
+>[undefined, '', null] : string[]
+>undefined : undefined
+>'' : ""
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([[3, 4], [null]][0][0]));
+><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+>this.voidIfAny([[3, 4], [null]][0][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[[3, 4], [null]][0][0] : number
+>[[3, 4], [null]][0] : number[]
+>[[3, 4], [null]] : number[][]
+>[3, 4] : number[]
+>3 : 3
+>4 : 4
+>[null] : null[]
+>null : null
+>0 : 0
+>0 : 0
+
+
+            var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
+>t1 : { x: number; y: base; }[]
+>x : number
+>y : base
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
+>{ x: 7, y: new derived() } : { x: number; y: derived; }
+>x : number
+>7 : 7
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+>{ x: 5, y: new base() } : { x: number; y: base; }
+>x : number
+>5 : 5
+>y : base
+>new base() : base
+>base : typeof base
+
+            var t2: { x: boolean; y: base; }[] = [{ x: true, y: new derived() }, { x: false, y: new base() }];
+>t2 : { x: boolean; y: base; }[]
+>x : boolean
+>y : base
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
+>true : true
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
+>false : false
+>y : base
+>new base() : base
+>base : typeof base
+
+            var t3: { x: string; y: base; }[] = [{ x: undefined, y: new base() }, { x: '', y: new derived() }];
+>t3 : { x: string; y: base; }[]
+>x : string
+>y : base
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
+>{ x: undefined, y: new base() } : { x: undefined; y: base; }
+>x : undefined
+>undefined : undefined
+>y : base
+>new base() : base
+>base : typeof base
+>{ x: '', y: new derived() } : { x: string; y: derived; }
+>x : string
+>'' : ""
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+
+            var anyObj: any = null;
+>anyObj : any
+>null : null
+
+            // Order matters here so test all the variants
+            var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
+>a1 : { x: any; y: string; }[]
+>[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+
+            var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
+>a2 : { x: any; y: string; }[]
+>[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+
+            var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
+>a3 : { x: any; y: string; }[]
+>[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+
+            var ifaceObj: iface = null;
+>ifaceObj : iface
+>null : null
+
+            var baseObj = new base();
+>baseObj : base
+>new base() : base
+>base : typeof base
+
+            var base2Obj = new base2();
+>base2Obj : base2
+>new base2() : base2
+>base2 : typeof base2
+
+            var b1 = [baseObj, base2Obj, ifaceObj];
+>b1 : iface[]
+>[baseObj, base2Obj, ifaceObj] : iface[]
+>baseObj : base
+>base2Obj : base2
+>ifaceObj : iface
+
+            var b2 = [base2Obj, baseObj, ifaceObj];
+>b2 : iface[]
+>[base2Obj, baseObj, ifaceObj] : iface[]
+>base2Obj : base2
+>baseObj : base
+>ifaceObj : iface
+
+            var b3 = [baseObj, ifaceObj, base2Obj];
+>b3 : iface[]
+>[baseObj, ifaceObj, base2Obj] : iface[]
+>baseObj : base
+>ifaceObj : iface
+>base2Obj : base2
+
+            var b4 = [ifaceObj, baseObj, base2Obj];
+>b4 : iface[]
+>[ifaceObj, baseObj, base2Obj] : iface[]
+>ifaceObj : iface
+>baseObj : base
+>base2Obj : base2
+        }
+    }
+}
+
+module NonEmptyTypes {
+>NonEmptyTypes : typeof NonEmptyTypes
+
+    interface iface { x: string; }
+>x : string
+
+    class base implements iface { x: string; y: string; }
+>base : base
+>x : string
+>y : string
+
+    class base2 implements iface { x: string; z: string; }
+>base2 : base2
+>x : string
+>z : string
+
+    class derived extends base { a: string; }
+>derived : derived
+>base : base
+>a : string
+
+
+    class f {
+>f : f
+
+        public voidIfAny(x: boolean, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : boolean
+>y : boolean
+
+        public voidIfAny(x: string, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : string
+>y : boolean
+
+        public voidIfAny(x: number, y?: boolean): number;
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : number
+>y : boolean
+
+        public voidIfAny(x: any, y = false): any { return null; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>x : any
+>y : boolean
+>false : false
+>null : null
+
+        public x() {
+>x : () => void
+
+            <number>(this.voidIfAny([4, 2][0]));
+><number>(this.voidIfAny([4, 2][0])) : number
+>(this.voidIfAny([4, 2][0])) : number
+>this.voidIfAny([4, 2][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[4, 2][0] : number
+>[4, 2] : number[]
+>4 : 4
+>2 : 2
+>0 : 0
+
+            <number>(this.voidIfAny([4, 2, undefined][0]));
+><number>(this.voidIfAny([4, 2, undefined][0])) : number
+>(this.voidIfAny([4, 2, undefined][0])) : number
+>this.voidIfAny([4, 2, undefined][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[4, 2, undefined][0] : number
+>[4, 2, undefined] : number[]
+>4 : 4
+>2 : 2
+>undefined : undefined
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, 2, 4][0]));
+><number>(this.voidIfAny([undefined, 2, 4][0])) : number
+>(this.voidIfAny([undefined, 2, 4][0])) : number
+>this.voidIfAny([undefined, 2, 4][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, 2, 4][0] : number
+>[undefined, 2, 4] : number[]
+>undefined : undefined
+>2 : 2
+>4 : 4
+>0 : 0
+
+            <number>(this.voidIfAny([null, 2, 4][0]));
+><number>(this.voidIfAny([null, 2, 4][0])) : number
+>(this.voidIfAny([null, 2, 4][0])) : number
+>this.voidIfAny([null, 2, 4][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[null, 2, 4][0] : number
+>[null, 2, 4] : number[]
+>null : null
+>2 : 2
+>4 : 4
+>0 : 0
+
+            <number>(this.voidIfAny([2, 4, null][0]));
+><number>(this.voidIfAny([2, 4, null][0])) : number
+>(this.voidIfAny([2, 4, null][0])) : number
+>this.voidIfAny([2, 4, null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[2, 4, null][0] : number
+>[2, 4, null] : number[]
+>2 : 2
+>4 : 4
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, 4, null][0]));
+><number>(this.voidIfAny([undefined, 4, null][0])) : number
+>(this.voidIfAny([undefined, 4, null][0])) : number
+>this.voidIfAny([undefined, 4, null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, 4, null][0] : number
+>[undefined, 4, null] : number[]
+>undefined : undefined
+>4 : 4
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny(['', "q"][0]));
+><number>(this.voidIfAny(['', "q"][0])) : number
+>(this.voidIfAny(['', "q"][0])) : number
+>this.voidIfAny(['', "q"][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>['', "q"][0] : string
+>['', "q"] : string[]
+>'' : ""
+>"q" : "q"
+>0 : 0
+
+            <number>(this.voidIfAny(['', "q", undefined][0]));
+><number>(this.voidIfAny(['', "q", undefined][0])) : number
+>(this.voidIfAny(['', "q", undefined][0])) : number
+>this.voidIfAny(['', "q", undefined][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>['', "q", undefined][0] : string
+>['', "q", undefined] : string[]
+>'' : ""
+>"q" : "q"
+>undefined : undefined
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, "q", ''][0]));
+><number>(this.voidIfAny([undefined, "q", ''][0])) : number
+>(this.voidIfAny([undefined, "q", ''][0])) : number
+>this.voidIfAny([undefined, "q", ''][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, "q", ''][0] : string
+>[undefined, "q", ''] : string[]
+>undefined : undefined
+>"q" : "q"
+>'' : ""
+>0 : 0
+
+            <number>(this.voidIfAny([null, "q", ''][0]));
+><number>(this.voidIfAny([null, "q", ''][0])) : number
+>(this.voidIfAny([null, "q", ''][0])) : number
+>this.voidIfAny([null, "q", ''][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[null, "q", ''][0] : string
+>[null, "q", ''] : string[]
+>null : null
+>"q" : "q"
+>'' : ""
+>0 : 0
+
+            <number>(this.voidIfAny(["q", '', null][0]));
+><number>(this.voidIfAny(["q", '', null][0])) : number
+>(this.voidIfAny(["q", '', null][0])) : number
+>this.voidIfAny(["q", '', null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>["q", '', null][0] : string
+>["q", '', null] : string[]
+>"q" : "q"
+>'' : ""
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([undefined, '', null][0]));
+><number>(this.voidIfAny([undefined, '', null][0])) : number
+>(this.voidIfAny([undefined, '', null][0])) : number
+>this.voidIfAny([undefined, '', null][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[undefined, '', null][0] : string
+>[undefined, '', null] : string[]
+>undefined : undefined
+>'' : ""
+>null : null
+>0 : 0
+
+            <number>(this.voidIfAny([[3, 4], [null]][0][0]));
+><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+>this.voidIfAny([[3, 4], [null]][0][0]) : number
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>this : this
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
+>[[3, 4], [null]][0][0] : number
+>[[3, 4], [null]][0] : number[]
+>[[3, 4], [null]] : number[][]
+>[3, 4] : number[]
+>3 : 3
+>4 : 4
+>[null] : null[]
+>null : null
+>0 : 0
+>0 : 0
+
+
+            var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
+>t1 : { x: number; y: base; }[]
+>x : number
+>y : base
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
+>{ x: 7, y: new derived() } : { x: number; y: derived; }
+>x : number
+>7 : 7
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+>{ x: 5, y: new base() } : { x: number; y: base; }
+>x : number
+>5 : 5
+>y : base
+>new base() : base
+>base : typeof base
+
+            var t2: { x: boolean; y: base; }[] = [{ x: true, y: new derived() }, { x: false, y: new base() }];
+>t2 : { x: boolean; y: base; }[]
+>x : boolean
+>y : base
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
+>true : true
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
+>false : false
+>y : base
+>new base() : base
+>base : typeof base
+
+            var t3: { x: string; y: base; }[] = [{ x: undefined, y: new base() }, { x: '', y: new derived() }];
+>t3 : { x: string; y: base; }[]
+>x : string
+>y : base
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
+>{ x: undefined, y: new base() } : { x: undefined; y: base; }
+>x : undefined
+>undefined : undefined
+>y : base
+>new base() : base
+>base : typeof base
+>{ x: '', y: new derived() } : { x: string; y: derived; }
+>x : string
+>'' : ""
+>y : derived
+>new derived() : derived
+>derived : typeof derived
+
+            var anyObj: any = null;
+>anyObj : any
+>null : null
+
+            // Order matters here so test all the variants
+            var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
+>a1 : { x: any; y: string; }[]
+>[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+
+            var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
+>a2 : { x: any; y: string; }[]
+>[{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+
+            var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
+>a3 : { x: any; y: string; }[]
+>[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
+>{ x: 0, y: 'a' } : { x: number; y: string; }
+>x : number
+>0 : 0
+>y : string
+>'a' : "a"
+>{ x: anyObj, y: 'a' } : { x: any; y: string; }
+>x : any
+>anyObj : any
+>y : string
+>'a' : "a"
+>{ x: 'a', y: 'a' } : { x: string; y: string; }
+>x : string
+>'a' : "a"
+>y : string
+>'a' : "a"
+
+            var ifaceObj: iface = null;
+>ifaceObj : iface
+>null : null
+
+            var baseObj = new base();
+>baseObj : base
+>new base() : base
+>base : typeof base
+
+            var base2Obj = new base2();
+>base2Obj : base2
+>new base2() : base2
+>base2 : typeof base2
+
+            var b1 = [baseObj, base2Obj, ifaceObj];
+>b1 : iface[]
+>[baseObj, base2Obj, ifaceObj] : iface[]
+>baseObj : base
+>base2Obj : base2
+>ifaceObj : iface
+
+            var b2 = [base2Obj, baseObj, ifaceObj];
+>b2 : iface[]
+>[base2Obj, baseObj, ifaceObj] : iface[]
+>base2Obj : base2
+>baseObj : base
+>ifaceObj : iface
+
+            var b3 = [baseObj, ifaceObj, base2Obj];
+>b3 : iface[]
+>[baseObj, ifaceObj, base2Obj] : iface[]
+>baseObj : base
+>ifaceObj : iface
+>base2Obj : base2
+
+            var b4 = [ifaceObj, baseObj, base2Obj];
+>b4 : iface[]
+>[ifaceObj, baseObj, base2Obj] : iface[]
+>ifaceObj : iface
+>baseObj : base
+>base2Obj : base2
+        }
+    }
+}
+
+

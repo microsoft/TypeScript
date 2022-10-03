@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/primitives/string/stringPropertyAccess.ts ===
+var x = '';
+>x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+
+var a = x.charAt(0);
+>a : Symbol(a, Decl(stringPropertyAccess.ts, 1, 3))
+>x.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+var b = x.hasOwnProperty('charAt');
+>b : Symbol(b, Decl(stringPropertyAccess.ts, 2, 3))
+>x.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+var c = x['charAt'](0);
+>c : Symbol(c, Decl(stringPropertyAccess.ts, 4, 3))
+>x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>'charAt' : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+var e = x['hasOwnProperty']('toFixed');
+>e : Symbol(e, Decl(stringPropertyAccess.ts, 5, 3))
+>x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>'hasOwnProperty' : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+

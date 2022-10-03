@@ -1,0 +1,58 @@
+=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_1.ts ===
+/// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
+
+interface D { bar(): number; }
+>D : Symbol(D, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 0, 0))
+>bar : Symbol(D.bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
+
+interface C extends D {
+>C : Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
+>D : Symbol(D, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 0, 0))
+
+	b(): Date;
+>b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+var c:C;
+>c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
+>C : Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
+
+var a: string = c.foo();
+>a : Symbol(a, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 9, 3))
+>c.foo : Symbol(I.foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 13))
+>c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
+>foo : Symbol(I.foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 13))
+
+var b: number = c.bar();
+>b : Symbol(b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 10, 3))
+>c.bar : Symbol(D.bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
+>c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
+>bar : Symbol(D.bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
+
+var d: number = c.a();
+>d : Symbol(d, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 11, 3))
+>c.a : Symbol(C.a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 2, 23))
+>c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
+>a : Symbol(C.a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 2, 23))
+
+var e: Date = c.b();
+>e : Symbol(e, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 12, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>c.b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
+>c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
+>b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
+
+=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_0.ts ===
+interface I { foo(): string; }
+>I : Symbol(I, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 0))
+>foo : Symbol(I.foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 13))
+
+interface C extends I {
+>C : Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
+>I : Symbol(I, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 0))
+
+	a(): number;
+>a : Symbol(C.a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 2, 23))
+}
+

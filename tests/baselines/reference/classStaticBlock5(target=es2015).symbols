@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts ===
+class B {
+>B : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+
+    static a = 1;
+>a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+
+    static b = 2;
+>b : Symbol(B.b, Decl(classStaticBlock5.ts, 1, 17))
+}
+
+class C extends B {
+>C : Symbol(C, Decl(classStaticBlock5.ts, 3, 1))
+>B : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+
+    static b = 3;
+>b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
+
+    static c = super.a
+>c : Symbol(C.c, Decl(classStaticBlock5.ts, 6, 17))
+>super.a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+>super : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+>a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+
+    static {
+        this.b;
+>this.b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
+>this : Symbol(C, Decl(classStaticBlock5.ts, 3, 1))
+>b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
+
+        super.b;
+>super.b : Symbol(B.b, Decl(classStaticBlock5.ts, 1, 17))
+>super : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+>b : Symbol(B.b, Decl(classStaticBlock5.ts, 1, 17))
+
+        super.a;
+>super.a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+>super : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+>a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+    }
+}
+

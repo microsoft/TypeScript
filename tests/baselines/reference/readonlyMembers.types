@@ -1,0 +1,278 @@
+=== tests/cases/compiler/readonlyMembers.ts ===
+interface X {
+    readonly a: number;
+>a : number
+
+    readonly b?: number;
+>b : number
+}
+var x: X = { a: 0 };
+>x : X
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
+x.a = 1;  // Error
+>x.a = 1 : 1
+>x.a : any
+>x : X
+>a : any
+>1 : 1
+
+x.b = 1;  // Error
+>x.b = 1 : 1
+>x.b : any
+>x : X
+>b : any
+>1 : 1
+
+class C {
+>C : C
+
+    readonly a: number;
+>a : number
+
+    readonly b = 1;
+>b : 1
+>1 : 1
+
+    get c() { return 1 }
+>c : number
+>1 : 1
+
+    constructor() {
+        this.a = 1;  // Ok
+>this.a = 1 : 1
+>this.a : number
+>this : this
+>a : number
+>1 : 1
+
+        this.b = 1;  // Ok
+>this.b = 1 : 1
+>this.b : 1
+>this : this
+>b : 1
+>1 : 1
+
+        this.c = 1;  // Error
+>this.c = 1 : 1
+>this.c : any
+>this : this
+>c : any
+>1 : 1
+
+        const f = () => {
+>f : () => void
+>() => {            this.a = 1;  // Error            this.b = 1;  // Error            this.c = 1;  // Error        } : () => void
+
+            this.a = 1;  // Error
+>this.a = 1 : 1
+>this.a : any
+>this : this
+>a : any
+>1 : 1
+
+            this.b = 1;  // Error
+>this.b = 1 : 1
+>this.b : any
+>this : this
+>b : any
+>1 : 1
+
+            this.c = 1;  // Error
+>this.c = 1 : 1
+>this.c : any
+>this : this
+>c : any
+>1 : 1
+        }
+    }
+    foo() {
+>foo : () => void
+
+        this.a = 1;  // Error
+>this.a = 1 : 1
+>this.a : any
+>this : this
+>a : any
+>1 : 1
+
+        this.b = 1;  // Error
+>this.b = 1 : 1
+>this.b : any
+>this : this
+>b : any
+>1 : 1
+
+        this.c = 1;  // Error
+>this.c = 1 : 1
+>this.c : any
+>this : this
+>c : any
+>1 : 1
+    }
+}
+
+var o = {
+>o : { readonly a: number; b: number; }
+>{    get a() { return 1 },    get b() { return 1 },    set b(value) { }} : { readonly a: number; b: number; }
+
+    get a() { return 1 },
+>a : number
+>1 : 1
+
+    get b() { return 1 },
+>b : number
+>1 : 1
+
+    set b(value) { }
+>b : number
+>value : number
+
+};
+o.a = 1;  // Error
+>o.a = 1 : 1
+>o.a : any
+>o : { readonly a: number; b: number; }
+>a : any
+>1 : 1
+
+o.b = 1;
+>o.b = 1 : 1
+>o.b : number
+>o : { readonly a: number; b: number; }
+>b : number
+>1 : 1
+
+var p: { readonly a: number, b: number } = { a: 1, b: 1 };
+>p : { readonly a: number; b: number; }
+>a : number
+>b : number
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+p.a = 1;  // Error
+>p.a = 1 : 1
+>p.a : any
+>p : { readonly a: number; b: number; }
+>a : any
+>1 : 1
+
+p.b = 1;
+>p.b = 1 : 1
+>p.b : number
+>p : { readonly a: number; b: number; }
+>b : number
+>1 : 1
+
+var q: { a: number, b: number } = p;
+>q : { a: number; b: number; }
+>a : number
+>b : number
+>p : { readonly a: number; b: number; }
+
+q.a = 1;
+>q.a = 1 : 1
+>q.a : number
+>q : { a: number; b: number; }
+>a : number
+>1 : 1
+
+q.b = 1;
+>q.b = 1 : 1
+>q.b : number
+>q : { a: number; b: number; }
+>b : number
+>1 : 1
+
+enum E {
+>E : E
+
+    A, B, C
+>A : E.A
+>B : E.B
+>C : E.C
+}
+E.A = 1;  // Error
+>E.A = 1 : 1
+>E.A : any
+>E : typeof E
+>A : any
+>1 : 1
+
+namespace N {
+>N : typeof N
+
+    export const a = 1;
+>a : 1
+>1 : 1
+
+    export let b = 1;
+>b : number
+>1 : 1
+
+    export var c = 1;
+>c : number
+>1 : 1
+}
+N.a = 1;  // Error
+>N.a = 1 : 1
+>N.a : any
+>N : typeof N
+>a : any
+>1 : 1
+
+N.b = 1;
+>N.b = 1 : 1
+>N.b : number
+>N : typeof N
+>b : number
+>1 : 1
+
+N.c = 1;
+>N.c = 1 : 1
+>N.c : number
+>N : typeof N
+>c : number
+>1 : 1
+
+let xx: { readonly [x: string]: string };
+>xx : { readonly [x: string]: string; }
+>x : string
+
+let s = xx["foo"];
+>s : string
+>xx["foo"] : string
+>xx : { readonly [x: string]: string; }
+>"foo" : "foo"
+
+xx["foo"] = "abc";  // Error
+>xx["foo"] = "abc" : "abc"
+>xx["foo"] : string
+>xx : { readonly [x: string]: string; }
+>"foo" : "foo"
+>"abc" : "abc"
+
+let yy: { readonly [x: number]: string, [x: string]: string };
+>yy : { readonly [x: number]: string; [x: string]: string; }
+>x : number
+>x : string
+
+yy[1] = "abc";  // Error
+>yy[1] = "abc" : "abc"
+>yy[1] : string
+>yy : { readonly [x: number]: string; [x: string]: string; }
+>1 : 1
+>"abc" : "abc"
+
+yy["foo"] = "abc";
+>yy["foo"] = "abc" : "abc"
+>yy["foo"] : string
+>yy : { readonly [x: number]: string; [x: string]: string; }
+>"foo" : "foo"
+>"abc" : "abc"
+

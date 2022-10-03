@@ -1,0 +1,14 @@
+=== /foo/test.ts ===
+import myModule = require("myModule");
+>myModule : Symbol(myModule, Decl(test.ts, 0, 0))
+
+new myModule.c();
+>myModule.c : Symbol(myModule.c, Decl(index.ts, 0, 0))
+>myModule : Symbol(myModule, Decl(test.ts, 0, 0))
+>c : Symbol(myModule.c, Decl(index.ts, 0, 0))
+
+
+=== /foo/node_modules/myModule/index.ts ===
+export class c { }
+>c : Symbol(c, Decl(index.ts, 0, 0))
+

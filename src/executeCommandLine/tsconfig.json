@@ -1,0 +1,14 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/executeCommandLine.js"
+    },
+
+    "references": [
+        { "path": "../compiler" }
+    ],
+
+    "files": [
+        "executeCommandLine.ts"
+    ]
+}

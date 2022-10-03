@@ -1,0 +1,63 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts ===
+class C {
+>C : Symbol(C, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 0, 0))
+
+    _name: string;
+>_name : Symbol(C._name, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 0, 9))
+
+    get name(): string {
+>name : Symbol(C.name, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 1, 18))
+
+        return this._name;
+>this._name : Symbol(C._name, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 0, 9))
+>this : Symbol(C, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 0, 0))
+>_name : Symbol(C._name, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 0, 9))
+    }
+    static get name2(): string {
+>name2 : Symbol(C.name2, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 4, 5))
+
+        return "BYE";
+    }
+    static get ["computedname"]() {
+>["computedname"] : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
+>"computedname" : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
+
+        return "";
+    }
+    get ["computedname1"]() {
+>["computedname1"] : Symbol(C["computedname1"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 10, 5))
+>"computedname1" : Symbol(C["computedname1"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 10, 5))
+
+        return "";
+    }
+    get ["computedname2"]() {
+>["computedname2"] : Symbol(C["computedname2"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 13, 5))
+>"computedname2" : Symbol(C["computedname2"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 13, 5))
+
+        return "";
+    }
+
+    set ["computedname3"](x: any) {
+>["computedname3"] : Symbol(C["computedname3"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 16, 5))
+>"computedname3" : Symbol(C["computedname3"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 16, 5))
+>x : Symbol(x, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 18, 26))
+    }
+    set ["computedname4"](y: string) {
+>["computedname4"] : Symbol(C["computedname4"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 19, 5))
+>"computedname4" : Symbol(C["computedname4"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 19, 5))
+>y : Symbol(y, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 20, 26))
+    }
+
+    set foo(a: string) { }
+>foo : Symbol(C.foo, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 21, 5))
+>a : Symbol(a, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 23, 12))
+
+    static set bar(b: number) { }
+>bar : Symbol(C.bar, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 23, 26))
+>b : Symbol(b, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 19))
+
+    static set ["computedname"](b: string) { }
+>["computedname"] : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
+>"computedname" : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
+>b : Symbol(b, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 25, 32))
+}

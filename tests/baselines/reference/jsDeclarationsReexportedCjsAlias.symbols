@@ -1,0 +1,53 @@
+=== tests/cases/conformance/jsdoc/declarations/main.js ===
+const { SomeClass, SomeClass: Another } = require('./lib');
+>SomeClass : Symbol(SomeClass, Decl(main.js, 0, 7))
+>SomeClass : Symbol(SomeClass, Decl(lib.js, 14, 8))
+>Another : Symbol(Another, Decl(main.js, 0, 18))
+>require : Symbol(require)
+>'./lib' : Symbol("tests/cases/conformance/jsdoc/declarations/lib", Decl(lib.js, 0, 0))
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(main.js, 0, 0))
+>module : Symbol(module, Decl(main.js, 0, 59))
+>exports : Symbol(module.exports, Decl(main.js, 0, 0))
+
+    SomeClass,
+>SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
+
+    Another
+>Another : Symbol(Another, Decl(main.js, 3, 14))
+}
+=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+/**
+ * @param {string} a
+ */
+function bar(a) {
+>bar : Symbol(bar, Decl(lib.js, 0, 0))
+>a : Symbol(a, Decl(lib.js, 3, 13))
+
+    return a + a;
+>a : Symbol(a, Decl(lib.js, 3, 13))
+>a : Symbol(a, Decl(lib.js, 3, 13))
+}
+
+class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(lib.js, 5, 1))
+
+    a() {
+>a : Symbol(SomeClass.a, Decl(lib.js, 7, 17))
+
+        return 1;
+    }
+}
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(lib.js, 0, 0))
+>module : Symbol(module, Decl(lib.js, 11, 1))
+>exports : Symbol(module.exports, Decl(lib.js, 0, 0))
+
+    bar,
+>bar : Symbol(bar, Decl(lib.js, 13, 18))
+
+    SomeClass
+>SomeClass : Symbol(SomeClass, Decl(lib.js, 14, 8))
+}

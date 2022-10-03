@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration2.ts ===
+class C {
+>C : C
+
+    static static Foo() { }
+>static : any
+>Foo : () => void
+}

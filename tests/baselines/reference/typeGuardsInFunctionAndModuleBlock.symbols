@@ -1,0 +1,234 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInFunctionAndModuleBlock.ts ===
+// typeguards are scoped in function/module block
+
+function foo(x: number | string | boolean) {
+>foo : Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 0, 0))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+
+    return typeof x === "string"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+
+        ? x
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+
+        : function f() {
+>f : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 5, 9))
+
+            var b = x; // number | boolean
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 6, 15))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+
+            return typeof x === "boolean"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+
+                ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+                : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        } ();
+}
+function foo2(x: number | string | boolean) {
+>foo2 : Symbol(foo2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 11, 1))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+
+    return typeof x === "string"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+
+        ? x
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+
+        : function f(a: number | boolean) {
+>f : Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 9))
+>a : Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 21))
+
+            var b = x; // new scope - number | boolean
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 16, 15))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+
+            return typeof x === "boolean"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+
+                ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+                : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        } (x); // x here is narrowed to number | boolean
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+}
+function foo3(x: number | string | boolean) {
+>foo3 : Symbol(foo3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 21, 1))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+
+    return typeof x === "string"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+
+        ? x
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+
+        : (() => {
+            var b = x; // new scope - number | boolean
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 26, 15))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+
+            return typeof x === "boolean"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+
+                ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+                : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        })();
+}
+function foo4(x: number | string | boolean) {
+>foo4 : Symbol(foo4, Decl(typeGuardsInFunctionAndModuleBlock.ts, 31, 1))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+
+    return typeof x === "string"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+
+        ? x
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+
+        : ((a: number | boolean) => {
+>a : Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 35, 12))
+
+            var b = x; // new scope - number | boolean
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 36, 15))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+
+            return typeof x === "boolean"
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+
+                ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+                : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        })(x); // x here is narrowed to number | boolean
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+}
+// Type guards do not affect nested function declarations
+function foo5(x: number | string | boolean) {
+>foo5 : Symbol(foo5, Decl(typeGuardsInFunctionAndModuleBlock.ts, 41, 1))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
+
+        var y = x; // string;
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
+
+        function foo() {
+>foo : Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 18))
+
+            var z = x; // string
+>z : Symbol(z, Decl(typeGuardsInFunctionAndModuleBlock.ts, 47, 15))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
+        }
+    }
+}
+module m {
+>m : Symbol(m, Decl(typeGuardsInFunctionAndModuleBlock.ts, 50, 1))
+
+    var x: number | string | boolean;
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+
+    module m2 {
+>m2 : Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 37))
+
+        var b = x; // new scope - number | boolean | string
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 54, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+
+        var y: string;
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
+
+        if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+
+            y = x // string;
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+
+        } else {
+            y = typeof x === "boolean"
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+
+            ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+            : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+module m1 {
+>m1 : Symbol(m1, Decl(typeGuardsInFunctionAndModuleBlock.ts, 64, 1))
+
+    var x: number | string | boolean;
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+
+    module m2.m3 {
+>m2 : Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 37))
+>m3 : Symbol(m3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 67, 14))
+
+        var b = x; // new scope - number | boolean | string
+>b : Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 68, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+
+        var y: string;
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
+
+        if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+
+            y = x // string;
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+
+        } else {
+            y = typeof x === "boolean"
+>y : Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+
+            ? x.toString() // boolean
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+            : x.toString(); // number
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}

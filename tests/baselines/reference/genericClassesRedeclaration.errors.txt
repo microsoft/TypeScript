@@ -1,0 +1,98 @@
+tests/cases/compiler/genericClassesRedeclaration.ts(3,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/compiler/genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate index signature for type 'string'.
+tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+
+
+==== tests/cases/compiler/genericClassesRedeclaration.ts (6 errors) ====
+    declare module TypeScript {
+        interface IIndexable<T> {
+            [s: string]: T;
+            ~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+        function createIntrinsicsObject<T>(): IIndexable<T>;
+        interface IHashTable<T> {
+            getAllKeys(): string[];
+            add(key: string, data: T): boolean;
+            addOrUpdate(key: string, data: T): boolean;
+            map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            count(): number;
+            lookup(key: string): T;
+        }
+        class StringHashTable<T> implements IHashTable<T> {
+              ~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'StringHashTable'.
+            private itemCount;
+            private table;
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public count(): number;
+            public lookup(key: string): T;
+            public remove(key: string): void;
+        }
+        class IdentifierNameHashTable<T> extends StringHashTable<T> {
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+            public lookup(key: string): T;
+        }
+    }
+    
+    declare module TypeScript {
+        interface IIndexable<T> {
+            [s: string]: T;
+            ~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'string'.
+        }
+        function createIntrinsicsObject<T>(): IIndexable<T>;
+        interface IHashTable<T> {
+            getAllKeys(): string[];
+            add(key: string, data: T): boolean;
+            addOrUpdate(key: string, data: T): boolean;
+            map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            count(): number;
+            lookup(key: string): T;
+        }
+        class StringHashTable<T> implements IHashTable<T> {
+              ~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'StringHashTable'.
+            private itemCount;
+            private table;
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public count(): number;
+            public lookup(key: string): T;
+            public remove(key: string): void;
+        }
+        class IdentifierNameHashTable<T> extends StringHashTable<T> {
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+            public lookup(key: string): T;
+        }
+    }

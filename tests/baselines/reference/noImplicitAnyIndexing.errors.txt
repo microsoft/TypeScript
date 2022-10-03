@@ -1,0 +1,63 @@
+tests/cases/compiler/noImplicitAnyIndexing.ts(12,37): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/compiler/noImplicitAnyIndexing.ts(19,9): error TS2339: Property 'hi' does not exist on type '{}'.
+tests/cases/compiler/noImplicitAnyIndexing.ts(22,9): error TS2339: Property '10' does not exist on type '{}'.
+tests/cases/compiler/noImplicitAnyIndexing.ts(30,10): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+
+
+==== tests/cases/compiler/noImplicitAnyIndexing.ts (4 errors) ====
+    enum MyEmusEnum {
+        emu
+    }
+    
+    // Should be okay; should be a string.
+    var strRepresentation1 = MyEmusEnum[0]
+    
+    // Should be okay; should be a string.
+    var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
+    
+    // Should be implicit 'any' ; property access fails, no string indexer.
+    var strRepresentation3 = MyEmusEnum["monehh"];
+                                        ~~~~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    
+    // Should be okay; should be a MyEmusEnum
+    var strRepresentation4 = MyEmusEnum["emu"];
+    
+    
+    // Should report an implicit 'any'.
+    var x = {}["hi"];
+            ~~~~~~~~
+!!! error TS2339: Property 'hi' does not exist on type '{}'.
+    
+    // Should report an implicit 'any'.
+    var y = {}[10];
+            ~~~~~~
+!!! error TS2339: Property '10' does not exist on type '{}'.
+    
+    
+    var hi: any = "hi";
+    
+    var emptyObj = {};
+    
+    // Should report an implicit 'any'.
+    var z1 = emptyObj[hi];
+             ~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+    var z2 = (<any>emptyObj)[hi];
+    
+    interface MyMap<T> {
+        [key: string]: T;
+    }
+    
+    var m: MyMap<number> = {
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "Okay that's enough for today.": NaN
+    };
+    
+    var mResult1 = m[MyEmusEnum.emu];
+    var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
+    var mResult3 = m[hi];
+    
+    

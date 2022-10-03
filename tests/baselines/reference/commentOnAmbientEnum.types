@@ -1,0 +1,30 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+declare enum E {
+>E : E
+}
+=== tests/cases/compiler/a.ts ===
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
+declare enum C {
+>C : C
+
+    a,
+>a : C
+
+    b,
+>b : C
+
+    c
+>c : C
+}
+
+// Don't keep this comment.
+declare enum D {
+>D : D
+}
+

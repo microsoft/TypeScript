@@ -1,0 +1,413 @@
+=== tests/cases/conformance/types/literal/numericLiteralTypes1.ts ===
+type A1 = 1;
+>A1 : Symbol(A1, Decl(numericLiteralTypes1.ts, 0, 0))
+
+type A2 = 1.0;
+>A2 : Symbol(A2, Decl(numericLiteralTypes1.ts, 0, 12))
+
+type A3 = 1e0;
+>A3 : Symbol(A3, Decl(numericLiteralTypes1.ts, 1, 14))
+
+type A4 = 10e-1;
+>A4 : Symbol(A4, Decl(numericLiteralTypes1.ts, 2, 14))
+
+type A5 = 1 | 1.0 | 1e0 | 10e-1;
+>A5 : Symbol(A5, Decl(numericLiteralTypes1.ts, 3, 16))
+
+function f1() {
+>f1 : Symbol(f1, Decl(numericLiteralTypes1.ts, 4, 32))
+
+    var a: A1 = 1;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 7, 7), Decl(numericLiteralTypes1.ts, 8, 7), Decl(numericLiteralTypes1.ts, 9, 7), Decl(numericLiteralTypes1.ts, 10, 7), Decl(numericLiteralTypes1.ts, 11, 7))
+>A1 : Symbol(A1, Decl(numericLiteralTypes1.ts, 0, 0))
+
+    var a: A2 = 1;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 7, 7), Decl(numericLiteralTypes1.ts, 8, 7), Decl(numericLiteralTypes1.ts, 9, 7), Decl(numericLiteralTypes1.ts, 10, 7), Decl(numericLiteralTypes1.ts, 11, 7))
+>A2 : Symbol(A2, Decl(numericLiteralTypes1.ts, 0, 12))
+
+    var a: A3 = 1;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 7, 7), Decl(numericLiteralTypes1.ts, 8, 7), Decl(numericLiteralTypes1.ts, 9, 7), Decl(numericLiteralTypes1.ts, 10, 7), Decl(numericLiteralTypes1.ts, 11, 7))
+>A3 : Symbol(A3, Decl(numericLiteralTypes1.ts, 1, 14))
+
+    var a: A4 = 1;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 7, 7), Decl(numericLiteralTypes1.ts, 8, 7), Decl(numericLiteralTypes1.ts, 9, 7), Decl(numericLiteralTypes1.ts, 10, 7), Decl(numericLiteralTypes1.ts, 11, 7))
+>A4 : Symbol(A4, Decl(numericLiteralTypes1.ts, 2, 14))
+
+    var a: A5 = 1;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 7, 7), Decl(numericLiteralTypes1.ts, 8, 7), Decl(numericLiteralTypes1.ts, 9, 7), Decl(numericLiteralTypes1.ts, 10, 7), Decl(numericLiteralTypes1.ts, 11, 7))
+>A5 : Symbol(A5, Decl(numericLiteralTypes1.ts, 3, 16))
+}
+
+type B1 = -1 | 0 | 1;
+>B1 : Symbol(B1, Decl(numericLiteralTypes1.ts, 12, 1))
+
+type B2 = 1 | 0 | -1;
+>B2 : Symbol(B2, Decl(numericLiteralTypes1.ts, 14, 21))
+
+type B3 = 0 | -1 | 1;
+>B3 : Symbol(B3, Decl(numericLiteralTypes1.ts, 15, 21))
+
+function f2() {
+>f2 : Symbol(f2, Decl(numericLiteralTypes1.ts, 16, 21))
+
+    var b: B1 = -1;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 19, 7), Decl(numericLiteralTypes1.ts, 20, 7), Decl(numericLiteralTypes1.ts, 21, 7))
+>B1 : Symbol(B1, Decl(numericLiteralTypes1.ts, 12, 1))
+
+    var b: B2 = 0;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 19, 7), Decl(numericLiteralTypes1.ts, 20, 7), Decl(numericLiteralTypes1.ts, 21, 7))
+>B2 : Symbol(B2, Decl(numericLiteralTypes1.ts, 14, 21))
+
+    var b: B3 = 1;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 19, 7), Decl(numericLiteralTypes1.ts, 20, 7), Decl(numericLiteralTypes1.ts, 21, 7))
+>B3 : Symbol(B3, Decl(numericLiteralTypes1.ts, 15, 21))
+}
+
+function f3(a: 1, b: 0 | 1 | 2) {
+>f3 : Symbol(f3, Decl(numericLiteralTypes1.ts, 22, 1))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a + b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a - b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a * b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a / b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a % b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a | b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a & b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = a ^ b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = -b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var x = ~b;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a == b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a != b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a === b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a !== b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a > b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a < b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a >= b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = a <= b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+
+    var y = !b;
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
+}
+
+function f4(a: 1, b: 0 | 1 | 2) {
+>f4 : Symbol(f4, Decl(numericLiteralTypes1.ts, 44, 1))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 46, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 46, 17))
+
+    a++;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 46, 12))
+
+    b++;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 46, 17))
+}
+
+declare function g(x: 0): string;
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 51, 19))
+
+declare function g(x: 1): boolean;
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 52, 19))
+
+declare function g(x: number): number;
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 53, 19))
+
+function f5(a: 1, b: 0 | 1 | 2) {
+>f5 : Symbol(f5, Decl(numericLiteralTypes1.ts, 53, 38))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 55, 12))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 55, 17))
+
+    var z1 = g(0);
+>z1 : Symbol(z1, Decl(numericLiteralTypes1.ts, 56, 7))
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+
+    var z2 = g(1);
+>z2 : Symbol(z2, Decl(numericLiteralTypes1.ts, 57, 7))
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+
+    var z3 = g(2);
+>z3 : Symbol(z3, Decl(numericLiteralTypes1.ts, 58, 7))
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+
+    var z4 = g(a);
+>z4 : Symbol(z4, Decl(numericLiteralTypes1.ts, 59, 7))
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 55, 12))
+
+    var z5 = g(b);
+>z5 : Symbol(z5, Decl(numericLiteralTypes1.ts, 60, 7))
+>g : Symbol(g, Decl(numericLiteralTypes1.ts, 49, 1), Decl(numericLiteralTypes1.ts, 51, 33), Decl(numericLiteralTypes1.ts, 52, 34))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 55, 17))
+}
+
+function assertNever(x: never): never {
+>assertNever : Symbol(assertNever, Decl(numericLiteralTypes1.ts, 61, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 63, 21))
+
+    throw new Error("Unexpected value");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+type Tag = 0 | 1 | 2;
+>Tag : Symbol(Tag, Decl(numericLiteralTypes1.ts, 65, 1))
+
+function f10(x: Tag) {
+>f10 : Symbol(f10, Decl(numericLiteralTypes1.ts, 67, 21))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 69, 13))
+>Tag : Symbol(Tag, Decl(numericLiteralTypes1.ts, 65, 1))
+
+    switch (x) {
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 69, 13))
+
+        case 0: return "a";
+        case 1: return "b";
+        case 2: return "c";
+    }
+}
+
+function f11(x: Tag) {
+>f11 : Symbol(f11, Decl(numericLiteralTypes1.ts, 75, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 77, 13))
+>Tag : Symbol(Tag, Decl(numericLiteralTypes1.ts, 65, 1))
+
+    switch (x) {
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 77, 13))
+
+        case 0: return "a";
+        case 1: return "b";
+        case 2: return "c";
+    }
+    return assertNever(x);
+>assertNever : Symbol(assertNever, Decl(numericLiteralTypes1.ts, 61, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 77, 13))
+}
+
+function f12(x: Tag) {
+>f12 : Symbol(f12, Decl(numericLiteralTypes1.ts, 84, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 86, 13))
+>Tag : Symbol(Tag, Decl(numericLiteralTypes1.ts, 65, 1))
+
+    if (x) {
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 86, 13))
+
+        x;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 86, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 86, 13))
+    }
+}
+
+function f13(x: Tag) {
+>f13 : Symbol(f13, Decl(numericLiteralTypes1.ts, 93, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 95, 13))
+>Tag : Symbol(Tag, Decl(numericLiteralTypes1.ts, 65, 1))
+
+    if (x === 0 || x === 2) {
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 95, 13))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 95, 13))
+
+        x;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 95, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 95, 13))
+    }
+}
+
+function f14(x: 0 | 1 | 2, y: string) {
+>f14 : Symbol(f14, Decl(numericLiteralTypes1.ts, 102, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 104, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 104, 26))
+
+    var a = x && y;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 105, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 104, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 104, 26))
+
+    var b = x || y;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 106, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 104, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 104, 26))
+}
+
+function f15(x: 0 | false, y: 1 | "one") {
+>f15 : Symbol(f15, Decl(numericLiteralTypes1.ts, 107, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+
+    var a = x && y;
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 110, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+
+    var b = y && x;
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 111, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+
+    var c = x || y;
+>c : Symbol(c, Decl(numericLiteralTypes1.ts, 112, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+
+    var d = y || x;
+>d : Symbol(d, Decl(numericLiteralTypes1.ts, 113, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+
+    var e = !x;
+>e : Symbol(e, Decl(numericLiteralTypes1.ts, 114, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 109, 13))
+
+    var f = !y;
+>f : Symbol(f, Decl(numericLiteralTypes1.ts, 115, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 109, 26))
+}
+
+type Item =
+>Item : Symbol(Item, Decl(numericLiteralTypes1.ts, 116, 1))
+
+    { kind: 0, a: string } |
+>kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 119, 5))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 119, 14))
+
+    { kind: 1, b: string } |
+>kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 120, 5))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 120, 14))
+
+    { kind: 2, c: string };
+>kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 121, 5))
+>c : Symbol(c, Decl(numericLiteralTypes1.ts, 121, 14))
+
+function f20(x: Item) {
+>f20 : Symbol(f20, Decl(numericLiteralTypes1.ts, 121, 27))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 123, 13))
+>Item : Symbol(Item, Decl(numericLiteralTypes1.ts, 116, 1))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 119, 5), Decl(numericLiteralTypes1.ts, 120, 5), Decl(numericLiteralTypes1.ts, 121, 5))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 123, 13))
+>kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 119, 5), Decl(numericLiteralTypes1.ts, 120, 5), Decl(numericLiteralTypes1.ts, 121, 5))
+
+        case 0: return x.a;
+>x.a : Symbol(a, Decl(numericLiteralTypes1.ts, 119, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 123, 13))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 119, 14))
+
+        case 1: return x.b;
+>x.b : Symbol(b, Decl(numericLiteralTypes1.ts, 120, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 123, 13))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 120, 14))
+
+        case 2: return x.c;
+>x.c : Symbol(c, Decl(numericLiteralTypes1.ts, 121, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 123, 13))
+>c : Symbol(c, Decl(numericLiteralTypes1.ts, 121, 14))
+    }
+}
+
+function f21(x: Item) {
+>f21 : Symbol(f21, Decl(numericLiteralTypes1.ts, 129, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+>Item : Symbol(Item, Decl(numericLiteralTypes1.ts, 116, 1))
+
+    switch (x.kind) {
+>x.kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 119, 5), Decl(numericLiteralTypes1.ts, 120, 5), Decl(numericLiteralTypes1.ts, 121, 5))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+>kind : Symbol(kind, Decl(numericLiteralTypes1.ts, 119, 5), Decl(numericLiteralTypes1.ts, 120, 5), Decl(numericLiteralTypes1.ts, 121, 5))
+
+        case 0: return x.a;
+>x.a : Symbol(a, Decl(numericLiteralTypes1.ts, 119, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+>a : Symbol(a, Decl(numericLiteralTypes1.ts, 119, 14))
+
+        case 1: return x.b;
+>x.b : Symbol(b, Decl(numericLiteralTypes1.ts, 120, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+>b : Symbol(b, Decl(numericLiteralTypes1.ts, 120, 14))
+
+        case 2: return x.c;
+>x.c : Symbol(c, Decl(numericLiteralTypes1.ts, 121, 14))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+>c : Symbol(c, Decl(numericLiteralTypes1.ts, 121, 14))
+    }
+    return assertNever(x);
+>assertNever : Symbol(assertNever, Decl(numericLiteralTypes1.ts, 61, 1))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 131, 13))
+}

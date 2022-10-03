@@ -1,0 +1,20 @@
+tests/cases/conformance/decorators/invalid/decoratorOnEnum2.ts(4,5): error TS1132: Enum member expected.
+tests/cases/conformance/decorators/invalid/decoratorOnEnum2.ts(4,9): error TS1146: Declaration expected.
+tests/cases/conformance/decorators/invalid/decoratorOnEnum2.ts(4,10): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/decorators/invalid/decoratorOnEnum2.ts(5,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnEnum2.ts (4 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    enum E {
+        @dec A
+        ~
+!!! error TS1132: Enum member expected.
+            
+!!! error TS1146: Declaration expected.
+             ~
+!!! error TS2304: Cannot find name 'A'.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

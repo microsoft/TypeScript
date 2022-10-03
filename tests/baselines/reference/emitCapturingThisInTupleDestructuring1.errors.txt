@@ -1,0 +1,13 @@
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,17): error TS2493: Tuple type '[any]' of length '1' has no element at index '1'.
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,29): error TS2493: Tuple type '[any]' of length '1' has no element at index '2'.
+
+
+==== tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts (2 errors) ====
+    declare function wrapper(x: any);
+    wrapper((array: [any]) => {
+        [this.test, this.test1, this.test2] = array;  // even though there is a compiler error, we should still emit lexical capture for "this"
+                    ~~~~~~~~~~
+!!! error TS2493: Tuple type '[any]' of length '1' has no element at index '1'.
+                                ~~~~~~~~~~
+!!! error TS2493: Tuple type '[any]' of length '1' has no element at index '2'.
+    });

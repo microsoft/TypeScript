@@ -1,0 +1,50 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export default {};
+>{} : {}
+
+export const b = 0;
+>b : 0
+>0 : 0
+
+export const c = 1;
+>c : 1
+>1 : 1
+
+export interface D {}
+
+=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+import a, { b, c, D } from "./a";
+>a : {}
+>b : 0
+>c : 1
+>D : any
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+import * as a from "./a";
+>a : typeof a
+
+=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+export = {};
+>{} : {}
+
+=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+import D = require("./d");
+>D : {}
+
+import DD = require("./d");
+>DD : {}
+
+DD;
+>DD : {}
+
+=== tests/cases/conformance/externalModules/typeOnly/f.ts ===
+import type a from "./a";
+>a : any
+
+import { b, c } from "./a";
+>b : 0
+>c : 1
+
+b;
+>b : 0
+

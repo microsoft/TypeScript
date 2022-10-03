@@ -1,0 +1,6 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile1.js
+// File contains early errors. All outputs should be skipped.
+var uninitialized_const_error;
+

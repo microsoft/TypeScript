@@ -1,0 +1,7 @@
+tests/cases/compiler/restParameterNotLast.ts(1,12): error TS1014: A rest parameter must be last in a parameter list.
+
+
+==== tests/cases/compiler/restParameterNotLast.ts (1 errors) ====
+    function f(...x, y) { }
+               ~~~
+!!! error TS1014: A rest parameter must be last in a parameter list.

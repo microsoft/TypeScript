@@ -1,0 +1,115 @@
+=== tests/cases/compiler/matchReturnTypeInAllBranches.ts ===
+// Represents a monster who enjoys ice cream
+class IceCreamMonster {
+>IceCreamMonster : IceCreamMonster
+
+    private iceCreamFlavor: string;
+>iceCreamFlavor : string
+
+    private iceCreamRemaining: number;
+>iceCreamRemaining : number
+
+    private wantsSprinkles: boolean;
+>wantsSprinkles : boolean
+
+    private soundsWhenEating: string;
+>soundsWhenEating : string
+
+    public name: string;
+>name : string
+
+    constructor(iceCreamFlavor: string, wantsSprinkles: boolean, soundsWhenEating: string, name: string) {
+>iceCreamFlavor : string
+>wantsSprinkles : boolean
+>soundsWhenEating : string
+>name : string
+
+        this.iceCreamFlavor = iceCreamFlavor;
+>this.iceCreamFlavor = iceCreamFlavor : string
+>this.iceCreamFlavor : string
+>this : this
+>iceCreamFlavor : string
+>iceCreamFlavor : string
+
+        this.iceCreamRemaining = 100;
+>this.iceCreamRemaining = 100 : 100
+>this.iceCreamRemaining : number
+>this : this
+>iceCreamRemaining : number
+>100 : 100
+
+        this.wantsSprinkles = wantsSprinkles;
+>this.wantsSprinkles = wantsSprinkles : boolean
+>this.wantsSprinkles : boolean
+>this : this
+>wantsSprinkles : boolean
+>wantsSprinkles : boolean
+
+        this.soundsWhenEating = soundsWhenEating;
+>this.soundsWhenEating = soundsWhenEating : string
+>this.soundsWhenEating : string
+>this : this
+>soundsWhenEating : string
+>soundsWhenEating : string
+
+        this.name = name;
+>this.name = name : string
+>this.name : string
+>this : this
+>name : string
+>name : string
+    }
+    /**
+* Tells the IceCreamMonster to eat their ice cre    am!    
+*
+* @param {number} amount The amount of ice cream to e    at.
+* @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
+*/
+    public eatIceCream(amount: number): boolean {
+>eatIceCream : (amount: number) => boolean
+>amount : number
+
+        this.iceCreamRemaining -= amount;
+>this.iceCreamRemaining -= amount : number
+>this.iceCreamRemaining : number
+>this : this
+>iceCreamRemaining : number
+>amount : number
+
+        if (this.iceCreamRemaining <= 0)
+>this.iceCreamRemaining <= 0 : boolean
+>this.iceCreamRemaining : number
+>this : this
+>iceCreamRemaining : number
+>0 : 0
+        {
+            this.iceCreamRemaining = 0;
+>this.iceCreamRemaining = 0 : 0
+>this.iceCreamRemaining : number
+>this : this
+>iceCreamRemaining : number
+>0 : 0
+
+            return false;
+>false : false
+        }
+        else
+        {
+            return 12345;
+>12345 : 12345
+        }
+    }
+}
+var cookieMonster: IceCreamMonster;
+>cookieMonster : IceCreamMonster
+
+cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
+>cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster") : IceCreamMonster
+>cookieMonster : IceCreamMonster
+>new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster") : IceCreamMonster
+>IceCreamMonster : typeof IceCreamMonster
+>"Chocolate Chip" : "Chocolate Chip"
+>false : false
+>"COOOOOKIE" : "COOOOOKIE"
+>"Cookie Monster" : "Cookie Monster"
+

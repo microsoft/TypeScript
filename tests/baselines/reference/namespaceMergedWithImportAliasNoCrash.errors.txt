@@ -1,0 +1,25 @@
+tests/cases/compiler/file1.ts(5,1): error TS2708: Cannot use namespace 'Library' as a value.
+tests/cases/compiler/file2.ts(1,13): error TS2440: Import declaration conflicts with local declaration of 'Lib'.
+tests/cases/compiler/file2.ts(6,12): error TS2694: Namespace 'Lib' has no exported member 'Bar'.
+
+
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    export namespace Library {
+        export type Bar = { a: number };
+    }
+    var x: Library.Bar; // should work
+    Library.foo; // should be an error
+    ~~~~~~~
+!!! error TS2708: Cannot use namespace 'Library' as a value.
+==== tests/cases/compiler/file2.ts (2 errors) ====
+    import * as Lib from './file1';
+                ~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'Lib'.
+    namespace Lib { // should fail to merge
+        export const foo: string = "";
+    }
+    Lib.foo; // should work
+    var x: Lib.Bar; // should be an error
+               ~~~
+!!! error TS2694: Namespace 'Lib' has no exported member 'Bar'.
+    export { Lib }

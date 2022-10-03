@@ -1,0 +1,68 @@
+=== tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts ===
+interface I2 {
+    value: string;
+>value : string
+
+    doStuff: (t: string) => string;
+>doStuff : (t: string) => string
+>t : string
+}
+
+function f2(args: I2) { }
+>f2 : (args: I2) => void
+>args : I2
+
+f2({ hello: 1 }) 
+>f2({ hello: 1 }) : void
+>f2 : (args: I2) => void
+>{ hello: 1 } : { hello: number; }
+>hello : number
+>1 : 1
+
+f2({ value: '' })
+>f2({ value: '' }) : void
+>f2 : (args: I2) => void
+>{ value: '' } : { value: string; }
+>value : string
+>'' : ""
+
+f2({ value: '', what: 1 }) 
+>f2({ value: '', what: 1 }) : void
+>f2 : (args: I2) => void
+>{ value: '', what: 1 } : { value: string; what: number; }
+>value : string
+>'' : ""
+>what : number
+>1 : 1
+
+f2({ toString: (s) => s }) 
+>f2({ toString: (s) => s }) : void
+>f2 : (args: I2) => void
+>{ toString: (s) => s } : { toString: (s: any) => any; }
+>toString : (s: any) => any
+>(s) => s : (s: any) => any
+>s : any
+>s : any
+
+f2({ toString: (s: string) => s }) 
+>f2({ toString: (s: string) => s }) : void
+>f2 : (args: I2) => void
+>{ toString: (s: string) => s } : { toString: (s: string) => string; }
+>toString : (s: string) => string
+>(s: string) => s : (s: string) => string
+>s : string
+>s : string
+
+f2({ value: '', toString: (s) => s.uhhh }) 
+>f2({ value: '', toString: (s) => s.uhhh }) : void
+>f2 : (args: I2) => void
+>{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: any) => any; }
+>value : string
+>'' : ""
+>toString : (s: any) => any
+>(s) => s.uhhh : (s: any) => any
+>s : any
+>s.uhhh : any
+>s : any
+>uhhh : any
+

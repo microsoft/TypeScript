@@ -1,0 +1,27 @@
+=== tests/cases/compiler/es6ClassTest4.ts ===
+declare class Point
+>Point : Point
+{
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+
+    add(dx: number, dy: number): Point;
+>add : (dx: number, dy: number) => Point
+>dx : number
+>dy : number
+
+    mult(p: Point): Point;
+>mult : (p: Point) => Point
+>p : Point
+
+    static origin: Point;
+>origin : Point
+
+    constructor(x: number, y: number);
+>x : number
+>y : number
+}
+

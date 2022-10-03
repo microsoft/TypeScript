@@ -1,0 +1,44 @@
+tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.
+tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported class expression may not be private or protected.
+tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(16,17): error TS4094: Property 'property' of exported class expression may not be private or protected.
+tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'property' of exported class expression may not be private or protected.
+
+
+==== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts (4 errors) ====
+    export var noPrivates = class {
+               ~~~~~~~~~~
+!!! error TS4094: Property 'p' of exported class expression may not be private or protected.
+               ~~~~~~~~~~
+!!! error TS4094: Property 'ps' of exported class expression may not be private or protected.
+        static getTags() { }
+        tags() { }
+        private static ps = -1
+        private p = 12
+    }
+    
+    // altered repro from #15066 to add private property
+    export class FooItem {
+        foo(): void { }
+        name?: string;
+        private property = "capitalism"
+    }
+    
+    export type Constructor<T> = new(...args: any[]) => T;
+    export function WithTags<T extends Constructor<FooItem>>(Base: T) {
+                    ~~~~~~~~
+!!! error TS4094: Property 'property' of exported class expression may not be private or protected.
+        return class extends Base {
+            static getTags(): void { }
+            tags(): void { }
+        }
+    }
+    
+    export class Test extends WithTags(FooItem) {}
+                 ~~~~
+!!! error TS4094: Property 'property' of exported class expression may not be private or protected.
+    
+    const test = new Test();
+    
+    Test.getTags()
+    test.tags();
+    

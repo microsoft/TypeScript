@@ -1,0 +1,10 @@
+=== /Helpers.ts ===
+export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+>StringKeyOf : StringKeyOf<TObj>
+
+=== /FromFactor.ts ===
+export type RowToColumns<TColumns> = {
+>RowToColumns : RowToColumns<TColumns>
+
+    [TName in StringKeyOf<TColumns>]: any;
+}

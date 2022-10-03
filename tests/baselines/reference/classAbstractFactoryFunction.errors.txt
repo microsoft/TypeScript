@@ -1,0 +1,27 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts(9,12): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts(13,6): error TS2345: Argument of type 'typeof B' is not assignable to parameter of type 'typeof A'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts (2 errors) ====
+    class A {}
+    abstract class B extends A {}
+    
+    function NewA(Factory: typeof A) {
+        return new A;
+    }
+    
+    function NewB(Factory: typeof B) {
+        return new B;
+               ~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    }
+    
+    NewA(A);
+    NewA(B);
+         ~
+!!! error TS2345: Argument of type 'typeof B' is not assignable to parameter of type 'typeof A'.
+!!! error TS2345:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+    
+    NewB(A);
+    NewB(B);

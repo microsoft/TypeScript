@@ -1,0 +1,28 @@
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(3,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,31): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,31): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'Error': name, message
+
+
+==== tests/cases/compiler/assigningFromObjectToAnythingElse.ts (4 errors) ====
+    var x: Object;
+    var y: RegExp;
+    y = x;
+    ~
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
+    
+    var a: String = Object.create<Object>("");
+                                  ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    var c: String = Object.create<Number>(1);
+                                  ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    var w: Error = new Object();
+        ~
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'Error': name, message
+    

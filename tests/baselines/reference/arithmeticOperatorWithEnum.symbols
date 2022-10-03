@@ -1,0 +1,773 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithEnum.ts ===
+// operands of an enum type are treated as having the primitive type Number.
+
+enum E {
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+
+    a,
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+    b
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+}
+
+var a: any;
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var b: number;
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var c: E;
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+
+// operator *
+var ra1 = c * a;
+>ra1 : Symbol(ra1, Decl(arithmeticOperatorWithEnum.ts, 12, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var ra2 = c * b;
+>ra2 : Symbol(ra2, Decl(arithmeticOperatorWithEnum.ts, 13, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var ra3 = c * c;
+>ra3 : Symbol(ra3, Decl(arithmeticOperatorWithEnum.ts, 14, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ra4 = a * c;
+>ra4 : Symbol(ra4, Decl(arithmeticOperatorWithEnum.ts, 15, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ra5 = b * c;
+>ra5 : Symbol(ra5, Decl(arithmeticOperatorWithEnum.ts, 16, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ra6 = E.a * a;
+>ra6 : Symbol(ra6, Decl(arithmeticOperatorWithEnum.ts, 17, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var ra7 = E.a * b;
+>ra7 : Symbol(ra7, Decl(arithmeticOperatorWithEnum.ts, 18, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var ra8 = E.a * E.b;
+>ra8 : Symbol(ra8, Decl(arithmeticOperatorWithEnum.ts, 19, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ra9 = E.a * 1;
+>ra9 : Symbol(ra9, Decl(arithmeticOperatorWithEnum.ts, 20, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var ra10 = a * E.b;
+>ra10 : Symbol(ra10, Decl(arithmeticOperatorWithEnum.ts, 21, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ra11 = b * E.b;
+>ra11 : Symbol(ra11, Decl(arithmeticOperatorWithEnum.ts, 22, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ra12 = 1 * E.b;
+>ra12 : Symbol(ra12, Decl(arithmeticOperatorWithEnum.ts, 23, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator /
+var rb1 = c / a;
+>rb1 : Symbol(rb1, Decl(arithmeticOperatorWithEnum.ts, 26, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rb2 = c / b;
+>rb2 : Symbol(rb2, Decl(arithmeticOperatorWithEnum.ts, 27, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rb3 = c / c;
+>rb3 : Symbol(rb3, Decl(arithmeticOperatorWithEnum.ts, 28, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rb4 = a / c;
+>rb4 : Symbol(rb4, Decl(arithmeticOperatorWithEnum.ts, 29, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rb5 = b / c;
+>rb5 : Symbol(rb5, Decl(arithmeticOperatorWithEnum.ts, 30, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rb6 = E.a / a;
+>rb6 : Symbol(rb6, Decl(arithmeticOperatorWithEnum.ts, 31, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rb7 = E.a / b;
+>rb7 : Symbol(rb7, Decl(arithmeticOperatorWithEnum.ts, 32, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rb8 = E.a / E.b;
+>rb8 : Symbol(rb8, Decl(arithmeticOperatorWithEnum.ts, 33, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rb9 = E.a / 1;
+>rb9 : Symbol(rb9, Decl(arithmeticOperatorWithEnum.ts, 34, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rb10 = a / E.b;
+>rb10 : Symbol(rb10, Decl(arithmeticOperatorWithEnum.ts, 35, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rb11 = b / E.b;
+>rb11 : Symbol(rb11, Decl(arithmeticOperatorWithEnum.ts, 36, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rb12 = 1 / E.b;
+>rb12 : Symbol(rb12, Decl(arithmeticOperatorWithEnum.ts, 37, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator %
+var rc1 = c % a;
+>rc1 : Symbol(rc1, Decl(arithmeticOperatorWithEnum.ts, 40, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rc2 = c % b;
+>rc2 : Symbol(rc2, Decl(arithmeticOperatorWithEnum.ts, 41, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rc3 = c % c;
+>rc3 : Symbol(rc3, Decl(arithmeticOperatorWithEnum.ts, 42, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rc4 = a % c;
+>rc4 : Symbol(rc4, Decl(arithmeticOperatorWithEnum.ts, 43, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rc5 = b % c;
+>rc5 : Symbol(rc5, Decl(arithmeticOperatorWithEnum.ts, 44, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rc6 = E.a % a;
+>rc6 : Symbol(rc6, Decl(arithmeticOperatorWithEnum.ts, 45, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rc7 = E.a % b;
+>rc7 : Symbol(rc7, Decl(arithmeticOperatorWithEnum.ts, 46, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rc8 = E.a % E.b;
+>rc8 : Symbol(rc8, Decl(arithmeticOperatorWithEnum.ts, 47, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rc9 = E.a % 1;
+>rc9 : Symbol(rc9, Decl(arithmeticOperatorWithEnum.ts, 48, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rc10 = a % E.b;
+>rc10 : Symbol(rc10, Decl(arithmeticOperatorWithEnum.ts, 49, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rc11 = b % E.b;
+>rc11 : Symbol(rc11, Decl(arithmeticOperatorWithEnum.ts, 50, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rc12 = 1 % E.b;
+>rc12 : Symbol(rc12, Decl(arithmeticOperatorWithEnum.ts, 51, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator -
+var rd1 = c - a;
+>rd1 : Symbol(rd1, Decl(arithmeticOperatorWithEnum.ts, 54, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rd2 = c - b;
+>rd2 : Symbol(rd2, Decl(arithmeticOperatorWithEnum.ts, 55, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rd3 = c - c;
+>rd3 : Symbol(rd3, Decl(arithmeticOperatorWithEnum.ts, 56, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rd4 = a - c;
+>rd4 : Symbol(rd4, Decl(arithmeticOperatorWithEnum.ts, 57, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rd5 = b - c;
+>rd5 : Symbol(rd5, Decl(arithmeticOperatorWithEnum.ts, 58, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rd6 = E.a - a;
+>rd6 : Symbol(rd6, Decl(arithmeticOperatorWithEnum.ts, 59, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rd7 = E.a - b;
+>rd7 : Symbol(rd7, Decl(arithmeticOperatorWithEnum.ts, 60, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rd8 = E.a - E.b;
+>rd8 : Symbol(rd8, Decl(arithmeticOperatorWithEnum.ts, 61, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rd9 = E.a - 1;
+>rd9 : Symbol(rd9, Decl(arithmeticOperatorWithEnum.ts, 62, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rd10 = a - E.b;
+>rd10 : Symbol(rd10, Decl(arithmeticOperatorWithEnum.ts, 63, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rd11 = b - E.b;
+>rd11 : Symbol(rd11, Decl(arithmeticOperatorWithEnum.ts, 64, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rd12 = 1 - E.b;
+>rd12 : Symbol(rd12, Decl(arithmeticOperatorWithEnum.ts, 65, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator <<
+var re1 = c << a;
+>re1 : Symbol(re1, Decl(arithmeticOperatorWithEnum.ts, 68, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var re2 = c << b;
+>re2 : Symbol(re2, Decl(arithmeticOperatorWithEnum.ts, 69, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var re3 = c << c;
+>re3 : Symbol(re3, Decl(arithmeticOperatorWithEnum.ts, 70, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var re4 = a << c;
+>re4 : Symbol(re4, Decl(arithmeticOperatorWithEnum.ts, 71, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var re5 = b << c;
+>re5 : Symbol(re5, Decl(arithmeticOperatorWithEnum.ts, 72, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var re6 = E.a << a;
+>re6 : Symbol(re6, Decl(arithmeticOperatorWithEnum.ts, 73, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var re7 = E.a << b;
+>re7 : Symbol(re7, Decl(arithmeticOperatorWithEnum.ts, 74, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var re8 = E.a << E.b;
+>re8 : Symbol(re8, Decl(arithmeticOperatorWithEnum.ts, 75, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var re9 = E.a << 1;
+>re9 : Symbol(re9, Decl(arithmeticOperatorWithEnum.ts, 76, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var re10 = a << E.b;
+>re10 : Symbol(re10, Decl(arithmeticOperatorWithEnum.ts, 77, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var re11 = b << E.b;
+>re11 : Symbol(re11, Decl(arithmeticOperatorWithEnum.ts, 78, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var re12 = 1 << E.b;
+>re12 : Symbol(re12, Decl(arithmeticOperatorWithEnum.ts, 79, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator >>
+var rf1 = c >> a;
+>rf1 : Symbol(rf1, Decl(arithmeticOperatorWithEnum.ts, 82, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rf2 = c >> b;
+>rf2 : Symbol(rf2, Decl(arithmeticOperatorWithEnum.ts, 83, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rf3 = c >> c;
+>rf3 : Symbol(rf3, Decl(arithmeticOperatorWithEnum.ts, 84, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rf4 = a >> c;
+>rf4 : Symbol(rf4, Decl(arithmeticOperatorWithEnum.ts, 85, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rf5 = b >> c;
+>rf5 : Symbol(rf5, Decl(arithmeticOperatorWithEnum.ts, 86, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rf6 = E.a >> a;
+>rf6 : Symbol(rf6, Decl(arithmeticOperatorWithEnum.ts, 87, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rf7 = E.a >> b;
+>rf7 : Symbol(rf7, Decl(arithmeticOperatorWithEnum.ts, 88, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rf8 = E.a >> E.b;
+>rf8 : Symbol(rf8, Decl(arithmeticOperatorWithEnum.ts, 89, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rf9 = E.a >> 1;
+>rf9 : Symbol(rf9, Decl(arithmeticOperatorWithEnum.ts, 90, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rf10 = a >> E.b;
+>rf10 : Symbol(rf10, Decl(arithmeticOperatorWithEnum.ts, 91, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rf11 = b >> E.b;
+>rf11 : Symbol(rf11, Decl(arithmeticOperatorWithEnum.ts, 92, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rf12 = 1 >> E.b;
+>rf12 : Symbol(rf12, Decl(arithmeticOperatorWithEnum.ts, 93, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator >>>
+var rg1 = c >>> a;
+>rg1 : Symbol(rg1, Decl(arithmeticOperatorWithEnum.ts, 96, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rg2 = c >>> b;
+>rg2 : Symbol(rg2, Decl(arithmeticOperatorWithEnum.ts, 97, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rg3 = c >>> c;
+>rg3 : Symbol(rg3, Decl(arithmeticOperatorWithEnum.ts, 98, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rg4 = a >>> c;
+>rg4 : Symbol(rg4, Decl(arithmeticOperatorWithEnum.ts, 99, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rg5 = b >>> c;
+>rg5 : Symbol(rg5, Decl(arithmeticOperatorWithEnum.ts, 100, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rg6 = E.a >>> a;
+>rg6 : Symbol(rg6, Decl(arithmeticOperatorWithEnum.ts, 101, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rg7 = E.a >>> b;
+>rg7 : Symbol(rg7, Decl(arithmeticOperatorWithEnum.ts, 102, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rg8 = E.a >>> E.b;
+>rg8 : Symbol(rg8, Decl(arithmeticOperatorWithEnum.ts, 103, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rg9 = E.a >>> 1;
+>rg9 : Symbol(rg9, Decl(arithmeticOperatorWithEnum.ts, 104, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rg10 = a >>> E.b;
+>rg10 : Symbol(rg10, Decl(arithmeticOperatorWithEnum.ts, 105, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rg11 = b >>> E.b;
+>rg11 : Symbol(rg11, Decl(arithmeticOperatorWithEnum.ts, 106, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rg12 = 1 >>> E.b;
+>rg12 : Symbol(rg12, Decl(arithmeticOperatorWithEnum.ts, 107, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator &
+var rh1 = c & a;
+>rh1 : Symbol(rh1, Decl(arithmeticOperatorWithEnum.ts, 110, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rh2 = c & b;
+>rh2 : Symbol(rh2, Decl(arithmeticOperatorWithEnum.ts, 111, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rh3 = c & c;
+>rh3 : Symbol(rh3, Decl(arithmeticOperatorWithEnum.ts, 112, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rh4 = a & c;
+>rh4 : Symbol(rh4, Decl(arithmeticOperatorWithEnum.ts, 113, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rh5 = b & c;
+>rh5 : Symbol(rh5, Decl(arithmeticOperatorWithEnum.ts, 114, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rh6 = E.a & a;
+>rh6 : Symbol(rh6, Decl(arithmeticOperatorWithEnum.ts, 115, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rh7 = E.a & b;
+>rh7 : Symbol(rh7, Decl(arithmeticOperatorWithEnum.ts, 116, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rh8 = E.a & E.b;
+>rh8 : Symbol(rh8, Decl(arithmeticOperatorWithEnum.ts, 117, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rh9 = E.a & 1;
+>rh9 : Symbol(rh9, Decl(arithmeticOperatorWithEnum.ts, 118, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rh10 = a & E.b;
+>rh10 : Symbol(rh10, Decl(arithmeticOperatorWithEnum.ts, 119, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rh11 = b & E.b;
+>rh11 : Symbol(rh11, Decl(arithmeticOperatorWithEnum.ts, 120, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rh12 = 1 & E.b;
+>rh12 : Symbol(rh12, Decl(arithmeticOperatorWithEnum.ts, 121, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator ^
+var ri1 = c ^ a;
+>ri1 : Symbol(ri1, Decl(arithmeticOperatorWithEnum.ts, 124, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var ri2 = c ^ b;
+>ri2 : Symbol(ri2, Decl(arithmeticOperatorWithEnum.ts, 125, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var ri3 = c ^ c;
+>ri3 : Symbol(ri3, Decl(arithmeticOperatorWithEnum.ts, 126, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ri4 = a ^ c;
+>ri4 : Symbol(ri4, Decl(arithmeticOperatorWithEnum.ts, 127, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ri5 = b ^ c;
+>ri5 : Symbol(ri5, Decl(arithmeticOperatorWithEnum.ts, 128, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var ri6 = E.a ^ a;
+>ri6 : Symbol(ri6, Decl(arithmeticOperatorWithEnum.ts, 129, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var ri7 = E.a ^ b;
+>ri7 : Symbol(ri7, Decl(arithmeticOperatorWithEnum.ts, 130, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var ri8 = E.a ^ E.b;
+>ri8 : Symbol(ri8, Decl(arithmeticOperatorWithEnum.ts, 131, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ri9 = E.a ^ 1;
+>ri9 : Symbol(ri9, Decl(arithmeticOperatorWithEnum.ts, 132, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var ri10 = a ^ E.b;
+>ri10 : Symbol(ri10, Decl(arithmeticOperatorWithEnum.ts, 133, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ri11 = b ^ E.b;
+>ri11 : Symbol(ri11, Decl(arithmeticOperatorWithEnum.ts, 134, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var ri12 = 1 ^ E.b;
+>ri12 : Symbol(ri12, Decl(arithmeticOperatorWithEnum.ts, 135, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+// operator |
+var rj1 = c | a;
+>rj1 : Symbol(rj1, Decl(arithmeticOperatorWithEnum.ts, 138, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rj2 = c | b;
+>rj2 : Symbol(rj2, Decl(arithmeticOperatorWithEnum.ts, 139, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rj3 = c | c;
+>rj3 : Symbol(rj3, Decl(arithmeticOperatorWithEnum.ts, 140, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rj4 = a | c;
+>rj4 : Symbol(rj4, Decl(arithmeticOperatorWithEnum.ts, 141, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rj5 = b | c;
+>rj5 : Symbol(rj5, Decl(arithmeticOperatorWithEnum.ts, 142, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>c : Symbol(c, Decl(arithmeticOperatorWithEnum.ts, 9, 3))
+
+var rj6 = E.a | a;
+>rj6 : Symbol(rj6, Decl(arithmeticOperatorWithEnum.ts, 143, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+
+var rj7 = E.a | b;
+>rj7 : Symbol(rj7, Decl(arithmeticOperatorWithEnum.ts, 144, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+
+var rj8 = E.a | E.b;
+>rj8 : Symbol(rj8, Decl(arithmeticOperatorWithEnum.ts, 145, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rj9 = E.a | 1;
+>rj9 : Symbol(rj9, Decl(arithmeticOperatorWithEnum.ts, 146, 3))
+>E.a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>a : Symbol(E.a, Decl(arithmeticOperatorWithEnum.ts, 2, 8))
+
+var rj10 = a | E.b;
+>rj10 : Symbol(rj10, Decl(arithmeticOperatorWithEnum.ts, 147, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithEnum.ts, 7, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rj11 = b | E.b;
+>rj11 : Symbol(rj11, Decl(arithmeticOperatorWithEnum.ts, 148, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithEnum.ts, 8, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+
+var rj12 = 1 | E.b;
+>rj12 : Symbol(rj12, Decl(arithmeticOperatorWithEnum.ts, 149, 3))
+>E.b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+>E : Symbol(E, Decl(arithmeticOperatorWithEnum.ts, 0, 0))
+>b : Symbol(E.b, Decl(arithmeticOperatorWithEnum.ts, 3, 6))
+

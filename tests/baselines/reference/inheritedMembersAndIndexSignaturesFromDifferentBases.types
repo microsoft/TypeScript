@@ -1,0 +1,40 @@
+=== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts ===
+// indexer in B is a subtype of indexer in A
+interface A {
+    [s: string]: {
+>s : string
+
+        a;
+>a : any
+
+    };
+}
+interface B {
+    [s: number]: {
+>s : number
+
+        a;
+>a : any
+
+        b;
+>b : any
+
+    };
+}
+interface C {
+    m: {};
+>m : {}
+}
+
+interface D extends A, B, C { } // error because m is not a subtype of {a;}
+
+interface E {
+    0: {};
+>0 : {}
+}
+
+interface F extends A, B, E { } // error because 0 is not a subtype of {a; b;}
+
+interface G extends A, B, C, E { } // should only report one error
+
+interface H extends A, F { } // Should report no error at all because error is internal to F

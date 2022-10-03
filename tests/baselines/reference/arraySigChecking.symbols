@@ -1,0 +1,76 @@
+=== tests/cases/compiler/arraySigChecking.ts ===
+declare module M {
+>M : Symbol(M, Decl(arraySigChecking.ts, 0, 0))
+
+    interface iBar { t: any; }
+>iBar : Symbol(iBar, Decl(arraySigChecking.ts, 0, 18))
+>t : Symbol(iBar.t, Decl(arraySigChecking.ts, 1, 20))
+
+    interface iFoo extends iBar {
+>iFoo : Symbol(iFoo, Decl(arraySigChecking.ts, 1, 30))
+>iBar : Symbol(iBar, Decl(arraySigChecking.ts, 0, 18))
+
+        s: any;
+>s : Symbol(iFoo.s, Decl(arraySigChecking.ts, 2, 33))
+    }
+
+    class cFoo {
+>cFoo : Symbol(cFoo, Decl(arraySigChecking.ts, 4, 5))
+
+        t: any;
+>t : Symbol(cFoo.t, Decl(arraySigChecking.ts, 6, 16))
+    }
+
+    var foo: { [index: any]; }; // expect an error here
+>foo : Symbol(foo, Decl(arraySigChecking.ts, 10, 7))
+>index : Symbol(index, Decl(arraySigChecking.ts, 10, 16))
+}
+
+interface myInt {
+>myInt : Symbol(myInt, Decl(arraySigChecking.ts, 11, 1))
+
+    voidFn(): void;
+>voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
+}
+var myVar: myInt;
+>myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+>myInt : Symbol(myInt, Decl(arraySigChecking.ts, 11, 1))
+
+var strArray: string[] = [myVar.voidFn()];
+>strArray : Symbol(strArray, Decl(arraySigChecking.ts, 17, 3))
+>myVar.voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
+>myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+>voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
+
+
+var myArray: number[][][];
+>myArray : Symbol(myArray, Decl(arraySigChecking.ts, 20, 3))
+
+myArray = [[1, 2]];
+>myArray : Symbol(myArray, Decl(arraySigChecking.ts, 20, 3))
+
+function isEmpty(l: { length: number }) {
+>isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
+>l : Symbol(l, Decl(arraySigChecking.ts, 23, 17))
+>length : Symbol(length, Decl(arraySigChecking.ts, 23, 21))
+
+    return l.length === 0;
+>l.length : Symbol(length, Decl(arraySigChecking.ts, 23, 21))
+>l : Symbol(l, Decl(arraySigChecking.ts, 23, 17))
+>length : Symbol(length, Decl(arraySigChecking.ts, 23, 21))
+}
+
+isEmpty([]);
+>isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
+
+isEmpty(new Array(3));
+>isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+isEmpty(new Array<string>(3));
+>isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+isEmpty(['a']);
+>isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
+

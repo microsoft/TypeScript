@@ -1,0 +1,9 @@
+=== tests/cases/compiler/staticsInAFunction.ts ===
+function boo{
+>boo : Symbol(boo, Decl(staticsInAFunction.ts, 0, 0))
+
+   static test()
+   static test(name:string)
+   static test(name?:any){}
+}
+

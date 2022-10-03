@@ -1,0 +1,48 @@
+=== tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
+let x: string | number | boolean | RegExp | Function;
+>x : string | number | boolean | Function | RegExp
+
+let obj: any;
+>obj : any
+
+let cond: boolean;
+>cond : boolean
+
+x = /a/;
+>x = /a/ : RegExp
+>x : string | number | boolean | Function | RegExp
+>/a/ : RegExp
+
+for (let y in obj) {
+>y : string
+>obj : any
+
+    x = y;
+>x = y : string
+>x : string | number | boolean | Function | RegExp
+>y : string
+
+    if (cond) {
+>cond : boolean
+
+        x = 42;
+>x = 42 : 42
+>x : string | number | boolean | Function | RegExp
+>42 : 42
+
+        continue;
+    }
+    if (cond) {
+>cond : boolean
+
+        x = true;
+>x = true : true
+>x : string | number | boolean | Function | RegExp
+>true : true
+
+        break;
+    }
+}
+x; // RegExp | string | number | boolean
+>x : string | number | true | RegExp
+

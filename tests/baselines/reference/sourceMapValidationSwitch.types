@@ -1,0 +1,63 @@
+=== tests/cases/compiler/sourceMapValidationSwitch.ts ===
+var x = 10;
+>x : number
+>10 : 10
+
+switch (x) {
+>x : number
+
+    case 5:
+>5 : 5
+
+        x++;
+>x++ : number
+>x : number
+
+        break;
+    case 10:
+>10 : 10
+        {
+            x--;
+>x-- : number
+>x : number
+
+            break;
+        }
+    default:
+        x = x *10;
+>x = x *10 : number
+>x : number
+>x *10 : number
+>x : number
+>10 : 10
+}
+switch (x)
+>x : number
+{
+    case 5:
+>5 : 5
+
+        x++;
+>x++ : number
+>x : number
+
+        break;
+    case 10:
+>10 : 10
+        {
+            x--;
+>x-- : number
+>x : number
+
+            break;
+        }
+    default:
+        {
+            x = x * 10;
+>x = x * 10 : number
+>x : number
+>x * 10 : number
+>x : number
+>10 : 10
+        }
+}

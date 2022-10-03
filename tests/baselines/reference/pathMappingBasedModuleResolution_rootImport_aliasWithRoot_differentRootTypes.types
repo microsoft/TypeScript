@@ -1,0 +1,81 @@
+=== /root/a.ts ===
+import { foo as foo1 } from "/foo";
+>foo : () => void
+>foo1 : () => void
+
+import { bar as bar1 } from "/bar";
+>bar : () => void
+>bar1 : () => void
+
+import { foo as foo2 } from "c:/foo";
+>foo : () => void
+>foo2 : () => void
+
+import { bar as bar2 } from "c:/bar";
+>bar : () => void
+>bar2 : () => void
+
+import { foo as foo3 } from "c:\\foo";
+>foo : () => void
+>foo3 : () => void
+
+import { bar as bar3 } from "c:\\bar";
+>bar : () => void
+>bar3 : () => void
+
+import { foo as foo4 } from "//server/foo";
+>foo : () => void
+>foo4 : () => void
+
+import { bar as bar4 } from "//server/bar";
+>bar : () => void
+>bar4 : () => void
+
+import { foo as foo5 } from "\\\\server\\foo";
+>foo : () => void
+>foo5 : () => void
+
+import { bar as bar5 } from "\\\\server\\bar";
+>bar : () => void
+>bar5 : () => void
+
+import { foo as foo6 } from "file:///foo";
+>foo : () => void
+>foo6 : () => void
+
+import { bar as bar6 } from "file:///bar";
+>bar : () => void
+>bar6 : () => void
+
+import { foo as foo7 } from "file://c:/foo";
+>foo : () => void
+>foo7 : () => void
+
+import { bar as bar7 } from "file://c:/bar";
+>bar : () => void
+>bar7 : () => void
+
+import { foo as foo8 } from "file://server/foo";
+>foo : () => void
+>foo8 : () => void
+
+import { bar as bar8 } from "file://server/bar";
+>bar : () => void
+>bar8 : () => void
+
+import { foo as foo9 } from "http://server/foo";
+>foo : () => void
+>foo9 : () => void
+
+import { bar as bar9 } from "http://server/bar";
+>bar : () => void
+>bar9 : () => void
+
+=== /root/src/foo.ts ===
+export function foo() {}
+>foo : () => void
+
+=== /root/src/bar.js ===
+export function bar() {}
+>bar : () => void
+

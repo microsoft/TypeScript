@@ -1,0 +1,11 @@
+=== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts ===
+interface I<T> { }
+class C<T> { }
+>C : C<T>
+
+var i: I;
+>i : any
+
+var c: C<I>;
+>c : C<any>
+

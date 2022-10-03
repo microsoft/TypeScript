@@ -1,0 +1,10 @@
+=== tests/cases/compiler/getterMissingReturnError.ts ===
+class test {
+>test : Symbol(test, Decl(getterMissingReturnError.ts, 0, 0))
+
+    public get p2(){
+>p2 : Symbol(test.p2, Decl(getterMissingReturnError.ts, 0, 12))
+
+    }
+}
+

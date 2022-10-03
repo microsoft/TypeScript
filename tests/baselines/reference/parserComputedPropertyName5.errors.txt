@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts(1,11): error TS1042: 'public' modifier cannot be used here.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts(1,22): error TS2378: A 'get' accessor must return a value.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts(1,23): error TS2304: Cannot find name 'e'.
+
+
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts (3 errors) ====
+    var v = { public get [e]() { } };
+              ~~~~~~
+!!! error TS1042: 'public' modifier cannot be used here.
+                         ~~~
+!!! error TS2378: A 'get' accessor must return a value.
+                          ~
+!!! error TS2304: Cannot find name 'e'.

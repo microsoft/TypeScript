@@ -1,0 +1,90 @@
+=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
+interface Window {
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 0))
+
+    someMethod();
+>someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 18))
+}
+
+module M {
+>M : Symbol(M, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 2, 1))
+
+    type W = Window | string;
+>W : Symbol(W, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 4, 10))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 0))
+
+    export module N {
+>N : Symbol(N, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 5, 29))
+
+        export class Window { }
+>Window : Symbol(Window, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 6, 21))
+
+        export var p: W; // Should report error that W is private
+>p : Symbol(p, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 8, 18))
+>W : Symbol(W, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 4, 10))
+    }
+}
+
+module M1 {
+>M1 : Symbol(M1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 10, 1))
+
+    export type W = Window | string;
+>W : Symbol(W, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 12, 11))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 0, 0))
+
+    export module N {
+>N : Symbol(N, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 13, 36))
+
+        export class Window { }
+>Window : Symbol(Window, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 14, 21))
+
+        export var p: W; // No error
+>p : Symbol(p, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 16, 18))
+>W : Symbol(W, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 12, 11))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 18, 1))
+
+    class private1 {
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 20, 11))
+    }
+    class public1 {
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 22, 5))
+    }
+    module m3 {
+>m3 : Symbol(m3, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 24, 5))
+
+        export class public1 {
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
+        }
+    }
+
+    type t1 = private1;
+>t1 : Symbol(t1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 28, 5))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 20, 11))
+
+    export type t2 = private1; // error
+>t2 : Symbol(t2, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 30, 23))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 20, 11))
+
+    type t11 = public1;
+>t11 : Symbol(t11, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 31, 30))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 22, 5))
+
+    export type t12 = public1;
+>t12 : Symbol(t12, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 33, 23))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 22, 5))
+
+    type t111 = m3.public1;
+>t111 : Symbol(t111, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 34, 30))
+>m3 : Symbol(m3, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 24, 5))
+>public1 : Symbol(m3.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
+
+    export type t112 = m3.public1; // error
+>t112 : Symbol(t112, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 36, 27))
+>m3 : Symbol(m3, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 24, 5))
+>public1 : Symbol(m3.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeAlias.ts, 25, 15))
+}
+

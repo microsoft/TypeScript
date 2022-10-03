@@ -1,0 +1,20 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration11.ts ===
+declare module string {
+>string : typeof string
+
+    interface X { }
+    export function foo(s: string);
+>foo : (s: string) => any
+>s : string
+}
+string.foo("abc");
+>string.foo("abc") : any
+>string.foo : (s: string) => any
+>string : typeof string
+>foo : (s: string) => any
+>"abc" : "abc"
+
+var x: string.X;
+>x : string.X
+>string : any
+

@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {...*=} args
+    @return {*=} */
+function f(...args) {
+>f : (...args?: any[] | undefined) => any | undefined
+>args : any
+
+    return null
+>null : null
+}
+
+/** @type *= */
+var x;
+>x : any
+
+
+/** @param {function():*=} f */
+function cbf(f) {
+>cbf : (f?: (() => any) | undefined) => void
+>f : (() => any) | undefined
+}
+

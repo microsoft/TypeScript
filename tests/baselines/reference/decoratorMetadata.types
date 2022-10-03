@@ -1,0 +1,29 @@
+=== tests/cases/conformance/decorators/service.ts ===
+export default class Service {
+>Service : Service
+}
+=== tests/cases/conformance/decorators/component.ts ===
+import Service from "./service";
+>Service : typeof Service
+
+declare var decorator: any;
+>decorator : any
+
+@decorator
+>decorator : any
+
+class MyComponent {
+>MyComponent : MyComponent
+
+    constructor(public Service: Service) {
+>Service : Service
+    }
+
+    @decorator
+>decorator : any
+
+    method(x: this) {
+>method : (x: this) => void
+>x : this
+    }
+}

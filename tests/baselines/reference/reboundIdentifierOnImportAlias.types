@@ -1,0 +1,19 @@
+=== tests/cases/compiler/reboundIdentifierOnImportAlias.ts ===
+module Foo {
+>Foo : typeof Foo
+
+    export var x = "hello";
+>x : string
+>"hello" : "hello"
+}
+module Bar {
+>Bar : typeof Bar
+
+    var Foo = 1;
+>Foo : number
+>1 : 1
+
+    import F = Foo;
+>F : typeof F
+>Foo : typeof F
+}

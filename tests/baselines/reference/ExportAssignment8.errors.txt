@@ -1,0 +1,13 @@
+tests/cases/compiler/ExportAssignment8.ts(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+tests/cases/compiler/ExportAssignment8.ts(1,10): error TS2304: Cannot find name 'B'.
+
+
+==== tests/cases/compiler/ExportAssignment8.ts (2 errors) ====
+    export = B;
+    ~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+             ~
+!!! error TS2304: Cannot find name 'B'.
+    
+    export class C {
+    }

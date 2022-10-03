@@ -1,0 +1,90 @@
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(9,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+  Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(10,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(11,13): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(12,13): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(13,13): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(14,23): error TS2554: Expected 1-3 arguments, but got 4.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(19,20): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
+  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(21,24): error TS2554: Expected 1-3 arguments, but got 4.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts (8 errors) ====
+    function foo(strs: TemplateStringsArray): number;
+    function foo(strs: TemplateStringsArray, x: number): string;
+    function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
+    function foo(strs: TemplateStringsArray, x: number, y: string): {};
+    function foo(...stuff: any[]): any {
+        return undefined;
+    }
+    
+    var a = foo([]);             // number
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2345:   Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+!!! related TS2728 /.ts/lib.es5.d.ts:608:14: 'raw' is declared here.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var b = foo([], 1);          // string
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var c = foo([], 1, 2);       // boolean
+                ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var d = foo([], 1, true);    // boolean (with error)
+                ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var e = foo([], 1, "2");     // {}
+                ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var f = foo([], 1, 2, 3);    // any (with error)
+                          ~
+!!! error TS2554: Expected 1-3 arguments, but got 4.
+    
+    var u = foo ``;              // number
+    var v = foo `${1}`;          // string
+    var w = foo `${1}${2}`;      // boolean
+    var x = foo `${1}${true}`;   // boolean (with error)
+                       ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! related TS2793 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    var y = foo `${1}${"2"}`;    // {}
+    var z = foo `${1}${2}${3}`;  // any (with error)
+                           ~
+!!! error TS2554: Expected 1-3 arguments, but got 4.
+    

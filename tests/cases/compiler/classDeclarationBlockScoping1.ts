@@ -1,0 +1,7 @@
+class C {
+}
+
+{
+    class C {
+    }
+}

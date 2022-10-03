@@ -1,0 +1,12 @@
+[
+    "======== Resolving module './shared/abc' from '/src/app.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/src/shared/abc', target file type 'TypeScript'.",
+    "File '/src/shared/abc.ts' exist - use it as a name resolution result.",
+    "======== Module name './shared/abc' was successfully resolved to '/src/shared/abc.ts'. ========",
+    "======== Resolving module './shared2/abc' from '/src/app.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/src/shared2/abc', target file type 'TypeScript'.",
+    "File '/src/shared2/abc.ts' exist - use it as a name resolution result.",
+    "======== Module name './shared2/abc' was successfully resolved to '/src/shared2/abc.ts'. ========"
+]

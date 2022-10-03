@@ -1,0 +1,43 @@
+=== tests/cases/compiler/duplicateObjectLiteralProperty.ts ===
+var x = {
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty.ts, 0, 3))
+
+    a: 1,
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 0, 9), Decl(duplicateObjectLiteralProperty.ts, 2, 12), Decl(duplicateObjectLiteralProperty.ts, 3, 10), Decl(duplicateObjectLiteralProperty.ts, 4, 17))
+
+    b: true, // OK
+>b : Symbol(b, Decl(duplicateObjectLiteralProperty.ts, 1, 9))
+
+    a: 56,   // Duplicate
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 0, 9), Decl(duplicateObjectLiteralProperty.ts, 2, 12), Decl(duplicateObjectLiteralProperty.ts, 3, 10), Decl(duplicateObjectLiteralProperty.ts, 4, 17))
+
+    \u0061: "ss", // Duplicate
+>\u0061 : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 0, 9), Decl(duplicateObjectLiteralProperty.ts, 2, 12), Decl(duplicateObjectLiteralProperty.ts, 3, 10), Decl(duplicateObjectLiteralProperty.ts, 4, 17))
+
+    a: {
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 0, 9), Decl(duplicateObjectLiteralProperty.ts, 2, 12), Decl(duplicateObjectLiteralProperty.ts, 3, 10), Decl(duplicateObjectLiteralProperty.ts, 4, 17))
+
+        c: 1,
+>c : Symbol(c, Decl(duplicateObjectLiteralProperty.ts, 5, 8), Decl(duplicateObjectLiteralProperty.ts, 6, 13))
+
+        "c": 56, // Duplicate
+>"c" : Symbol(c, Decl(duplicateObjectLiteralProperty.ts, 5, 8), Decl(duplicateObjectLiteralProperty.ts, 6, 13))
+    }
+};
+
+
+var y = {
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty.ts, 12, 3))
+
+    get a() { return 0; },
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26))
+
+    set a(v: number) { },
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 12, 9), Decl(duplicateObjectLiteralProperty.ts, 13, 26))
+>v : Symbol(v, Decl(duplicateObjectLiteralProperty.ts, 14, 10))
+
+    get a() { return 0; }
+>a : Symbol(a, Decl(duplicateObjectLiteralProperty.ts, 14, 25))
+
+};
+

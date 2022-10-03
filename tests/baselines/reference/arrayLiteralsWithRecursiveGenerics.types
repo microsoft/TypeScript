@@ -1,0 +1,67 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts ===
+class List<T> {
+>List : List<T>
+
+    data: T;
+>data : T
+
+    next: List<List<T>>;
+>next : List<List<T>>
+}
+
+class DerivedList<U> extends List<U> {
+>DerivedList : DerivedList<U>
+>List : List<U>
+
+    foo: U;
+>foo : U
+
+    // next: List<List<U>>
+}
+
+class MyList<T> {
+>MyList : MyList<T>
+
+    data: T;
+>data : T
+
+    next: MyList<MyList<T>>;
+>next : MyList<MyList<T>>
+}
+
+var list: List<number>;
+>list : List<number>
+
+var list2: List<string>;
+>list2 : List<string>
+
+var myList: MyList<number>;
+>myList : MyList<number>
+
+var xs = [list, myList]; // {}[]
+>xs : (List<number> | MyList<number>)[]
+>[list, myList] : (List<number> | MyList<number>)[]
+>list : List<number>
+>myList : MyList<number>
+
+var ys = [list, list2]; // {}[]
+>ys : (List<number> | List<string>)[]
+>[list, list2] : (List<number> | List<string>)[]
+>list : List<number>
+>list2 : List<string>
+
+var zs = [list, null]; // List<number>[]
+>zs : List<number>[]
+>[list, null] : List<number>[]
+>list : List<number>
+>null : null
+
+var myDerivedList: DerivedList<number>;
+>myDerivedList : DerivedList<number>
+
+var as = [list, myDerivedList]; // List<number>[]
+>as : List<number>[]
+>[list, myDerivedList] : List<number>[]
+>list : List<number>
+>myDerivedList : DerivedList<number>
+

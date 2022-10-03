@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/modules/t1.ts ===
+let set = {
+>set : { foo: number; }
+>{    set foo(x: number) {    }} : { foo: number; }
+
+    set foo(x: number) {
+>foo : number
+>x : number
+    }
+}
+let get = 10;
+>get : number
+>10 : 10
+
+export { set, get };
+>set : { foo: number; }
+>get : number
+
+=== tests/cases/conformance/es6/modules/t2.ts ===
+import * as set from "./t1";
+>set : typeof set
+
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import { set as yield } from "./t1";
+>set : { foo: number; }
+>yield : { foo: number; }
+
+=== tests/cases/conformance/es6/modules/t4.ts ===
+import { get } from "./t1";
+>get : number
+

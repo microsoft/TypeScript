@@ -1,0 +1,75 @@
+=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping2.ts ===
+type FuncType1 = (x: <T>(p: T) => T) => typeof x;
+>FuncType1 : Symbol(FuncType1, Decl(taggedTemplateContextualTyping2.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 0, 18))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 0, 22))
+>p : Symbol(p, Decl(taggedTemplateContextualTyping2.ts, 0, 25))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 0, 22))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 0, 22))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 0, 18))
+
+type FuncType2 = (x: <S, T>(p: T) => T) => typeof x;
+>FuncType2 : Symbol(FuncType2, Decl(taggedTemplateContextualTyping2.ts, 0, 49))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 1, 18))
+>S : Symbol(S, Decl(taggedTemplateContextualTyping2.ts, 1, 22))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 1, 24))
+>p : Symbol(p, Decl(taggedTemplateContextualTyping2.ts, 1, 28))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 1, 24))
+>T : Symbol(T, Decl(taggedTemplateContextualTyping2.ts, 1, 24))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 1, 18))
+
+function tempTag2(templateStrs: TemplateStringsArray, f: FuncType1, x: number): number;
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>templateStrs : Symbol(templateStrs, Decl(taggedTemplateContextualTyping2.ts, 3, 18))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(taggedTemplateContextualTyping2.ts, 3, 53))
+>FuncType1 : Symbol(FuncType1, Decl(taggedTemplateContextualTyping2.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 3, 67))
+
+function tempTag2(templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string;
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>templateStrs : Symbol(templateStrs, Decl(taggedTemplateContextualTyping2.ts, 4, 18))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(taggedTemplateContextualTyping2.ts, 4, 53))
+>FuncType2 : Symbol(FuncType2, Decl(taggedTemplateContextualTyping2.ts, 0, 49))
+>h : Symbol(h, Decl(taggedTemplateContextualTyping2.ts, 4, 67))
+>FuncType2 : Symbol(FuncType2, Decl(taggedTemplateContextualTyping2.ts, 0, 49))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 4, 81))
+
+function tempTag2(...rest: any[]): any {
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>rest : Symbol(rest, Decl(taggedTemplateContextualTyping2.ts, 5, 18))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+// If contextual typing takes place, these functions should work.
+// Otherwise, the arrow functions' parameters will be typed as 'any',
+// and it is an error to invoke an any-typed value with type arguments,
+// so this test will error.
+tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 13, 12))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 13, 12))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 13, 12))
+
+tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 14, 12))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 14, 12))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 14, 12))
+>y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 14, 65))
+>y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 14, 65))
+>y : Symbol(y, Decl(taggedTemplateContextualTyping2.ts, 14, 65))
+
+tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
+>tempTag2 : Symbol(tempTag2, Decl(taggedTemplateContextualTyping2.ts, 1, 52), Decl(taggedTemplateContextualTyping2.ts, 3, 87), Decl(taggedTemplateContextualTyping2.ts, 4, 101))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(taggedTemplateContextualTyping2.ts, 15, 12))
+>undefined : Symbol(undefined)
+

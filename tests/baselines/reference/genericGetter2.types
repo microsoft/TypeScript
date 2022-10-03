@@ -1,0 +1,19 @@
+=== tests/cases/compiler/genericGetter2.ts ===
+class A<T> { }
+>A : A<T>
+
+class C<T> {
+>C : C<T>
+
+    data: A<T>;
+>data : A<T>
+
+    get x(): A {
+>x : any
+
+        return this.data;
+>this.data : A<T>
+>this : this
+>data : A<T>
+    }
+}

@@ -1,0 +1,149 @@
+=== tests/cases/compiler/superErrors.ts ===
+function foo() {
+>foo : () => void
+
+    // super in a non class context
+    var x = super;
+>x : any
+>super : any
+>super : any
+> : any
+
+    var y = () => super;
+>y : () => any
+>() => super : () => any
+>super : any
+>super : any
+> : any
+
+    var z = () => () => () => super;
+>z : () => () => () => any
+>() => () => () => super : () => () => () => any
+>() => () => super : () => () => any
+>() => super : () => any
+>super : any
+>super : any
+> : any
+}
+
+class User {
+>User : User
+
+    name: string = "Bob";
+>name : string
+>"Bob" : "Bob"
+
+    sayHello(): void {
+>sayHello : () => void
+
+        //console.log("Hello, " + this.name);
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : RegisteredUser
+>User : User
+
+    name: string = "Frank";
+>name : string
+>"Frank" : "Frank"
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof User
+
+        // super call in an inner function in a constructor
+        function inner() {
+>inner : () => void
+
+            super.sayHello();
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+        }
+
+        // super call in a lambda in an inner function in a constructor 
+        function inner2() {
+>inner2 : () => void
+
+            var x = () => super.sayHello();
+>x : () => any
+>() => super.sayHello() : () => any
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+        }
+
+        // super call in a lambda in a function expression in a constructor 
+        (function() { return () => super; })();
+>(function() { return () => super; })() : () => any
+>(function() { return () => super; }) : () => () => any
+>function() { return () => super; } : () => () => any
+>() => super : () => any
+>super : any
+>super : any
+> : any
+    }
+    sayHello(): void {
+>sayHello : () => void
+
+        // super call in a method
+        super.sayHello();
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+
+        // super call in a lambda in an inner function in a method
+        function inner() {
+>inner : () => void
+
+            var x = () => super.sayHello();
+>x : () => any
+>() => super.sayHello() : () => any
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+        }
+
+        // super call in a lambda in a function expression in a constructor 
+        (function() { return () => super; })();
+>(function() { return () => super; })() : () => any
+>(function() { return () => super; }) : () => () => any
+>function() { return () => super; } : () => () => any
+>() => super : () => any
+>super : any
+>super : any
+> : any
+    }
+    static staticFunction(): void {
+>staticFunction : () => void
+
+        // super in static functions
+        var s = super;
+>s : any
+>super : any
+>super : typeof User
+> : any
+
+        var x = () => super;
+>x : () => any
+>() => super : () => any
+>super : any
+>super : typeof User
+> : any
+
+        var y = () => () => () => super;
+>y : () => () => () => any
+>() => () => () => super : () => () => () => any
+>() => () => super : () => () => any
+>() => super : () => any
+>super : any
+>super : typeof User
+> : any
+    }
+}

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/enumDecl1.ts ===
+declare module mAmbient {
+>mAmbient : typeof mAmbient
+
+    enum e {
+>e : e
+
+        x,
+>x : e
+
+        y,
+>y : e
+
+        z
+>z : e
+    }
+}
+

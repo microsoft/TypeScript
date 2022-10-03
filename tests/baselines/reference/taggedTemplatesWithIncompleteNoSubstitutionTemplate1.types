@@ -1,0 +1,14 @@
+=== tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts ===
+function f(x: TemplateStringsArray, y: string, z: string) {
+>f : (x: TemplateStringsArray, y: string, z: string) => void
+>x : TemplateStringsArray
+>y : string
+>z : string
+}
+
+// Incomplete call, not enough parameters.
+f `123qdawdrqw
+>f `123qdawdrqw : void
+>f : (x: TemplateStringsArray, y: string, z: string) => void
+>`123qdawdrqw : "123qdawdrqw"
+

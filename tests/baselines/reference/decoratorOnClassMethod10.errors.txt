@@ -1,0 +1,13 @@
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6): error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
+  Type 'C' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
+
+
+==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts (1 errors) ====
+    declare function dec(target: Function, paramIndex: number): void;
+    
+    class C {
+        @dec method() {}
+         ~~~
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
+!!! error TS2345:   Type 'C' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
+    }

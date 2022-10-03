@@ -1,0 +1,16 @@
+=== tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts ===
+declare module "mod" {
+>"mod" : typeof import("mod")
+
+    export var x: number;
+>x : number
+}
+
+declare namespace N {
+>N : typeof N
+
+    export { x } from "mod"; // Error
+>x : number
+}
+
+

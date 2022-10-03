@@ -1,0 +1,9 @@
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../src" }
+    ]
+}

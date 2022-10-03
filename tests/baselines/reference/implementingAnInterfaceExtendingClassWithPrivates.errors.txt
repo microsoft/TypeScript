@@ -1,0 +1,48 @@
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
+  Type 'Bar' is missing the following properties from type 'I': y, x
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
+  Property 'x' is missing in type 'Bar2' but required in type 'I'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
+  Property 'x' is private in type 'I' but not in type 'Bar3'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
+  Types have separate declarations of a private property 'x'.
+
+
+==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
+    class Foo {
+        private x: string;
+    }
+    
+    interface I extends Foo {
+        y: number;
+    }
+    
+    class Bar implements I { // error
+          ~~~
+!!! error TS2420: Class 'Bar' incorrectly implements interface 'I'.
+!!! error TS2420:   Type 'Bar' is missing the following properties from type 'I': y, x
+    }
+    
+    class Bar2 implements I { // error
+          ~~~~
+!!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
+!!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:2:13: 'x' is declared here.
+        y: number;
+    }
+    
+    class Bar3 implements I { // error
+          ~~~~
+!!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
+!!! error TS2420:   Property 'x' is private in type 'I' but not in type 'Bar3'.
+        x: string;
+        y: number;
+    }
+    
+    class Bar4 implements I { // error
+          ~~~~
+!!! error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
+!!! error TS2420:   Types have separate declarations of a private property 'x'.
+        private x: string;
+        y: number;
+    }

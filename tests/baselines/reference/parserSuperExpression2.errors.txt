@@ -1,0 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,5): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts(3,10): error TS2754: 'super' may not use type arguments.
+
+
+==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts (2 errors) ====
+    class C {
+      M() {
+        super<T>(0);
+        ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+             ~~~
+!!! error TS2754: 'super' may not use type arguments.
+      }
+    }

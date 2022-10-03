@@ -1,0 +1,72 @@
+=== tests/cases/compiler/unionWithIndexSignature.ts ===
+interface NumList {
+>NumList : Symbol(NumList, Decl(unionWithIndexSignature.ts, 0, 0))
+
+  kind: 'n';
+>kind : Symbol(NumList.kind, Decl(unionWithIndexSignature.ts, 0, 19))
+
+  [x: number]: number;
+>x : Symbol(x, Decl(unionWithIndexSignature.ts, 2, 3))
+}
+interface StrList {
+>StrList : Symbol(StrList, Decl(unionWithIndexSignature.ts, 3, 1))
+
+  kind: 's';
+>kind : Symbol(StrList.kind, Decl(unionWithIndexSignature.ts, 4, 19))
+
+  [x: number]: string;
+>x : Symbol(x, Decl(unionWithIndexSignature.ts, 6, 3))
+}
+
+export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
+>foo : Symbol(foo, Decl(unionWithIndexSignature.ts, 7, 1))
+>T : Symbol(T, Decl(unionWithIndexSignature.ts, 9, 20))
+>NumList : Symbol(NumList, Decl(unionWithIndexSignature.ts, 0, 0))
+>StrList : Symbol(StrList, Decl(unionWithIndexSignature.ts, 3, 1))
+>arr : Symbol(arr, Decl(unionWithIndexSignature.ts, 9, 49))
+>T : Symbol(T, Decl(unionWithIndexSignature.ts, 9, 20))
+>NumList : Symbol(NumList, Decl(unionWithIndexSignature.ts, 0, 0))
+>StrList : Symbol(StrList, Decl(unionWithIndexSignature.ts, 3, 1))
+
+  let zz = arr[1];  // Error
+>zz : Symbol(zz, Decl(unionWithIndexSignature.ts, 10, 5))
+>arr : Symbol(arr, Decl(unionWithIndexSignature.ts, 9, 49))
+}
+
+// Repro from #38102
+
+export type TypedArray = Int32Array | Uint8Array;
+>TypedArray : Symbol(TypedArray, Decl(unionWithIndexSignature.ts, 11, 1))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
+>isTypedArray : Symbol(isTypedArray, Decl(unionWithIndexSignature.ts, 15, 49))
+>a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
+>a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  return a instanceof Int32Array || a instanceof Uint8Array;
+>a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function flatten<T extends number|TypedArray>(arr: T) {
+>flatten : Symbol(flatten, Decl(unionWithIndexSignature.ts, 19, 1))
+>T : Symbol(T, Decl(unionWithIndexSignature.ts, 21, 24))
+>TypedArray : Symbol(TypedArray, Decl(unionWithIndexSignature.ts, 11, 1))
+>arr : Symbol(arr, Decl(unionWithIndexSignature.ts, 21, 53))
+>T : Symbol(T, Decl(unionWithIndexSignature.ts, 21, 24))
+
+  if (isTypedArray(arr)) {
+>isTypedArray : Symbol(isTypedArray, Decl(unionWithIndexSignature.ts, 15, 49))
+>arr : Symbol(arr, Decl(unionWithIndexSignature.ts, 21, 53))
+
+      arr[1];
+>arr : Symbol(arr, Decl(unionWithIndexSignature.ts, 21, 53))
+  }
+}
+

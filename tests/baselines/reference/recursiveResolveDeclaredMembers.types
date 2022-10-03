@@ -1,0 +1,11 @@
+=== tests/cases/compiler/types.ts ===
+// #23025
+No type information for this code.export interface F {
+No type information for this code.    (): E;
+No type information for this code.}
+No type information for this code.export interface D<T extends F = F> {}
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/other.js ===
+/** @typedef {import("./types").D} E */
+No type information for this code.
+No type information for this code.

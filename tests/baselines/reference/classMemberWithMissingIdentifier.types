@@ -1,0 +1,7 @@
+=== tests/cases/compiler/classMemberWithMissingIdentifier.ts ===
+class C { 
+>C : C
+
+    public {};
+> : any
+}

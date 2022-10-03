@@ -1,0 +1,88 @@
+=== tests/cases/compiler/infinitelyExpandingOverloads.ts ===
+interface KnockoutSubscription2<T> {
+>KnockoutSubscription2 : Symbol(KnockoutSubscription2, Decl(infinitelyExpandingOverloads.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 0, 32))
+
+    target: KnockoutObservableBase2<T>;
+>target : Symbol(KnockoutSubscription2.target, Decl(infinitelyExpandingOverloads.ts, 0, 36))
+>KnockoutObservableBase2 : Symbol(KnockoutObservableBase2, Decl(infinitelyExpandingOverloads.ts, 2, 1))
+>T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 0, 32))
+}
+interface KnockoutObservableBase2<T> {
+>KnockoutObservableBase2 : Symbol(KnockoutObservableBase2, Decl(infinitelyExpandingOverloads.ts, 2, 1))
+>T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 3, 34))
+
+    subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
+>subscribe : Symbol(KnockoutObservableBase2.subscribe, Decl(infinitelyExpandingOverloads.ts, 3, 38))
+>callback : Symbol(callback, Decl(infinitelyExpandingOverloads.ts, 4, 14))
+>newValue : Symbol(newValue, Decl(infinitelyExpandingOverloads.ts, 4, 25))
+>T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 3, 34))
+>target : Symbol(target, Decl(infinitelyExpandingOverloads.ts, 4, 46))
+>topic : Symbol(topic, Decl(infinitelyExpandingOverloads.ts, 4, 60))
+>KnockoutSubscription2 : Symbol(KnockoutSubscription2, Decl(infinitelyExpandingOverloads.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 3, 34))
+}
+interface ValidationPlacement2<TValue> {
+>ValidationPlacement2 : Symbol(ValidationPlacement2, Decl(infinitelyExpandingOverloads.ts, 5, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 6, 31))
+
+    initialize(validatable: Validatable2<TValue>): void;
+>initialize : Symbol(ValidationPlacement2.initialize, Decl(infinitelyExpandingOverloads.ts, 6, 40))
+>validatable : Symbol(validatable, Decl(infinitelyExpandingOverloads.ts, 7, 15))
+>Validatable2 : Symbol(Validatable2, Decl(infinitelyExpandingOverloads.ts, 8, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 6, 31))
+}
+interface Validatable2<TValue> {
+>Validatable2 : Symbol(Validatable2, Decl(infinitelyExpandingOverloads.ts, 8, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 9, 23))
+
+    validators: KnockoutObservableBase2<Validator2<TValue>>;
+>validators : Symbol(Validatable2.validators, Decl(infinitelyExpandingOverloads.ts, 9, 32))
+>KnockoutObservableBase2 : Symbol(KnockoutObservableBase2, Decl(infinitelyExpandingOverloads.ts, 2, 1))
+>Validator2 : Symbol(Validator2, Decl(infinitelyExpandingOverloads.ts, 11, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 9, 23))
+}
+class Validator2<TValue> {
+>Validator2 : Symbol(Validator2, Decl(infinitelyExpandingOverloads.ts, 11, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 12, 17))
+
+    private _subscription: KnockoutSubscription2<TValue>;
+>_subscription : Symbol(Validator2._subscription, Decl(infinitelyExpandingOverloads.ts, 12, 26))
+>KnockoutSubscription2 : Symbol(KnockoutSubscription2, Decl(infinitelyExpandingOverloads.ts, 0, 0))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 12, 17))
+}
+class ViewModel<TValue> {
+>ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
+
+    public validationPlacements: Array<ValidationPlacement2<TValue>> = new Array<ValidationPlacement2<TValue>>();
+>validationPlacements : Symbol(ViewModel.validationPlacements, Decl(infinitelyExpandingOverloads.ts, 15, 25))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ValidationPlacement2 : Symbol(ValidationPlacement2, Decl(infinitelyExpandingOverloads.ts, 5, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ValidationPlacement2 : Symbol(ValidationPlacement2, Decl(infinitelyExpandingOverloads.ts, 5, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
+}
+class Widget<TValue> {
+>Widget : Symbol(Widget, Decl(infinitelyExpandingOverloads.ts, 17, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
+
+    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldnt error on this overload
+>viewModelType : Symbol(viewModelType, Decl(infinitelyExpandingOverloads.ts, 19, 16))
+>ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
+
+    constructor(viewModelType: new () => ViewModel<TValue>) {
+>viewModelType : Symbol(viewModelType, Decl(infinitelyExpandingOverloads.ts, 20, 16))
+>ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
+    }
+    public get options(): ViewModel<TValue> {
+>options : Symbol(Widget.options, Decl(infinitelyExpandingOverloads.ts, 21, 5))
+>ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
+>TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
+
+        return null;
+    }
+}

@@ -1,0 +1,326 @@
+=== tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts ===
+// Repro from #8513
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(typeGuardsAsAssertions.ts, 2, 3))
+
+export type Optional<a> = Some<a> | None;
+>Optional : Symbol(Optional, Decl(typeGuardsAsAssertions.ts, 2, 18))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 4, 21))
+>Some : Symbol(Some, Decl(typeGuardsAsAssertions.ts, 6, 48))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 4, 21))
+>None : Symbol(None, Decl(typeGuardsAsAssertions.ts, 4, 41))
+
+export interface None { readonly none: string; }
+>None : Symbol(None, Decl(typeGuardsAsAssertions.ts, 4, 41))
+>none : Symbol(None.none, Decl(typeGuardsAsAssertions.ts, 6, 23))
+
+export interface Some<a> { readonly some: a; }
+>Some : Symbol(Some, Decl(typeGuardsAsAssertions.ts, 6, 48))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 7, 22))
+>some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 7, 22))
+
+export const none : None = { none: '' };
+>none : Symbol(none, Decl(typeGuardsAsAssertions.ts, 9, 12))
+>None : Symbol(None, Decl(typeGuardsAsAssertions.ts, 4, 41))
+>none : Symbol(none, Decl(typeGuardsAsAssertions.ts, 9, 28))
+
+export function isSome<a>(value: Optional<a>): value is Some<a> {
+>isSome : Symbol(isSome, Decl(typeGuardsAsAssertions.ts, 9, 40))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 11, 23))
+>value : Symbol(value, Decl(typeGuardsAsAssertions.ts, 11, 26))
+>Optional : Symbol(Optional, Decl(typeGuardsAsAssertions.ts, 2, 18))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 11, 23))
+>value : Symbol(value, Decl(typeGuardsAsAssertions.ts, 11, 26))
+>Some : Symbol(Some, Decl(typeGuardsAsAssertions.ts, 6, 48))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 11, 23))
+
+    return 'some' in value;
+>value : Symbol(value, Decl(typeGuardsAsAssertions.ts, 11, 26))
+}
+
+function someFrom<a>(some: a) {
+>someFrom : Symbol(someFrom, Decl(typeGuardsAsAssertions.ts, 13, 1))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 15, 18))
+>some : Symbol(some, Decl(typeGuardsAsAssertions.ts, 15, 21))
+>a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 15, 18))
+
+    return { some };
+>some : Symbol(some, Decl(typeGuardsAsAssertions.ts, 16, 12))
+}
+
+export function fn<r>(makeSome: () => r): void {
+>fn : Symbol(fn, Decl(typeGuardsAsAssertions.ts, 17, 1))
+>r : Symbol(r, Decl(typeGuardsAsAssertions.ts, 19, 19))
+>makeSome : Symbol(makeSome, Decl(typeGuardsAsAssertions.ts, 19, 22))
+>r : Symbol(r, Decl(typeGuardsAsAssertions.ts, 19, 19))
+
+    let result: Optional<r> = none;
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+>Optional : Symbol(Optional, Decl(typeGuardsAsAssertions.ts, 2, 18))
+>r : Symbol(r, Decl(typeGuardsAsAssertions.ts, 19, 19))
+>none : Symbol(none, Decl(typeGuardsAsAssertions.ts, 9, 12))
+
+    result;  // None
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(typeGuardsAsAssertions.ts, 2, 3))
+
+        result;  // Some<r> | None
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+
+        result = someFrom(isSome(result) ? result.some : makeSome());
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+>someFrom : Symbol(someFrom, Decl(typeGuardsAsAssertions.ts, 13, 1))
+>isSome : Symbol(isSome, Decl(typeGuardsAsAssertions.ts, 9, 40))
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+>result.some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+>some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+>makeSome : Symbol(makeSome, Decl(typeGuardsAsAssertions.ts, 19, 22))
+
+        result;  // Some<r>
+>result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+    }
+}
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(typeGuardsAsAssertions.ts, 27, 1))
+
+    let x: string | number | boolean = 0;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+
+    x;  // number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(typeGuardsAsAssertions.ts, 2, 3))
+
+        x;  // number, then string | number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+
+        x = typeof x === "string" ? x.slice() : "abc";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+>x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+        x;  // string
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+    }
+    x;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(typeGuardsAsAssertions.ts, 38, 1))
+
+    let x: string | number | boolean = 0;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+
+    x;  // number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(typeGuardsAsAssertions.ts, 2, 3))
+
+        x;  // number, then string | number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+
+        if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+
+            x = x.slice();
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+>x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            x = "abc";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+        }
+        x;  // string
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+    }
+    x;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+}
+
+// Type guards as assertions
+
+function f1() {
+>f1 : Symbol(f1, Decl(typeGuardsAsAssertions.ts, 54, 1))
+
+    let x: string | number | undefined = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 59, 7))
+>undefined : Symbol(undefined)
+
+    x;  // undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 59, 7))
+
+    if (x) {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 59, 7))
+
+        x;  // string | number (guard as assertion)
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 59, 7))
+    }
+    x;  // string | number | undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 59, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(typeGuardsAsAssertions.ts, 65, 1))
+
+    let x: string | number | undefined = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 68, 7))
+>undefined : Symbol(undefined)
+
+    x;  // undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 68, 7))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 68, 7))
+
+        x;  // string (guard as assertion)
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 68, 7))
+    }
+    x;  // string | undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 68, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(typeGuardsAsAssertions.ts, 74, 1))
+
+    let x: string | number | undefined = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 77, 7))
+>undefined : Symbol(undefined)
+
+    x;  // undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 77, 7))
+
+    if (!x) {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 77, 7))
+
+        return;
+    }
+    x;  // string | number (guard as assertion)
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 77, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(typeGuardsAsAssertions.ts, 83, 1))
+
+    let x: string | number | undefined = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 86, 7))
+>undefined : Symbol(undefined)
+
+    x;  // undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 86, 7))
+
+    if (typeof x === "boolean") {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 86, 7))
+
+        x;  // nothing (boolean not in declared type)
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 86, 7))
+    }
+    x;  // undefined
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 86, 7))
+}
+
+function f5(x: string | number) {
+>f5 : Symbol(f5, Decl(typeGuardsAsAssertions.ts, 92, 1))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+
+    if (typeof x === "string" && typeof x === "number") {
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+
+        x;  // number (guard as assertion)
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+    }
+    else {
+        x;  // string | number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+    }
+    x;  // string | number
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 94, 12))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(typeGuardsAsAssertions.ts, 102, 1))
+
+    let x: string | undefined | null;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = "";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>undefined : Symbol(undefined)
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = null;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = <undefined | null>undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>undefined : Symbol(undefined)
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = <string | undefined>"";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
+    x = <string | null>"";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(typeGuardsAsAssertions.ts, 119, 1))
+
+    let x: string;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 122, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 122, 7))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+}
+

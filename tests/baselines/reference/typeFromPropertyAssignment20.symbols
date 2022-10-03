@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/bluebird.js ===
+!function outer (f) { return f }(
+>outer : Symbol(outer, Decl(bluebird.js, 0, 1))
+>f : Symbol(f, Decl(bluebird.js, 0, 17))
+>f : Symbol(f, Decl(bluebird.js, 0, 17))
+
+    function inner () {
+>inner : Symbol(inner, Decl(bluebird.js, 0, 33))
+
+        function Async() {
+>Async : Symbol(Async, Decl(bluebird.js, 1, 23))
+
+            this._trampolineEnabled = true;
+>this._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+>this : Symbol(Async, Decl(bluebird.js, 1, 23))
+>_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+        }
+
+        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {
+>Async.prototype : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
+>Async : Symbol(Async, Decl(bluebird.js, 1, 23))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>disableTrampolineIfNecessary : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
+>dtin : Symbol(dtin, Decl(bluebird.js, 6, 54))
+>b : Symbol(b, Decl(bluebird.js, 6, 69))
+
+            if (b) {
+>b : Symbol(b, Decl(bluebird.js, 6, 69))
+
+                this._trampolineEnabled = false;
+>this._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+>this : Symbol(Async, Decl(bluebird.js, 1, 23))
+>_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+            }
+        };
+    })
+

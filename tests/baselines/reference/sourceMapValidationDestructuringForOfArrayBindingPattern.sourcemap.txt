@@ -1,0 +1,2721 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringForOfArrayBindingPattern.js
+mapUrl: sourceMapValidationDestructuringForOfArrayBindingPattern.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringForOfArrayBindingPattern.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringForOfArrayBindingPattern.js
+sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
+-------------------------------------------------------------------
+>>>var robotA = [1, "mower", "mowing"];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^
+9 >                        ^^
+10>                          ^^^^^^^^
+11>                                  ^
+12>                                   ^
+13>                                    ^^^^^->
+1 >declare var console: {
+  >    log(msg: any): void;
+  >}
+  >type Robot = [number, string, string];
+  >type MultiSkilledRobot = [string, [string, string]];
+  >
+  >
+2 >let 
+3 >    robotA
+4 >          : Robot = 
+5 >             [
+6 >              1
+7 >               , 
+8 >                 "mower"
+9 >                        , 
+10>                          "mowing"
+11>                                  ]
+12>                                   ;
+1 >Emitted(1, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(7, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(7, 21) + SourceIndex(0)
+5 >Emitted(1, 15) Source(7, 22) + SourceIndex(0)
+6 >Emitted(1, 16) Source(7, 23) + SourceIndex(0)
+7 >Emitted(1, 18) Source(7, 25) + SourceIndex(0)
+8 >Emitted(1, 25) Source(7, 32) + SourceIndex(0)
+9 >Emitted(1, 27) Source(7, 34) + SourceIndex(0)
+10>Emitted(1, 35) Source(7, 42) + SourceIndex(0)
+11>Emitted(1, 36) Source(7, 43) + SourceIndex(0)
+12>Emitted(1, 37) Source(7, 44) + SourceIndex(0)
+---
+>>>var robotB = [2, "trimmer", "trimming"];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^^^
+9 >                          ^^
+10>                            ^^^^^^^^^^
+11>                                      ^
+12>                                       ^
+1->
+  >
+2 >let 
+3 >    robotB
+4 >          : Robot = 
+5 >             [
+6 >              2
+7 >               , 
+8 >                 "trimmer"
+9 >                          , 
+10>                            "trimming"
+11>                                      ]
+12>                                       ;
+1->Emitted(2, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(8, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(8, 21) + SourceIndex(0)
+5 >Emitted(2, 15) Source(8, 22) + SourceIndex(0)
+6 >Emitted(2, 16) Source(8, 23) + SourceIndex(0)
+7 >Emitted(2, 18) Source(8, 25) + SourceIndex(0)
+8 >Emitted(2, 27) Source(8, 34) + SourceIndex(0)
+9 >Emitted(2, 29) Source(8, 36) + SourceIndex(0)
+10>Emitted(2, 39) Source(8, 46) + SourceIndex(0)
+11>Emitted(2, 40) Source(8, 47) + SourceIndex(0)
+12>Emitted(2, 41) Source(8, 48) + SourceIndex(0)
+---
+>>>var robots = [robotA, robotB];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^^^^^^
+7 >                    ^^
+8 >                      ^^^^^^
+9 >                            ^
+10>                             ^
+1 >
+  >
+2 >let 
+3 >    robots
+4 >           = 
+5 >             [
+6 >              robotA
+7 >                    , 
+8 >                      robotB
+9 >                            ]
+10>                             ;
+1 >Emitted(3, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(9, 5) + SourceIndex(0)
+3 >Emitted(3, 11) Source(9, 11) + SourceIndex(0)
+4 >Emitted(3, 14) Source(9, 14) + SourceIndex(0)
+5 >Emitted(3, 15) Source(9, 15) + SourceIndex(0)
+6 >Emitted(3, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(3, 23) Source(9, 23) + SourceIndex(0)
+8 >Emitted(3, 29) Source(9, 29) + SourceIndex(0)
+9 >Emitted(3, 30) Source(9, 30) + SourceIndex(0)
+10>Emitted(3, 31) Source(9, 31) + SourceIndex(0)
+---
+>>>function getRobots() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^
+4 >                  ^->
+1 >
+  >
+2 >function 
+3 >         getRobots
+1 >Emitted(4, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(4, 10) Source(10, 10) + SourceIndex(0)
+3 >Emitted(4, 19) Source(10, 19) + SourceIndex(0)
+---
+>>>    return robots;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^
+4 >                 ^
+1->() {
+  >    
+2 >    return 
+3 >           robots
+4 >                 ;
+1->Emitted(5, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(5, 12) Source(11, 12) + SourceIndex(0)
+3 >Emitted(5, 18) Source(11, 18) + SourceIndex(0)
+4 >Emitted(5, 19) Source(11, 19) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(12, 2) + SourceIndex(0)
+---
+>>>var multiRobotA = ["mower", ["mowing", ""]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^
+7 >                          ^^
+8 >                            ^
+9 >                             ^^^^^^^^
+10>                                     ^^
+11>                                       ^^
+12>                                         ^
+13>                                          ^
+14>                                           ^
+15>                                            ^^^^^^^^^^^->
+1->
+  >
+  >
+2 >let 
+3 >    multiRobotA
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "mower"
+7 >                          , 
+8 >                            [
+9 >                             "mowing"
+10>                                     , 
+11>                                       ""
+12>                                         ]
+13>                                          ]
+14>                                           ;
+1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(14, 5) + SourceIndex(0)
+3 >Emitted(7, 16) Source(14, 16) + SourceIndex(0)
+4 >Emitted(7, 19) Source(14, 38) + SourceIndex(0)
+5 >Emitted(7, 20) Source(14, 39) + SourceIndex(0)
+6 >Emitted(7, 27) Source(14, 46) + SourceIndex(0)
+7 >Emitted(7, 29) Source(14, 48) + SourceIndex(0)
+8 >Emitted(7, 30) Source(14, 49) + SourceIndex(0)
+9 >Emitted(7, 38) Source(14, 57) + SourceIndex(0)
+10>Emitted(7, 40) Source(14, 59) + SourceIndex(0)
+11>Emitted(7, 42) Source(14, 61) + SourceIndex(0)
+12>Emitted(7, 43) Source(14, 62) + SourceIndex(0)
+13>Emitted(7, 44) Source(14, 63) + SourceIndex(0)
+14>Emitted(7, 45) Source(14, 64) + SourceIndex(0)
+---
+>>>var multiRobotB = ["trimmer", ["trimming", "edging"]];
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^^^
+7 >                            ^^
+8 >                              ^
+9 >                               ^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^^^^^
+12>                                                   ^
+13>                                                    ^
+14>                                                     ^
+1->
+  >
+2 >let 
+3 >    multiRobotB
+4 >               : MultiSkilledRobot = 
+5 >                  [
+6 >                   "trimmer"
+7 >                            , 
+8 >                              [
+9 >                               "trimming"
+10>                                         , 
+11>                                           "edging"
+12>                                                   ]
+13>                                                    ]
+14>                                                     ;
+1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
+3 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
+4 >Emitted(8, 19) Source(15, 38) + SourceIndex(0)
+5 >Emitted(8, 20) Source(15, 39) + SourceIndex(0)
+6 >Emitted(8, 29) Source(15, 48) + SourceIndex(0)
+7 >Emitted(8, 31) Source(15, 50) + SourceIndex(0)
+8 >Emitted(8, 32) Source(15, 51) + SourceIndex(0)
+9 >Emitted(8, 42) Source(15, 61) + SourceIndex(0)
+10>Emitted(8, 44) Source(15, 63) + SourceIndex(0)
+11>Emitted(8, 52) Source(15, 71) + SourceIndex(0)
+12>Emitted(8, 53) Source(15, 72) + SourceIndex(0)
+13>Emitted(8, 54) Source(15, 73) + SourceIndex(0)
+14>Emitted(8, 55) Source(15, 74) + SourceIndex(0)
+---
+>>>var multiRobots = [multiRobotA, multiRobotB];
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^
+6 >                   ^^^^^^^^^^^
+7 >                              ^^
+8 >                                ^^^^^^^^^^^
+9 >                                           ^
+10>                                            ^
+1 >
+  >
+2 >let 
+3 >    multiRobots
+4 >                = 
+5 >                  [
+6 >                   multiRobotA
+7 >                              , 
+8 >                                multiRobotB
+9 >                                           ]
+10>                                            ;
+1 >Emitted(9, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(9, 5) Source(16, 5) + SourceIndex(0)
+3 >Emitted(9, 16) Source(16, 16) + SourceIndex(0)
+4 >Emitted(9, 19) Source(16, 19) + SourceIndex(0)
+5 >Emitted(9, 20) Source(16, 20) + SourceIndex(0)
+6 >Emitted(9, 31) Source(16, 31) + SourceIndex(0)
+7 >Emitted(9, 33) Source(16, 33) + SourceIndex(0)
+8 >Emitted(9, 44) Source(16, 44) + SourceIndex(0)
+9 >Emitted(9, 45) Source(16, 45) + SourceIndex(0)
+10>Emitted(9, 46) Source(16, 46) + SourceIndex(0)
+---
+>>>function getMultiRobots() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^
+4 >                       ^->
+1 >
+  >
+2 >function 
+3 >         getMultiRobots
+1 >Emitted(10, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(10, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(10, 24) Source(17, 24) + SourceIndex(0)
+---
+>>>    return multiRobots;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^
+4 >                      ^
+1->() {
+  >    
+2 >    return 
+3 >           multiRobots
+4 >                      ;
+1->Emitted(11, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(11, 12) Source(18, 12) + SourceIndex(0)
+3 >Emitted(11, 23) Source(18, 23) + SourceIndex(0)
+4 >Emitted(11, 24) Source(18, 24) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(12, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(19, 2) + SourceIndex(0)
+---
+>>>for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+1->
+  >
+  >
+2 >for (let [, nameA] of 
+3 >     robots
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
+1->Emitted(13, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(13, 6) Source(21, 23) + SourceIndex(0)
+3 >Emitted(13, 16) Source(21, 29) + SourceIndex(0)
+4 >Emitted(13, 18) Source(21, 23) + SourceIndex(0)
+5 >Emitted(13, 35) Source(21, 29) + SourceIndex(0)
+6 >Emitted(13, 37) Source(21, 23) + SourceIndex(0)
+7 >Emitted(13, 57) Source(21, 29) + SourceIndex(0)
+8 >Emitted(13, 59) Source(21, 23) + SourceIndex(0)
+9 >Emitted(13, 63) Source(21, 29) + SourceIndex(0)
+10>Emitted(13, 65) Source(21, 31) + SourceIndex(0)
+---
+>>>    var _a = robots_1[_i], nameA = _a[1];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^
+6 >                                ^^^^^^^^
+1 >
+2 >    
+3 >        [, nameA]
+4 >                         
+5 >                           nameA
+6 >                                
+1 >Emitted(14, 5) Source(21, 10) + SourceIndex(0)
+2 >Emitted(14, 9) Source(21, 10) + SourceIndex(0)
+3 >Emitted(14, 26) Source(21, 19) + SourceIndex(0)
+4 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
+5 >Emitted(14, 33) Source(21, 18) + SourceIndex(0)
+6 >Emitted(14, 41) Source(21, 18) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(15, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(15, 12) Source(22, 12) + SourceIndex(0)
+3 >Emitted(15, 13) Source(22, 13) + SourceIndex(0)
+4 >Emitted(15, 16) Source(22, 16) + SourceIndex(0)
+5 >Emitted(15, 17) Source(22, 17) + SourceIndex(0)
+6 >Emitted(15, 22) Source(22, 22) + SourceIndex(0)
+7 >Emitted(15, 23) Source(22, 23) + SourceIndex(0)
+8 >Emitted(15, 24) Source(22, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(16, 2) Source(23, 2) + SourceIndex(0)
+---
+>>>for (var _b = 0, _c = getRobots(); _b < _c.length; _b++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+1->
+  >
+2 >for (let [, nameA] of 
+3 >     getRobots()
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
+1->Emitted(17, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(17, 6) Source(24, 23) + SourceIndex(0)
+3 >Emitted(17, 16) Source(24, 34) + SourceIndex(0)
+4 >Emitted(17, 18) Source(24, 23) + SourceIndex(0)
+5 >Emitted(17, 23) Source(24, 23) + SourceIndex(0)
+6 >Emitted(17, 32) Source(24, 32) + SourceIndex(0)
+7 >Emitted(17, 34) Source(24, 34) + SourceIndex(0)
+8 >Emitted(17, 36) Source(24, 23) + SourceIndex(0)
+9 >Emitted(17, 50) Source(24, 34) + SourceIndex(0)
+10>Emitted(17, 52) Source(24, 23) + SourceIndex(0)
+11>Emitted(17, 56) Source(24, 34) + SourceIndex(0)
+12>Emitted(17, 58) Source(24, 36) + SourceIndex(0)
+---
+>>>    var _d = _c[_b], nameA = _d[1];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^
+6 >                          ^^^^^^^^
+1 >
+2 >    
+3 >        [, nameA]
+4 >                   
+5 >                     nameA
+6 >                          
+1 >Emitted(18, 5) Source(24, 10) + SourceIndex(0)
+2 >Emitted(18, 9) Source(24, 10) + SourceIndex(0)
+3 >Emitted(18, 20) Source(24, 19) + SourceIndex(0)
+4 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
+5 >Emitted(18, 27) Source(24, 18) + SourceIndex(0)
+6 >Emitted(18, 35) Source(24, 18) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(19, 5) Source(25, 5) + SourceIndex(0)
+2 >Emitted(19, 12) Source(25, 12) + SourceIndex(0)
+3 >Emitted(19, 13) Source(25, 13) + SourceIndex(0)
+4 >Emitted(19, 16) Source(25, 16) + SourceIndex(0)
+5 >Emitted(19, 17) Source(25, 17) + SourceIndex(0)
+6 >Emitted(19, 22) Source(25, 22) + SourceIndex(0)
+7 >Emitted(19, 23) Source(25, 23) + SourceIndex(0)
+8 >Emitted(19, 24) Source(25, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(20, 2) Source(26, 2) + SourceIndex(0)
+---
+>>>for (var _e = 0, _f = [robotA, robotB]; _e < _f.length; _e++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^^^^^^^^^^^^^
+12>                                                      ^^
+13>                                                        ^^^^
+14>                                                            ^^
+1->
+  >
+2 >for (let [, nameA] of 
+3 >     [robotA, robotB]
+4 >               
+5 >                 [
+6 >                       robotA
+7 >                             , 
+8 >                               robotB
+9 >                                     ]
+10>                                      
+11>                                        [robotA, robotB]
+12>                                                      
+13>                                                        [robotA, robotB]
+14>                                                            ) 
+1->Emitted(21, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(21, 6) Source(27, 23) + SourceIndex(0)
+3 >Emitted(21, 16) Source(27, 39) + SourceIndex(0)
+4 >Emitted(21, 18) Source(27, 23) + SourceIndex(0)
+5 >Emitted(21, 24) Source(27, 24) + SourceIndex(0)
+6 >Emitted(21, 30) Source(27, 30) + SourceIndex(0)
+7 >Emitted(21, 32) Source(27, 32) + SourceIndex(0)
+8 >Emitted(21, 38) Source(27, 38) + SourceIndex(0)
+9 >Emitted(21, 39) Source(27, 39) + SourceIndex(0)
+10>Emitted(21, 41) Source(27, 23) + SourceIndex(0)
+11>Emitted(21, 55) Source(27, 39) + SourceIndex(0)
+12>Emitted(21, 57) Source(27, 23) + SourceIndex(0)
+13>Emitted(21, 61) Source(27, 39) + SourceIndex(0)
+14>Emitted(21, 63) Source(27, 41) + SourceIndex(0)
+---
+>>>    var _g = _f[_e], nameA = _g[1];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^
+6 >                          ^^^^^^^^
+1 >
+2 >    
+3 >        [, nameA]
+4 >                   
+5 >                     nameA
+6 >                          
+1 >Emitted(22, 5) Source(27, 10) + SourceIndex(0)
+2 >Emitted(22, 9) Source(27, 10) + SourceIndex(0)
+3 >Emitted(22, 20) Source(27, 19) + SourceIndex(0)
+4 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
+5 >Emitted(22, 27) Source(27, 18) + SourceIndex(0)
+6 >Emitted(22, 35) Source(27, 18) + SourceIndex(0)
+---
+>>>    console.log(nameA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA
+7 >                     )
+8 >                      ;
+1 >Emitted(23, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(23, 12) Source(28, 12) + SourceIndex(0)
+3 >Emitted(23, 13) Source(28, 13) + SourceIndex(0)
+4 >Emitted(23, 16) Source(28, 16) + SourceIndex(0)
+5 >Emitted(23, 17) Source(28, 17) + SourceIndex(0)
+6 >Emitted(23, 22) Source(28, 22) + SourceIndex(0)
+7 >Emitted(23, 23) Source(28, 23) + SourceIndex(0)
+8 >Emitted(23, 24) Source(28, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(24, 2) Source(29, 2) + SourceIndex(0)
+---
+>>>for (var _h = 0, multiRobots_1 = multiRobots; _h < multiRobots_1.length; _h++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                            ^^
+7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                       ^^
+9 >                                                                         ^^^^
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, [primarySkillA, secondarySkillA]] of 
+3 >     multiRobots
+4 >               
+5 >                 multiRobots
+6 >                                            
+7 >                                              multiRobots
+8 >                                                                       
+9 >                                                                         multiRobots
+10>                                                                             ) 
+1->Emitted(25, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(25, 6) Source(30, 50) + SourceIndex(0)
+3 >Emitted(25, 16) Source(30, 61) + SourceIndex(0)
+4 >Emitted(25, 18) Source(30, 50) + SourceIndex(0)
+5 >Emitted(25, 45) Source(30, 61) + SourceIndex(0)
+6 >Emitted(25, 47) Source(30, 50) + SourceIndex(0)
+7 >Emitted(25, 72) Source(30, 61) + SourceIndex(0)
+8 >Emitted(25, 74) Source(30, 50) + SourceIndex(0)
+9 >Emitted(25, 78) Source(30, 61) + SourceIndex(0)
+10>Emitted(25, 80) Source(30, 63) + SourceIndex(0)
+---
+>>>    var _j = multiRobots_1[_h], _k = _j[1], primarySkillA = _k[0], secondarySkillA = _k[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^
+4 >                              ^^
+5 >                                ^^^^^^^^^^
+6 >                                          ^^
+7 >                                            ^^^^^^^^^^^^^
+8 >                                                         ^^^^^^^^
+9 >                                                                 ^^
+10>                                                                   ^^^^^^^^^^^^^^^
+11>                                                                                  ^^^^^^^^
+1->
+2 >    
+3 >        [, [primarySkillA, secondarySkillA]]
+4 >                              
+5 >                                [primarySkillA, secondarySkillA]
+6 >                                          
+7 >                                            primarySkillA
+8 >                                                         
+9 >                                                                 , 
+10>                                                                   secondarySkillA
+11>                                                                                  
+1->Emitted(26, 5) Source(30, 10) + SourceIndex(0)
+2 >Emitted(26, 9) Source(30, 10) + SourceIndex(0)
+3 >Emitted(26, 31) Source(30, 46) + SourceIndex(0)
+4 >Emitted(26, 33) Source(30, 13) + SourceIndex(0)
+5 >Emitted(26, 43) Source(30, 45) + SourceIndex(0)
+6 >Emitted(26, 45) Source(30, 14) + SourceIndex(0)
+7 >Emitted(26, 58) Source(30, 27) + SourceIndex(0)
+8 >Emitted(26, 66) Source(30, 27) + SourceIndex(0)
+9 >Emitted(26, 68) Source(30, 29) + SourceIndex(0)
+10>Emitted(26, 83) Source(30, 44) + SourceIndex(0)
+11>Emitted(26, 91) Source(30, 44) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >]] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(27, 5) Source(31, 5) + SourceIndex(0)
+2 >Emitted(27, 12) Source(31, 12) + SourceIndex(0)
+3 >Emitted(27, 13) Source(31, 13) + SourceIndex(0)
+4 >Emitted(27, 16) Source(31, 16) + SourceIndex(0)
+5 >Emitted(27, 17) Source(31, 17) + SourceIndex(0)
+6 >Emitted(27, 30) Source(31, 30) + SourceIndex(0)
+7 >Emitted(27, 31) Source(31, 31) + SourceIndex(0)
+8 >Emitted(27, 32) Source(31, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(28, 2) Source(32, 2) + SourceIndex(0)
+---
+>>>for (var _l = 0, _m = getMultiRobots(); _l < _m.length; _l++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^
+9 >                                        ^^^^^^^^^^^^^^
+10>                                                      ^^
+11>                                                        ^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [, [primarySkillA, secondarySkillA]] of 
+3 >     getMultiRobots()
+4 >               
+5 >                 
+6 >                      getMultiRobots
+7 >                                    ()
+8 >                                      
+9 >                                        getMultiRobots()
+10>                                                      
+11>                                                        getMultiRobots()
+12>                                                            ) 
+1->Emitted(29, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(29, 6) Source(33, 50) + SourceIndex(0)
+3 >Emitted(29, 16) Source(33, 66) + SourceIndex(0)
+4 >Emitted(29, 18) Source(33, 50) + SourceIndex(0)
+5 >Emitted(29, 23) Source(33, 50) + SourceIndex(0)
+6 >Emitted(29, 37) Source(33, 64) + SourceIndex(0)
+7 >Emitted(29, 39) Source(33, 66) + SourceIndex(0)
+8 >Emitted(29, 41) Source(33, 50) + SourceIndex(0)
+9 >Emitted(29, 55) Source(33, 66) + SourceIndex(0)
+10>Emitted(29, 57) Source(33, 50) + SourceIndex(0)
+11>Emitted(29, 61) Source(33, 66) + SourceIndex(0)
+12>Emitted(29, 63) Source(33, 68) + SourceIndex(0)
+---
+>>>    var _o = _m[_l], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^^^^^^^^^
+8 >                                              ^^^^^^^^
+9 >                                                      ^^
+10>                                                        ^^^^^^^^^^^^^^^
+11>                                                                       ^^^^^^^^
+1->
+2 >    
+3 >        [, [primarySkillA, secondarySkillA]]
+4 >                   
+5 >                     [primarySkillA, secondarySkillA]
+6 >                               
+7 >                                 primarySkillA
+8 >                                              
+9 >                                                      , 
+10>                                                        secondarySkillA
+11>                                                                       
+1->Emitted(30, 5) Source(33, 10) + SourceIndex(0)
+2 >Emitted(30, 9) Source(33, 10) + SourceIndex(0)
+3 >Emitted(30, 20) Source(33, 46) + SourceIndex(0)
+4 >Emitted(30, 22) Source(33, 13) + SourceIndex(0)
+5 >Emitted(30, 32) Source(33, 45) + SourceIndex(0)
+6 >Emitted(30, 34) Source(33, 14) + SourceIndex(0)
+7 >Emitted(30, 47) Source(33, 27) + SourceIndex(0)
+8 >Emitted(30, 55) Source(33, 27) + SourceIndex(0)
+9 >Emitted(30, 57) Source(33, 29) + SourceIndex(0)
+10>Emitted(30, 72) Source(33, 44) + SourceIndex(0)
+11>Emitted(30, 80) Source(33, 44) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >]] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(31, 5) Source(34, 5) + SourceIndex(0)
+2 >Emitted(31, 12) Source(34, 12) + SourceIndex(0)
+3 >Emitted(31, 13) Source(34, 13) + SourceIndex(0)
+4 >Emitted(31, 16) Source(34, 16) + SourceIndex(0)
+5 >Emitted(31, 17) Source(34, 17) + SourceIndex(0)
+6 >Emitted(31, 30) Source(34, 30) + SourceIndex(0)
+7 >Emitted(31, 31) Source(34, 31) + SourceIndex(0)
+8 >Emitted(31, 32) Source(34, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(32, 2) Source(35, 2) + SourceIndex(0)
+---
+>>>for (var _q = 0, _r = [multiRobotA, multiRobotB]; _q < _r.length; _q++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^^^^^^
+7 >                                  ^^
+8 >                                    ^^^^^^^^^^^
+9 >                                               ^
+10>                                                ^^
+11>                                                  ^^^^^^^^^^^^^^
+12>                                                                ^^
+13>                                                                  ^^^^
+14>                                                                      ^^
+15>                                                                        ^^^^^^^^^->
+1->
+  >
+2 >for (let [, [primarySkillA, secondarySkillA]] of 
+3 >     [multiRobotA, multiRobotB]
+4 >               
+5 >                 [
+6 >                       multiRobotA
+7 >                                  , 
+8 >                                    multiRobotB
+9 >                                               ]
+10>                                                
+11>                                                  [multiRobotA, multiRobotB]
+12>                                                                
+13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
+1->Emitted(33, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(33, 6) Source(36, 50) + SourceIndex(0)
+3 >Emitted(33, 16) Source(36, 76) + SourceIndex(0)
+4 >Emitted(33, 18) Source(36, 50) + SourceIndex(0)
+5 >Emitted(33, 24) Source(36, 51) + SourceIndex(0)
+6 >Emitted(33, 35) Source(36, 62) + SourceIndex(0)
+7 >Emitted(33, 37) Source(36, 64) + SourceIndex(0)
+8 >Emitted(33, 48) Source(36, 75) + SourceIndex(0)
+9 >Emitted(33, 49) Source(36, 76) + SourceIndex(0)
+10>Emitted(33, 51) Source(36, 50) + SourceIndex(0)
+11>Emitted(33, 65) Source(36, 76) + SourceIndex(0)
+12>Emitted(33, 67) Source(36, 50) + SourceIndex(0)
+13>Emitted(33, 71) Source(36, 76) + SourceIndex(0)
+14>Emitted(33, 73) Source(36, 78) + SourceIndex(0)
+---
+>>>    var _s = _r[_q], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^
+6 >                               ^^
+7 >                                 ^^^^^^^^^^^^^
+8 >                                              ^^^^^^^^
+9 >                                                      ^^
+10>                                                        ^^^^^^^^^^^^^^^
+11>                                                                       ^^^^^^^^
+1->
+2 >    
+3 >        [, [primarySkillA, secondarySkillA]]
+4 >                   
+5 >                     [primarySkillA, secondarySkillA]
+6 >                               
+7 >                                 primarySkillA
+8 >                                              
+9 >                                                      , 
+10>                                                        secondarySkillA
+11>                                                                       
+1->Emitted(34, 5) Source(36, 10) + SourceIndex(0)
+2 >Emitted(34, 9) Source(36, 10) + SourceIndex(0)
+3 >Emitted(34, 20) Source(36, 46) + SourceIndex(0)
+4 >Emitted(34, 22) Source(36, 13) + SourceIndex(0)
+5 >Emitted(34, 32) Source(36, 45) + SourceIndex(0)
+6 >Emitted(34, 34) Source(36, 14) + SourceIndex(0)
+7 >Emitted(34, 47) Source(36, 27) + SourceIndex(0)
+8 >Emitted(34, 55) Source(36, 27) + SourceIndex(0)
+9 >Emitted(34, 57) Source(36, 29) + SourceIndex(0)
+10>Emitted(34, 72) Source(36, 44) + SourceIndex(0)
+11>Emitted(34, 80) Source(36, 44) + SourceIndex(0)
+---
+>>>    console.log(primarySkillA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^
+7 >                             ^
+8 >                              ^
+1 >]] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                primarySkillA
+7 >                             )
+8 >                              ;
+1 >Emitted(35, 5) Source(37, 5) + SourceIndex(0)
+2 >Emitted(35, 12) Source(37, 12) + SourceIndex(0)
+3 >Emitted(35, 13) Source(37, 13) + SourceIndex(0)
+4 >Emitted(35, 16) Source(37, 16) + SourceIndex(0)
+5 >Emitted(35, 17) Source(37, 17) + SourceIndex(0)
+6 >Emitted(35, 30) Source(37, 30) + SourceIndex(0)
+7 >Emitted(35, 31) Source(37, 31) + SourceIndex(0)
+8 >Emitted(35, 32) Source(37, 32) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(36, 2) Source(38, 2) + SourceIndex(0)
+---
+>>>for (var _u = 0, robots_2 = robots; _u < robots_2.length; _u++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+1->
+  >
+  >
+2 >for (let [numberB] of 
+3 >     robots
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
+1->Emitted(37, 1) Source(40, 1) + SourceIndex(0)
+2 >Emitted(37, 6) Source(40, 23) + SourceIndex(0)
+3 >Emitted(37, 16) Source(40, 29) + SourceIndex(0)
+4 >Emitted(37, 18) Source(40, 23) + SourceIndex(0)
+5 >Emitted(37, 35) Source(40, 29) + SourceIndex(0)
+6 >Emitted(37, 37) Source(40, 23) + SourceIndex(0)
+7 >Emitted(37, 57) Source(40, 29) + SourceIndex(0)
+8 >Emitted(37, 59) Source(40, 23) + SourceIndex(0)
+9 >Emitted(37, 63) Source(40, 29) + SourceIndex(0)
+10>Emitted(37, 65) Source(40, 31) + SourceIndex(0)
+---
+>>>    var numberB = robots_2[_u][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^
+4 >               ^^^^^^^^^^^^^^^^^^
+1 >
+2 >    
+3 >        numberB
+4 >               
+1 >Emitted(38, 5) Source(40, 11) + SourceIndex(0)
+2 >Emitted(38, 9) Source(40, 11) + SourceIndex(0)
+3 >Emitted(38, 16) Source(40, 18) + SourceIndex(0)
+4 >Emitted(38, 34) Source(40, 18) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(39, 5) Source(41, 5) + SourceIndex(0)
+2 >Emitted(39, 12) Source(41, 12) + SourceIndex(0)
+3 >Emitted(39, 13) Source(41, 13) + SourceIndex(0)
+4 >Emitted(39, 16) Source(41, 16) + SourceIndex(0)
+5 >Emitted(39, 17) Source(41, 17) + SourceIndex(0)
+6 >Emitted(39, 24) Source(41, 24) + SourceIndex(0)
+7 >Emitted(39, 25) Source(41, 25) + SourceIndex(0)
+8 >Emitted(39, 26) Source(41, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(40, 2) Source(42, 2) + SourceIndex(0)
+---
+>>>for (var _v = 0, _w = getRobots(); _v < _w.length; _v++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+1->
+  >
+2 >for (let [numberB] of 
+3 >     getRobots()
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
+1->Emitted(41, 1) Source(43, 1) + SourceIndex(0)
+2 >Emitted(41, 6) Source(43, 23) + SourceIndex(0)
+3 >Emitted(41, 16) Source(43, 34) + SourceIndex(0)
+4 >Emitted(41, 18) Source(43, 23) + SourceIndex(0)
+5 >Emitted(41, 23) Source(43, 23) + SourceIndex(0)
+6 >Emitted(41, 32) Source(43, 32) + SourceIndex(0)
+7 >Emitted(41, 34) Source(43, 34) + SourceIndex(0)
+8 >Emitted(41, 36) Source(43, 23) + SourceIndex(0)
+9 >Emitted(41, 50) Source(43, 34) + SourceIndex(0)
+10>Emitted(41, 52) Source(43, 23) + SourceIndex(0)
+11>Emitted(41, 56) Source(43, 34) + SourceIndex(0)
+12>Emitted(41, 58) Source(43, 36) + SourceIndex(0)
+---
+>>>    var numberB = _w[_v][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^
+4 >               ^^^^^^^^^^^^
+1 >
+2 >    
+3 >        numberB
+4 >               
+1 >Emitted(42, 5) Source(43, 11) + SourceIndex(0)
+2 >Emitted(42, 9) Source(43, 11) + SourceIndex(0)
+3 >Emitted(42, 16) Source(43, 18) + SourceIndex(0)
+4 >Emitted(42, 28) Source(43, 18) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(43, 5) Source(44, 5) + SourceIndex(0)
+2 >Emitted(43, 12) Source(44, 12) + SourceIndex(0)
+3 >Emitted(43, 13) Source(44, 13) + SourceIndex(0)
+4 >Emitted(43, 16) Source(44, 16) + SourceIndex(0)
+5 >Emitted(43, 17) Source(44, 17) + SourceIndex(0)
+6 >Emitted(43, 24) Source(44, 24) + SourceIndex(0)
+7 >Emitted(43, 25) Source(44, 25) + SourceIndex(0)
+8 >Emitted(43, 26) Source(44, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(44, 2) Source(45, 2) + SourceIndex(0)
+---
+>>>for (var _x = 0, _y = [robotA, robotB]; _x < _y.length; _x++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^
+7 >                             ^^
+8 >                               ^^^^^^
+9 >                                     ^
+10>                                      ^^
+11>                                        ^^^^^^^^^^^^^^
+12>                                                      ^^
+13>                                                        ^^^^
+14>                                                            ^^
+1->
+  >
+2 >for (let [numberB] of 
+3 >     [robotA, robotB]
+4 >               
+5 >                 [
+6 >                       robotA
+7 >                             , 
+8 >                               robotB
+9 >                                     ]
+10>                                      
+11>                                        [robotA, robotB]
+12>                                                      
+13>                                                        [robotA, robotB]
+14>                                                            ) 
+1->Emitted(45, 1) Source(46, 1) + SourceIndex(0)
+2 >Emitted(45, 6) Source(46, 23) + SourceIndex(0)
+3 >Emitted(45, 16) Source(46, 39) + SourceIndex(0)
+4 >Emitted(45, 18) Source(46, 23) + SourceIndex(0)
+5 >Emitted(45, 24) Source(46, 24) + SourceIndex(0)
+6 >Emitted(45, 30) Source(46, 30) + SourceIndex(0)
+7 >Emitted(45, 32) Source(46, 32) + SourceIndex(0)
+8 >Emitted(45, 38) Source(46, 38) + SourceIndex(0)
+9 >Emitted(45, 39) Source(46, 39) + SourceIndex(0)
+10>Emitted(45, 41) Source(46, 23) + SourceIndex(0)
+11>Emitted(45, 55) Source(46, 39) + SourceIndex(0)
+12>Emitted(45, 57) Source(46, 23) + SourceIndex(0)
+13>Emitted(45, 61) Source(46, 39) + SourceIndex(0)
+14>Emitted(45, 63) Source(46, 41) + SourceIndex(0)
+---
+>>>    var numberB = _y[_x][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^
+4 >               ^^^^^^^^^^^^
+1 >
+2 >    
+3 >        numberB
+4 >               
+1 >Emitted(46, 5) Source(46, 11) + SourceIndex(0)
+2 >Emitted(46, 9) Source(46, 11) + SourceIndex(0)
+3 >Emitted(46, 16) Source(46, 18) + SourceIndex(0)
+4 >Emitted(46, 28) Source(46, 18) + SourceIndex(0)
+---
+>>>    console.log(numberB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberB
+7 >                       )
+8 >                        ;
+1 >Emitted(47, 5) Source(47, 5) + SourceIndex(0)
+2 >Emitted(47, 12) Source(47, 12) + SourceIndex(0)
+3 >Emitted(47, 13) Source(47, 13) + SourceIndex(0)
+4 >Emitted(47, 16) Source(47, 16) + SourceIndex(0)
+5 >Emitted(47, 17) Source(47, 17) + SourceIndex(0)
+6 >Emitted(47, 24) Source(47, 24) + SourceIndex(0)
+7 >Emitted(47, 25) Source(47, 25) + SourceIndex(0)
+8 >Emitted(47, 26) Source(47, 26) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(48, 2) Source(48, 2) + SourceIndex(0)
+---
+>>>for (var _z = 0, multiRobots_2 = multiRobots; _z < multiRobots_2.length; _z++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                            ^^
+7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                       ^^
+9 >                                                                         ^^^^
+10>                                                                             ^^
+1->
+  >
+2 >for (let [nameB] of 
+3 >     multiRobots
+4 >               
+5 >                 multiRobots
+6 >                                            
+7 >                                              multiRobots
+8 >                                                                       
+9 >                                                                         multiRobots
+10>                                                                             ) 
+1->Emitted(49, 1) Source(49, 1) + SourceIndex(0)
+2 >Emitted(49, 6) Source(49, 21) + SourceIndex(0)
+3 >Emitted(49, 16) Source(49, 32) + SourceIndex(0)
+4 >Emitted(49, 18) Source(49, 21) + SourceIndex(0)
+5 >Emitted(49, 45) Source(49, 32) + SourceIndex(0)
+6 >Emitted(49, 47) Source(49, 21) + SourceIndex(0)
+7 >Emitted(49, 72) Source(49, 32) + SourceIndex(0)
+8 >Emitted(49, 74) Source(49, 21) + SourceIndex(0)
+9 >Emitted(49, 78) Source(49, 32) + SourceIndex(0)
+10>Emitted(49, 80) Source(49, 34) + SourceIndex(0)
+---
+>>>    var nameB = multiRobots_2[_z][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >    
+3 >        nameB
+4 >             
+1 >Emitted(50, 5) Source(49, 11) + SourceIndex(0)
+2 >Emitted(50, 9) Source(49, 11) + SourceIndex(0)
+3 >Emitted(50, 14) Source(49, 16) + SourceIndex(0)
+4 >Emitted(50, 37) Source(49, 16) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(51, 5) Source(50, 5) + SourceIndex(0)
+2 >Emitted(51, 12) Source(50, 12) + SourceIndex(0)
+3 >Emitted(51, 13) Source(50, 13) + SourceIndex(0)
+4 >Emitted(51, 16) Source(50, 16) + SourceIndex(0)
+5 >Emitted(51, 17) Source(50, 17) + SourceIndex(0)
+6 >Emitted(51, 22) Source(50, 22) + SourceIndex(0)
+7 >Emitted(51, 23) Source(50, 23) + SourceIndex(0)
+8 >Emitted(51, 24) Source(50, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(52, 2) Source(51, 2) + SourceIndex(0)
+---
+>>>for (var _0 = 0, _1 = getMultiRobots(); _0 < _1.length; _0++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^
+9 >                                        ^^^^^^^^^^^^^^
+10>                                                      ^^
+11>                                                        ^^^^
+12>                                                            ^^
+1->
+  >
+2 >for (let [nameB] of 
+3 >     getMultiRobots()
+4 >               
+5 >                 
+6 >                      getMultiRobots
+7 >                                    ()
+8 >                                      
+9 >                                        getMultiRobots()
+10>                                                      
+11>                                                        getMultiRobots()
+12>                                                            ) 
+1->Emitted(53, 1) Source(52, 1) + SourceIndex(0)
+2 >Emitted(53, 6) Source(52, 21) + SourceIndex(0)
+3 >Emitted(53, 16) Source(52, 37) + SourceIndex(0)
+4 >Emitted(53, 18) Source(52, 21) + SourceIndex(0)
+5 >Emitted(53, 23) Source(52, 21) + SourceIndex(0)
+6 >Emitted(53, 37) Source(52, 35) + SourceIndex(0)
+7 >Emitted(53, 39) Source(52, 37) + SourceIndex(0)
+8 >Emitted(53, 41) Source(52, 21) + SourceIndex(0)
+9 >Emitted(53, 55) Source(52, 37) + SourceIndex(0)
+10>Emitted(53, 57) Source(52, 21) + SourceIndex(0)
+11>Emitted(53, 61) Source(52, 37) + SourceIndex(0)
+12>Emitted(53, 63) Source(52, 39) + SourceIndex(0)
+---
+>>>    var nameB = _1[_0][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^^^^^^^^^^^^
+1 >
+2 >    
+3 >        nameB
+4 >             
+1 >Emitted(54, 5) Source(52, 11) + SourceIndex(0)
+2 >Emitted(54, 9) Source(52, 11) + SourceIndex(0)
+3 >Emitted(54, 14) Source(52, 16) + SourceIndex(0)
+4 >Emitted(54, 26) Source(52, 16) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(55, 5) Source(53, 5) + SourceIndex(0)
+2 >Emitted(55, 12) Source(53, 12) + SourceIndex(0)
+3 >Emitted(55, 13) Source(53, 13) + SourceIndex(0)
+4 >Emitted(55, 16) Source(53, 16) + SourceIndex(0)
+5 >Emitted(55, 17) Source(53, 17) + SourceIndex(0)
+6 >Emitted(55, 22) Source(53, 22) + SourceIndex(0)
+7 >Emitted(55, 23) Source(53, 23) + SourceIndex(0)
+8 >Emitted(55, 24) Source(53, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(56, 2) Source(54, 2) + SourceIndex(0)
+---
+>>>for (var _2 = 0, _3 = [multiRobotA, multiRobotB]; _2 < _3.length; _2++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^^^^^^^^^
+7 >                                  ^^
+8 >                                    ^^^^^^^^^^^
+9 >                                               ^
+10>                                                ^^
+11>                                                  ^^^^^^^^^^^^^^
+12>                                                                ^^
+13>                                                                  ^^^^
+14>                                                                      ^^
+1->
+  >
+2 >for (let [nameB] of 
+3 >     [multiRobotA, multiRobotB]
+4 >               
+5 >                 [
+6 >                       multiRobotA
+7 >                                  , 
+8 >                                    multiRobotB
+9 >                                               ]
+10>                                                
+11>                                                  [multiRobotA, multiRobotB]
+12>                                                                
+13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
+1->Emitted(57, 1) Source(55, 1) + SourceIndex(0)
+2 >Emitted(57, 6) Source(55, 21) + SourceIndex(0)
+3 >Emitted(57, 16) Source(55, 47) + SourceIndex(0)
+4 >Emitted(57, 18) Source(55, 21) + SourceIndex(0)
+5 >Emitted(57, 24) Source(55, 22) + SourceIndex(0)
+6 >Emitted(57, 35) Source(55, 33) + SourceIndex(0)
+7 >Emitted(57, 37) Source(55, 35) + SourceIndex(0)
+8 >Emitted(57, 48) Source(55, 46) + SourceIndex(0)
+9 >Emitted(57, 49) Source(55, 47) + SourceIndex(0)
+10>Emitted(57, 51) Source(55, 21) + SourceIndex(0)
+11>Emitted(57, 65) Source(55, 47) + SourceIndex(0)
+12>Emitted(57, 67) Source(55, 21) + SourceIndex(0)
+13>Emitted(57, 71) Source(55, 47) + SourceIndex(0)
+14>Emitted(57, 73) Source(55, 49) + SourceIndex(0)
+---
+>>>    var nameB = _3[_2][0];
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^^^^^^^^^^^^
+1 >
+2 >    
+3 >        nameB
+4 >             
+1 >Emitted(58, 5) Source(55, 11) + SourceIndex(0)
+2 >Emitted(58, 9) Source(55, 11) + SourceIndex(0)
+3 >Emitted(58, 14) Source(55, 16) + SourceIndex(0)
+4 >Emitted(58, 26) Source(55, 16) + SourceIndex(0)
+---
+>>>    console.log(nameB);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1 >] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameB
+7 >                     )
+8 >                      ;
+1 >Emitted(59, 5) Source(56, 5) + SourceIndex(0)
+2 >Emitted(59, 12) Source(56, 12) + SourceIndex(0)
+3 >Emitted(59, 13) Source(56, 13) + SourceIndex(0)
+4 >Emitted(59, 16) Source(56, 16) + SourceIndex(0)
+5 >Emitted(59, 17) Source(56, 17) + SourceIndex(0)
+6 >Emitted(59, 22) Source(56, 22) + SourceIndex(0)
+7 >Emitted(59, 23) Source(56, 23) + SourceIndex(0)
+8 >Emitted(59, 24) Source(56, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(60, 2) Source(57, 2) + SourceIndex(0)
+---
+>>>for (var _4 = 0, robots_3 = robots; _4 < robots_3.length; _4++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^
+10>                                                              ^^
+11>                                                                ^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >for (let [numberA2, nameA2, skillA2] of 
+3 >     robots
+4 >               
+5 >                 robots
+6 >                                  
+7 >                                    robots
+8 >                                                        
+9 >                                                          robots
+10>                                                              ) 
+1->Emitted(61, 1) Source(59, 1) + SourceIndex(0)
+2 >Emitted(61, 6) Source(59, 41) + SourceIndex(0)
+3 >Emitted(61, 16) Source(59, 47) + SourceIndex(0)
+4 >Emitted(61, 18) Source(59, 41) + SourceIndex(0)
+5 >Emitted(61, 35) Source(59, 47) + SourceIndex(0)
+6 >Emitted(61, 37) Source(59, 41) + SourceIndex(0)
+7 >Emitted(61, 57) Source(59, 47) + SourceIndex(0)
+8 >Emitted(61, 59) Source(59, 41) + SourceIndex(0)
+9 >Emitted(61, 63) Source(59, 47) + SourceIndex(0)
+10>Emitted(61, 65) Source(59, 49) + SourceIndex(0)
+---
+>>>    var _5 = robots_3[_4], numberA2 = _5[0], nameA2 = _5[1], skillA2 = _5[2];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^
+6 >                                   ^^^^^^^^
+7 >                                           ^^
+8 >                                             ^^^^^^
+9 >                                                   ^^^^^^^^
+10>                                                           ^^
+11>                                                             ^^^^^^^
+12>                                                                    ^^^^^^^^
+1->
+2 >    
+3 >        [numberA2, nameA2, skillA2]
+4 >                         
+5 >                           numberA2
+6 >                                   
+7 >                                           , 
+8 >                                             nameA2
+9 >                                                   
+10>                                                           , 
+11>                                                             skillA2
+12>                                                                    
+1->Emitted(62, 5) Source(59, 10) + SourceIndex(0)
+2 >Emitted(62, 9) Source(59, 10) + SourceIndex(0)
+3 >Emitted(62, 26) Source(59, 37) + SourceIndex(0)
+4 >Emitted(62, 28) Source(59, 11) + SourceIndex(0)
+5 >Emitted(62, 36) Source(59, 19) + SourceIndex(0)
+6 >Emitted(62, 44) Source(59, 19) + SourceIndex(0)
+7 >Emitted(62, 46) Source(59, 21) + SourceIndex(0)
+8 >Emitted(62, 52) Source(59, 27) + SourceIndex(0)
+9 >Emitted(62, 60) Source(59, 27) + SourceIndex(0)
+10>Emitted(62, 62) Source(59, 29) + SourceIndex(0)
+11>Emitted(62, 69) Source(59, 36) + SourceIndex(0)
+12>Emitted(62, 77) Source(59, 36) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(63, 5) Source(60, 5) + SourceIndex(0)
+2 >Emitted(63, 12) Source(60, 12) + SourceIndex(0)
+3 >Emitted(63, 13) Source(60, 13) + SourceIndex(0)
+4 >Emitted(63, 16) Source(60, 16) + SourceIndex(0)
+5 >Emitted(63, 17) Source(60, 17) + SourceIndex(0)
+6 >Emitted(63, 23) Source(60, 23) + SourceIndex(0)
+7 >Emitted(63, 24) Source(60, 24) + SourceIndex(0)
+8 >Emitted(63, 25) Source(60, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(64, 2) Source(61, 2) + SourceIndex(0)
+---
+>>>for (var _6 = 0, _7 = getRobots(); _6 < _7.length; _6++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^^
+11>                                                   ^^^^
+12>                                                       ^^
+13>                                                         ^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA2, nameA2, skillA2] of 
+3 >     getRobots()
+4 >               
+5 >                 
+6 >                      getRobots
+7 >                               ()
+8 >                                 
+9 >                                   getRobots()
+10>                                                 
+11>                                                   getRobots()
+12>                                                       ) 
+1->Emitted(65, 1) Source(62, 1) + SourceIndex(0)
+2 >Emitted(65, 6) Source(62, 41) + SourceIndex(0)
+3 >Emitted(65, 16) Source(62, 52) + SourceIndex(0)
+4 >Emitted(65, 18) Source(62, 41) + SourceIndex(0)
+5 >Emitted(65, 23) Source(62, 41) + SourceIndex(0)
+6 >Emitted(65, 32) Source(62, 50) + SourceIndex(0)
+7 >Emitted(65, 34) Source(62, 52) + SourceIndex(0)
+8 >Emitted(65, 36) Source(62, 41) + SourceIndex(0)
+9 >Emitted(65, 50) Source(62, 52) + SourceIndex(0)
+10>Emitted(65, 52) Source(62, 41) + SourceIndex(0)
+11>Emitted(65, 56) Source(62, 52) + SourceIndex(0)
+12>Emitted(65, 58) Source(62, 54) + SourceIndex(0)
+---
+>>>    var _8 = _7[_6], numberA2 = _8[0], nameA2 = _8[1], skillA2 = _8[2];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^
+6 >                             ^^^^^^^^
+7 >                                     ^^
+8 >                                       ^^^^^^
+9 >                                             ^^^^^^^^
+10>                                                     ^^
+11>                                                       ^^^^^^^
+12>                                                              ^^^^^^^^
+1->
+2 >    
+3 >        [numberA2, nameA2, skillA2]
+4 >                   
+5 >                     numberA2
+6 >                             
+7 >                                     , 
+8 >                                       nameA2
+9 >                                             
+10>                                                     , 
+11>                                                       skillA2
+12>                                                              
+1->Emitted(66, 5) Source(62, 10) + SourceIndex(0)
+2 >Emitted(66, 9) Source(62, 10) + SourceIndex(0)
+3 >Emitted(66, 20) Source(62, 37) + SourceIndex(0)
+4 >Emitted(66, 22) Source(62, 11) + SourceIndex(0)
+5 >Emitted(66, 30) Source(62, 19) + SourceIndex(0)
+6 >Emitted(66, 38) Source(62, 19) + SourceIndex(0)
+7 >Emitted(66, 40) Source(62, 21) + SourceIndex(0)
+8 >Emitted(66, 46) Source(62, 27) + SourceIndex(0)
+9 >Emitted(66, 54) Source(62, 27) + SourceIndex(0)
+10>Emitted(66, 56) Source(62, 29) + SourceIndex(0)
+11>Emitted(66, 63) Source(62, 36) + SourceIndex(0)
+12>Emitted(66, 71) Source(62, 36) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(67, 5) Source(63, 5) + SourceIndex(0)
+2 >Emitted(67, 12) Source(63, 12) + SourceIndex(0)
+3 >Emitted(67, 13) Source(63, 13) + SourceIndex(0)
+4 >Emitted(67, 16) Source(63, 16) + SourceIndex(0)
+5 >Emitted(67, 17) Source(63, 17) + SourceIndex(0)
+6 >Emitted(67, 23) Source(63, 23) + SourceIndex(0)
+7 >Emitted(67, 24) Source(63, 24) + SourceIndex(0)
+8 >Emitted(67, 25) Source(63, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(68, 2) Source(64, 2) + SourceIndex(0)
+---
+>>>for (var _9 = 0, _10 = [robotA, robotB]; _9 < _10.length; _9++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^
+6 >                        ^^^^^^
+7 >                              ^^
+8 >                                ^^^^^^
+9 >                                      ^
+10>                                       ^^
+11>                                         ^^^^^^^^^^^^^^^
+12>                                                        ^^
+13>                                                          ^^^^
+14>                                                              ^^
+15>                                                                ^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [numberA2, nameA2, skillA2] of 
+3 >     [robotA, robotB]
+4 >               
+5 >                 [
+6 >                        robotA
+7 >                              , 
+8 >                                robotB
+9 >                                      ]
+10>                                       
+11>                                         [robotA, robotB]
+12>                                                        
+13>                                                          [robotA, robotB]
+14>                                                              ) 
+1->Emitted(69, 1) Source(65, 1) + SourceIndex(0)
+2 >Emitted(69, 6) Source(65, 41) + SourceIndex(0)
+3 >Emitted(69, 16) Source(65, 57) + SourceIndex(0)
+4 >Emitted(69, 18) Source(65, 41) + SourceIndex(0)
+5 >Emitted(69, 25) Source(65, 42) + SourceIndex(0)
+6 >Emitted(69, 31) Source(65, 48) + SourceIndex(0)
+7 >Emitted(69, 33) Source(65, 50) + SourceIndex(0)
+8 >Emitted(69, 39) Source(65, 56) + SourceIndex(0)
+9 >Emitted(69, 40) Source(65, 57) + SourceIndex(0)
+10>Emitted(69, 42) Source(65, 41) + SourceIndex(0)
+11>Emitted(69, 57) Source(65, 57) + SourceIndex(0)
+12>Emitted(69, 59) Source(65, 41) + SourceIndex(0)
+13>Emitted(69, 63) Source(65, 57) + SourceIndex(0)
+14>Emitted(69, 65) Source(65, 59) + SourceIndex(0)
+---
+>>>    var _11 = _10[_9], numberA2 = _11[0], nameA2 = _11[1], skillA2 = _11[2];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^
+4 >                     ^^
+5 >                       ^^^^^^^^
+6 >                               ^^^^^^^^^
+7 >                                        ^^
+8 >                                          ^^^^^^
+9 >                                                ^^^^^^^^^
+10>                                                         ^^
+11>                                                           ^^^^^^^
+12>                                                                  ^^^^^^^^^
+1->
+2 >    
+3 >        [numberA2, nameA2, skillA2]
+4 >                     
+5 >                       numberA2
+6 >                               
+7 >                                        , 
+8 >                                          nameA2
+9 >                                                
+10>                                                         , 
+11>                                                           skillA2
+12>                                                                  
+1->Emitted(70, 5) Source(65, 10) + SourceIndex(0)
+2 >Emitted(70, 9) Source(65, 10) + SourceIndex(0)
+3 >Emitted(70, 22) Source(65, 37) + SourceIndex(0)
+4 >Emitted(70, 24) Source(65, 11) + SourceIndex(0)
+5 >Emitted(70, 32) Source(65, 19) + SourceIndex(0)
+6 >Emitted(70, 41) Source(65, 19) + SourceIndex(0)
+7 >Emitted(70, 43) Source(65, 21) + SourceIndex(0)
+8 >Emitted(70, 49) Source(65, 27) + SourceIndex(0)
+9 >Emitted(70, 58) Source(65, 27) + SourceIndex(0)
+10>Emitted(70, 60) Source(65, 29) + SourceIndex(0)
+11>Emitted(70, 67) Source(65, 36) + SourceIndex(0)
+12>Emitted(70, 76) Source(65, 36) + SourceIndex(0)
+---
+>>>    console.log(nameA2);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameA2
+7 >                      )
+8 >                       ;
+1 >Emitted(71, 5) Source(66, 5) + SourceIndex(0)
+2 >Emitted(71, 12) Source(66, 12) + SourceIndex(0)
+3 >Emitted(71, 13) Source(66, 13) + SourceIndex(0)
+4 >Emitted(71, 16) Source(66, 16) + SourceIndex(0)
+5 >Emitted(71, 17) Source(66, 17) + SourceIndex(0)
+6 >Emitted(71, 23) Source(66, 23) + SourceIndex(0)
+7 >Emitted(71, 24) Source(66, 24) + SourceIndex(0)
+8 >Emitted(71, 25) Source(66, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(72, 2) Source(67, 2) + SourceIndex(0)
+---
+>>>for (var _12 = 0, multiRobots_3 = multiRobots; _12 < multiRobots_3.length; _12++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^^
+9 >                                                                           ^^^^^
+10>                                                                                ^^
+11>                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
+3 >     multiRobots
+4 >                
+5 >                  multiRobots
+6 >                                             
+7 >                                               multiRobots
+8 >                                                                         
+9 >                                                                           multiRobots
+10>                                                                                ) 
+1->Emitted(73, 1) Source(68, 1) + SourceIndex(0)
+2 >Emitted(73, 6) Source(68, 56) + SourceIndex(0)
+3 >Emitted(73, 17) Source(68, 67) + SourceIndex(0)
+4 >Emitted(73, 19) Source(68, 56) + SourceIndex(0)
+5 >Emitted(73, 46) Source(68, 67) + SourceIndex(0)
+6 >Emitted(73, 48) Source(68, 56) + SourceIndex(0)
+7 >Emitted(73, 74) Source(68, 67) + SourceIndex(0)
+8 >Emitted(73, 76) Source(68, 56) + SourceIndex(0)
+9 >Emitted(73, 81) Source(68, 67) + SourceIndex(0)
+10>Emitted(73, 83) Source(68, 69) + SourceIndex(0)
+---
+>>>    var _13 = multiRobots_3[_12], nameMA = _13[0], _14 = _13[1], primarySkillA = _14[0], secondarySkillA = _14[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                ^^
+5 >                                  ^^^^^^
+6 >                                        ^^^^^^^^^
+7 >                                                 ^^
+8 >                                                   ^^^^^^^^^^^^
+9 >                                                               ^^
+10>                                                                 ^^^^^^^^^^^^^
+11>                                                                              ^^^^^^^^^
+12>                                                                                       ^^
+13>                                                                                         ^^^^^^^^^^^^^^^
+14>                                                                                                        ^^^^^^^^^
+1->
+2 >    
+3 >        [nameMA, [primarySkillA, secondarySkillA]]
+4 >                                
+5 >                                  nameMA
+6 >                                        
+7 >                                                 , 
+8 >                                                   [primarySkillA, secondarySkillA]
+9 >                                                               
+10>                                                                 primarySkillA
+11>                                                                              
+12>                                                                                       , 
+13>                                                                                         secondarySkillA
+14>                                                                                                        
+1->Emitted(74, 5) Source(68, 10) + SourceIndex(0)
+2 >Emitted(74, 9) Source(68, 10) + SourceIndex(0)
+3 >Emitted(74, 33) Source(68, 52) + SourceIndex(0)
+4 >Emitted(74, 35) Source(68, 11) + SourceIndex(0)
+5 >Emitted(74, 41) Source(68, 17) + SourceIndex(0)
+6 >Emitted(74, 50) Source(68, 17) + SourceIndex(0)
+7 >Emitted(74, 52) Source(68, 19) + SourceIndex(0)
+8 >Emitted(74, 64) Source(68, 51) + SourceIndex(0)
+9 >Emitted(74, 66) Source(68, 20) + SourceIndex(0)
+10>Emitted(74, 79) Source(68, 33) + SourceIndex(0)
+11>Emitted(74, 88) Source(68, 33) + SourceIndex(0)
+12>Emitted(74, 90) Source(68, 35) + SourceIndex(0)
+13>Emitted(74, 105) Source(68, 50) + SourceIndex(0)
+14>Emitted(74, 114) Source(68, 50) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >]] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(75, 5) Source(69, 5) + SourceIndex(0)
+2 >Emitted(75, 12) Source(69, 12) + SourceIndex(0)
+3 >Emitted(75, 13) Source(69, 13) + SourceIndex(0)
+4 >Emitted(75, 16) Source(69, 16) + SourceIndex(0)
+5 >Emitted(75, 17) Source(69, 17) + SourceIndex(0)
+6 >Emitted(75, 23) Source(69, 23) + SourceIndex(0)
+7 >Emitted(75, 24) Source(69, 24) + SourceIndex(0)
+8 >Emitted(75, 25) Source(69, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(76, 2) Source(70, 2) + SourceIndex(0)
+---
+>>>for (var _15 = 0, _16 = getMultiRobots(); _15 < _16.length; _15++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^^^^^^
+7 >                                      ^^
+8 >                                        ^^
+9 >                                          ^^^^^^^^^^^^^^^^
+10>                                                          ^^
+11>                                                            ^^^^^
+12>                                                                 ^^
+13>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
+3 >     getMultiRobots()
+4 >                
+5 >                  
+6 >                        getMultiRobots
+7 >                                      ()
+8 >                                        
+9 >                                          getMultiRobots()
+10>                                                          
+11>                                                            getMultiRobots()
+12>                                                                 ) 
+1->Emitted(77, 1) Source(71, 1) + SourceIndex(0)
+2 >Emitted(77, 6) Source(71, 56) + SourceIndex(0)
+3 >Emitted(77, 17) Source(71, 72) + SourceIndex(0)
+4 >Emitted(77, 19) Source(71, 56) + SourceIndex(0)
+5 >Emitted(77, 25) Source(71, 56) + SourceIndex(0)
+6 >Emitted(77, 39) Source(71, 70) + SourceIndex(0)
+7 >Emitted(77, 41) Source(71, 72) + SourceIndex(0)
+8 >Emitted(77, 43) Source(71, 56) + SourceIndex(0)
+9 >Emitted(77, 59) Source(71, 72) + SourceIndex(0)
+10>Emitted(77, 61) Source(71, 56) + SourceIndex(0)
+11>Emitted(77, 66) Source(71, 72) + SourceIndex(0)
+12>Emitted(77, 68) Source(71, 74) + SourceIndex(0)
+---
+>>>    var _17 = _16[_15], nameMA = _17[0], _18 = _17[1], primarySkillA = _18[0], secondarySkillA = _18[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^
+6 >                              ^^^^^^^^^
+7 >                                       ^^
+8 >                                         ^^^^^^^^^^^^
+9 >                                                     ^^
+10>                                                       ^^^^^^^^^^^^^
+11>                                                                    ^^^^^^^^^
+12>                                                                             ^^
+13>                                                                               ^^^^^^^^^^^^^^^
+14>                                                                                              ^^^^^^^^^
+1->
+2 >    
+3 >        [nameMA, [primarySkillA, secondarySkillA]]
+4 >                      
+5 >                        nameMA
+6 >                              
+7 >                                       , 
+8 >                                         [primarySkillA, secondarySkillA]
+9 >                                                     
+10>                                                       primarySkillA
+11>                                                                    
+12>                                                                             , 
+13>                                                                               secondarySkillA
+14>                                                                                              
+1->Emitted(78, 5) Source(71, 10) + SourceIndex(0)
+2 >Emitted(78, 9) Source(71, 10) + SourceIndex(0)
+3 >Emitted(78, 23) Source(71, 52) + SourceIndex(0)
+4 >Emitted(78, 25) Source(71, 11) + SourceIndex(0)
+5 >Emitted(78, 31) Source(71, 17) + SourceIndex(0)
+6 >Emitted(78, 40) Source(71, 17) + SourceIndex(0)
+7 >Emitted(78, 42) Source(71, 19) + SourceIndex(0)
+8 >Emitted(78, 54) Source(71, 51) + SourceIndex(0)
+9 >Emitted(78, 56) Source(71, 20) + SourceIndex(0)
+10>Emitted(78, 69) Source(71, 33) + SourceIndex(0)
+11>Emitted(78, 78) Source(71, 33) + SourceIndex(0)
+12>Emitted(78, 80) Source(71, 35) + SourceIndex(0)
+13>Emitted(78, 95) Source(71, 50) + SourceIndex(0)
+14>Emitted(78, 104) Source(71, 50) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >]] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(79, 5) Source(72, 5) + SourceIndex(0)
+2 >Emitted(79, 12) Source(72, 12) + SourceIndex(0)
+3 >Emitted(79, 13) Source(72, 13) + SourceIndex(0)
+4 >Emitted(79, 16) Source(72, 16) + SourceIndex(0)
+5 >Emitted(79, 17) Source(72, 17) + SourceIndex(0)
+6 >Emitted(79, 23) Source(72, 23) + SourceIndex(0)
+7 >Emitted(79, 24) Source(72, 24) + SourceIndex(0)
+8 >Emitted(79, 25) Source(72, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(80, 2) Source(73, 2) + SourceIndex(0)
+---
+>>>for (var _19 = 0, _20 = [multiRobotA, multiRobotB]; _19 < _20.length; _19++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^^^^^^^^^^
+9 >                                                 ^
+10>                                                  ^^
+11>                                                    ^^^^^^^^^^^^^^^^
+12>                                                                    ^^
+13>                                                                      ^^^^^
+14>                                                                           ^^
+15>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
+3 >     [multiRobotA, multiRobotB]
+4 >                
+5 >                  [
+6 >                         multiRobotA
+7 >                                    , 
+8 >                                      multiRobotB
+9 >                                                 ]
+10>                                                  
+11>                                                    [multiRobotA, multiRobotB]
+12>                                                                    
+13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
+1->Emitted(81, 1) Source(74, 1) + SourceIndex(0)
+2 >Emitted(81, 6) Source(74, 56) + SourceIndex(0)
+3 >Emitted(81, 17) Source(74, 82) + SourceIndex(0)
+4 >Emitted(81, 19) Source(74, 56) + SourceIndex(0)
+5 >Emitted(81, 26) Source(74, 57) + SourceIndex(0)
+6 >Emitted(81, 37) Source(74, 68) + SourceIndex(0)
+7 >Emitted(81, 39) Source(74, 70) + SourceIndex(0)
+8 >Emitted(81, 50) Source(74, 81) + SourceIndex(0)
+9 >Emitted(81, 51) Source(74, 82) + SourceIndex(0)
+10>Emitted(81, 53) Source(74, 56) + SourceIndex(0)
+11>Emitted(81, 69) Source(74, 82) + SourceIndex(0)
+12>Emitted(81, 71) Source(74, 56) + SourceIndex(0)
+13>Emitted(81, 76) Source(74, 82) + SourceIndex(0)
+14>Emitted(81, 78) Source(74, 84) + SourceIndex(0)
+---
+>>>    var _21 = _20[_19], nameMA = _21[0], _22 = _21[1], primarySkillA = _22[0], secondarySkillA = _22[1];
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^
+6 >                              ^^^^^^^^^
+7 >                                       ^^
+8 >                                         ^^^^^^^^^^^^
+9 >                                                     ^^
+10>                                                       ^^^^^^^^^^^^^
+11>                                                                    ^^^^^^^^^
+12>                                                                             ^^
+13>                                                                               ^^^^^^^^^^^^^^^
+14>                                                                                              ^^^^^^^^^
+1->
+2 >    
+3 >        [nameMA, [primarySkillA, secondarySkillA]]
+4 >                      
+5 >                        nameMA
+6 >                              
+7 >                                       , 
+8 >                                         [primarySkillA, secondarySkillA]
+9 >                                                     
+10>                                                       primarySkillA
+11>                                                                    
+12>                                                                             , 
+13>                                                                               secondarySkillA
+14>                                                                                              
+1->Emitted(82, 5) Source(74, 10) + SourceIndex(0)
+2 >Emitted(82, 9) Source(74, 10) + SourceIndex(0)
+3 >Emitted(82, 23) Source(74, 52) + SourceIndex(0)
+4 >Emitted(82, 25) Source(74, 11) + SourceIndex(0)
+5 >Emitted(82, 31) Source(74, 17) + SourceIndex(0)
+6 >Emitted(82, 40) Source(74, 17) + SourceIndex(0)
+7 >Emitted(82, 42) Source(74, 19) + SourceIndex(0)
+8 >Emitted(82, 54) Source(74, 51) + SourceIndex(0)
+9 >Emitted(82, 56) Source(74, 20) + SourceIndex(0)
+10>Emitted(82, 69) Source(74, 33) + SourceIndex(0)
+11>Emitted(82, 78) Source(74, 33) + SourceIndex(0)
+12>Emitted(82, 80) Source(74, 35) + SourceIndex(0)
+13>Emitted(82, 95) Source(74, 50) + SourceIndex(0)
+14>Emitted(82, 104) Source(74, 50) + SourceIndex(0)
+---
+>>>    console.log(nameMA);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1 >]] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameMA
+7 >                      )
+8 >                       ;
+1 >Emitted(83, 5) Source(75, 5) + SourceIndex(0)
+2 >Emitted(83, 12) Source(75, 12) + SourceIndex(0)
+3 >Emitted(83, 13) Source(75, 13) + SourceIndex(0)
+4 >Emitted(83, 16) Source(75, 16) + SourceIndex(0)
+5 >Emitted(83, 17) Source(75, 17) + SourceIndex(0)
+6 >Emitted(83, 23) Source(75, 23) + SourceIndex(0)
+7 >Emitted(83, 24) Source(75, 24) + SourceIndex(0)
+8 >Emitted(83, 25) Source(75, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(84, 2) Source(76, 2) + SourceIndex(0)
+---
+>>>for (var _23 = 0, robots_4 = robots; _23 < robots_4.length; _23++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^
+6 >                                   ^^
+7 >                                     ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                          ^^
+9 >                                                            ^^^^^
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^->
+1->
+  >
+  >
+2 >for (let [numberA3, ...robotAInfo] of 
+3 >     robots
+4 >                
+5 >                  robots
+6 >                                   
+7 >                                     robots
+8 >                                                          
+9 >                                                            robots
+10>                                                                 ) 
+1->Emitted(85, 1) Source(78, 1) + SourceIndex(0)
+2 >Emitted(85, 6) Source(78, 39) + SourceIndex(0)
+3 >Emitted(85, 17) Source(78, 45) + SourceIndex(0)
+4 >Emitted(85, 19) Source(78, 39) + SourceIndex(0)
+5 >Emitted(85, 36) Source(78, 45) + SourceIndex(0)
+6 >Emitted(85, 38) Source(78, 39) + SourceIndex(0)
+7 >Emitted(85, 59) Source(78, 45) + SourceIndex(0)
+8 >Emitted(85, 61) Source(78, 39) + SourceIndex(0)
+9 >Emitted(85, 66) Source(78, 45) + SourceIndex(0)
+10>Emitted(85, 68) Source(78, 47) + SourceIndex(0)
+---
+>>>    var _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^
+4 >                           ^^
+5 >                             ^^^^^^^^
+6 >                                     ^^^^^^^^^
+7 >                                              ^^
+8 >                                                ^^^^^^^^^^
+9 >                                                          ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3, ...robotAInfo]
+4 >                           
+5 >                             numberA3
+6 >                                     
+7 >                                              , ...
+8 >                                                robotAInfo
+9 >                                                          
+1->Emitted(86, 5) Source(78, 10) + SourceIndex(0)
+2 >Emitted(86, 9) Source(78, 10) + SourceIndex(0)
+3 >Emitted(86, 28) Source(78, 35) + SourceIndex(0)
+4 >Emitted(86, 30) Source(78, 11) + SourceIndex(0)
+5 >Emitted(86, 38) Source(78, 19) + SourceIndex(0)
+6 >Emitted(86, 47) Source(78, 19) + SourceIndex(0)
+7 >Emitted(86, 49) Source(78, 24) + SourceIndex(0)
+8 >Emitted(86, 59) Source(78, 34) + SourceIndex(0)
+9 >Emitted(86, 74) Source(78, 34) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of robots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(87, 5) Source(79, 5) + SourceIndex(0)
+2 >Emitted(87, 12) Source(79, 12) + SourceIndex(0)
+3 >Emitted(87, 13) Source(79, 13) + SourceIndex(0)
+4 >Emitted(87, 16) Source(79, 16) + SourceIndex(0)
+5 >Emitted(87, 17) Source(79, 17) + SourceIndex(0)
+6 >Emitted(87, 25) Source(79, 25) + SourceIndex(0)
+7 >Emitted(87, 26) Source(79, 26) + SourceIndex(0)
+8 >Emitted(87, 27) Source(79, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(88, 2) Source(80, 2) + SourceIndex(0)
+---
+>>>for (var _25 = 0, _26 = getRobots(); _25 < _26.length; _25++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^
+7 >                                 ^^
+8 >                                   ^^
+9 >                                     ^^^^^^^^^^^^^^^^
+10>                                                     ^^
+11>                                                       ^^^^^
+12>                                                            ^^
+13>                                                              ^^^^^^^^->
+1->
+  >
+2 >for (let [numberA3, ...robotAInfo] of 
+3 >     getRobots()
+4 >                
+5 >                  
+6 >                        getRobots
+7 >                                 ()
+8 >                                   
+9 >                                     getRobots()
+10>                                                     
+11>                                                       getRobots()
+12>                                                            ) 
+1->Emitted(89, 1) Source(81, 1) + SourceIndex(0)
+2 >Emitted(89, 6) Source(81, 39) + SourceIndex(0)
+3 >Emitted(89, 17) Source(81, 50) + SourceIndex(0)
+4 >Emitted(89, 19) Source(81, 39) + SourceIndex(0)
+5 >Emitted(89, 25) Source(81, 39) + SourceIndex(0)
+6 >Emitted(89, 34) Source(81, 48) + SourceIndex(0)
+7 >Emitted(89, 36) Source(81, 50) + SourceIndex(0)
+8 >Emitted(89, 38) Source(81, 39) + SourceIndex(0)
+9 >Emitted(89, 54) Source(81, 50) + SourceIndex(0)
+10>Emitted(89, 56) Source(81, 39) + SourceIndex(0)
+11>Emitted(89, 61) Source(81, 50) + SourceIndex(0)
+12>Emitted(89, 63) Source(81, 52) + SourceIndex(0)
+---
+>>>    var _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^
+6 >                                ^^^^^^^^^
+7 >                                         ^^
+8 >                                           ^^^^^^^^^^
+9 >                                                     ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3, ...robotAInfo]
+4 >                      
+5 >                        numberA3
+6 >                                
+7 >                                         , ...
+8 >                                           robotAInfo
+9 >                                                     
+1->Emitted(90, 5) Source(81, 10) + SourceIndex(0)
+2 >Emitted(90, 9) Source(81, 10) + SourceIndex(0)
+3 >Emitted(90, 23) Source(81, 35) + SourceIndex(0)
+4 >Emitted(90, 25) Source(81, 11) + SourceIndex(0)
+5 >Emitted(90, 33) Source(81, 19) + SourceIndex(0)
+6 >Emitted(90, 42) Source(81, 19) + SourceIndex(0)
+7 >Emitted(90, 44) Source(81, 24) + SourceIndex(0)
+8 >Emitted(90, 54) Source(81, 34) + SourceIndex(0)
+9 >Emitted(90, 69) Source(81, 34) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of getRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(91, 5) Source(82, 5) + SourceIndex(0)
+2 >Emitted(91, 12) Source(82, 12) + SourceIndex(0)
+3 >Emitted(91, 13) Source(82, 13) + SourceIndex(0)
+4 >Emitted(91, 16) Source(82, 16) + SourceIndex(0)
+5 >Emitted(91, 17) Source(82, 17) + SourceIndex(0)
+6 >Emitted(91, 25) Source(82, 25) + SourceIndex(0)
+7 >Emitted(91, 26) Source(82, 26) + SourceIndex(0)
+8 >Emitted(91, 27) Source(82, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(92, 2) Source(83, 2) + SourceIndex(0)
+---
+>>>for (var _28 = 0, _29 = [robotA, robotB]; _28 < _29.length; _28++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^
+9 >                                       ^
+10>                                        ^^
+11>                                          ^^^^^^^^^^^^^^^^
+12>                                                          ^^
+13>                                                            ^^^^^
+14>                                                                 ^^
+15>                                                                   ^^^->
+1->
+  >
+2 >for (let [numberA3, ...robotAInfo] of 
+3 >     [robotA, robotB]
+4 >                
+5 >                  [
+6 >                         robotA
+7 >                               , 
+8 >                                 robotB
+9 >                                       ]
+10>                                        
+11>                                          [robotA, robotB]
+12>                                                          
+13>                                                            [robotA, robotB]
+14>                                                                 ) 
+1->Emitted(93, 1) Source(84, 1) + SourceIndex(0)
+2 >Emitted(93, 6) Source(84, 39) + SourceIndex(0)
+3 >Emitted(93, 17) Source(84, 55) + SourceIndex(0)
+4 >Emitted(93, 19) Source(84, 39) + SourceIndex(0)
+5 >Emitted(93, 26) Source(84, 40) + SourceIndex(0)
+6 >Emitted(93, 32) Source(84, 46) + SourceIndex(0)
+7 >Emitted(93, 34) Source(84, 48) + SourceIndex(0)
+8 >Emitted(93, 40) Source(84, 54) + SourceIndex(0)
+9 >Emitted(93, 41) Source(84, 55) + SourceIndex(0)
+10>Emitted(93, 43) Source(84, 39) + SourceIndex(0)
+11>Emitted(93, 59) Source(84, 55) + SourceIndex(0)
+12>Emitted(93, 61) Source(84, 39) + SourceIndex(0)
+13>Emitted(93, 66) Source(84, 55) + SourceIndex(0)
+14>Emitted(93, 68) Source(84, 57) + SourceIndex(0)
+---
+>>>    var _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^
+6 >                                ^^^^^^^^^
+7 >                                         ^^
+8 >                                           ^^^^^^^^^^
+9 >                                                     ^^^^^^^^^^^^^^^
+1->
+2 >    
+3 >        [numberA3, ...robotAInfo]
+4 >                      
+5 >                        numberA3
+6 >                                
+7 >                                         , ...
+8 >                                           robotAInfo
+9 >                                                     
+1->Emitted(94, 5) Source(84, 10) + SourceIndex(0)
+2 >Emitted(94, 9) Source(84, 10) + SourceIndex(0)
+3 >Emitted(94, 23) Source(84, 35) + SourceIndex(0)
+4 >Emitted(94, 25) Source(84, 11) + SourceIndex(0)
+5 >Emitted(94, 33) Source(84, 19) + SourceIndex(0)
+6 >Emitted(94, 42) Source(84, 19) + SourceIndex(0)
+7 >Emitted(94, 44) Source(84, 24) + SourceIndex(0)
+8 >Emitted(94, 54) Source(84, 34) + SourceIndex(0)
+9 >Emitted(94, 69) Source(84, 34) + SourceIndex(0)
+---
+>>>    console.log(numberA3);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^
+7 >                        ^
+8 >                         ^
+1 >] of [robotA, robotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                numberA3
+7 >                        )
+8 >                         ;
+1 >Emitted(95, 5) Source(85, 5) + SourceIndex(0)
+2 >Emitted(95, 12) Source(85, 12) + SourceIndex(0)
+3 >Emitted(95, 13) Source(85, 13) + SourceIndex(0)
+4 >Emitted(95, 16) Source(85, 16) + SourceIndex(0)
+5 >Emitted(95, 17) Source(85, 17) + SourceIndex(0)
+6 >Emitted(95, 25) Source(85, 25) + SourceIndex(0)
+7 >Emitted(95, 26) Source(85, 26) + SourceIndex(0)
+8 >Emitted(95, 27) Source(85, 27) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(96, 2) Source(86, 2) + SourceIndex(0)
+---
+>>>for (var _31 = 0, multiRobots_4 = multiRobots; _31 < multiRobots_4.length; _31++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^^
+9 >                                                                           ^^^^^
+10>                                                                                ^^
+1->
+  >
+2 >for (let [...multiRobotAInfo] of 
+3 >     multiRobots
+4 >                
+5 >                  multiRobots
+6 >                                             
+7 >                                               multiRobots
+8 >                                                                         
+9 >                                                                           multiRobots
+10>                                                                                ) 
+1->Emitted(97, 1) Source(87, 1) + SourceIndex(0)
+2 >Emitted(97, 6) Source(87, 34) + SourceIndex(0)
+3 >Emitted(97, 17) Source(87, 45) + SourceIndex(0)
+4 >Emitted(97, 19) Source(87, 34) + SourceIndex(0)
+5 >Emitted(97, 46) Source(87, 45) + SourceIndex(0)
+6 >Emitted(97, 48) Source(87, 34) + SourceIndex(0)
+7 >Emitted(97, 74) Source(87, 45) + SourceIndex(0)
+8 >Emitted(97, 76) Source(87, 34) + SourceIndex(0)
+9 >Emitted(97, 81) Source(87, 45) + SourceIndex(0)
+10>Emitted(97, 83) Source(87, 47) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = multiRobots_4[_31].slice(0);
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^
+4 >                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >    ...
+3 >        multiRobotAInfo
+4 >                       
+1 >Emitted(98, 5) Source(87, 11) + SourceIndex(0)
+2 >Emitted(98, 9) Source(87, 14) + SourceIndex(0)
+3 >Emitted(98, 24) Source(87, 29) + SourceIndex(0)
+4 >Emitted(98, 54) Source(87, 29) + SourceIndex(0)
+---
+>>>    console.log(multiRobotAInfo);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^^^
+7 >                               ^
+8 >                                ^
+1 >] of multiRobots) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                multiRobotAInfo
+7 >                               )
+8 >                                ;
+1 >Emitted(99, 5) Source(88, 5) + SourceIndex(0)
+2 >Emitted(99, 12) Source(88, 12) + SourceIndex(0)
+3 >Emitted(99, 13) Source(88, 13) + SourceIndex(0)
+4 >Emitted(99, 16) Source(88, 16) + SourceIndex(0)
+5 >Emitted(99, 17) Source(88, 17) + SourceIndex(0)
+6 >Emitted(99, 32) Source(88, 32) + SourceIndex(0)
+7 >Emitted(99, 33) Source(88, 33) + SourceIndex(0)
+8 >Emitted(99, 34) Source(88, 34) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(100, 2) Source(89, 2) + SourceIndex(0)
+---
+>>>for (var _32 = 0, _33 = getMultiRobots(); _32 < _33.length; _32++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^
+6 >                        ^^^^^^^^^^^^^^
+7 >                                      ^^
+8 >                                        ^^
+9 >                                          ^^^^^^^^^^^^^^^^
+10>                                                          ^^
+11>                                                            ^^^^^
+12>                                                                 ^^
+1->
+  >
+2 >for (let [...multiRobotAInfo] of 
+3 >     getMultiRobots()
+4 >                
+5 >                  
+6 >                        getMultiRobots
+7 >                                      ()
+8 >                                        
+9 >                                          getMultiRobots()
+10>                                                          
+11>                                                            getMultiRobots()
+12>                                                                 ) 
+1->Emitted(101, 1) Source(90, 1) + SourceIndex(0)
+2 >Emitted(101, 6) Source(90, 34) + SourceIndex(0)
+3 >Emitted(101, 17) Source(90, 50) + SourceIndex(0)
+4 >Emitted(101, 19) Source(90, 34) + SourceIndex(0)
+5 >Emitted(101, 25) Source(90, 34) + SourceIndex(0)
+6 >Emitted(101, 39) Source(90, 48) + SourceIndex(0)
+7 >Emitted(101, 41) Source(90, 50) + SourceIndex(0)
+8 >Emitted(101, 43) Source(90, 34) + SourceIndex(0)
+9 >Emitted(101, 59) Source(90, 50) + SourceIndex(0)
+10>Emitted(101, 61) Source(90, 34) + SourceIndex(0)
+11>Emitted(101, 66) Source(90, 50) + SourceIndex(0)
+12>Emitted(101, 68) Source(90, 52) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = _33[_32].slice(0);
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^
+4 >                       ^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >    ...
+3 >        multiRobotAInfo
+4 >                       
+1 >Emitted(102, 5) Source(90, 11) + SourceIndex(0)
+2 >Emitted(102, 9) Source(90, 14) + SourceIndex(0)
+3 >Emitted(102, 24) Source(90, 29) + SourceIndex(0)
+4 >Emitted(102, 44) Source(90, 29) + SourceIndex(0)
+---
+>>>    console.log(multiRobotAInfo);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^^^
+7 >                               ^
+8 >                                ^
+1 >] of getMultiRobots()) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                multiRobotAInfo
+7 >                               )
+8 >                                ;
+1 >Emitted(103, 5) Source(91, 5) + SourceIndex(0)
+2 >Emitted(103, 12) Source(91, 12) + SourceIndex(0)
+3 >Emitted(103, 13) Source(91, 13) + SourceIndex(0)
+4 >Emitted(103, 16) Source(91, 16) + SourceIndex(0)
+5 >Emitted(103, 17) Source(91, 17) + SourceIndex(0)
+6 >Emitted(103, 32) Source(91, 32) + SourceIndex(0)
+7 >Emitted(103, 33) Source(91, 33) + SourceIndex(0)
+8 >Emitted(103, 34) Source(91, 34) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(104, 2) Source(92, 2) + SourceIndex(0)
+---
+>>>for (var _34 = 0, _35 = [multiRobotA, multiRobotB]; _34 < _35.length; _34++) {
+1->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^
+5 >                  ^^^^^^^
+6 >                         ^^^^^^^^^^^
+7 >                                    ^^
+8 >                                      ^^^^^^^^^^^
+9 >                                                 ^
+10>                                                  ^^
+11>                                                    ^^^^^^^^^^^^^^^^
+12>                                                                    ^^
+13>                                                                      ^^^^^
+14>                                                                           ^^
+1->
+  >
+2 >for (let [...multiRobotAInfo] of 
+3 >     [multiRobotA, multiRobotB]
+4 >                
+5 >                  [
+6 >                         multiRobotA
+7 >                                    , 
+8 >                                      multiRobotB
+9 >                                                 ]
+10>                                                  
+11>                                                    [multiRobotA, multiRobotB]
+12>                                                                    
+13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
+1->Emitted(105, 1) Source(93, 1) + SourceIndex(0)
+2 >Emitted(105, 6) Source(93, 34) + SourceIndex(0)
+3 >Emitted(105, 17) Source(93, 60) + SourceIndex(0)
+4 >Emitted(105, 19) Source(93, 34) + SourceIndex(0)
+5 >Emitted(105, 26) Source(93, 35) + SourceIndex(0)
+6 >Emitted(105, 37) Source(93, 46) + SourceIndex(0)
+7 >Emitted(105, 39) Source(93, 48) + SourceIndex(0)
+8 >Emitted(105, 50) Source(93, 59) + SourceIndex(0)
+9 >Emitted(105, 51) Source(93, 60) + SourceIndex(0)
+10>Emitted(105, 53) Source(93, 34) + SourceIndex(0)
+11>Emitted(105, 69) Source(93, 60) + SourceIndex(0)
+12>Emitted(105, 71) Source(93, 34) + SourceIndex(0)
+13>Emitted(105, 76) Source(93, 60) + SourceIndex(0)
+14>Emitted(105, 78) Source(93, 62) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = _35[_34].slice(0);
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^
+4 >                       ^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >    ...
+3 >        multiRobotAInfo
+4 >                       
+1 >Emitted(106, 5) Source(93, 11) + SourceIndex(0)
+2 >Emitted(106, 9) Source(93, 14) + SourceIndex(0)
+3 >Emitted(106, 24) Source(93, 29) + SourceIndex(0)
+4 >Emitted(106, 44) Source(93, 29) + SourceIndex(0)
+---
+>>>    console.log(multiRobotAInfo);
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^^^^^^^^^
+7 >                               ^
+8 >                                ^
+1 >] of [multiRobotA, multiRobotB]) {
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                multiRobotAInfo
+7 >                               )
+8 >                                ;
+1 >Emitted(107, 5) Source(94, 5) + SourceIndex(0)
+2 >Emitted(107, 12) Source(94, 12) + SourceIndex(0)
+3 >Emitted(107, 13) Source(94, 13) + SourceIndex(0)
+4 >Emitted(107, 16) Source(94, 16) + SourceIndex(0)
+5 >Emitted(107, 17) Source(94, 17) + SourceIndex(0)
+6 >Emitted(107, 32) Source(94, 32) + SourceIndex(0)
+7 >Emitted(107, 33) Source(94, 33) + SourceIndex(0)
+8 >Emitted(107, 34) Source(94, 34) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(108, 2) Source(95, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern.js.map

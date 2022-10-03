@@ -1,0 +1,19 @@
+tests/cases/compiler/tsxInvokeComponentType.tsx(6,14): error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ someKey: string; }'.
+
+
+==== tests/cases/compiler/tsxInvokeComponentType.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import React, { ComponentType } from "react";
+    
+    declare const Elem: ComponentType<{ someKey: string }>;
+    
+    const bad = <Elem />;
+                 ~~~~
+!!! error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ someKey: string; }'.
+!!! related TS2728 tests/cases/compiler/tsxInvokeComponentType.tsx:4:37: 'someKey' is declared here.
+    
+    const good = <Elem someKey="ok" />;
+    
+    declare const Elem2: ComponentType<{ opt?: number }>;
+    const alsoOk = <Elem2>text</Elem2>;
+    

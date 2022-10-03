@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts ===
+let abc: "ABC" = "ABC";
+>abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
+
+let xyz: "XYZ" = "XYZ";
+>xyz : Symbol(xyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 1, 3))
+
+let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
+>abcOrXyz : Symbol(abcOrXyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 2, 3))
+>abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
+>xyz : Symbol(xyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 1, 3))
+
+let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+>abcOrXyz : Symbol(abcOrXyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 2, 3))
+
+let a = abcOrXyzOrNumber + 100;
+>a : Symbol(a, Decl(stringLiteralTypesWithVariousOperators02.ts, 5, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let b = 100 + abcOrXyzOrNumber;
+>b : Symbol(b, Decl(stringLiteralTypesWithVariousOperators02.ts, 6, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let c = abcOrXyzOrNumber + abcOrXyzOrNumber;
+>c : Symbol(c, Decl(stringLiteralTypesWithVariousOperators02.ts, 7, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let d = abcOrXyzOrNumber + true;
+>d : Symbol(d, Decl(stringLiteralTypesWithVariousOperators02.ts, 8, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let e = false + abcOrXyzOrNumber;
+>e : Symbol(e, Decl(stringLiteralTypesWithVariousOperators02.ts, 9, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let f = abcOrXyzOrNumber++;
+>f : Symbol(f, Decl(stringLiteralTypesWithVariousOperators02.ts, 10, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let g = --abcOrXyzOrNumber;
+>g : Symbol(g, Decl(stringLiteralTypesWithVariousOperators02.ts, 11, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let h = abcOrXyzOrNumber ^ 10;
+>h : Symbol(h, Decl(stringLiteralTypesWithVariousOperators02.ts, 12, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let i = abcOrXyzOrNumber | 10;
+>i : Symbol(i, Decl(stringLiteralTypesWithVariousOperators02.ts, 13, 3))
+>abcOrXyzOrNumber : Symbol(abcOrXyzOrNumber, Decl(stringLiteralTypesWithVariousOperators02.ts, 3, 3))
+
+let j = abc < xyz;
+>j : Symbol(j, Decl(stringLiteralTypesWithVariousOperators02.ts, 14, 3))
+>abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
+>xyz : Symbol(xyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 1, 3))
+
+let k = abc === xyz;
+>k : Symbol(k, Decl(stringLiteralTypesWithVariousOperators02.ts, 15, 3))
+>abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
+>xyz : Symbol(xyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 1, 3))
+
+let l = abc != xyz;
+>l : Symbol(l, Decl(stringLiteralTypesWithVariousOperators02.ts, 16, 3))
+>abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
+>xyz : Symbol(xyz, Decl(stringLiteralTypesWithVariousOperators02.ts, 1, 3))
+

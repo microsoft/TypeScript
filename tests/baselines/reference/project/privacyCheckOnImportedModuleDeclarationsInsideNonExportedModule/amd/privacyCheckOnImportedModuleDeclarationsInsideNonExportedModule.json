@@ -1,0 +1,14 @@
+{
+    "scenario": "privacy Check on imported module - declarations inside non exported module",
+    "projectRoot": "tests/cases/projects/privacyCheck-InsideModule",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "test.js"
+    ]
+}

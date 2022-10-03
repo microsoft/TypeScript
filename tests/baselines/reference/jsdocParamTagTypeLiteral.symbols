@@ -1,0 +1,132 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+/**
+ * @param {Object} notSpecial
+ * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
+ */
+function normal(notSpecial) {
+>normal : Symbol(normal, Decl(0.js, 0, 0))
+>notSpecial : Symbol(notSpecial, Decl(0.js, 4, 16))
+
+    notSpecial; // should just be 'Object'
+>notSpecial : Symbol(notSpecial, Decl(0.js, 4, 16))
+}
+normal(12);
+>normal : Symbol(normal, Decl(0.js, 0, 0))
+
+/**
+ * @param {Object} opts1 doc1
+ * @param {string} opts1.x doc2
+ * @param {string=} opts1.y doc3
+ * @param {string} [opts1.z] doc4
+ * @param {string} [opts1.w="hi"] doc5
+ */
+function foo1(opts1) {
+>foo1 : Symbol(foo1, Decl(0.js, 7, 11))
+>opts1 : Symbol(opts1, Decl(0.js, 16, 14))
+
+    opts1.x;
+>opts1.x : Symbol(x, Decl(0.js, 11, 3))
+>opts1 : Symbol(opts1, Decl(0.js, 16, 14))
+>x : Symbol(x, Decl(0.js, 11, 3))
+}
+
+foo1({x: 'abc'});
+>foo1 : Symbol(foo1, Decl(0.js, 7, 11))
+>x : Symbol(x, Decl(0.js, 20, 6))
+
+/**
+ * @param {Object[]} opts2
+ * @param {string} opts2[].anotherX
+ * @param {string=} opts2[].anotherY
+ */
+function foo2(/** @param opts2 bad idea theatre! */opts2) {
+>foo2 : Symbol(foo2, Decl(0.js, 20, 17))
+>opts2 : Symbol(opts2, Decl(0.js, 27, 14))
+
+    opts2[0].anotherX;
+>opts2[0].anotherX : Symbol(anotherX, Decl(0.js, 24, 3))
+>opts2 : Symbol(opts2, Decl(0.js, 27, 14))
+>anotherX : Symbol(anotherX, Decl(0.js, 24, 3))
+}
+
+foo2([{anotherX: "world"}]);
+>foo2 : Symbol(foo2, Decl(0.js, 20, 17))
+>anotherX : Symbol(anotherX, Decl(0.js, 31, 7))
+
+/**
+ * @param {object} opts3
+ * @param {string} opts3.x
+ */
+function foo3(opts3) {
+>foo3 : Symbol(foo3, Decl(0.js, 31, 28))
+>opts3 : Symbol(opts3, Decl(0.js, 37, 14))
+
+    opts3.x;
+>opts3.x : Symbol(x, Decl(0.js, 35, 3))
+>opts3 : Symbol(opts3, Decl(0.js, 37, 14))
+>x : Symbol(x, Decl(0.js, 35, 3))
+}
+foo3({x: 'abc'});
+>foo3 : Symbol(foo3, Decl(0.js, 31, 28))
+>x : Symbol(x, Decl(0.js, 40, 6))
+
+/**
+ * @param {object[]} opts4
+ * @param {string} opts4[].x
+ * @param {string=} opts4[].y
+ * @param {string} [opts4[].z]
+ * @param {string} [opts4[].w="hi"]
+ */
+function foo4(opts4) {
+>foo4 : Symbol(foo4, Decl(0.js, 40, 17))
+>opts4 : Symbol(opts4, Decl(0.js, 49, 14))
+
+    opts4[0].x;
+>opts4[0].x : Symbol(x, Decl(0.js, 44, 3))
+>opts4 : Symbol(opts4, Decl(0.js, 49, 14))
+>x : Symbol(x, Decl(0.js, 44, 3))
+}
+
+foo4([{ x: 'hi' }]);
+>foo4 : Symbol(foo4, Decl(0.js, 40, 17))
+>x : Symbol(x, Decl(0.js, 53, 7))
+
+/**
+ * @param {object[]} opts5 - Let's test out some multiple nesting levels
+ * @param {string} opts5[].help - (This one is just normal)
+ * @param {object} opts5[].what - Look at us go! Here's the first nest!
+ * @param {string} opts5[].what.a - (Another normal one)
+ * @param {Object[]} opts5[].what.bad - Now we're nesting inside a nested type
+ * @param {string} opts5[].what.bad[].idea - I don't think you can get back out of this level...
+ * @param {boolean} opts5[].what.bad[].oh - Oh ... that's how you do it.
+ * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
+ */
+function foo5(opts5) {
+>foo5 : Symbol(foo5, Decl(0.js, 53, 20))
+>opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+
+    opts5[0].what.bad[0].idea;
+>opts5[0].what.bad[0].idea : Symbol(idea, Decl(0.js, 61, 3))
+>opts5[0].what.bad : Symbol(bad, Decl(0.js, 60, 3))
+>opts5[0].what : Symbol(what, Decl(0.js, 58, 3))
+>opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+>what : Symbol(what, Decl(0.js, 58, 3))
+>bad : Symbol(bad, Decl(0.js, 60, 3))
+>idea : Symbol(idea, Decl(0.js, 61, 3))
+
+    opts5[0].unnest;
+>opts5[0].unnest : Symbol(unnest, Decl(0.js, 63, 3))
+>opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+>unnest : Symbol(unnest, Decl(0.js, 63, 3))
+}
+
+foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
+>foo5 : Symbol(foo5, Decl(0.js, 53, 20))
+>help : Symbol(help, Decl(0.js, 70, 7))
+>what : Symbol(what, Decl(0.js, 70, 21))
+>a : Symbol(a, Decl(0.js, 70, 29))
+>bad : Symbol(bad, Decl(0.js, 70, 37))
+>idea : Symbol(idea, Decl(0.js, 70, 45))
+>oh : Symbol(oh, Decl(0.js, 70, 59))
+>unnest : Symbol(unnest, Decl(0.js, 70, 75))
+

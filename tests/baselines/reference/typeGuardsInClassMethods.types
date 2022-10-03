@@ -1,0 +1,249 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInClassMethods.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// variables in global
+var num: number;
+>num : number
+
+var var1: string | number;
+>var1 : string | number
+
+class C1 {
+>C1 : C1
+
+    constructor(param: string | number) {
+>param : string | number
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num = typeof var1 === "string" && var1.length : number
+>num : number
+>typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+>var1.length : number
+>var1 : string
+>length : number
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : string | number
+
+        num = typeof var2 === "string" && var2.length; // string
+>num = typeof var2 === "string" && var2.length : number
+>num : number
+>typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" : boolean
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var2 : string | number
+>"string" : "string"
+>var2.length : number
+>var2 : string
+>length : number
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num = typeof param === "string" && param.length : number
+>num : number
+>typeof param === "string" && param.length : number
+>typeof param === "string" : boolean
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>param : string | number
+>"string" : "string"
+>param.length : number
+>param : string
+>length : number
+    }
+    // Inside function declaration
+    private p1(param: string | number) {
+>p1 : (param: string | number) => void
+>param : string | number
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num = typeof var1 === "string" && var1.length : number
+>num : number
+>typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+>var1.length : number
+>var1 : string
+>length : number
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : string | number
+
+        num = typeof var2 === "string" && var2.length; // string
+>num = typeof var2 === "string" && var2.length : number
+>num : number
+>typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" : boolean
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var2 : string | number
+>"string" : "string"
+>var2.length : number
+>var2 : string
+>length : number
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num = typeof param === "string" && param.length : number
+>num : number
+>typeof param === "string" && param.length : number
+>typeof param === "string" : boolean
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>param : string | number
+>"string" : "string"
+>param.length : number
+>param : string
+>length : number
+    }
+    // Inside function declaration
+    p2(param: string | number) {
+>p2 : (param: string | number) => void
+>param : string | number
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num = typeof var1 === "string" && var1.length : number
+>num : number
+>typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+>var1.length : number
+>var1 : string
+>length : number
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : string | number
+
+        num = typeof var2 === "string" && var2.length; // string
+>num = typeof var2 === "string" && var2.length : number
+>num : number
+>typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" : boolean
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var2 : string | number
+>"string" : "string"
+>var2.length : number
+>var2 : string
+>length : number
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num = typeof param === "string" && param.length : number
+>num : number
+>typeof param === "string" && param.length : number
+>typeof param === "string" : boolean
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>param : string | number
+>"string" : "string"
+>param.length : number
+>param : string
+>length : number
+    }
+    // Inside function declaration
+    private static s1(param: string | number) {
+>s1 : (param: string | number) => void
+>param : string | number
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num = typeof var1 === "string" && var1.length : number
+>num : number
+>typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+>var1.length : number
+>var1 : string
+>length : number
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : string | number
+
+        num = typeof var2 === "string" && var2.length; // string
+>num = typeof var2 === "string" && var2.length : number
+>num : number
+>typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" : boolean
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var2 : string | number
+>"string" : "string"
+>var2.length : number
+>var2 : string
+>length : number
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num = typeof param === "string" && param.length : number
+>num : number
+>typeof param === "string" && param.length : number
+>typeof param === "string" : boolean
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>param : string | number
+>"string" : "string"
+>param.length : number
+>param : string
+>length : number
+    }
+    // Inside function declaration
+    static s2(param: string | number) {
+>s2 : (param: string | number) => void
+>param : string | number
+
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+>num = typeof var1 === "string" && var1.length : number
+>num : number
+>typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" : boolean
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var1 : string | number
+>"string" : "string"
+>var1.length : number
+>var1 : string
+>length : number
+
+        // variables in function declaration
+        var var2: string | number;
+>var2 : string | number
+
+        num = typeof var2 === "string" && var2.length; // string
+>num = typeof var2 === "string" && var2.length : number
+>num : number
+>typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" : boolean
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>var2 : string | number
+>"string" : "string"
+>var2.length : number
+>var2 : string
+>length : number
+
+        // parameters in function declaration
+        num = typeof param === "string" && param.length; // string
+>num = typeof param === "string" && param.length : number
+>num : number
+>typeof param === "string" && param.length : number
+>typeof param === "string" : boolean
+>typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>param : string | number
+>"string" : "string"
+>param.length : number
+>param : string
+>length : number
+    }
+}
+

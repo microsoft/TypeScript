@@ -1,0 +1,25 @@
+=== tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts ===
+type M = { p: string };
+>M : Symbol(M, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 0))
+>p : Symbol(p, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 10))
+
+type O = { m: () => M };
+>O : Symbol(O, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 23))
+>m : Symbol(m, Decl(substituteReturnTypeSatisfiesConstraint.ts, 1, 10))
+>M : Symbol(M, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 0))
+
+type X<T extends M> = T;
+>X : Symbol(X, Decl(substituteReturnTypeSatisfiesConstraint.ts, 1, 24))
+>T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 2, 7))
+>M : Symbol(M, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 2, 7))
+
+type FFG<T> = T extends O ? X<ReturnType<T['m']>> : never; // error!
+>FFG : Symbol(FFG, Decl(substituteReturnTypeSatisfiesConstraint.ts, 2, 24))
+>T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 3, 9))
+>T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 3, 9))
+>O : Symbol(O, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 23))
+>X : Symbol(X, Decl(substituteReturnTypeSatisfiesConstraint.ts, 1, 24))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 3, 9))
+

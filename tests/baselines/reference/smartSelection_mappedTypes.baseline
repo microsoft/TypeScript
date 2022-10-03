@@ -1,0 +1,65 @@
+type M = { /**/-readonly [K in keyof any]-?: any };
+
+           -                                   
+           -readonly                           
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -re/**/adonly [K in keyof any]-?: any };
+
+            readonly                           
+           -readonly                           
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly /**/[K in keyof any]-?: any };
+
+                     [                         
+                     [K in keyof any]          
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in ke/**/yof any]-?: any };
+
+                           keyof               
+                           keyof any           
+                      K in keyof any           
+                     [K in keyof any]          
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in keyof any]/**/-?: any };
+
+                                     -         
+                                     -?        
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };
+
+================================================================================
+
+type M = { -readonly [K in keyof any]-/**/?: any };
+
+                                      ?        
+                                     -?        
+           -readonly [K in keyof any]-?        
+           -readonly [K in keyof any]-?: any   
+         { -readonly [K in keyof any]-?: any } 
+type M = { -readonly [K in keyof any]-?: any };

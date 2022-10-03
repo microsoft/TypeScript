@@ -1,0 +1,7 @@
+tests/cases/compiler/separate1-1.ts(1,1): error TS2304: Cannot find name 'X'.
+
+
+==== tests/cases/compiler/separate1-1.ts (1 errors) ====
+    X.f();
+    ~
+!!! error TS2304: Cannot find name 'X'.

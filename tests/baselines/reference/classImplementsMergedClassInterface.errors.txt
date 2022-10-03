@@ -1,0 +1,43 @@
+tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts(9,7): error TS2720: Class 'C2' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+  Type 'C2' is missing the following properties from type 'C1': x, y
+tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts(12,7): error TS2720: Class 'C3' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+  Property 'y' is missing in type 'C3' but required in type 'C1'.
+tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts(16,7): error TS2720: Class 'C4' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+  Property 'x' is missing in type 'C4' but required in type 'C1'.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts (3 errors) ====
+    declare class C1 {
+        x : number;
+    }
+    
+    interface C1 {
+        y : number;
+    }
+    
+    class C2 implements C1 { // error -- missing x
+          ~~
+!!! error TS2720: Class 'C2' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+!!! error TS2720:   Type 'C2' is missing the following properties from type 'C1': x, y
+    }
+    
+    class C3 implements C1 { // error -- missing y
+          ~~
+!!! error TS2720: Class 'C3' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+!!! error TS2720:   Property 'y' is missing in type 'C3' but required in type 'C1'.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:6:5: 'y' is declared here.
+        x : number;
+    }
+    
+    class C4 implements C1 { // error -- missing x
+          ~~
+!!! error TS2720: Class 'C4' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
+!!! error TS2720:   Property 'x' is missing in type 'C4' but required in type 'C1'.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:2:5: 'x' is declared here.
+        y : number;
+    }
+    
+    class C5 implements C1 { // okay
+        x : number;
+        y : number;
+    }

@@ -1,0 +1,10 @@
+{
+    "scenario": "Prologue emit",
+    "projectRoot": "tests/cases/projects/PrologueEmit",
+    "inputFiles": [
+        "globalThisCapture.ts",
+        "__extends.ts"
+    ],
+    "out": "out.js",
+    "baselineCheck": true
+}

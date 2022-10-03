@@ -1,0 +1,77 @@
+=== tests/cases/compiler/node_modules/react/index.d.ts ===
+declare namespace React {
+>React : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
+
+    export interface DetailedHTMLProps<T, U> {}
+>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.d.ts, 0, 25))
+>T : Symbol(T, Decl(index.d.ts, 1, 39))
+>U : Symbol(U, Decl(index.d.ts, 1, 41))
+
+    export interface HTMLAttributes<T> {}
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 1, 47), Decl(index.d.ts, 1, 24))
+>T : Symbol(T, Decl(index.d.ts, 2, 36), Decl(index.d.ts, 2, 29))
+}
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
+
+export as namespace React;
+>React : Symbol(React, Decl(index.d.ts, 4, 15))
+
+=== tests/cases/compiler/node_modules/create-emotion-styled/types/react/index.d.ts ===
+/// <reference types="react" />
+declare module 'react' { // augment
+>'react' : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
+
+    interface HTMLAttributes<T> {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 1, 47), Decl(index.d.ts, 1, 24))
+>T : Symbol(T, Decl(index.d.ts, 2, 36), Decl(index.d.ts, 2, 29))
+
+        css?: unknown;
+>css : Symbol(HTMLAttributes.css, Decl(index.d.ts, 2, 33))
+    }
+}
+export interface StyledOtherComponentList {
+>StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 5, 1))
+
+    "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>"div" : Symbol(StyledOtherComponentList["div"], Decl(index.d.ts, 6, 43))
+>React : Symbol(React, Decl(index.d.ts, 4, 15))
+>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.d.ts, 0, 25))
+>React : Symbol(React, Decl(index.d.ts, 4, 15))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 1, 47), Decl(index.d.ts, 1, 24))
+>HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLDivElement : Symbol(HTMLDivElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+export interface StyledOtherComponent<A, B, C> {}
+>StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 8, 1))
+>A : Symbol(A, Decl(index.d.ts, 9, 38))
+>B : Symbol(B, Decl(index.d.ts, 9, 40))
+>C : Symbol(C, Decl(index.d.ts, 9, 43))
+
+=== tests/cases/compiler/node_modules/create-emotion-styled/index.d.ts ===
+export * from "./types/react";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
+import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
+>StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 0, 8))
+>StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))
+
+export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
+>styled : Symbol(styled, Decl(index.d.ts, 0, 85))
+>tag : Symbol(tag, Decl(index.d.ts, 1, 31))
+>o : Symbol(o, Decl(index.d.ts, 1, 46))
+>StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 0, 8))
+>StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))
+
+=== tests/cases/compiler/index.ts ===
+import styled from "react-emotion"
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+
+const Form = styled('div')({ color: "red" })
+>Form : Symbol(Form, Decl(index.ts, 2, 5))
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+>color : Symbol(color, Decl(index.ts, 2, 28))
+
+export default Form
+>Form : Symbol(Form, Decl(index.ts, 2, 5))
+

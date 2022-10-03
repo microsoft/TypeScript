@@ -1,0 +1,25 @@
+tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts(10,12): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts(14,12): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts (2 errors) ====
+    function f() {
+        let x: { a?: number | string, b: number | string } = { b: 1 };
+        x.a;
+        x.b;
+        x.a = 1;
+        x.b = 1;
+        x.a;
+        x.b;
+        delete x.a;
+        delete x.b;
+               ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+        x.a;
+        x.b;
+        x;
+        delete x;  // No effect
+               ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+        x;
+    }

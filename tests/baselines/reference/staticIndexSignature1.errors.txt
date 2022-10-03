@@ -1,0 +1,17 @@
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature1.ts(10,1): error TS2322: Type '2' is not assignable to type '42'.
+
+
+==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature1.ts (1 errors) ====
+    class C {
+        static [s: string]: number;
+        static [s: number]: 42
+    }
+    
+    C["foo"] = 1
+    C.bar = 2;
+    const foo = C["foo"]
+    C[42] = 42
+    C[2] = 2;
+    ~~~~
+!!! error TS2322: Type '2' is not assignable to type '42'.
+    const bar = C[42] 

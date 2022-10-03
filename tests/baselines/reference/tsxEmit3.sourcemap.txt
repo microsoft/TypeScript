@@ -1,0 +1,762 @@
+===================================================================
+JsFile: file.jsx
+mapUrl: file.jsx.map
+sourceRoot: 
+sources: file.tsx
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/jsx/file.jsx
+sourceFile:file.tsx
+-------------------------------------------------------------------
+>>>var M;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^^^^^^^^->
+1 >declare module JSX {
+  >	interface Element { }
+  >	interface IntrinsicElements { }
+  >}
+  >
+  >
+2 >module 
+3 >    M
+4 >      {
+  >     	export class Foo { constructor() { } }
+  >     	export module S {
+  >     		export class Bar { }
+  >     
+  >     		// Emit Foo
+  >     		// Foo, <Foo />;
+  >     	}
+  >     }
+1 >Emitted(1, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(6, 8) + SourceIndex(0)
+3 >Emitted(1, 6) Source(6, 9) + SourceIndex(0)
+4 >Emitted(1, 7) Source(14, 2) + SourceIndex(0)
+---
+>>>(function (M) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >module 
+3 >           M
+1->Emitted(2, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(2, 12) Source(6, 8) + SourceIndex(0)
+3 >Emitted(2, 13) Source(6, 9) + SourceIndex(0)
+---
+>>>    var Foo = /** @class */ (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >	
+1->Emitted(3, 5) Source(7, 2) + SourceIndex(0)
+---
+>>>        function Foo() {
+1->^^^^^^^^
+2 >        ^^->
+1->export class Foo { 
+1->Emitted(4, 9) Source(7, 21) + SourceIndex(0)
+---
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^->
+1->constructor() { 
+2 >        }
+1->Emitted(5, 9) Source(7, 37) + SourceIndex(0)
+2 >Emitted(5, 10) Source(7, 38) + SourceIndex(0)
+---
+>>>        return Foo;
+1->^^^^^^^^
+2 >        ^^^^^^^^^^
+1-> 
+2 >        }
+1->Emitted(6, 9) Source(7, 39) + SourceIndex(0)
+2 >Emitted(6, 19) Source(7, 40) + SourceIndex(0)
+---
+>>>    }());
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^^^
+5 >         ^^^^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class Foo { constructor() { } }
+1 >Emitted(7, 5) Source(7, 39) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 40) + SourceIndex(0)
+3 >Emitted(7, 6) Source(7, 2) + SourceIndex(0)
+4 >Emitted(7, 10) Source(7, 40) + SourceIndex(0)
+---
+>>>    M.Foo = Foo;
+1->^^^^
+2 >    ^^^^^
+3 >         ^^^^^^
+4 >               ^
+1->
+2 >    Foo
+3 >          { constructor() { } }
+4 >               
+1->Emitted(8, 5) Source(7, 15) + SourceIndex(0)
+2 >Emitted(8, 10) Source(7, 18) + SourceIndex(0)
+3 >Emitted(8, 16) Source(7, 40) + SourceIndex(0)
+4 >Emitted(8, 17) Source(7, 40) + SourceIndex(0)
+---
+>>>    var S;
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^^^^^^^^^^->
+1 >
+  >	
+2 >    export module 
+3 >        S
+4 >          {
+  >         		export class Bar { }
+  >         
+  >         		// Emit Foo
+  >         		// Foo, <Foo />;
+  >         	}
+1 >Emitted(9, 5) Source(8, 2) + SourceIndex(0)
+2 >Emitted(9, 9) Source(8, 16) + SourceIndex(0)
+3 >Emitted(9, 10) Source(8, 17) + SourceIndex(0)
+4 >Emitted(9, 11) Source(13, 3) + SourceIndex(0)
+---
+>>>    (function (S) {
+1->^^^^
+2 >    ^^^^^^^^^^^
+3 >               ^
+4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >    export module 
+3 >               S
+1->Emitted(10, 5) Source(8, 2) + SourceIndex(0)
+2 >Emitted(10, 16) Source(8, 16) + SourceIndex(0)
+3 >Emitted(10, 17) Source(8, 17) + SourceIndex(0)
+---
+>>>        var Bar = /** @class */ (function () {
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >		
+1->Emitted(11, 9) Source(9, 3) + SourceIndex(0)
+---
+>>>            function Bar() {
+1->^^^^^^^^^^^^
+2 >            ^^->
+1->
+1->Emitted(12, 13) Source(9, 3) + SourceIndex(0)
+---
+>>>            }
+1->^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^^^^^->
+1->export class Bar { 
+2 >            }
+1->Emitted(13, 13) Source(9, 22) + SourceIndex(0)
+2 >Emitted(13, 14) Source(9, 23) + SourceIndex(0)
+---
+>>>            return Bar;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^
+1->
+2 >            }
+1->Emitted(14, 13) Source(9, 22) + SourceIndex(0)
+2 >Emitted(14, 23) Source(9, 23) + SourceIndex(0)
+---
+>>>        }());
+1 >^^^^^^^^
+2 >        ^
+3 >         
+4 >         ^^^^
+5 >             ^^^^^^^^->
+1 >
+2 >        }
+3 >         
+4 >         export class Bar { }
+1 >Emitted(15, 9) Source(9, 22) + SourceIndex(0)
+2 >Emitted(15, 10) Source(9, 23) + SourceIndex(0)
+3 >Emitted(15, 10) Source(9, 3) + SourceIndex(0)
+4 >Emitted(15, 14) Source(9, 23) + SourceIndex(0)
+---
+>>>        S.Bar = Bar;
+1->^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^^^
+4 >                   ^
+1->
+2 >        Bar
+3 >              { }
+4 >                   
+1->Emitted(16, 9) Source(9, 16) + SourceIndex(0)
+2 >Emitted(16, 14) Source(9, 19) + SourceIndex(0)
+3 >Emitted(16, 20) Source(9, 23) + SourceIndex(0)
+4 >Emitted(16, 21) Source(9, 23) + SourceIndex(0)
+---
+>>>        // Emit Foo
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^
+3 >                   ^^^^^^->
+1 >
+  >
+  >		
+2 >        // Emit Foo
+1 >Emitted(17, 9) Source(11, 3) + SourceIndex(0)
+2 >Emitted(17, 20) Source(11, 14) + SourceIndex(0)
+---
+>>>        // Foo, <Foo />;
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^->
+1->
+  >		
+2 >        // Foo, <Foo />;
+1->Emitted(18, 9) Source(12, 3) + SourceIndex(0)
+2 >Emitted(18, 25) Source(12, 19) + SourceIndex(0)
+---
+>>>    })(S = M.S || (M.S = {}));
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^^
+6 >           ^^^
+7 >              ^^^^^
+8 >                   ^^^
+9 >                      ^^^^^^^^
+1->
+  >	
+2 >    }
+3 >     
+4 >       S
+5 >        
+6 >           S
+7 >              
+8 >                   S
+9 >                       {
+  >                      		export class Bar { }
+  >                      
+  >                      		// Emit Foo
+  >                      		// Foo, <Foo />;
+  >                      	}
+1->Emitted(19, 5) Source(13, 2) + SourceIndex(0)
+2 >Emitted(19, 6) Source(13, 3) + SourceIndex(0)
+3 >Emitted(19, 8) Source(8, 16) + SourceIndex(0)
+4 >Emitted(19, 9) Source(8, 17) + SourceIndex(0)
+5 >Emitted(19, 12) Source(8, 16) + SourceIndex(0)
+6 >Emitted(19, 15) Source(8, 17) + SourceIndex(0)
+7 >Emitted(19, 20) Source(8, 16) + SourceIndex(0)
+8 >Emitted(19, 23) Source(8, 17) + SourceIndex(0)
+9 >Emitted(19, 31) Source(13, 3) + SourceIndex(0)
+---
+>>>})(M || (M = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^
+6 >         ^
+7 >          ^^^^^^^^
+1 >
+  >
+2 >}
+3 > 
+4 >   M
+5 >    
+6 >         M
+7 >           {
+  >          	export class Foo { constructor() { } }
+  >          	export module S {
+  >          		export class Bar { }
+  >          
+  >          		// Emit Foo
+  >          		// Foo, <Foo />;
+  >          	}
+  >          }
+1 >Emitted(20, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(14, 2) + SourceIndex(0)
+3 >Emitted(20, 4) Source(6, 8) + SourceIndex(0)
+4 >Emitted(20, 5) Source(6, 9) + SourceIndex(0)
+5 >Emitted(20, 10) Source(6, 8) + SourceIndex(0)
+6 >Emitted(20, 11) Source(6, 9) + SourceIndex(0)
+7 >Emitted(20, 19) Source(14, 2) + SourceIndex(0)
+---
+>>>(function (M) {
+1 >
+2 >^^^^^^^^^^^
+3 >           ^
+4 >            ^^^^^^->
+1 >
+  >
+  >
+2 >module 
+3 >           M
+1 >Emitted(21, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(21, 12) Source(16, 8) + SourceIndex(0)
+3 >Emitted(21, 13) Source(16, 9) + SourceIndex(0)
+---
+>>>    // Emit M.Foo
+1->^^^^
+2 >    ^^^^^^^^^^^^^
+3 >                 ^^^^^->
+1-> {
+  >	
+2 >    // Emit M.Foo
+1->Emitted(22, 5) Source(17, 2) + SourceIndex(0)
+2 >Emitted(22, 18) Source(17, 15) + SourceIndex(0)
+---
+>>>    M.Foo, <M.Foo />;
+1->^^^^
+2 >    ^^
+3 >      ^^^
+4 >         ^^
+5 >           ^
+6 >            ^^
+7 >              ^^^
+8 >                 ^
+9 >                  
+10>                  ^^
+11>                    ^
+1->
+  >	
+2 >    
+3 >      Foo
+4 >         , 
+5 >           <
+6 >            
+7 >              Foo
+8 >                  
+9 >                  
+10>                   />
+11>                    ;
+1->Emitted(23, 5) Source(18, 2) + SourceIndex(0)
+2 >Emitted(23, 7) Source(18, 2) + SourceIndex(0)
+3 >Emitted(23, 10) Source(18, 5) + SourceIndex(0)
+4 >Emitted(23, 12) Source(18, 7) + SourceIndex(0)
+5 >Emitted(23, 13) Source(18, 8) + SourceIndex(0)
+6 >Emitted(23, 15) Source(18, 8) + SourceIndex(0)
+7 >Emitted(23, 18) Source(18, 11) + SourceIndex(0)
+8 >Emitted(23, 19) Source(18, 12) + SourceIndex(0)
+9 >Emitted(23, 19) Source(18, 11) + SourceIndex(0)
+10>Emitted(23, 21) Source(18, 14) + SourceIndex(0)
+11>Emitted(23, 22) Source(18, 15) + SourceIndex(0)
+---
+>>>    var S;
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^^^^^^^^^^->
+1 >
+  >
+  >	
+2 >    export module 
+3 >        S
+4 >          {
+  >         		// Emit M.Foo
+  >         		Foo, <Foo />;
+  >         
+  >         		// Emit S.Bar
+  >         		Bar, <Bar />;
+  >         	}
+1 >Emitted(24, 5) Source(20, 2) + SourceIndex(0)
+2 >Emitted(24, 9) Source(20, 16) + SourceIndex(0)
+3 >Emitted(24, 10) Source(20, 17) + SourceIndex(0)
+4 >Emitted(24, 11) Source(26, 3) + SourceIndex(0)
+---
+>>>    (function (S) {
+1->^^^^
+2 >    ^^^^^^^^^^^
+3 >               ^
+4 >                ^^^^^^->
+1->
+2 >    export module 
+3 >               S
+1->Emitted(25, 5) Source(20, 2) + SourceIndex(0)
+2 >Emitted(25, 16) Source(20, 16) + SourceIndex(0)
+3 >Emitted(25, 17) Source(20, 17) + SourceIndex(0)
+---
+>>>        // Emit M.Foo
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^^^->
+1-> {
+  >		
+2 >        // Emit M.Foo
+1->Emitted(26, 9) Source(21, 3) + SourceIndex(0)
+2 >Emitted(26, 22) Source(21, 16) + SourceIndex(0)
+---
+>>>        M.Foo, <M.Foo />;
+1->^^^^^^^^
+2 >        ^^
+3 >          ^^^
+4 >             ^^
+5 >               ^
+6 >                ^^
+7 >                  ^^^
+8 >                     ^
+9 >                      
+10>                      ^^
+11>                        ^
+1->
+  >		
+2 >        
+3 >          Foo
+4 >             , 
+5 >               <
+6 >                
+7 >                  Foo
+8 >                      
+9 >                      
+10>                       />
+11>                        ;
+1->Emitted(27, 9) Source(22, 3) + SourceIndex(0)
+2 >Emitted(27, 11) Source(22, 3) + SourceIndex(0)
+3 >Emitted(27, 14) Source(22, 6) + SourceIndex(0)
+4 >Emitted(27, 16) Source(22, 8) + SourceIndex(0)
+5 >Emitted(27, 17) Source(22, 9) + SourceIndex(0)
+6 >Emitted(27, 19) Source(22, 9) + SourceIndex(0)
+7 >Emitted(27, 22) Source(22, 12) + SourceIndex(0)
+8 >Emitted(27, 23) Source(22, 13) + SourceIndex(0)
+9 >Emitted(27, 23) Source(22, 12) + SourceIndex(0)
+10>Emitted(27, 25) Source(22, 15) + SourceIndex(0)
+11>Emitted(27, 26) Source(22, 16) + SourceIndex(0)
+---
+>>>        // Emit S.Bar
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^^^->
+1 >
+  >
+  >		
+2 >        // Emit S.Bar
+1 >Emitted(28, 9) Source(24, 3) + SourceIndex(0)
+2 >Emitted(28, 22) Source(24, 16) + SourceIndex(0)
+---
+>>>        S.Bar, <S.Bar />;
+1->^^^^^^^^
+2 >        ^^
+3 >          ^^^
+4 >             ^^
+5 >               ^
+6 >                ^^
+7 >                  ^^^
+8 >                     ^
+9 >                      
+10>                      ^^
+11>                        ^
+12>                         ^^^^^^->
+1->
+  >		
+2 >        
+3 >          Bar
+4 >             , 
+5 >               <
+6 >                
+7 >                  Bar
+8 >                      
+9 >                      
+10>                       />
+11>                        ;
+1->Emitted(29, 9) Source(25, 3) + SourceIndex(0)
+2 >Emitted(29, 11) Source(25, 3) + SourceIndex(0)
+3 >Emitted(29, 14) Source(25, 6) + SourceIndex(0)
+4 >Emitted(29, 16) Source(25, 8) + SourceIndex(0)
+5 >Emitted(29, 17) Source(25, 9) + SourceIndex(0)
+6 >Emitted(29, 19) Source(25, 9) + SourceIndex(0)
+7 >Emitted(29, 22) Source(25, 12) + SourceIndex(0)
+8 >Emitted(29, 23) Source(25, 13) + SourceIndex(0)
+9 >Emitted(29, 23) Source(25, 12) + SourceIndex(0)
+10>Emitted(29, 25) Source(25, 15) + SourceIndex(0)
+11>Emitted(29, 26) Source(25, 16) + SourceIndex(0)
+---
+>>>    })(S = M.S || (M.S = {}));
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+5 >        ^^^
+6 >           ^^^
+7 >              ^^^^^
+8 >                   ^^^
+9 >                      ^^^^^^^^
+1->
+  >	
+2 >    }
+3 >     
+4 >       S
+5 >        
+6 >           S
+7 >              
+8 >                   S
+9 >                       {
+  >                      		// Emit M.Foo
+  >                      		Foo, <Foo />;
+  >                      
+  >                      		// Emit S.Bar
+  >                      		Bar, <Bar />;
+  >                      	}
+1->Emitted(30, 5) Source(26, 2) + SourceIndex(0)
+2 >Emitted(30, 6) Source(26, 3) + SourceIndex(0)
+3 >Emitted(30, 8) Source(20, 16) + SourceIndex(0)
+4 >Emitted(30, 9) Source(20, 17) + SourceIndex(0)
+5 >Emitted(30, 12) Source(20, 16) + SourceIndex(0)
+6 >Emitted(30, 15) Source(20, 17) + SourceIndex(0)
+7 >Emitted(30, 20) Source(20, 16) + SourceIndex(0)
+8 >Emitted(30, 23) Source(20, 17) + SourceIndex(0)
+9 >Emitted(30, 31) Source(26, 3) + SourceIndex(0)
+---
+>>>})(M || (M = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^
+6 >         ^
+7 >          ^^^^^^^^
+1 >
+  >
+  >
+2 >}
+3 > 
+4 >   M
+5 >    
+6 >         M
+7 >           {
+  >          	// Emit M.Foo
+  >          	Foo, <Foo />;
+  >          
+  >          	export module S {
+  >          		// Emit M.Foo
+  >          		Foo, <Foo />;
+  >          
+  >          		// Emit S.Bar
+  >          		Bar, <Bar />;
+  >          	}
+  >          
+  >          }
+1 >Emitted(31, 1) Source(28, 1) + SourceIndex(0)
+2 >Emitted(31, 2) Source(28, 2) + SourceIndex(0)
+3 >Emitted(31, 4) Source(16, 8) + SourceIndex(0)
+4 >Emitted(31, 5) Source(16, 9) + SourceIndex(0)
+5 >Emitted(31, 10) Source(16, 8) + SourceIndex(0)
+6 >Emitted(31, 11) Source(16, 9) + SourceIndex(0)
+7 >Emitted(31, 19) Source(28, 2) + SourceIndex(0)
+---
+>>>(function (M) {
+1 >
+2 >^^^^^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
+1 >
+  >
+  >
+2 >module 
+3 >           M
+1 >Emitted(32, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(32, 12) Source(30, 8) + SourceIndex(0)
+3 >Emitted(32, 13) Source(30, 9) + SourceIndex(0)
+---
+>>>    // Emit M.S.Bar
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^^^^^^->
+1-> {
+  >	
+2 >    // Emit M.S.Bar
+1->Emitted(33, 5) Source(31, 2) + SourceIndex(0)
+2 >Emitted(33, 20) Source(31, 17) + SourceIndex(0)
+---
+>>>    M.S.Bar, <M.S.Bar />;
+1->^^^^
+2 >    ^^
+3 >      ^
+4 >       ^
+5 >        ^^^
+6 >           ^^
+7 >             ^
+8 >              ^^
+9 >                ^
+10>                 ^
+11>                  ^^^
+12>                     ^
+13>                      
+14>                      ^^
+15>                        ^
+1->
+  >	
+2 >    
+3 >      S
+4 >       .
+5 >        Bar
+6 >           , 
+7 >             <
+8 >              
+9 >                S
+10>                 .
+11>                  Bar
+12>                      
+13>                      
+14>                       />
+15>                        ;
+1->Emitted(34, 5) Source(32, 2) + SourceIndex(0)
+2 >Emitted(34, 7) Source(32, 2) + SourceIndex(0)
+3 >Emitted(34, 8) Source(32, 3) + SourceIndex(0)
+4 >Emitted(34, 9) Source(32, 4) + SourceIndex(0)
+5 >Emitted(34, 12) Source(32, 7) + SourceIndex(0)
+6 >Emitted(34, 14) Source(32, 9) + SourceIndex(0)
+7 >Emitted(34, 15) Source(32, 10) + SourceIndex(0)
+8 >Emitted(34, 17) Source(32, 10) + SourceIndex(0)
+9 >Emitted(34, 18) Source(32, 11) + SourceIndex(0)
+10>Emitted(34, 19) Source(32, 12) + SourceIndex(0)
+11>Emitted(34, 22) Source(32, 15) + SourceIndex(0)
+12>Emitted(34, 23) Source(32, 16) + SourceIndex(0)
+13>Emitted(34, 23) Source(32, 15) + SourceIndex(0)
+14>Emitted(34, 25) Source(32, 18) + SourceIndex(0)
+15>Emitted(34, 26) Source(32, 19) + SourceIndex(0)
+---
+>>>})(M || (M = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^
+6 >         ^
+7 >          ^^^^^^^^
+1 >
+  >
+2 >}
+3 > 
+4 >   M
+5 >    
+6 >         M
+7 >           {
+  >          	// Emit M.S.Bar
+  >          	S.Bar, <S.Bar />;
+  >          }
+1 >Emitted(35, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(35, 2) Source(33, 2) + SourceIndex(0)
+3 >Emitted(35, 4) Source(30, 8) + SourceIndex(0)
+4 >Emitted(35, 5) Source(30, 9) + SourceIndex(0)
+5 >Emitted(35, 10) Source(30, 8) + SourceIndex(0)
+6 >Emitted(35, 11) Source(30, 9) + SourceIndex(0)
+7 >Emitted(35, 19) Source(33, 2) + SourceIndex(0)
+---
+>>>(function (M_1) {
+1 >
+2 >^^^^^^^^^^^
+3 >           ^^^
+4 >              ^^^->
+1 >
+  >
+  >
+2 >module 
+3 >           M
+1 >Emitted(36, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(36, 12) Source(35, 8) + SourceIndex(0)
+3 >Emitted(36, 15) Source(35, 9) + SourceIndex(0)
+---
+>>>    var M = 100;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^^
+6 >               ^
+7 >                ^^^^->
+1-> {
+  >	
+2 >    var 
+3 >        M
+4 >          = 
+5 >            100
+6 >               ;
+1->Emitted(37, 5) Source(36, 2) + SourceIndex(0)
+2 >Emitted(37, 9) Source(36, 6) + SourceIndex(0)
+3 >Emitted(37, 10) Source(36, 7) + SourceIndex(0)
+4 >Emitted(37, 13) Source(36, 10) + SourceIndex(0)
+5 >Emitted(37, 16) Source(36, 13) + SourceIndex(0)
+6 >Emitted(37, 17) Source(36, 14) + SourceIndex(0)
+---
+>>>    // Emit M_1.Foo
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^^^^^^->
+1->
+  >	
+2 >    // Emit M_1.Foo
+1->Emitted(38, 5) Source(37, 2) + SourceIndex(0)
+2 >Emitted(38, 20) Source(37, 17) + SourceIndex(0)
+---
+>>>    M_1.Foo, <M_1.Foo />;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^
+4 >           ^^
+5 >             ^
+6 >              ^^^^
+7 >                  ^^^
+8 >                     ^
+9 >                      
+10>                      ^^
+11>                        ^
+1->
+  >	
+2 >    
+3 >        Foo
+4 >           , 
+5 >             <
+6 >              
+7 >                  Foo
+8 >                      
+9 >                      
+10>                       />
+11>                        ;
+1->Emitted(39, 5) Source(38, 2) + SourceIndex(0)
+2 >Emitted(39, 9) Source(38, 2) + SourceIndex(0)
+3 >Emitted(39, 12) Source(38, 5) + SourceIndex(0)
+4 >Emitted(39, 14) Source(38, 7) + SourceIndex(0)
+5 >Emitted(39, 15) Source(38, 8) + SourceIndex(0)
+6 >Emitted(39, 19) Source(38, 8) + SourceIndex(0)
+7 >Emitted(39, 22) Source(38, 11) + SourceIndex(0)
+8 >Emitted(39, 23) Source(38, 12) + SourceIndex(0)
+9 >Emitted(39, 23) Source(38, 11) + SourceIndex(0)
+10>Emitted(39, 25) Source(38, 14) + SourceIndex(0)
+11>Emitted(39, 26) Source(38, 15) + SourceIndex(0)
+---
+>>>})(M || (M = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^
+6 >         ^
+7 >          ^^^^^^^^
+8 >                  ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+3 > 
+4 >   M
+5 >    
+6 >         M
+7 >           {
+  >          	var M = 100;
+  >          	// Emit M_1.Foo
+  >          	Foo, <Foo />;
+  >          }
+1 >Emitted(40, 1) Source(39, 1) + SourceIndex(0)
+2 >Emitted(40, 2) Source(39, 2) + SourceIndex(0)
+3 >Emitted(40, 4) Source(35, 8) + SourceIndex(0)
+4 >Emitted(40, 5) Source(35, 9) + SourceIndex(0)
+5 >Emitted(40, 10) Source(35, 8) + SourceIndex(0)
+6 >Emitted(40, 11) Source(35, 9) + SourceIndex(0)
+7 >Emitted(40, 19) Source(39, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=file.jsx.map

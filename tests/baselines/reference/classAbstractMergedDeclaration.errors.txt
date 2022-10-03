@@ -1,0 +1,91 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(25,24): error TS2300: Duplicate identifier 'DCC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(26,15): error TS2300: Duplicate identifier 'DCC1'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(28,15): error TS2300: Duplicate identifier 'DCC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(29,24): error TS2300: Duplicate identifier 'DCC2'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(31,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(32,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(33,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(34,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(35,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(37,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(38,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts (16 errors) ====
+    abstract class CM {}
+    module CM {}
+    
+    module MC {}
+    abstract class MC {}
+    
+    abstract class CI {}
+    interface CI {}
+    
+    interface IC {}
+    abstract class IC {}
+    
+    abstract class CC1 {}
+                   ~~~
+!!! error TS2300: Duplicate identifier 'CC1'.
+    class CC1 {}
+          ~~~
+!!! error TS2300: Duplicate identifier 'CC1'.
+    
+    class CC2 {}
+          ~~~
+!!! error TS2300: Duplicate identifier 'CC2'.
+    abstract class CC2 {}
+                   ~~~
+!!! error TS2300: Duplicate identifier 'CC2'.
+    
+    declare abstract class DCI {}
+    interface DCI {}
+    
+    interface DIC {}
+    declare abstract class DIC {}
+    
+    declare abstract class DCC1 {}
+                           ~~~~
+!!! error TS2300: Duplicate identifier 'DCC1'.
+    declare class DCC1 {}
+                  ~~~~
+!!! error TS2300: Duplicate identifier 'DCC1'.
+    
+    declare class DCC2 {}
+                  ~~~~
+!!! error TS2300: Duplicate identifier 'DCC2'.
+    declare abstract class DCC2 {}
+                           ~~~~
+!!! error TS2300: Duplicate identifier 'DCC2'.
+    
+    new CM;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new MC;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new CI;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new IC;
+    ~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new CC1;
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new CC2;
+    new DCI;
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new DIC;
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new DCC1;
+    ~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new DCC2;

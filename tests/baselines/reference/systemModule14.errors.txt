@@ -1,0 +1,15 @@
+tests/cases/compiler/systemModule14.ts(5,17): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/systemModule14.ts (1 errors) ====
+    function foo() {
+        return a;
+    }
+    
+    import {a} from "foo";
+                    ~~~~~
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export {foo}
+    
+    var x = 1;
+    export {foo as b}

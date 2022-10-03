@@ -1,0 +1,13 @@
+=== tests/cases/compiler/extendsClauseAlreadySeen.ts ===
+class C {
+>C : C
+
+}
+class D extends C extends C {
+>D : D
+>C : C
+>C : C
+
+    baz() { }
+>baz : () => void
+}

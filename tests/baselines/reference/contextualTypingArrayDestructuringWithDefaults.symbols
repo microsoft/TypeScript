@@ -1,0 +1,33 @@
+=== tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts ===
+type I = { a: "a" };
+>I : Symbol(I, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 0))
+>a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 10))
+
+let [ c0 = {a: "a"} ]: [I?] = [];
+>c0 : Symbol(c0, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 1, 5))
+>a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 1, 12))
+>I : Symbol(I, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 0))
+
+let [ x1, c1 = {a: "a"} ]: [number, I?] = [1];
+>x1 : Symbol(x1, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 2, 5))
+>c1 : Symbol(c1, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 2, 9))
+>a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 2, 16))
+>I : Symbol(I, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 0))
+
+let [ c_ = {a: "a"} ]: I[] = [];
+>c_ : Symbol(c_, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 3, 5))
+>a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 3, 12))
+>I : Symbol(I, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 0))
+
+// not a great example, expect an error
+function foo() {
+>foo : Symbol(foo, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 3, 32))
+
+    let {length = {a: 1}}: [number] = [1];
+>length : Symbol(length, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 7, 9))
+>a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 7, 19))
+
+    return length;
+>length : Symbol(length, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 7, 9))
+}
+

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeofSimple.ts ===
+var v = 3;
+>v : number
+>3 : 3
+
+var v2: typeof v;
+>v2 : number
+>v : number
+
+var v3: string = v2; // Not assignment compatible
+>v3 : string
+>v2 : number
+
+interface I<T> { x: T; }
+>x : T
+
+interface J { }
+
+var numberJ: typeof J; //Error, cannot reference type in typeof
+>numberJ : any
+>J : any
+
+var numberI: I<typeof v2>;
+>numberI : I<number>
+>v2 : number
+
+var fun: () => I<number>;
+>fun : () => I<number>
+
+numberI = fun();
+>numberI = fun() : I<number>
+>numberI : I<number>
+>fun() : I<number>
+>fun : () => I<number>
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/argumentsObjectIterator02_ES5.ts ===
+function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
+>doubleAndReturnAsArray : (x: number, y: number, z: number) => [number, number, number]
+>x : number
+>y : number
+>z : number
+
+    let blah = arguments[Symbol.iterator];
+>blah : any
+>arguments[Symbol.iterator] : any
+>arguments : IArguments
+>Symbol.iterator : any
+>Symbol : any
+>iterator : any
+
+    let result = [];
+>result : any[]
+>[] : undefined[]
+
+    for (let arg of blah()) {
+>arg : any
+>blah() : any
+>blah : any
+
+        result.push(arg + arg);
+>result.push(arg + arg) : number
+>result.push : (...items: any[]) => number
+>result : any[]
+>push : (...items: any[]) => number
+>arg + arg : any
+>arg : any
+>arg : any
+    }
+    return <[any, any, any]>result;
+><[any, any, any]>result : [any, any, any]
+>result : any[]
+}
+
+

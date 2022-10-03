@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts ===
+declare function f(x: (p: "foo" | "bar") => "foo");
+>f : (x: (p: "foo" | "bar") => "foo") => any
+>x : (p: "foo" | "bar") => "foo"
+>p : "foo" | "bar"
+
+f(y => {
+>f(y => {    const z = y = "foo";    return z;}) : any
+>f : (x: (p: "foo" | "bar") => "foo") => any
+>y => {    const z = y = "foo";    return z;} : (y: "foo" | "bar") => "foo"
+>y : "foo" | "bar"
+
+    const z = y = "foo";
+>z : "foo"
+>y = "foo" : "foo"
+>y : "foo" | "bar"
+>"foo" : "foo"
+
+    return z;
+>z : "foo"
+
+})

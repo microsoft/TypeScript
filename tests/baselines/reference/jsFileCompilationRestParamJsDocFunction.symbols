@@ -1,0 +1,67 @@
+=== tests/cases/compiler/_apply.js ===
+/**
+ * A faster alternative to `Function#apply`, this function invokes `func`
+ * with the `this` binding of `thisArg` and the arguments of `args`.
+ *
+ * @private
+ * @param {Function} func The function to invoke.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {...*} args The arguments to invoke `func` with.
+ * @returns {*} Returns the result of `func`.
+ */
+function apply(func, thisArg, ...args) {
+>apply : Symbol(apply, Decl(_apply.js, 0, 0))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+
+    var length = args.length;
+>length : Symbol(length, Decl(_apply.js, 11, 7))
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    switch (length) {
+>length : Symbol(length, Decl(_apply.js, 11, 7))
+
+        case 0: return func.call(thisArg);
+>func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+
+        case 1: return func.call(thisArg, args[0]);
+>func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+
+        case 2: return func.call(thisArg, args[0], args[1]);
+>func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+
+        case 3: return func.call(thisArg, args[0], args[1], args[2]);
+>func.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+    }
+    return func.apply(thisArg, args);
+>func.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(_apply.js, 10, 15))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))
+>args : Symbol(args, Decl(_apply.js, 10, 29))
+}
+
+export default apply;
+>apply : Symbol(apply, Decl(_apply.js, 0, 0))
+

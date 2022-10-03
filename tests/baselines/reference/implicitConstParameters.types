@@ -1,0 +1,165 @@
+=== tests/cases/compiler/implicitConstParameters.ts ===
+function doSomething(cb: () => void) {
+>doSomething : (cb: () => void) => void
+>cb : () => void
+
+    cb();
+>cb() : void
+>cb : () => void
+}
+
+function fn(x: number | string) {
+>fn : (x: number | string) => void
+>x : string | number
+
+  if (typeof x === 'number') {
+>typeof x === 'number' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'number' : "number"
+
+      doSomething(() => x.toFixed());
+>doSomething(() => x.toFixed()) : void
+>doSomething : (cb: () => void) => void
+>() => x.toFixed() : () => string
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+  }
+}
+
+function f1(x: string | undefined) {
+>f1 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (!x) {
+>!x : boolean
+>x : string | undefined
+
+        return;
+    }
+    doSomething(() => x.length);
+>doSomething(() => x.length) : void
+>doSomething : (cb: () => void) => void
+>() => x.length : () => number
+>x.length : number
+>x : string
+>length : number
+}
+
+function f2(x: string | undefined) {
+>f2 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (x) {
+>x : string | undefined
+
+        doSomething(() => {
+>doSomething(() => {            doSomething(() => x.length);        }) : void
+>doSomething : (cb: () => void) => void
+>() => {            doSomething(() => x.length);        } : () => void
+
+            doSomething(() => x.length);
+>doSomething(() => x.length) : void
+>doSomething : (cb: () => void) => void
+>() => x.length : () => number
+>x.length : number
+>x : string
+>length : number
+
+        });
+    }
+}
+
+function f3(x: string | undefined) {
+>f3 : (x: string | undefined) => void
+>x : string | undefined
+
+    inner();
+>inner() : void
+>inner : () => void
+
+    function inner() {
+>inner : () => void
+
+        if (x) {
+>x : string | undefined
+
+            doSomething(() => x.length);
+>doSomething(() => x.length) : void
+>doSomething : (cb: () => void) => void
+>() => x.length : () => number
+>x.length : number
+>x : string
+>length : number
+        }
+    }
+}
+
+function f4(x: string | undefined) {
+>f4 : (x: string | undefined) => void
+>x : string | undefined
+
+    x = "abc";  // causes x to be considered non-const
+>x = "abc" : "abc"
+>x : string | undefined
+>"abc" : "abc"
+
+    if (x) {
+>x : string
+
+        doSomething(() => x.length);
+>doSomething(() => x.length) : void
+>doSomething : (cb: () => void) => void
+>() => x.length : () => number
+>x.length : number
+>x : string | undefined
+>length : number
+    }
+}
+
+function f5(x: string | undefined) {
+>f5 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (x) {
+>x : string | undefined
+
+        doSomething(() => x.length);
+>doSomething(() => x.length) : void
+>doSomething : (cb: () => void) => void
+>() => x.length : () => number
+>x.length : number
+>x : string | undefined
+>length : number
+    }
+    x = "abc";  // causes x to be considered non-const
+>x = "abc" : "abc"
+>x : string | undefined
+>"abc" : "abc"
+}
+
+
+function f6(x: string | undefined) {
+>f6 : (x: string | undefined) => void
+>x : string | undefined
+
+    const y = x || "";
+>y : string
+>x || "" : string
+>x : string | undefined
+>"" : ""
+
+    if (x) {
+>x : string | undefined
+
+        doSomething(() => y.length);
+>doSomething(() => y.length) : void
+>doSomething : (cb: () => void) => void
+>() => y.length : () => number
+>y.length : number
+>y : string
+>length : number
+    }
+}

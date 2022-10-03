@@ -1,0 +1,16 @@
+=== tests/cases/compiler/widenToAny2.ts ===
+function foo3<T>(x: T[]): T {
+>foo3 : Symbol(foo3, Decl(widenToAny2.ts, 0, 0))
+>T : Symbol(T, Decl(widenToAny2.ts, 0, 14))
+>x : Symbol(x, Decl(widenToAny2.ts, 0, 17))
+>T : Symbol(T, Decl(widenToAny2.ts, 0, 14))
+>T : Symbol(T, Decl(widenToAny2.ts, 0, 14))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
+>z3 : Symbol(z3, Decl(widenToAny2.ts, 3, 3))
+>foo3 : Symbol(foo3, Decl(widenToAny2.ts, 0, 0))
+>undefined : Symbol(undefined)
+

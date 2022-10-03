@@ -1,0 +1,20 @@
+=== tests/cases/compiler/internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts ===
+module A {
+>A : Symbol(A, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 0, 0))
+
+    export interface X { s: string }
+>X : Symbol(X, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 0, 10))
+>s : Symbol(X.s, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 1, 24))
+}
+
+module B {
+>B : Symbol(B, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 2, 1))
+
+    var A = 1;
+>A : Symbol(A, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 5, 7))
+
+    import Y = A;
+>Y : Symbol(Y, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 5, 14))
+>A : Symbol(Y, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 0, 0))
+}
+

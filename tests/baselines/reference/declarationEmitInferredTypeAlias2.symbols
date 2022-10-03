@@ -1,0 +1,25 @@
+=== tests/cases/compiler/0.ts ===
+{
+    type Data = string | boolean;
+>Data : Symbol(Data, Decl(0.ts, 0, 1))
+
+    let obj: Data = true;
+>obj : Symbol(obj, Decl(0.ts, 2, 7))
+>Data : Symbol(Data, Decl(0.ts, 0, 1))
+}
+export { }
+
+=== tests/cases/compiler/1.ts ===
+let v = "str" || true;
+>v : Symbol(v, Decl(1.ts, 0, 3))
+
+function bar () {
+>bar : Symbol(bar, Decl(1.ts, 0, 22))
+
+    return v;
+>v : Symbol(v, Decl(1.ts, 0, 3))
+}
+export { v, bar }
+>v : Symbol(v, Decl(1.ts, 4, 8))
+>bar : Symbol(bar, Decl(1.ts, 4, 11))
+

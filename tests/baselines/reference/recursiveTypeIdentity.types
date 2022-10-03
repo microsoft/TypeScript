@@ -1,0 +1,18 @@
+=== tests/cases/compiler/recursiveTypeIdentity.ts ===
+interface A {
+    <T extends A>(x: T): void;
+>x : T
+}
+
+interface B {
+    <T extends B>(x: T): void;
+>x : T
+}
+
+interface C {
+    (x: A): void;
+>x : A
+
+    (x: B): void;
+>x : B
+}

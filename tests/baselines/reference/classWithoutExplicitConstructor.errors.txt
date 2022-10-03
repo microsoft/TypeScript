@@ -1,0 +1,24 @@
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(7,16): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(15,16): error TS2554: Expected 0 arguments, but got 1.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts (2 errors) ====
+    class C {
+        x = 1
+        y = 'hello';
+    }
+    
+    var c = new C();
+    var c2 = new C(null); // error
+                   ~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    
+    class D<T extends Date> {
+        x = 2
+        y: T = null;
+    }
+    
+    var d = new D();
+    var d2 = new D(null); // error
+                   ~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.

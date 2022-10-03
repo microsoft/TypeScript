@@ -1,0 +1,179 @@
+=== tests/cases/conformance/types/never/neverType.ts ===
+function error(message: string): never {
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+>message : Symbol(message, Decl(neverType.ts, 0, 15))
+
+    throw new Error(message);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(neverType.ts, 0, 15))
+}
+
+function errorVoid(message: string) {
+>errorVoid : Symbol(errorVoid, Decl(neverType.ts, 2, 1))
+>message : Symbol(message, Decl(neverType.ts, 4, 19))
+
+    throw new Error(message);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>message : Symbol(message, Decl(neverType.ts, 4, 19))
+}
+
+function fail() {
+>fail : Symbol(fail, Decl(neverType.ts, 6, 1))
+
+    return error("Something failed");
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+}
+
+function failOrThrow(shouldFail: boolean) {
+>failOrThrow : Symbol(failOrThrow, Decl(neverType.ts, 10, 1))
+>shouldFail : Symbol(shouldFail, Decl(neverType.ts, 12, 21))
+
+    if (shouldFail) {
+>shouldFail : Symbol(shouldFail, Decl(neverType.ts, 12, 21))
+
+        return fail();
+>fail : Symbol(fail, Decl(neverType.ts, 6, 1))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function infiniteLoop1() {
+>infiniteLoop1 : Symbol(infiniteLoop1, Decl(neverType.ts, 17, 1))
+
+    while (true) {
+    }
+}
+
+function infiniteLoop2(): never {
+>infiniteLoop2 : Symbol(infiniteLoop2, Decl(neverType.ts, 22, 1))
+
+    while (true) {
+    }
+}
+
+function move1(direction: "up" | "down") {
+>move1 : Symbol(move1, Decl(neverType.ts, 27, 1))
+>direction : Symbol(direction, Decl(neverType.ts, 29, 15))
+
+    switch (direction) {
+>direction : Symbol(direction, Decl(neverType.ts, 29, 15))
+
+        case "up":
+            return 1;
+        case "down":
+            return -1; 
+    }
+    return error("Should never get here");
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+}
+
+function move2(direction: "up" | "down") {
+>move2 : Symbol(move2, Decl(neverType.ts, 37, 1))
+>direction : Symbol(direction, Decl(neverType.ts, 39, 15))
+
+    return direction === "up" ? 1 :
+>direction : Symbol(direction, Decl(neverType.ts, 39, 15))
+
+        direction === "down" ? -1 :
+>direction : Symbol(direction, Decl(neverType.ts, 39, 15))
+
+        error("Should never get here");
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+}
+
+function check<T>(x: T | undefined) {
+>check : Symbol(check, Decl(neverType.ts, 43, 1))
+>T : Symbol(T, Decl(neverType.ts, 45, 15))
+>x : Symbol(x, Decl(neverType.ts, 45, 18))
+>T : Symbol(T, Decl(neverType.ts, 45, 15))
+
+    return x || error("Undefined value");
+>x : Symbol(x, Decl(neverType.ts, 45, 18))
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+}
+
+class C {
+>C : Symbol(C, Decl(neverType.ts, 47, 1))
+
+    void1() {
+>void1 : Symbol(C.void1, Decl(neverType.ts, 49, 9))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    void2() {
+>void2 : Symbol(C.void2, Decl(neverType.ts, 52, 5))
+
+        while (true) {}
+    }
+    never1(): never {
+>never1 : Symbol(C.never1, Decl(neverType.ts, 55, 5))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    never2(): never {
+>never2 : Symbol(C.never2, Decl(neverType.ts, 58, 5))
+
+        while (true) {}
+    }
+}
+
+function f1(x: string | number) {
+>f1 : Symbol(f1, Decl(neverType.ts, 62, 1))
+>x : Symbol(x, Decl(neverType.ts, 64, 12))
+
+    if (typeof x === "boolean") {
+>x : Symbol(x, Decl(neverType.ts, 64, 12))
+
+        x;  // never
+>x : Symbol(x, Decl(neverType.ts, 64, 12))
+    }
+}
+
+function f2(x: string | number) {
+>f2 : Symbol(f2, Decl(neverType.ts, 68, 1))
+>x : Symbol(x, Decl(neverType.ts, 70, 12))
+
+    while (true) {
+        if (typeof x === "boolean") {
+>x : Symbol(x, Decl(neverType.ts, 70, 12))
+
+            return x;  // never
+>x : Symbol(x, Decl(neverType.ts, 70, 12))
+        }
+    }
+}
+
+function test(cb: () => string) {
+>test : Symbol(test, Decl(neverType.ts, 76, 1))
+>cb : Symbol(cb, Decl(neverType.ts, 78, 14))
+
+    let s = cb();
+>s : Symbol(s, Decl(neverType.ts, 79, 7))
+>cb : Symbol(cb, Decl(neverType.ts, 78, 14))
+
+    return s;
+>s : Symbol(s, Decl(neverType.ts, 79, 7))
+}
+
+let errorCallback = () => error("Error callback");
+>errorCallback : Symbol(errorCallback, Decl(neverType.ts, 83, 3))
+>error : Symbol(error, Decl(neverType.ts, 0, 0))
+
+test(() => "hello");
+>test : Symbol(test, Decl(neverType.ts, 76, 1))
+
+test(() => fail());
+>test : Symbol(test, Decl(neverType.ts, 76, 1))
+>fail : Symbol(fail, Decl(neverType.ts, 6, 1))
+
+test(() => { throw new Error(); })
+>test : Symbol(test, Decl(neverType.ts, 76, 1))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+test(errorCallback);
+>test : Symbol(test, Decl(neverType.ts, 76, 1))
+>errorCallback : Symbol(errorCallback, Decl(neverType.ts, 83, 3))
+

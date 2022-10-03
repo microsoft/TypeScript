@@ -1,0 +1,45 @@
+=== tests/cases/compiler/objectLiteralIndexerErrors.ts ===
+interface A {
+>A : Symbol(A, Decl(objectLiteralIndexerErrors.ts, 0, 0))
+
+    x: number;
+>x : Symbol(A.x, Decl(objectLiteralIndexerErrors.ts, 0, 13))
+}
+
+interface B extends A {
+>B : Symbol(B, Decl(objectLiteralIndexerErrors.ts, 2, 1))
+>A : Symbol(A, Decl(objectLiteralIndexerErrors.ts, 0, 0))
+
+    y: string;
+>y : Symbol(B.y, Decl(objectLiteralIndexerErrors.ts, 4, 23))
+}
+
+var a: A;
+>a : Symbol(a, Decl(objectLiteralIndexerErrors.ts, 8, 3))
+>A : Symbol(A, Decl(objectLiteralIndexerErrors.ts, 0, 0))
+
+var b: B;
+>b : Symbol(b, Decl(objectLiteralIndexerErrors.ts, 9, 3))
+>B : Symbol(B, Decl(objectLiteralIndexerErrors.ts, 2, 1))
+
+var c: any;
+>c : Symbol(c, Decl(objectLiteralIndexerErrors.ts, 10, 3))
+
+var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
+>o1 : Symbol(o1, Decl(objectLiteralIndexerErrors.ts, 12, 3))
+>s : Symbol(s, Decl(objectLiteralIndexerErrors.ts, 12, 11))
+>A : Symbol(A, Decl(objectLiteralIndexerErrors.ts, 0, 0))
+>n : Symbol(n, Decl(objectLiteralIndexerErrors.ts, 12, 26))
+>B : Symbol(B, Decl(objectLiteralIndexerErrors.ts, 2, 1))
+>x : Symbol(x, Decl(objectLiteralIndexerErrors.ts, 12, 46))
+>b : Symbol(b, Decl(objectLiteralIndexerErrors.ts, 9, 3))
+>0 : Symbol(0, Decl(objectLiteralIndexerErrors.ts, 12, 52))
+>a : Symbol(a, Decl(objectLiteralIndexerErrors.ts, 8, 3))
+
+o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
+>o1 : Symbol(o1, Decl(objectLiteralIndexerErrors.ts, 12, 3))
+>x : Symbol(x, Decl(objectLiteralIndexerErrors.ts, 13, 6))
+>c : Symbol(c, Decl(objectLiteralIndexerErrors.ts, 10, 3))
+>0 : Symbol(0, Decl(objectLiteralIndexerErrors.ts, 13, 12))
+>a : Symbol(a, Decl(objectLiteralIndexerErrors.ts, 8, 3))
+

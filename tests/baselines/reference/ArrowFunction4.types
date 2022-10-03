@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction4.ts ===
+var v = (a, b) => {
+>v : (a: any, b: any) => void
+>(a, b) => {   } : (a: any, b: any) => void
+>a : any
+>b : any
+   
+};

@@ -1,0 +1,680 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource9.ts, 0, 0))
+
+    export class Binder {
+>Binder : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+
+        constructor (public checker: TypeChecker) { }
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>TypeChecker : Symbol(TypeChecker)
+
+        public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
+>resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
+>typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
+>TypeLink : Symbol(TypeLink)
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 8, 58))
+>SymbolScope : Symbol(SymbolScope)
+
+            var extendsList: Type[] = null;
+>extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+>Type : Symbol(Type)
+
+            if (typeLinks) {
+>typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
+
+                extendsList = new Type[];
+>extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+
+                for (var i = 0, len = typeLinks.length; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+>len : Symbol(len, Decl(parserRealSource9.ts, 12, 31))
+>typeLinks.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+>len : Symbol(len, Decl(parserRealSource9.ts, 12, 31))
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+
+                    var typeLink = typeLinks[i];
+>typeLink : Symbol(typeLink, Decl(parserRealSource9.ts, 13, 23))
+>typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+
+                    this.checker.resolvingBases = true;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                    this.checker.resolveTypeLink(scope, typeLink, true);
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 8, 58))
+>typeLink : Symbol(typeLink, Decl(parserRealSource9.ts, 13, 23))
+
+                    this.checker.resolvingBases = false;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                    if (typeLink.type.isClass()) {
+>typeLink : Symbol(typeLink, Decl(parserRealSource9.ts, 13, 23))
+
+                        extendsList[i] = typeLink.type.instanceType;
+>extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+>typeLink : Symbol(typeLink, Decl(parserRealSource9.ts, 13, 23))
+                    }
+                    else {
+                        extendsList[i] = typeLink.type;
+>extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+>i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
+>typeLink : Symbol(typeLink, Decl(parserRealSource9.ts, 13, 23))
+                    }
+                }
+            }
+            return extendsList;
+>extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+        }
+
+        public resolveBases(scope: SymbolScope, type: Type) {
+>resolveBases : Symbol(Binder.resolveBases, Decl(parserRealSource9.ts, 26, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 28, 28))
+>SymbolScope : Symbol(SymbolScope)
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>Type : Symbol(Type)
+
+            type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>this.resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 28, 28))
+
+            var i = 0, len = type.extendsList.length;
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+>len : Symbol(len, Decl(parserRealSource9.ts, 31, 22))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+            var derivedIsClass = type.isClassInstance();
+>derivedIsClass : Symbol(derivedIsClass, Decl(parserRealSource9.ts, 32, 15))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+            for (; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+>len : Symbol(len, Decl(parserRealSource9.ts, 31, 22))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+
+                var baseIsClass = type.extendsList[i].isClassInstance();
+>baseIsClass : Symbol(baseIsClass, Decl(parserRealSource9.ts, 34, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+
+                if (type.extendsList[i] != this.checker.anyType) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                    if (derivedIsClass) {
+>derivedIsClass : Symbol(derivedIsClass, Decl(parserRealSource9.ts, 32, 15))
+
+                        if (!baseIsClass) {
+>baseIsClass : Symbol(baseIsClass, Decl(parserRealSource9.ts, 34, 19))
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+                                                                     "A export class may only extend other classes, " + type.extendsList[i].symbol.fullName() + " is an interface.");
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+                        }
+                    }
+                    else {
+                        if (baseIsClass) {
+>baseIsClass : Symbol(baseIsClass, Decl(parserRealSource9.ts, 34, 19))
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+                                                                     "An interface may only extend other interfaces, " + type.extendsList[i].symbol.fullName() + " is a class.");
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+                        }
+                    }
+                }
+            }
+
+            type.implementsList = this.resolveBaseTypeLinks(type.implementsTypeLinks, scope);
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>this.resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 28, 28))
+
+            if (type.implementsList) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+                for (i = 0, len = type.implementsList.length; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+>len : Symbol(len, Decl(parserRealSource9.ts, 31, 22))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+>len : Symbol(len, Decl(parserRealSource9.ts, 31, 22))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+
+                    var iface = type.implementsList[i];
+>iface : Symbol(iface, Decl(parserRealSource9.ts, 55, 23))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>i : Symbol(i, Decl(parserRealSource9.ts, 31, 15))
+
+                    if (iface.isClassInstance()) {
+>iface : Symbol(iface, Decl(parserRealSource9.ts, 55, 23))
+
+                        if (derivedIsClass) {
+>derivedIsClass : Symbol(derivedIsClass, Decl(parserRealSource9.ts, 32, 15))
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+
+                                                                     "A class may only implement an interface; " + iface.symbol.fullName() + " is a class.");
+>iface : Symbol(iface, Decl(parserRealSource9.ts, 55, 23))
+                        }
+                    }
+                }
+            }
+        }
+
+        public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
+>resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>signatureGroup : Symbol(signatureGroup, Decl(parserRealSource9.ts, 66, 37))
+>SignatureGroup : Symbol(SignatureGroup)
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 66, 68))
+>SymbolScope : Symbol(SymbolScope)
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 66, 88))
+>Type : Symbol(Type)
+
+            var supplyVar = !(signatureGroup.hasImplementation);
+>supplyVar : Symbol(supplyVar, Decl(parserRealSource9.ts, 67, 15))
+>signatureGroup : Symbol(signatureGroup, Decl(parserRealSource9.ts, 66, 37))
+
+            for (var i = 0, len = signatureGroup.signatures.length; i < len; i++) {
+>i : Symbol(i, Decl(parserRealSource9.ts, 68, 20))
+>len : Symbol(len, Decl(parserRealSource9.ts, 68, 27))
+>signatureGroup : Symbol(signatureGroup, Decl(parserRealSource9.ts, 66, 37))
+>i : Symbol(i, Decl(parserRealSource9.ts, 68, 20))
+>len : Symbol(len, Decl(parserRealSource9.ts, 68, 27))
+>i : Symbol(i, Decl(parserRealSource9.ts, 68, 20))
+
+                var signature = signatureGroup.signatures[i];
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+>signatureGroup : Symbol(signatureGroup, Decl(parserRealSource9.ts, 66, 37))
+>i : Symbol(i, Decl(parserRealSource9.ts, 68, 20))
+
+                if (instanceType) {
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 66, 88))
+
+                    signature.returnType.type = instanceType;
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 66, 88))
+                }
+                else {
+                    this.checker.resolveTypeLink(scope, signature.returnType, supplyVar);
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 66, 68))
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+>supplyVar : Symbol(supplyVar, Decl(parserRealSource9.ts, 67, 15))
+                }
+                var paramLen = signature.parameters.length;
+>paramLen : Symbol(paramLen, Decl(parserRealSource9.ts, 76, 19))
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+
+                for (var j = 0; j < paramLen; j++) {
+>j : Symbol(j, Decl(parserRealSource9.ts, 77, 24))
+>j : Symbol(j, Decl(parserRealSource9.ts, 77, 24))
+>paramLen : Symbol(paramLen, Decl(parserRealSource9.ts, 76, 19))
+>j : Symbol(j, Decl(parserRealSource9.ts, 77, 24))
+
+                    this.bindSymbol(scope, signature.parameters[j]);
+>this.bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 66, 68))
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+>j : Symbol(j, Decl(parserRealSource9.ts, 77, 24))
+                }
+                if (signature.hasVariableArgList) {
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+
+                    // check that last parameter has an array type
+                    var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+>ParameterSymbol : Symbol(ParameterSymbol)
+>signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
+>paramLen : Symbol(paramLen, Decl(parserRealSource9.ts, 76, 19))
+
+                    lastParam.argsOffset = paramLen - 1;
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+>paramLen : Symbol(paramLen, Decl(parserRealSource9.ts, 76, 19))
+
+                    if (!lastParam.getType().isArray()) {
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+
+                        this.checker.errorReporter.simpleErrorFromSym(lastParam,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+
+                                                                 "... parameter must have array type");
+                        lastParam.parameter.typeLink.type = this.checker.makeArrayType(lastParam.parameter.typeLink.type);
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+                    }
+                }
+            }
+        }
+
+        public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
+>bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>SymbolScope : Symbol(SymbolScope)
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+>Type : Symbol(Type)
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
+>Type : Symbol(Type)
+
+            if (instanceType) {
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
+
+                this.bindType(scope, instanceType, null);
+>this.bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
+            }
+            if (type.hasMembers()) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var members = type.members;
+>members : Symbol(members, Decl(parserRealSource9.ts, 98, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var ambientMembers = type.ambientMembers;
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource9.ts, 99, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var typeMembers = type.getAllEnclosedTypes(); // REVIEW: Should only be getting exported types?
+>typeMembers : Symbol(typeMembers, Decl(parserRealSource9.ts, 100, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var ambientTypeMembers = type.getAllAmbientEnclosedTypes(); // REVIEW: Should only be getting exported types?
+>ambientTypeMembers : Symbol(ambientTypeMembers, Decl(parserRealSource9.ts, 101, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var memberScope = new SymbolTableScope(members, ambientMembers, typeMembers, ambientTypeMembers, type.symbol);
+>memberScope : Symbol(memberScope, Decl(parserRealSource9.ts, 102, 19))
+>members : Symbol(members, Decl(parserRealSource9.ts, 98, 19))
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource9.ts, 99, 19))
+>typeMembers : Symbol(typeMembers, Decl(parserRealSource9.ts, 100, 19))
+>ambientTypeMembers : Symbol(ambientTypeMembers, Decl(parserRealSource9.ts, 101, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var agg = new SymbolAggregateScope(type.symbol);
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                var prevCurrentModDecl = this.checker.currentModDecl;
+>prevCurrentModDecl : Symbol(prevCurrentModDecl, Decl(parserRealSource9.ts, 104, 19))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                var prevBindStatus = this.checker.inBind;
+>prevBindStatus : Symbol(prevBindStatus, Decl(parserRealSource9.ts, 105, 19))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                agg.addParentScope(memberScope);
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>memberScope : Symbol(memberScope, Decl(parserRealSource9.ts, 102, 19))
+
+                agg.addParentScope(scope);
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+
+                if (type.isModuleType()) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                    this.checker.currentModDecl = <ModuleDeclaration>type.symbol.declAST;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                    this.checker.inBind = true;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+                }
+                if (members) {
+>members : Symbol(members, Decl(parserRealSource9.ts, 98, 19))
+
+                    this.bind(agg, type.members.allMembers); // REVIEW: Should only be getting exported types?
+>this.bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+                }
+                if (typeMembers) {
+>typeMembers : Symbol(typeMembers, Decl(parserRealSource9.ts, 100, 19))
+
+                    this.bind(agg, typeMembers.allMembers);
+>this.bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>typeMembers : Symbol(typeMembers, Decl(parserRealSource9.ts, 100, 19))
+                }
+                if (ambientMembers) {
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource9.ts, 99, 19))
+
+                    this.bind(agg, ambientMembers.allMembers);
+>this.bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>ambientMembers : Symbol(ambientMembers, Decl(parserRealSource9.ts, 99, 19))
+                }
+                if (ambientTypeMembers) {
+>ambientTypeMembers : Symbol(ambientTypeMembers, Decl(parserRealSource9.ts, 101, 19))
+
+                    this.bind(agg, ambientTypeMembers.allMembers);
+>this.bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>agg : Symbol(agg, Decl(parserRealSource9.ts, 103, 19))
+>ambientTypeMembers : Symbol(ambientTypeMembers, Decl(parserRealSource9.ts, 101, 19))
+                }
+                this.checker.currentModDecl = prevCurrentModDecl;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>prevCurrentModDecl : Symbol(prevCurrentModDecl, Decl(parserRealSource9.ts, 104, 19))
+
+                this.checker.inBind = prevBindStatus;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>prevBindStatus : Symbol(prevBindStatus, Decl(parserRealSource9.ts, 105, 19))
+            }
+            if (type.extendsTypeLinks) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                this.resolveBases(scope, type);
+>this.resolveBases : Symbol(Binder.resolveBases, Decl(parserRealSource9.ts, 26, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveBases : Symbol(Binder.resolveBases, Decl(parserRealSource9.ts, 26, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+            }
+            if (type.construct) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                this.resolveSignatureGroup(type.construct, scope, instanceType);
+>this.resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
+            }
+            if (type.call) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                this.resolveSignatureGroup(type.call, scope, null);
+>this.resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+            }
+            if (type.index) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                this.resolveSignatureGroup(type.index, scope, null);
+>this.resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+            }
+            if (type.elementType) {
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+
+                this.bindType(scope, type.elementType, null);
+>this.bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+            }
+        }
+
+        public bindSymbol(scope: SymbolScope, symbol: Symbol) {
+>bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>SymbolScope : Symbol(SymbolScope)
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+            if (!symbol.bound) {
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                var prevLocationInfo = this.checker.locationInfo;
+>prevLocationInfo : Symbol(prevLocationInfo, Decl(parserRealSource9.ts, 146, 19))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                if ((this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length)) {
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                    this.checker.locationInfo = this.checker.units[symbol.unitIndex];
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+                }
+                switch (symbol.kind()) {
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                    case SymbolKind.Type:
+
+                        if (symbol.flags & SymbolFlags.Bound) {
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                            break;
+                        }
+
+                        var typeSymbol = <TypeSymbol>symbol;
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>TypeSymbol : Symbol(TypeSymbol)
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                        typeSymbol.flags |= SymbolFlags.Bound;
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+
+                        // Since type collection happens out of order, a dynamic module referenced by an import statement
+                        // may not yet be in scope when the import symbol is created.  In that case, we need to search
+                        // out the module symbol now
+                        // Note that we'll also want to do this in resolveTypeMembers, in case the symbol is set outside the
+                        // context of a given module  (E.g., an outer import statement)
+                        if (typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name) {
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+
+                            var modPath = (<Identifier>typeSymbol.aliasLink.alias).text;
+>modPath : Symbol(modPath, Decl(parserRealSource9.ts, 166, 31))
+>Identifier : Symbol(Identifier)
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+
+                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true));
+>modSym : Symbol(modSym, Decl(parserRealSource9.ts, 167, 31))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>modPath : Symbol(modPath, Decl(parserRealSource9.ts, 166, 31))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>id : Symbol(id, Decl(parserRealSource9.ts, 167, 127))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>id : Symbol(id, Decl(parserRealSource9.ts, 167, 127))
+
+                            if (modSym) {
+>modSym : Symbol(modSym, Decl(parserRealSource9.ts, 167, 31))
+
+                                typeSymbol.type = modSym.getType();
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>modSym : Symbol(modSym, Decl(parserRealSource9.ts, 167, 31))
+                            }
+                        }
+
+                        if (typeSymbol.type && typeSymbol.type != this.checker.gloModType) {
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+
+                            this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
+>this.bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+
+                            // bind expansions on the parent type symbol
+                            if (typeSymbol.type.isModuleType()) {
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+
+                                for (var i = 0; i < typeSymbol.expansions.length; i++) {
+>i : Symbol(i, Decl(parserRealSource9.ts, 178, 40))
+>i : Symbol(i, Decl(parserRealSource9.ts, 178, 40))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>i : Symbol(i, Decl(parserRealSource9.ts, 178, 40))
+
+                                    this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType);
+>this.bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>i : Symbol(i, Decl(parserRealSource9.ts, 178, 40))
+>typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+                                }
+                            }
+                        }
+                        break;
+                    case SymbolKind.Field:
+                        this.checker.resolveTypeLink(scope, (<FieldSymbol>symbol).field.typeLink,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>FieldSymbol : Symbol(FieldSymbol)
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                                                false);
+                        break;
+                    case SymbolKind.Parameter:
+                        this.checker.resolveTypeLink(scope,
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+
+                                                (<ParameterSymbol>symbol).parameter.typeLink,
+>ParameterSymbol : Symbol(ParameterSymbol)
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+
+                                                true);
+                        break;
+                }
+                this.checker.locationInfo = prevLocationInfo;
+>this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+>checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>prevLocationInfo : Symbol(prevLocationInfo, Decl(parserRealSource9.ts, 146, 19))
+            }
+            symbol.bound = true;
+>symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+        }
+
+        public bind(scope: SymbolScope, table: IHashTable) {
+>bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 199, 20))
+>SymbolScope : Symbol(SymbolScope)
+>table : Symbol(table, Decl(parserRealSource9.ts, 199, 39))
+>IHashTable : Symbol(IHashTable)
+
+            table.map(
+>table : Symbol(table, Decl(parserRealSource9.ts, 199, 39))
+
+                (key, sym, binder) => {
+>key : Symbol(key, Decl(parserRealSource9.ts, 201, 17))
+>sym : Symbol(sym, Decl(parserRealSource9.ts, 201, 21))
+>binder : Symbol(binder, Decl(parserRealSource9.ts, 201, 26))
+
+                    binder.bindSymbol(scope, sym);
+>binder : Symbol(binder, Decl(parserRealSource9.ts, 201, 26))
+>scope : Symbol(scope, Decl(parserRealSource9.ts, 199, 20))
+>sym : Symbol(sym, Decl(parserRealSource9.ts, 201, 21))
+
+                },
+                this);
+>this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
+        }
+    }
+
+}

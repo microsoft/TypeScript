@@ -1,0 +1,58 @@
+=== tests/cases/compiler/thisBinding2.ts ===
+class C {
+>C : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+
+ x: number;
+>x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+
+    constructor() {
+        this.x = (() => {
+>this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+>this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+>x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+
+   var x = 1;
+>x : Symbol(x, Decl(thisBinding2.ts, 4, 6))
+
+   return this.x;
+>this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+>this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+>x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+
+  })();
+  this.x = function() {
+>this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+>this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+>x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
+
+   var x = 1;
+>x : Symbol(x, Decl(thisBinding2.ts, 8, 6))
+
+   return this.x;
+  }();
+    }  
+}
+declare function setTimeout(expression: any, msec?: number, language?: any): number;
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
+>expression : Symbol(expression, Decl(thisBinding2.ts, 13, 28))
+>msec : Symbol(msec, Decl(thisBinding2.ts, 13, 44))
+>language : Symbol(language, Decl(thisBinding2.ts, 13, 59))
+
+var messenger = {
+>messenger : Symbol(messenger, Decl(thisBinding2.ts, 14, 3))
+
+    message: "Hello World",
+>message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
+
+    start: function () {
+>start : Symbol(start, Decl(thisBinding2.ts, 15, 27))
+
+        return setTimeout(() => { var x = this.message; }, 3000);
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
+>x : Symbol(x, Decl(thisBinding2.ts, 17, 37))
+>this.message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
+>this : Symbol(messenger, Decl(thisBinding2.ts, 14, 15))
+>message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
+    }
+};
+

@@ -1,0 +1,12 @@
+=== C:/foo/bar/Baz/src/utils.ts ===
+export function exist() {}
+>exist : () => void
+
+=== C:/foo/bar/Baz/src/sample.ts ===
+import { exit } from "./utils.js";
+>exit : any
+
+exit()
+>exit() : any
+>exit : any
+

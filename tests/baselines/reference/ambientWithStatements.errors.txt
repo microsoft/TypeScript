@@ -1,0 +1,42 @@
+tests/cases/compiler/ambientWithStatements.ts(2,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(3,5): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+tests/cases/compiler/ambientWithStatements.ts(11,5): error TS1108: A 'return' statement can only be used within a function body.
+tests/cases/compiler/ambientWithStatements.ts(25,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+==== tests/cases/compiler/ambientWithStatements.ts (4 errors) ====
+    declare module M {
+        break;
+        ~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+        continue;
+        ~~~~~~~~~
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+        debugger;
+        do { } while (true);
+        var x;
+        for (x in null) { }
+        if (true) { } else { }
+        1;
+        L: var y;
+        return;
+        ~~~~~~
+!!! error TS1108: A 'return' statement can only be used within a function body.
+        switch (x) {
+            case 1:
+                break;
+            default:
+                break;
+        }
+        throw "nooo";
+        try {
+        }
+        catch (e) {
+        }
+        finally {
+        }
+        with (x) {
+        ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+        }
+    }

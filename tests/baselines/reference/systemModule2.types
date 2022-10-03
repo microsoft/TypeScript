@@ -1,0 +1,8 @@
+=== tests/cases/compiler/systemModule2.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+export = x;
+>x : number
+

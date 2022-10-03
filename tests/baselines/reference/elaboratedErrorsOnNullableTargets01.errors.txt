@@ -1,0 +1,24 @@
+tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(4,1): error TS2322: Type '{ foo: { bar: number | undefined; }; }' is not assignable to type '{ foo: { bar: string | null; } | undefined; }'.
+  The types of 'foo.bar' are incompatible between these types.
+    Type 'number | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(6,1): error TS2322: Type '{ foo: { bar: string | null; } | undefined; } | null | undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
+  Type 'undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
+
+
+==== tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts (2 errors) ====
+    export declare let x: null | { foo: { bar: string | null } | undefined } | undefined;
+    export declare let y: { foo: { bar: number | undefined } };
+    
+    x = y;
+    ~
+!!! error TS2322: Type '{ foo: { bar: number | undefined; }; }' is not assignable to type '{ foo: { bar: string | null; } | undefined; }'.
+!!! error TS2322:   The types of 'foo.bar' are incompatible between these types.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | null'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | null'.
+    
+    y = x;
+    ~
+!!! error TS2322: Type '{ foo: { bar: string | null; } | undefined; } | null | undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
+!!! error TS2322:   Type 'undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
+    

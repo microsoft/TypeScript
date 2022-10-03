@@ -1,0 +1,38 @@
+=== tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts ===
+// this should be an error
+var x;                   // no error, control flow typed
+>x : any
+
+var y;                   // error because captured
+>y : any
+
+declare var foo;         // error at "foo"
+>foo : any
+
+function func(k) { y };  // error at "k"
+>func : (k: any) => void
+>k : any
+>y : any
+
+func(x);
+>func(x) : void
+>func : (k: any) => void
+>x : undefined
+
+// this shouldn't be an error
+var bar = 3;            
+>bar : number
+>3 : 3
+
+var bar1: any;          
+>bar1 : any
+
+declare var bar2: any; 
+>bar2 : any
+
+var x1: any; var y1 = new x1;
+>x1 : any
+>y1 : any
+>new x1 : any
+>x1 : any
+

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/functionOnlyHasThrow.ts ===
+function clone():number {
+>clone : Symbol(clone, Decl(functionOnlyHasThrow.ts, 0, 0))
+
+	throw new Error("To be implemented");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

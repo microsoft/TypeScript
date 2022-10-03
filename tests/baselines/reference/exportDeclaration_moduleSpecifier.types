@@ -1,0 +1,19 @@
+=== /a.ts ===
+export class A {}
+>A : A
+
+=== /b.ts ===
+export type { A } from './a';
+>A : import("/a").A
+
+=== /c.ts ===
+import { A } from './b';
+>A : typeof A
+
+declare const a: A;
+>a : A
+
+new A();
+>new A() : A
+>A : typeof A
+

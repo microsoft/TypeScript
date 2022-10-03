@@ -1,0 +1,26 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof foo
+
+if(foo.E1.A === 0){
+>foo.E1.A === 0 : boolean
+>foo.E1.A : foo.E1.A
+>foo.E1 : typeof foo.E1
+>foo : typeof foo
+>E1 : typeof foo.E1
+>A : foo.E1.A
+>0 : 0
+
+	// Should cause runtime import - interesting optimization possibility, as gets inlined to 0.
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export enum E1 {
+>E1 : E1
+
+	A,B,C
+>A : E1.A
+>B : E1.B
+>C : E1.C
+}
+

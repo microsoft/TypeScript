@@ -1,0 +1,66 @@
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(2,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(3,9): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(6,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(7,9): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(10,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(11,9): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(14,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(15,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(16,9): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(19,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(20,9): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(23,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts(24,9): error TS2790: The operand of a 'delete' operator must be optional.
+
+
+==== tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts (13 errors) ====
+    declare const o1: undefined | { b: string };
+    delete o1?.b;
+           ~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o1?.b);
+            ~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    declare const o2: undefined | { b: { c: string } };
+    delete o2?.b.c;
+           ~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o2?.b.c);
+            ~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    declare const o3: { b: undefined | { c: string } };
+    delete o3.b?.c;
+           ~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o3.b?.c);
+            ~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    declare const o4: { b?: { c: { d?: { e: string } } } };
+    delete o4.b?.c.d?.e;
+           ~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o4.b?.c.d)?.e;
+           ~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o4.b?.c.d?.e);
+            ~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    declare const o5: { b?(): { c: { d?: { e: string } } } };
+    delete o5.b?.().c.d?.e;
+           ~~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o5.b?.().c.d?.e);
+            ~~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    declare const o6: { b?: { c: { d?: { e: string } } } };
+    delete o6.b?.['c'].d?.['e'];
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete (o6.b?.['c'].d?.['e']);
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.

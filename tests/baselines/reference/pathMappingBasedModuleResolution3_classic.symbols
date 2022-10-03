@@ -1,0 +1,38 @@
+=== c:/root/folder1/file1.ts ===
+// baseUrl set via command line
+
+import {x} from "folder2/file2"
+>x : Symbol(x, Decl(file1.ts, 2, 8))
+
+declare function use(a: any): void;
+>use : Symbol(use, Decl(file1.ts, 2, 31))
+>a : Symbol(a, Decl(file1.ts, 3, 21))
+
+use(x.toExponential());
+>use : Symbol(use, Decl(file1.ts, 2, 31))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file1.ts, 2, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+=== c:/root/folder2/file2.ts ===
+import {x as a} from "./file3"  // found with baseurl
+>x : Symbol(a, Decl(file3.ts, 0, 10))
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+
+import {y as b} from "file4"    // found with fallback
+>y : Symbol(b, Decl(file4.ts, 0, 10))
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+
+export var x = a + b;
+>x : Symbol(x, Decl(file2.ts, 2, 10))
+>a : Symbol(a, Decl(file2.ts, 0, 8))
+>b : Symbol(b, Decl(file2.ts, 1, 8))
+
+=== c:/root/folder2/file3.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(file3.ts, 0, 10))
+
+=== c:/file4.ts ===
+export var y = 100;
+>y : Symbol(y, Decl(file4.ts, 0, 10))
+

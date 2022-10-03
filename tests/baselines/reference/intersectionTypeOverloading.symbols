@@ -1,0 +1,36 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeOverloading.ts ===
+// Check that order is preserved in intersection types for purposes of
+// overload resolution
+
+type F = (s: string) => string;
+>F : Symbol(F, Decl(intersectionTypeOverloading.ts, 0, 0))
+>s : Symbol(s, Decl(intersectionTypeOverloading.ts, 3, 10))
+
+type G = (x: any) => any;
+>G : Symbol(G, Decl(intersectionTypeOverloading.ts, 3, 31))
+>x : Symbol(x, Decl(intersectionTypeOverloading.ts, 4, 10))
+
+var fg: F & G;
+>fg : Symbol(fg, Decl(intersectionTypeOverloading.ts, 6, 3))
+>F : Symbol(F, Decl(intersectionTypeOverloading.ts, 0, 0))
+>G : Symbol(G, Decl(intersectionTypeOverloading.ts, 3, 31))
+
+var gf: G & F;
+>gf : Symbol(gf, Decl(intersectionTypeOverloading.ts, 7, 3))
+>G : Symbol(G, Decl(intersectionTypeOverloading.ts, 3, 31))
+>F : Symbol(F, Decl(intersectionTypeOverloading.ts, 0, 0))
+
+var x = fg("abc");
+>x : Symbol(x, Decl(intersectionTypeOverloading.ts, 9, 3), Decl(intersectionTypeOverloading.ts, 10, 3))
+>fg : Symbol(fg, Decl(intersectionTypeOverloading.ts, 6, 3))
+
+var x: string;
+>x : Symbol(x, Decl(intersectionTypeOverloading.ts, 9, 3), Decl(intersectionTypeOverloading.ts, 10, 3))
+
+var y = gf("abc");
+>y : Symbol(y, Decl(intersectionTypeOverloading.ts, 12, 3), Decl(intersectionTypeOverloading.ts, 13, 3))
+>gf : Symbol(gf, Decl(intersectionTypeOverloading.ts, 7, 3))
+
+var y: any;
+>y : Symbol(y, Decl(intersectionTypeOverloading.ts, 12, 3), Decl(intersectionTypeOverloading.ts, 13, 3))
+

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/es3defaultAliasQuoted_file0.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(es3defaultAliasQuoted_file0.ts, 0, 0))
+
+    static CONSTANT = "Foo";
+>CONSTANT : Symbol(Foo.CONSTANT, Decl(es3defaultAliasQuoted_file0.ts, 0, 18))
+}
+
+export default function assert(value: boolean) {
+>assert : Symbol(assert, Decl(es3defaultAliasQuoted_file0.ts, 2, 1))
+>value : Symbol(value, Decl(es3defaultAliasQuoted_file0.ts, 4, 31))
+
+    if (!value) throw new Error("Assertion failed!");
+>value : Symbol(value, Decl(es3defaultAliasQuoted_file0.ts, 4, 31))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+=== tests/cases/compiler/es3defaultAliasQuoted_file1.ts ===
+import {Foo, default as assert} from "./es3defaultAliasQuoted_file0";
+>Foo : Symbol(Foo, Decl(es3defaultAliasQuoted_file1.ts, 0, 8))
+>default : Symbol(assert, Decl(es3defaultAliasQuoted_file0.ts, 2, 1))
+>assert : Symbol(assert, Decl(es3defaultAliasQuoted_file1.ts, 0, 12))
+
+assert(Foo.CONSTANT === "Foo");
+>assert : Symbol(assert, Decl(es3defaultAliasQuoted_file1.ts, 0, 12))
+>Foo.CONSTANT : Symbol(Foo.CONSTANT, Decl(es3defaultAliasQuoted_file0.ts, 0, 18))
+>Foo : Symbol(Foo, Decl(es3defaultAliasQuoted_file1.ts, 0, 8))
+>CONSTANT : Symbol(Foo.CONSTANT, Decl(es3defaultAliasQuoted_file0.ts, 0, 18))
+

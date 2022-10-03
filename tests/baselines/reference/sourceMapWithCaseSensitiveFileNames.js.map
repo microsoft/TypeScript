@@ -1,0 +1,2 @@
+//// [fooResult.js.map]
+{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["../testFiles/app.ts","../testFiles/app2.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC;ACHD;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}

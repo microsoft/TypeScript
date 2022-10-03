@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts ===
+// some complex cases of assignment compat of generic signatures.
+
+interface I2<T> {
+    p: T
+>p : T
+}
+
+var x: <T extends I2<T>>(z: T) => void
+>x : <T extends I2<T>>(z: T) => void
+>z : T
+
+var y: <T extends I2<I2<T>>>(z: T) => void
+>y : <T extends I2<I2<T>>>(z: T) => void
+>z : T
+
+// These both do not make sense as we would eventually be comparing I2<T> to I2<I2<T>>, and they are self referencing anyway
+x = y 
+>x = y : <T extends I2<I2<T>>>(z: T) => void
+>x : <T extends I2<T>>(z: T) => void
+>y : <T extends I2<I2<T>>>(z: T) => void
+
+y = x 
+>y = x : <T extends I2<T>>(z: T) => void
+>y : <T extends I2<I2<T>>>(z: T) => void
+>x : <T extends I2<T>>(z: T) => void
+

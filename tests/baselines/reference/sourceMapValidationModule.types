@@ -1,0 +1,32 @@
+=== tests/cases/compiler/sourceMapValidationModule.ts ===
+module m2 {
+>m2 : typeof m2
+
+    var a = 10;
+>a : number
+>10 : 10
+
+    a++;
+>a++ : number
+>a : number
+}
+module m3 {
+>m3 : typeof m3
+
+    module m4 {
+>m4 : typeof m4
+
+        export var x = 30;
+>x : number
+>30 : 30
+    }
+
+    export function foo() {
+>foo : () => number
+
+        return m4.x;
+>m4.x : number
+>m4 : typeof m4
+>x : number
+    }
+}

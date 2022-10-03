@@ -1,0 +1,26 @@
+tests/cases/compiler/errorMessagesIntersectionTypes02.ts(14,5): error TS2322: Type '{ fooProp: "frizzlebizzle"; } & Bar' is not assignable to type 'FooBar'.
+  Types of property 'fooProp' are incompatible.
+    Type '"frizzlebizzle"' is not assignable to type '"hello" | "world"'.
+
+
+==== tests/cases/compiler/errorMessagesIntersectionTypes02.ts (1 errors) ====
+    interface Foo {
+        fooProp: "hello" | "world";
+    }
+    
+    interface Bar {
+        barProp: string;
+    }
+    
+    interface FooBar extends Foo, Bar {
+    }
+    
+    declare function mixBar<T>(obj: T): T & Bar;
+    
+    let fooBar: FooBar = mixBar({
+        ~~~~~~
+!!! error TS2322: Type '{ fooProp: "frizzlebizzle"; } & Bar' is not assignable to type 'FooBar'.
+!!! error TS2322:   Types of property 'fooProp' are incompatible.
+!!! error TS2322:     Type '"frizzlebizzle"' is not assignable to type '"hello" | "world"'.
+        fooProp: "frizzlebizzle"
+    });

@@ -1,0 +1,27 @@
+=== tests/cases/conformance/salsa/npm.js ===
+var npm = module.exports = function (tree) {
+>npm : Symbol(npm, Decl(npm.js, 0, 3))
+>module.exports : Symbol(module.exports, Decl(npm.js, 0, 0))
+>module : Symbol(npm, Decl(npm.js, 0, 9))
+>exports : Symbol(npm, Decl(npm.js, 0, 9))
+>tree : Symbol(tree, Decl(npm.js, 0, 37))
+}
+module.exports.asReadInstalled = function (tree) {
+>module.exports.asReadInstalled : Symbol(asReadInstalled, Decl(npm.js, 1, 1))
+>module.exports : Symbol(asReadInstalled, Decl(npm.js, 1, 1))
+>module : Symbol(module, Decl(npm.js, 0, 9), Decl(npm.js, 3, 13))
+>exports : Symbol(module.exports, Decl(npm.js, 0, 0))
+>asReadInstalled : Symbol(asReadInstalled, Decl(npm.js, 1, 1))
+>tree : Symbol(tree, Decl(npm.js, 2, 43))
+
+    npm(tree) // both references should be callable
+>npm : Symbol(npm, Decl(npm.js, 0, 3))
+>tree : Symbol(tree, Decl(npm.js, 2, 43))
+
+    module.exports(tree)
+>module.exports : Symbol(module.exports, Decl(npm.js, 0, 0))
+>module : Symbol(module, Decl(npm.js, 0, 9), Decl(npm.js, 3, 13))
+>exports : Symbol(module.exports, Decl(npm.js, 0, 0))
+>tree : Symbol(tree, Decl(npm.js, 2, 43))
+}
+

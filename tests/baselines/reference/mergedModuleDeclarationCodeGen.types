@@ -1,0 +1,31 @@
+=== tests/cases/compiler/mergedModuleDeclarationCodeGen.ts ===
+export module X {
+>X : typeof X
+
+    export module Y {
+>Y : typeof Y
+
+        class A {
+>A : A
+
+            constructor(Y: any) {
+>Y : any
+
+                new B();
+>new B() : B
+>B : typeof B
+            }
+        }
+    }
+}
+export module X {
+>X : typeof X
+
+    export module Y {
+>Y : typeof Y
+
+        export class B {
+>B : B
+        }
+    }
+}

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/a.ts ===
+class c {
+>c : c
+}
+
+=== tests/cases/compiler/b.js ===
+function foo() {
+>foo : () => void
+}
+

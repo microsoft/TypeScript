@@ -1,0 +1,68 @@
+tests/cases/conformance/jsx/file.tsx(23,8): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(24,8): error TS2322: Type '{ y: number; }' is not assignable to type 'Attribs1'.
+  Property 'y' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(25,8): error TS2322: Type '{ y: string; }' is not assignable to type 'Attribs1'.
+  Property 'y' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(26,8): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(27,8): error TS2322: Type '{ var: string; }' is not assignable to type 'Attribs1'.
+  Property 'var' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2741: Property 'reqd' is missing in type '{}' but required in type '{ reqd: string; }'.
+tests/cases/conformance/jsx/file.tsx(30,8): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (7 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		test1: Attribs1;
+    		test2: { reqd: string };
+    		var: { var: string };
+    	}
+    }
+    interface Attribs1 {
+    	x?: number;
+    	s?: string;
+    }
+    
+    // OK
+    <test1 x={0} />; // OK
+    <test1 />; // OK
+    <test1 data-x={true} />; // OK
+    
+    <test2 reqd='true' />; // OK
+    <test2 reqd={'true'} />; // OK
+    
+    // Errors
+    <test1 x={'0'} />; // Error, '0' is not number
+           ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:10:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'
+    <test1 y={0} />; // Error, no property "y"
+           ~
+!!! error TS2322: Type '{ y: number; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Property 'y' does not exist on type 'Attribs1'.
+    <test1 y="foo" />; // Error, no property "y"
+           ~
+!!! error TS2322: Type '{ y: string; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Property 'y' does not exist on type 'Attribs1'.
+    <test1 x="32" />; // Error, "32" is not number
+           ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:10:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'
+    <test1 var="10" />; // Error, no 'var' property
+           ~~~
+!!! error TS2322: Type '{ var: string; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Property 'var' does not exist on type 'Attribs1'.
+    
+    <test2 />; // Error, missing reqd
+     ~~~~~
+!!! error TS2741: Property 'reqd' is missing in type '{}' but required in type '{ reqd: string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:12: 'reqd' is declared here.
+    <test2 reqd={10} />; // Error, reqd is not string
+           ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:12: The expected type comes from property 'reqd' which is declared here on type '{ reqd: string; }'
+    
+    // Should be OK
+    <var var='var' />;
+    

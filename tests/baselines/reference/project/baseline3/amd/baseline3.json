@@ -1,0 +1,16 @@
+{
+    "scenario": "baseline 3",
+    "projectRoot": "tests/cases/projects/baseline",
+    "inputFiles": [
+        "nestedModule.ts"
+    ],
+    "baselineCheck": true,
+    "runTest": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "nestedModule.ts"
+    ],
+    "emittedFiles": [
+        "nestedModule.js"
+    ]
+}

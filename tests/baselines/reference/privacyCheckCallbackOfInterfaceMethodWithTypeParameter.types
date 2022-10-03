@@ -1,0 +1,11 @@
+=== tests/cases/compiler/privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts ===
+export interface A<T> {
+    f1(callback: (p: T) => any); 
+>f1 : (callback: (p: T) => any) => any
+>callback : (p: T) => any
+>p : T
+}
+ 
+export interface B<T> extends A<T> {
+}
+

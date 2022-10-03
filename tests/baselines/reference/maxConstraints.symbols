@@ -1,0 +1,39 @@
+=== tests/cases/compiler/maxConstraints.ts ===
+interface Comparable<T> {
+>Comparable : Symbol(Comparable, Decl(maxConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(maxConstraints.ts, 0, 21))
+
+    compareTo(other: T): number;
+>compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
+>other : Symbol(other, Decl(maxConstraints.ts, 1, 14))
+>T : Symbol(T, Decl(maxConstraints.ts, 0, 21))
+}
+interface Comparer {
+>Comparer : Symbol(Comparer, Decl(maxConstraints.ts, 2, 1))
+
+    <T extends Comparable<T>>(x: T, y: T): T;
+>T : Symbol(T, Decl(maxConstraints.ts, 4, 5))
+>Comparable : Symbol(Comparable, Decl(maxConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(maxConstraints.ts, 4, 5))
+>x : Symbol(x, Decl(maxConstraints.ts, 4, 30))
+>T : Symbol(T, Decl(maxConstraints.ts, 4, 5))
+>y : Symbol(y, Decl(maxConstraints.ts, 4, 35))
+>T : Symbol(T, Decl(maxConstraints.ts, 4, 5))
+>T : Symbol(T, Decl(maxConstraints.ts, 4, 5))
+}
+var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
+>max2 : Symbol(max2, Decl(maxConstraints.ts, 6, 3))
+>Comparer : Symbol(Comparer, Decl(maxConstraints.ts, 2, 1))
+>x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
+>y : Symbol(y, Decl(maxConstraints.ts, 6, 24))
+>x.compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
+>x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
+>compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
+>y : Symbol(y, Decl(maxConstraints.ts, 6, 24))
+>x : Symbol(x, Decl(maxConstraints.ts, 6, 22))
+>y : Symbol(y, Decl(maxConstraints.ts, 6, 24))
+
+var maxResult = max2(1, 2);
+>maxResult : Symbol(maxResult, Decl(maxConstraints.ts, 7, 3))
+>max2 : Symbol(max2, Decl(maxConstraints.ts, 6, 3))
+

@@ -1,0 +1,274 @@
+=== tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts ===
+function f(x: number, y: number, ...z: string[]) {
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>x : Symbol(x, Decl(newWithSpreadES5.ts, 0, 11))
+>y : Symbol(y, Decl(newWithSpreadES5.ts, 0, 21))
+>z : Symbol(z, Decl(newWithSpreadES5.ts, 0, 32))
+}
+
+function f2(...x: string[]) {}
+>f2 : Symbol(f2, Decl(newWithSpreadES5.ts, 1, 1))
+>x : Symbol(x, Decl(newWithSpreadES5.ts, 3, 12))
+
+interface A {
+>A : Symbol(A, Decl(newWithSpreadES5.ts, 3, 30))
+
+    f: {
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+
+        new (x: number, y: number, ...z: string[]);
+>x : Symbol(x, Decl(newWithSpreadES5.ts, 7, 13))
+>y : Symbol(y, Decl(newWithSpreadES5.ts, 7, 23))
+>z : Symbol(z, Decl(newWithSpreadES5.ts, 7, 34))
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+
+    constructor(x: number, y: number, ...z: string[]) {}
+>x : Symbol(x, Decl(newWithSpreadES5.ts, 12, 16))
+>y : Symbol(y, Decl(newWithSpreadES5.ts, 12, 26))
+>z : Symbol(z, Decl(newWithSpreadES5.ts, 12, 37))
+}
+
+interface C {
+>C : Symbol(C, Decl(newWithSpreadES5.ts, 13, 1))
+
+    "a-b": typeof B;
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+}
+
+interface D {
+>D : Symbol(D, Decl(newWithSpreadES5.ts, 17, 1))
+
+    1: typeof B;
+>1 : Symbol(D[1], Decl(newWithSpreadES5.ts, 19, 13))
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+}
+
+var a: string[];
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+var b: A;
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>A : Symbol(A, Decl(newWithSpreadES5.ts, 3, 30))
+
+var c: C;
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>C : Symbol(C, Decl(newWithSpreadES5.ts, 13, 1))
+
+var d: A[];
+>d : Symbol(d, Decl(newWithSpreadES5.ts, 26, 3))
+>A : Symbol(A, Decl(newWithSpreadES5.ts, 3, 30))
+
+var e: { [key: string]: A };
+>e : Symbol(e, Decl(newWithSpreadES5.ts, 27, 3))
+>key : Symbol(key, Decl(newWithSpreadES5.ts, 27, 10))
+>A : Symbol(A, Decl(newWithSpreadES5.ts, 3, 30))
+
+var g: C[];
+>g : Symbol(g, Decl(newWithSpreadES5.ts, 28, 3))
+>C : Symbol(C, Decl(newWithSpreadES5.ts, 13, 1))
+
+var h: { [key: string]: C };
+>h : Symbol(h, Decl(newWithSpreadES5.ts, 29, 3))
+>key : Symbol(key, Decl(newWithSpreadES5.ts, 29, 10))
+>C : Symbol(C, Decl(newWithSpreadES5.ts, 13, 1))
+
+var i: C[][];
+>i : Symbol(i, Decl(newWithSpreadES5.ts, 30, 3))
+>C : Symbol(C, Decl(newWithSpreadES5.ts, 13, 1))
+
+// Basic expression
+new f(1, 2, "string");
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+
+new f(1, 2, ...a);
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new f(1, 2, ...a, "string");
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Multiple spreads arguments
+new f2(...a, ...a);
+>f2 : Symbol(f2, Decl(newWithSpreadES5.ts, 1, 1))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new f(1 ,2, ...a, ...a);
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Call expression
+new f(1, 2, "string")();
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+
+new f(1, 2, ...a)();
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new f(1, 2, ...a, "string")();
+>f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Property access expression
+new b.f(1, 2, "string");
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+
+new b.f(1, 2, ...a);
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new b.f(1, 2, ...a, "string"); 
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Parenthesised expression
+new (b.f)(1, 2, "string");
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+
+new (b.f)(1, 2, ...a);
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new (b.f)(1, 2, ...a, "string"); 
+>b.f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>b : Symbol(b, Decl(newWithSpreadES5.ts, 24, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Element access expression
+new d[1].f(1, 2, "string");
+>d[1].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>d : Symbol(d, Decl(newWithSpreadES5.ts, 26, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+
+new d[1].f(1, 2, ...a);
+>d[1].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>d : Symbol(d, Decl(newWithSpreadES5.ts, 26, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new d[1].f(1, 2, ...a, "string");
+>d[1].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>d : Symbol(d, Decl(newWithSpreadES5.ts, 26, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Element access expression with a punctuated key
+new e["a-b"].f(1, 2, "string");
+>e["a-b"].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>e : Symbol(e, Decl(newWithSpreadES5.ts, 27, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+
+new e["a-b"].f(1, 2, ...a);
+>e["a-b"].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>e : Symbol(e, Decl(newWithSpreadES5.ts, 27, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new e["a-b"].f(1, 2, ...a, "string");
+>e["a-b"].f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>e : Symbol(e, Decl(newWithSpreadES5.ts, 27, 3))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 5, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Basic expression
+new B(1, 2, "string");
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+
+new B(1, 2, ...a);
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new B(1, 2, ...a, "string");
+>B : Symbol(B, Decl(newWithSpreadES5.ts, 9, 1))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Property access expression
+new c["a-b"](1, 2, "string");
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+
+new c["a-b"](1, 2, ...a);
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new c["a-b"](1, 2, ...a, "string");
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Parenthesised expression
+new (c["a-b"])(1, 2, "string");
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+
+new (c["a-b"])(1, 2, ...a);
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new (c["a-b"])(1, 2, ...a, "string");
+>c : Symbol(c, Decl(newWithSpreadES5.ts, 25, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Element access expression
+new g[1]["a-b"](1, 2, "string");
+>g : Symbol(g, Decl(newWithSpreadES5.ts, 28, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+
+new g[1]["a-b"](1, 2, ...a);
+>g : Symbol(g, Decl(newWithSpreadES5.ts, 28, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new g[1]["a-b"](1, 2, ...a, "string");
+>g : Symbol(g, Decl(newWithSpreadES5.ts, 28, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Element access expression with a punctuated key
+new h["a-b"]["a-b"](1, 2, "string");
+>h : Symbol(h, Decl(newWithSpreadES5.ts, 29, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+
+new h["a-b"]["a-b"](1, 2, ...a);
+>h : Symbol(h, Decl(newWithSpreadES5.ts, 29, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new h["a-b"]["a-b"](1, 2, ...a, "string");
+>h : Symbol(h, Decl(newWithSpreadES5.ts, 29, 3))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES5.ts, 15, 13))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+// Element access expression with a number
+new i["a-b"][1](1, 2, "string");
+>i : Symbol(i, Decl(newWithSpreadES5.ts, 30, 3))
+
+new i["a-b"][1](1, 2, ...a);
+>i : Symbol(i, Decl(newWithSpreadES5.ts, 30, 3))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+
+new i["a-b"][1](1, 2, ...a, "string");
+>i : Symbol(i, Decl(newWithSpreadES5.ts, 30, 3))
+>a : Symbol(a, Decl(newWithSpreadES5.ts, 23, 3))
+

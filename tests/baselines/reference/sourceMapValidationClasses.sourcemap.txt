@@ -1,0 +1,934 @@
+===================================================================
+JsFile: sourceMapValidationClasses.js
+mapUrl: sourceMapValidationClasses.js.map
+sourceRoot: 
+sources: sourceMapValidationClasses.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationClasses.js
+sourceFile:sourceMapValidationClasses.ts
+-------------------------------------------------------------------
+>>>var Foo;
+1 >
+2 >^^^^
+3 >    ^^^
+4 >       ^
+5 >        ^^^^^^^^^^->
+1 >
+2 >module 
+3 >    Foo
+4 >       .Bar {
+  >           "use strict";
+  >       
+  >           class Greeter {
+  >               constructor(public greeting: string) {
+  >               }
+  >       
+  >               greet() {
+  >                   return "<h1>" + this.greeting + "</h1>";
+  >               }
+  >           }
+  >       
+  >       
+  >           function foo(greeting: string): Greeter {
+  >               return new Greeter(greeting);
+  >           }
+  >       
+  >           var greeter = new Greeter("Hello, world!");
+  >           var str = greeter.greet();
+  >       
+  >           function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+  >               var greeters: Greeter[] = []; /* inline block comment */
+  >               greeters[0] = new Greeter(greeting);
+  >               for (var i = 0; i < restGreetings.length; i++) {
+  >                   greeters.push(new Greeter(restGreetings[i]));
+  >               }
+  >       
+  >               return greeters;
+  >           }
+  >       
+  >           var b = foo2("Hello", "World", "!");
+  >           // This is simple signle line comment
+  >           for (var j = 0; j < b.length; j++) {
+  >               b[j].greet();
+  >           }
+  >       }
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 11) + SourceIndex(0)
+4 >Emitted(1, 9) Source(36, 2) + SourceIndex(0)
+---
+>>>(function (Foo) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^^
+1->
+2 >module 
+3 >           Foo
+1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
+3 >Emitted(2, 15) Source(1, 11) + SourceIndex(0)
+---
+>>>    var Bar;
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^
+4 >           ^
+5 >            ^^^^^^^^^^->
+1 >.
+2 >    
+3 >        Bar
+4 >            {
+  >               "use strict";
+  >           
+  >               class Greeter {
+  >                   constructor(public greeting: string) {
+  >                   }
+  >           
+  >                   greet() {
+  >                       return "<h1>" + this.greeting + "</h1>";
+  >                   }
+  >               }
+  >           
+  >           
+  >               function foo(greeting: string): Greeter {
+  >                   return new Greeter(greeting);
+  >               }
+  >           
+  >               var greeter = new Greeter("Hello, world!");
+  >               var str = greeter.greet();
+  >           
+  >               function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+  >                   var greeters: Greeter[] = []; /* inline block comment */
+  >                   greeters[0] = new Greeter(greeting);
+  >                   for (var i = 0; i < restGreetings.length; i++) {
+  >                       greeters.push(new Greeter(restGreetings[i]));
+  >                   }
+  >           
+  >                   return greeters;
+  >               }
+  >           
+  >               var b = foo2("Hello", "World", "!");
+  >               // This is simple signle line comment
+  >               for (var j = 0; j < b.length; j++) {
+  >                   b[j].greet();
+  >               }
+  >           }
+1 >Emitted(3, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(3, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(3, 12) Source(1, 15) + SourceIndex(0)
+4 >Emitted(3, 13) Source(36, 2) + SourceIndex(0)
+---
+>>>    (function (Bar) {
+1->^^^^
+2 >    ^^^^^^^^^^^
+3 >               ^^^
+4 >                  ^^^^->
+1->
+2 >    
+3 >               Bar
+1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 19) Source(1, 15) + SourceIndex(0)
+---
+>>>        "use strict";
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^
+3 >                    ^
+4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
+2 >        "use strict"
+3 >                    ;
+1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(5, 21) Source(2, 17) + SourceIndex(0)
+3 >Emitted(5, 22) Source(2, 18) + SourceIndex(0)
+---
+>>>        var Greeter = /** @class */ (function () {
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(6, 9) Source(4, 5) + SourceIndex(0)
+---
+>>>            function Greeter(greeting) {
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^
+3 >                             ^^^^^^^^
+4 >                                     ^^^^^->
+1->class Greeter {
+  >        
+2 >            constructor(public 
+3 >                             greeting: string
+1->Emitted(7, 13) Source(5, 9) + SourceIndex(0)
+2 >Emitted(7, 30) Source(5, 28) + SourceIndex(0)
+3 >Emitted(7, 38) Source(5, 44) + SourceIndex(0)
+---
+>>>                this.greeting = greeting;
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^^^^^^
+3 >                             ^^^
+4 >                                ^^^^^^^^
+5 >                                        ^
+1->
+2 >                greeting
+3 >                             
+4 >                                greeting
+5 >                                        : string
+1->Emitted(8, 17) Source(5, 28) + SourceIndex(0)
+2 >Emitted(8, 30) Source(5, 36) + SourceIndex(0)
+3 >Emitted(8, 33) Source(5, 28) + SourceIndex(0)
+4 >Emitted(8, 41) Source(5, 36) + SourceIndex(0)
+5 >Emitted(8, 42) Source(5, 44) + SourceIndex(0)
+---
+>>>            }
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >) {
+  >        
+2 >            }
+1 >Emitted(9, 13) Source(6, 9) + SourceIndex(0)
+2 >Emitted(9, 14) Source(6, 10) + SourceIndex(0)
+---
+>>>            Greeter.prototype.greet = function () {
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                   ^^^
+4 >                                      ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >        
+2 >            greet
+3 >                                   
+1->Emitted(10, 13) Source(8, 9) + SourceIndex(0)
+2 >Emitted(10, 36) Source(8, 14) + SourceIndex(0)
+3 >Emitted(10, 39) Source(8, 9) + SourceIndex(0)
+---
+>>>                return "<h1>" + this.greeting + "</h1>";
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^
+3 >                       ^^^^^^
+4 >                             ^^^
+5 >                                ^^^^
+6 >                                    ^
+7 >                                     ^^^^^^^^
+8 >                                             ^^^
+9 >                                                ^^^^^^^
+10>                                                       ^
+1->greet() {
+  >            
+2 >                return 
+3 >                       "<h1>"
+4 >                              + 
+5 >                                this
+6 >                                    .
+7 >                                     greeting
+8 >                                              + 
+9 >                                                "</h1>"
+10>                                                       ;
+1->Emitted(11, 17) Source(9, 13) + SourceIndex(0)
+2 >Emitted(11, 24) Source(9, 20) + SourceIndex(0)
+3 >Emitted(11, 30) Source(9, 26) + SourceIndex(0)
+4 >Emitted(11, 33) Source(9, 29) + SourceIndex(0)
+5 >Emitted(11, 37) Source(9, 33) + SourceIndex(0)
+6 >Emitted(11, 38) Source(9, 34) + SourceIndex(0)
+7 >Emitted(11, 46) Source(9, 42) + SourceIndex(0)
+8 >Emitted(11, 49) Source(9, 45) + SourceIndex(0)
+9 >Emitted(11, 56) Source(9, 52) + SourceIndex(0)
+10>Emitted(11, 57) Source(9, 53) + SourceIndex(0)
+---
+>>>            };
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^^^^^^^^^^^^^^^->
+1 >
+  >        
+2 >            }
+1 >Emitted(12, 13) Source(10, 9) + SourceIndex(0)
+2 >Emitted(12, 14) Source(10, 10) + SourceIndex(0)
+---
+>>>            return Greeter;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^
+1->
+  >    
+2 >            }
+1->Emitted(13, 13) Source(11, 5) + SourceIndex(0)
+2 >Emitted(13, 27) Source(11, 6) + SourceIndex(0)
+---
+>>>        }());
+1 >^^^^^^^^
+2 >        ^
+3 >         
+4 >         ^^^^
+5 >             ^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >        }
+3 >         
+4 >         class Greeter {
+  >                 constructor(public greeting: string) {
+  >                 }
+  >         
+  >                 greet() {
+  >                     return "<h1>" + this.greeting + "</h1>";
+  >                 }
+  >             }
+1 >Emitted(14, 9) Source(11, 5) + SourceIndex(0)
+2 >Emitted(14, 10) Source(11, 6) + SourceIndex(0)
+3 >Emitted(14, 10) Source(4, 5) + SourceIndex(0)
+4 >Emitted(14, 14) Source(11, 6) + SourceIndex(0)
+---
+>>>        function foo(greeting) {
+1->^^^^^^^^
+2 >        ^^^^^^^^^
+3 >                 ^^^
+4 >                    ^
+5 >                     ^^^^^^^^
+6 >                             ^^^^^^^^^^^^^->
+1->
+  >
+  >
+  >    
+2 >        function 
+3 >                 foo
+4 >                    (
+5 >                     greeting: string
+1->Emitted(15, 9) Source(14, 5) + SourceIndex(0)
+2 >Emitted(15, 18) Source(14, 14) + SourceIndex(0)
+3 >Emitted(15, 21) Source(14, 17) + SourceIndex(0)
+4 >Emitted(15, 22) Source(14, 18) + SourceIndex(0)
+5 >Emitted(15, 30) Source(14, 34) + SourceIndex(0)
+---
+>>>            return new Greeter(greeting);
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^^^^^^^
+5 >                              ^
+6 >                               ^^^^^^^^
+7 >                                       ^
+8 >                                        ^
+1->): Greeter {
+  >        
+2 >            return 
+3 >                   new 
+4 >                       Greeter
+5 >                              (
+6 >                               greeting
+7 >                                       )
+8 >                                        ;
+1->Emitted(16, 13) Source(15, 9) + SourceIndex(0)
+2 >Emitted(16, 20) Source(15, 16) + SourceIndex(0)
+3 >Emitted(16, 24) Source(15, 20) + SourceIndex(0)
+4 >Emitted(16, 31) Source(15, 27) + SourceIndex(0)
+5 >Emitted(16, 32) Source(15, 28) + SourceIndex(0)
+6 >Emitted(16, 40) Source(15, 36) + SourceIndex(0)
+7 >Emitted(16, 41) Source(15, 37) + SourceIndex(0)
+8 >Emitted(16, 42) Source(15, 38) + SourceIndex(0)
+---
+>>>        }
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(17, 9) Source(16, 5) + SourceIndex(0)
+2 >Emitted(17, 10) Source(16, 6) + SourceIndex(0)
+---
+>>>        var greeter = new Greeter("Hello, world!");
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^^^^
+4 >                   ^^^
+5 >                      ^^^^
+6 >                          ^^^^^^^
+7 >                                 ^
+8 >                                  ^^^^^^^^^^^^^^^
+9 >                                                 ^
+10>                                                  ^
+1->
+  >
+  >    
+2 >        var 
+3 >            greeter
+4 >                    = 
+5 >                      new 
+6 >                          Greeter
+7 >                                 (
+8 >                                  "Hello, world!"
+9 >                                                 )
+10>                                                  ;
+1->Emitted(18, 9) Source(18, 5) + SourceIndex(0)
+2 >Emitted(18, 13) Source(18, 9) + SourceIndex(0)
+3 >Emitted(18, 20) Source(18, 16) + SourceIndex(0)
+4 >Emitted(18, 23) Source(18, 19) + SourceIndex(0)
+5 >Emitted(18, 27) Source(18, 23) + SourceIndex(0)
+6 >Emitted(18, 34) Source(18, 30) + SourceIndex(0)
+7 >Emitted(18, 35) Source(18, 31) + SourceIndex(0)
+8 >Emitted(18, 50) Source(18, 46) + SourceIndex(0)
+9 >Emitted(18, 51) Source(18, 47) + SourceIndex(0)
+10>Emitted(18, 52) Source(18, 48) + SourceIndex(0)
+---
+>>>        var str = greeter.greet();
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^^^
+4 >               ^^^
+5 >                  ^^^^^^^
+6 >                         ^
+7 >                          ^^^^^
+8 >                               ^^
+9 >                                 ^
+1 >
+  >    
+2 >        var 
+3 >            str
+4 >                = 
+5 >                  greeter
+6 >                         .
+7 >                          greet
+8 >                               ()
+9 >                                 ;
+1 >Emitted(19, 9) Source(19, 5) + SourceIndex(0)
+2 >Emitted(19, 13) Source(19, 9) + SourceIndex(0)
+3 >Emitted(19, 16) Source(19, 12) + SourceIndex(0)
+4 >Emitted(19, 19) Source(19, 15) + SourceIndex(0)
+5 >Emitted(19, 26) Source(19, 22) + SourceIndex(0)
+6 >Emitted(19, 27) Source(19, 23) + SourceIndex(0)
+7 >Emitted(19, 32) Source(19, 28) + SourceIndex(0)
+8 >Emitted(19, 34) Source(19, 30) + SourceIndex(0)
+9 >Emitted(19, 35) Source(19, 31) + SourceIndex(0)
+---
+>>>        function foo2(greeting) {
+1 >^^^^^^^^
+2 >        ^^^^^^^^^
+3 >                 ^^^^
+4 >                     ^
+5 >                      ^^^^^^^^
+6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >    
+2 >        function 
+3 >                 foo2
+4 >                     (
+5 >                      greeting: string
+1 >Emitted(20, 9) Source(21, 5) + SourceIndex(0)
+2 >Emitted(20, 18) Source(21, 14) + SourceIndex(0)
+3 >Emitted(20, 22) Source(21, 18) + SourceIndex(0)
+4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
+5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
+---
+>>>            var restGreetings /* more greeting */ = [];
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^
+3 >                              ^^^^^^^^^^^^^^^^^^^
+4 >                                                 ^^^^^^
+5 >                                                       ^^^^^->
+1->, 
+2 >            ...restGreetings 
+3 >                              /* more greeting */
+4 >                                                 : string[]
+1->Emitted(21, 13) Source(21, 37) + SourceIndex(0)
+2 >Emitted(21, 31) Source(21, 54) + SourceIndex(0)
+3 >Emitted(21, 50) Source(21, 73) + SourceIndex(0)
+4 >Emitted(21, 56) Source(21, 83) + SourceIndex(0)
+---
+>>>            for (var _i = 1; _i < arguments.length; _i++) {
+1->^^^^^^^^^^^^^^^^^
+2 >                 ^^^^^^^^^^
+3 >                           ^^
+4 >                             ^^^^^^^^^^^^^^^^^^^^^
+5 >                                                  ^^
+6 >                                                    ^^^^
+1->
+2 >                 ...restGreetings /* more greeting */: string[]
+3 >                           
+4 >                             ...restGreetings /* more greeting */: string[]
+5 >                                                  
+6 >                                                    ...restGreetings /* more greeting */: string[]
+1->Emitted(22, 18) Source(21, 37) + SourceIndex(0)
+2 >Emitted(22, 28) Source(21, 83) + SourceIndex(0)
+3 >Emitted(22, 30) Source(21, 37) + SourceIndex(0)
+4 >Emitted(22, 51) Source(21, 83) + SourceIndex(0)
+5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0)
+6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0)
+---
+>>>                restGreetings[_i - 1] = arguments[_i];
+1 >^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >                ...restGreetings /* more greeting */: string[]
+1 >Emitted(23, 17) Source(21, 37) + SourceIndex(0)
+2 >Emitted(23, 55) Source(21, 83) + SourceIndex(0)
+---
+>>>            }
+>>>            var greeters = []; /* inline block comment */
+1 >^^^^^^^^^^^^
+2 >            ^^^^
+3 >                ^^^^^^^^
+4 >                        ^^^
+5 >                           ^^
+6 >                             ^
+7 >                              ^
+8 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >) {
+  >        
+2 >            var 
+3 >                greeters
+4 >                        : Greeter[] = 
+5 >                           []
+6 >                             ;
+7 >                               
+8 >                               /* inline block comment */
+1 >Emitted(25, 13) Source(22, 9) + SourceIndex(0)
+2 >Emitted(25, 17) Source(22, 13) + SourceIndex(0)
+3 >Emitted(25, 25) Source(22, 21) + SourceIndex(0)
+4 >Emitted(25, 28) Source(22, 35) + SourceIndex(0)
+5 >Emitted(25, 30) Source(22, 37) + SourceIndex(0)
+6 >Emitted(25, 31) Source(22, 38) + SourceIndex(0)
+7 >Emitted(25, 32) Source(22, 39) + SourceIndex(0)
+8 >Emitted(25, 58) Source(22, 65) + SourceIndex(0)
+---
+>>>            greeters[0] = new Greeter(greeting);
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^
+3 >                    ^
+4 >                     ^
+5 >                      ^
+6 >                       ^^^
+7 >                          ^^^^
+8 >                              ^^^^^^^
+9 >                                     ^
+10>                                      ^^^^^^^^
+11>                                              ^
+12>                                               ^
+13>                                                ^^^^^^^^^^^^^->
+1 >
+  >        
+2 >            greeters
+3 >                    [
+4 >                     0
+5 >                      ]
+6 >                        = 
+7 >                          new 
+8 >                              Greeter
+9 >                                     (
+10>                                      greeting
+11>                                              )
+12>                                               ;
+1 >Emitted(26, 13) Source(23, 9) + SourceIndex(0)
+2 >Emitted(26, 21) Source(23, 17) + SourceIndex(0)
+3 >Emitted(26, 22) Source(23, 18) + SourceIndex(0)
+4 >Emitted(26, 23) Source(23, 19) + SourceIndex(0)
+5 >Emitted(26, 24) Source(23, 20) + SourceIndex(0)
+6 >Emitted(26, 27) Source(23, 23) + SourceIndex(0)
+7 >Emitted(26, 31) Source(23, 27) + SourceIndex(0)
+8 >Emitted(26, 38) Source(23, 34) + SourceIndex(0)
+9 >Emitted(26, 39) Source(23, 35) + SourceIndex(0)
+10>Emitted(26, 47) Source(23, 43) + SourceIndex(0)
+11>Emitted(26, 48) Source(23, 44) + SourceIndex(0)
+12>Emitted(26, 49) Source(23, 45) + SourceIndex(0)
+---
+>>>            for (var i = 0; i < restGreetings.length; i++) {
+1->^^^^^^^^^^^^
+2 >            ^^^^^
+3 >                 ^^^^
+4 >                     ^
+5 >                      ^^^
+6 >                         ^
+7 >                          ^^
+8 >                            ^
+9 >                             ^^^
+10>                                ^^^^^^^^^^^^^
+11>                                             ^
+12>                                              ^^^^^^
+13>                                                    ^^
+14>                                                      ^
+15>                                                       ^^
+16>                                                         ^^
+17>                                                           ^^^->
+1->
+  >        
+2 >            for (
+3 >                 var 
+4 >                     i
+5 >                       = 
+6 >                         0
+7 >                          ; 
+8 >                            i
+9 >                              < 
+10>                                restGreetings
+11>                                             .
+12>                                              length
+13>                                                    ; 
+14>                                                      i
+15>                                                       ++
+16>                                                         ) 
+1->Emitted(27, 13) Source(24, 9) + SourceIndex(0)
+2 >Emitted(27, 18) Source(24, 14) + SourceIndex(0)
+3 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
+4 >Emitted(27, 23) Source(24, 19) + SourceIndex(0)
+5 >Emitted(27, 26) Source(24, 22) + SourceIndex(0)
+6 >Emitted(27, 27) Source(24, 23) + SourceIndex(0)
+7 >Emitted(27, 29) Source(24, 25) + SourceIndex(0)
+8 >Emitted(27, 30) Source(24, 26) + SourceIndex(0)
+9 >Emitted(27, 33) Source(24, 29) + SourceIndex(0)
+10>Emitted(27, 46) Source(24, 42) + SourceIndex(0)
+11>Emitted(27, 47) Source(24, 43) + SourceIndex(0)
+12>Emitted(27, 53) Source(24, 49) + SourceIndex(0)
+13>Emitted(27, 55) Source(24, 51) + SourceIndex(0)
+14>Emitted(27, 56) Source(24, 52) + SourceIndex(0)
+15>Emitted(27, 58) Source(24, 54) + SourceIndex(0)
+16>Emitted(27, 60) Source(24, 56) + SourceIndex(0)
+---
+>>>                greeters.push(new Greeter(restGreetings[i]));
+1->^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^
+3 >                        ^
+4 >                         ^^^^
+5 >                             ^
+6 >                              ^^^^
+7 >                                  ^^^^^^^
+8 >                                         ^
+9 >                                          ^^^^^^^^^^^^^
+10>                                                       ^
+11>                                                        ^
+12>                                                         ^
+13>                                                          ^
+14>                                                           ^
+15>                                                            ^
+1->{
+  >            
+2 >                greeters
+3 >                        .
+4 >                         push
+5 >                             (
+6 >                              new 
+7 >                                  Greeter
+8 >                                         (
+9 >                                          restGreetings
+10>                                                       [
+11>                                                        i
+12>                                                         ]
+13>                                                          )
+14>                                                           )
+15>                                                            ;
+1->Emitted(28, 17) Source(25, 13) + SourceIndex(0)
+2 >Emitted(28, 25) Source(25, 21) + SourceIndex(0)
+3 >Emitted(28, 26) Source(25, 22) + SourceIndex(0)
+4 >Emitted(28, 30) Source(25, 26) + SourceIndex(0)
+5 >Emitted(28, 31) Source(25, 27) + SourceIndex(0)
+6 >Emitted(28, 35) Source(25, 31) + SourceIndex(0)
+7 >Emitted(28, 42) Source(25, 38) + SourceIndex(0)
+8 >Emitted(28, 43) Source(25, 39) + SourceIndex(0)
+9 >Emitted(28, 56) Source(25, 52) + SourceIndex(0)
+10>Emitted(28, 57) Source(25, 53) + SourceIndex(0)
+11>Emitted(28, 58) Source(25, 54) + SourceIndex(0)
+12>Emitted(28, 59) Source(25, 55) + SourceIndex(0)
+13>Emitted(28, 60) Source(25, 56) + SourceIndex(0)
+14>Emitted(28, 61) Source(25, 57) + SourceIndex(0)
+15>Emitted(28, 62) Source(25, 58) + SourceIndex(0)
+---
+>>>            }
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^^^^^^^->
+1 >
+  >        }
+1 >Emitted(29, 14) Source(26, 10) + SourceIndex(0)
+---
+>>>            return greeters;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^^^^^^^
+4 >                           ^
+1->
+  >
+  >        
+2 >            return 
+3 >                   greeters
+4 >                           ;
+1->Emitted(30, 13) Source(28, 9) + SourceIndex(0)
+2 >Emitted(30, 20) Source(28, 16) + SourceIndex(0)
+3 >Emitted(30, 28) Source(28, 24) + SourceIndex(0)
+4 >Emitted(30, 29) Source(28, 25) + SourceIndex(0)
+---
+>>>        }
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(31, 9) Source(29, 5) + SourceIndex(0)
+2 >Emitted(31, 10) Source(29, 6) + SourceIndex(0)
+---
+>>>        var b = foo2("Hello", "World", "!");
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^^^
+6 >                    ^
+7 >                     ^^^^^^^
+8 >                            ^^
+9 >                              ^^^^^^^
+10>                                     ^^
+11>                                       ^^^
+12>                                          ^
+13>                                           ^
+14>                                            ^^->
+1->
+  >
+  >    
+2 >        var 
+3 >            b
+4 >              = 
+5 >                foo2
+6 >                    (
+7 >                     "Hello"
+8 >                            , 
+9 >                              "World"
+10>                                     , 
+11>                                       "!"
+12>                                          )
+13>                                           ;
+1->Emitted(32, 9) Source(31, 5) + SourceIndex(0)
+2 >Emitted(32, 13) Source(31, 9) + SourceIndex(0)
+3 >Emitted(32, 14) Source(31, 10) + SourceIndex(0)
+4 >Emitted(32, 17) Source(31, 13) + SourceIndex(0)
+5 >Emitted(32, 21) Source(31, 17) + SourceIndex(0)
+6 >Emitted(32, 22) Source(31, 18) + SourceIndex(0)
+7 >Emitted(32, 29) Source(31, 25) + SourceIndex(0)
+8 >Emitted(32, 31) Source(31, 27) + SourceIndex(0)
+9 >Emitted(32, 38) Source(31, 34) + SourceIndex(0)
+10>Emitted(32, 40) Source(31, 36) + SourceIndex(0)
+11>Emitted(32, 43) Source(31, 39) + SourceIndex(0)
+12>Emitted(32, 44) Source(31, 40) + SourceIndex(0)
+13>Emitted(32, 45) Source(31, 41) + SourceIndex(0)
+---
+>>>        // This is simple signle line comment
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >    
+2 >        // This is simple signle line comment
+1->Emitted(33, 9) Source(32, 5) + SourceIndex(0)
+2 >Emitted(33, 46) Source(32, 42) + SourceIndex(0)
+---
+>>>        for (var j = 0; j < b.length; j++) {
+1 >^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^
+4 >                 ^
+5 >                  ^^^
+6 >                     ^
+7 >                      ^^
+8 >                        ^
+9 >                         ^^^
+10>                            ^
+11>                             ^
+12>                              ^^^^^^
+13>                                    ^^
+14>                                      ^
+15>                                       ^^
+16>                                         ^^
+1 >
+  >    
+2 >        for (
+3 >             var 
+4 >                 j
+5 >                   = 
+6 >                     0
+7 >                      ; 
+8 >                        j
+9 >                          < 
+10>                            b
+11>                             .
+12>                              length
+13>                                    ; 
+14>                                      j
+15>                                       ++
+16>                                         ) 
+1 >Emitted(34, 9) Source(33, 5) + SourceIndex(0)
+2 >Emitted(34, 14) Source(33, 10) + SourceIndex(0)
+3 >Emitted(34, 18) Source(33, 14) + SourceIndex(0)
+4 >Emitted(34, 19) Source(33, 15) + SourceIndex(0)
+5 >Emitted(34, 22) Source(33, 18) + SourceIndex(0)
+6 >Emitted(34, 23) Source(33, 19) + SourceIndex(0)
+7 >Emitted(34, 25) Source(33, 21) + SourceIndex(0)
+8 >Emitted(34, 26) Source(33, 22) + SourceIndex(0)
+9 >Emitted(34, 29) Source(33, 25) + SourceIndex(0)
+10>Emitted(34, 30) Source(33, 26) + SourceIndex(0)
+11>Emitted(34, 31) Source(33, 27) + SourceIndex(0)
+12>Emitted(34, 37) Source(33, 33) + SourceIndex(0)
+13>Emitted(34, 39) Source(33, 35) + SourceIndex(0)
+14>Emitted(34, 40) Source(33, 36) + SourceIndex(0)
+15>Emitted(34, 42) Source(33, 38) + SourceIndex(0)
+16>Emitted(34, 44) Source(33, 40) + SourceIndex(0)
+---
+>>>            b[j].greet();
+1 >^^^^^^^^^^^^
+2 >            ^
+3 >             ^
+4 >              ^
+5 >               ^
+6 >                ^
+7 >                 ^^^^^
+8 >                      ^^
+9 >                        ^
+1 >{
+  >        
+2 >            b
+3 >             [
+4 >              j
+5 >               ]
+6 >                .
+7 >                 greet
+8 >                      ()
+9 >                        ;
+1 >Emitted(35, 13) Source(34, 9) + SourceIndex(0)
+2 >Emitted(35, 14) Source(34, 10) + SourceIndex(0)
+3 >Emitted(35, 15) Source(34, 11) + SourceIndex(0)
+4 >Emitted(35, 16) Source(34, 12) + SourceIndex(0)
+5 >Emitted(35, 17) Source(34, 13) + SourceIndex(0)
+6 >Emitted(35, 18) Source(34, 14) + SourceIndex(0)
+7 >Emitted(35, 23) Source(34, 19) + SourceIndex(0)
+8 >Emitted(35, 25) Source(34, 21) + SourceIndex(0)
+9 >Emitted(35, 26) Source(34, 22) + SourceIndex(0)
+---
+>>>        }
+1 >^^^^^^^^^
+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    }
+1 >Emitted(36, 10) Source(35, 6) + SourceIndex(0)
+---
+>>>    })(Bar = Foo.Bar || (Foo.Bar = {}));
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^
+5 >          ^^^
+6 >             ^^^^^^^
+7 >                    ^^^^^
+8 >                         ^^^^^^^
+9 >                                ^^^^^^^^
+1->
+  >
+2 >    }
+3 >     
+4 >       Bar
+5 >          
+6 >             Bar
+7 >                    
+8 >                         Bar
+9 >                                 {
+  >                                    "use strict";
+  >                                
+  >                                    class Greeter {
+  >                                        constructor(public greeting: string) {
+  >                                        }
+  >                                
+  >                                        greet() {
+  >                                            return "<h1>" + this.greeting + "</h1>";
+  >                                        }
+  >                                    }
+  >                                
+  >                                
+  >                                    function foo(greeting: string): Greeter {
+  >                                        return new Greeter(greeting);
+  >                                    }
+  >                                
+  >                                    var greeter = new Greeter("Hello, world!");
+  >                                    var str = greeter.greet();
+  >                                
+  >                                    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+  >                                        var greeters: Greeter[] = []; /* inline block comment */
+  >                                        greeters[0] = new Greeter(greeting);
+  >                                        for (var i = 0; i < restGreetings.length; i++) {
+  >                                            greeters.push(new Greeter(restGreetings[i]));
+  >                                        }
+  >                                
+  >                                        return greeters;
+  >                                    }
+  >                                
+  >                                    var b = foo2("Hello", "World", "!");
+  >                                    // This is simple signle line comment
+  >                                    for (var j = 0; j < b.length; j++) {
+  >                                        b[j].greet();
+  >                                    }
+  >                                }
+1->Emitted(37, 5) Source(36, 1) + SourceIndex(0)
+2 >Emitted(37, 6) Source(36, 2) + SourceIndex(0)
+3 >Emitted(37, 8) Source(1, 12) + SourceIndex(0)
+4 >Emitted(37, 11) Source(1, 15) + SourceIndex(0)
+5 >Emitted(37, 14) Source(1, 12) + SourceIndex(0)
+6 >Emitted(37, 21) Source(1, 15) + SourceIndex(0)
+7 >Emitted(37, 26) Source(1, 12) + SourceIndex(0)
+8 >Emitted(37, 33) Source(1, 15) + SourceIndex(0)
+9 >Emitted(37, 41) Source(36, 2) + SourceIndex(0)
+---
+>>>})(Foo || (Foo = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^^^
+5 >      ^^^^^
+6 >           ^^^
+7 >              ^^^^^^^^
+8 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 >   Foo
+5 >      
+6 >           Foo
+7 >              .Bar {
+  >                  "use strict";
+  >              
+  >                  class Greeter {
+  >                      constructor(public greeting: string) {
+  >                      }
+  >              
+  >                      greet() {
+  >                          return "<h1>" + this.greeting + "</h1>";
+  >                      }
+  >                  }
+  >              
+  >              
+  >                  function foo(greeting: string): Greeter {
+  >                      return new Greeter(greeting);
+  >                  }
+  >              
+  >                  var greeter = new Greeter("Hello, world!");
+  >                  var str = greeter.greet();
+  >              
+  >                  function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+  >                      var greeters: Greeter[] = []; /* inline block comment */
+  >                      greeters[0] = new Greeter(greeting);
+  >                      for (var i = 0; i < restGreetings.length; i++) {
+  >                          greeters.push(new Greeter(restGreetings[i]));
+  >                      }
+  >              
+  >                      return greeters;
+  >                  }
+  >              
+  >                  var b = foo2("Hello", "World", "!");
+  >                  // This is simple signle line comment
+  >                  for (var j = 0; j < b.length; j++) {
+  >                      b[j].greet();
+  >                  }
+  >              }
+1 >Emitted(38, 1) Source(36, 1) + SourceIndex(0)
+2 >Emitted(38, 2) Source(36, 2) + SourceIndex(0)
+3 >Emitted(38, 4) Source(1, 8) + SourceIndex(0)
+4 >Emitted(38, 7) Source(1, 11) + SourceIndex(0)
+5 >Emitted(38, 12) Source(1, 8) + SourceIndex(0)
+6 >Emitted(38, 15) Source(1, 11) + SourceIndex(0)
+7 >Emitted(38, 23) Source(36, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClasses.js.map

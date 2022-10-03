@@ -1,0 +1,50 @@
+=== tests/cases/compiler/file2.ts ===
+///<reference path='file1.ts'/>
+declare var c: C;
+>c : Symbol(c, Decl(file2.ts, 1, 11))
+>C : Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+
+interface C {
+>C : Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+
+    count(countTitle?: string): void;
+>count : Symbol(C.count, Decl(file2.ts, 2, 13))
+>countTitle : Symbol(countTitle, Decl(file2.ts, 3, 10))
+}
+interface C {
+>C : Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+
+    log(message?: any, ...optionalParams: any[]): void;
+>log : Symbol(C.log, Decl(file2.ts, 5, 13))
+>message : Symbol(message, Decl(file2.ts, 6, 8))
+>optionalParams : Symbol(optionalParams, Decl(file2.ts, 6, 22))
+}
+
+=== tests/cases/compiler/file1.ts ===
+interface Q<T> {
+>Q : Symbol(Q, Decl(file1.ts, 0, 0))
+>T : Symbol(T, Decl(file1.ts, 0, 12))
+
+    each(action: (item: T, index: number) => void): void;
+>each : Symbol(Q.each, Decl(file1.ts, 0, 16))
+>action : Symbol(action, Decl(file1.ts, 1, 9))
+>item : Symbol(item, Decl(file1.ts, 1, 18))
+>T : Symbol(T, Decl(file1.ts, 0, 12))
+>index : Symbol(index, Decl(file1.ts, 1, 26))
+}
+var q1: Q<{ a: number; }>;
+>q1 : Symbol(q1, Decl(file1.ts, 3, 3))
+>Q : Symbol(Q, Decl(file1.ts, 0, 0))
+>a : Symbol(a, Decl(file1.ts, 3, 11))
+
+var x = q1.each(x => c.log(x));
+>x : Symbol(x, Decl(file1.ts, 4, 3))
+>q1.each : Symbol(Q.each, Decl(file1.ts, 0, 16))
+>q1 : Symbol(q1, Decl(file1.ts, 3, 3))
+>each : Symbol(Q.each, Decl(file1.ts, 0, 16))
+>x : Symbol(x, Decl(file1.ts, 4, 16))
+>c.log : Symbol(C.log, Decl(file2.ts, 5, 13))
+>c : Symbol(c, Decl(file2.ts, 1, 11))
+>log : Symbol(C.log, Decl(file2.ts, 5, 13))
+>x : Symbol(x, Decl(file1.ts, 4, 16))
+

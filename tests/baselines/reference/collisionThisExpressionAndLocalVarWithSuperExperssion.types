@@ -1,0 +1,51 @@
+=== tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts ===
+class a {
+>a : a
+
+    public foo() {
+>foo : () => void
+    }
+}
+class b extends a {
+>b : b
+>a : a
+
+    public foo() {
+>foo : () => void
+
+        var _this = 10;
+>_this : number
+>10 : 10
+
+        var f = () => super.foo();
+>f : () => void
+>() => super.foo() : () => void
+>super.foo() : void
+>super.foo : () => void
+>super : a
+>foo : () => void
+    }
+}
+class b2 extends a {
+>b2 : b2
+>a : a
+
+    public foo() {
+>foo : () => void
+
+        var f = () => {
+>f : () => void
+>() => {            var _this = 10;            return super.foo()        } : () => void
+
+            var _this = 10;
+>_this : number
+>10 : 10
+
+            return super.foo()
+>super.foo() : void
+>super.foo : () => void
+>super : a
+>foo : () => void
+        }
+    }
+}

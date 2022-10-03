@@ -1,0 +1,43 @@
+tests/cases/compiler/t2.ts(1,13): error TS2305: Module '"./t1"' has no exported member 'from'.
+tests/cases/compiler/t2.ts(1,18): error TS1005: ',' expected.
+tests/cases/compiler/t3.ts(1,10): error TS2305: Module '"./t1"' has no exported member 'from'.
+tests/cases/compiler/t3.ts(1,15): error TS1005: ',' expected.
+tests/cases/compiler/t4.ts(1,17): error TS1005: ',' expected.
+tests/cases/compiler/t4.ts(1,17): error TS2305: Module '"./t1"' has no exported member 'from'.
+tests/cases/compiler/t4.ts(1,22): error TS1005: ',' expected.
+tests/cases/compiler/t5.ts(1,18): error TS2305: Module '"./t1"' has no exported member 'from'.
+tests/cases/compiler/t5.ts(1,23): error TS1005: ',' expected.
+
+
+==== tests/cases/compiler/t1.ts (0 errors) ====
+    export var x = "x";
+    
+==== tests/cases/compiler/t2.ts (2 errors) ====
+    export { x, from "./t1"
+                ~~~~
+!!! error TS2305: Module '"./t1"' has no exported member 'from'.
+                     ~~~~~~
+!!! error TS1005: ',' expected.
+    
+==== tests/cases/compiler/t3.ts (2 errors) ====
+    export { from "./t1"
+             ~~~~
+!!! error TS2305: Module '"./t1"' has no exported member 'from'.
+                  ~~~~~~
+!!! error TS1005: ',' expected.
+    
+==== tests/cases/compiler/t4.ts (3 errors) ====
+    export { x as a from "./t1"
+                    ~~~~
+!!! error TS1005: ',' expected.
+                    ~~~~
+!!! error TS2305: Module '"./t1"' has no exported member 'from'.
+                         ~~~~~~
+!!! error TS1005: ',' expected.
+    
+==== tests/cases/compiler/t5.ts (2 errors) ====
+    export { x as a, from "./t1"
+                     ~~~~
+!!! error TS2305: Module '"./t1"' has no exported member 'from'.
+                          ~~~~~~
+!!! error TS1005: ',' expected.

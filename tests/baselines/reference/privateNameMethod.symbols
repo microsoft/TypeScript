@@ -1,0 +1,28 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethod.ts ===
+class A1 {
+>A1 : Symbol(A1, Decl(privateNameMethod.ts, 0, 0))
+
+    #method(param: string): string {
+>#method : Symbol(A1.#method, Decl(privateNameMethod.ts, 0, 10))
+>param : Symbol(param, Decl(privateNameMethod.ts, 1, 12))
+
+        return "";
+    }
+    constructor(name: string) {
+>name : Symbol(name, Decl(privateNameMethod.ts, 4, 16))
+
+        this.#method("")
+>this.#method : Symbol(A1.#method, Decl(privateNameMethod.ts, 0, 10))
+>this : Symbol(A1, Decl(privateNameMethod.ts, 0, 0))
+
+        this.#method(1) // Error
+>this.#method : Symbol(A1.#method, Decl(privateNameMethod.ts, 0, 10))
+>this : Symbol(A1, Decl(privateNameMethod.ts, 0, 0))
+
+        this.#method()  // Error 
+>this.#method : Symbol(A1.#method, Decl(privateNameMethod.ts, 0, 10))
+>this : Symbol(A1, Decl(privateNameMethod.ts, 0, 0))
+
+    }
+}
+

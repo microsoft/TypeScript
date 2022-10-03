@@ -1,0 +1,912 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithEnum.ts ===
+// operands of an enum type are treated as having the primitive type Number.
+
+enum E {
+>E : E
+
+    a,
+>a : E.a
+
+    b
+>b : E.b
+}
+
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+var c: E;
+>c : E
+
+// operator *
+var ra1 = c * a;
+>ra1 : number
+>c * a : number
+>c : E
+>a : any
+
+var ra2 = c * b;
+>ra2 : number
+>c * b : number
+>c : E
+>b : number
+
+var ra3 = c * c;
+>ra3 : number
+>c * c : number
+>c : E
+>c : E
+
+var ra4 = a * c;
+>ra4 : number
+>a * c : number
+>a : any
+>c : E
+
+var ra5 = b * c;
+>ra5 : number
+>b * c : number
+>b : number
+>c : E
+
+var ra6 = E.a * a;
+>ra6 : number
+>E.a * a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var ra7 = E.a * b;
+>ra7 : number
+>E.a * b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var ra8 = E.a * E.b;
+>ra8 : number
+>E.a * E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ra9 = E.a * 1;
+>ra9 : number
+>E.a * 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var ra10 = a * E.b;
+>ra10 : number
+>a * E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ra11 = b * E.b;
+>ra11 : number
+>b * E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ra12 = 1 * E.b;
+>ra12 : number
+>1 * E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator /
+var rb1 = c / a;
+>rb1 : number
+>c / a : number
+>c : E
+>a : any
+
+var rb2 = c / b;
+>rb2 : number
+>c / b : number
+>c : E
+>b : number
+
+var rb3 = c / c;
+>rb3 : number
+>c / c : number
+>c : E
+>c : E
+
+var rb4 = a / c;
+>rb4 : number
+>a / c : number
+>a : any
+>c : E
+
+var rb5 = b / c;
+>rb5 : number
+>b / c : number
+>b : number
+>c : E
+
+var rb6 = E.a / a;
+>rb6 : number
+>E.a / a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rb7 = E.a / b;
+>rb7 : number
+>E.a / b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rb8 = E.a / E.b;
+>rb8 : number
+>E.a / E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rb9 = E.a / 1;
+>rb9 : number
+>E.a / 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rb10 = a / E.b;
+>rb10 : number
+>a / E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rb11 = b / E.b;
+>rb11 : number
+>b / E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rb12 = 1 / E.b;
+>rb12 : number
+>1 / E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator %
+var rc1 = c % a;
+>rc1 : number
+>c % a : number
+>c : E
+>a : any
+
+var rc2 = c % b;
+>rc2 : number
+>c % b : number
+>c : E
+>b : number
+
+var rc3 = c % c;
+>rc3 : number
+>c % c : number
+>c : E
+>c : E
+
+var rc4 = a % c;
+>rc4 : number
+>a % c : number
+>a : any
+>c : E
+
+var rc5 = b % c;
+>rc5 : number
+>b % c : number
+>b : number
+>c : E
+
+var rc6 = E.a % a;
+>rc6 : number
+>E.a % a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rc7 = E.a % b;
+>rc7 : number
+>E.a % b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rc8 = E.a % E.b;
+>rc8 : number
+>E.a % E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rc9 = E.a % 1;
+>rc9 : number
+>E.a % 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rc10 = a % E.b;
+>rc10 : number
+>a % E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rc11 = b % E.b;
+>rc11 : number
+>b % E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rc12 = 1 % E.b;
+>rc12 : number
+>1 % E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator -
+var rd1 = c - a;
+>rd1 : number
+>c - a : number
+>c : E
+>a : any
+
+var rd2 = c - b;
+>rd2 : number
+>c - b : number
+>c : E
+>b : number
+
+var rd3 = c - c;
+>rd3 : number
+>c - c : number
+>c : E
+>c : E
+
+var rd4 = a - c;
+>rd4 : number
+>a - c : number
+>a : any
+>c : E
+
+var rd5 = b - c;
+>rd5 : number
+>b - c : number
+>b : number
+>c : E
+
+var rd6 = E.a - a;
+>rd6 : number
+>E.a - a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rd7 = E.a - b;
+>rd7 : number
+>E.a - b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rd8 = E.a - E.b;
+>rd8 : number
+>E.a - E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rd9 = E.a - 1;
+>rd9 : number
+>E.a - 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rd10 = a - E.b;
+>rd10 : number
+>a - E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rd11 = b - E.b;
+>rd11 : number
+>b - E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rd12 = 1 - E.b;
+>rd12 : number
+>1 - E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator <<
+var re1 = c << a;
+>re1 : number
+>c << a : number
+>c : E
+>a : any
+
+var re2 = c << b;
+>re2 : number
+>c << b : number
+>c : E
+>b : number
+
+var re3 = c << c;
+>re3 : number
+>c << c : number
+>c : E
+>c : E
+
+var re4 = a << c;
+>re4 : number
+>a << c : number
+>a : any
+>c : E
+
+var re5 = b << c;
+>re5 : number
+>b << c : number
+>b : number
+>c : E
+
+var re6 = E.a << a;
+>re6 : number
+>E.a << a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var re7 = E.a << b;
+>re7 : number
+>E.a << b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var re8 = E.a << E.b;
+>re8 : number
+>E.a << E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var re9 = E.a << 1;
+>re9 : number
+>E.a << 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var re10 = a << E.b;
+>re10 : number
+>a << E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var re11 = b << E.b;
+>re11 : number
+>b << E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var re12 = 1 << E.b;
+>re12 : number
+>1 << E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator >>
+var rf1 = c >> a;
+>rf1 : number
+>c >> a : number
+>c : E
+>a : any
+
+var rf2 = c >> b;
+>rf2 : number
+>c >> b : number
+>c : E
+>b : number
+
+var rf3 = c >> c;
+>rf3 : number
+>c >> c : number
+>c : E
+>c : E
+
+var rf4 = a >> c;
+>rf4 : number
+>a >> c : number
+>a : any
+>c : E
+
+var rf5 = b >> c;
+>rf5 : number
+>b >> c : number
+>b : number
+>c : E
+
+var rf6 = E.a >> a;
+>rf6 : number
+>E.a >> a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rf7 = E.a >> b;
+>rf7 : number
+>E.a >> b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rf8 = E.a >> E.b;
+>rf8 : number
+>E.a >> E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rf9 = E.a >> 1;
+>rf9 : number
+>E.a >> 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rf10 = a >> E.b;
+>rf10 : number
+>a >> E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rf11 = b >> E.b;
+>rf11 : number
+>b >> E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rf12 = 1 >> E.b;
+>rf12 : number
+>1 >> E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator >>>
+var rg1 = c >>> a;
+>rg1 : number
+>c >>> a : number
+>c : E
+>a : any
+
+var rg2 = c >>> b;
+>rg2 : number
+>c >>> b : number
+>c : E
+>b : number
+
+var rg3 = c >>> c;
+>rg3 : number
+>c >>> c : number
+>c : E
+>c : E
+
+var rg4 = a >>> c;
+>rg4 : number
+>a >>> c : number
+>a : any
+>c : E
+
+var rg5 = b >>> c;
+>rg5 : number
+>b >>> c : number
+>b : number
+>c : E
+
+var rg6 = E.a >>> a;
+>rg6 : number
+>E.a >>> a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rg7 = E.a >>> b;
+>rg7 : number
+>E.a >>> b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rg8 = E.a >>> E.b;
+>rg8 : number
+>E.a >>> E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rg9 = E.a >>> 1;
+>rg9 : number
+>E.a >>> 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rg10 = a >>> E.b;
+>rg10 : number
+>a >>> E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rg11 = b >>> E.b;
+>rg11 : number
+>b >>> E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rg12 = 1 >>> E.b;
+>rg12 : number
+>1 >>> E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator &
+var rh1 = c & a;
+>rh1 : number
+>c & a : number
+>c : E
+>a : any
+
+var rh2 = c & b;
+>rh2 : number
+>c & b : number
+>c : E
+>b : number
+
+var rh3 = c & c;
+>rh3 : number
+>c & c : number
+>c : E
+>c : E
+
+var rh4 = a & c;
+>rh4 : number
+>a & c : number
+>a : any
+>c : E
+
+var rh5 = b & c;
+>rh5 : number
+>b & c : number
+>b : number
+>c : E
+
+var rh6 = E.a & a;
+>rh6 : number
+>E.a & a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rh7 = E.a & b;
+>rh7 : number
+>E.a & b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rh8 = E.a & E.b;
+>rh8 : number
+>E.a & E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rh9 = E.a & 1;
+>rh9 : number
+>E.a & 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rh10 = a & E.b;
+>rh10 : number
+>a & E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rh11 = b & E.b;
+>rh11 : number
+>b & E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rh12 = 1 & E.b;
+>rh12 : number
+>1 & E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator ^
+var ri1 = c ^ a;
+>ri1 : number
+>c ^ a : number
+>c : E
+>a : any
+
+var ri2 = c ^ b;
+>ri2 : number
+>c ^ b : number
+>c : E
+>b : number
+
+var ri3 = c ^ c;
+>ri3 : number
+>c ^ c : number
+>c : E
+>c : E
+
+var ri4 = a ^ c;
+>ri4 : number
+>a ^ c : number
+>a : any
+>c : E
+
+var ri5 = b ^ c;
+>ri5 : number
+>b ^ c : number
+>b : number
+>c : E
+
+var ri6 = E.a ^ a;
+>ri6 : number
+>E.a ^ a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var ri7 = E.a ^ b;
+>ri7 : number
+>E.a ^ b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var ri8 = E.a ^ E.b;
+>ri8 : number
+>E.a ^ E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ri9 = E.a ^ 1;
+>ri9 : number
+>E.a ^ 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var ri10 = a ^ E.b;
+>ri10 : number
+>a ^ E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ri11 = b ^ E.b;
+>ri11 : number
+>b ^ E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var ri12 = 1 ^ E.b;
+>ri12 : number
+>1 ^ E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+// operator |
+var rj1 = c | a;
+>rj1 : number
+>c | a : number
+>c : E
+>a : any
+
+var rj2 = c | b;
+>rj2 : number
+>c | b : number
+>c : E
+>b : number
+
+var rj3 = c | c;
+>rj3 : number
+>c | c : number
+>c : E
+>c : E
+
+var rj4 = a | c;
+>rj4 : number
+>a | c : number
+>a : any
+>c : E
+
+var rj5 = b | c;
+>rj5 : number
+>b | c : number
+>b : number
+>c : E
+
+var rj6 = E.a | a;
+>rj6 : number
+>E.a | a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var rj7 = E.a | b;
+>rj7 : number
+>E.a | b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : number
+
+var rj8 = E.a | E.b;
+>rj8 : number
+>E.a | E.b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rj9 = E.a | 1;
+>rj9 : number
+>E.a | 1 : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>1 : 1
+
+var rj10 = a | E.b;
+>rj10 : number
+>a | E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rj11 = b | E.b;
+>rj11 : number
+>b | E.b : number
+>b : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var rj12 = 1 | E.b;
+>rj12 : number
+>1 | E.b : number
+>1 : 1
+>E.b : E.b
+>E : typeof E
+>b : E.b
+

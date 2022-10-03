@@ -1,0 +1,21 @@
+=== tests/cases/compiler/noErrorsInCallback.ts ===
+class Bar {
+>Bar : Symbol(Bar, Decl(noErrorsInCallback.ts, 0, 0))
+
+    constructor(public foo: string) { }
+>foo : Symbol(Bar.foo, Decl(noErrorsInCallback.ts, 1, 16))
+}
+var one = new Bar({}); // Error
+>one : Symbol(one, Decl(noErrorsInCallback.ts, 3, 3))
+>Bar : Symbol(Bar, Decl(noErrorsInCallback.ts, 0, 0))
+
+[].forEach(() => {
+>[].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+
+    var two = new Bar({}); // No error?
+>two : Symbol(two, Decl(noErrorsInCallback.ts, 5, 7))
+>Bar : Symbol(Bar, Decl(noErrorsInCallback.ts, 0, 0))
+
+});
+ 

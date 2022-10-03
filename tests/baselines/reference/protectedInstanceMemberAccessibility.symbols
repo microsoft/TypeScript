@@ -1,0 +1,152 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts ===
+class A {
+>A : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+    protected x: string;
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+    protected f(): string {
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        return "hello";
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+>A : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+    protected y: string;
+>y : Symbol(B.y, Decl(protectedInstanceMemberAccessibility.ts, 7, 19))
+
+    g() {
+>g : Symbol(B.g, Decl(protectedInstanceMemberAccessibility.ts, 8, 24))
+
+        var t1 = this.x;
+>t1 : Symbol(t1, Decl(protectedInstanceMemberAccessibility.ts, 10, 11))
+>this.x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+>this : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+        var t2 = this.f();
+>t2 : Symbol(t2, Decl(protectedInstanceMemberAccessibility.ts, 11, 11))
+>this.f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+>this : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        var t3 = this.y;
+>t3 : Symbol(t3, Decl(protectedInstanceMemberAccessibility.ts, 12, 11))
+>this.y : Symbol(B.y, Decl(protectedInstanceMemberAccessibility.ts, 7, 19))
+>this : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+>y : Symbol(B.y, Decl(protectedInstanceMemberAccessibility.ts, 7, 19))
+
+        var t4 = this.z;     // error
+>t4 : Symbol(t4, Decl(protectedInstanceMemberAccessibility.ts, 13, 11))
+>this : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+
+        var s1 = super.x;    // error
+>s1 : Symbol(s1, Decl(protectedInstanceMemberAccessibility.ts, 15, 11))
+>super.x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+>super : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+        var s2 = super.f();
+>s2 : Symbol(s2, Decl(protectedInstanceMemberAccessibility.ts, 16, 11))
+>super.f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+>super : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        var s3 = super.y;    // error
+>s3 : Symbol(s3, Decl(protectedInstanceMemberAccessibility.ts, 17, 11))
+>super : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+        var s4 = super.z;    // error
+>s4 : Symbol(s4, Decl(protectedInstanceMemberAccessibility.ts, 18, 11))
+>super : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+        var a: A;
+>a : Symbol(a, Decl(protectedInstanceMemberAccessibility.ts, 20, 11))
+>A : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+        var a1 = a.x;    // error
+>a1 : Symbol(a1, Decl(protectedInstanceMemberAccessibility.ts, 21, 11))
+>a.x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+>a : Symbol(a, Decl(protectedInstanceMemberAccessibility.ts, 20, 11))
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+        var a2 = a.f();  // error
+>a2 : Symbol(a2, Decl(protectedInstanceMemberAccessibility.ts, 22, 11))
+>a.f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+>a : Symbol(a, Decl(protectedInstanceMemberAccessibility.ts, 20, 11))
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        var a3 = a.y;    // error
+>a3 : Symbol(a3, Decl(protectedInstanceMemberAccessibility.ts, 23, 11))
+>a : Symbol(a, Decl(protectedInstanceMemberAccessibility.ts, 20, 11))
+
+        var a4 = a.z;    // error
+>a4 : Symbol(a4, Decl(protectedInstanceMemberAccessibility.ts, 24, 11))
+>a : Symbol(a, Decl(protectedInstanceMemberAccessibility.ts, 20, 11))
+
+        var b: B;
+>b : Symbol(b, Decl(protectedInstanceMemberAccessibility.ts, 26, 11))
+>B : Symbol(B, Decl(protectedInstanceMemberAccessibility.ts, 5, 1))
+
+        var b1 = b.x;
+>b1 : Symbol(b1, Decl(protectedInstanceMemberAccessibility.ts, 27, 11))
+>b.x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+>b : Symbol(b, Decl(protectedInstanceMemberAccessibility.ts, 26, 11))
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+        var b2 = b.f();
+>b2 : Symbol(b2, Decl(protectedInstanceMemberAccessibility.ts, 28, 11))
+>b.f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+>b : Symbol(b, Decl(protectedInstanceMemberAccessibility.ts, 26, 11))
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        var b3 = b.y;
+>b3 : Symbol(b3, Decl(protectedInstanceMemberAccessibility.ts, 29, 11))
+>b.y : Symbol(B.y, Decl(protectedInstanceMemberAccessibility.ts, 7, 19))
+>b : Symbol(b, Decl(protectedInstanceMemberAccessibility.ts, 26, 11))
+>y : Symbol(B.y, Decl(protectedInstanceMemberAccessibility.ts, 7, 19))
+
+        var b4 = b.z;    // error
+>b4 : Symbol(b4, Decl(protectedInstanceMemberAccessibility.ts, 30, 11))
+>b : Symbol(b, Decl(protectedInstanceMemberAccessibility.ts, 26, 11))
+
+        var c: C;
+>c : Symbol(c, Decl(protectedInstanceMemberAccessibility.ts, 32, 11))
+>C : Symbol(C, Decl(protectedInstanceMemberAccessibility.ts, 38, 1))
+
+        var c1 = c.x;    // error
+>c1 : Symbol(c1, Decl(protectedInstanceMemberAccessibility.ts, 33, 11))
+>c.x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+>c : Symbol(c, Decl(protectedInstanceMemberAccessibility.ts, 32, 11))
+>x : Symbol(A.x, Decl(protectedInstanceMemberAccessibility.ts, 0, 9))
+
+        var c2 = c.f();  // error
+>c2 : Symbol(c2, Decl(protectedInstanceMemberAccessibility.ts, 34, 11))
+>c.f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+>c : Symbol(c, Decl(protectedInstanceMemberAccessibility.ts, 32, 11))
+>f : Symbol(A.f, Decl(protectedInstanceMemberAccessibility.ts, 1, 24))
+
+        var c3 = c.y;    // error
+>c3 : Symbol(c3, Decl(protectedInstanceMemberAccessibility.ts, 35, 11))
+>c : Symbol(c, Decl(protectedInstanceMemberAccessibility.ts, 32, 11))
+
+        var c4 = c.z;    // error
+>c4 : Symbol(c4, Decl(protectedInstanceMemberAccessibility.ts, 36, 11))
+>c.z : Symbol(C.z, Decl(protectedInstanceMemberAccessibility.ts, 40, 19))
+>c : Symbol(c, Decl(protectedInstanceMemberAccessibility.ts, 32, 11))
+>z : Symbol(C.z, Decl(protectedInstanceMemberAccessibility.ts, 40, 19))
+    }
+}
+
+class C extends A {
+>C : Symbol(C, Decl(protectedInstanceMemberAccessibility.ts, 38, 1))
+>A : Symbol(A, Decl(protectedInstanceMemberAccessibility.ts, 0, 0))
+
+    protected z: string;
+>z : Symbol(C.z, Decl(protectedInstanceMemberAccessibility.ts, 40, 19))
+}
+

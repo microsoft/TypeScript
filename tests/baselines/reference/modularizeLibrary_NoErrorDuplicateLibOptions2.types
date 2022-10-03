@@ -1,0 +1,232 @@
+=== tests/cases/compiler/modularizeLibrary_NoErrorDuplicateLibOptions2.ts ===
+// Using Es6 array
+function f(x: number, y: number, z: number) {
+>f : (x: number, y: number, z: number) => any[]
+>x : number
+>y : number
+>z : number
+
+    return Array.from(arguments);
+>Array.from(arguments) : any[]
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array : ArrayConstructor
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>arguments : IArguments
+}
+
+f(1, 2, 3);  // no error
+>f(1, 2, 3) : any[]
+>f : (x: number, y: number, z: number) => any[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+// Using ES6 collection
+var m = new Map<string, number>();
+>m : Map<string, number>
+>new Map<string, number>() : Map<string, number>
+>Map : MapConstructor
+
+m.clear();
+>m.clear() : void
+>m.clear : () => void
+>m : Map<string, number>
+>clear : () => void
+
+// Using ES6 iterable
+m.keys();
+>m.keys() : IterableIterator<string>
+>m.keys : () => IterableIterator<string>
+>m : Map<string, number>
+>keys : () => IterableIterator<string>
+
+// Using ES6 function
+function Baz() { }
+>Baz : () => void
+
+Baz.name;
+>Baz.name : string
+>Baz : () => void
+>name : string
+
+// Using ES6 generator
+function* gen() {
+>gen : () => Generator<number, void, unknown>
+
+    let i = 0;
+>i : number
+>0 : 0
+
+    while (i < 10) {
+>i < 10 : boolean
+>i : number
+>10 : 10
+
+        yield i;
+>yield i : any
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+    }
+}
+
+function* gen2() {
+>gen2 : () => Generator<number, void, unknown>
+
+    let i = 0;
+>i : number
+>0 : 0
+
+    while (i < 10) {
+>i < 10 : boolean
+>i : number
+>10 : 10
+
+        yield i;
+>yield i : any
+>i : number
+
+        i++;
+>i++ : number
+>i : number
+    }
+}
+
+// Using ES6 math
+Math.sign(1);
+>Math.sign(1) : number
+>Math.sign : (x: number) => number
+>Math : Math
+>sign : (x: number) => number
+>1 : 1
+
+// Using ES6 object
+var o = {
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
+
+    a: 2,
+>a : number
+>2 : 2
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : any
+
+        return false;
+>false : false
+    }
+};
+o.hasOwnProperty(Symbol.hasInstance);
+>o.hasOwnProperty(Symbol.hasInstance) : boolean
+>o.hasOwnProperty : (v: PropertyKey) => boolean
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>hasOwnProperty : (v: PropertyKey) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+
+// Using ES6 promise
+async function out() {
+>out : () => Promise<unknown>
+
+    return new Promise(function (resolve, reject) {});
+>new Promise(function (resolve, reject) {}) : Promise<unknown>
+>Promise : PromiseConstructor
+>function (resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
+>reject : (reason?: any) => void
+}
+
+declare var console: any;
+>console : any
+
+out().then(() => {
+>out().then(() => {    console.log("Yea!");}) : Promise<void>
+>out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>out() : Promise<unknown>
+>out : () => Promise<unknown>
+>then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>() => {    console.log("Yea!");} : () => void
+
+    console.log("Yea!");
+>console.log("Yea!") : any
+>console.log : any
+>console : any
+>log : any
+>"Yea!" : "Yea!"
+
+});
+
+// Using Es6 proxy
+var t = {}
+>t : {}
+>{} : {}
+
+var p = new Proxy(t, {});
+>p : {}
+>new Proxy(t, {}) : {}
+>Proxy : ProxyConstructor
+>t : {}
+>{} : {}
+
+// Using ES6 reflect
+Reflect.isExtensible({});
+>Reflect.isExtensible({}) : boolean
+>Reflect.isExtensible : (target: object) => boolean
+>Reflect : typeof Reflect
+>isExtensible : (target: object) => boolean
+>{} : {}
+
+// Using Es6 regexp
+var reg = new RegExp("/s");
+>reg : RegExp
+>new RegExp("/s") : RegExp
+>RegExp : RegExpConstructor
+>"/s" : "/s"
+
+reg.flags;
+>reg.flags : string
+>reg : RegExp
+>flags : string
+
+// Using ES6 string
+var str = "Hello world";
+>str : string
+>"Hello world" : "Hello world"
+
+str.includes("hello", 0);
+>str.includes("hello", 0) : boolean
+>str.includes : (searchString: string, position?: number) => boolean
+>str : string
+>includes : (searchString: string, position?: number) => boolean
+>"hello" : "hello"
+>0 : 0
+
+// Using ES6 symbol
+var s = Symbol();
+>s : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+// Using ES6 wellknown-symbol
+const o1 = {
+>o1 : { [Symbol.hasInstance](value: any): boolean; }
+>{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : any
+
+        return false;
+>false : false
+    }
+}

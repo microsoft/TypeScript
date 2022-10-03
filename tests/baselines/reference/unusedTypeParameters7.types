@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.ts ===
+class C<T> { a: T; }
+>C : C<T>
+>a : T
+
+=== tests/cases/compiler/b.ts ===
+interface C<T> { }
+No type information for this code.

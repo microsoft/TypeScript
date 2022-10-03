@@ -1,0 +1,34 @@
+=== tests/cases/conformance/jsdoc/type.js ===
+/** @typedef {import("./mod1").TestEnum} TE */
+/** @type {TE} */
+const test = 'add'
+>test : Symbol(test, Decl(type.js, 2, 5))
+
+/** @type {import("./mod1").TestEnum} */
+const tost = 'remove'
+>tost : Symbol(tost, Decl(type.js, 4, 5))
+
+=== tests/cases/conformance/jsdoc/value.js ===
+import { TestEnum } from "./mod1"
+>TestEnum : Symbol(TestEnum, Decl(value.js, 0, 8))
+
+/** @type {TestEnum} */
+const tist = TestEnum.ADD
+>tist : Symbol(tist, Decl(value.js, 2, 5))
+>TestEnum.ADD : Symbol(ADD, Decl(mod1.js, 1, 25))
+>TestEnum : Symbol(TestEnum, Decl(value.js, 0, 8))
+>ADD : Symbol(ADD, Decl(mod1.js, 1, 25))
+
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/** @enum {string} */
+export const TestEnum = {
+>TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12), Decl(mod1.js, 0, 4))
+
+    ADD: 'add',
+>ADD : Symbol(ADD, Decl(mod1.js, 1, 25))
+
+    REMOVE: 'remove'
+>REMOVE : Symbol(REMOVE, Decl(mod1.js, 2, 15))
+}
+

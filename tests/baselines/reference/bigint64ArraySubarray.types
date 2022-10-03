@@ -1,0 +1,32 @@
+=== tests/cases/compiler/bigint64ArraySubarray.ts ===
+function bigInt64ArraySubarray() {
+>bigInt64ArraySubarray : () => void
+
+    var arr = new BigInt64Array(10);
+>arr : BigInt64Array
+>new BigInt64Array(10) : BigInt64Array
+>BigInt64Array : BigInt64ArrayConstructor
+>10 : 10
+
+    arr.subarray();
+>arr.subarray() : BigInt64Array
+>arr.subarray : (begin?: number, end?: number) => BigInt64Array
+>arr : BigInt64Array
+>subarray : (begin?: number, end?: number) => BigInt64Array
+
+    arr.subarray(0);
+>arr.subarray(0) : BigInt64Array
+>arr.subarray : (begin?: number, end?: number) => BigInt64Array
+>arr : BigInt64Array
+>subarray : (begin?: number, end?: number) => BigInt64Array
+>0 : 0
+
+    arr.subarray(0, 10);
+>arr.subarray(0, 10) : BigInt64Array
+>arr.subarray : (begin?: number, end?: number) => BigInt64Array
+>arr : BigInt64Array
+>subarray : (begin?: number, end?: number) => BigInt64Array
+>0 : 0
+>10 : 10
+}
+

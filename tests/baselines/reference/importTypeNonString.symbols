@@ -1,0 +1,6 @@
+=== tests/cases/conformance/types/import/importTypeNonString.ts ===
+export const x: import({x: 12}) = undefined as any;
+>x : Symbol(x, Decl(importTypeNonString.ts, 0, 12))
+>x : Symbol(x, Decl(importTypeNonString.ts, 0, 24))
+>undefined : Symbol(undefined)
+

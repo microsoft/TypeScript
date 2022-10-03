@@ -1,0 +1,94 @@
+
+1  >let l1;
+
+    ~~~~~~~~                                      => Pos: (0 to 7)  SpanInfo: undefined
+--------------------------------
+2  >let l2: number;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (8 to 23)  SpanInfo: undefined
+--------------------------------
+3  >let l3, l4, l5 :string, l6;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (24 to 51)  SpanInfo: undefined
+--------------------------------
+4  >let l7 = false;
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (52 to 67)  SpanInfo: {"start":52,"length":14}
+    >let l7 = false
+    >:=> (line 4, col 0) to (line 4, col 14)
+--------------------------------
+5  >let l8: number = 23;
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (68 to 88)  SpanInfo: {"start":68,"length":19}
+    >let l8: number = 23
+    >:=> (line 5, col 0) to (line 5, col 19)
+--------------------------------
+6  >let l9 = 0, l10 :string = "", l11 = null;
+
+    ~~~~~~~~~~~                                   => Pos: (89 to 99)  SpanInfo: {"start":89,"length":10}
+    >let l9 = 0
+    >:=> (line 6, col 0) to (line 6, col 10)
+6  >let l9 = 0, l10 :string = "", l11 = null;
+
+               ~~~~~~~~~~~~~~~~~~                 => Pos: (100 to 117)  SpanInfo: {"start":101,"length":16}
+    >l10 :string = ""
+    >:=> (line 6, col 12) to (line 6, col 28)
+6  >let l9 = 0, l10 :string = "", l11 = null;
+
+                                 ~~~~~~~~~~~~~    => Pos: (118 to 130)  SpanInfo: {"start":119,"length":10}
+    >l11 = null
+    >:=> (line 6, col 30) to (line 6, col 40)
+--------------------------------
+7  >for(let l11 in {}) { }
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (131 to 150)  SpanInfo: {"start":131,"length":18}
+    >for(let l11 in {})
+    >:=> (line 7, col 0) to (line 7, col 18)
+7  >for(let l11 in {}) { }
+
+                        ~~~                       => Pos: (151 to 153)  SpanInfo: undefined
+--------------------------------
+8  >for(let l12 = 0; l12 < 9; l12++) { }
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (154 to 169)  SpanInfo: {"start":158,"length":11}
+    >let l12 = 0
+    >:=> (line 8, col 4) to (line 8, col 15)
+8  >for(let l12 = 0; l12 < 9; l12++) { }
+
+                    ~~~~~~~~~                     => Pos: (170 to 178)  SpanInfo: {"start":171,"length":7}
+    >l12 < 9
+    >:=> (line 8, col 17) to (line 8, col 24)
+8  >for(let l12 = 0; l12 < 9; l12++) { }
+
+                             ~~~~~~~~~            => Pos: (179 to 187)  SpanInfo: {"start":180,"length":5}
+    >l12++
+    >:=> (line 8, col 26) to (line 8, col 31)
+8  >for(let l12 = 0; l12 < 9; l12++) { }
+
+                                      ~~~         => Pos: (188 to 190)  SpanInfo: undefined
+--------------------------------
+9  >module M {
+
+    ~~~~~~~~~~~                                   => Pos: (191 to 201)  SpanInfo: {"start":191,"length":55}
+    >module M {
+    >    let ll1 = "s";
+    >    export let ll2 = 0;
+    >}
+    >:=> (line 9, col 0) to (line 12, col 1)
+--------------------------------
+10 >    let ll1 = "s";
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (202 to 220)  SpanInfo: {"start":206,"length":13}
+    >let ll1 = "s"
+    >:=> (line 10, col 4) to (line 10, col 17)
+--------------------------------
+11 >    export let ll2 = 0;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (221 to 244)  SpanInfo: {"start":232,"length":11}
+    >let ll2 = 0
+    >:=> (line 11, col 11) to (line 11, col 22)
+--------------------------------
+12 >}
+    ~                                             => Pos: (245 to 245)  SpanInfo: {"start":245,"length":1}
+    >}
+    >:=> (line 12, col 0) to (line 12, col 1)

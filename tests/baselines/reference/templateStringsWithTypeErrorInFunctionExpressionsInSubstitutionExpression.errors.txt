@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/templates/templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(1,27): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/es6/templates/templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
+    `${function (x: number) { x = "bad"; } }`;
+                              ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

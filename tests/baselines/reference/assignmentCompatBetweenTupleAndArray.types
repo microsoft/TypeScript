@@ -1,0 +1,56 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts ===
+var numStrTuple: [number, string];
+>numStrTuple : [number, string]
+
+var numNumTuple: [number, number];
+>numNumTuple : [number, number]
+
+var numEmptyObjTuple: [number, {}];
+>numEmptyObjTuple : [number, {}]
+
+var emptyObjTuple: [{}];
+>emptyObjTuple : [{}]
+
+var numArray: number[];
+>numArray : number[]
+
+var emptyObjArray: {}[];
+>emptyObjArray : {}[]
+
+// no error
+numArray = numNumTuple;
+>numArray = numNumTuple : [number, number]
+>numArray : number[]
+>numNumTuple : [number, number]
+
+emptyObjArray = emptyObjTuple;
+>emptyObjArray = emptyObjTuple : [{}]
+>emptyObjArray : {}[]
+>emptyObjTuple : [{}]
+
+emptyObjArray = numStrTuple;
+>emptyObjArray = numStrTuple : [number, string]
+>emptyObjArray : {}[]
+>numStrTuple : [number, string]
+
+emptyObjArray = numNumTuple;
+>emptyObjArray = numNumTuple : [number, number]
+>emptyObjArray : {}[]
+>numNumTuple : [number, number]
+
+emptyObjArray = numEmptyObjTuple;
+>emptyObjArray = numEmptyObjTuple : [number, {}]
+>emptyObjArray : {}[]
+>numEmptyObjTuple : [number, {}]
+
+// error
+numArray = numStrTuple;
+>numArray = numStrTuple : [number, string]
+>numArray : number[]
+>numStrTuple : [number, string]
+
+emptyObjTuple = emptyObjArray;
+>emptyObjTuple = emptyObjArray : {}[]
+>emptyObjTuple : [{}]
+>emptyObjArray : {}[]
+

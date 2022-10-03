@@ -1,0 +1,39 @@
+===================================================================
+JsFile: sourceMapValidationLabeled.js
+mapUrl: sourceMapValidationLabeled.js.map
+sourceRoot: 
+sources: sourceMapValidationLabeled.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationLabeled.js
+sourceFile:sourceMapValidationLabeled.ts
+-------------------------------------------------------------------
+>>>x: var b = 10;
+1 >
+2 >^
+3 > ^^
+4 >   ^^^^
+5 >       ^
+6 >        ^^^
+7 >           ^^
+8 >             ^
+9 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >x
+3 > :
+  > 
+4 >   var 
+5 >       b
+6 >         = 
+7 >           10
+8 >             ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 2) Source(1, 2) + SourceIndex(0)
+3 >Emitted(1, 4) Source(2, 1) + SourceIndex(0)
+4 >Emitted(1, 8) Source(2, 5) + SourceIndex(0)
+5 >Emitted(1, 9) Source(2, 6) + SourceIndex(0)
+6 >Emitted(1, 12) Source(2, 9) + SourceIndex(0)
+7 >Emitted(1, 14) Source(2, 11) + SourceIndex(0)
+8 >Emitted(1, 15) Source(2, 12) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationLabeled.js.map

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/shouldNotPrintNullEscapesIntoOctalLiterals.ts ===
+"use strict";
+No type information for this code.`\x001`;
+No type information for this code.`\u00001`;
+No type information for this code.`\u{00000000}1`;
+No type information for this code.`\u{000000}1`;
+No type information for this code.`\u{0}1`;
+No type information for this code.

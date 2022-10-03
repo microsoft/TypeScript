@@ -1,0 +1,11 @@
+=== tests/cases/compiler/moduleAugmentationGlobal8.ts ===
+namespace A {
+    declare global {
+>global : typeof global
+
+        interface Array<T> { x }
+>x : any
+    }
+}
+export {}
+

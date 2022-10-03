@@ -1,0 +1,69 @@
+=== tests/cases/compiler/assignmentToObjectAndFunction.ts ===
+var errObj: Object = { toString: 0 }; // Error, incompatible toString
+>errObj : Symbol(errObj, Decl(assignmentToObjectAndFunction.ts, 0, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(toString, Decl(assignmentToObjectAndFunction.ts, 0, 22))
+
+var goodObj: Object = {
+>goodObj : Symbol(goodObj, Decl(assignmentToObjectAndFunction.ts, 1, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    toString(x?) {
+>toString : Symbol(toString, Decl(assignmentToObjectAndFunction.ts, 1, 23))
+>x : Symbol(x, Decl(assignmentToObjectAndFunction.ts, 2, 13))
+
+        return "";
+    }
+}; // Ok, because toString is a subtype of Object's toString
+
+var errFun: Function = {}; // Error for no call signature
+>errFun : Symbol(errFun, Decl(assignmentToObjectAndFunction.ts, 7, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function foo() { }
+>foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
+
+module foo {
+>foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
+
+    export var boom = 0;
+>boom : Symbol(boom, Decl(assignmentToObjectAndFunction.ts, 11, 14))
+}
+
+var goodFundule: Function = foo; // ok
+>goodFundule : Symbol(goodFundule, Decl(assignmentToObjectAndFunction.ts, 14, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(assignmentToObjectAndFunction.ts, 7, 26), Decl(assignmentToObjectAndFunction.ts, 9, 18))
+
+function bar() { }
+>bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
+
+module bar {
+>bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
+
+    export function apply(thisArg: string, argArray?: string) { }
+>apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 17, 12))
+>thisArg : Symbol(thisArg, Decl(assignmentToObjectAndFunction.ts, 18, 26))
+>argArray : Symbol(argArray, Decl(assignmentToObjectAndFunction.ts, 18, 42))
+}
+
+var goodFundule2: Function = bar; // ok
+>goodFundule2 : Symbol(goodFundule2, Decl(assignmentToObjectAndFunction.ts, 21, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(assignmentToObjectAndFunction.ts, 14, 32), Decl(assignmentToObjectAndFunction.ts, 16, 18))
+
+function bad() { }
+>bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
+
+module bad {
+>bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
+
+    export var apply = 0;
+>apply : Symbol(apply, Decl(assignmentToObjectAndFunction.ts, 25, 14))
+}
+
+var badFundule: Function = bad; // error
+>badFundule : Symbol(badFundule, Decl(assignmentToObjectAndFunction.ts, 28, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>bad : Symbol(bad, Decl(assignmentToObjectAndFunction.ts, 21, 33), Decl(assignmentToObjectAndFunction.ts, 23, 18))
+

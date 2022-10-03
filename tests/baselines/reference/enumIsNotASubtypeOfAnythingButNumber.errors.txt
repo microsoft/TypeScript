@@ -1,0 +1,181 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(18,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'string'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(24,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'boolean'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(30,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'Date'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(36,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(42,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '{ bar: number; }'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(48,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'number[]'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(54,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'I8'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(60,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(66,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A2<number>'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts (16 errors) ====
+    // enums are only subtypes of number, any and no other types
+    
+    enum E { A }
+    interface I {
+        [x: string]: any;
+        foo: E; // ok
+    }
+    
+    
+    interface I2 {
+        [x: string]: number;
+        foo: E; // ok
+    }
+    
+    // error cases
+    interface I3 {
+        [x: string]: string;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'string'.
+    }
+    
+    
+    interface I4 {
+        [x: string]: boolean;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'boolean'.
+    }
+    
+    
+    interface I5 {
+        [x: string]: Date;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'Date'.
+    }
+    
+    
+    interface I6 {
+        [x: string]: RegExp;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
+    }
+    
+    
+    interface I7 {
+        [x: string]: { bar: number };
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '{ bar: number; }'.
+    }
+    
+    
+    interface I8 {
+        [x: string]: number[];
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'number[]'.
+    }
+    
+    
+    interface I9 {
+        [x: string]: I8;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'I8'.
+    }
+    
+    class A { foo: number; }
+    interface I10 {
+        [x: string]: A;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A'.
+    }
+    
+    class A2<T> { foo: T; }
+    interface I11 {
+        [x: string]: A2<number>;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A2<number>'.
+    }
+    
+    
+    interface I12 {
+        [x: string]: (x) => number;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
+    }
+    
+    
+    interface I13 {
+        [x: string]: <T>(x: T) => T;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
+    }
+    
+    
+    enum E2 { A }
+    interface I14 {
+        [x: string]: E2;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
+    }
+    
+    
+    function f() { }
+    module f {
+        export var bar = 1;
+    }
+    interface I15 {
+        [x: string]: typeof f;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
+    }
+    
+    
+    class c { baz: string }
+    module c {
+        export var bar = 1;
+    }
+    interface I16 {
+        [x: string]: typeof c;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
+    }
+    
+    
+    interface I17<T> {
+        [x: string]: T;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
+    }
+    
+    
+    interface I18<T, U extends T> {
+        [x: string]: U;
+        foo: E;
+        ~~~
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
+    }
+    
+    
+    interface I19 {
+        [x: string]: Object;
+        foo: E; // BUG 831833
+    }
+    
+    
+    interface I20 {
+        [x: string]: {};
+        foo: E; // BUG 831833
+    }

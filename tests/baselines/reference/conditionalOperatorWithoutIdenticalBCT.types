@@ -1,0 +1,127 @@
+=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts ===
+//Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
+class X { propertyX: any; propertyX1: number; propertyX2: string };
+>X : X
+>propertyX : any
+>propertyX1 : number
+>propertyX2 : string
+
+class A extends X { propertyA: number };
+>A : A
+>X : X
+>propertyA : number
+
+class B extends X { propertyB: string };
+>B : B
+>X : X
+>propertyB : string
+
+var x: X;
+>x : X
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+// No errors anymore, uses union types
+true ? a : b;
+>true ? a : b : A | B
+>true : true
+>a : A
+>b : B
+
+var result1 = true ? a : b;
+>result1 : A | B
+>true ? a : b : A | B
+>true : true
+>a : A
+>b : B
+
+//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+var result2: A = true ? a : b;
+>result2 : A
+>true ? a : b : A | B
+>true : true
+>a : A
+>b : B
+
+var result3: B = true ? a : b;
+>result3 : B
+>true ? a : b : A | B
+>true : true
+>a : A
+>b : B
+
+var result31: A | B = true ? a : b;
+>result31 : A | B
+>true ? a : b : A | B
+>true : true
+>a : A
+>b : B
+
+var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+>result4 : (t: X) => number
+>t : X
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
+>true : true
+>(m) => m.propertyX1 : (m: X) => number
+>m : X
+>m.propertyX1 : number
+>m : X
+>propertyX1 : number
+>(n) => n.propertyX2 : (n: X) => string
+>n : X
+>n.propertyX2 : string
+>n : X
+>propertyX2 : string
+
+var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+>result5 : (t: X) => string
+>t : X
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
+>true : true
+>(m) => m.propertyX1 : (m: X) => number
+>m : X
+>m.propertyX1 : number
+>m : X
+>propertyX1 : number
+>(n) => n.propertyX2 : (n: X) => string
+>n : X
+>n.propertyX2 : string
+>n : X
+>propertyX2 : string
+
+var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+>result6 : (t: X) => boolean
+>t : X
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
+>true : true
+>(m) => m.propertyX1 : (m: X) => number
+>m : X
+>m.propertyX1 : number
+>m : X
+>propertyX1 : number
+>(n) => n.propertyX2 : (n: X) => string
+>n : X
+>n.propertyX2 : string
+>n : X
+>propertyX2 : string
+
+var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+>result61 : (t: X) => number | string
+>t : X
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
+>true : true
+>(m) => m.propertyX1 : (m: X) => number
+>m : X
+>m.propertyX1 : number
+>m : X
+>propertyX1 : number
+>(n) => n.propertyX2 : (n: X) => string
+>n : X
+>n.propertyX2 : string
+>n : X
+>propertyX2 : string
+

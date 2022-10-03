@@ -1,0 +1,85 @@
+=== tests/cases/compiler/commalist.ts ===
+export default {
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 0, 16))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 1, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 2, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 3, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 4, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 5, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 6, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 7, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 8, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 9, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 10, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 11, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 12, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 13, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 14, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 15, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 16, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 17, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 18, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 19, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 20, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 21, 19))
+
+    ['foo'+'']: 42,
+>['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 22, 19))
+
+};
+
+=== tests/cases/compiler/comma.ts ===
+export default {
+    ['foo']: 42
+>['foo'] : Symbol(['foo'], Decl(comma.ts, 0, 16))
+>'foo' : Symbol(['foo'], Decl(comma.ts, 0, 16))
+
+};
+
+=== tests/cases/compiler/functionexpression.ts ===
+export default () => 42;
+No type information for this code.
+No type information for this code.

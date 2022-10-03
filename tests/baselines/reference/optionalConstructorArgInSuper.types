@@ -1,0 +1,29 @@
+=== tests/cases/compiler/optionalConstructorArgInSuper.ts ===
+class Base {
+>Base : Base
+
+    constructor(opt?) { }
+>opt : any
+
+    foo(other?) { }
+>foo : (other?: any) => void
+>other : any
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+}
+var d = new Derived(); // bug caused an error here, couldn't select overload
+>d : Derived
+>new Derived() : Derived
+>Derived : typeof Derived
+
+var d2: Derived;
+>d2 : Derived
+
+d2.foo(); 
+>d2.foo() : void
+>d2.foo : (other?: any) => void
+>d2 : Derived
+>foo : (other?: any) => void
+

@@ -1,0 +1,11 @@
+tests/cases/compiler/optionalSetterParam.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/optionalSetterParam.ts (1 errors) ====
+    class foo {
+    
+        public set bar(param?:any) { }
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    

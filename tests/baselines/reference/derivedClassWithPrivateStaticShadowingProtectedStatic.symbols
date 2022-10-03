@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingProtectedStatic.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 0, 0))
+
+    protected static x: string;
+>x : Symbol(Base.x, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 0, 12))
+
+    protected static fn(): string {
+>fn : Symbol(Base.fn, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 1, 31))
+
+        return '';
+    }
+
+    protected static get a() { return 1; }
+>a : Symbol(Base.a, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 4, 5), Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 6, 42))
+
+    protected static set a(v) { }
+>a : Symbol(Base.a, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 4, 5), Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 6, 42))
+>v : Symbol(v, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 7, 27))
+}
+
+// should be error
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 8, 1))
+>Base : Symbol(Base, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 0, 0))
+
+    private static x: string; 
+>x : Symbol(Derived.x, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 11, 28))
+
+    private static fn(): string {
+>fn : Symbol(Derived.fn, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 12, 29))
+
+        return '';
+    }
+
+    private static get a() { return 1; }
+>a : Symbol(Derived.a, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 15, 5), Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 17, 40))
+
+    private static set a(v) { }
+>a : Symbol(Derived.a, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 15, 5), Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 17, 40))
+>v : Symbol(v, Decl(derivedClassWithPrivateStaticShadowingProtectedStatic.ts, 18, 25))
+}

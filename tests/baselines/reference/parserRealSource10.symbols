@@ -1,0 +1,2642 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource10.ts, 0, 0))
+
+    export enum TokenID {
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+
+        // Keywords
+        Any,
+>Any : Symbol(TokenID.Any, Decl(parserRealSource10.ts, 6, 25))
+
+        Bool,
+>Bool : Symbol(TokenID.Bool, Decl(parserRealSource10.ts, 8, 12))
+
+        Break,
+>Break : Symbol(TokenID.Break, Decl(parserRealSource10.ts, 9, 13))
+
+        Case,
+>Case : Symbol(TokenID.Case, Decl(parserRealSource10.ts, 10, 14))
+
+        Catch,
+>Catch : Symbol(TokenID.Catch, Decl(parserRealSource10.ts, 11, 13))
+
+        Class,
+>Class : Symbol(TokenID.Class, Decl(parserRealSource10.ts, 12, 14))
+
+        Const,
+>Const : Symbol(TokenID.Const, Decl(parserRealSource10.ts, 13, 14))
+
+        Continue,
+>Continue : Symbol(TokenID.Continue, Decl(parserRealSource10.ts, 14, 14))
+
+        Debugger,
+>Debugger : Symbol(TokenID.Debugger, Decl(parserRealSource10.ts, 15, 17))
+
+        Default,
+>Default : Symbol(TokenID.Default, Decl(parserRealSource10.ts, 16, 17))
+
+        Delete,
+>Delete : Symbol(TokenID.Delete, Decl(parserRealSource10.ts, 17, 16))
+
+        Do,
+>Do : Symbol(TokenID.Do, Decl(parserRealSource10.ts, 18, 15))
+
+        Else,
+>Else : Symbol(TokenID.Else, Decl(parserRealSource10.ts, 19, 11))
+
+        Enum,
+>Enum : Symbol(TokenID.Enum, Decl(parserRealSource10.ts, 20, 13))
+
+        Export,
+>Export : Symbol(TokenID.Export, Decl(parserRealSource10.ts, 21, 13))
+
+        Extends,
+>Extends : Symbol(TokenID.Extends, Decl(parserRealSource10.ts, 22, 15))
+
+        Declare,
+>Declare : Symbol(TokenID.Declare, Decl(parserRealSource10.ts, 23, 16))
+
+        False,
+>False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
+
+        Finally,
+>Finally : Symbol(TokenID.Finally, Decl(parserRealSource10.ts, 25, 14))
+
+        For,
+>For : Symbol(TokenID.For, Decl(parserRealSource10.ts, 26, 16))
+
+        Function,
+>Function : Symbol(TokenID.Function, Decl(parserRealSource10.ts, 27, 12))
+
+        Constructor,
+>Constructor : Symbol(TokenID.Constructor, Decl(parserRealSource10.ts, 28, 17))
+
+        Get,
+>Get : Symbol(TokenID.Get, Decl(parserRealSource10.ts, 29, 20))
+
+        If,
+>If : Symbol(TokenID.If, Decl(parserRealSource10.ts, 30, 12))
+
+        Implements,
+>Implements : Symbol(TokenID.Implements, Decl(parserRealSource10.ts, 31, 11))
+
+        Import,
+>Import : Symbol(TokenID.Import, Decl(parserRealSource10.ts, 32, 19))
+
+        In,
+>In : Symbol(TokenID.In, Decl(parserRealSource10.ts, 33, 15))
+
+        InstanceOf,
+>InstanceOf : Symbol(TokenID.InstanceOf, Decl(parserRealSource10.ts, 34, 11))
+
+        Interface,
+>Interface : Symbol(TokenID.Interface, Decl(parserRealSource10.ts, 35, 19))
+
+        Let,
+>Let : Symbol(TokenID.Let, Decl(parserRealSource10.ts, 36, 18))
+
+        Module,
+>Module : Symbol(TokenID.Module, Decl(parserRealSource10.ts, 37, 12))
+
+        New,
+>New : Symbol(TokenID.New, Decl(parserRealSource10.ts, 38, 15))
+
+        Number,
+>Number : Symbol(TokenID.Number, Decl(parserRealSource10.ts, 39, 12))
+
+        Null,
+>Null : Symbol(TokenID.Null, Decl(parserRealSource10.ts, 40, 15))
+
+        Package,
+>Package : Symbol(TokenID.Package, Decl(parserRealSource10.ts, 41, 13))
+
+        Private,
+>Private : Symbol(TokenID.Private, Decl(parserRealSource10.ts, 42, 16))
+
+        Protected,
+>Protected : Symbol(TokenID.Protected, Decl(parserRealSource10.ts, 43, 16))
+
+        Public,
+>Public : Symbol(TokenID.Public, Decl(parserRealSource10.ts, 44, 18))
+
+        Return,
+>Return : Symbol(TokenID.Return, Decl(parserRealSource10.ts, 45, 15))
+
+        Set,
+>Set : Symbol(TokenID.Set, Decl(parserRealSource10.ts, 46, 15))
+
+        Static,
+>Static : Symbol(TokenID.Static, Decl(parserRealSource10.ts, 47, 12))
+
+        String,
+>String : Symbol(TokenID.String, Decl(parserRealSource10.ts, 48, 15))
+
+        Super,
+>Super : Symbol(TokenID.Super, Decl(parserRealSource10.ts, 49, 15))
+
+        Switch,
+>Switch : Symbol(TokenID.Switch, Decl(parserRealSource10.ts, 50, 14))
+
+        This,
+>This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
+
+        Throw,
+>Throw : Symbol(TokenID.Throw, Decl(parserRealSource10.ts, 52, 13))
+
+        True,
+>True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
+
+        Try,
+>Try : Symbol(TokenID.Try, Decl(parserRealSource10.ts, 54, 13))
+
+        TypeOf,
+>TypeOf : Symbol(TokenID.TypeOf, Decl(parserRealSource10.ts, 55, 12))
+
+        Var,
+>Var : Symbol(TokenID.Var, Decl(parserRealSource10.ts, 56, 15))
+
+        Void,
+>Void : Symbol(TokenID.Void, Decl(parserRealSource10.ts, 57, 12))
+
+        With,
+>With : Symbol(TokenID.With, Decl(parserRealSource10.ts, 58, 13))
+
+        While,
+>While : Symbol(TokenID.While, Decl(parserRealSource10.ts, 59, 13))
+
+        Yield,
+>Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
+
+        // Punctuation
+        Semicolon,
+>Semicolon : Symbol(TokenID.Semicolon, Decl(parserRealSource10.ts, 61, 14))
+
+        OpenParen,
+>OpenParen : Symbol(TokenID.OpenParen, Decl(parserRealSource10.ts, 63, 18))
+
+        CloseParen,
+>CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
+
+        OpenBracket,
+>OpenBracket : Symbol(TokenID.OpenBracket, Decl(parserRealSource10.ts, 65, 19))
+
+        CloseBracket,
+>CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
+
+        OpenBrace,
+>OpenBrace : Symbol(TokenID.OpenBrace, Decl(parserRealSource10.ts, 67, 21))
+
+        CloseBrace,
+>CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
+
+        Comma,
+>Comma : Symbol(TokenID.Comma, Decl(parserRealSource10.ts, 69, 19))
+
+        Equals,
+>Equals : Symbol(TokenID.Equals, Decl(parserRealSource10.ts, 70, 14))
+
+        PlusEquals,
+>PlusEquals : Symbol(TokenID.PlusEquals, Decl(parserRealSource10.ts, 71, 15))
+
+        MinusEquals,
+>MinusEquals : Symbol(TokenID.MinusEquals, Decl(parserRealSource10.ts, 72, 19))
+
+        AsteriskEquals,
+>AsteriskEquals : Symbol(TokenID.AsteriskEquals, Decl(parserRealSource10.ts, 73, 20))
+
+        SlashEquals,
+>SlashEquals : Symbol(TokenID.SlashEquals, Decl(parserRealSource10.ts, 74, 23))
+
+        PercentEquals,
+>PercentEquals : Symbol(TokenID.PercentEquals, Decl(parserRealSource10.ts, 75, 20))
+
+        AmpersandEquals,
+>AmpersandEquals : Symbol(TokenID.AmpersandEquals, Decl(parserRealSource10.ts, 76, 22))
+
+        CaretEquals,
+>CaretEquals : Symbol(TokenID.CaretEquals, Decl(parserRealSource10.ts, 77, 24))
+
+        BarEquals,
+>BarEquals : Symbol(TokenID.BarEquals, Decl(parserRealSource10.ts, 78, 20))
+
+        LessThanLessThanEquals,
+>LessThanLessThanEquals : Symbol(TokenID.LessThanLessThanEquals, Decl(parserRealSource10.ts, 79, 18))
+
+        GreaterThanGreaterThanEquals,
+>GreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 80, 31))
+
+        GreaterThanGreaterThanGreaterThanEquals,
+>GreaterThanGreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 81, 37))
+
+        Question,
+>Question : Symbol(TokenID.Question, Decl(parserRealSource10.ts, 82, 48))
+
+        Colon,
+>Colon : Symbol(TokenID.Colon, Decl(parserRealSource10.ts, 83, 17))
+
+        BarBar,
+>BarBar : Symbol(TokenID.BarBar, Decl(parserRealSource10.ts, 84, 14))
+
+        AmpersandAmpersand,
+>AmpersandAmpersand : Symbol(TokenID.AmpersandAmpersand, Decl(parserRealSource10.ts, 85, 15))
+
+        Bar,
+>Bar : Symbol(TokenID.Bar, Decl(parserRealSource10.ts, 86, 27))
+
+        Caret,
+>Caret : Symbol(TokenID.Caret, Decl(parserRealSource10.ts, 87, 12))
+
+        And,
+>And : Symbol(TokenID.And, Decl(parserRealSource10.ts, 88, 14))
+
+        EqualsEquals,
+>EqualsEquals : Symbol(TokenID.EqualsEquals, Decl(parserRealSource10.ts, 89, 12))
+
+        ExclamationEquals,
+>ExclamationEquals : Symbol(TokenID.ExclamationEquals, Decl(parserRealSource10.ts, 90, 21))
+
+        EqualsEqualsEquals,
+>EqualsEqualsEquals : Symbol(TokenID.EqualsEqualsEquals, Decl(parserRealSource10.ts, 91, 26))
+
+        ExclamationEqualsEquals,
+>ExclamationEqualsEquals : Symbol(TokenID.ExclamationEqualsEquals, Decl(parserRealSource10.ts, 92, 27))
+
+        LessThan,
+>LessThan : Symbol(TokenID.LessThan, Decl(parserRealSource10.ts, 93, 32))
+
+        LessThanEquals,
+>LessThanEquals : Symbol(TokenID.LessThanEquals, Decl(parserRealSource10.ts, 94, 17))
+
+        GreaterThan,
+>GreaterThan : Symbol(TokenID.GreaterThan, Decl(parserRealSource10.ts, 95, 23))
+
+        GreaterThanEquals,
+>GreaterThanEquals : Symbol(TokenID.GreaterThanEquals, Decl(parserRealSource10.ts, 96, 20))
+
+        LessThanLessThan,
+>LessThanLessThan : Symbol(TokenID.LessThanLessThan, Decl(parserRealSource10.ts, 97, 26))
+
+        GreaterThanGreaterThan,
+>GreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThan, Decl(parserRealSource10.ts, 98, 25))
+
+        GreaterThanGreaterThanGreaterThan,
+>GreaterThanGreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThanGreaterThan, Decl(parserRealSource10.ts, 99, 31))
+
+        Plus,
+>Plus : Symbol(TokenID.Plus, Decl(parserRealSource10.ts, 100, 42))
+
+        Minus,
+>Minus : Symbol(TokenID.Minus, Decl(parserRealSource10.ts, 101, 13))
+
+        Asterisk,
+>Asterisk : Symbol(TokenID.Asterisk, Decl(parserRealSource10.ts, 102, 14))
+
+        Slash,
+>Slash : Symbol(TokenID.Slash, Decl(parserRealSource10.ts, 103, 17))
+
+        Percent,
+>Percent : Symbol(TokenID.Percent, Decl(parserRealSource10.ts, 104, 14))
+
+        Tilde,
+>Tilde : Symbol(TokenID.Tilde, Decl(parserRealSource10.ts, 105, 16))
+
+        Exclamation,
+>Exclamation : Symbol(TokenID.Exclamation, Decl(parserRealSource10.ts, 106, 14))
+
+        PlusPlus,
+>PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
+
+        MinusMinus,
+>MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
+
+        Dot,
+>Dot : Symbol(TokenID.Dot, Decl(parserRealSource10.ts, 109, 19))
+
+        DotDotDot,
+>DotDotDot : Symbol(TokenID.DotDotDot, Decl(parserRealSource10.ts, 110, 12))
+
+        Error,
+>Error : Symbol(TokenID.Error, Decl(parserRealSource10.ts, 111, 18))
+
+        EndOfFile,
+>EndOfFile : Symbol(TokenID.EndOfFile, Decl(parserRealSource10.ts, 112, 14))
+
+        EqualsGreaterThan,
+>EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
+
+        Identifier,
+>Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+
+        StringLiteral,
+>StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+
+        RegularExpressionLiteral,
+>RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+
+        NumberLiteral,
+>NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+
+        Whitespace,
+>Whitespace : Symbol(TokenID.Whitespace, Decl(parserRealSource10.ts, 118, 22))
+
+        Comment,
+>Comment : Symbol(TokenID.Comment, Decl(parserRealSource10.ts, 119, 19))
+
+        Lim,
+>Lim : Symbol(TokenID.Lim, Decl(parserRealSource10.ts, 120, 16))
+
+        LimFixed = EqualsGreaterThan,
+>LimFixed : Symbol(TokenID.LimFixed, Decl(parserRealSource10.ts, 121, 12))
+>EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
+
+        LimKeyword = Yield,
+>LimKeyword : Symbol(TokenID.LimKeyword, Decl(parserRealSource10.ts, 122, 37))
+>Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
+    }
+
+    export var tokenTable = new TokenInfo[];
+>tokenTable : Symbol(tokenTable, Decl(parserRealSource10.ts, 126, 14))
+>TokenInfo : Symbol(TokenInfo, Decl(parserRealSource10.ts, 172, 5))
+
+    export var nodeTypeTable = new string[];
+>nodeTypeTable : Symbol(nodeTypeTable, Decl(parserRealSource10.ts, 127, 14))
+
+    export var nodeTypeToTokTable = new number[];
+>nodeTypeToTokTable : Symbol(nodeTypeToTokTable, Decl(parserRealSource10.ts, 128, 14))
+
+    export var noRegexTable = new boolean[];
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+
+    noRegexTable[TokenID.Identifier] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+
+    noRegexTable[TokenID.StringLiteral] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+
+    noRegexTable[TokenID.NumberLiteral] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+
+    noRegexTable[TokenID.RegularExpressionLiteral] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+
+    noRegexTable[TokenID.This] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
+
+    noRegexTable[TokenID.PlusPlus] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
+
+    noRegexTable[TokenID.MinusMinus] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
+
+    noRegexTable[TokenID.CloseParen] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
+
+    noRegexTable[TokenID.CloseBracket] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
+
+    noRegexTable[TokenID.CloseBrace] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
+
+    noRegexTable[TokenID.True] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
+
+    noRegexTable[TokenID.False] = true;
+>noRegexTable : Symbol(noRegexTable, Decl(parserRealSource10.ts, 129, 14))
+>TokenID.False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
+
+    export enum OperatorPrecedence {
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+
+        None,
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+        Comma,
+>Comma : Symbol(OperatorPrecedence.Comma, Decl(parserRealSource10.ts, 145, 13))
+
+        Assignment,
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+
+        Conditional,
+>Conditional : Symbol(OperatorPrecedence.Conditional, Decl(parserRealSource10.ts, 147, 19))
+
+        LogicalOr,
+>LogicalOr : Symbol(OperatorPrecedence.LogicalOr, Decl(parserRealSource10.ts, 148, 20))
+
+        LogicalAnd,
+>LogicalAnd : Symbol(OperatorPrecedence.LogicalAnd, Decl(parserRealSource10.ts, 149, 18))
+
+        BitwiseOr,
+>BitwiseOr : Symbol(OperatorPrecedence.BitwiseOr, Decl(parserRealSource10.ts, 150, 19))
+
+        BitwiseExclusiveOr,
+>BitwiseExclusiveOr : Symbol(OperatorPrecedence.BitwiseExclusiveOr, Decl(parserRealSource10.ts, 151, 18))
+
+        BitwiseAnd,
+>BitwiseAnd : Symbol(OperatorPrecedence.BitwiseAnd, Decl(parserRealSource10.ts, 152, 27))
+
+        Equality,
+>Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+
+        Relational,
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+
+        Shift,
+>Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+
+        Additive,
+>Additive : Symbol(OperatorPrecedence.Additive, Decl(parserRealSource10.ts, 156, 14))
+
+        Multiplicative,
+>Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+
+        Unary,
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+        Lim
+>Lim : Symbol(OperatorPrecedence.Lim, Decl(parserRealSource10.ts, 159, 14))
+    }
+
+    export enum Reservation {
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+
+        None = 0,
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+
+        Javascript = 1,
+>Javascript : Symbol(Reservation.Javascript, Decl(parserRealSource10.ts, 164, 17))
+
+        JavascriptFuture = 2,
+>JavascriptFuture : Symbol(Reservation.JavascriptFuture, Decl(parserRealSource10.ts, 165, 23))
+
+        TypeScript = 4,
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+
+        JavascriptFutureStrict = 8,
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+
+        TypeScriptAndJS = Javascript | TypeScript,
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Javascript : Symbol(Reservation.Javascript, Decl(parserRealSource10.ts, 164, 17))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+
+        TypeScriptAndJSFuture = JavascriptFuture | TypeScript,
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>JavascriptFuture : Symbol(Reservation.JavascriptFuture, Decl(parserRealSource10.ts, 165, 23))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+
+        TypeScriptAndJSFutureStrict = JavascriptFutureStrict | TypeScript,
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+    }
+
+    export class TokenInfo {
+>TokenInfo : Symbol(TokenInfo, Decl(parserRealSource10.ts, 172, 5))
+
+        constructor (public tokenId: TokenID, public reservation: Reservation,
+>tokenId : Symbol(TokenInfo.tokenId, Decl(parserRealSource10.ts, 175, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>reservation : Symbol(TokenInfo.reservation, Decl(parserRealSource10.ts, 175, 45))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+
+                    public binopPrecedence: number, public binopNodeType: number,
+>binopPrecedence : Symbol(TokenInfo.binopPrecedence, Decl(parserRealSource10.ts, 175, 78))
+>binopNodeType : Symbol(TokenInfo.binopNodeType, Decl(parserRealSource10.ts, 176, 51))
+
+                    public unopPrecedence: number, public unopNodeType: number,
+>unopPrecedence : Symbol(TokenInfo.unopPrecedence, Decl(parserRealSource10.ts, 176, 81))
+>unopNodeType : Symbol(TokenInfo.unopNodeType, Decl(parserRealSource10.ts, 177, 50))
+
+                    public text: string, public ers: ErrorRecoverySet) { }
+>text : Symbol(TokenInfo.text, Decl(parserRealSource10.ts, 177, 79))
+>ers : Symbol(TokenInfo.ers, Decl(parserRealSource10.ts, 178, 40))
+>ErrorRecoverySet : Symbol(ErrorRecoverySet)
+    }
+
+    function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>reservation : Symbol(reservation, Decl(parserRealSource10.ts, 181, 43))
+>binopPrecedence : Symbol(binopPrecedence, Decl(parserRealSource10.ts, 181, 64))
+
+        binopNodeType: number, unopPrecedence: number, unopNodeType: number,
+>binopNodeType : Symbol(binopNodeType, Decl(parserRealSource10.ts, 181, 89))
+>unopPrecedence : Symbol(unopPrecedence, Decl(parserRealSource10.ts, 182, 30))
+>unopNodeType : Symbol(unopNodeType, Decl(parserRealSource10.ts, 182, 54))
+
+        text: string, ers: ErrorRecoverySet) {
+>text : Symbol(text, Decl(parserRealSource10.ts, 182, 76))
+>ers : Symbol(ers, Decl(parserRealSource10.ts, 183, 21))
+>ErrorRecoverySet : Symbol(ErrorRecoverySet)
+
+        if (tokenId !== undefined) {
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
+>undefined : Symbol(undefined)
+
+            tokenTable[tokenId] = new TokenInfo(tokenId, reservation, binopPrecedence,
+>tokenTable : Symbol(tokenTable, Decl(parserRealSource10.ts, 126, 14))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
+>TokenInfo : Symbol(TokenInfo, Decl(parserRealSource10.ts, 172, 5))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
+>reservation : Symbol(reservation, Decl(parserRealSource10.ts, 181, 43))
+>binopPrecedence : Symbol(binopPrecedence, Decl(parserRealSource10.ts, 181, 64))
+
+                                              binopNodeType, unopPrecedence, unopNodeType, text, ers);
+>binopNodeType : Symbol(binopNodeType, Decl(parserRealSource10.ts, 181, 89))
+>unopPrecedence : Symbol(unopPrecedence, Decl(parserRealSource10.ts, 182, 30))
+>unopNodeType : Symbol(unopNodeType, Decl(parserRealSource10.ts, 182, 54))
+>text : Symbol(text, Decl(parserRealSource10.ts, 182, 76))
+>ers : Symbol(ers, Decl(parserRealSource10.ts, 183, 21))
+
+            if (binopNodeType != NodeType.None) {
+>binopNodeType : Symbol(binopNodeType, Decl(parserRealSource10.ts, 181, 89))
+
+                nodeTypeTable[binopNodeType] = text;
+>nodeTypeTable : Symbol(nodeTypeTable, Decl(parserRealSource10.ts, 127, 14))
+>binopNodeType : Symbol(binopNodeType, Decl(parserRealSource10.ts, 181, 89))
+>text : Symbol(text, Decl(parserRealSource10.ts, 182, 76))
+
+                nodeTypeToTokTable[binopNodeType] = tokenId;
+>nodeTypeToTokTable : Symbol(nodeTypeToTokTable, Decl(parserRealSource10.ts, 128, 14))
+>binopNodeType : Symbol(binopNodeType, Decl(parserRealSource10.ts, 181, 89))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 181, 26))
+            }
+            if (unopNodeType != NodeType.None) {
+>unopNodeType : Symbol(unopNodeType, Decl(parserRealSource10.ts, 182, 54))
+
+                nodeTypeTable[unopNodeType] = text;
+>nodeTypeTable : Symbol(nodeTypeTable, Decl(parserRealSource10.ts, 127, 14))
+>unopNodeType : Symbol(unopNodeType, Decl(parserRealSource10.ts, 182, 54))
+>text : Symbol(text, Decl(parserRealSource10.ts, 182, 76))
+            }
+        }
+    }
+
+    setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Any : Symbol(TokenID.Any, Decl(parserRealSource10.ts, 6, 25))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Any : Symbol(TokenID.Any, Decl(parserRealSource10.ts, 6, 25))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Bool : Symbol(TokenID.Bool, Decl(parserRealSource10.ts, 8, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Bool : Symbol(TokenID.Bool, Decl(parserRealSource10.ts, 8, 12))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Break : Symbol(TokenID.Break, Decl(parserRealSource10.ts, 9, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Break : Symbol(TokenID.Break, Decl(parserRealSource10.ts, 9, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Case, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "case", ErrorRecoverySet.SCase);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Case : Symbol(TokenID.Case, Decl(parserRealSource10.ts, 10, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Case : Symbol(TokenID.Case, Decl(parserRealSource10.ts, 10, 14))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Catch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "catch", ErrorRecoverySet.Catch);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Catch : Symbol(TokenID.Catch, Decl(parserRealSource10.ts, 11, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Catch : Symbol(TokenID.Catch, Decl(parserRealSource10.ts, 11, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Class, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "class", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Class : Symbol(TokenID.Class, Decl(parserRealSource10.ts, 12, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Class : Symbol(TokenID.Class, Decl(parserRealSource10.ts, 12, 14))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Const, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "const", ErrorRecoverySet.Var);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Const : Symbol(TokenID.Const, Decl(parserRealSource10.ts, 13, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Const : Symbol(TokenID.Const, Decl(parserRealSource10.ts, 13, 14))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Continue, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "continue", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Continue : Symbol(TokenID.Continue, Decl(parserRealSource10.ts, 14, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Continue : Symbol(TokenID.Continue, Decl(parserRealSource10.ts, 14, 14))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Debugger, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.Debugger, "debugger", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Debugger : Symbol(TokenID.Debugger, Decl(parserRealSource10.ts, 15, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Debugger : Symbol(TokenID.Debugger, Decl(parserRealSource10.ts, 15, 17))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Default, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "default", ErrorRecoverySet.SCase);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Default : Symbol(TokenID.Default, Decl(parserRealSource10.ts, 16, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Default : Symbol(TokenID.Default, Decl(parserRealSource10.ts, 16, 17))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Delete, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Delete, "delete", ErrorRecoverySet.Prefix);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Delete : Symbol(TokenID.Delete, Decl(parserRealSource10.ts, 17, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Delete : Symbol(TokenID.Delete, Decl(parserRealSource10.ts, 17, 16))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.Do, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "do", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Do : Symbol(TokenID.Do, Decl(parserRealSource10.ts, 18, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Do : Symbol(TokenID.Do, Decl(parserRealSource10.ts, 18, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Else, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "else", ErrorRecoverySet.Else);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Else : Symbol(TokenID.Else, Decl(parserRealSource10.ts, 19, 11))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Else : Symbol(TokenID.Else, Decl(parserRealSource10.ts, 19, 11))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Enum, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "enum", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Enum : Symbol(TokenID.Enum, Decl(parserRealSource10.ts, 20, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Enum : Symbol(TokenID.Enum, Decl(parserRealSource10.ts, 20, 13))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Export, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "export", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Export : Symbol(TokenID.Export, Decl(parserRealSource10.ts, 21, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Export : Symbol(TokenID.Export, Decl(parserRealSource10.ts, 21, 13))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Extends, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "extends", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Extends : Symbol(TokenID.Extends, Decl(parserRealSource10.ts, 22, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Extends : Symbol(TokenID.Extends, Decl(parserRealSource10.ts, 22, 15))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Declare, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "declare", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Declare : Symbol(TokenID.Declare, Decl(parserRealSource10.ts, 23, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Declare : Symbol(TokenID.Declare, Decl(parserRealSource10.ts, 23, 16))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.False, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "false", ErrorRecoverySet.RLit);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>False : Symbol(TokenID.False, Decl(parserRealSource10.ts, 24, 16))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Finally, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "finally", ErrorRecoverySet.Catch);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Finally : Symbol(TokenID.Finally, Decl(parserRealSource10.ts, 25, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Finally : Symbol(TokenID.Finally, Decl(parserRealSource10.ts, 25, 14))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.For, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "for", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.For : Symbol(TokenID.For, Decl(parserRealSource10.ts, 26, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>For : Symbol(TokenID.For, Decl(parserRealSource10.ts, 26, 16))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Function, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "function", ErrorRecoverySet.Func);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Function : Symbol(TokenID.Function, Decl(parserRealSource10.ts, 27, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Function : Symbol(TokenID.Function, Decl(parserRealSource10.ts, 27, 12))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Constructor, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "constructor", ErrorRecoverySet.Func);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Constructor : Symbol(TokenID.Constructor, Decl(parserRealSource10.ts, 28, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Constructor : Symbol(TokenID.Constructor, Decl(parserRealSource10.ts, 28, 17))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Get, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "get", ErrorRecoverySet.Func);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Get : Symbol(TokenID.Get, Decl(parserRealSource10.ts, 29, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Get : Symbol(TokenID.Get, Decl(parserRealSource10.ts, 29, 20))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Set, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "set", ErrorRecoverySet.Func);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Set : Symbol(TokenID.Set, Decl(parserRealSource10.ts, 46, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Set : Symbol(TokenID.Set, Decl(parserRealSource10.ts, 46, 15))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.If, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "if", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.If : Symbol(TokenID.If, Decl(parserRealSource10.ts, 30, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>If : Symbol(TokenID.If, Decl(parserRealSource10.ts, 30, 12))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Implements, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "implements", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Implements : Symbol(TokenID.Implements, Decl(parserRealSource10.ts, 31, 11))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Implements : Symbol(TokenID.Implements, Decl(parserRealSource10.ts, 31, 11))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Import, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "import", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Import : Symbol(TokenID.Import, Decl(parserRealSource10.ts, 32, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Import : Symbol(TokenID.Import, Decl(parserRealSource10.ts, 32, 19))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.In, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.In, OperatorPrecedence.None, NodeType.None, "in", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.In : Symbol(TokenID.In, Decl(parserRealSource10.ts, 33, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>In : Symbol(TokenID.In, Decl(parserRealSource10.ts, 33, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.InstanceOf, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.InstOf, OperatorPrecedence.None, NodeType.None, "instanceof", ErrorRecoverySet.BinOp);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.InstanceOf : Symbol(TokenID.InstanceOf, Decl(parserRealSource10.ts, 34, 11))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>InstanceOf : Symbol(TokenID.InstanceOf, Decl(parserRealSource10.ts, 34, 11))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Interface, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "interface", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Interface : Symbol(TokenID.Interface, Decl(parserRealSource10.ts, 35, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Interface : Symbol(TokenID.Interface, Decl(parserRealSource10.ts, 35, 19))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Let, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "let", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Let : Symbol(TokenID.Let, Decl(parserRealSource10.ts, 36, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Let : Symbol(TokenID.Let, Decl(parserRealSource10.ts, 36, 18))
+>Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Module, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "module", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Module : Symbol(TokenID.Module, Decl(parserRealSource10.ts, 37, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Module : Symbol(TokenID.Module, Decl(parserRealSource10.ts, 37, 12))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.New, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "new", ErrorRecoverySet.PreOp);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.New : Symbol(TokenID.New, Decl(parserRealSource10.ts, 38, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>New : Symbol(TokenID.New, Decl(parserRealSource10.ts, 38, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Number, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "number", ErrorRecoverySet.PrimType);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Number : Symbol(TokenID.Number, Decl(parserRealSource10.ts, 39, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Number : Symbol(TokenID.Number, Decl(parserRealSource10.ts, 39, 12))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Null, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "null", ErrorRecoverySet.RLit);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Null : Symbol(TokenID.Null, Decl(parserRealSource10.ts, 40, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Null : Symbol(TokenID.Null, Decl(parserRealSource10.ts, 40, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Package, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "package", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Package : Symbol(TokenID.Package, Decl(parserRealSource10.ts, 41, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Package : Symbol(TokenID.Package, Decl(parserRealSource10.ts, 41, 13))
+>Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Private, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "private", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Private : Symbol(TokenID.Private, Decl(parserRealSource10.ts, 42, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Private : Symbol(TokenID.Private, Decl(parserRealSource10.ts, 42, 16))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Protected, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "protected", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Protected : Symbol(TokenID.Protected, Decl(parserRealSource10.ts, 43, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Protected : Symbol(TokenID.Protected, Decl(parserRealSource10.ts, 43, 16))
+>Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Public, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "public", ErrorRecoverySet.TypeScriptS);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Public : Symbol(TokenID.Public, Decl(parserRealSource10.ts, 44, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Public : Symbol(TokenID.Public, Decl(parserRealSource10.ts, 44, 18))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Return, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "return", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Return : Symbol(TokenID.Return, Decl(parserRealSource10.ts, 45, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Return : Symbol(TokenID.Return, Decl(parserRealSource10.ts, 45, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Static, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "static", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Static : Symbol(TokenID.Static, Decl(parserRealSource10.ts, 47, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Static : Symbol(TokenID.Static, Decl(parserRealSource10.ts, 47, 12))
+>Reservation.TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFutureStrict : Symbol(Reservation.TypeScriptAndJSFutureStrict, Decl(parserRealSource10.ts, 170, 62))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.String, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "string", ErrorRecoverySet.PrimType);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.String : Symbol(TokenID.String, Decl(parserRealSource10.ts, 48, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>String : Symbol(TokenID.String, Decl(parserRealSource10.ts, 48, 15))
+>Reservation.TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScript : Symbol(Reservation.TypeScript, Decl(parserRealSource10.ts, 166, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Super, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "super", ErrorRecoverySet.RLit);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Super : Symbol(TokenID.Super, Decl(parserRealSource10.ts, 49, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Super : Symbol(TokenID.Super, Decl(parserRealSource10.ts, 49, 15))
+>Reservation.TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJSFuture : Symbol(Reservation.TypeScriptAndJSFuture, Decl(parserRealSource10.ts, 169, 50))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Switch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "switch", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Switch : Symbol(TokenID.Switch, Decl(parserRealSource10.ts, 50, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Switch : Symbol(TokenID.Switch, Decl(parserRealSource10.ts, 50, 14))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.This, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "this", ErrorRecoverySet.RLit);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>This : Symbol(TokenID.This, Decl(parserRealSource10.ts, 51, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Throw, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "throw", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Throw : Symbol(TokenID.Throw, Decl(parserRealSource10.ts, 52, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Throw : Symbol(TokenID.Throw, Decl(parserRealSource10.ts, 52, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.True, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "true", ErrorRecoverySet.RLit);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>True : Symbol(TokenID.True, Decl(parserRealSource10.ts, 53, 14))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Try, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "try", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Try : Symbol(TokenID.Try, Decl(parserRealSource10.ts, 54, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Try : Symbol(TokenID.Try, Decl(parserRealSource10.ts, 54, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.TypeOf, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Typeof, "typeof", ErrorRecoverySet.Prefix);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.TypeOf : Symbol(TokenID.TypeOf, Decl(parserRealSource10.ts, 55, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TypeOf : Symbol(TokenID.TypeOf, Decl(parserRealSource10.ts, 55, 12))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.Var, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "var", ErrorRecoverySet.Var);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Var : Symbol(TokenID.Var, Decl(parserRealSource10.ts, 56, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Var : Symbol(TokenID.Var, Decl(parserRealSource10.ts, 56, 15))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Void, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Void, "void", ErrorRecoverySet.Prefix);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Void : Symbol(TokenID.Void, Decl(parserRealSource10.ts, 57, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Void : Symbol(TokenID.Void, Decl(parserRealSource10.ts, 57, 12))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.With : Symbol(TokenID.With, Decl(parserRealSource10.ts, 58, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>With : Symbol(TokenID.With, Decl(parserRealSource10.ts, 58, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.While : Symbol(TokenID.While, Decl(parserRealSource10.ts, 59, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>While : Symbol(TokenID.While, Decl(parserRealSource10.ts, 59, 13))
+>Reservation.TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>TypeScriptAndJS : Symbol(Reservation.TypeScriptAndJS, Decl(parserRealSource10.ts, 168, 35))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Yield : Symbol(TokenID.Yield, Decl(parserRealSource10.ts, 60, 14))
+>Reservation.JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>JavascriptFutureStrict : Symbol(Reservation.JavascriptFutureStrict, Decl(parserRealSource10.ts, 167, 23))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal);
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    // Non-operator non-identifier tokens
+    setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon); // ;
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Semicolon : Symbol(TokenID.Semicolon, Decl(parserRealSource10.ts, 61, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Semicolon : Symbol(TokenID.Semicolon, Decl(parserRealSource10.ts, 61, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen); // )
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseParen : Symbol(TokenID.CloseParen, Decl(parserRealSource10.ts, 64, 18))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.CloseBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "]", ErrorRecoverySet.RBrack); // ]
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseBracket : Symbol(TokenID.CloseBracket, Decl(parserRealSource10.ts, 66, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly); // {
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.OpenBrace : Symbol(TokenID.OpenBrace, Decl(parserRealSource10.ts, 67, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>OpenBrace : Symbol(TokenID.OpenBrace, Decl(parserRealSource10.ts, 67, 21))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly); // }
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CloseBrace : Symbol(TokenID.CloseBrace, Decl(parserRealSource10.ts, 68, 18))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None); // ...
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.DotDotDot : Symbol(TokenID.DotDotDot, Decl(parserRealSource10.ts, 110, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>DotDotDot : Symbol(TokenID.DotDotDot, Decl(parserRealSource10.ts, 110, 12))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    // Operator non-identifier tokens
+    setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma); // ,
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Comma : Symbol(TokenID.Comma, Decl(parserRealSource10.ts, 69, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Comma : Symbol(TokenID.Comma, Decl(parserRealSource10.ts, 69, 19))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Comma : Symbol(OperatorPrecedence.Comma, Decl(parserRealSource10.ts, 145, 13))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Comma : Symbol(OperatorPrecedence.Comma, Decl(parserRealSource10.ts, 145, 13))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg); // =
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Equals : Symbol(TokenID.Equals, Decl(parserRealSource10.ts, 70, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Equals : Symbol(TokenID.Equals, Decl(parserRealSource10.ts, 70, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp); // +=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.PlusEquals : Symbol(TokenID.PlusEquals, Decl(parserRealSource10.ts, 71, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>PlusEquals : Symbol(TokenID.PlusEquals, Decl(parserRealSource10.ts, 71, 15))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp); // -=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.MinusEquals : Symbol(TokenID.MinusEquals, Decl(parserRealSource10.ts, 72, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>MinusEquals : Symbol(TokenID.MinusEquals, Decl(parserRealSource10.ts, 72, 19))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp); // *=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.AsteriskEquals : Symbol(TokenID.AsteriskEquals, Decl(parserRealSource10.ts, 73, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>AsteriskEquals : Symbol(TokenID.AsteriskEquals, Decl(parserRealSource10.ts, 73, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp); // /=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.SlashEquals : Symbol(TokenID.SlashEquals, Decl(parserRealSource10.ts, 74, 23))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>SlashEquals : Symbol(TokenID.SlashEquals, Decl(parserRealSource10.ts, 74, 23))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp); // %=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.PercentEquals : Symbol(TokenID.PercentEquals, Decl(parserRealSource10.ts, 75, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>PercentEquals : Symbol(TokenID.PercentEquals, Decl(parserRealSource10.ts, 75, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp); // &=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.AmpersandEquals : Symbol(TokenID.AmpersandEquals, Decl(parserRealSource10.ts, 76, 22))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>AmpersandEquals : Symbol(TokenID.AmpersandEquals, Decl(parserRealSource10.ts, 76, 22))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.CaretEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgXor, OperatorPrecedence.None, NodeType.None, "^=", ErrorRecoverySet.BinOp); // ^=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.CaretEquals : Symbol(TokenID.CaretEquals, Decl(parserRealSource10.ts, 77, 24))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>CaretEquals : Symbol(TokenID.CaretEquals, Decl(parserRealSource10.ts, 77, 24))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.BarEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgOr, OperatorPrecedence.None, NodeType.None, "|=", ErrorRecoverySet.BinOp); // |=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.BarEquals : Symbol(TokenID.BarEquals, Decl(parserRealSource10.ts, 78, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>BarEquals : Symbol(TokenID.BarEquals, Decl(parserRealSource10.ts, 78, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.LessThanLessThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgLsh, OperatorPrecedence.None, NodeType.None, "<<=", ErrorRecoverySet.BinOp); // <<=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.LessThanLessThanEquals : Symbol(TokenID.LessThanLessThanEquals, Decl(parserRealSource10.ts, 79, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LessThanLessThanEquals : Symbol(TokenID.LessThanLessThanEquals, Decl(parserRealSource10.ts, 79, 18))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRsh, OperatorPrecedence.None, NodeType.None, ">>=", ErrorRecoverySet.BinOp); // >>=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 80, 31))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 80, 31))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRs2, OperatorPrecedence.None, NodeType.None, ">>>=", ErrorRecoverySet.BinOp); // >>>=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThanGreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 81, 37))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThanGreaterThanGreaterThanEquals : Symbol(TokenID.GreaterThanGreaterThanGreaterThanEquals, Decl(parserRealSource10.ts, 81, 37))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Assignment : Symbol(OperatorPrecedence.Assignment, Decl(parserRealSource10.ts, 146, 14))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Question, Reservation.None, OperatorPrecedence.Conditional, NodeType.ConditionalExpression, OperatorPrecedence.None, NodeType.None, "?", ErrorRecoverySet.BinOp); // ?
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Question : Symbol(TokenID.Question, Decl(parserRealSource10.ts, 82, 48))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Question : Symbol(TokenID.Question, Decl(parserRealSource10.ts, 82, 48))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Conditional : Symbol(OperatorPrecedence.Conditional, Decl(parserRealSource10.ts, 147, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Conditional : Symbol(OperatorPrecedence.Conditional, Decl(parserRealSource10.ts, 147, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Colon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ":", ErrorRecoverySet.Colon); // :
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Colon : Symbol(TokenID.Colon, Decl(parserRealSource10.ts, 83, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Colon : Symbol(TokenID.Colon, Decl(parserRealSource10.ts, 83, 17))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.BarBar, Reservation.None, OperatorPrecedence.LogicalOr, NodeType.LogOr, OperatorPrecedence.None, NodeType.None, "||", ErrorRecoverySet.BinOp); // ||
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.BarBar : Symbol(TokenID.BarBar, Decl(parserRealSource10.ts, 84, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>BarBar : Symbol(TokenID.BarBar, Decl(parserRealSource10.ts, 84, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.LogicalOr : Symbol(OperatorPrecedence.LogicalOr, Decl(parserRealSource10.ts, 148, 20))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>LogicalOr : Symbol(OperatorPrecedence.LogicalOr, Decl(parserRealSource10.ts, 148, 20))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.AmpersandAmpersand, Reservation.None, OperatorPrecedence.LogicalAnd, NodeType.LogAnd, OperatorPrecedence.None, NodeType.None, "&&", ErrorRecoverySet.BinOp); // &&
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.AmpersandAmpersand : Symbol(TokenID.AmpersandAmpersand, Decl(parserRealSource10.ts, 85, 15))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>AmpersandAmpersand : Symbol(TokenID.AmpersandAmpersand, Decl(parserRealSource10.ts, 85, 15))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.LogicalAnd : Symbol(OperatorPrecedence.LogicalAnd, Decl(parserRealSource10.ts, 149, 18))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>LogicalAnd : Symbol(OperatorPrecedence.LogicalAnd, Decl(parserRealSource10.ts, 149, 18))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Bar, Reservation.None, OperatorPrecedence.BitwiseOr, NodeType.Or, OperatorPrecedence.None, NodeType.None, "|", ErrorRecoverySet.BinOp); // |
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Bar : Symbol(TokenID.Bar, Decl(parserRealSource10.ts, 86, 27))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Bar : Symbol(TokenID.Bar, Decl(parserRealSource10.ts, 86, 27))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.BitwiseOr : Symbol(OperatorPrecedence.BitwiseOr, Decl(parserRealSource10.ts, 150, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>BitwiseOr : Symbol(OperatorPrecedence.BitwiseOr, Decl(parserRealSource10.ts, 150, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Caret, Reservation.None, OperatorPrecedence.BitwiseExclusiveOr, NodeType.Xor, OperatorPrecedence.None, NodeType.None, "^", ErrorRecoverySet.BinOp); // ^
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Caret : Symbol(TokenID.Caret, Decl(parserRealSource10.ts, 87, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Caret : Symbol(TokenID.Caret, Decl(parserRealSource10.ts, 87, 12))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.BitwiseExclusiveOr : Symbol(OperatorPrecedence.BitwiseExclusiveOr, Decl(parserRealSource10.ts, 151, 18))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>BitwiseExclusiveOr : Symbol(OperatorPrecedence.BitwiseExclusiveOr, Decl(parserRealSource10.ts, 151, 18))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.And, Reservation.None, OperatorPrecedence.BitwiseAnd, NodeType.And, OperatorPrecedence.None, NodeType.None, "&", ErrorRecoverySet.BinOp); // &
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.And : Symbol(TokenID.And, Decl(parserRealSource10.ts, 88, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>And : Symbol(TokenID.And, Decl(parserRealSource10.ts, 88, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.BitwiseAnd : Symbol(OperatorPrecedence.BitwiseAnd, Decl(parserRealSource10.ts, 152, 27))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>BitwiseAnd : Symbol(OperatorPrecedence.BitwiseAnd, Decl(parserRealSource10.ts, 152, 27))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.EqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eq, OperatorPrecedence.None, NodeType.None, "==", ErrorRecoverySet.BinOp); // ==
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.EqualsEquals : Symbol(TokenID.EqualsEquals, Decl(parserRealSource10.ts, 89, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>EqualsEquals : Symbol(TokenID.EqualsEquals, Decl(parserRealSource10.ts, 89, 12))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.ExclamationEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Ne, OperatorPrecedence.None, NodeType.None, "!=", ErrorRecoverySet.BinOp); // !=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.ExclamationEquals : Symbol(TokenID.ExclamationEquals, Decl(parserRealSource10.ts, 90, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>ExclamationEquals : Symbol(TokenID.ExclamationEquals, Decl(parserRealSource10.ts, 90, 21))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.EqualsEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eqv, OperatorPrecedence.None, NodeType.None, "===", ErrorRecoverySet.BinOp); // ===
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.EqualsEqualsEquals : Symbol(TokenID.EqualsEqualsEquals, Decl(parserRealSource10.ts, 91, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>EqualsEqualsEquals : Symbol(TokenID.EqualsEqualsEquals, Decl(parserRealSource10.ts, 91, 26))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.ExclamationEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.NEqv, OperatorPrecedence.None, NodeType.None, "!==", ErrorRecoverySet.BinOp); // !==
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.ExclamationEqualsEquals : Symbol(TokenID.ExclamationEqualsEquals, Decl(parserRealSource10.ts, 92, 27))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>ExclamationEqualsEquals : Symbol(TokenID.ExclamationEqualsEquals, Decl(parserRealSource10.ts, 92, 27))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Equality : Symbol(OperatorPrecedence.Equality, Decl(parserRealSource10.ts, 153, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.LessThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Lt, OperatorPrecedence.None, NodeType.None, "<", ErrorRecoverySet.BinOp); // <
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.LessThan : Symbol(TokenID.LessThan, Decl(parserRealSource10.ts, 93, 32))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LessThan : Symbol(TokenID.LessThan, Decl(parserRealSource10.ts, 93, 32))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.LessThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Le, OperatorPrecedence.None, NodeType.None, "<=", ErrorRecoverySet.BinOp); // <=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.LessThanEquals : Symbol(TokenID.LessThanEquals, Decl(parserRealSource10.ts, 94, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LessThanEquals : Symbol(TokenID.LessThanEquals, Decl(parserRealSource10.ts, 94, 17))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Gt, OperatorPrecedence.None, NodeType.None, ">", ErrorRecoverySet.BinOp); // >
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThan : Symbol(TokenID.GreaterThan, Decl(parserRealSource10.ts, 95, 23))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThan : Symbol(TokenID.GreaterThan, Decl(parserRealSource10.ts, 95, 23))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Ge, OperatorPrecedence.None, NodeType.None, ">=", ErrorRecoverySet.BinOp); // >=
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThanEquals : Symbol(TokenID.GreaterThanEquals, Decl(parserRealSource10.ts, 96, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThanEquals : Symbol(TokenID.GreaterThanEquals, Decl(parserRealSource10.ts, 96, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Relational : Symbol(OperatorPrecedence.Relational, Decl(parserRealSource10.ts, 154, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.LessThanLessThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Lsh, OperatorPrecedence.None, NodeType.None, "<<", ErrorRecoverySet.BinOp); // <<
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.LessThanLessThan : Symbol(TokenID.LessThanLessThan, Decl(parserRealSource10.ts, 97, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LessThanLessThan : Symbol(TokenID.LessThanLessThan, Decl(parserRealSource10.ts, 97, 26))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rsh, OperatorPrecedence.None, NodeType.None, ">>", ErrorRecoverySet.BinOp); // >>
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThan, Decl(parserRealSource10.ts, 98, 25))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThan, Decl(parserRealSource10.ts, 98, 25))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rs2, OperatorPrecedence.None, NodeType.None, ">>>", ErrorRecoverySet.BinOp); // >>>
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.GreaterThanGreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThanGreaterThan, Decl(parserRealSource10.ts, 99, 31))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>GreaterThanGreaterThanGreaterThan : Symbol(TokenID.GreaterThanGreaterThanGreaterThan, Decl(parserRealSource10.ts, 99, 31))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Shift : Symbol(OperatorPrecedence.Shift, Decl(parserRealSource10.ts, 155, 19))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Plus, Reservation.None, OperatorPrecedence.Additive, NodeType.Add, OperatorPrecedence.Unary, NodeType.Pos, "+", ErrorRecoverySet.AddOp); // +
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Plus : Symbol(TokenID.Plus, Decl(parserRealSource10.ts, 100, 42))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Plus : Symbol(TokenID.Plus, Decl(parserRealSource10.ts, 100, 42))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Additive : Symbol(OperatorPrecedence.Additive, Decl(parserRealSource10.ts, 156, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Additive : Symbol(OperatorPrecedence.Additive, Decl(parserRealSource10.ts, 156, 14))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.Minus, Reservation.None, OperatorPrecedence.Additive, NodeType.Sub, OperatorPrecedence.Unary, NodeType.Neg, "-", ErrorRecoverySet.AddOp); // -
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Minus : Symbol(TokenID.Minus, Decl(parserRealSource10.ts, 101, 13))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Minus : Symbol(TokenID.Minus, Decl(parserRealSource10.ts, 101, 13))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Additive : Symbol(OperatorPrecedence.Additive, Decl(parserRealSource10.ts, 156, 14))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Additive : Symbol(OperatorPrecedence.Additive, Decl(parserRealSource10.ts, 156, 14))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.Asterisk, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mul, OperatorPrecedence.None, NodeType.None, "*", ErrorRecoverySet.BinOp); // *
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Asterisk : Symbol(TokenID.Asterisk, Decl(parserRealSource10.ts, 102, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Asterisk : Symbol(TokenID.Asterisk, Decl(parserRealSource10.ts, 102, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Slash, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Div, OperatorPrecedence.None, NodeType.None, "/", ErrorRecoverySet.BinOp); // /
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Slash : Symbol(TokenID.Slash, Decl(parserRealSource10.ts, 103, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Slash : Symbol(TokenID.Slash, Decl(parserRealSource10.ts, 103, 17))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Percent, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mod, OperatorPrecedence.None, NodeType.None, "%", ErrorRecoverySet.BinOp); // %
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Percent : Symbol(TokenID.Percent, Decl(parserRealSource10.ts, 104, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Percent : Symbol(TokenID.Percent, Decl(parserRealSource10.ts, 104, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Multiplicative : Symbol(OperatorPrecedence.Multiplicative, Decl(parserRealSource10.ts, 157, 17))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Tilde, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Not, "~", ErrorRecoverySet.PreOp); // ~
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Tilde : Symbol(TokenID.Tilde, Decl(parserRealSource10.ts, 105, 16))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Tilde : Symbol(TokenID.Tilde, Decl(parserRealSource10.ts, 105, 16))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.Exclamation, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.LogNot, "!", ErrorRecoverySet.PreOp); // !
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Exclamation : Symbol(TokenID.Exclamation, Decl(parserRealSource10.ts, 106, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Exclamation : Symbol(TokenID.Exclamation, Decl(parserRealSource10.ts, 106, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.PlusPlus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.IncPre, "++", ErrorRecoverySet.PreOp); // ++
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>PlusPlus : Symbol(TokenID.PlusPlus, Decl(parserRealSource10.ts, 107, 20))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.MinusMinus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.DecPre, "--", ErrorRecoverySet.PreOp); // --
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>MinusMinus : Symbol(TokenID.MinusMinus, Decl(parserRealSource10.ts, 108, 17))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+
+    setTokenInfo(TokenID.OpenParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "(", ErrorRecoverySet.LParen); // (
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.OpenParen : Symbol(TokenID.OpenParen, Decl(parserRealSource10.ts, 63, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>OpenParen : Symbol(TokenID.OpenParen, Decl(parserRealSource10.ts, 63, 18))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.OpenBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "[", ErrorRecoverySet.LBrack); // [
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.OpenBracket : Symbol(TokenID.OpenBracket, Decl(parserRealSource10.ts, 65, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>OpenBracket : Symbol(TokenID.OpenBracket, Decl(parserRealSource10.ts, 65, 19))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot); // .
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.Dot : Symbol(TokenID.Dot, Decl(parserRealSource10.ts, 109, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Dot : Symbol(TokenID.Dot, Decl(parserRealSource10.ts, 109, 19))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>Unary : Symbol(OperatorPrecedence.Unary, Decl(parserRealSource10.ts, 158, 23))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF); // EOF
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.EndOfFile : Symbol(TokenID.EndOfFile, Decl(parserRealSource10.ts, 112, 14))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>EndOfFile : Symbol(TokenID.EndOfFile, Decl(parserRealSource10.ts, 112, 14))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None); // =>
+>setTokenInfo : Symbol(setTokenInfo, Decl(parserRealSource10.ts, 179, 5))
+>TokenID.EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>EqualsGreaterThan : Symbol(TokenID.EqualsGreaterThan, Decl(parserRealSource10.ts, 113, 18))
+>Reservation.None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>Reservation : Symbol(Reservation, Decl(parserRealSource10.ts, 161, 5))
+>None : Symbol(Reservation.None, Decl(parserRealSource10.ts, 163, 29))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence.None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+>OperatorPrecedence : Symbol(OperatorPrecedence, Decl(parserRealSource10.ts, 142, 39))
+>None : Symbol(OperatorPrecedence.None, Decl(parserRealSource10.ts, 144, 36))
+
+    export function lookupToken(tokenId: TokenID): TokenInfo {
+>lookupToken : Symbol(lookupToken, Decl(parserRealSource10.ts, 311, 171))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 313, 32))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>TokenInfo : Symbol(TokenInfo, Decl(parserRealSource10.ts, 172, 5))
+
+        return tokenTable[tokenId];
+>tokenTable : Symbol(tokenTable, Decl(parserRealSource10.ts, 126, 14))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 313, 32))
+    }
+
+    export enum TokenClass {
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+        Punctuation,
+>Punctuation : Symbol(TokenClass.Punctuation, Decl(parserRealSource10.ts, 317, 28))
+
+        Keyword,
+>Keyword : Symbol(TokenClass.Keyword, Decl(parserRealSource10.ts, 318, 20))
+
+        Operator,
+>Operator : Symbol(TokenClass.Operator, Decl(parserRealSource10.ts, 319, 16))
+
+        Comment,
+>Comment : Symbol(TokenClass.Comment, Decl(parserRealSource10.ts, 320, 17))
+
+        Whitespace,
+>Whitespace : Symbol(TokenClass.Whitespace, Decl(parserRealSource10.ts, 321, 16))
+
+        Identifier,
+>Identifier : Symbol(TokenClass.Identifier, Decl(parserRealSource10.ts, 322, 19))
+
+        Literal,
+>Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+    }
+
+    export class SavedToken {
+>SavedToken : Symbol(SavedToken, Decl(parserRealSource10.ts, 325, 5))
+
+        constructor (public tok: Token, public minChar: number, public limChar: number) { }
+>tok : Symbol(SavedToken.tok, Decl(parserRealSource10.ts, 328, 21))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>minChar : Symbol(SavedToken.minChar, Decl(parserRealSource10.ts, 328, 39))
+>limChar : Symbol(SavedToken.limChar, Decl(parserRealSource10.ts, 328, 63))
+    }
+
+    export class Token {
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (public tokenId: TokenID) {
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+        }
+
+        public toString() {
+>toString : Symbol(Token.toString, Decl(parserRealSource10.ts, 333, 9))
+
+            return "token: " + this.tokenId + " " + this.getText() + " (" + (<any>TokenID)._map[this.tokenId] + ")";
+>this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this.getText : Symbol(Token.getText, Decl(parserRealSource10.ts, 341, 9))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>getText : Symbol(Token.getText, Decl(parserRealSource10.ts, 341, 9))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+        }
+
+        public print(line: number, outfile) {
+>print : Symbol(Token.print, Decl(parserRealSource10.ts, 337, 9))
+>line : Symbol(line, Decl(parserRealSource10.ts, 339, 21))
+>outfile : Symbol(outfile, Decl(parserRealSource10.ts, 339, 34))
+
+            outfile.WriteLine(this.toString() + ",on line" + line);
+>outfile : Symbol(outfile, Decl(parserRealSource10.ts, 339, 34))
+>this.toString : Symbol(Token.toString, Decl(parserRealSource10.ts, 333, 9))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>toString : Symbol(Token.toString, Decl(parserRealSource10.ts, 333, 9))
+>line : Symbol(line, Decl(parserRealSource10.ts, 339, 21))
+        }
+
+        public getText(): string {
+>getText : Symbol(Token.getText, Decl(parserRealSource10.ts, 341, 9))
+
+            return tokenTable[this.tokenId].text;
+>tokenTable : Symbol(tokenTable, Decl(parserRealSource10.ts, 126, 14))
+>this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(Token.classification, Decl(parserRealSource10.ts, 345, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            if (this.tokenId <= TokenID.LimKeyword) {
+>this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>TokenID.LimKeyword : Symbol(TokenID.LimKeyword, Decl(parserRealSource10.ts, 122, 37))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LimKeyword : Symbol(TokenID.LimKeyword, Decl(parserRealSource10.ts, 122, 37))
+
+                return TokenClass.Keyword;
+>TokenClass.Keyword : Symbol(TokenClass.Keyword, Decl(parserRealSource10.ts, 318, 20))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Keyword : Symbol(TokenClass.Keyword, Decl(parserRealSource10.ts, 318, 20))
+            }
+            else {
+                var tokenInfo = lookupToken(this.tokenId);
+>tokenInfo : Symbol(tokenInfo, Decl(parserRealSource10.ts, 352, 19))
+>lookupToken : Symbol(lookupToken, Decl(parserRealSource10.ts, 311, 171))
+>this.tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+>this : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(Token.tokenId, Decl(parserRealSource10.ts, 332, 21))
+
+                if (tokenInfo != undefined) {
+>tokenInfo : Symbol(tokenInfo, Decl(parserRealSource10.ts, 352, 19))
+>undefined : Symbol(undefined)
+
+                    if ((tokenInfo.unopNodeType != NodeType.None) ||
+>tokenInfo.unopNodeType : Symbol(TokenInfo.unopNodeType, Decl(parserRealSource10.ts, 177, 50))
+>tokenInfo : Symbol(tokenInfo, Decl(parserRealSource10.ts, 352, 19))
+>unopNodeType : Symbol(TokenInfo.unopNodeType, Decl(parserRealSource10.ts, 177, 50))
+
+                        (tokenInfo.binopNodeType != NodeType.None)) {
+>tokenInfo.binopNodeType : Symbol(TokenInfo.binopNodeType, Decl(parserRealSource10.ts, 176, 51))
+>tokenInfo : Symbol(tokenInfo, Decl(parserRealSource10.ts, 352, 19))
+>binopNodeType : Symbol(TokenInfo.binopNodeType, Decl(parserRealSource10.ts, 176, 51))
+
+                        return TokenClass.Operator;
+>TokenClass.Operator : Symbol(TokenClass.Operator, Decl(parserRealSource10.ts, 319, 16))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Operator : Symbol(TokenClass.Operator, Decl(parserRealSource10.ts, 319, 16))
+                    }
+                }
+            }
+
+            return TokenClass.Punctuation;
+>TokenClass.Punctuation : Symbol(TokenClass.Punctuation, Decl(parserRealSource10.ts, 317, 28))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Punctuation : Symbol(TokenClass.Punctuation, Decl(parserRealSource10.ts, 317, 28))
+        }
+    }
+
+    export class NumberLiteralToken extends Token {
+>NumberLiteralToken : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (public value: number, public hasEmptyFraction?: boolean) {
+>value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
+>hasEmptyFraction : Symbol(NumberLiteralToken.hasEmptyFraction, Decl(parserRealSource10.ts, 366, 42))
+
+            super(TokenID.NumberLiteral);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>TokenID.NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>NumberLiteral : Symbol(TokenID.NumberLiteral, Decl(parserRealSource10.ts, 117, 33))
+        }
+
+        public getText(): string {
+>getText : Symbol(NumberLiteralToken.getText, Decl(parserRealSource10.ts, 368, 9))
+
+            return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
+>this.hasEmptyFraction : Symbol(NumberLiteralToken.hasEmptyFraction, Decl(parserRealSource10.ts, 366, 42))
+>this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
+>hasEmptyFraction : Symbol(NumberLiteralToken.hasEmptyFraction, Decl(parserRealSource10.ts, 366, 42))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>this.value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
+>this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
+>value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>this.value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
+>this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
+>value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(NumberLiteralToken.classification, Decl(parserRealSource10.ts, 372, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Literal;
+>TokenClass.Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+        }
+    }
+
+    export class StringLiteralToken extends Token {
+>StringLiteralToken : Symbol(StringLiteralToken, Decl(parserRealSource10.ts, 377, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (public value: string) {
+>value : Symbol(StringLiteralToken.value, Decl(parserRealSource10.ts, 380, 21))
+
+            super(TokenID.StringLiteral);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>TokenID.StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>StringLiteral : Symbol(TokenID.StringLiteral, Decl(parserRealSource10.ts, 115, 19))
+        }
+
+        public getText(): string {
+>getText : Symbol(StringLiteralToken.getText, Decl(parserRealSource10.ts, 382, 9))
+
+            return this.value;
+>this.value : Symbol(StringLiteralToken.value, Decl(parserRealSource10.ts, 380, 21))
+>this : Symbol(StringLiteralToken, Decl(parserRealSource10.ts, 377, 5))
+>value : Symbol(StringLiteralToken.value, Decl(parserRealSource10.ts, 380, 21))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(StringLiteralToken.classification, Decl(parserRealSource10.ts, 386, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Literal;
+>TokenClass.Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+        }
+    }
+
+    export class IdentifierToken extends Token {
+>IdentifierToken : Symbol(IdentifierToken, Decl(parserRealSource10.ts, 391, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (public value: string, public hasEscapeSequence : boolean) {
+>value : Symbol(IdentifierToken.value, Decl(parserRealSource10.ts, 394, 21))
+>hasEscapeSequence : Symbol(IdentifierToken.hasEscapeSequence, Decl(parserRealSource10.ts, 394, 42))
+
+            super(TokenID.Identifier);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>TokenID.Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>Identifier : Symbol(TokenID.Identifier, Decl(parserRealSource10.ts, 114, 26))
+        }
+        public getText(): string {
+>getText : Symbol(IdentifierToken.getText, Decl(parserRealSource10.ts, 396, 9))
+
+            return this.value;
+>this.value : Symbol(IdentifierToken.value, Decl(parserRealSource10.ts, 394, 21))
+>this : Symbol(IdentifierToken, Decl(parserRealSource10.ts, 391, 5))
+>value : Symbol(IdentifierToken.value, Decl(parserRealSource10.ts, 394, 21))
+        }
+        public classification(): TokenClass {
+>classification : Symbol(IdentifierToken.classification, Decl(parserRealSource10.ts, 399, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Identifier;
+>TokenClass.Identifier : Symbol(TokenClass.Identifier, Decl(parserRealSource10.ts, 322, 19))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Identifier : Symbol(TokenClass.Identifier, Decl(parserRealSource10.ts, 322, 19))
+        }
+    }
+
+    export class WhitespaceToken extends Token {
+>WhitespaceToken : Symbol(WhitespaceToken, Decl(parserRealSource10.ts, 403, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (tokenId: TokenID, public value: string) {
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 406, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>value : Symbol(WhitespaceToken.value, Decl(parserRealSource10.ts, 406, 38))
+
+            super(tokenId);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenId : Symbol(tokenId, Decl(parserRealSource10.ts, 406, 21))
+        }
+
+        public getText(): string {
+>getText : Symbol(WhitespaceToken.getText, Decl(parserRealSource10.ts, 408, 9))
+
+            return this.value;
+>this.value : Symbol(WhitespaceToken.value, Decl(parserRealSource10.ts, 406, 38))
+>this : Symbol(WhitespaceToken, Decl(parserRealSource10.ts, 403, 5))
+>value : Symbol(WhitespaceToken.value, Decl(parserRealSource10.ts, 406, 38))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(WhitespaceToken.classification, Decl(parserRealSource10.ts, 412, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Whitespace;
+>TokenClass.Whitespace : Symbol(TokenClass.Whitespace, Decl(parserRealSource10.ts, 321, 16))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Whitespace : Symbol(TokenClass.Whitespace, Decl(parserRealSource10.ts, 321, 16))
+        }
+    }
+
+    export class CommentToken extends Token {
+>CommentToken : Symbol(CommentToken, Decl(parserRealSource10.ts, 417, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor (tokenID: TokenID, public value: string, public isBlock: boolean, public startPos: number, public line: number, public endsLine: boolean) {
+>tokenID : Symbol(tokenID, Decl(parserRealSource10.ts, 420, 21))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>value : Symbol(CommentToken.value, Decl(parserRealSource10.ts, 420, 38))
+>isBlock : Symbol(CommentToken.isBlock, Decl(parserRealSource10.ts, 420, 60))
+>startPos : Symbol(CommentToken.startPos, Decl(parserRealSource10.ts, 420, 85))
+>line : Symbol(CommentToken.line, Decl(parserRealSource10.ts, 420, 110))
+>endsLine : Symbol(CommentToken.endsLine, Decl(parserRealSource10.ts, 420, 131))
+
+            super(tokenID);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>tokenID : Symbol(tokenID, Decl(parserRealSource10.ts, 420, 21))
+        }
+
+        public getText(): string {
+>getText : Symbol(CommentToken.getText, Decl(parserRealSource10.ts, 422, 9))
+
+            return this.value;
+>this.value : Symbol(CommentToken.value, Decl(parserRealSource10.ts, 420, 38))
+>this : Symbol(CommentToken, Decl(parserRealSource10.ts, 417, 5))
+>value : Symbol(CommentToken.value, Decl(parserRealSource10.ts, 420, 38))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(CommentToken.classification, Decl(parserRealSource10.ts, 426, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Comment;
+>TokenClass.Comment : Symbol(TokenClass.Comment, Decl(parserRealSource10.ts, 320, 17))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Comment : Symbol(TokenClass.Comment, Decl(parserRealSource10.ts, 320, 17))
+        }
+    }
+
+    export class RegularExpressionLiteralToken extends Token {
+>RegularExpressionLiteralToken : Symbol(RegularExpressionLiteralToken, Decl(parserRealSource10.ts, 431, 5))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+        constructor(public regex) {
+>regex : Symbol(RegularExpressionLiteralToken.regex, Decl(parserRealSource10.ts, 434, 20))
+
+            super(TokenID.RegularExpressionLiteral);
+>super : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>TokenID.RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>RegularExpressionLiteral : Symbol(TokenID.RegularExpressionLiteral, Decl(parserRealSource10.ts, 116, 22))
+        }
+
+        public getText(): string {
+>getText : Symbol(RegularExpressionLiteralToken.getText, Decl(parserRealSource10.ts, 436, 9))
+
+            return this.regex.toString();
+>this.regex : Symbol(RegularExpressionLiteralToken.regex, Decl(parserRealSource10.ts, 434, 20))
+>this : Symbol(RegularExpressionLiteralToken, Decl(parserRealSource10.ts, 431, 5))
+>regex : Symbol(RegularExpressionLiteralToken.regex, Decl(parserRealSource10.ts, 434, 20))
+        }
+
+        public classification(): TokenClass {
+>classification : Symbol(RegularExpressionLiteralToken.classification, Decl(parserRealSource10.ts, 440, 9))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+
+            return TokenClass.Literal;
+>TokenClass.Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+>TokenClass : Symbol(TokenClass, Decl(parserRealSource10.ts, 315, 5))
+>Literal : Symbol(TokenClass.Literal, Decl(parserRealSource10.ts, 323, 19))
+        }
+    }
+
+    // TODO: new with length TokenID.LimFixed
+    export var staticTokens = new Token[];
+>staticTokens : Symbol(staticTokens, Decl(parserRealSource10.ts, 448, 14))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+
+    export function initializeStaticTokens() {
+>initializeStaticTokens : Symbol(initializeStaticTokens, Decl(parserRealSource10.ts, 448, 42))
+
+        for (var i = 0; i <= TokenID.LimFixed; i++) {
+>i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
+>i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
+>TokenID.LimFixed : Symbol(TokenID.LimFixed, Decl(parserRealSource10.ts, 121, 12))
+>TokenID : Symbol(TokenID, Decl(parserRealSource10.ts, 5, 19))
+>LimFixed : Symbol(TokenID.LimFixed, Decl(parserRealSource10.ts, 121, 12))
+>i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
+
+            staticTokens[i] = new Token(i);
+>staticTokens : Symbol(staticTokens, Decl(parserRealSource10.ts, 448, 14))
+>i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
+>Token : Symbol(Token, Decl(parserRealSource10.ts, 329, 5))
+>i : Symbol(i, Decl(parserRealSource10.ts, 450, 16))
+        }
+    }
+}

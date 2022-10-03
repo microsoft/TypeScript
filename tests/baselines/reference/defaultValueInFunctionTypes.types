@@ -1,0 +1,14 @@
+=== tests/cases/compiler/defaultValueInFunctionTypes.ts ===
+var x: (a: number = 1) => number;
+>x : (a?: number) => number
+>a : number
+>1 : 1
+
+var y = <(a : string = "") => any>(undefined)
+>y : (a?: string) => any
+><(a : string = "") => any>(undefined) : (a?: string) => any
+>a : string
+>"" : ""
+>(undefined) : undefined
+>undefined : undefined
+

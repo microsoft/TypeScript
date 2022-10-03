@@ -1,0 +1,43 @@
+=== tests/cases/conformance/salsa/npm-install.js ===
+function Installer () {
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+
+    this.args = 0
+>this.args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+}
+Installer.prototype.loadArgMetadata = function (next) {
+>Installer.prototype : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>loadArgMetadata : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
+>next : Symbol(next, Decl(npm-install.js, 3, 48))
+
+    // ArrowFunction isn't treated as a this-container
+    (args) => {
+>args : Symbol(args, Decl(npm-install.js, 5, 5))
+
+        this.args = 'hi'
+>this.args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+
+        this.newProperty = 1
+>this.newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
+    }
+}
+var i = new Installer()
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+
+i.newProperty = i.args // ok, number ==> number | undefined
+>i.newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
+>newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
+>i.args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
+>args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+

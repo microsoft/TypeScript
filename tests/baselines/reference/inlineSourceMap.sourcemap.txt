@@ -1,0 +1,60 @@
+===================================================================
+JsFile: inlineSourceMap.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiaW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMifQ==
+sourceRoot: 
+sources: inlineSourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/inlineSourceMap.js
+sourceFile:inlineSourceMap.ts
+-------------------------------------------------------------------
+>>>var x = 0;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^->
+1 >
+2 >var 
+3 >    x
+4 >      = 
+5 >        0
+6 >         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>console.log(x);
+1->
+2 >^^^^^^^
+3 >       ^
+4 >        ^^^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >console
+3 >       .
+4 >        log
+5 >           (
+6 >            x
+7 >             )
+8 >              ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+3 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+6 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+7 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+8 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiaW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMifQ==

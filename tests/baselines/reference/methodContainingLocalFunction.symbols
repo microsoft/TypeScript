@@ -1,0 +1,122 @@
+=== tests/cases/compiler/methodContainingLocalFunction.ts ===
+// The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
+class BugExhibition<T> {
+>BugExhibition : Symbol(BugExhibition, Decl(methodContainingLocalFunction.ts, 0, 0))
+>T : Symbol(T, Decl(methodContainingLocalFunction.ts, 1, 20))
+
+    public exhibitBug() {
+>exhibitBug : Symbol(BugExhibition.exhibitBug, Decl(methodContainingLocalFunction.ts, 1, 24))
+
+        function localFunction() { }
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 2, 25))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 4, 11))
+
+        x = localFunction;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 4, 11))
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 2, 25))
+    }
+}
+
+class BugExhibition2<T> {
+>BugExhibition2 : Symbol(BugExhibition2, Decl(methodContainingLocalFunction.ts, 7, 1))
+>T : Symbol(T, Decl(methodContainingLocalFunction.ts, 9, 21))
+
+    private static get exhibitBug() {
+>exhibitBug : Symbol(BugExhibition2.exhibitBug, Decl(methodContainingLocalFunction.ts, 9, 25))
+
+        function localFunction() { }
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 10, 37))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 12, 11))
+
+        x = localFunction;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 12, 11))
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 10, 37))
+
+        return null;
+    }
+}
+
+class BugExhibition3<T> {
+>BugExhibition3 : Symbol(BugExhibition3, Decl(methodContainingLocalFunction.ts, 16, 1))
+>T : Symbol(T, Decl(methodContainingLocalFunction.ts, 18, 21))
+
+    public exhibitBug() {
+>exhibitBug : Symbol(BugExhibition3.exhibitBug, Decl(methodContainingLocalFunction.ts, 18, 25))
+
+        function localGenericFunction<U>(u?: U) { }
+>localGenericFunction : Symbol(localGenericFunction, Decl(methodContainingLocalFunction.ts, 19, 25))
+>U : Symbol(U, Decl(methodContainingLocalFunction.ts, 20, 38))
+>u : Symbol(u, Decl(methodContainingLocalFunction.ts, 20, 41))
+>U : Symbol(U, Decl(methodContainingLocalFunction.ts, 20, 38))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 21, 11))
+
+        x = localGenericFunction;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 21, 11))
+>localGenericFunction : Symbol(localGenericFunction, Decl(methodContainingLocalFunction.ts, 19, 25))
+    }
+}
+
+class C {
+>C : Symbol(C, Decl(methodContainingLocalFunction.ts, 24, 1))
+
+    exhibit() {
+>exhibit : Symbol(C.exhibit, Decl(methodContainingLocalFunction.ts, 26, 9))
+
+        var funcExpr = <U>(u?: U) => { };
+>funcExpr : Symbol(funcExpr, Decl(methodContainingLocalFunction.ts, 28, 11))
+>U : Symbol(U, Decl(methodContainingLocalFunction.ts, 28, 24))
+>u : Symbol(u, Decl(methodContainingLocalFunction.ts, 28, 27))
+>U : Symbol(U, Decl(methodContainingLocalFunction.ts, 28, 24))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 29, 11))
+
+        x = funcExpr;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 29, 11))
+>funcExpr : Symbol(funcExpr, Decl(methodContainingLocalFunction.ts, 28, 11))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(methodContainingLocalFunction.ts, 32, 1))
+
+    export function exhibitBug() {
+>exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 34, 10))
+
+        function localFunction() { }
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 35, 34))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 37, 11))
+
+        x = localFunction;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 37, 11))
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 35, 34))
+    }
+}
+
+enum E {
+>E : Symbol(E, Decl(methodContainingLocalFunction.ts, 40, 1))
+
+    A = (() => {
+>A : Symbol(E.A, Decl(methodContainingLocalFunction.ts, 42, 8))
+
+        function localFunction() { }
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 43, 16))
+
+        var x: { (): void; };
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 45, 11))
+
+        x = localFunction;
+>x : Symbol(x, Decl(methodContainingLocalFunction.ts, 45, 11))
+>localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 43, 16))
+
+        return 0;
+    })()
+}

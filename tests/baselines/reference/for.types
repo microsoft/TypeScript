@@ -1,0 +1,80 @@
+=== tests/cases/compiler/for.ts ===
+for (var i = 0; i < 10; i++) { // ok
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+    var x1 = i;
+>x1 : number
+>i : number
+}
+
+for (var j: number = 0; j < 10; j++) { // ok
+>j : number
+>0 : 0
+>j < 10 : boolean
+>j : number
+>10 : 10
+>j++ : number
+>j : number
+
+    var x2 = j;
+>x2 : number
+>j : number
+}
+
+for (var k = 0; k < 10;) { // ok
+>k : number
+>0 : 0
+>k < 10 : boolean
+>k : number
+>10 : 10
+
+    k++;
+>k++ : number
+>k : number
+}
+
+for (; i < 10;) { // ok
+>i < 10 : boolean
+>i : number
+>10 : 10
+
+    i++;
+>i++ : number
+>i : number
+}
+
+for (; i > 1; i--) { // ok
+>i > 1 : boolean
+>i : number
+>1 : 1
+>i-- : number
+>i : number
+}
+
+for (var l = 0; ; l++) { // ok
+>l : number
+>0 : 0
+>l++ : number
+>l : number
+
+    if (l > 10) {
+>l > 10 : boolean
+>l : number
+>10 : 10
+
+        break;
+    }
+}
+
+for (; ;) { // ok
+}
+
+for () { // error
+> : any
+}

@@ -1,0 +1,29 @@
+=== tests/cases/conformance/async/es2017/awaitBinaryExpression/awaitBinaryExpression4_es2017.ts ===
+declare var a: boolean;
+>a : Symbol(a, Decl(awaitBinaryExpression4_es2017.ts, 0, 11))
+
+declare var p: Promise<boolean>;
+>p : Symbol(p, Decl(awaitBinaryExpression4_es2017.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function before(): void;
+>before : Symbol(before, Decl(awaitBinaryExpression4_es2017.ts, 1, 32))
+
+declare function after(): void;
+>after : Symbol(after, Decl(awaitBinaryExpression4_es2017.ts, 2, 32))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(awaitBinaryExpression4_es2017.ts, 3, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    before();
+>before : Symbol(before, Decl(awaitBinaryExpression4_es2017.ts, 1, 32))
+
+    var b = (await p, a);
+>b : Symbol(b, Decl(awaitBinaryExpression4_es2017.ts, 6, 7))
+>p : Symbol(p, Decl(awaitBinaryExpression4_es2017.ts, 1, 11))
+>a : Symbol(a, Decl(awaitBinaryExpression4_es2017.ts, 0, 11))
+
+    after();
+>after : Symbol(after, Decl(awaitBinaryExpression4_es2017.ts, 2, 32))
+}

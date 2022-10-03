@@ -1,0 +1,65 @@
+=== /src/a.ts ===
+import { a } from "a";
+>a : Symbol(a, Decl(a.ts, 0, 8))
+
+import { b } from "b";
+>b : Symbol(b, Decl(a.ts, 1, 8))
+
+import { c } from "c";
+>c : Symbol(c, Decl(a.ts, 2, 8))
+
+a(b); // Works
+>a : Symbol(a, Decl(a.ts, 0, 8))
+>b : Symbol(b, Decl(a.ts, 1, 8))
+
+a(c); // Error, these are from different versions of the library.
+>a : Symbol(a, Decl(a.ts, 0, 8))
+>c : Symbol(c, Decl(a.ts, 2, 8))
+
+=== /node_modules/a/index.d.ts ===
+import X from "x";
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+export function a(x: X): void;
+>a : Symbol(a, Decl(index.d.ts, 0, 18))
+>x : Symbol(x, Decl(index.d.ts, 1, 18))
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+=== /node_modules/a/node_modules/x/index.d.ts ===
+export default class X {
+>X : Symbol(X, Decl(index.d.ts, 0, 0))
+
+    private x: number;
+>x : Symbol(X.x, Decl(index.d.ts, 0, 24))
+}
+
+=== /node_modules/b/index.d.ts ===
+import X from "x";
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+export const b: X;
+>b : Symbol(b, Decl(index.d.ts, 1, 12))
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+=== /node_modules/b/node_modules/x/index.d.ts ===
+content not parsed
+>X : Symbol(X, Decl(index.d.ts, 0, 0))
+
+>x : Symbol(X.x, Decl(index.d.ts, 0, 24))
+
+=== /node_modules/c/index.d.ts ===
+import X from "x";
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+export const c: X;
+>c : Symbol(c, Decl(index.d.ts, 1, 12))
+>X : Symbol(X, Decl(index.d.ts, 0, 6))
+
+=== /node_modules/c/node_modules/x/index.d.ts ===
+export default class X {
+>X : Symbol(X, Decl(index.d.ts, 0, 0))
+
+    private x: number;
+>x : Symbol(X.x, Decl(index.d.ts, 0, 24))
+}
+

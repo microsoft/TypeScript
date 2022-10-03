@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "removeComments": false,
+        "declaration": false,
+        "sourceMap": true,
+        "newLine": "lf",
+        "target": "es6",
+        "module": "commonjs",
+        "types": ["node"],
+        "lib": ["es6", "scripthost"],
+    },
+
+    "include": ["*.ts"]
+}

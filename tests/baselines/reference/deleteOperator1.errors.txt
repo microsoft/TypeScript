@@ -1,0 +1,19 @@
+tests/cases/compiler/deleteOperator1.ts(2,25): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/compiler/deleteOperator1.ts(3,21): error TS2703: The operand of a 'delete' operator must be a property reference.
+tests/cases/compiler/deleteOperator1.ts(4,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/compiler/deleteOperator1.ts(4,24): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+==== tests/cases/compiler/deleteOperator1.ts (4 errors) ====
+    var a;
+    var x: boolean = delete a;
+                            ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    var y: any = delete a;
+                        ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
+    var z: number = delete a;
+        ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+                           ~
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

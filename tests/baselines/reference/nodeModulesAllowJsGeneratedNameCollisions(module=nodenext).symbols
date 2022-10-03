@@ -1,0 +1,38 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+function require() {}
+>require : Symbol(require, Decl(index.js, 0, 0))
+
+const exports = {};
+>exports : Symbol(exports, Decl(index.js, 2, 5))
+
+class Object {}
+>Object : Symbol(Object, Decl(index.js, 2, 19))
+
+export const __esModule = false;
+>__esModule : Symbol(__esModule, Decl(index.js, 4, 12))
+
+export {require, exports, Object};
+>require : Symbol(require, Decl(index.js, 5, 8))
+>exports : Symbol(exports, Decl(index.js, 5, 16))
+>Object : Symbol(Object, Decl(index.js, 5, 25))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+function require() {}
+>require : Symbol(require, Decl(index.js, 0, 0))
+
+const exports = {};
+>exports : Symbol(exports, Decl(index.js, 2, 5))
+
+class Object {}
+>Object : Symbol(Object, Decl(index.js, 2, 19))
+
+export const __esModule = false;
+>__esModule : Symbol(__esModule, Decl(index.js, 4, 12))
+
+export {require, exports, Object};
+>require : Symbol(require, Decl(index.js, 5, 8))
+>exports : Symbol(exports, Decl(index.js, 5, 16))
+>Object : Symbol(Object, Decl(index.js, 5, 25))
+

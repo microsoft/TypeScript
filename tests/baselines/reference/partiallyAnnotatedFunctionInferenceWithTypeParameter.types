@@ -1,0 +1,116 @@
+=== tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceWithTypeParameter.ts ===
+class C {
+>C : C
+
+  test: string
+>test : string
+}
+
+class D extends C {
+>D : D
+>C : C
+
+  test2: string
+>test2 : string
+}
+
+declare function test<T extends C>(a: (t: T, t1: T) => void): T
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>a : (t: T, t1: T) => void
+>t : T
+>t1 : T
+
+declare function testRest<T extends C>(a: (t: T, t1: T, ...ts: T[]) => void): T
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>a : (t: T, t1: T, ...ts: T[]) => void
+>t : T
+>t1 : T
+>ts : T[]
+
+
+// exactly
+test((t1: D, t2) => { t2.test2 })
+>test((t1: D, t2) => { t2.test2 }) : D
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>(t1: D, t2) => { t2.test2 } : (t1: D, t2: D) => void
+>t1 : D
+>t2 : D
+>t2.test2 : string
+>t2 : D
+>test2 : string
+
+test((t1, t2: D) => { t2.test2 })
+>test((t1, t2: D) => { t2.test2 }) : D
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>(t1, t2: D) => { t2.test2 } : (t1: D, t2: D) => void
+>t1 : D
+>t2 : D
+>t2.test2 : string
+>t2 : D
+>test2 : string
+
+// zero arg
+test(() => {})
+>test(() => {}) : C
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>() => {} : () => void
+
+// fewer args
+test((t1: D) => {})
+>test((t1: D) => {}) : D
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>(t1: D) => {} : (t1: D) => void
+>t1 : D
+
+// rest arg
+test((...ts: D[]) => {})
+>test((...ts: D[]) => {}) : D
+>test : <T extends C>(a: (t: T, t1: T) => void) => T
+>(...ts: D[]) => {} : (...ts: D[]) => void
+>ts : D[]
+
+// source function has rest arg
+testRest((t1: D) => {})
+>testRest((t1: D) => {}) : D
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t1: D) => {} : (t1: D) => void
+>t1 : D
+
+testRest((t1, t2, t3) => {})
+>testRest((t1, t2, t3) => {}) : C
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t1, t2, t3) => {} : (t1: C, t2: C, t3: C) => void
+>t1 : C
+>t2 : C
+>t3 : C
+
+testRest((t1: D, t2, t3) => {})
+>testRest((t1: D, t2, t3) => {}) : D
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t1: D, t2, t3) => {} : (t1: D, t2: D, t3: D) => void
+>t1 : D
+>t2 : D
+>t3 : D
+
+testRest((t1, t2: D, t3) => {})
+>testRest((t1, t2: D, t3) => {}) : D
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t1, t2: D, t3) => {} : (t1: D, t2: D, t3: D) => void
+>t1 : D
+>t2 : D
+>t3 : D
+
+testRest((t2: D, ...t3) => {})
+>testRest((t2: D, ...t3) => {}) : D
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t2: D, ...t3) => {} : (t2: D, t1: D, ...ts: D[]) => void
+>t2 : D
+>t3 : [t1: D, ...ts: D[]]
+
+testRest((t2, ...t3: D[]) => {})
+>testRest((t2, ...t3: D[]) => {}) : C
+>testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
+>(t2, ...t3: D[]) => {} : (t2: C, ...t3: D[]) => void
+>t2 : C
+>t3 : D[]
+

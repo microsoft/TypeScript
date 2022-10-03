@@ -1,0 +1,18 @@
+=== tests/cases/compiler/declarationEmitClassPrivateConstructor2.ts ===
+interface PrivateInterface {
+}
+
+export class ExportedClass1 {
+>ExportedClass1 : ExportedClass1
+
+    private constructor(public data: PrivateInterface) { }
+>data : PrivateInterface
+}
+
+
+export class ExportedClass2 {
+>ExportedClass2 : ExportedClass2
+
+    protected constructor(data: PrivateInterface) { }
+>data : PrivateInterface
+}

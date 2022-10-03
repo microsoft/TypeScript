@@ -1,0 +1,52 @@
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(1,13): error TS2448: Block-scoped variable 'foo' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(2,20): error TS2448: Block-scoped variable 'bar' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(4,15): error TS2448: Block-scoped variable 'bar' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(7,22): error TS2448: Block-scoped variable 'bar' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(10,12): error TS2448: Block-scoped variable 'foo1' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(11,19): error TS2448: Block-scoped variable 'bar1' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(13,14): error TS2448: Block-scoped variable 'bar1' used before its declaration.
+tests/cases/compiler/exportedBlockScopedDeclarations.ts(16,21): error TS2448: Block-scoped variable 'bar1' used before its declaration.
+
+
+==== tests/cases/compiler/exportedBlockScopedDeclarations.ts (8 errors) ====
+    const foo = foo; // compile error
+                ~~~
+!!! error TS2448: Block-scoped variable 'foo' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:1:7: 'foo' is declared here.
+    export const bar = bar; // should be compile error
+                       ~~~
+!!! error TS2448: Block-scoped variable 'bar' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:2:14: 'bar' is declared here.
+    function f() {
+      const bar = bar; // compile error
+                  ~~~
+!!! error TS2448: Block-scoped variable 'bar' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:4:9: 'bar' is declared here.
+    }
+    namespace NS {
+      export const bar = bar; // should be compile error
+                         ~~~
+!!! error TS2448: Block-scoped variable 'bar' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:7:16: 'bar' is declared here.
+    }
+    
+    let foo1 = foo1; // compile error
+               ~~~~
+!!! error TS2448: Block-scoped variable 'foo1' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:10:5: 'foo1' is declared here.
+    export let bar1 = bar1; // should be compile error
+                      ~~~~
+!!! error TS2448: Block-scoped variable 'bar1' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:11:12: 'bar1' is declared here.
+    function f1() {
+      let bar1 = bar1; // compile error
+                 ~~~~
+!!! error TS2448: Block-scoped variable 'bar1' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:13:7: 'bar1' is declared here.
+    }
+    namespace NS1 {
+      export let bar1 = bar1; // should be compile error
+                        ~~~~
+!!! error TS2448: Block-scoped variable 'bar1' used before its declaration.
+!!! related TS2728 tests/cases/compiler/exportedBlockScopedDeclarations.ts:16:14: 'bar1' is declared here.
+    }

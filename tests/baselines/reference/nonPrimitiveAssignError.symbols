@@ -1,0 +1,84 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts ===
+var x = {};
+>x : Symbol(x, Decl(nonPrimitiveAssignError.ts, 0, 3))
+
+var y = {foo: "bar"};
+>y : Symbol(y, Decl(nonPrimitiveAssignError.ts, 1, 3))
+>foo : Symbol(foo, Decl(nonPrimitiveAssignError.ts, 1, 9))
+
+var a: object;
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+x = a;
+>x : Symbol(x, Decl(nonPrimitiveAssignError.ts, 0, 3))
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+y = a; // expect error
+>y : Symbol(y, Decl(nonPrimitiveAssignError.ts, 1, 3))
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+a = x;
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>x : Symbol(x, Decl(nonPrimitiveAssignError.ts, 0, 3))
+
+a = y;
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>y : Symbol(y, Decl(nonPrimitiveAssignError.ts, 1, 3))
+
+var n = 123;
+>n : Symbol(n, Decl(nonPrimitiveAssignError.ts, 8, 3))
+
+var b = true;
+>b : Symbol(b, Decl(nonPrimitiveAssignError.ts, 9, 3))
+
+var s = "fooo";
+>s : Symbol(s, Decl(nonPrimitiveAssignError.ts, 10, 3))
+
+a = n; // expect error
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>n : Symbol(n, Decl(nonPrimitiveAssignError.ts, 8, 3))
+
+a = b; // expect error
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>b : Symbol(b, Decl(nonPrimitiveAssignError.ts, 9, 3))
+
+a = s; // expect error
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>s : Symbol(s, Decl(nonPrimitiveAssignError.ts, 10, 3))
+
+n = a; // expect error
+>n : Symbol(n, Decl(nonPrimitiveAssignError.ts, 8, 3))
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+b = a; // expect error
+>b : Symbol(b, Decl(nonPrimitiveAssignError.ts, 9, 3))
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+s = a; // expect error
+>s : Symbol(s, Decl(nonPrimitiveAssignError.ts, 10, 3))
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+
+var numObj: Number = 123;
+>numObj : Symbol(numObj, Decl(nonPrimitiveAssignError.ts, 20, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var boolObj: Boolean = true;
+>boolObj : Symbol(boolObj, Decl(nonPrimitiveAssignError.ts, 21, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var strObj: String = "string";
+>strObj : Symbol(strObj, Decl(nonPrimitiveAssignError.ts, 22, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+a = numObj; // ok
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>numObj : Symbol(numObj, Decl(nonPrimitiveAssignError.ts, 20, 3))
+
+a = boolObj; // ok
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>boolObj : Symbol(boolObj, Decl(nonPrimitiveAssignError.ts, 21, 3))
+
+a = strObj; // ok
+>a : Symbol(a, Decl(nonPrimitiveAssignError.ts, 2, 3))
+>strObj : Symbol(strObj, Decl(nonPrimitiveAssignError.ts, 22, 3))
+

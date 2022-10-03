@@ -1,0 +1,85 @@
+=== tests/cases/conformance/jsx/tsxSpreadChildren.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxSpreadChildren.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxSpreadChildren.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(tsxSpreadChildren.tsx, 3, 3))
+	}
+}
+declare var React: any;
+>React : Symbol(React, Decl(tsxSpreadChildren.tsx, 6, 11))
+
+interface TodoProp {
+>TodoProp : Symbol(TodoProp, Decl(tsxSpreadChildren.tsx, 6, 23))
+
+    id: number;
+>id : Symbol(TodoProp.id, Decl(tsxSpreadChildren.tsx, 8, 20))
+
+    todo: string;
+>todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildren.tsx, 9, 15))
+}
+interface TodoListProps {
+>TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildren.tsx, 11, 1))
+
+    todos: TodoProp[];
+>todos : Symbol(TodoListProps.todos, Decl(tsxSpreadChildren.tsx, 12, 25))
+>TodoProp : Symbol(TodoProp, Decl(tsxSpreadChildren.tsx, 6, 23))
+}
+function Todo(prop: { key: number, todo: string }) {
+>Todo : Symbol(Todo, Decl(tsxSpreadChildren.tsx, 14, 1))
+>prop : Symbol(prop, Decl(tsxSpreadChildren.tsx, 15, 14))
+>key : Symbol(key, Decl(tsxSpreadChildren.tsx, 15, 21))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 15, 34))
+
+    return <div>{prop.key.toString() + prop.todo}</div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
+>prop.key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>prop.key : Symbol(key, Decl(tsxSpreadChildren.tsx, 15, 21))
+>prop : Symbol(prop, Decl(tsxSpreadChildren.tsx, 15, 14))
+>key : Symbol(key, Decl(tsxSpreadChildren.tsx, 15, 21))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>prop.todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 15, 34))
+>prop : Symbol(prop, Decl(tsxSpreadChildren.tsx, 15, 14))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 15, 34))
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
+}
+function TodoList({ todos }: TodoListProps) {
+>TodoList : Symbol(TodoList, Decl(tsxSpreadChildren.tsx, 17, 1))
+>todos : Symbol(todos, Decl(tsxSpreadChildren.tsx, 18, 19))
+>TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildren.tsx, 11, 1))
+
+    return <div>
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
+
+        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
+>todos.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>todos : Symbol(todos, Decl(tsxSpreadChildren.tsx, 18, 19))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 20, 22))
+>Todo : Symbol(Todo, Decl(tsxSpreadChildren.tsx, 14, 1))
+>key : Symbol(key, Decl(tsxSpreadChildren.tsx, 20, 35))
+>todo.id : Symbol(TodoProp.id, Decl(tsxSpreadChildren.tsx, 8, 20))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 20, 22))
+>id : Symbol(TodoProp.id, Decl(tsxSpreadChildren.tsx, 8, 20))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 20, 49))
+>todo.todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildren.tsx, 9, 15))
+>todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 20, 22))
+>todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildren.tsx, 9, 15))
+
+    </div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
+}
+let x: TodoListProps;
+>x : Symbol(x, Decl(tsxSpreadChildren.tsx, 23, 3))
+>TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildren.tsx, 11, 1))
+
+    <TodoList {...x}/>
+>TodoList : Symbol(TodoList, Decl(tsxSpreadChildren.tsx, 17, 1))
+>x : Symbol(x, Decl(tsxSpreadChildren.tsx, 23, 3))
+

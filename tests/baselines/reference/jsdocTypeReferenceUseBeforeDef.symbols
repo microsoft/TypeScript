@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/bug25097.js ===
+/** @type {C | null} */
+const c = null
+>c : Symbol(c, Decl(bug25097.js, 1, 5))
+
+class C {
+>C : Symbol(C, Decl(bug25097.js, 1, 14))
+}
+

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility5.ts ===
+class Base {
+>Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+
+    protected constructor() { }
+}
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(classConstructorAccessibility5.ts, 2, 1))
+>Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+
+    static make() { new Base() } // ok
+>make : Symbol(Derived.make, Decl(classConstructorAccessibility5.ts, 3, 28))
+>Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+}
+
+class Unrelated {
+>Unrelated : Symbol(Unrelated, Decl(classConstructorAccessibility5.ts, 5, 1))
+
+    static fake() { new Base() } // error
+>fake : Symbol(Unrelated.fake, Decl(classConstructorAccessibility5.ts, 7, 17))
+>Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+}
+

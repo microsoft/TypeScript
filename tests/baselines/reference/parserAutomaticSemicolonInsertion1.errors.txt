@@ -1,0 +1,32 @@
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+    Type 'Object' provides no match for the signature '(): void'.
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+    Type 'Object' provides no match for the signature '(): void'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts (2 errors) ====
+    interface I {
+        (): void;
+    }
+     
+    var i: I;
+    var o: Object;
+    o = i;
+    i = o;
+    ~
+!!! error TS2322: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+     
+    var a: {
+        (): void
+    }
+    o = a;
+    a = o;
+    ~
+!!! error TS2322: Type 'Object' is not assignable to type '() => void'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+    

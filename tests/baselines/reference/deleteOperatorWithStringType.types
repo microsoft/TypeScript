@@ -1,0 +1,172 @@
+=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts ===
+// delete  operator on string type
+var STRING: string;
+>STRING : string
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : string[]
+>["", "abc"] : string[]
+>"" : ""
+>"abc" : "abc"
+
+function foo(): string { return "abc"; }
+>foo : () => string
+>"abc" : "abc"
+
+class A {
+>A : A
+
+    public a: string;
+>a : string
+
+    static foo() { return ""; }
+>foo : () => string
+>"" : ""
+}
+module M {
+>M : typeof M
+
+    export var n: string;
+>n : string
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// string type var
+var ResultIsBoolean1 = delete STRING;
+>ResultIsBoolean1 : boolean
+>delete STRING : boolean
+>STRING : string
+
+var ResultIsBoolean2 = delete STRING1;
+>ResultIsBoolean2 : boolean
+>delete STRING1 : boolean
+>STRING1 : string[]
+
+// string type literal
+var ResultIsBoolean3 = delete "";
+>ResultIsBoolean3 : boolean
+>delete "" : boolean
+>"" : ""
+
+var ResultIsBoolean4 = delete { x: "", y: "" };
+>ResultIsBoolean4 : boolean
+>delete { x: "", y: "" } : boolean
+>{ x: "", y: "" } : { x: string; y: string; }
+>x : string
+>"" : ""
+>y : string
+>"" : ""
+
+var ResultIsBoolean5 = delete { x: "", y: (s: string) => { return s; } };
+>ResultIsBoolean5 : boolean
+>delete { x: "", y: (s: string) => { return s; } } : boolean
+>{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>x : string
+>"" : ""
+>y : (s: string) => string
+>(s: string) => { return s; } : (s: string) => string
+>s : string
+>s : string
+
+// string type expressions
+var ResultIsBoolean6 = delete objA.a;
+>ResultIsBoolean6 : boolean
+>delete objA.a : boolean
+>objA.a : string
+>objA : A
+>a : string
+
+var ResultIsBoolean7 = delete M.n;
+>ResultIsBoolean7 : boolean
+>delete M.n : boolean
+>M.n : string
+>M : typeof M
+>n : string
+
+var ResultIsBoolean8 = delete STRING1[0];
+>ResultIsBoolean8 : boolean
+>delete STRING1[0] : boolean
+>STRING1[0] : string
+>STRING1 : string[]
+>0 : 0
+
+var ResultIsBoolean9 = delete foo();
+>ResultIsBoolean9 : boolean
+>delete foo() : boolean
+>foo() : string
+>foo : () => string
+
+var ResultIsBoolean10 = delete A.foo();
+>ResultIsBoolean10 : boolean
+>delete A.foo() : boolean
+>A.foo() : string
+>A.foo : () => string
+>A : typeof A
+>foo : () => string
+
+var ResultIsBoolean11 = delete (STRING + STRING);
+>ResultIsBoolean11 : boolean
+>delete (STRING + STRING) : boolean
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+var ResultIsBoolean12 = delete STRING.charAt(0);
+>ResultIsBoolean12 : boolean
+>delete STRING.charAt(0) : boolean
+>STRING.charAt(0) : string
+>STRING.charAt : (pos: number) => string
+>STRING : string
+>charAt : (pos: number) => string
+>0 : 0
+
+// multiple delete  operator
+var ResultIsBoolean13 = delete delete STRING;
+>ResultIsBoolean13 : boolean
+>delete delete STRING : boolean
+>delete STRING : boolean
+>STRING : string
+
+var ResultIsBoolean14 = delete delete delete (STRING + STRING);
+>ResultIsBoolean14 : boolean
+>delete delete delete (STRING + STRING) : boolean
+>delete delete (STRING + STRING) : boolean
+>delete (STRING + STRING) : boolean
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+// miss assignment operators
+delete "";
+>delete "" : boolean
+>"" : ""
+
+delete STRING;
+>delete STRING : boolean
+>STRING : string
+
+delete STRING1;
+>delete STRING1 : boolean
+>STRING1 : string[]
+
+delete foo();
+>delete foo() : boolean
+>foo() : string
+>foo : () => string
+
+delete objA.a,M.n;
+>delete objA.a,M.n : string
+>delete objA.a : boolean
+>objA.a : string
+>objA : A
+>a : string
+>M.n : string
+>M : typeof M
+>n : string
+

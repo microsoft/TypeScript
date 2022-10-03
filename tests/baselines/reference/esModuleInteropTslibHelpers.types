@@ -1,0 +1,63 @@
+=== tests/cases/compiler/refs.d.ts ===
+declare module "path";
+>"path" : any
+
+=== tests/cases/compiler/file.ts ===
+import path from "path";
+>path : any
+
+path.resolve("", "../");
+>path.resolve("", "../") : any
+>path.resolve : any
+>path : any
+>resolve : any
+>"" : ""
+>"../" : "../"
+
+export class Foo { }
+>Foo : Foo
+
+=== tests/cases/compiler/file2.ts ===
+import * as path from "path";
+>path : any
+
+path.resolve("", "../");
+>path.resolve("", "../") : any
+>path.resolve : any
+>path : any
+>resolve : any
+>"" : ""
+>"../" : "../"
+
+export class Foo2 { }
+>Foo2 : Foo2
+
+=== tests/cases/compiler/file3.ts ===
+import {default as resolve} from "path";
+>default : any
+>resolve : any
+
+resolve("", "../");
+>resolve("", "../") : any
+>resolve : any
+>"" : ""
+>"../" : "../"
+
+export class Foo3 { }
+>Foo3 : Foo3
+
+=== tests/cases/compiler/file4.ts ===
+import {Bar, default as resolve} from "path";
+>Bar : any
+>default : any
+>resolve : any
+
+resolve("", "../");
+>resolve("", "../") : any
+>resolve : any
+>"" : ""
+>"../" : "../"
+
+export { Bar }
+>Bar : any
+

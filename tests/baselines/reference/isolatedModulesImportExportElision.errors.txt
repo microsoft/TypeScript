@@ -1,0 +1,27 @@
+tests/cases/compiler/file1.ts(1,17): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+tests/cases/compiler/file1.ts(2,18): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+tests/cases/compiler/file1.ts(3,21): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+tests/cases/compiler/file1.ts(11,18): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/file1.ts (4 errors) ====
+    import {c} from "module"
+                    ~~~~~~~~
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
+    import {c2} from "module"
+                     ~~~~~~~~
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
+    import * as ns from "module"
+                        ~~~~~~~~
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
+    
+    class C extends c2.C {
+    }
+    
+    let x = new c();
+    let y = ns.value;
+    
+    export {c1} from "module";
+                     ~~~~~~~~
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
+    export var z = x;

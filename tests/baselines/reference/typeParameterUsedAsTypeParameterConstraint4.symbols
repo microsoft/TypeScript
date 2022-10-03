@@ -1,0 +1,225 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts ===
+// Type parameters are in scope in their own and other type parameter lists
+// Some negative cases
+
+class C<T, U extends T, V extends U> {
+>C : Symbol(C, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 8))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 10))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 8))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 23))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 10))
+
+    z: W; // error
+>z : Symbol(C.z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 38))
+>W : Symbol(W)
+
+    foo<W extends V>(x: W): T {
+>foo : Symbol(C.foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 4, 9))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 8))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 23))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 21))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 8))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 8))
+
+        var r: T;
+>r : Symbol(r, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 6, 11))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 8))
+
+        return x;
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 21))
+    }
+}
+
+interface I<T, U extends T, V extends U> {
+>I : Symbol(I, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 9, 1))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 12))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 14))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 12))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 27))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 14))
+
+    x: T;
+>x : Symbol(I.x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 42))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 12))
+
+    y: U;
+>y : Symbol(I.y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 12, 9))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 14))
+
+    z: W; // error
+>z : Symbol(I.z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 13, 9))
+>W : Symbol(W)
+
+    foo<W extends V>(x: W): T;
+>foo : Symbol(I.foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 14, 9))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 15, 8))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 27))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 15, 21))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 15, 8))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 12))
+}
+
+function foo<T, U extends T>(x: T, y: U): V { // error
+>foo : Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 16, 1))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 13))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 15))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 13))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 29))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 13))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 34))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 15))
+>V : Symbol(V)
+
+    function bar<V extends T, W extends U>(): X { // error
+>bar : Symbol(bar, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 45))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 19, 17))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 13))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 19, 29))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 15))
+>X : Symbol(X)
+
+        function baz<X extends W, Y extends V>(a: X, b: Y): T {
+>baz : Symbol(baz, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 19, 49))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 21))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 19, 29))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 33))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 19, 17))
+>a : Symbol(a, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 47))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 21))
+>b : Symbol(b, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 52))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 20, 33))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 13))
+
+            x = y;
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 29))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 34))
+
+            return y;
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 18, 34))
+        }
+    }
+}
+
+function foo2<U extends T, T>(x: T, y: U): W { // error
+>foo2 : Symbol(foo2, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 25, 1))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 14))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 26))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 26))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 30))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 26))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 35))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 14))
+>W : Symbol(W)
+
+    function bar<V extends T, W extends U>(): Y { // error
+>bar : Symbol(bar, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 46))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 28, 17))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 26))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 28, 29))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 14))
+>Y : Symbol(Y)
+
+        function baz<X extends W, Y extends V>(a: X, b: Y): T {
+>baz : Symbol(baz, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 28, 49))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 21))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 28, 29))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 33))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 28, 17))
+>a : Symbol(a, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 47))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 21))
+>b : Symbol(b, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 52))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 29, 33))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 26))
+
+            x = y;
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 30))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 35))
+
+            return y;
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 27, 35))
+        }
+    }
+}
+
+var f3 = <T, U extends T>(x: T, y: U) => {
+>f3 : Symbol(f3, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 3))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 10))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 12))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 10))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 26))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 10))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 31))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 12))
+
+    function bar<V extends T, W extends U>(r: X, s: Y) { // error
+>bar : Symbol(bar, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 42))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 17))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 10))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 29))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 12))
+>r : Symbol(r, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 43))
+>X : Symbol(X)
+>s : Symbol(s, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 48))
+>Y : Symbol(Y)
+
+        var g = <X extends W, Y extends V>(a: X, b: Y): T => {
+>g : Symbol(g, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 11))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 17))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 29))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 29))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 37, 17))
+>a : Symbol(a, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 43))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 17))
+>b : Symbol(b, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 48))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 38, 29))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 10))
+
+            x = y;
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 26))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 31))
+
+            return y;
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 36, 31))
+        }
+    }
+}
+
+var f4 = <U extends T, T>(x: V, y: X) => { // error
+>f4 : Symbol(f4, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 3))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 10))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 22))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 22))
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 26))
+>V : Symbol(V)
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 31))
+>X : Symbol(X)
+
+    function bar<V extends T, W extends U>() {
+>bar : Symbol(bar, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 42))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 46, 17))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 22))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 46, 29))
+>U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 10))
+
+        var g = <X extends W, Y extends V>(a: X, b: Y): T => {
+>g : Symbol(g, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 11))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 17))
+>W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 46, 29))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 29))
+>V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 46, 17))
+>a : Symbol(a, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 43))
+>X : Symbol(X, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 17))
+>b : Symbol(b, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 48))
+>Y : Symbol(Y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 47, 29))
+>T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 22))
+
+            x = y;
+>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 26))
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 31))
+
+            return y;
+>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 45, 31))
+        }
+    }
+}

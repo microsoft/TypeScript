@@ -1,0 +1,24 @@
+=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum2.ts ===
+    export enum SignatureFlags {
+>SignatureFlags : SignatureFlags
+
+        None = 0,
+>None : SignatureFlags
+>0 : 0
+
+        IsIndexer = 1,
+>IsIndexer : SignatureFlags
+>1 : 1
+
+        IsStringIndexer = 1 << 1,
+>IsStringIndexer : SignatureFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        IsNumberIndexer = 1 << 2
+>IsNumberIndexer : SignatureFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+    }

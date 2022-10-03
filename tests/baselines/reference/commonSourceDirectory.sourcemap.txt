@@ -1,0 +1,59 @@
+===================================================================
+JsFile: index.js
+mapUrl: ../myMapRoot/index.js.map
+sourceRoot: mySourceRoot/
+sources: index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/app/bin/index.js
+sourceFile:index.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>exports.__esModule = true;
+>>>/// <reference path="../types/bar.d.ts"/>
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >/// <reference path="../types/bar.d.ts"/>
+1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 42) Source(1, 42) + SourceIndex(0)
+---
+>>>var foo_1 = require("foo");
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^->
+1 >
+  >
+2 >import { x } from "foo";
+1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 28) Source(2, 25) + SourceIndex(0)
+---
+>>>var bar_1 = require("bar");
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >import { y } from "bar";
+1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 28) Source(3, 25) + SourceIndex(0)
+---
+>>>foo_1.x + bar_1.y;
+1 >
+2 >^^^^^^^
+3 >       ^^^
+4 >          ^^^^^^^
+5 >                 ^
+6 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >x
+3 >        + 
+4 >          y
+5 >                 ;
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 8) Source(4, 2) + SourceIndex(0)
+3 >Emitted(6, 11) Source(4, 5) + SourceIndex(0)
+4 >Emitted(6, 18) Source(4, 6) + SourceIndex(0)
+5 >Emitted(6, 19) Source(4, 7) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=../myMapRoot/index.js.map

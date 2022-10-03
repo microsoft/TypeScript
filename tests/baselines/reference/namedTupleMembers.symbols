@@ -1,0 +1,201 @@
+=== tests/cases/conformance/types/tuple/named/namedTupleMembers.ts ===
+export type Segment = [length: number, count: number];
+>Segment : Symbol(Segment, Decl(namedTupleMembers.ts, 0, 0))
+
+export type SegmentAnnotated = [
+>SegmentAnnotated : Symbol(SegmentAnnotated, Decl(namedTupleMembers.ts, 0, 54))
+
+    /** 
+     * Size of message buffer segment handles
+     */
+    length: number,
+    /**
+     * Number of segments handled at once
+     */
+    count: number
+];
+
+declare var a: Segment;
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+>Segment : Symbol(Segment, Decl(namedTupleMembers.ts, 0, 0))
+
+declare var b: SegmentAnnotated;
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+>SegmentAnnotated : Symbol(SegmentAnnotated, Decl(namedTupleMembers.ts, 0, 54))
+
+declare var c: [number, number];
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+
+declare var d: [a: number, b: number];
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+
+a = b;
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+
+a = c;
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+
+a = d;
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+
+b = a;
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+
+b = c;
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+
+b = d;
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+
+c = a;
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+
+c = b;
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+
+c = d;
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+
+d = a;
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+>a : Symbol(a, Decl(namedTupleMembers.ts, 13, 11))
+
+d = b;
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+>b : Symbol(b, Decl(namedTupleMembers.ts, 14, 11))
+
+d = c;
+>d : Symbol(d, Decl(namedTupleMembers.ts, 16, 11))
+>c : Symbol(c, Decl(namedTupleMembers.ts, 15, 11))
+
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+>WithOptAndRest : Symbol(WithOptAndRest, Decl(namedTupleMembers.ts, 32, 6))
+
+export type Func<T extends any[]> = (...x: T) => void;
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 34, 81))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 36, 17))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 36, 37))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 36, 17))
+
+export const func = null as any as Func<SegmentAnnotated>;
+>func : Symbol(func, Decl(namedTupleMembers.ts, 38, 12))
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 34, 81))
+>SegmentAnnotated : Symbol(SegmentAnnotated, Decl(namedTupleMembers.ts, 0, 54))
+
+export function useState<T>(initial: T): [value: T, setter: (T) => void] {
+>useState : Symbol(useState, Decl(namedTupleMembers.ts, 38, 58))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 40, 25))
+>initial : Symbol(initial, Decl(namedTupleMembers.ts, 40, 28))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 40, 25))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 40, 25))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 40, 61))
+
+    return null as any;
+}
+
+
+export type Iter = Func<[step: number, iterations: number]>;
+>Iter : Symbol(Iter, Decl(namedTupleMembers.ts, 42, 1))
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 34, 81))
+
+export function readSegment([length, count]: [number, number]) {}
+>readSegment : Symbol(readSegment, Decl(namedTupleMembers.ts, 45, 60))
+>length : Symbol(length, Decl(namedTupleMembers.ts, 47, 29))
+>count : Symbol(count, Decl(namedTupleMembers.ts, 47, 36))
+
+// documenting binding pattern behavior (currently does _not_ generate tuple names)
+export const val = null as any as Parameters<typeof readSegment>[0];
+>val : Symbol(val, Decl(namedTupleMembers.ts, 50, 12))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>readSegment : Symbol(readSegment, Decl(namedTupleMembers.ts, 45, 60))
+
+export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
+>RecursiveTupleA : Symbol(RecursiveTupleA, Decl(namedTupleMembers.ts, 50, 68))
+>RecursiveTupleA : Symbol(RecursiveTupleA, Decl(namedTupleMembers.ts, 50, 68))
+
+export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
+>RecursiveTupleB : Symbol(RecursiveTupleB, Decl(namedTupleMembers.ts, 52, 71))
+>RecursiveTupleB : Symbol(RecursiveTupleB, Decl(namedTupleMembers.ts, 52, 71))
+
+declare var q: RecursiveTupleA;
+>q : Symbol(q, Decl(namedTupleMembers.ts, 56, 11))
+>RecursiveTupleA : Symbol(RecursiveTupleA, Decl(namedTupleMembers.ts, 50, 68))
+
+declare var r: RecursiveTupleB;
+>r : Symbol(r, Decl(namedTupleMembers.ts, 57, 11))
+>RecursiveTupleB : Symbol(RecursiveTupleB, Decl(namedTupleMembers.ts, 52, 71))
+
+q = r;
+>q : Symbol(q, Decl(namedTupleMembers.ts, 56, 11))
+>r : Symbol(r, Decl(namedTupleMembers.ts, 57, 11))
+
+r = q;
+>r : Symbol(r, Decl(namedTupleMembers.ts, 57, 11))
+>q : Symbol(q, Decl(namedTupleMembers.ts, 56, 11))
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembers.ts, 60, 6))
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembers.ts, 60, 6))
+
+export type RecusiveRest2 = [string, ...RecusiveRest2[]];
+>RecusiveRest2 : Symbol(RecusiveRest2, Decl(namedTupleMembers.ts, 62, 68))
+>RecusiveRest2 : Symbol(RecusiveRest2, Decl(namedTupleMembers.ts, 62, 68))
+
+declare var x: RecusiveRest;
+>x : Symbol(x, Decl(namedTupleMembers.ts, 65, 11))
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembers.ts, 60, 6))
+
+declare var y: RecusiveRest2;
+>y : Symbol(y, Decl(namedTupleMembers.ts, 66, 11))
+>RecusiveRest2 : Symbol(RecusiveRest2, Decl(namedTupleMembers.ts, 62, 68))
+
+x = y;
+>x : Symbol(x, Decl(namedTupleMembers.ts, 65, 11))
+>y : Symbol(y, Decl(namedTupleMembers.ts, 66, 11))
+
+y = x;
+>y : Symbol(y, Decl(namedTupleMembers.ts, 66, 11))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 65, 11))
+
+declare function f<T extends any[]>(...x: T): T;
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 71, 36))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+
+declare function g(elem: object, index: number): object;
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+>elem : Symbol(elem, Decl(namedTupleMembers.ts, 72, 19))
+>index : Symbol(index, Decl(namedTupleMembers.ts, 72, 32))
+
+declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+>args : Symbol(args, Decl(namedTupleMembers.ts, 73, 48))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 73, 72))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+
+export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+>argumentsOfGAsFirstArgument : Symbol(argumentsOfGAsFirstArgument, Decl(namedTupleMembers.ts, 75, 12))
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+
+export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+>argumentsOfG : Symbol(argumentsOfG, Decl(namedTupleMembers.ts, 76, 12))
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+

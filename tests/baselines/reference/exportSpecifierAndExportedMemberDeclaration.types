@@ -1,0 +1,26 @@
+=== tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts ===
+declare module "m2" {
+>"m2" : typeof import("m2")
+
+    export module X {
+        interface I { }
+    }
+    function Y();
+>Y : () => any
+
+    export { Y as X };
+>Y : () => any
+>X : () => any
+
+    function Z(): X.I;
+>Z : () => X.I
+>X : any
+}
+
+declare module "m2" {
+>"m2" : typeof import("m2")
+
+    function Z2(): X.I;
+>Z2 : () => X.I
+>X : any
+}

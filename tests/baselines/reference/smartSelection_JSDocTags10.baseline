@@ -1,0 +1,29 @@
+/**
+ * @template T
+ * @extends {/**/Set<T>}
+ */
+class A extends B {
+}
+
+
+             Set    
+
+
+             Set<T> 
+
+
+   @extends {Set<T>}
+
+
+/**
+ * @template T
+ * @extends {Set<T>}
+ */
+
+
+/**
+ * @template T
+ * @extends {Set<T>}
+ */
+class A extends B {
+}

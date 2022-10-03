@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts ===
+var x = {
+>x : any
+>{    a: `abc${ 123 }def`,    `b` : any
+>{    a: `abc${ 123 }def`, : { a: string; }
+
+    a: `abc${ 123 }def`,
+>a : string
+>`abc${ 123 }def` : string
+>123 : 123
+
+    `b`: 321
+>`b` : "b"
+>321 : 321
+}

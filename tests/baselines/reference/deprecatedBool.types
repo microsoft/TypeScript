@@ -1,0 +1,7 @@
+=== tests/cases/compiler/deprecatedBool.ts ===
+var b4: boolean;
+>b4 : boolean
+
+var bool: boolean;
+>bool : boolean
+

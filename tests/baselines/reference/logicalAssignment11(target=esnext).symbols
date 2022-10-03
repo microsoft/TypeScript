@@ -1,0 +1,29 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment11.ts ===
+let x: string | undefined;
+>x : Symbol(x, Decl(logicalAssignment11.ts, 0, 3))
+
+let d: string | undefined;
+>d : Symbol(d, Decl(logicalAssignment11.ts, 2, 3))
+
+d ?? (d = x ?? "x")
+>d : Symbol(d, Decl(logicalAssignment11.ts, 2, 3))
+>d : Symbol(d, Decl(logicalAssignment11.ts, 2, 3))
+>x : Symbol(x, Decl(logicalAssignment11.ts, 0, 3))
+
+d.length;
+>d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(logicalAssignment11.ts, 2, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+let e: string | undefined;
+>e : Symbol(e, Decl(logicalAssignment11.ts, 6, 3))
+
+e ??= x ?? "x"
+>e : Symbol(e, Decl(logicalAssignment11.ts, 6, 3))
+>x : Symbol(x, Decl(logicalAssignment11.ts, 0, 3))
+
+e.length
+>e.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(logicalAssignment11.ts, 6, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

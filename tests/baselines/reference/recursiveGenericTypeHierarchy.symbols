@@ -1,0 +1,31 @@
+=== tests/cases/compiler/recursiveGenericTypeHierarchy.ts ===
+// used to ICE
+interface A<T extends A<T, S>, S extends A<T, S>> { }
+>A : Symbol(A, Decl(recursiveGenericTypeHierarchy.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 1, 12))
+>A : Symbol(A, Decl(recursiveGenericTypeHierarchy.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 1, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 1, 30))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 1, 30))
+>A : Symbol(A, Decl(recursiveGenericTypeHierarchy.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 1, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 1, 30))
+
+interface B<T extends B<T, S>, S extends B<T, S>> extends A<B<T, S>, B<T, S>> { }
+>B : Symbol(B, Decl(recursiveGenericTypeHierarchy.ts, 1, 53))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 2, 12))
+>B : Symbol(B, Decl(recursiveGenericTypeHierarchy.ts, 1, 53))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 2, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 2, 30))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 2, 30))
+>B : Symbol(B, Decl(recursiveGenericTypeHierarchy.ts, 1, 53))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 2, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 2, 30))
+>A : Symbol(A, Decl(recursiveGenericTypeHierarchy.ts, 0, 0))
+>B : Symbol(B, Decl(recursiveGenericTypeHierarchy.ts, 1, 53))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 2, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 2, 30))
+>B : Symbol(B, Decl(recursiveGenericTypeHierarchy.ts, 1, 53))
+>T : Symbol(T, Decl(recursiveGenericTypeHierarchy.ts, 2, 12))
+>S : Symbol(S, Decl(recursiveGenericTypeHierarchy.ts, 2, 30))
+

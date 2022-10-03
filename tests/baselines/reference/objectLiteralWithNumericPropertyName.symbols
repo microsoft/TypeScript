@@ -1,0 +1,16 @@
+=== tests/cases/compiler/objectLiteralWithNumericPropertyName.ts ===
+interface A {
+>A : Symbol(A, Decl(objectLiteralWithNumericPropertyName.ts, 0, 0))
+
+    0: string;
+>0 : Symbol(A[0], Decl(objectLiteralWithNumericPropertyName.ts, 0, 13))
+}
+var x: A = {
+>x : Symbol(x, Decl(objectLiteralWithNumericPropertyName.ts, 3, 3))
+>A : Symbol(A, Decl(objectLiteralWithNumericPropertyName.ts, 0, 0))
+
+    0: 3
+>0 : Symbol(0, Decl(objectLiteralWithNumericPropertyName.ts, 3, 12))
+
+};
+

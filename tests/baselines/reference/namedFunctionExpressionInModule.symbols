@@ -1,0 +1,15 @@
+=== tests/cases/compiler/namedFunctionExpressionInModule.ts ===
+module Variables{
+>Variables : Symbol(Variables, Decl(namedFunctionExpressionInModule.ts, 0, 0))
+
+    var x = function bar(a, b, c) {
+>x : Symbol(x, Decl(namedFunctionExpressionInModule.ts, 1, 7))
+>bar : Symbol(bar, Decl(namedFunctionExpressionInModule.ts, 1, 11))
+>a : Symbol(a, Decl(namedFunctionExpressionInModule.ts, 1, 25))
+>b : Symbol(b, Decl(namedFunctionExpressionInModule.ts, 1, 27))
+>c : Symbol(c, Decl(namedFunctionExpressionInModule.ts, 1, 30))
+    }
+    x(1, 2, 3);
+>x : Symbol(x, Decl(namedFunctionExpressionInModule.ts, 1, 7))
+}
+

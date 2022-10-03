@@ -1,0 +1,18 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts(6,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts(7,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts (2 errors) ====
+    interface IList<T> {
+        data(): T;
+        next(): string;
+    }
+    class List<U> implements IList<U> {
+        data(): U;
+        ~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+        next(): string;
+        ~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    

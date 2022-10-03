@@ -1,0 +1,36 @@
+=== tests/cases/compiler/interfaceExtendsClass1.ts ===
+class Control {
+>Control : Control
+
+    private state: any;
+>state : any
+}
+interface SelectableControl extends Control {
+    select(): void;
+>select : () => void
+}
+class Button extends Control {
+>Button : Button
+>Control : Control
+
+    select() { }
+>select : () => void
+}
+class TextBox extends Control {
+>TextBox : TextBox
+>Control : Control
+
+    select() { }
+>select : () => void
+}
+class Image extends Control {
+>Image : Image
+>Control : Control
+}
+class Location {
+>Location : Location
+
+    select() { }
+>select : () => void
+}
+

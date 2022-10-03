@@ -1,0 +1,20 @@
+{
+    "scenario": "Quotes in file and directory names",
+    "projectRoot": "tests/cases/projects/Quote'InName",
+    "inputFiles": [
+        "m'ain.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "li'b/class'A.ts",
+        "m'ain.ts"
+    ],
+    "emittedFiles": [
+        "li'b/class'A.js",
+        "li'b/class'A.d.ts",
+        "m'ain.js",
+        "m'ain.d.ts"
+    ]
+}

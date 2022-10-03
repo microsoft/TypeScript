@@ -1,0 +1,19 @@
+=== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
+return this.edit(role)
+>this : Symbol(globalThis)
+
+    .then((role: Role) =>
+>role : Symbol(role, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 1, 11))
+>Role : Symbol(Role)
+
+        this.roleService.add(role)
+>this : Symbol(globalThis)
+>role : Symbol(role, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 1, 11))
+
+            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
+>data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
+>ng : Symbol(ng)
+>IHttpPromiseCallbackArg : Symbol(ng.IHttpPromiseCallbackArg)
+>Role : Symbol(Role)
+>data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
+

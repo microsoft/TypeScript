@@ -1,0 +1,21 @@
+=== tests/cases/compiler/instantiatedBaseTypeConstraints2.ts ===
+interface A<T extends A<T, S>, S extends A<T, S>> { }
+>A : Symbol(A, Decl(instantiatedBaseTypeConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedBaseTypeConstraints2.ts, 0, 12))
+>A : Symbol(A, Decl(instantiatedBaseTypeConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedBaseTypeConstraints2.ts, 0, 12))
+>S : Symbol(S, Decl(instantiatedBaseTypeConstraints2.ts, 0, 30))
+>S : Symbol(S, Decl(instantiatedBaseTypeConstraints2.ts, 0, 30))
+>A : Symbol(A, Decl(instantiatedBaseTypeConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedBaseTypeConstraints2.ts, 0, 12))
+>S : Symbol(S, Decl(instantiatedBaseTypeConstraints2.ts, 0, 30))
+
+interface B<U> extends A<B<U>, B<U>> { }
+>B : Symbol(B, Decl(instantiatedBaseTypeConstraints2.ts, 0, 53))
+>U : Symbol(U, Decl(instantiatedBaseTypeConstraints2.ts, 1, 12))
+>A : Symbol(A, Decl(instantiatedBaseTypeConstraints2.ts, 0, 0))
+>B : Symbol(B, Decl(instantiatedBaseTypeConstraints2.ts, 0, 53))
+>U : Symbol(U, Decl(instantiatedBaseTypeConstraints2.ts, 1, 12))
+>B : Symbol(B, Decl(instantiatedBaseTypeConstraints2.ts, 0, 53))
+>U : Symbol(U, Decl(instantiatedBaseTypeConstraints2.ts, 1, 12))
+

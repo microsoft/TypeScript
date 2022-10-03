@@ -1,0 +1,1143 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    export class Binder {
+>Binder : Binder
+
+        constructor (public checker: TypeChecker) { }
+>checker : TypeChecker
+
+        public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
+>resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
+>typeLinks : TypeLink[]
+>scope : SymbolScope
+
+            var extendsList: Type[] = null;
+>extendsList : Type[]
+>null : null
+
+            if (typeLinks) {
+>typeLinks : TypeLink[]
+
+                extendsList = new Type[];
+>extendsList = new Type[] : any
+>extendsList : Type[]
+>new Type[] : any
+>Type[] : any
+>Type : any
+> : any
+
+                for (var i = 0, len = typeLinks.length; i < len; i++) {
+>i : number
+>0 : 0
+>len : number
+>typeLinks.length : number
+>typeLinks : TypeLink[]
+>length : number
+>i < len : boolean
+>i : number
+>len : number
+>i++ : number
+>i : number
+
+                    var typeLink = typeLinks[i];
+>typeLink : TypeLink
+>typeLinks[i] : TypeLink
+>typeLinks : TypeLink[]
+>i : number
+
+                    this.checker.resolvingBases = true;
+>this.checker.resolvingBases = true : true
+>this.checker.resolvingBases : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolvingBases : any
+>true : true
+
+                    this.checker.resolveTypeLink(scope, typeLink, true);
+>this.checker.resolveTypeLink(scope, typeLink, true) : any
+>this.checker.resolveTypeLink : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolveTypeLink : any
+>scope : SymbolScope
+>typeLink : TypeLink
+>true : true
+
+                    this.checker.resolvingBases = false;
+>this.checker.resolvingBases = false : false
+>this.checker.resolvingBases : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolvingBases : any
+>false : false
+
+                    if (typeLink.type.isClass()) {
+>typeLink.type.isClass() : any
+>typeLink.type.isClass : any
+>typeLink.type : any
+>typeLink : TypeLink
+>type : any
+>isClass : any
+
+                        extendsList[i] = typeLink.type.instanceType;
+>extendsList[i] = typeLink.type.instanceType : any
+>extendsList[i] : Type
+>extendsList : Type[]
+>i : number
+>typeLink.type.instanceType : any
+>typeLink.type : any
+>typeLink : TypeLink
+>type : any
+>instanceType : any
+                    }
+                    else {
+                        extendsList[i] = typeLink.type;
+>extendsList[i] = typeLink.type : any
+>extendsList[i] : Type
+>extendsList : Type[]
+>i : number
+>typeLink.type : any
+>typeLink : TypeLink
+>type : any
+                    }
+                }
+            }
+            return extendsList;
+>extendsList : Type[]
+        }
+
+        public resolveBases(scope: SymbolScope, type: Type) {
+>resolveBases : (scope: SymbolScope, type: Type) => void
+>scope : SymbolScope
+>type : Type
+
+            type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
+>type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : Type[]
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : Type[]
+>this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
+>this : this
+>resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
+>type.extendsTypeLinks : any
+>type : Type
+>extendsTypeLinks : any
+>scope : SymbolScope
+
+            var i = 0, len = type.extendsList.length;
+>i : number
+>0 : 0
+>len : any
+>type.extendsList.length : any
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>length : any
+
+            var derivedIsClass = type.isClassInstance();
+>derivedIsClass : any
+>type.isClassInstance() : any
+>type.isClassInstance : any
+>type : Type
+>isClassInstance : any
+
+            for (; i < len; i++) {
+>i < len : boolean
+>i : number
+>len : any
+>i++ : number
+>i : number
+
+                var baseIsClass = type.extendsList[i].isClassInstance();
+>baseIsClass : any
+>type.extendsList[i].isClassInstance() : any
+>type.extendsList[i].isClassInstance : any
+>type.extendsList[i] : any
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>i : number
+>isClassInstance : any
+
+                if (type.extendsList[i] != this.checker.anyType) {
+>type.extendsList[i] != this.checker.anyType : boolean
+>type.extendsList[i] : any
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>i : number
+>this.checker.anyType : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>anyType : any
+
+                    if (derivedIsClass) {
+>derivedIsClass : any
+
+                        if (!baseIsClass) {
+>!baseIsClass : boolean
+>baseIsClass : any
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker.errorReporter.simpleErrorFromSym(type.symbol,                                                                     "A export class may only extend other classes, " + type.extendsList[i].symbol.fullName() + " is an interface.") : any
+>this.checker.errorReporter.simpleErrorFromSym : any
+>this.checker.errorReporter : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>errorReporter : any
+>simpleErrorFromSym : any
+>type.symbol : any
+>type : Type
+>symbol : any
+
+                                                                     "A export class may only extend other classes, " + type.extendsList[i].symbol.fullName() + " is an interface.");
+>"A export class may only extend other classes, " + type.extendsList[i].symbol.fullName() + " is an interface." : string
+>"A export class may only extend other classes, " + type.extendsList[i].symbol.fullName() : string
+>"A export class may only extend other classes, " : "A export class may only extend other classes, "
+>type.extendsList[i].symbol.fullName() : any
+>type.extendsList[i].symbol.fullName : any
+>type.extendsList[i].symbol : any
+>type.extendsList[i] : any
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>i : number
+>symbol : any
+>fullName : any
+>" is an interface." : " is an interface."
+                        }
+                    }
+                    else {
+                        if (baseIsClass) {
+>baseIsClass : any
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker.errorReporter.simpleErrorFromSym(type.symbol,                                                                     "An interface may only extend other interfaces, " + type.extendsList[i].symbol.fullName() + " is a class.") : any
+>this.checker.errorReporter.simpleErrorFromSym : any
+>this.checker.errorReporter : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>errorReporter : any
+>simpleErrorFromSym : any
+>type.symbol : any
+>type : Type
+>symbol : any
+
+                                                                     "An interface may only extend other interfaces, " + type.extendsList[i].symbol.fullName() + " is a class.");
+>"An interface may only extend other interfaces, " + type.extendsList[i].symbol.fullName() + " is a class." : string
+>"An interface may only extend other interfaces, " + type.extendsList[i].symbol.fullName() : string
+>"An interface may only extend other interfaces, " : "An interface may only extend other interfaces, "
+>type.extendsList[i].symbol.fullName() : any
+>type.extendsList[i].symbol.fullName : any
+>type.extendsList[i].symbol : any
+>type.extendsList[i] : any
+>type.extendsList : any
+>type : Type
+>extendsList : any
+>i : number
+>symbol : any
+>fullName : any
+>" is a class." : " is a class."
+                        }
+                    }
+                }
+            }
+
+            type.implementsList = this.resolveBaseTypeLinks(type.implementsTypeLinks, scope);
+>type.implementsList = this.resolveBaseTypeLinks(type.implementsTypeLinks, scope) : Type[]
+>type.implementsList : any
+>type : Type
+>implementsList : any
+>this.resolveBaseTypeLinks(type.implementsTypeLinks, scope) : Type[]
+>this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
+>this : this
+>resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
+>type.implementsTypeLinks : any
+>type : Type
+>implementsTypeLinks : any
+>scope : SymbolScope
+
+            if (type.implementsList) {
+>type.implementsList : any
+>type : Type
+>implementsList : any
+
+                for (i = 0, len = type.implementsList.length; i < len; i++) {
+>i = 0, len = type.implementsList.length : any
+>i = 0 : 0
+>i : number
+>0 : 0
+>len = type.implementsList.length : any
+>len : any
+>type.implementsList.length : any
+>type.implementsList : any
+>type : Type
+>implementsList : any
+>length : any
+>i < len : boolean
+>i : number
+>len : any
+>i++ : number
+>i : number
+
+                    var iface = type.implementsList[i];
+>iface : any
+>type.implementsList[i] : any
+>type.implementsList : any
+>type : Type
+>implementsList : any
+>i : number
+
+                    if (iface.isClassInstance()) {
+>iface.isClassInstance() : any
+>iface.isClassInstance : any
+>iface : any
+>isClassInstance : any
+
+                        if (derivedIsClass) {
+>derivedIsClass : any
+
+                            this.checker.errorReporter.simpleErrorFromSym(type.symbol,
+>this.checker.errorReporter.simpleErrorFromSym(type.symbol,                                                                     "A class may only implement an interface; " + iface.symbol.fullName() + " is a class.") : any
+>this.checker.errorReporter.simpleErrorFromSym : any
+>this.checker.errorReporter : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>errorReporter : any
+>simpleErrorFromSym : any
+>type.symbol : any
+>type : Type
+>symbol : any
+
+                                                                     "A class may only implement an interface; " + iface.symbol.fullName() + " is a class.");
+>"A class may only implement an interface; " + iface.symbol.fullName() + " is a class." : string
+>"A class may only implement an interface; " + iface.symbol.fullName() : string
+>"A class may only implement an interface; " : "A class may only implement an interface; "
+>iface.symbol.fullName() : any
+>iface.symbol.fullName : any
+>iface.symbol : any
+>iface : any
+>symbol : any
+>fullName : any
+>" is a class." : " is a class."
+                        }
+                    }
+                }
+            }
+        }
+
+        public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
+>resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>signatureGroup : SignatureGroup
+>scope : SymbolScope
+>instanceType : Type
+
+            var supplyVar = !(signatureGroup.hasImplementation);
+>supplyVar : boolean
+>!(signatureGroup.hasImplementation) : boolean
+>(signatureGroup.hasImplementation) : any
+>signatureGroup.hasImplementation : any
+>signatureGroup : SignatureGroup
+>hasImplementation : any
+
+            for (var i = 0, len = signatureGroup.signatures.length; i < len; i++) {
+>i : number
+>0 : 0
+>len : any
+>signatureGroup.signatures.length : any
+>signatureGroup.signatures : any
+>signatureGroup : SignatureGroup
+>signatures : any
+>length : any
+>i < len : boolean
+>i : number
+>len : any
+>i++ : number
+>i : number
+
+                var signature = signatureGroup.signatures[i];
+>signature : any
+>signatureGroup.signatures[i] : any
+>signatureGroup.signatures : any
+>signatureGroup : SignatureGroup
+>signatures : any
+>i : number
+
+                if (instanceType) {
+>instanceType : Type
+
+                    signature.returnType.type = instanceType;
+>signature.returnType.type = instanceType : Type
+>signature.returnType.type : any
+>signature.returnType : any
+>signature : any
+>returnType : any
+>type : any
+>instanceType : Type
+                }
+                else {
+                    this.checker.resolveTypeLink(scope, signature.returnType, supplyVar);
+>this.checker.resolveTypeLink(scope, signature.returnType, supplyVar) : any
+>this.checker.resolveTypeLink : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolveTypeLink : any
+>scope : SymbolScope
+>signature.returnType : any
+>signature : any
+>returnType : any
+>supplyVar : boolean
+                }
+                var paramLen = signature.parameters.length;
+>paramLen : any
+>signature.parameters.length : any
+>signature.parameters : any
+>signature : any
+>parameters : any
+>length : any
+
+                for (var j = 0; j < paramLen; j++) {
+>j : number
+>0 : 0
+>j < paramLen : boolean
+>j : number
+>paramLen : any
+>j++ : number
+>j : number
+
+                    this.bindSymbol(scope, signature.parameters[j]);
+>this.bindSymbol(scope, signature.parameters[j]) : void
+>this.bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
+>this : this
+>bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
+>scope : SymbolScope
+>signature.parameters[j] : any
+>signature.parameters : any
+>signature : any
+>parameters : any
+>j : number
+                }
+                if (signature.hasVariableArgList) {
+>signature.hasVariableArgList : any
+>signature : any
+>hasVariableArgList : any
+
+                    // check that last parameter has an array type
+                    var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
+>lastParam : ParameterSymbol
+><ParameterSymbol>signature.parameters[paramLen - 1] : ParameterSymbol
+>signature.parameters[paramLen - 1] : any
+>signature.parameters : any
+>signature : any
+>parameters : any
+>paramLen - 1 : number
+>paramLen : any
+>1 : 1
+
+                    lastParam.argsOffset = paramLen - 1;
+>lastParam.argsOffset = paramLen - 1 : number
+>lastParam.argsOffset : any
+>lastParam : ParameterSymbol
+>argsOffset : any
+>paramLen - 1 : number
+>paramLen : any
+>1 : 1
+
+                    if (!lastParam.getType().isArray()) {
+>!lastParam.getType().isArray() : boolean
+>lastParam.getType().isArray() : any
+>lastParam.getType().isArray : any
+>lastParam.getType() : any
+>lastParam.getType : any
+>lastParam : ParameterSymbol
+>getType : any
+>isArray : any
+
+                        this.checker.errorReporter.simpleErrorFromSym(lastParam,
+>this.checker.errorReporter.simpleErrorFromSym(lastParam,                                                                 "... parameter must have array type") : any
+>this.checker.errorReporter.simpleErrorFromSym : any
+>this.checker.errorReporter : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>errorReporter : any
+>simpleErrorFromSym : any
+>lastParam : ParameterSymbol
+
+                                                                 "... parameter must have array type");
+>"... parameter must have array type" : "... parameter must have array type"
+
+                        lastParam.parameter.typeLink.type = this.checker.makeArrayType(lastParam.parameter.typeLink.type);
+>lastParam.parameter.typeLink.type = this.checker.makeArrayType(lastParam.parameter.typeLink.type) : any
+>lastParam.parameter.typeLink.type : any
+>lastParam.parameter.typeLink : any
+>lastParam.parameter : any
+>lastParam : ParameterSymbol
+>parameter : any
+>typeLink : any
+>type : any
+>this.checker.makeArrayType(lastParam.parameter.typeLink.type) : any
+>this.checker.makeArrayType : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>makeArrayType : any
+>lastParam.parameter.typeLink.type : any
+>lastParam.parameter.typeLink : any
+>lastParam.parameter : any
+>lastParam : ParameterSymbol
+>parameter : any
+>typeLink : any
+>type : any
+                    }
+                }
+            }
+        }
+
+        public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
+>bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>scope : SymbolScope
+>type : Type
+>instanceType : Type
+
+            if (instanceType) {
+>instanceType : Type
+
+                this.bindType(scope, instanceType, null);
+>this.bindType(scope, instanceType, null) : void
+>this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>this : this
+>bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>scope : SymbolScope
+>instanceType : Type
+>null : null
+            }
+            if (type.hasMembers()) {
+>type.hasMembers() : any
+>type.hasMembers : any
+>type : Type
+>hasMembers : any
+
+                var members = type.members;
+>members : any
+>type.members : any
+>type : Type
+>members : any
+
+                var ambientMembers = type.ambientMembers;
+>ambientMembers : any
+>type.ambientMembers : any
+>type : Type
+>ambientMembers : any
+
+                var typeMembers = type.getAllEnclosedTypes(); // REVIEW: Should only be getting exported types?
+>typeMembers : any
+>type.getAllEnclosedTypes() : any
+>type.getAllEnclosedTypes : any
+>type : Type
+>getAllEnclosedTypes : any
+
+                var ambientTypeMembers = type.getAllAmbientEnclosedTypes(); // REVIEW: Should only be getting exported types?
+>ambientTypeMembers : any
+>type.getAllAmbientEnclosedTypes() : any
+>type.getAllAmbientEnclosedTypes : any
+>type : Type
+>getAllAmbientEnclosedTypes : any
+
+                var memberScope = new SymbolTableScope(members, ambientMembers, typeMembers, ambientTypeMembers, type.symbol);
+>memberScope : any
+>new SymbolTableScope(members, ambientMembers, typeMembers, ambientTypeMembers, type.symbol) : any
+>SymbolTableScope : any
+>members : any
+>ambientMembers : any
+>typeMembers : any
+>ambientTypeMembers : any
+>type.symbol : any
+>type : Type
+>symbol : any
+
+                var agg = new SymbolAggregateScope(type.symbol);
+>agg : any
+>new SymbolAggregateScope(type.symbol) : any
+>SymbolAggregateScope : any
+>type.symbol : any
+>type : Type
+>symbol : any
+
+                var prevCurrentModDecl = this.checker.currentModDecl;
+>prevCurrentModDecl : any
+>this.checker.currentModDecl : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>currentModDecl : any
+
+                var prevBindStatus = this.checker.inBind;
+>prevBindStatus : any
+>this.checker.inBind : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>inBind : any
+
+                agg.addParentScope(memberScope);
+>agg.addParentScope(memberScope) : any
+>agg.addParentScope : any
+>agg : any
+>addParentScope : any
+>memberScope : any
+
+                agg.addParentScope(scope);
+>agg.addParentScope(scope) : any
+>agg.addParentScope : any
+>agg : any
+>addParentScope : any
+>scope : SymbolScope
+
+                if (type.isModuleType()) {
+>type.isModuleType() : any
+>type.isModuleType : any
+>type : Type
+>isModuleType : any
+
+                    this.checker.currentModDecl = <ModuleDeclaration>type.symbol.declAST;
+>this.checker.currentModDecl = <ModuleDeclaration>type.symbol.declAST : ModuleDeclaration
+>this.checker.currentModDecl : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>currentModDecl : any
+><ModuleDeclaration>type.symbol.declAST : ModuleDeclaration
+>type.symbol.declAST : any
+>type.symbol : any
+>type : Type
+>symbol : any
+>declAST : any
+
+                    this.checker.inBind = true;
+>this.checker.inBind = true : true
+>this.checker.inBind : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>inBind : any
+>true : true
+                }
+                if (members) {
+>members : any
+
+                    this.bind(agg, type.members.allMembers); // REVIEW: Should only be getting exported types?
+>this.bind(agg, type.members.allMembers) : void
+>this.bind : (scope: SymbolScope, table: IHashTable) => void
+>this : this
+>bind : (scope: SymbolScope, table: IHashTable) => void
+>agg : any
+>type.members.allMembers : any
+>type.members : any
+>type : Type
+>members : any
+>allMembers : any
+                }
+                if (typeMembers) {
+>typeMembers : any
+
+                    this.bind(agg, typeMembers.allMembers);
+>this.bind(agg, typeMembers.allMembers) : void
+>this.bind : (scope: SymbolScope, table: IHashTable) => void
+>this : this
+>bind : (scope: SymbolScope, table: IHashTable) => void
+>agg : any
+>typeMembers.allMembers : any
+>typeMembers : any
+>allMembers : any
+                }
+                if (ambientMembers) {
+>ambientMembers : any
+
+                    this.bind(agg, ambientMembers.allMembers);
+>this.bind(agg, ambientMembers.allMembers) : void
+>this.bind : (scope: SymbolScope, table: IHashTable) => void
+>this : this
+>bind : (scope: SymbolScope, table: IHashTable) => void
+>agg : any
+>ambientMembers.allMembers : any
+>ambientMembers : any
+>allMembers : any
+                }
+                if (ambientTypeMembers) {
+>ambientTypeMembers : any
+
+                    this.bind(agg, ambientTypeMembers.allMembers);
+>this.bind(agg, ambientTypeMembers.allMembers) : void
+>this.bind : (scope: SymbolScope, table: IHashTable) => void
+>this : this
+>bind : (scope: SymbolScope, table: IHashTable) => void
+>agg : any
+>ambientTypeMembers.allMembers : any
+>ambientTypeMembers : any
+>allMembers : any
+                }
+                this.checker.currentModDecl = prevCurrentModDecl;
+>this.checker.currentModDecl = prevCurrentModDecl : any
+>this.checker.currentModDecl : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>currentModDecl : any
+>prevCurrentModDecl : any
+
+                this.checker.inBind = prevBindStatus;
+>this.checker.inBind = prevBindStatus : any
+>this.checker.inBind : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>inBind : any
+>prevBindStatus : any
+            }
+            if (type.extendsTypeLinks) {
+>type.extendsTypeLinks : any
+>type : Type
+>extendsTypeLinks : any
+
+                this.resolveBases(scope, type);
+>this.resolveBases(scope, type) : void
+>this.resolveBases : (scope: SymbolScope, type: Type) => void
+>this : this
+>resolveBases : (scope: SymbolScope, type: Type) => void
+>scope : SymbolScope
+>type : Type
+            }
+            if (type.construct) {
+>type.construct : any
+>type : Type
+>construct : any
+
+                this.resolveSignatureGroup(type.construct, scope, instanceType);
+>this.resolveSignatureGroup(type.construct, scope, instanceType) : void
+>this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>this : this
+>resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>type.construct : any
+>type : Type
+>construct : any
+>scope : SymbolScope
+>instanceType : Type
+            }
+            if (type.call) {
+>type.call : any
+>type : Type
+>call : any
+
+                this.resolveSignatureGroup(type.call, scope, null);
+>this.resolveSignatureGroup(type.call, scope, null) : void
+>this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>this : this
+>resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>type.call : any
+>type : Type
+>call : any
+>scope : SymbolScope
+>null : null
+            }
+            if (type.index) {
+>type.index : any
+>type : Type
+>index : any
+
+                this.resolveSignatureGroup(type.index, scope, null);
+>this.resolveSignatureGroup(type.index, scope, null) : void
+>this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>this : this
+>resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
+>type.index : any
+>type : Type
+>index : any
+>scope : SymbolScope
+>null : null
+            }
+            if (type.elementType) {
+>type.elementType : any
+>type : Type
+>elementType : any
+
+                this.bindType(scope, type.elementType, null);
+>this.bindType(scope, type.elementType, null) : void
+>this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>this : this
+>bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>scope : SymbolScope
+>type.elementType : any
+>type : Type
+>elementType : any
+>null : null
+            }
+        }
+
+        public bindSymbol(scope: SymbolScope, symbol: Symbol) {
+>bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
+>scope : SymbolScope
+>symbol : Symbol
+
+            if (!symbol.bound) {
+>!symbol.bound : boolean
+>symbol.bound : any
+>symbol : Symbol
+>bound : any
+
+                var prevLocationInfo = this.checker.locationInfo;
+>prevLocationInfo : any
+>this.checker.locationInfo : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>locationInfo : any
+
+                if ((this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length)) {
+>(this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length) : boolean
+>(this.checker.units) && (symbol.unitIndex >= 0) : boolean
+>(this.checker.units) : any
+>this.checker.units : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>units : any
+>(symbol.unitIndex >= 0) : boolean
+>symbol.unitIndex >= 0 : boolean
+>symbol.unitIndex : any
+>symbol : Symbol
+>unitIndex : any
+>0 : 0
+>(symbol.unitIndex < this.checker.units.length) : boolean
+>symbol.unitIndex < this.checker.units.length : boolean
+>symbol.unitIndex : any
+>symbol : Symbol
+>unitIndex : any
+>this.checker.units.length : any
+>this.checker.units : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>units : any
+>length : any
+
+                    this.checker.locationInfo = this.checker.units[symbol.unitIndex];
+>this.checker.locationInfo = this.checker.units[symbol.unitIndex] : any
+>this.checker.locationInfo : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>locationInfo : any
+>this.checker.units[symbol.unitIndex] : any
+>this.checker.units : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>units : any
+>symbol.unitIndex : any
+>symbol : Symbol
+>unitIndex : any
+                }
+                switch (symbol.kind()) {
+>symbol.kind() : any
+>symbol.kind : any
+>symbol : Symbol
+>kind : any
+
+                    case SymbolKind.Type:
+>SymbolKind.Type : any
+>SymbolKind : any
+>Type : any
+
+                        if (symbol.flags & SymbolFlags.Bound) {
+>symbol.flags & SymbolFlags.Bound : number
+>symbol.flags : any
+>symbol : Symbol
+>flags : any
+>SymbolFlags.Bound : any
+>SymbolFlags : any
+>Bound : any
+
+                            break;
+                        }
+
+                        var typeSymbol = <TypeSymbol>symbol;
+>typeSymbol : TypeSymbol
+><TypeSymbol>symbol : TypeSymbol
+>symbol : Symbol
+
+                        typeSymbol.flags |= SymbolFlags.Bound;
+>typeSymbol.flags |= SymbolFlags.Bound : number
+>typeSymbol.flags : any
+>typeSymbol : TypeSymbol
+>flags : any
+>SymbolFlags.Bound : any
+>SymbolFlags : any
+>Bound : any
+
+                        // Since type collection happens out of order, a dynamic module referenced by an import statement
+                        // may not yet be in scope when the import symbol is created.  In that case, we need to search
+                        // out the module symbol now
+                        // Note that we'll also want to do this in resolveTypeMembers, in case the symbol is set outside the
+                        // context of a given module  (E.g., an outer import statement)
+                        if (typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name) {
+>typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name : boolean
+>typeSymbol.aliasLink && !typeSymbol.type : boolean
+>typeSymbol.aliasLink : any
+>typeSymbol : TypeSymbol
+>aliasLink : any
+>!typeSymbol.type : boolean
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>typeSymbol.aliasLink.alias.nodeType == NodeType.Name : boolean
+>typeSymbol.aliasLink.alias.nodeType : any
+>typeSymbol.aliasLink.alias : any
+>typeSymbol.aliasLink : any
+>typeSymbol : TypeSymbol
+>aliasLink : any
+>alias : any
+>nodeType : any
+>NodeType.Name : any
+>NodeType : any
+>Name : any
+
+                            var modPath = (<Identifier>typeSymbol.aliasLink.alias).text;
+>modPath : any
+>(<Identifier>typeSymbol.aliasLink.alias).text : any
+>(<Identifier>typeSymbol.aliasLink.alias) : Identifier
+><Identifier>typeSymbol.aliasLink.alias : Identifier
+>typeSymbol.aliasLink.alias : any
+>typeSymbol.aliasLink : any
+>typeSymbol : TypeSymbol
+>aliasLink : any
+>alias : any
+>text : any
+
+                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true));
+>modSym : any
+>this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true)) : any
+>this.checker.findSymbolForDynamicModule : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>findSymbolForDynamicModule : any
+>modPath : any
+>this.checker.locationInfo.filename : any
+>this.checker.locationInfo : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>locationInfo : any
+>filename : any
+>(id) => scope.find(id, false, true) : (id: any) => any
+>id : any
+>scope.find(id, false, true) : any
+>scope.find : any
+>scope : SymbolScope
+>find : any
+>id : any
+>false : false
+>true : true
+
+                            if (modSym) {
+>modSym : any
+
+                                typeSymbol.type = modSym.getType();
+>typeSymbol.type = modSym.getType() : any
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>modSym.getType() : any
+>modSym.getType : any
+>modSym : any
+>getType : any
+                            }
+                        }
+
+                        if (typeSymbol.type && typeSymbol.type != this.checker.gloModType) {
+>typeSymbol.type && typeSymbol.type != this.checker.gloModType : boolean
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>typeSymbol.type != this.checker.gloModType : boolean
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>this.checker.gloModType : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>gloModType : any
+
+                            this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
+>this.bindType(scope, typeSymbol.type, typeSymbol.instanceType) : void
+>this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>this : this
+>bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>scope : SymbolScope
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>typeSymbol.instanceType : any
+>typeSymbol : TypeSymbol
+>instanceType : any
+
+                            // bind expansions on the parent type symbol
+                            if (typeSymbol.type.isModuleType()) {
+>typeSymbol.type.isModuleType() : any
+>typeSymbol.type.isModuleType : any
+>typeSymbol.type : any
+>typeSymbol : TypeSymbol
+>type : any
+>isModuleType : any
+
+                                for (var i = 0; i < typeSymbol.expansions.length; i++) {
+>i : number
+>0 : 0
+>i < typeSymbol.expansions.length : boolean
+>i : number
+>typeSymbol.expansions.length : any
+>typeSymbol.expansions : any
+>typeSymbol : TypeSymbol
+>expansions : any
+>length : any
+>i++ : number
+>i : number
+
+                                    this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType);
+>this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType) : void
+>this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>this : this
+>bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
+>scope : SymbolScope
+>typeSymbol.expansions[i] : any
+>typeSymbol.expansions : any
+>typeSymbol : TypeSymbol
+>expansions : any
+>i : number
+>typeSymbol.instanceType : any
+>typeSymbol : TypeSymbol
+>instanceType : any
+                                }
+                            }
+                        }
+                        break;
+                    case SymbolKind.Field:
+>SymbolKind.Field : any
+>SymbolKind : any
+>Field : any
+
+                        this.checker.resolveTypeLink(scope, (<FieldSymbol>symbol).field.typeLink,
+>this.checker.resolveTypeLink(scope, (<FieldSymbol>symbol).field.typeLink,                                                false) : any
+>this.checker.resolveTypeLink : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolveTypeLink : any
+>scope : SymbolScope
+>(<FieldSymbol>symbol).field.typeLink : any
+>(<FieldSymbol>symbol).field : any
+>(<FieldSymbol>symbol) : FieldSymbol
+><FieldSymbol>symbol : FieldSymbol
+>symbol : Symbol
+>field : any
+>typeLink : any
+
+                                                false);
+>false : false
+
+                        break;
+                    case SymbolKind.Parameter:
+>SymbolKind.Parameter : any
+>SymbolKind : any
+>Parameter : any
+
+                        this.checker.resolveTypeLink(scope,
+>this.checker.resolveTypeLink(scope,                                                (<ParameterSymbol>symbol).parameter.typeLink,                                                true) : any
+>this.checker.resolveTypeLink : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>resolveTypeLink : any
+>scope : SymbolScope
+
+                                                (<ParameterSymbol>symbol).parameter.typeLink,
+>(<ParameterSymbol>symbol).parameter.typeLink : any
+>(<ParameterSymbol>symbol).parameter : any
+>(<ParameterSymbol>symbol) : ParameterSymbol
+><ParameterSymbol>symbol : ParameterSymbol
+>symbol : Symbol
+>parameter : any
+>typeLink : any
+
+                                                true);
+>true : true
+
+                        break;
+                }
+                this.checker.locationInfo = prevLocationInfo;
+>this.checker.locationInfo = prevLocationInfo : any
+>this.checker.locationInfo : any
+>this.checker : TypeChecker
+>this : this
+>checker : TypeChecker
+>locationInfo : any
+>prevLocationInfo : any
+            }
+            symbol.bound = true;
+>symbol.bound = true : true
+>symbol.bound : any
+>symbol : Symbol
+>bound : any
+>true : true
+        }
+
+        public bind(scope: SymbolScope, table: IHashTable) {
+>bind : (scope: SymbolScope, table: IHashTable) => void
+>scope : SymbolScope
+>table : IHashTable
+
+            table.map(
+>table.map(                (key, sym, binder) => {                    binder.bindSymbol(scope, sym);                },                this) : any
+>table.map : any
+>table : IHashTable
+>map : any
+
+                (key, sym, binder) => {
+>(key, sym, binder) => {                    binder.bindSymbol(scope, sym);                } : (key: any, sym: any, binder: any) => void
+>key : any
+>sym : any
+>binder : any
+
+                    binder.bindSymbol(scope, sym);
+>binder.bindSymbol(scope, sym) : any
+>binder.bindSymbol : any
+>binder : any
+>bindSymbol : any
+>scope : SymbolScope
+>sym : any
+
+                },
+                this);
+>this : this
+        }
+    }
+
+}

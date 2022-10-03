@@ -1,0 +1,126 @@
+=== tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts ===
+declare class Component<P> {
+>Component : Component<P>
+
+    constructor(props: Readonly<P>);
+>props : Readonly<P>
+
+    constructor(props: P, context?: any);
+>props : P
+>context : any
+
+    readonly props: Readonly<P> & Readonly<{ children?: {} }>;
+>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
+>children : {} | undefined
+}
+interface ComponentClass<P = {}> {
+    new (props: P, context?: any): Component<P>;
+>props : P
+>context : any
+
+    propTypes?: WeakValidationMap<P>;
+>propTypes : WeakValidationMap<P> | undefined
+
+    defaultProps?: Partial<P>;
+>defaultProps : Partial<P> | undefined
+
+    displayName?: string;
+>displayName : string | undefined
+}
+interface FunctionComponent<P = {}> {
+    (props: P & { children?: {} }, context?: any): {} | null;
+>props : P & { children?: {} | undefined; }
+>children : {} | undefined
+>context : any
+>null : null
+
+    propTypes?: WeakValidationMap<P>;
+>propTypes : WeakValidationMap<P> | undefined
+
+    defaultProps?: Partial<P>;
+>defaultProps : Partial<P> | undefined
+
+    displayName?: string;
+>displayName : string | undefined
+}
+
+export declare const nominalTypeHack: unique symbol;
+>nominalTypeHack : unique symbol
+
+export interface Validator<T> {
+    (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
+>props : object
+>propName : string
+>componentName : string
+>location : string
+>propFullName : string
+>null : null
+
+    [nominalTypeHack]?: T;
+>[nominalTypeHack] : T | undefined
+>nominalTypeHack : unique symbol
+}
+type WeakValidationMap<T> = {
+>WeakValidationMap : WeakValidationMap<T>
+
+    [K in keyof T]?: null extends T[K]
+>null : null
+
+        ? Validator<T[K] | null | undefined>
+>null : null
+
+        : undefined extends T[K]
+        ? Validator<T[K] | null | undefined>
+>null : null
+
+        : Validator<T[K]>
+};
+type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
+>ComponentType : ComponentType<P>
+
+export type Shared<
+>Shared : Shared<InjectedProps, DecorationTargetProps>
+
+    InjectedProps,
+    DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
+    > = {
+        [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]?: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
+    };
+
+// Infers prop type from component C
+export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
+>GetProps : GetProps<C>
+
+export type ConnectedComponentClass<
+>ConnectedComponentClass : ConnectedComponentClass<C, P>
+
+    C extends ComponentType<any>,
+    P
+> = ComponentClass<P> & {
+    WrappedComponent: C;
+>WrappedComponent : C
+
+};
+
+export type Matching<InjectedProps, DecorationTargetProps> = {
+>Matching : Matching<InjectedProps, DecorationTargetProps>
+
+    [P in keyof DecorationTargetProps]: P extends keyof InjectedProps
+        ? InjectedProps[P] extends DecorationTargetProps[P]
+            ? DecorationTargetProps[P]
+            : InjectedProps[P]
+        : DecorationTargetProps[P];
+};
+
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+>Omit : Omit<T, K>
+
+export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
+>InferableComponentEnhancerWithProps : InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps>
+
+    <C extends ComponentType<Matching<TInjectedProps, GetProps<C>>>>(
+        component: C
+>component : C
+
+    ) => ConnectedComponentClass<C, Omit<GetProps<C>, keyof Shared<TInjectedProps, GetProps<C>>> & TNeedsProps>;
+

@@ -1,0 +1,458 @@
+=== tests/cases/conformance/types/unknown/unknownType1.ts ===
+// In an intersection everything absorbs unknown
+
+type T00 = unknown & null;  // null
+>T00 : Symbol(T00, Decl(unknownType1.ts, 0, 0))
+
+type T01 = unknown & undefined;  // undefined
+>T01 : Symbol(T01, Decl(unknownType1.ts, 2, 26))
+
+type T02 = unknown & null & undefined;  // never
+>T02 : Symbol(T02, Decl(unknownType1.ts, 3, 31))
+
+type T03 = unknown & string;  // string
+>T03 : Symbol(T03, Decl(unknownType1.ts, 4, 38))
+
+type T04 = unknown & string[];  // string[]
+>T04 : Symbol(T04, Decl(unknownType1.ts, 5, 28))
+
+type T05 = unknown & unknown;  // unknown
+>T05 : Symbol(T05, Decl(unknownType1.ts, 6, 30))
+
+type T06 = unknown & any;  // any
+>T06 : Symbol(T06, Decl(unknownType1.ts, 7, 29))
+
+// In a union an unknown absorbs everything
+
+type T10 = unknown | null;  // unknown
+>T10 : Symbol(T10, Decl(unknownType1.ts, 8, 25))
+
+type T11 = unknown | undefined;  // unknown
+>T11 : Symbol(T11, Decl(unknownType1.ts, 12, 26))
+
+type T12 = unknown | null | undefined;  // unknown
+>T12 : Symbol(T12, Decl(unknownType1.ts, 13, 31))
+
+type T13 = unknown | string;  // unknown
+>T13 : Symbol(T13, Decl(unknownType1.ts, 14, 38))
+
+type T14 = unknown | string[];  // unknown
+>T14 : Symbol(T14, Decl(unknownType1.ts, 15, 28))
+
+type T15 = unknown | unknown;  // unknown
+>T15 : Symbol(T15, Decl(unknownType1.ts, 16, 30))
+
+type T16 = unknown | any;  // any
+>T16 : Symbol(T16, Decl(unknownType1.ts, 17, 29))
+
+// Type variable and unknown in union and intersection
+
+type T20<T> = T & {};  // T & {}
+>T20 : Symbol(T20, Decl(unknownType1.ts, 18, 25))
+>T : Symbol(T, Decl(unknownType1.ts, 22, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 22, 9))
+
+type T21<T> = T | {};  // T | {}
+>T21 : Symbol(T21, Decl(unknownType1.ts, 22, 21))
+>T : Symbol(T, Decl(unknownType1.ts, 23, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 23, 9))
+
+type T22<T> = T & unknown;  // T
+>T22 : Symbol(T22, Decl(unknownType1.ts, 23, 21))
+>T : Symbol(T, Decl(unknownType1.ts, 24, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 24, 9))
+
+type T23<T> = T | unknown;  // unknown
+>T23 : Symbol(T23, Decl(unknownType1.ts, 24, 26))
+>T : Symbol(T, Decl(unknownType1.ts, 25, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 25, 9))
+
+// unknown in conditional types
+
+type T30<T> = unknown extends T ? true : false;  // Deferred
+>T30 : Symbol(T30, Decl(unknownType1.ts, 25, 26))
+>T : Symbol(T, Decl(unknownType1.ts, 29, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 29, 9))
+
+type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
+>T31 : Symbol(T31, Decl(unknownType1.ts, 29, 47))
+>T : Symbol(T, Decl(unknownType1.ts, 30, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 30, 9))
+
+type T32<T> = never extends T ? true : false;  // true
+>T32 : Symbol(T32, Decl(unknownType1.ts, 30, 47))
+>T : Symbol(T, Decl(unknownType1.ts, 31, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 31, 9))
+
+type T33<T> = T extends never ? true : false;  // Deferred
+>T33 : Symbol(T33, Decl(unknownType1.ts, 31, 45))
+>T : Symbol(T, Decl(unknownType1.ts, 32, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 32, 9))
+
+type T35<T> = T extends unknown ? { x: T } : false;
+>T35 : Symbol(T35, Decl(unknownType1.ts, 32, 45))
+>T : Symbol(T, Decl(unknownType1.ts, 34, 9))
+>T : Symbol(T, Decl(unknownType1.ts, 34, 9))
+>x : Symbol(x, Decl(unknownType1.ts, 34, 35))
+>T : Symbol(T, Decl(unknownType1.ts, 34, 9))
+
+type T36 = T35<string | number>;  // { x: string } | { x: number }
+>T36 : Symbol(T36, Decl(unknownType1.ts, 34, 51))
+>T35 : Symbol(T35, Decl(unknownType1.ts, 32, 45))
+
+type T37 = T35<any>;  // { x: any }
+>T37 : Symbol(T37, Decl(unknownType1.ts, 35, 32))
+>T35 : Symbol(T35, Decl(unknownType1.ts, 32, 45))
+
+type T38 = T35<unknown>;  // { x: unknown }
+>T38 : Symbol(T38, Decl(unknownType1.ts, 36, 20))
+>T35 : Symbol(T35, Decl(unknownType1.ts, 32, 45))
+
+// keyof unknown
+
+type T40 = keyof any;  // string | number | symbol
+>T40 : Symbol(T40, Decl(unknownType1.ts, 37, 24))
+
+type T41 = keyof unknown;  // never
+>T41 : Symbol(T41, Decl(unknownType1.ts, 41, 21))
+
+// Only equality operators are allowed with unknown
+
+function f10(x: unknown) {
+>f10 : Symbol(f10, Decl(unknownType1.ts, 42, 25))
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x == 5;
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x !== 10;
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x >= 0;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x.foo;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x[10];  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x();  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x + 1;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    x * 2;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    -x;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+
+    +x;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 46, 13))
+}
+
+// No property accesses, element accesses, or function calls
+
+function f11(x: unknown) {
+>f11 : Symbol(f11, Decl(unknownType1.ts, 57, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 61, 13))
+
+    x.foo;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 61, 13))
+
+    x[5];  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 61, 13))
+
+    x();  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 61, 13))
+
+    new x();  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 61, 13))
+}
+
+// typeof, instanceof, and user defined type predicates
+
+declare function isFunction(x: unknown): x is Function;
+>isFunction : Symbol(isFunction, Decl(unknownType1.ts, 66, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 70, 28))
+>x : Symbol(x, Decl(unknownType1.ts, 70, 28))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f20(x: unknown) {
+>f20 : Symbol(f20, Decl(unknownType1.ts, 70, 55))
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+
+    if (typeof x === "string" || typeof x === "number") {
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+
+        x;  // string | number
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+    }
+    if (x instanceof Error) {
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        x;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+    }
+    if (isFunction(x)) {
+>isFunction : Symbol(isFunction, Decl(unknownType1.ts, 66, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+
+        x;  // Function
+>x : Symbol(x, Decl(unknownType1.ts, 72, 13))
+    }
+}
+
+// Homomorphic mapped type over unknown
+
+type T50<T> = { [P in keyof T]: number };
+>T50 : Symbol(T50, Decl(unknownType1.ts, 82, 1))
+>T : Symbol(T, Decl(unknownType1.ts, 86, 9))
+>P : Symbol(P, Decl(unknownType1.ts, 86, 17))
+>T : Symbol(T, Decl(unknownType1.ts, 86, 9))
+
+type T51 = T50<any>;  // { [x: string]: number }
+>T51 : Symbol(T51, Decl(unknownType1.ts, 86, 41))
+>T50 : Symbol(T50, Decl(unknownType1.ts, 82, 1))
+
+type T52 = T50<unknown>;  // {}
+>T52 : Symbol(T52, Decl(unknownType1.ts, 87, 20))
+>T50 : Symbol(T50, Decl(unknownType1.ts, 82, 1))
+
+// Anything is assignable to unknown
+
+function f21<T>(pAny: any, pNever: never, pT: T) {
+>f21 : Symbol(f21, Decl(unknownType1.ts, 88, 24))
+>T : Symbol(T, Decl(unknownType1.ts, 92, 13))
+>pAny : Symbol(pAny, Decl(unknownType1.ts, 92, 16))
+>pNever : Symbol(pNever, Decl(unknownType1.ts, 92, 26))
+>pT : Symbol(pT, Decl(unknownType1.ts, 92, 41))
+>T : Symbol(T, Decl(unknownType1.ts, 92, 13))
+
+    let x: unknown;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+
+    x = 123;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+
+    x = "hello";
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+
+    x = [1, 2, 3];
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+
+    x = new Error();
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x = x;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+
+    x = pAny;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+>pAny : Symbol(pAny, Decl(unknownType1.ts, 92, 16))
+
+    x = pNever;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+>pNever : Symbol(pNever, Decl(unknownType1.ts, 92, 26))
+
+    x = pT;
+>x : Symbol(x, Decl(unknownType1.ts, 93, 7))
+>pT : Symbol(pT, Decl(unknownType1.ts, 92, 41))
+}
+
+// unknown assignable only to itself and any
+
+function f22(x: unknown) {
+>f22 : Symbol(f22, Decl(unknownType1.ts, 102, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v1: any = x;
+>v1 : Symbol(v1, Decl(unknownType1.ts, 107, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v2: unknown = x;
+>v2 : Symbol(v2, Decl(unknownType1.ts, 108, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v3: object = x;  // Error
+>v3 : Symbol(v3, Decl(unknownType1.ts, 109, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v4: string = x;  // Error
+>v4 : Symbol(v4, Decl(unknownType1.ts, 110, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v5: string[] = x;  // Error
+>v5 : Symbol(v5, Decl(unknownType1.ts, 111, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v6: {} = x;  // Error
+>v6 : Symbol(v6, Decl(unknownType1.ts, 112, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+
+    let v7: {} | null | undefined = x;  // Error
+>v7 : Symbol(v7, Decl(unknownType1.ts, 113, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 106, 13))
+}
+
+// Type parameter 'T extends unknown' not related to object
+
+function f23<T extends unknown>(x: T) {
+>f23 : Symbol(f23, Decl(unknownType1.ts, 114, 1))
+>T : Symbol(T, Decl(unknownType1.ts, 118, 13))
+>x : Symbol(x, Decl(unknownType1.ts, 118, 32))
+>T : Symbol(T, Decl(unknownType1.ts, 118, 13))
+
+    let y: object = x;  // Error
+>y : Symbol(y, Decl(unknownType1.ts, 119, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 118, 32))
+}
+
+// Anything fresh but primitive assignable to { [x: string]: unknown }
+
+function f24(x: { [x: string]: unknown }) {
+>f24 : Symbol(f24, Decl(unknownType1.ts, 120, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 124, 13))
+>x : Symbol(x, Decl(unknownType1.ts, 124, 19))
+
+    x = {};
+>x : Symbol(x, Decl(unknownType1.ts, 124, 13))
+
+    x = { a: 5 };
+>x : Symbol(x, Decl(unknownType1.ts, 124, 13))
+>a : Symbol(a, Decl(unknownType1.ts, 126, 9))
+
+    x = [1, 2, 3]; // Error
+>x : Symbol(x, Decl(unknownType1.ts, 124, 13))
+
+    x = 123;  // Error
+>x : Symbol(x, Decl(unknownType1.ts, 124, 13))
+}
+
+// Locals of type unknown always considered initialized
+
+function f25() {
+>f25 : Symbol(f25, Decl(unknownType1.ts, 129, 1))
+
+    let x: unknown;
+>x : Symbol(x, Decl(unknownType1.ts, 134, 7))
+
+    let y = x;
+>y : Symbol(y, Decl(unknownType1.ts, 135, 7))
+>x : Symbol(x, Decl(unknownType1.ts, 134, 7))
+}
+
+// Spread of unknown causes result to be unknown
+
+function f26(x: {}, y: unknown, z: any) {
+>f26 : Symbol(f26, Decl(unknownType1.ts, 136, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 140, 13))
+>y : Symbol(y, Decl(unknownType1.ts, 140, 19))
+>z : Symbol(z, Decl(unknownType1.ts, 140, 31))
+
+    let o1 = { a: 42, ...x };  // { a: number }
+>o1 : Symbol(o1, Decl(unknownType1.ts, 141, 7))
+>a : Symbol(a, Decl(unknownType1.ts, 141, 14))
+>x : Symbol(x, Decl(unknownType1.ts, 140, 13))
+
+    let o2 = { a: 42, ...x, ...y };  // unknown
+>o2 : Symbol(o2, Decl(unknownType1.ts, 142, 7))
+>a : Symbol(a, Decl(unknownType1.ts, 142, 14))
+>x : Symbol(x, Decl(unknownType1.ts, 140, 13))
+>y : Symbol(y, Decl(unknownType1.ts, 140, 19))
+
+    let o3 = { a: 42, ...x, ...y, ...z };  // any
+>o3 : Symbol(o3, Decl(unknownType1.ts, 143, 7))
+>a : Symbol(a, Decl(unknownType1.ts, 143, 14))
+>x : Symbol(x, Decl(unknownType1.ts, 140, 13))
+>y : Symbol(y, Decl(unknownType1.ts, 140, 19))
+>z : Symbol(z, Decl(unknownType1.ts, 140, 31))
+
+    let o4 = { a: 42, ...z }; // any
+>o4 : Symbol(o4, Decl(unknownType1.ts, 144, 7))
+>a : Symbol(a, Decl(unknownType1.ts, 144, 14))
+>z : Symbol(z, Decl(unknownType1.ts, 140, 31))
+}
+
+// Functions with unknown return type don't need return expressions
+
+function f27(): unknown {
+>f27 : Symbol(f27, Decl(unknownType1.ts, 145, 1))
+}
+
+// Rest type cannot be created from unknown
+
+function f28(x: unknown) {
+>f28 : Symbol(f28, Decl(unknownType1.ts, 150, 1))
+>x : Symbol(x, Decl(unknownType1.ts, 154, 13))
+
+    let { ...a } = x;  // Error
+>a : Symbol(a, Decl(unknownType1.ts, 155, 9))
+>x : Symbol(x, Decl(unknownType1.ts, 154, 13))
+}
+
+// Class properties of type unknown don't need definite assignment
+
+class C1 {
+>C1 : Symbol(C1, Decl(unknownType1.ts, 156, 1))
+
+    a: string;  // Error
+>a : Symbol(C1.a, Decl(unknownType1.ts, 160, 10))
+
+    b: unknown;
+>b : Symbol(C1.b, Decl(unknownType1.ts, 161, 14))
+
+    c: any;
+>c : Symbol(C1.c, Decl(unknownType1.ts, 162, 15))
+}
+
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+>f30 : Symbol(f30, Decl(unknownType1.ts, 164, 1))
+>T : Symbol(T, Decl(unknownType1.ts, 168, 13))
+>U : Symbol(U, Decl(unknownType1.ts, 168, 15))
+>t : Symbol(t, Decl(unknownType1.ts, 168, 35))
+>T : Symbol(T, Decl(unknownType1.ts, 168, 13))
+>u : Symbol(u, Decl(unknownType1.ts, 168, 40))
+>U : Symbol(U, Decl(unknownType1.ts, 168, 15))
+
+    let x: {} = t;
+>x : Symbol(x, Decl(unknownType1.ts, 169, 7))
+>t : Symbol(t, Decl(unknownType1.ts, 168, 35))
+
+    let y: {} = u;
+>y : Symbol(y, Decl(unknownType1.ts, 170, 7))
+>u : Symbol(u, Decl(unknownType1.ts, 168, 40))
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+>Test1 : Symbol(Test1, Decl(unknownType1.ts, 171, 1))
+
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+>IsDefinitelyDefined : Symbol(IsDefinitelyDefined, Decl(unknownType1.ts, 175, 51))
+>T : Symbol(T, Decl(unknownType1.ts, 176, 25))
+>T : Symbol(T, Decl(unknownType1.ts, 176, 25))
+
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+>Test2 : Symbol(Test2, Decl(unknownType1.ts, 176, 78))
+>IsDefinitelyDefined : Symbol(IsDefinitelyDefined, Decl(unknownType1.ts, 175, 51))
+
+function oops<T extends unknown>(arg: T): {} {
+>oops : Symbol(oops, Decl(unknownType1.ts, 177, 42))
+>T : Symbol(T, Decl(unknownType1.ts, 179, 14))
+>arg : Symbol(arg, Decl(unknownType1.ts, 179, 33))
+>T : Symbol(T, Decl(unknownType1.ts, 179, 14))
+
+    return arg;  // Error
+>arg : Symbol(arg, Decl(unknownType1.ts, 179, 33))
+}
+

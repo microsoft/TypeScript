@@ -1,0 +1,84 @@
+=== tests/cases/compiler/noAsConstNameLookup.ts ===
+// Repros from #44292
+
+type Store = { a: 123 }
+>Store : Symbol(Store, Decl(noAsConstNameLookup.ts, 0, 0))
+>a : Symbol(a, Decl(noAsConstNameLookup.ts, 2, 14))
+
+export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
+>Cleaner : Symbol(Cleaner, Decl(noAsConstNameLookup.ts, 2, 23))
+>W : Symbol(W, Decl(noAsConstNameLookup.ts, 3, 23))
+>Store : Symbol(Store, Decl(noAsConstNameLookup.ts, 0, 0))
+>runner : Symbol(runner, Decl(noAsConstNameLookup.ts, 3, 40))
+>FeatureRunner : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
+>W : Symbol(W, Decl(noAsConstNameLookup.ts, 3, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class FeatureRunner<W extends Store> {
+>FeatureRunner : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
+>W : Symbol(W, Decl(noAsConstNameLookup.ts, 5, 27))
+>Store : Symbol(Store, Decl(noAsConstNameLookup.ts, 0, 0))
+
+    private readonly cleaners: Cleaner[] = []
+>cleaners : Symbol(FeatureRunner.cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
+>Cleaner : Symbol(Cleaner, Decl(noAsConstNameLookup.ts, 2, 23))
+
+    async runFeature(): Promise<any> {
+>runFeature : Symbol(FeatureRunner.runFeature, Decl(noAsConstNameLookup.ts, 6, 45))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        const objectWhichShouldBeConst = {
+>objectWhichShouldBeConst : Symbol(objectWhichShouldBeConst, Decl(noAsConstNameLookup.ts, 9, 13))
+
+            flags: {},
+>flags : Symbol(flags, Decl(noAsConstNameLookup.ts, 9, 42))
+
+            settings: {},
+>settings : Symbol(settings, Decl(noAsConstNameLookup.ts, 10, 22))
+
+        } as const;
+>const : Symbol(const)
+
+        return objectWhichShouldBeConst
+>objectWhichShouldBeConst : Symbol(objectWhichShouldBeConst, Decl(noAsConstNameLookup.ts, 9, 13))
+    }
+
+    async run(): Promise<any> {
+>run : Symbol(FeatureRunner.run, Decl(noAsConstNameLookup.ts, 14, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        const result = {}
+>result : Symbol(result, Decl(noAsConstNameLookup.ts, 17, 13))
+
+        this.cleaners.forEach(c => c(this))
+>this.cleaners.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>this.cleaners : Symbol(FeatureRunner.cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
+>this : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
+>cleaners : Symbol(FeatureRunner.cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(noAsConstNameLookup.ts, 18, 30))
+>c : Symbol(c, Decl(noAsConstNameLookup.ts, 18, 30))
+>this : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
+
+        return result
+>result : Symbol(result, Decl(noAsConstNameLookup.ts, 17, 13))
+    }
+}
+
+export class C<T> {
+>C : Symbol(C, Decl(noAsConstNameLookup.ts, 21, 1))
+>T : Symbol(T, Decl(noAsConstNameLookup.ts, 23, 15))
+
+    f(): void {
+>f : Symbol(C.f, Decl(noAsConstNameLookup.ts, 23, 19))
+
+        let one = 1 as const;
+>one : Symbol(one, Decl(noAsConstNameLookup.ts, 25, 11))
+>const : Symbol(const)
+    }
+}
+new C<string>().f();
+>new C<string>().f : Symbol(C.f, Decl(noAsConstNameLookup.ts, 23, 19))
+>C : Symbol(C, Decl(noAsConstNameLookup.ts, 21, 1))
+>f : Symbol(C.f, Decl(noAsConstNameLookup.ts, 23, 19))
+

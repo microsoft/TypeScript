@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts ===
+function foo([x,y,z]?: [string, number, boolean]) {
+>foo : Symbol(foo, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 0, 0))
+>x : Symbol(x, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 0, 14))
+>y : Symbol(y, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 0, 16))
+>z : Symbol(z, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 0, 18))
+}
+function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
+>foo1 : Symbol(foo1, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 1, 1))
+>x : Symbol(x, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 16))
+>y : Symbol(y, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 19))
+>z : Symbol(z, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 22))
+>x : Symbol(x, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 30))
+>y : Symbol(y, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 41))
+>z : Symbol(z, Decl(declarationEmitDestructuringWithOptionalBindingParameters.ts, 2, 52))
+}

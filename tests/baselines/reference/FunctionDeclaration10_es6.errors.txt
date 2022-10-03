@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration10_es6.ts(1,20): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration10_es6.ts(1,26): error TS1005: ',' expected.
+
+
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration10_es6.ts (2 errors) ====
+    function * foo(a = yield => yield) {
+                       ~~~~~
+!!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+                             ~~
+!!! error TS1005: ',' expected.
+    }

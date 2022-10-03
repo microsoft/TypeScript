@@ -1,0 +1,99 @@
+=== tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts ===
+declare var x: any;
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+declare function isFunction(x): x is Function;
+>isFunction : Symbol(isFunction, Decl(narrowFromAnyWithTypePredicate.ts, 0, 19))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 1, 28))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 1, 28))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare function isObject(x): x is Object;
+>isObject : Symbol(isObject, Decl(narrowFromAnyWithTypePredicate.ts, 1, 46))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 2, 26))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 2, 26))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare function isAnything(x): x is {};
+>isAnything : Symbol(isAnything, Decl(narrowFromAnyWithTypePredicate.ts, 2, 42))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 3, 28))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 3, 28))
+
+declare function isError(x): x is Error;
+>isError : Symbol(isError, Decl(narrowFromAnyWithTypePredicate.ts, 3, 40))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 4, 25))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 4, 25))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare function isDate(x): x is Date;
+>isDate : Symbol(isDate, Decl(narrowFromAnyWithTypePredicate.ts, 4, 40))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+
+if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
+>isFunction : Symbol(isFunction, Decl(narrowFromAnyWithTypePredicate.ts, 0, 19))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x(1, 2, 3);
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x("hello!");
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x.prop;
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+}
+
+if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
+>isObject : Symbol(isObject, Decl(narrowFromAnyWithTypePredicate.ts, 1, 46))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x.method();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+}
+
+if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object' (including {})
+>isAnything : Symbol(isAnything, Decl(narrowFromAnyWithTypePredicate.ts, 2, 42))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x.method();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+}
+
+if (isError(x)) { 
+>isError : Symbol(isError, Decl(narrowFromAnyWithTypePredicate.ts, 3, 40))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x.message;
+>x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+
+    x.mesage;
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+}
+
+if (isDate(x)) {
+>isDate : Symbol(isDate, Decl(narrowFromAnyWithTypePredicate.ts, 4, 40))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+
+    x.getDate();
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+
+    x.getHuors();
+>x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+}
+

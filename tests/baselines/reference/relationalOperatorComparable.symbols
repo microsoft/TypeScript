@@ -1,0 +1,59 @@
+=== tests/cases/compiler/relationalOperatorComparable.ts ===
+function f(onethree: 1 | 3, two: 2) {
+>f : Symbol(f, Decl(relationalOperatorComparable.ts, 0, 0))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+>two : Symbol(two, Decl(relationalOperatorComparable.ts, 0, 27))
+
+    const t = true;
+>t : Symbol(t, Decl(relationalOperatorComparable.ts, 1, 9))
+
+    const f = false;
+>f : Symbol(f, Decl(relationalOperatorComparable.ts, 2, 9))
+
+    let a1 = onethree < two; // ok
+>a1 : Symbol(a1, Decl(relationalOperatorComparable.ts, 3, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+>two : Symbol(two, Decl(relationalOperatorComparable.ts, 0, 27))
+
+    let a2 = onethree < true; // error, number and boolean
+>a2 : Symbol(a2, Decl(relationalOperatorComparable.ts, 4, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+
+    let a3 = onethree <= false; // error, number and boolean
+>a3 : Symbol(a3, Decl(relationalOperatorComparable.ts, 5, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+
+    let a4 = onethree >= t; // error, number and boolean
+>a4 : Symbol(a4, Decl(relationalOperatorComparable.ts, 6, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+>t : Symbol(t, Decl(relationalOperatorComparable.ts, 1, 9))
+
+    let a5 = onethree > f; // error, number and boolean
+>a5 : Symbol(a5, Decl(relationalOperatorComparable.ts, 7, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+>f : Symbol(f, Decl(relationalOperatorComparable.ts, 2, 9))
+
+    let a6 = true < onethree; // error, boolean and number
+>a6 : Symbol(a6, Decl(relationalOperatorComparable.ts, 8, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+
+    let a7 = false < two; // error, boolean and number
+>a7 : Symbol(a7, Decl(relationalOperatorComparable.ts, 9, 7))
+>two : Symbol(two, Decl(relationalOperatorComparable.ts, 0, 27))
+
+    let a8 = 'foo' < onethree; // error, string and number
+>a8 : Symbol(a8, Decl(relationalOperatorComparable.ts, 10, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+
+    let a9 = onethree < 1; // ok
+>a9 : Symbol(a9, Decl(relationalOperatorComparable.ts, 11, 7))
+>onethree : Symbol(onethree, Decl(relationalOperatorComparable.ts, 0, 11))
+
+    let a10 = 1 < two; // ok
+>a10 : Symbol(a10, Decl(relationalOperatorComparable.ts, 12, 7))
+>two : Symbol(two, Decl(relationalOperatorComparable.ts, 0, 27))
+
+    let a11 = 2 < 1; // ok
+>a11 : Symbol(a11, Decl(relationalOperatorComparable.ts, 13, 7))
+}
+

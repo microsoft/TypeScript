@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declFileForFunctionTypeAsTypeParameter.ts ===
+class X<T> {
+>X : X<T>
+}
+class C extends X<() => number> {
+>C : C
+>X : X<() => number>
+}
+interface I extends X<() => number> {
+}
+
+

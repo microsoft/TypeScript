@@ -1,0 +1,202 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop3.ts ===
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+
+    let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 1, 7))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+
+    if (x == 1) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+
+        break;
+    }
+    else {
+        for (let a = 1; a < 5; --a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+
+            let f = () => a;
+>f : Symbol(f, Decl(blockScopedBindingsReassignedInLoop3.ts, 7, 15))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+
+            if (a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+
+                a = x;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 6, 16))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 8))
+
+                break;
+            }
+            else {
+                y++;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+            }
+        }
+        
+        y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 0, 15))
+    }
+}
+
+
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+
+    let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 23, 7))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+
+    if (x == 1) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+
+        continue;
+    }
+    else {
+        for (let a = 1; a < 5; --a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+
+            let f = () => a;
+>f : Symbol(f, Decl(blockScopedBindingsReassignedInLoop3.ts, 29, 15))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+
+            if (a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+
+                a = x;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 28, 16))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 8))
+
+                continue;
+            }
+            else {
+                y++;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+            }
+        }
+        
+        y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 22, 15))
+    }
+}
+
+loop2:
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+
+    let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 45, 7))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+
+    if (x == 1) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+
+        break loop2;
+    }
+    else {
+        loop1:
+        for (let a = 1; a < 5; --a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+
+            let f = () => a;
+>f : Symbol(f, Decl(blockScopedBindingsReassignedInLoop3.ts, 52, 15))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+
+            if (a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+
+                a = x;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 51, 16))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 8))
+
+                break loop1;
+            }
+            else {
+                y++;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+
+                break loop2
+            }
+        }
+        
+        y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 44, 15))
+    }
+}
+
+loop2:
+for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+
+    let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 69, 7))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+
+    if (x == 1) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+
+        continue loop2;
+    }
+    else {
+        loop1:
+        for (let a = 1; a < 5; --a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+
+            let f = () => a;
+>f : Symbol(f, Decl(blockScopedBindingsReassignedInLoop3.ts, 76, 15))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+
+            if (a) {
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+
+                a = x;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop3.ts, 75, 16))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 8))
+
+                continue loop1;
+            }
+            else {
+                y++;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+
+                continue loop2
+            }
+        }
+        
+        y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop3.ts, 68, 15))
+    }
+}
+

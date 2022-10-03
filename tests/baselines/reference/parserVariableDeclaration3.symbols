@@ -1,0 +1,19 @@
+=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts ===
+function runTests() {
+>runTests : Symbol(runTests, Decl(parserVariableDeclaration3.ts, 0, 0))
+
+    var outfile = new Harness.Compiler.WriterAggregator()
+>outfile : Symbol(outfile, Decl(parserVariableDeclaration3.ts, 1, 7))
+
+      , outerr = new Harness.Compiler.WriterAggregator()
+>outerr : Symbol(outerr, Decl(parserVariableDeclaration3.ts, 2, 7))
+
+      , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
+>compiler : Symbol(compiler, Decl(parserVariableDeclaration3.ts, 3, 7))
+>TypeScript : Symbol(TypeScript)
+>TypeScriptCompiler : Symbol(TypeScript.TypeScriptCompiler)
+>outerr : Symbol(outerr, Decl(parserVariableDeclaration3.ts, 2, 7))
+
+      , code;
+>code : Symbol(code, Decl(parserVariableDeclaration3.ts, 4, 7))
+}

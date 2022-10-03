@@ -1,0 +1,64 @@
+=== tests/cases/compiler/typeInferenceCacheInvalidation.ts ===
+// Repro from #32230
+
+type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
+>Callback : Symbol(Callback, Decl(typeInferenceCacheInvalidation.ts, 0, 0))
+>TFoo : Symbol(TFoo, Decl(typeInferenceCacheInvalidation.ts, 2, 14))
+>TBar : Symbol(TBar, Decl(typeInferenceCacheInvalidation.ts, 2, 19))
+>foo : Symbol(foo, Decl(typeInferenceCacheInvalidation.ts, 2, 29))
+>TFoo : Symbol(TFoo, Decl(typeInferenceCacheInvalidation.ts, 2, 14))
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 2, 39))
+>TBar : Symbol(TBar, Decl(typeInferenceCacheInvalidation.ts, 2, 19))
+
+declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
+>example : Symbol(example, Decl(typeInferenceCacheInvalidation.ts, 2, 57))
+>TFoo : Symbol(TFoo, Decl(typeInferenceCacheInvalidation.ts, 4, 25))
+>TBar : Symbol(TBar, Decl(typeInferenceCacheInvalidation.ts, 4, 30))
+>TCallback : Symbol(TCallback, Decl(typeInferenceCacheInvalidation.ts, 4, 36))
+>Callback : Symbol(Callback, Decl(typeInferenceCacheInvalidation.ts, 0, 0))
+>TFoo : Symbol(TFoo, Decl(typeInferenceCacheInvalidation.ts, 4, 25))
+>TBar : Symbol(TBar, Decl(typeInferenceCacheInvalidation.ts, 4, 30))
+
+    foo: TFoo,
+>foo : Symbol(foo, Decl(typeInferenceCacheInvalidation.ts, 4, 77))
+>TFoo : Symbol(TFoo, Decl(typeInferenceCacheInvalidation.ts, 4, 25))
+
+    callback: TCallback,
+>callback : Symbol(callback, Decl(typeInferenceCacheInvalidation.ts, 5, 14))
+>TCallback : Symbol(TCallback, Decl(typeInferenceCacheInvalidation.ts, 4, 36))
+
+    bar: TBar,
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 6, 24))
+>TBar : Symbol(TBar, Decl(typeInferenceCacheInvalidation.ts, 4, 30))
+
+): TCallback
+>TCallback : Symbol(TCallback, Decl(typeInferenceCacheInvalidation.ts, 4, 36))
+
+example(42, (foo, bar) => ({
+>example : Symbol(example, Decl(typeInferenceCacheInvalidation.ts, 2, 57))
+>foo : Symbol(foo, Decl(typeInferenceCacheInvalidation.ts, 10, 13))
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 10, 17))
+
+    t: () => {
+>t : Symbol(t, Decl(typeInferenceCacheInvalidation.ts, 10, 28))
+
+        let s: string = bar;
+>s : Symbol(s, Decl(typeInferenceCacheInvalidation.ts, 12, 11))
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 10, 17))
+    }
+}), '42');
+
+example(42, (foo, bar) => ({
+>example : Symbol(example, Decl(typeInferenceCacheInvalidation.ts, 2, 57))
+>foo : Symbol(foo, Decl(typeInferenceCacheInvalidation.ts, 16, 13))
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 16, 17))
+
+    t() {
+>t : Symbol(t, Decl(typeInferenceCacheInvalidation.ts, 16, 28))
+
+        let s: string = bar;
+>s : Symbol(s, Decl(typeInferenceCacheInvalidation.ts, 18, 11))
+>bar : Symbol(bar, Decl(typeInferenceCacheInvalidation.ts, 16, 17))
+    }
+}), '42');
+

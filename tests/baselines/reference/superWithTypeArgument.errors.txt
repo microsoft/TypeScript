@@ -1,0 +1,15 @@
+tests/cases/compiler/superWithTypeArgument.ts(7,14): error TS2754: 'super' may not use type arguments.
+
+
+==== tests/cases/compiler/superWithTypeArgument.ts (1 errors) ====
+    class C {
+        
+    }
+    
+    class D<T> extends C {
+        constructor() {
+            super<T>();
+                 ~~~
+!!! error TS2754: 'super' may not use type arguments.
+        }
+    }

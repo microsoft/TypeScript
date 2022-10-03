@@ -1,0 +1,9 @@
+=== tests/cases/compiler/interfaceOnly.ts ===
+interface foo {
+    foo();
+>foo : () => any
+
+    f2 (f: ()=> void);
+>f2 : (f: () => void) => any
+>f : () => void
+}

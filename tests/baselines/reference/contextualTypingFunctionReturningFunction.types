@@ -1,0 +1,33 @@
+=== tests/cases/compiler/contextualTypingFunctionReturningFunction.ts ===
+interface I {
+	a(s: string): void;
+>a : (s: string) => void
+>s : string
+
+	b(): (n: number) => void;
+>b : () => (n: number) => void
+>n : number
+}
+
+declare function f(i: I): void;
+>f : (i: I) => void
+>i : I
+
+f({
+>f({	a: s => {},	b: () => n => {},}) : void
+>f : (i: I) => void
+>{	a: s => {},	b: () => n => {},} : { a: (s: string) => void; b: () => (n: number) => void; }
+
+	a: s => {},
+>a : (s: string) => void
+>s => {} : (s: string) => void
+>s : string
+
+	b: () => n => {},
+>b : () => (n: number) => void
+>() => n => {} : () => (n: number) => void
+>n => {} : (n: number) => void
+>n : number
+
+});
+

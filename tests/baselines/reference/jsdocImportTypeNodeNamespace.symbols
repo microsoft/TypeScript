@@ -1,0 +1,18 @@
+=== tests/cases/compiler/GeometryType.d.ts ===
+// #40767
+
+declare namespace _default {
+>_default : Symbol(_default, Decl(GeometryType.d.ts, 0, 0))
+
+  export const POINT: string;
+>POINT : Symbol(POINT, Decl(GeometryType.d.ts, 3, 14))
+}
+export default _default;
+>_default : Symbol(_default, Decl(GeometryType.d.ts, 0, 0))
+
+=== tests/cases/compiler/Main.js ===
+export default function () {
+No type information for this code.  return /** @type {import('./GeometryType.js').default} */ ('Point');
+No type information for this code.}
+No type information for this code.
+No type information for this code.

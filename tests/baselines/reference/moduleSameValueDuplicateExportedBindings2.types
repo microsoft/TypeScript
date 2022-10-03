@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.ts ===
+export * from "./b";
+No type information for this code.export * from "./c";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/b.ts ===
+export {Animals} from "./c";
+>Animals : typeof import("tests/cases/compiler/c").Animals
+
+=== tests/cases/compiler/c.ts ===
+export enum Animals {
+>Animals : Animals
+
+	Cat,
+>Cat : Animals.Cat
+
+	Dog
+>Dog : Animals.Dog
+
+};

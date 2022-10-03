@@ -1,0 +1,37 @@
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(20,46): error TS2322: Type '"y"' is not assignable to type '"x"'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(21,42): error TS2322: Type '"y"' is not assignable to type '"x"'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,45): error TS2322: Type 'number' is not assignable to type '"x"'.
+
+
+==== tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx (3 errors) ====
+    namespace JSX {
+        export interface Element {}
+        export interface ElementAttributesProperty { props: {}; }
+        export interface ElementChildrenAttribute { children: {}; }
+        export interface IntrinsicAttributes {}
+        export interface IntrinsicElements { [key: string]: Element }
+    }
+    const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
+    Elem({prop: {a: "x"}, children: i => ({a: "z"})});
+    const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
+    const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
+    
+    interface LitProps<T> { prop: T, children: (x: this) => T }
+    const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
+    ElemLit({prop: "x", children: () => "x"});
+    const j = <ElemLit prop="x" children={() => "x"} />
+    const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
+    
+    // Should error
+    const arg = <ElemLit prop="x" children={p => "y"} />
+                                                 ~~~
+!!! error TS2322: Type '"y"' is not assignable to type '"x"'.
+!!! related TS6502 tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx:13:44: The expected type comes from the return type of this signature.
+    const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
+                                             ~~~
+!!! error TS2322: Type '"y"' is not assignable to type '"x"'.
+!!! related TS6502 tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx:13:44: The expected type comes from the return type of this signature.
+    const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
+                                                ~~
+!!! error TS2322: Type 'number' is not assignable to type '"x"'.
+!!! related TS6502 tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx:13:44: The expected type comes from the return type of this signature.

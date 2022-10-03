@@ -1,0 +1,39 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts ===
+var object = {
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+
+    _0: 2,
+>_0 : Symbol(_0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 14))
+
+    get 0() {
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+
+        return this._0;
+    },
+    set 0(x: number) {
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+>x : Symbol(x, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 5, 10))
+
+        this._0 = x;
+>x : Symbol(x, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 5, 10))
+
+    },
+}
+object[0] **= object[0];
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+
+object[0] **= object[0] **= 2;
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+
+object[0] **= object[0] ** 2;
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+>object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 10), Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 4, 6))
+

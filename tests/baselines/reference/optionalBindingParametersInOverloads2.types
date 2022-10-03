@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads2.ts ===
+function foo({ x, y, z }?: { x: string; y: number; z: boolean });
+>foo : ({ x, y, z }?: {    x: string;    y: number;    z: boolean;}) => any
+>x : string
+>y : number
+>z : boolean
+>x : string
+>y : number
+>z : boolean
+
+function foo(...rest: any[]) {
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>rest : any[]
+
+}
+
+foo({ x: "", y: 0, z: false });
+>foo({ x: "", y: 0, z: false }) : any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>{ x: "", y: 0, z: false } : { x: string; y: number; z: false; }
+>x : string
+>"" : ""
+>y : number
+>0 : 0
+>z : false
+>false : false
+
+foo({ x: false, y: 0, z: "" });
+>foo({ x: false, y: 0, z: "" }) : any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>{ x: false, y: 0, z: "" } : { x: boolean; y: number; z: string; }
+>x : boolean
+>false : false
+>y : number
+>0 : 0
+>z : string
+>"" : ""
+

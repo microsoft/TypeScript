@@ -1,0 +1,115 @@
+=== tests/cases/compiler/intersectionsOfLargeUnions2.ts ===
+// Repro from #24233
+
+declare global {
+>global : Symbol(global, Decl(intersectionsOfLargeUnions2.ts, 0, 0))
+
+    interface ElementTagNameMap {
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+
+        [index: number]: HTMLElement
+>index : Symbol(index, Decl(intersectionsOfLargeUnions2.ts, 4, 9))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 5, 5))
+    }
+
+    interface HTMLElement {
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 5, 5))
+
+        [index: number]: HTMLElement;
+>index : Symbol(index, Decl(intersectionsOfLargeUnions2.ts, 8, 9))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 5, 5))
+    }
+}
+
+export function assertIsElement(node: Node | null): node is Element {
+>assertIsElement : Symbol(assertIsElement, Decl(intersectionsOfLargeUnions2.ts, 10, 1))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    let nodeType = node === null ? null : node.nodeType;
+>nodeType : Symbol(nodeType, Decl(intersectionsOfLargeUnions2.ts, 13, 7))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+>node.nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+>nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
+
+    return nodeType === 1;
+>nodeType : Symbol(nodeType, Decl(intersectionsOfLargeUnions2.ts, 13, 7))
+}
+  
+export function assertNodeTagName<
+>assertNodeTagName : Symbol(assertNodeTagName, Decl(intersectionsOfLargeUnions2.ts, 15, 1))
+
+    T extends keyof ElementTagNameMap,
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 17, 34))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+    U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
+>U : Symbol(U, Decl(intersectionsOfLargeUnions2.ts, 18, 38))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 17, 34))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(intersectionsOfLargeUnions2.ts, 19, 54))
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 17, 34))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
+>U : Symbol(U, Decl(intersectionsOfLargeUnions2.ts, 18, 38))
+
+    if (assertIsElement(node)) {
+>assertIsElement : Symbol(assertIsElement, Decl(intersectionsOfLargeUnions2.ts, 10, 1))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
+
+        const nodeTagName = node.tagName.toLowerCase();
+>nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions2.ts, 21, 13))
+>node.tagName.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>node.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
+>tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+         return nodeTagName === tagName;
+>nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions2.ts, 21, 13))
+>tagName : Symbol(tagName, Decl(intersectionsOfLargeUnions2.ts, 19, 54))
+    }
+    return false;
+}
+  
+export function assertNodeProperty<
+>assertNodeProperty : Symbol(assertNodeProperty, Decl(intersectionsOfLargeUnions2.ts, 25, 1))
+
+    T extends keyof ElementTagNameMap,
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+    P extends keyof ElementTagNameMap[T],
+>P : Symbol(P, Decl(intersectionsOfLargeUnions2.ts, 28, 38))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
+
+    V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
+>V : Symbol(V, Decl(intersectionsOfLargeUnions2.ts, 29, 41))
+>HTMLElementTagNameMap : Symbol(HTMLElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
+>P : Symbol(P, Decl(intersectionsOfLargeUnions2.ts, 28, 38))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 30, 43))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(intersectionsOfLargeUnions2.ts, 30, 61))
+>T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
+>prop : Symbol(prop, Decl(intersectionsOfLargeUnions2.ts, 30, 73))
+>P : Symbol(P, Decl(intersectionsOfLargeUnions2.ts, 28, 38))
+>value : Symbol(value, Decl(intersectionsOfLargeUnions2.ts, 30, 82))
+>V : Symbol(V, Decl(intersectionsOfLargeUnions2.ts, 29, 41))
+
+    if (assertNodeTagName(node, tagName)) {
+>assertNodeTagName : Symbol(assertNodeTagName, Decl(intersectionsOfLargeUnions2.ts, 15, 1))
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 30, 43))
+>tagName : Symbol(tagName, Decl(intersectionsOfLargeUnions2.ts, 30, 61))
+
+        node[prop];
+>node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 30, 43))
+>prop : Symbol(prop, Decl(intersectionsOfLargeUnions2.ts, 30, 73))
+    }
+}
+

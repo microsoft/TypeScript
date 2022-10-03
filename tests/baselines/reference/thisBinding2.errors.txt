@@ -1,0 +1,28 @@
+tests/cases/compiler/thisBinding2.ts(10,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== tests/cases/compiler/thisBinding2.ts (1 errors) ====
+    class C {
+     x: number;
+        constructor() {
+            this.x = (() => {
+       var x = 1;
+       return this.x;
+      })();
+      this.x = function() {
+       var x = 1;
+       return this.x;
+              ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 tests/cases/compiler/thisBinding2.ts:8:12: An outer value of 'this' is shadowed by this container.
+      }();
+        }  
+    }
+    declare function setTimeout(expression: any, msec?: number, language?: any): number;
+    var messenger = {
+        message: "Hello World",
+        start: function () {
+            return setTimeout(() => { var x = this.message; }, 3000);
+        }
+    };
+    

@@ -1,0 +1,32 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInLhsReceiverExpression.ts ===
+class Test {
+>Test : Symbol(Test, Decl(privateNameInLhsReceiverExpression.ts, 0, 0))
+
+    #y = 123;
+>#y : Symbol(Test.#y, Decl(privateNameInLhsReceiverExpression.ts, 0, 12))
+
+    static something(obj: { [key: string]: Test }) {
+>something : Symbol(Test.something, Decl(privateNameInLhsReceiverExpression.ts, 1, 13))
+>obj : Symbol(obj, Decl(privateNameInLhsReceiverExpression.ts, 2, 21))
+>key : Symbol(key, Decl(privateNameInLhsReceiverExpression.ts, 2, 29))
+>Test : Symbol(Test, Decl(privateNameInLhsReceiverExpression.ts, 0, 0))
+
+        obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1;
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y : Symbol(Test.#y, Decl(privateNameInLhsReceiverExpression.ts, 0, 12))
+>obj : Symbol(obj, Decl(privateNameInLhsReceiverExpression.ts, 2, 21))
+>(new class { #x = 1; readonly s = "prop"; }).s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 3, 32))
+>#x : Symbol((Anonymous class).#x, Decl(privateNameInLhsReceiverExpression.ts, 3, 24))
+>s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 3, 32))
+>s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 3, 32))
+
+        obj[(new class { #x = 1; readonly s = "prop"; }).s].#y += 1;
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y : Symbol(Test.#y, Decl(privateNameInLhsReceiverExpression.ts, 0, 12))
+>obj : Symbol(obj, Decl(privateNameInLhsReceiverExpression.ts, 2, 21))
+>(new class { #x = 1; readonly s = "prop"; }).s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 4, 32))
+>#x : Symbol((Anonymous class).#x, Decl(privateNameInLhsReceiverExpression.ts, 4, 24))
+>s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 4, 32))
+>s : Symbol((Anonymous class).s, Decl(privateNameInLhsReceiverExpression.ts, 4, 32))
+    }
+}
+
+

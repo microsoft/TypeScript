@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic10.ts(3,8): error TS1029: 'public' modifier must precede 'static' modifier.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic10.ts (1 errors) ====
+    class Outer
+    {
+    static public intI<T>() {}
+           ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+    }
+    

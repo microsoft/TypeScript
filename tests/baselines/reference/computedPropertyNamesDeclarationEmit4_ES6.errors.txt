@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES6.ts(2,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES6.ts (1 errors) ====
+    var v: {
+        ["" + ""](): void;
+        ~~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+    }

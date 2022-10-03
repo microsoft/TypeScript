@@ -1,0 +1,70 @@
+=== tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule.ts ===
+// two interfaces with different root modules should not merge
+
+module M {
+>M : Symbol(M, Decl(twoInterfacesDifferentRootModule.ts, 0, 0))
+
+    export interface A {
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule.ts, 2, 10))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule.ts, 3, 24))
+    }
+
+    export interface B<T> {
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule.ts, 5, 5))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 7, 23))
+
+        foo: T;
+>foo : Symbol(B.foo, Decl(twoInterfacesDifferentRootModule.ts, 7, 27))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 7, 23))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(twoInterfacesDifferentRootModule.ts, 10, 1))
+
+    export interface A {
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule.ts, 12, 11))
+
+        bar: number;
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+    }
+
+    var a: A;
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule.ts, 17, 7))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule.ts, 12, 11))
+
+    var r1 = a.foo; // error
+>r1 : Symbol(r1, Decl(twoInterfacesDifferentRootModule.ts, 18, 7))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule.ts, 17, 7))
+
+    var r2 = a.bar; 
+>r2 : Symbol(r2, Decl(twoInterfacesDifferentRootModule.ts, 19, 7))
+>a.bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule.ts, 17, 7))
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule.ts, 13, 24))
+
+    export interface B<T> {
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule.ts, 19, 19))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 21, 23))
+
+        bar: T;
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule.ts, 21, 23))
+    }
+
+    var b: B<string>;
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule.ts, 25, 7))
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule.ts, 19, 19))
+
+    var r3 = b.foo; // error
+>r3 : Symbol(r3, Decl(twoInterfacesDifferentRootModule.ts, 26, 7))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule.ts, 25, 7))
+
+    var r4 = b.bar; 
+>r4 : Symbol(r4, Decl(twoInterfacesDifferentRootModule.ts, 27, 7))
+>b.bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule.ts, 25, 7))
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule.ts, 21, 27))
+}

@@ -1,0 +1,17 @@
+tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts(4,7): error TS2663: Cannot find name 'v'. Did you mean the instance member 'this.v'?
+tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts(6,7): error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?
+
+
+==== tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts (2 errors) ====
+    class C { private v; public p; static s; }
+    class D extends C {
+       public c() {
+          v = 1;
+          ~
+!!! error TS2663: Cannot find name 'v'. Did you mean the instance member 'this.v'?
+          this.p = 1;
+          s = 1;
+          ~
+!!! error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?
+       }
+    }

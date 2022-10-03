@@ -1,0 +1,91 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
+
+enum E { a, b, c }
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>b : Symbol(E.b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 11))
+>c : Symbol(E.c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 14))
+
+var a: any;
+>a : Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
+
+var b: number;
+>b : Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
+
+var c: E;
+>c : Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+
+var d: string;
+>d : Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
+
+// null + any
+var r1: any = null + a;
+>r1 : Symbol(r1, Decl(additionOperatorWithNullValueAndValidOperator.ts, 10, 3))
+>a : Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
+
+var r2: any = a + null;
+>r2 : Symbol(r2, Decl(additionOperatorWithNullValueAndValidOperator.ts, 11, 3))
+>a : Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
+
+// null + number/enum
+var r3 = null + b;
+>r3 : Symbol(r3, Decl(additionOperatorWithNullValueAndValidOperator.ts, 14, 3))
+>b : Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
+
+var r4 = null + 1;
+>r4 : Symbol(r4, Decl(additionOperatorWithNullValueAndValidOperator.ts, 15, 3))
+
+var r5 = null + c;
+>r5 : Symbol(r5, Decl(additionOperatorWithNullValueAndValidOperator.ts, 16, 3))
+>c : Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
+
+var r6 = null + E.a;
+>r6 : Symbol(r6, Decl(additionOperatorWithNullValueAndValidOperator.ts, 17, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+
+var r7 = null + E['a'];
+>r7 : Symbol(r7, Decl(additionOperatorWithNullValueAndValidOperator.ts, 18, 3))
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>'a' : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+
+var r8 = b + null;
+>r8 : Symbol(r8, Decl(additionOperatorWithNullValueAndValidOperator.ts, 19, 3))
+>b : Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
+
+var r9 = 1 + null;
+>r9 : Symbol(r9, Decl(additionOperatorWithNullValueAndValidOperator.ts, 20, 3))
+
+var r10 = c + null
+>r10 : Symbol(r10, Decl(additionOperatorWithNullValueAndValidOperator.ts, 21, 3))
+>c : Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
+
+var r11 = E.a + null;
+>r11 : Symbol(r11, Decl(additionOperatorWithNullValueAndValidOperator.ts, 22, 3))
+>E.a : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+
+var r12 = E['a'] + null;
+>r12 : Symbol(r12, Decl(additionOperatorWithNullValueAndValidOperator.ts, 23, 3))
+>E : Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>'a' : Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+
+// null + string
+var r13 = null + d;
+>r13 : Symbol(r13, Decl(additionOperatorWithNullValueAndValidOperator.ts, 26, 3))
+>d : Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
+
+var r14 = null + '';
+>r14 : Symbol(r14, Decl(additionOperatorWithNullValueAndValidOperator.ts, 27, 3))
+
+var r15 = d + null;
+>r15 : Symbol(r15, Decl(additionOperatorWithNullValueAndValidOperator.ts, 28, 3))
+>d : Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
+
+var r16 = '' + null;
+>r16 : Symbol(r16, Decl(additionOperatorWithNullValueAndValidOperator.ts, 29, 3))
+

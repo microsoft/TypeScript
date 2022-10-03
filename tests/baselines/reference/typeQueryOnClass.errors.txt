@@ -1,0 +1,77 @@
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(18,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(21,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(33,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts(36,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts (6 errors) ====
+    class C<T> {
+        constructor(x: number);
+        constructor(x: string);
+        constructor(public x) { }
+    
+        static foo(x: number);
+        static foo(x: {});
+        static foo(x) { }
+    
+        static bar(x) { }
+    
+        static sa = 1;
+        static sb = () => 1;
+    
+        static get sc() {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+        static set sc(x) {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        static get sd() {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+    
+        baz(x): string { return ''; }
+    
+        ia = 1;
+        ib = () => this.ia;
+    
+        get ic() {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+        set ic(x) {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        get id() {
+            ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+    
+    }
+    
+    var c: C<string>;
+    
+    // BUG 820454
+    var r1: typeof C;
+    var r2: typeof c;
+    
+    class D<T> {
+        constructor(public y?) { }
+        x: T;
+        foo() { }
+    }
+    
+    var d: D<string>;
+    var r3: typeof D;
+    var r4: typeof d;

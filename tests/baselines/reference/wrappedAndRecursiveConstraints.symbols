@@ -1,0 +1,48 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts ===
+// no errors expected
+
+class C<T extends Date> {
+>C : Symbol(C, Decl(wrappedAndRecursiveConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    constructor(public data: T) { }
+>data : Symbol(C.data, Decl(wrappedAndRecursiveConstraints.ts, 3, 16))
+>T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
+
+    foo<U extends T>(x: U) {
+>foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+>U : Symbol(U, Decl(wrappedAndRecursiveConstraints.ts, 4, 8))
+>T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
+>x : Symbol(x, Decl(wrappedAndRecursiveConstraints.ts, 4, 21))
+>U : Symbol(U, Decl(wrappedAndRecursiveConstraints.ts, 4, 8))
+
+        return x;
+>x : Symbol(x, Decl(wrappedAndRecursiveConstraints.ts, 4, 21))
+    }
+}
+
+interface Foo extends Date {
+>Foo : Symbol(Foo, Decl(wrappedAndRecursiveConstraints.ts, 7, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: string;
+>foo : Symbol(Foo.foo, Decl(wrappedAndRecursiveConstraints.ts, 9, 28))
+}
+
+var y: Foo = null;
+>y : Symbol(y, Decl(wrappedAndRecursiveConstraints.ts, 13, 3))
+>Foo : Symbol(Foo, Decl(wrappedAndRecursiveConstraints.ts, 7, 1))
+
+var c = new C(y);
+>c : Symbol(c, Decl(wrappedAndRecursiveConstraints.ts, 14, 3))
+>C : Symbol(C, Decl(wrappedAndRecursiveConstraints.ts, 0, 0))
+>y : Symbol(y, Decl(wrappedAndRecursiveConstraints.ts, 13, 3))
+
+var r = c.foo(y);
+>r : Symbol(r, Decl(wrappedAndRecursiveConstraints.ts, 15, 3))
+>c.foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+>c : Symbol(c, Decl(wrappedAndRecursiveConstraints.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+>y : Symbol(y, Decl(wrappedAndRecursiveConstraints.ts, 13, 3))
+

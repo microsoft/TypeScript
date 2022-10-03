@@ -1,0 +1,27 @@
+=== tests/cases/compiler/evolvingArrayTypeInAssert.ts ===
+export function unsafeCast<T>(_value: unknown): asserts _value is T { }
+>unsafeCast : Symbol(unsafeCast, Decl(evolvingArrayTypeInAssert.ts, 0, 0))
+>T : Symbol(T, Decl(evolvingArrayTypeInAssert.ts, 0, 27))
+>_value : Symbol(_value, Decl(evolvingArrayTypeInAssert.ts, 0, 30))
+>_value : Symbol(_value, Decl(evolvingArrayTypeInAssert.ts, 0, 30))
+>T : Symbol(T, Decl(evolvingArrayTypeInAssert.ts, 0, 27))
+
+function yadda() {
+>yadda : Symbol(yadda, Decl(evolvingArrayTypeInAssert.ts, 0, 71))
+
+    let out = [];
+>out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
+
+    out.push(100)
+>out.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    unsafeCast<any>(out);
+>unsafeCast : Symbol(unsafeCast, Decl(evolvingArrayTypeInAssert.ts, 0, 0))
+>out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
+
+    return out;
+>out : Symbol(out, Decl(evolvingArrayTypeInAssert.ts, 3, 7))
+}
+

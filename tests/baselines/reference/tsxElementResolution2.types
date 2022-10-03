@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+	    [x: string]: any;
+>x : string
+	}
+}
+
+// OK
+<div />;
+><div /> : JSX.Element
+>div : any
+
+// OK
+<span />;
+><span /> : JSX.Element
+>span : any
+

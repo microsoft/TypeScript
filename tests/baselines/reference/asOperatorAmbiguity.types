@@ -1,0 +1,25 @@
+=== tests/cases/conformance/expressions/asOperator/asOperatorAmbiguity.ts ===
+interface A<T> { x: T; }
+>x : T
+
+interface B { m: string; }
+>m : string
+
+// Make sure this is a type assertion to an array type, and not nested comparison operators.
+var x: any;
+>x : any
+
+var y = x as A<B>[];
+>y : A<B>[]
+>x as A<B>[] : A<B>[]
+>x : any
+
+var z = y[0].m; // z should be string
+>z : any
+>y[0].m : any
+>y[0] : A<B>
+>y : A<B>[]
+>0 : 0
+>m : any
+
+

@@ -1,0 +1,68 @@
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(4,8): error TS1005: ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(4,9): error TS1131: Property or signature expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(8,8): error TS1005: ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(8,9): error TS1131: Property or signature expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,8): error TS1144: '{' or ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(16,8): error TS1005: ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(16,9): error TS1131: Property or signature expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,8): error TS1144: '{' or ';' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(25,8): error TS1005: '{' expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(25,9): error TS1136: Property assignment expected.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(26,1): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts (13 errors) ====
+    // Illegal attempts to define optional methods
+    
+    var a: {
+        x()?: number; // error
+           ~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1131: Property or signature expected.
+    }
+    
+    interface I {
+        x()?: number; // error
+           ~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1131: Property or signature expected.
+    }
+    
+    class C {
+        x()?: number; // error
+           ~
+!!! error TS1144: '{' or ';' expected.
+            ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    }
+    
+    interface I2<T> {
+        x()?: T; // error
+           ~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1131: Property or signature expected.
+    }
+    
+    class C2<T> {
+        x()?: T; // error
+           ~
+!!! error TS1144: '{' or ';' expected.
+            ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    }
+    
+    
+    var b = {
+        x()?: 1 // error
+           ~
+!!! error TS1005: '{' expected.
+            ~
+!!! error TS1136: Property assignment expected.
+    }
+    ~
+!!! error TS1005: ':' expected.

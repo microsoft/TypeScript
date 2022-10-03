@@ -1,0 +1,36 @@
+=== tests/cases/conformance/jsdoc/declarations/folder/mod1.js ===
+/**
+ * @typedef {{x: number}} Item
+ */
+/**
+ * @type {Item};
+ */
+const x = {x: 12};
+>x : Item
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+
+module.exports = x;
+>module.exports = x : { x: number; }
+>module.exports : { x: number; }
+>module : { exports: { x: number; }; }
+>exports : { x: number; }
+>x : Item
+
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/** @type {(typeof import("./folder/mod1"))[]} */
+const items = [{x: 12}];
+>items : import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]
+>[{x: 12}] : { x: number; }[]
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+
+module.exports = items;
+>module.exports = items : import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]
+>module.exports : import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]
+>module : { exports: import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]; }
+>exports : import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]
+>items : import("tests/cases/conformance/jsdoc/declarations/folder/mod1").Item[]
+

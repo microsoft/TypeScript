@@ -1,0 +1,70 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+var lol = "hello Lol"
+>lol : Symbol(lol, Decl(0.js, 1, 3))
+
+const obj = {
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+
+  /** @type {string|undefined} */
+  foo: undefined,
+>foo : Symbol(foo, Decl(0.js, 2, 13))
+>undefined : Symbol(undefined)
+
+  /** @type {string|undefined} */
+  bar: "42",
+>bar : Symbol(bar, Decl(0.js, 4, 17))
+
+  /** @type {function(number): number} */
+  method1(n1) {
+>method1 : Symbol(method1, Decl(0.js, 6, 12))
+>n1 : Symbol(n1, Decl(0.js, 8, 10))
+
+      return n1 + 42;
+>n1 : Symbol(n1, Decl(0.js, 8, 10))
+
+  },
+  /** @type {string} */
+  lol,
+>lol : Symbol(lol, Decl(0.js, 10, 4))
+
+  /** @type {number} */
+  ['b' + 'ar1']: 42,
+>['b' + 'ar1'] : Symbol(['b' + 'ar1'], Decl(0.js, 12, 6))
+
+  /** @type {function(number): number} */
+  arrowFunc: (num) => num + 42
+>arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
+>num : Symbol(num, Decl(0.js, 16, 14))
+>num : Symbol(num, Decl(0.js, 16, 14))
+}
+obj.foo = 'string'
+>obj.foo : Symbol(foo, Decl(0.js, 2, 13))
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+>foo : Symbol(foo, Decl(0.js, 2, 13))
+
+obj.lol
+>obj.lol : Symbol(lol, Decl(0.js, 10, 4))
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+>lol : Symbol(lol, Decl(0.js, 10, 4))
+
+obj.bar = undefined;
+>obj.bar : Symbol(bar, Decl(0.js, 4, 17))
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+>bar : Symbol(bar, Decl(0.js, 4, 17))
+>undefined : Symbol(undefined)
+
+var k = obj.method1(0);
+>k : Symbol(k, Decl(0.js, 21, 3))
+>obj.method1 : Symbol(method1, Decl(0.js, 6, 12))
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+>method1 : Symbol(method1, Decl(0.js, 6, 12))
+
+obj.bar1 = "42";
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+
+obj.arrowFunc(0);
+>obj.arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
+>obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
+>arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
+

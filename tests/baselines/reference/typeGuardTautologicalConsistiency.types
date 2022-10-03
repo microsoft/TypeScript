@@ -1,0 +1,36 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardTautologicalConsistiency.ts ===
+let stringOrNumber: string | number;
+>stringOrNumber : string | number
+
+if (typeof stringOrNumber === "number") {
+>typeof stringOrNumber === "number" : boolean
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>stringOrNumber : string | number
+>"number" : "number"
+
+    if (typeof stringOrNumber !== "number") {
+>typeof stringOrNumber !== "number" : boolean
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>stringOrNumber : number
+>"number" : "number"
+
+        stringOrNumber;
+>stringOrNumber : never
+    }
+}
+
+if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
+>typeof stringOrNumber === "number" && typeof stringOrNumber !== "number" : boolean
+>typeof stringOrNumber === "number" : boolean
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>stringOrNumber : string | number
+>"number" : "number"
+>typeof stringOrNumber !== "number" : boolean
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>stringOrNumber : number
+>"number" : "number"
+
+    stringOrNumber;
+>stringOrNumber : never
+}
+

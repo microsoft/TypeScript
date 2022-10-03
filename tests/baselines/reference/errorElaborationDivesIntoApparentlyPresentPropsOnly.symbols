@@ -1,0 +1,39 @@
+=== tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
+function foo<T extends { a: string }>(x: T) {
+>foo : Symbol(foo, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 0))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 13))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 24))
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 38))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 13))
+
+    x = { a: "abc", b: 20, c: 30 };
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 38))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 1, 9))
+>b : Symbol(b, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 1, 19))
+>c : Symbol(c, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 1, 26))
+}
+
+function bar<T extends { a: string }>(x: T) {
+>bar : Symbol(bar, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 2, 1))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 4, 13))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 4, 24))
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 4, 38))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 4, 13))
+
+    x = { a: 20 };
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 4, 38))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 5, 9))
+}
+
+function baz<T extends { a: string }>(x: T) {
+>baz : Symbol(baz, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 6, 1))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 8, 13))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 8, 24))
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 8, 38))
+>T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 8, 13))
+
+    x = { a: "not ok" };
+>x : Symbol(x, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 8, 38))
+>a : Symbol(a, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 9, 9))
+}
+

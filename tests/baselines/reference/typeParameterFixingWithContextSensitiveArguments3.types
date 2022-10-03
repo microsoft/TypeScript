@@ -1,0 +1,40 @@
+=== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts ===
+function f<T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U): [T, U] { return [t1, pf2(t1)]; }
+>f : <T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U) => [T, U]
+>t1 : T
+>u1 : U
+>pf1 : (u2: U) => T
+>u2 : U
+>pf2 : (t2: T) => U
+>t2 : T
+>[t1, pf2(t1)] : [T, U]
+>t1 : T
+>pf2(t1) : U
+>pf2 : (t2: T) => U
+>t1 : T
+
+interface A { a: A; }
+>a : A
+
+interface B extends A { b: B; }
+>b : B
+
+var a: A, b: B;
+>a : A
+>b : B
+
+var d = f(a, b, u2 => u2.b, t2 => t2);
+>d : [A, B]
+>f(a, b, u2 => u2.b, t2 => t2) : [A, B]
+>f : <T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U) => [T, U]
+>a : A
+>b : B
+>u2 => u2.b : (u2: B) => B
+>u2 : B
+>u2.b : B
+>u2 : B
+>b : B
+>t2 => t2 : (t2: A) => A
+>t2 : A
+>t2 : A
+

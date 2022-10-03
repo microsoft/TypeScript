@@ -1,0 +1,27 @@
+tests/cases/compiler/selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
+
+
+==== tests/cases/compiler/selfRef.ts (2 errors) ====
+    module M
+    {
+        export class Test
+        {
+          private name = "hello";
+          public setName = function(value: string): void {
+    	  (function () {
+    	      name=value;
+    	      ~~~~
+!!! error TS2304: Cannot find name 'name'.
+    	  })();
+          }
+          public getName = function(): string {
+              return name;
+                     ~~~~
+!!! error TS2304: Cannot find name 'name'.
+          }
+        }
+    }
+    
+    
+    

@@ -1,0 +1,52 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts ===
+let a: Date[];
+>a : Date[]
+
+for (let x in a) {
+>x : string
+>a : Date[]
+
+    let a1 = a[x + 1];
+>a1 : any
+>a[x + 1] : any
+>a : Date[]
+>x + 1 : string
+>x : string
+>1 : 1
+
+    let a2 = a[x - 1];
+>a2 : Date
+>a[x - 1] : Date
+>a : Date[]
+>x - 1 : number
+>x : string
+>1 : 1
+
+    if (x === 1) {
+>x === 1 : boolean
+>x : string
+>1 : 1
+    }
+    let a3 = x.unknownProperty;
+>a3 : any
+>x.unknownProperty : any
+>x : string
+>unknownProperty : any
+}
+
+var i: number;
+>i : number
+
+for (var i in a ) {
+>i : number
+>a : Date[]
+}
+
+var j: any;
+>j : any
+
+for (var j in a ) {
+>j : any
+>a : Date[]
+}
+

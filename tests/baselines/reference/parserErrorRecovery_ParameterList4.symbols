@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList4.ts ===
+function f(a,¬) {
+>f : Symbol(f, Decl(parserErrorRecovery_ParameterList4.ts, 0, 0))
+>a : Symbol(a, Decl(parserErrorRecovery_ParameterList4.ts, 0, 11))
+}

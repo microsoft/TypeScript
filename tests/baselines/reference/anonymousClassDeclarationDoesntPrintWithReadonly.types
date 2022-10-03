@@ -1,0 +1,15 @@
+=== tests/cases/compiler/anonymousClassDeclarationDoesntPrintWithReadonly.ts ===
+export class X {
+>X : X
+
+    constructor(readonly a: number) { }
+>a : number
+}
+
+export function y() {
+>y : () => typeof (Anonymous class)
+
+    return class extends X { }
+>class extends X { } : typeof (Anonymous class)
+>X : X
+}

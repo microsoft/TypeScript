@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts ===
+var x: 'hi';
+>x : "hi"
+
+function f(x: 'hi');
+>f : { (x: 'hi'): any; (x: string): any; }
+>x : "hi"
+
+function f(x: string);
+>f : { (x: "hi"): any; (x: string): any; }
+>x : string
+
+function f(x: any) {
+>f : { (x: "hi"): any; (x: string): any; }
+>x : any
+}

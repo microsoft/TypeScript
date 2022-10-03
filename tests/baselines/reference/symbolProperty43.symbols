@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty43.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty43.ts, 0, 0))
+
+    [Symbol.iterator](x: string): string;
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty43.ts, 0, 9), Decl(symbolProperty43.ts, 1, 41))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty43.ts, 1, 22))
+
+    [Symbol.iterator](x: number): number;
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty43.ts, 0, 9), Decl(symbolProperty43.ts, 1, 41))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty43.ts, 2, 22))
+}

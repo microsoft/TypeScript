@@ -1,0 +1,167 @@
+===================================================================
+JsFile: properties.js
+mapUrl: properties.js.map
+sourceRoot: 
+sources: properties.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/properties.js
+sourceFile:properties.ts
+-------------------------------------------------------------------
+>>>var MyClass = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function MyClass() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->class MyClass
+  >{
+  >    public get Count(): number
+  >    {
+  >        return 42;
+  >    }
+  >
+  >    public set Count(value: number)
+  >    {
+  >        //
+  >    }
+  >
+2 >    }
+1->Emitted(3, 5) Source(12, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(12, 2) + SourceIndex(0)
+---
+>>>    Object.defineProperty(MyClass.prototype, "Count", {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >    public get 
+3 >                          Count
+1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 27) Source(3, 16) + SourceIndex(0)
+3 >Emitted(4, 53) Source(3, 21) + SourceIndex(0)
+---
+>>>        get: function () {
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^->
+1 >
+1 >Emitted(5, 14) Source(3, 5) + SourceIndex(0)
+---
+>>>            return 42;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^
+3 >                   ^^
+4 >                     ^
+1->public get Count(): number
+  >    {
+  >        
+2 >            return 
+3 >                   42
+4 >                     ;
+1->Emitted(6, 13) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 20) Source(5, 16) + SourceIndex(0)
+3 >Emitted(6, 22) Source(5, 18) + SourceIndex(0)
+4 >Emitted(6, 23) Source(5, 19) + SourceIndex(0)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(7, 9) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 10) Source(6, 6) + SourceIndex(0)
+---
+>>>        set: function (value) {
+1->^^^^^^^^^^^^^
+2 >             ^^^^^^^^^^
+3 >                       ^^^^^
+1->
+  >
+  >    
+2 >             public set Count(
+3 >                       value: number
+1->Emitted(8, 14) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 24) Source(8, 22) + SourceIndex(0)
+3 >Emitted(8, 29) Source(8, 35) + SourceIndex(0)
+---
+>>>            //
+1 >^^^^^^^^^^^^
+2 >            ^^
+1 >)
+  >    {
+  >        
+2 >            //
+1 >Emitted(9, 13) Source(10, 9) + SourceIndex(0)
+2 >Emitted(9, 15) Source(10, 11) + SourceIndex(0)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >        }
+1 >Emitted(10, 9) Source(11, 5) + SourceIndex(0)
+2 >Emitted(10, 10) Source(11, 6) + SourceIndex(0)
+---
+>>>        enumerable: false,
+>>>        configurable: true
+>>>    });
+1->^^^^^^^
+2 >       ^^^^^^^^^^^^^->
+1->
+1->Emitted(13, 8) Source(6, 6) + SourceIndex(0)
+---
+>>>    return MyClass;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+  >
+  >    public set Count(value: number)
+  >    {
+  >        //
+  >    }
+  >
+2 >    }
+1->Emitted(14, 5) Source(12, 1) + SourceIndex(0)
+2 >Emitted(14, 19) Source(12, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class MyClass
+  > {
+  >     public get Count(): number
+  >     {
+  >         return 42;
+  >     }
+  > 
+  >     public set Count(value: number)
+  >     {
+  >         //
+  >     }
+  > }
+1 >Emitted(15, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(15, 2) Source(12, 2) + SourceIndex(0)
+3 >Emitted(15, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(15, 6) Source(12, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=properties.js.map

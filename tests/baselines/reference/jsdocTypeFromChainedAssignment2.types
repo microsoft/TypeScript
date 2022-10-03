@@ -1,0 +1,78 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+var mod = require('./mod');
+>mod : typeof mod
+>require('./mod') : typeof mod
+>require : any
+>'./mod' : "./mod"
+
+mod.f('no')
+>mod.f('no') : number
+>mod.f : (n: number) => number
+>mod : typeof mod
+>f : (n: number) => number
+>'no' : "no"
+
+mod.g('also no')
+>mod.g('also no') : number
+>mod.g : (n: number) => number
+>mod : typeof mod
+>g : (n: number) => number
+>'also no' : "also no"
+
+mod.h(0)
+>mod.h(0) : string
+>mod.h : (mom: string) => string
+>mod : typeof mod
+>h : (mom: string) => string
+>0 : 0
+
+mod.i(1)
+>mod.i(1) : string
+>mod.i : (mom: string) => string
+>mod : typeof mod
+>i : (mom: string) => string
+>1 : 1
+
+=== tests/cases/conformance/jsdoc/mod.js ===
+/** @param {number} n */
+exports.f = exports.g = function fg(n) {
+>exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
+>exports.f : (n: number) => number
+>exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>f : (n: number) => number
+>exports.g = function fg(n) {    return n + 1} : (n: number) => number
+>exports.g : (n: number) => number
+>exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>g : (n: number) => number
+>function fg(n) {    return n + 1} : (n: number) => number
+>fg : (n: number) => number
+>n : number
+
+    return n + 1
+>n + 1 : number
+>n : number
+>1 : 1
+}
+/** @param {string} mom */
+module.exports.h = module.exports.i = function hi(mom) {
+>module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>module.exports.h : (mom: string) => string
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>h : (mom: string) => string
+>module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>module.exports.i : (mom: string) => string
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>i : (mom: string) => string
+>function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
+>hi : (mom: string) => string
+>mom : string
+
+    return `hi, ${mom}!`;
+>`hi, ${mom}!` : string
+>mom : string
+}
+

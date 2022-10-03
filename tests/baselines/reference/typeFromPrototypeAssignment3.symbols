@@ -1,0 +1,43 @@
+=== tests/cases/conformance/salsa/bug26885.js ===
+function Multimap3() {
+>Multimap3 : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
+
+    this._map = {};
+>this._map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
+>this : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
+>_map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
+
+};
+
+Multimap3.prototype = {
+>Multimap3.prototype : Symbol(Multimap3.prototype, Decl(bug26885.js, 2, 2))
+>Multimap3 : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
+>prototype : Symbol(Multimap3.prototype, Decl(bug26885.js, 2, 2))
+
+    /**
+     * @param {string} key
+     * @returns {number} the value ok
+     */
+    get(key) {
+>get : Symbol(get, Decl(bug26885.js, 4, 23))
+>key : Symbol(key, Decl(bug26885.js, 9, 8))
+
+        return this._map[key + ''];
+>this._map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
+>this : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
+>_map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
+>key : Symbol(key, Decl(bug26885.js, 9, 8))
+    }
+}
+
+/** @type {Multimap3} */
+const map = new Multimap3();
+>map : Symbol(map, Decl(bug26885.js, 15, 5))
+>Multimap3 : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
+
+const n = map.get('hi')
+>n : Symbol(n, Decl(bug26885.js, 16, 5))
+>map.get : Symbol(get, Decl(bug26885.js, 4, 23))
+>map : Symbol(map, Decl(bug26885.js, 15, 5))
+>get : Symbol(get, Decl(bug26885.js, 4, 23))
+

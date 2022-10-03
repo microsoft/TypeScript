@@ -1,0 +1,87 @@
+=== tests/cases/compiler/es5ModuleInternalNamedImports.ts ===
+export module M {
+>M : Symbol(M, Decl(es5ModuleInternalNamedImports.ts, 0, 0))
+
+    // variable
+    export var M_V = 0;
+>M_V : Symbol(M_V, Decl(es5ModuleInternalNamedImports.ts, 2, 14))
+
+    // interface
+    export interface M_I { }
+>M_I : Symbol(M_I, Decl(es5ModuleInternalNamedImports.ts, 2, 23))
+
+    //calss
+    export class M_C { }
+>M_C : Symbol(M_C, Decl(es5ModuleInternalNamedImports.ts, 4, 28))
+
+    // instantiated module
+    export module M_M { var x; }
+>M_M : Symbol(M_M, Decl(es5ModuleInternalNamedImports.ts, 6, 24))
+>x : Symbol(x, Decl(es5ModuleInternalNamedImports.ts, 8, 27))
+
+    // uninstantiated module
+    export module M_MU { }
+>M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 32))
+
+    // function
+    export function M_F() { }
+>M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 26))
+
+    // enum
+    export enum M_E { }
+>M_E : Symbol(M_E, Decl(es5ModuleInternalNamedImports.ts, 12, 29))
+
+    // type
+    export type M_T = number;
+>M_T : Symbol(M_T, Decl(es5ModuleInternalNamedImports.ts, 14, 23))
+
+    // alias
+    export import M_A = M_M;
+>M_A : Symbol(M_A, Decl(es5ModuleInternalNamedImports.ts, 16, 29))
+>M_M : Symbol(M_M, Decl(es5ModuleInternalNamedImports.ts, 6, 24))
+
+    // Reexports
+    export {M_V as v};
+>M_V : Symbol(M_V, Decl(es5ModuleInternalNamedImports.ts, 2, 14))
+>v : Symbol(v, Decl(es5ModuleInternalNamedImports.ts, 21, 12))
+
+    export {M_I as i};
+>M_I : Symbol(M_I, Decl(es5ModuleInternalNamedImports.ts, 2, 23))
+>i : Symbol(i, Decl(es5ModuleInternalNamedImports.ts, 22, 12))
+
+    export {M_C as c};
+>M_C : Symbol(M_C, Decl(es5ModuleInternalNamedImports.ts, 4, 28))
+>c : Symbol(c, Decl(es5ModuleInternalNamedImports.ts, 23, 12))
+
+    export {M_M as m};
+>M_M : Symbol(M_M, Decl(es5ModuleInternalNamedImports.ts, 6, 24))
+>m : Symbol(m, Decl(es5ModuleInternalNamedImports.ts, 24, 12))
+
+    export {M_MU as mu};
+>M_MU : Symbol(M_MU, Decl(es5ModuleInternalNamedImports.ts, 8, 32))
+>mu : Symbol(mu, Decl(es5ModuleInternalNamedImports.ts, 25, 12))
+
+    export {M_F as f};
+>M_F : Symbol(M_F, Decl(es5ModuleInternalNamedImports.ts, 10, 26))
+>f : Symbol(f, Decl(es5ModuleInternalNamedImports.ts, 26, 12))
+
+    export {M_E as e};
+>M_E : Symbol(M_E, Decl(es5ModuleInternalNamedImports.ts, 12, 29))
+>e : Symbol(e, Decl(es5ModuleInternalNamedImports.ts, 27, 12))
+
+    export {M_A as a};
+>M_A : Symbol(M_A, Decl(es5ModuleInternalNamedImports.ts, 16, 29))
+>a : Symbol(a, Decl(es5ModuleInternalNamedImports.ts, 28, 12))
+
+    import * as M2 from "M2";
+>M2 : Symbol(M2, Decl(es5ModuleInternalNamedImports.ts, 29, 10))
+
+    import M4 from "M4";
+>M4 : Symbol(M4, Decl(es5ModuleInternalNamedImports.ts, 30, 10))
+
+    export import M5 = require("M5");
+>M5 : Symbol(M5, Decl(es5ModuleInternalNamedImports.ts, 30, 24))
+}
+import M3 from "M3";
+>M3 : Symbol(M3, Decl(es5ModuleInternalNamedImports.ts, 33, 6))
+

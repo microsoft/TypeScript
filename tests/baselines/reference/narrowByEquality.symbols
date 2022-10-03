@@ -1,0 +1,140 @@
+=== tests/cases/compiler/narrowByEquality.ts ===
+declare let x: number | string | boolean
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+declare let n: number;
+>n : Symbol(n, Decl(narrowByEquality.ts, 1, 11))
+
+declare let s: string;
+>s : Symbol(s, Decl(narrowByEquality.ts, 2, 11))
+
+declare let b: boolean;
+>b : Symbol(b, Decl(narrowByEquality.ts, 3, 11))
+
+declare let xUnknown: unknown;
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+if (x == n) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+>n : Symbol(n, Decl(narrowByEquality.ts, 1, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == s) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+>s : Symbol(s, Decl(narrowByEquality.ts, 2, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == b) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+>b : Symbol(b, Decl(narrowByEquality.ts, 3, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == 1) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == "") {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == "foo") {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == true) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+if (x == false) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+}
+
+declare let xAndObj: number | string | boolean | object
+>xAndObj : Symbol(xAndObj, Decl(narrowByEquality.ts, 38, 11))
+
+if (xAndObj == {}) {
+>xAndObj : Symbol(xAndObj, Decl(narrowByEquality.ts, 38, 11))
+
+    xAndObj;
+>xAndObj : Symbol(xAndObj, Decl(narrowByEquality.ts, 38, 11))
+}
+
+if (x == xAndObj) {
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+>xAndObj : Symbol(xAndObj, Decl(narrowByEquality.ts, 38, 11))
+
+    x;
+>x : Symbol(x, Decl(narrowByEquality.ts, 0, 11))
+
+    xAndObj;
+>xAndObj : Symbol(xAndObj, Decl(narrowByEquality.ts, 38, 11))
+}
+
+// Repro from #24991
+
+function test(level: number | string):number {
+>test : Symbol(test, Decl(narrowByEquality.ts, 47, 1))
+>level : Symbol(level, Decl(narrowByEquality.ts, 51, 14))
+
+    if (level == +level) {
+>level : Symbol(level, Decl(narrowByEquality.ts, 51, 14))
+>level : Symbol(level, Decl(narrowByEquality.ts, 51, 14))
+
+        const q2: number = level; // error
+>q2 : Symbol(q2, Decl(narrowByEquality.ts, 53, 13))
+>level : Symbol(level, Decl(narrowByEquality.ts, 51, 14))
+
+        return level;
+>level : Symbol(level, Decl(narrowByEquality.ts, 51, 14))
+    }
+    return 0;
+}
+
+// From issue #32798
+if (xUnknown == null) {
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+    xUnknown;
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+} else {
+    xUnknown
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+}
+
+if (xUnknown != null) {
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+    xUnknown;
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+} else {
+    xUnknown;
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+}
+
+

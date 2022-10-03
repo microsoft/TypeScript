@@ -1,0 +1,14 @@
+=== tests/cases/compiler/errorSupression1.ts ===
+class Foo { static bar() { return "x"; } }
+>Foo : Symbol(Foo, Decl(errorSupression1.ts, 0, 0))
+>bar : Symbol(Foo.bar, Decl(errorSupression1.ts, 0, 11))
+
+var baz = Foo.b;
+>baz : Symbol(baz, Decl(errorSupression1.ts, 2, 3))
+>Foo : Symbol(Foo, Decl(errorSupression1.ts, 0, 0))
+
+  // Foo.b won't bind. 
+baz.concat("y");
+>baz : Symbol(baz, Decl(errorSupression1.ts, 2, 3))
+
+  // So we don't want an error on 'concat'.

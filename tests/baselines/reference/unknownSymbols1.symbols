@@ -1,0 +1,72 @@
+=== tests/cases/compiler/unknownSymbols1.ts ===
+var x = asdf;
+>x : Symbol(x, Decl(unknownSymbols1.ts, 0, 3))
+
+var y: asdf;
+>y : Symbol(y, Decl(unknownSymbols1.ts, 1, 3))
+>asdf : Symbol(asdf)
+
+function foo(x: asdf, y: number): asdf { }
+>foo : Symbol(foo, Decl(unknownSymbols1.ts, 1, 12))
+>x : Symbol(x, Decl(unknownSymbols1.ts, 3, 13))
+>asdf : Symbol(asdf)
+>y : Symbol(y, Decl(unknownSymbols1.ts, 3, 21))
+>asdf : Symbol(asdf)
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(unknownSymbols1.ts, 3, 42))
+
+    return asdf;
+}
+
+var z = <asdf>x; // should be an error
+>z : Symbol(z, Decl(unknownSymbols1.ts, 8, 3))
+>asdf : Symbol(asdf)
+>x : Symbol(x, Decl(unknownSymbols1.ts, 0, 3))
+
+class C<T> {
+>C : Symbol(C, Decl(unknownSymbols1.ts, 8, 16))
+>T : Symbol(T, Decl(unknownSymbols1.ts, 10, 8))
+
+    foo: asdf;
+>foo : Symbol(C.foo, Decl(unknownSymbols1.ts, 10, 12))
+>asdf : Symbol(asdf)
+
+    bar: C<asdf>;
+>bar : Symbol(C.bar, Decl(unknownSymbols1.ts, 11, 14))
+>C : Symbol(C, Decl(unknownSymbols1.ts, 8, 16))
+>asdf : Symbol(asdf)
+}
+
+class C2 implements asdf { }
+>C2 : Symbol(C2, Decl(unknownSymbols1.ts, 13, 1))
+
+interface I extends adsf { }
+>I : Symbol(I, Decl(unknownSymbols1.ts, 15, 28))
+
+class C3 { constructor(x: any) { } }
+>C3 : Symbol(C3, Decl(unknownSymbols1.ts, 16, 28))
+>x : Symbol(x, Decl(unknownSymbols1.ts, 18, 23))
+
+class C4 extends C3 {
+>C4 : Symbol(C4, Decl(unknownSymbols1.ts, 18, 36))
+>C3 : Symbol(C3, Decl(unknownSymbols1.ts, 16, 28))
+
+    constructor() {
+        super(asdf);
+>super : Symbol(C3, Decl(unknownSymbols1.ts, 16, 28))
+    }
+}
+
+var x2 = this.asdf; // no error, this is any
+>x2 : Symbol(x2, Decl(unknownSymbols1.ts, 25, 3))
+>this : Symbol(globalThis)
+
+class C5 {
+>C5 : Symbol(C5, Decl(unknownSymbols1.ts, 25, 19))
+
+    constructor() {
+        this.asdf = asdf;
+>this : Symbol(C5, Decl(unknownSymbols1.ts, 25, 19))
+    }
+}

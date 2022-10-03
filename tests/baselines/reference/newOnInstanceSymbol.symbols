@@ -1,0 +1,11 @@
+=== tests/cases/compiler/newOnInstanceSymbol.ts ===
+class C {}
+>C : Symbol(C, Decl(newOnInstanceSymbol.ts, 0, 0))
+
+var x = new C(); // should be ok
+>x : Symbol(x, Decl(newOnInstanceSymbol.ts, 1, 3))
+>C : Symbol(C, Decl(newOnInstanceSymbol.ts, 0, 0))
+
+new x(); // should error
+>x : Symbol(x, Decl(newOnInstanceSymbol.ts, 1, 3))
+

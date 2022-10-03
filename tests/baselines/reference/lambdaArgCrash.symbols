@@ -1,0 +1,58 @@
+=== tests/cases/compiler/lambdaArgCrash.ts ===
+class Event {
+>Event : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
+
+	 private _listeners: any[] = [];
+>_listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
+
+	 constructor () {
+
+		 // TODO: remove
+
+		 this._listeners = [];
+>this._listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
+>this : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
+>_listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
+
+	}
+
+	 add(listener: () => any): void {
+>add : Symbol(Event.add, Decl(lambdaArgCrash.ts, 10, 2))
+>listener : Symbol(listener, Decl(lambdaArgCrash.ts, 12, 6))
+
+		 /// <summary>Registers a new listener for the event.</summary>
+
+		 /// <param name="listener">The callback function to register.</param>
+
+		 this._listeners.push(listener);
+>this._listeners.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this._listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
+>this : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
+>_listeners : Symbol(Event._listeners, Decl(lambdaArgCrash.ts, 0, 13))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>listener : Symbol(listener, Decl(lambdaArgCrash.ts, 12, 6))
+
+	}
+
+}
+ 
+class ItemSetEvent extends Event {
+>ItemSetEvent : Symbol(ItemSetEvent, Decl(lambdaArgCrash.ts, 22, 1))
+>Event : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
+
+	 add(listener: (items: ItemSet) => void ) {
+>add : Symbol(ItemSetEvent.add, Decl(lambdaArgCrash.ts, 24, 34))
+>listener : Symbol(listener, Decl(lambdaArgCrash.ts, 26, 6))
+>items : Symbol(items, Decl(lambdaArgCrash.ts, 26, 17))
+>ItemSet : Symbol(ItemSet)
+
+	 	super.add(listener);
+>super.add : Symbol(Event.add, Decl(lambdaArgCrash.ts, 10, 2))
+>super : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
+>add : Symbol(Event.add, Decl(lambdaArgCrash.ts, 10, 2))
+>listener : Symbol(listener, Decl(lambdaArgCrash.ts, 26, 6))
+
+	}
+
+}
+

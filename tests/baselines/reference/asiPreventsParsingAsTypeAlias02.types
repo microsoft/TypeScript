@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias02.ts ===
+var type;
+>type : any
+
+var string;
+>string : any
+
+var Foo;
+>Foo : any
+
+namespace container {
+>container : typeof container
+
+    type
+>type : any
+
+    Foo = string;
+>Foo = string : any
+>Foo : any
+>string : any
+}

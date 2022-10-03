@@ -1,0 +1,31 @@
+=== tests/cases/compiler/foo.d.ts ===
+export = Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 1, 24))
+
+export as namespace Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 0, 13))
+
+declare namespace Foo {
+>Foo : Symbol(Foo, Decl(foo.d.ts, 1, 24))
+
+    function foo();
+>foo : Symbol(foo, Decl(foo.d.ts, 3, 23))
+}
+
+declare global {
+>global : Symbol(global, Decl(foo.d.ts, 5, 1))
+
+    namespace Bar { }
+>Bar : Symbol(Bar, Decl(foo.d.ts, 7, 16))
+}
+
+=== tests/cases/compiler/bar.d.ts ===
+import { Bar } from './foo';
+>Bar : Symbol(Bar, Decl(bar.d.ts, 0, 8))
+
+export = Bar;
+>Bar : Symbol(Bar, Decl(bar.d.ts, 0, 8))
+
+export as namespace Bar;
+>Bar : Symbol(Bar, Decl(bar.d.ts, 1, 13))
+

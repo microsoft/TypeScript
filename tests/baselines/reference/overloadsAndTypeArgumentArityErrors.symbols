@@ -1,0 +1,31 @@
+=== tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts ===
+declare function Callbacks(flags?: string): void;
+>Callbacks : Symbol(Callbacks, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 0), Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 49), Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 52))
+>flags : Symbol(flags, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 27))
+
+declare function Callbacks<T>(flags?: string): void;
+>Callbacks : Symbol(Callbacks, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 0), Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 49), Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 52))
+>T : Symbol(T, Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 27))
+>flags : Symbol(flags, Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 30))
+
+declare function Callbacks<T1, T2>(flags?: string): void;
+>Callbacks : Symbol(Callbacks, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 0), Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 49), Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 52))
+>T1 : Symbol(T1, Decl(overloadsAndTypeArgumentArityErrors.ts, 2, 27))
+>T2 : Symbol(T2, Decl(overloadsAndTypeArgumentArityErrors.ts, 2, 30))
+>flags : Symbol(flags, Decl(overloadsAndTypeArgumentArityErrors.ts, 2, 35))
+
+Callbacks<number, string, boolean>('s'); // wrong number of type arguments
+>Callbacks : Symbol(Callbacks, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 0), Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 49), Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 52))
+
+new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
+>Callbacks : Symbol(Callbacks, Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 0), Decl(overloadsAndTypeArgumentArityErrors.ts, 0, 49), Decl(overloadsAndTypeArgumentArityErrors.ts, 1, 52))
+
+declare function f<A, B = {}>(arg: number): void;
+>f : Symbol(f, Decl(overloadsAndTypeArgumentArityErrors.ts, 5, 44))
+>A : Symbol(A, Decl(overloadsAndTypeArgumentArityErrors.ts, 7, 19))
+>B : Symbol(B, Decl(overloadsAndTypeArgumentArityErrors.ts, 7, 21))
+>arg : Symbol(arg, Decl(overloadsAndTypeArgumentArityErrors.ts, 7, 30))
+
+f<number>(); // wrong number of arguments (#25683)
+>f : Symbol(f, Decl(overloadsAndTypeArgumentArityErrors.ts, 5, 44))
+

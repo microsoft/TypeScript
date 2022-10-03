@@ -1,0 +1,19 @@
+/a.js(7,3): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'number'.
+/a.js(8,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== /a.js (2 errors) ====
+    /** @param {...number} a */
+    function f(a) {
+        a; // number | undefined
+        // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`, so it's `any`.
+        arguments[0];
+    }
+    f([1, 2]); // Error
+      ~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'number'.
+    f(1, "2"); // Error
+         ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    f(1, 2);
+    

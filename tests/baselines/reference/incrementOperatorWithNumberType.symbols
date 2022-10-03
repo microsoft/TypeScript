@@ -1,0 +1,112 @@
+=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberType.ts ===
+// ++ operator on number type
+var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberType.ts, 1, 3))
+
+var NUMBER1: number[] = [1, 2];
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberType.ts, 2, 3))
+
+class A {
+>A : Symbol(A, Decl(incrementOperatorWithNumberType.ts, 2, 31))
+
+    public a: number;
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+}
+module M {
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+
+    export var n: number;
+>n : Symbol(n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>A : Symbol(A, Decl(incrementOperatorWithNumberType.ts, 2, 31))
+
+// number type var
+var ResultIsNumber1 = ++NUMBER;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(incrementOperatorWithNumberType.ts, 14, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberType.ts, 1, 3))
+
+var ResultIsNumber2 = NUMBER++;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(incrementOperatorWithNumberType.ts, 16, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberType.ts, 1, 3))
+
+// expressions
+var ResultIsNumber3 = ++objA.a;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(incrementOperatorWithNumberType.ts, 19, 3))
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+
+var ResultIsNumber4 = ++M.n;
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(incrementOperatorWithNumberType.ts, 20, 3))
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+
+var ResultIsNumber5 = objA.a++;
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(incrementOperatorWithNumberType.ts, 22, 3))
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+
+var ResultIsNumber6 = M.n++;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(incrementOperatorWithNumberType.ts, 23, 3))
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+
+var ResultIsNumber7 = NUMBER1[0]++;
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(incrementOperatorWithNumberType.ts, 24, 3))
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberType.ts, 2, 3))
+
+// miss assignment operators
+++NUMBER;
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberType.ts, 1, 3))
+
+++NUMBER1[0];
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberType.ts, 2, 3))
+
+++objA.a;
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+
+++M.n;
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+
+++objA.a, M.n;
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+
+NUMBER++;
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberType.ts, 1, 3))
+
+NUMBER1[0]++;
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberType.ts, 2, 3))
+
+objA.a++;
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+
+M.n++;
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+
+objA.a++, M.n++;
+>objA.a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberType.ts, 11, 3))
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberType.ts, 4, 9))
+>M.n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+>M : Symbol(M, Decl(incrementOperatorWithNumberType.ts, 6, 1))
+>n : Symbol(M.n, Decl(incrementOperatorWithNumberType.ts, 8, 14))
+

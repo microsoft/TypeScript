@@ -1,0 +1,56 @@
+=== tests/cases/compiler/a.ts ===
+export class Foo {
+>Foo : Foo
+
+    doThing(x: {a: number}) {
+>doThing : (x: {    a: number;}) => { b: number; }
+>x : { a: number; }
+>a : number
+
+        return {b: x.a};
+>{b: x.a} : { b: number; }
+>b : number
+>x.a : number
+>x : { a: number; }
+>a : number
+    }
+    static make() {
+>make : () => Foo
+
+        return new Foo();
+>new Foo() : Foo
+>Foo : typeof Foo
+    }
+}
+=== tests/cases/compiler/index.ts ===
+import {Foo} from "./a";
+>Foo : typeof Foo
+
+const c = new Foo();
+>c : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+c.doThing({a: 42});
+>c.doThing({a: 42}) : { b: number; }
+>c.doThing : (x: { a: number; }) => { b: number; }
+>c : Foo
+>doThing : (x: { a: number; }) => { b: number; }
+>{a: 42} : { a: number; }
+>a : number
+>42 : 42
+
+export let x = c.doThing({a: 12});
+>x : { b: number; }
+>c.doThing({a: 12}) : { b: number; }
+>c.doThing : (x: { a: number; }) => { b: number; }
+>c : Foo
+>doThing : (x: { a: number; }) => { b: number; }
+>{a: 12} : { a: number; }
+>a : number
+>12 : 12
+
+export { c, Foo };
+>c : Foo
+>Foo : typeof Foo
+

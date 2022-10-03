@@ -1,0 +1,54 @@
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(3,66): error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(10,22): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(12,48): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(13,31): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(14,46): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(18,53): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(19,22): error TS2339: Property 'isArray' does not exist on type 'PullTypeSymbol<A, B, C>'.
+
+
+==== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts (7 errors) ====
+    module TypeScript {
+        export class MemberName <A,B,C>{
+            static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
+                                                                     ~~~~~~~~~~
+!!! error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
+            }
+        }
+    }
+     
+    module TypeScript {
+        export class PullSymbol <A,B,C>{
+            public type: PullTypeSymbol = null;
+                         ~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+        }
+        export class PullTypeSymbol <A,B,C>extends PullSymbol {
+                                                   ~~~~~~~~~~
+!!! error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+            private _elementType: PullTypeSymbol = null;
+                                  ~~~~~~~~~~~~~~
+!!! error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+            public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
+                                                 ~~~~~~~~~~
+!!! error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+                var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
+                return s;
+            }
+            public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
+                                                        ~~~~~~~~~~
+!!! error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+                if (this.isArray()) {
+                         ~~~~~~~
+!!! error TS2339: Property 'isArray' does not exist on type 'PullTypeSymbol<A, B, C>'.
+                    var elementMemberName = this._elementType ?
+                    (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
+                    this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :
+                    this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1
+                    return MemberName.create(elementMemberName, "", "[]");
+                }
+            }
+        }
+    }
+     
+    

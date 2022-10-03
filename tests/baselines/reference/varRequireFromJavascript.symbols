@@ -1,0 +1,57 @@
+=== tests/cases/conformance/salsa/use.js ===
+var ex = require('./ex')
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+>require : Symbol(require)
+>'./ex' : Symbol(ex, Decl(ex.js, 0, 0))
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>ex.Crunch : Symbol(ex.Crunch, Decl(ex.js, 0, 0))
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+>Crunch : Symbol(ex.Crunch, Decl(ex.js, 0, 0))
+
+crunch.n
+>crunch.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
+
+
+// types work
+/**
+ * @param {ex.Crunch} wrap
+ */
+function f(wrap) {
+>f : Symbol(f, Decl(use.js, 4, 8))
+>wrap : Symbol(wrap, Decl(use.js, 11, 11))
+
+    wrap.n
+>wrap.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
+>wrap : Symbol(wrap, Decl(use.js, 11, 11))
+>n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
+}
+
+=== tests/cases/conformance/salsa/ex.js ===
+export class Crunch {
+>Crunch : Symbol(Crunch, Decl(ex.js, 0, 0))
+
+    /** @param {number} n */
+    constructor(n) {
+>n : Symbol(n, Decl(ex.js, 2, 16))
+
+        this.n = n
+>this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
+>this : Symbol(Crunch, Decl(ex.js, 0, 0))
+>n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
+>n : Symbol(n, Decl(ex.js, 2, 16))
+    }
+    m() {
+>m : Symbol(Crunch.m, Decl(ex.js, 4, 5))
+
+        return this.n
+>this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
+>this : Symbol(Crunch, Decl(ex.js, 0, 0))
+>n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
+    }
+}
+

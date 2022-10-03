@@ -1,0 +1,29 @@
+tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts(19,5): error TS2322: Type '() => void' is not assignable to type '{ [n: number]: Bar; }'.
+  Index signature for type 'number' is missing in type '() => void'.
+
+
+==== tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts (1 errors) ====
+    interface Foo { a }
+    interface Bar { b }
+    
+    interface Object {
+        [n: number]: Foo;
+    }
+    
+    interface Function {
+        [n: number]: Bar;
+    }
+    
+    var o = {};
+    var f = () => { };
+    
+    var v1: {
+        [n: number]: Foo
+    } = o; // Should be allowed
+    
+    var v2: {
+        ~~
+!!! error TS2322: Type '() => void' is not assignable to type '{ [n: number]: Bar; }'.
+!!! error TS2322:   Index signature for type 'number' is missing in type '() => void'.
+        [n: number]: Bar
+    } = f; // Should be allowed

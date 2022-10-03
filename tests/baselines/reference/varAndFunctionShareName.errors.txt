@@ -1,0 +1,11 @@
+tests/cases/compiler/varAndFunctionShareName.ts(1,5): error TS2300: Duplicate identifier 'myFn'.
+tests/cases/compiler/varAndFunctionShareName.ts(2,10): error TS2300: Duplicate identifier 'myFn'.
+
+
+==== tests/cases/compiler/varAndFunctionShareName.ts (2 errors) ====
+    var myFn;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'myFn'.
+    function myFn(): any { }
+             ~~~~
+!!! error TS2300: Duplicate identifier 'myFn'.

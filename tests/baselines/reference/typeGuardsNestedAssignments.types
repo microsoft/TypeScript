@@ -1,0 +1,148 @@
+=== tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts ===
+class Foo {
+>Foo : Foo
+
+    x: string;
+>x : string
+}
+
+declare function getFooOrNull(): Foo | null;
+>getFooOrNull : () => Foo | null
+>null : null
+
+declare function getStringOrNumberOrNull(): string | number | null;
+>getStringOrNumberOrNull : () => string | number | null
+>null : null
+
+function f1() {
+>f1 : () => void
+
+    let foo: Foo | null;
+>foo : Foo | null
+>null : null
+
+    if ((foo = getFooOrNull()) !== null) {
+>(foo = getFooOrNull()) !== null : boolean
+>(foo = getFooOrNull()) : Foo | null
+>foo = getFooOrNull() : Foo | null
+>foo : Foo | null
+>getFooOrNull() : Foo | null
+>getFooOrNull : () => Foo | null
+>null : null
+
+        foo;  // Foo
+>foo : Foo
+    }
+}
+
+function f2() {
+>f2 : () => void
+
+    let foo1: Foo | null;
+>foo1 : Foo | null
+>null : null
+
+    let foo2: Foo | null;
+>foo2 : Foo | null
+>null : null
+
+    if ((foo1 = getFooOrNull(), foo2 = foo1) !== null) {
+>(foo1 = getFooOrNull(), foo2 = foo1) !== null : boolean
+>(foo1 = getFooOrNull(), foo2 = foo1) : Foo | null
+>foo1 = getFooOrNull(), foo2 = foo1 : Foo | null
+>foo1 = getFooOrNull() : Foo | null
+>foo1 : Foo | null
+>getFooOrNull() : Foo | null
+>getFooOrNull : () => Foo | null
+>foo2 = foo1 : Foo | null
+>foo2 : Foo | null
+>foo1 : Foo | null
+>null : null
+
+        foo1;  // Foo | null
+>foo1 : Foo | null
+
+        foo2;  // Foo
+>foo2 : Foo
+    }
+}
+
+function f3() {
+>f3 : () => void
+
+    let obj: Object | null;
+>obj : Object | null
+>null : null
+
+    if ((obj = getFooOrNull()) instanceof Foo) {
+>(obj = getFooOrNull()) instanceof Foo : boolean
+>(obj = getFooOrNull()) : Foo | null
+>obj = getFooOrNull() : Foo | null
+>obj : Object | null
+>getFooOrNull() : Foo | null
+>getFooOrNull : () => Foo | null
+>Foo : typeof Foo
+
+        obj;
+>obj : Foo
+    }
+}
+
+function f4() {
+>f4 : () => void
+
+    let x: string | number | null;
+>x : string | number | null
+>null : null
+
+    if (typeof (x = getStringOrNumberOrNull()) === "number") {
+>typeof (x = getStringOrNumberOrNull()) === "number" : boolean
+>typeof (x = getStringOrNumberOrNull()) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(x = getStringOrNumberOrNull()) : string | number | null
+>x = getStringOrNumberOrNull() : string | number | null
+>x : string | number | null
+>getStringOrNumberOrNull() : string | number | null
+>getStringOrNumberOrNull : () => string | number | null
+>"number" : "number"
+
+        x;
+>x : number
+    }
+}
+
+// Repro from #8851
+
+const re = /./g
+>re : RegExp
+>/./g : RegExp
+
+let match: RegExpExecArray | null
+>match : RegExpExecArray | null
+>null : null
+
+while ((match = re.exec("xxx")) != null) {
+>(match = re.exec("xxx")) != null : boolean
+>(match = re.exec("xxx")) : RegExpExecArray | null
+>match = re.exec("xxx") : RegExpExecArray | null
+>match : RegExpExecArray | null
+>re.exec("xxx") : RegExpExecArray | null
+>re.exec : (string: string) => RegExpExecArray | null
+>re : RegExp
+>exec : (string: string) => RegExpExecArray | null
+>"xxx" : "xxx"
+>null : null
+
+    const length = match[1].length + match[2].length
+>length : number
+>match[1].length + match[2].length : number
+>match[1].length : number
+>match[1] : string
+>match : RegExpExecArray
+>1 : 1
+>length : number
+>match[2].length : number
+>match[2] : string
+>match : RegExpExecArray
+>2 : 2
+>length : number
+}

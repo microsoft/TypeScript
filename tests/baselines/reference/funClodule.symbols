@@ -1,0 +1,39 @@
+=== tests/cases/compiler/funClodule.ts ===
+declare function foo();
+>foo : Symbol(foo, Decl(funClodule.ts, 0, 0), Decl(funClodule.ts, 0, 23), Decl(funClodule.ts, 3, 1))
+
+declare module foo {
+>foo : Symbol(foo, Decl(funClodule.ts, 0, 0), Decl(funClodule.ts, 0, 23), Decl(funClodule.ts, 3, 1))
+
+    export function x(): any;
+>x : Symbol(x, Decl(funClodule.ts, 1, 20))
+}
+declare class foo { } // Should error
+>foo : Symbol(foo, Decl(funClodule.ts, 0, 0), Decl(funClodule.ts, 0, 23), Decl(funClodule.ts, 3, 1))
+
+
+declare class foo2 { }
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1), Decl(funClodule.ts, 4, 21), Decl(funClodule.ts, 7, 22))
+
+declare module foo2 {
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1), Decl(funClodule.ts, 4, 21), Decl(funClodule.ts, 7, 22))
+
+    export function x(): any;
+>x : Symbol(x, Decl(funClodule.ts, 8, 21))
+}
+declare function foo2(); // Should error
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1), Decl(funClodule.ts, 4, 21), Decl(funClodule.ts, 7, 22))
+
+
+function foo3() { }
+>foo3 : Symbol(foo3, Decl(funClodule.ts, 11, 24), Decl(funClodule.ts, 14, 19), Decl(funClodule.ts, 17, 1))
+
+module foo3 {
+>foo3 : Symbol(foo3, Decl(funClodule.ts, 11, 24), Decl(funClodule.ts, 14, 19), Decl(funClodule.ts, 17, 1))
+
+     export function x(): any { }
+>x : Symbol(x, Decl(funClodule.ts, 15, 13))
+}
+class foo3 { } // Should error
+>foo3 : Symbol(foo3, Decl(funClodule.ts, 11, 24), Decl(funClodule.ts, 14, 19), Decl(funClodule.ts, 17, 1))
+

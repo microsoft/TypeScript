@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts ===
+for (new foo() in b) {
+No type information for this code.}
+No type information for this code.

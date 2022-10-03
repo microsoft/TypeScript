@@ -1,0 +1,133 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts ===
+class C {
+>C : C
+
+    foo: string;
+>foo : string
+}
+var ac: C;
+>ac : C
+
+interface I {
+    foo: string;
+>foo : string
+}
+var ai: I;
+>ai : I
+
+enum E { A }
+>E : E
+>A : E.A
+
+var ae: E;
+>ae : E
+
+var b: number = null;
+>b : number
+>null : null
+
+var c: string = null;
+>c : string
+>null : null
+
+var d: boolean = null;
+>d : boolean
+>null : null
+
+var e: Date = null;
+>e : Date
+>null : null
+
+var f: any = null;
+>f : any
+>null : null
+
+var g: void = null;
+>g : void
+>null : null
+
+var h: Object = null;
+>h : Object
+>null : null
+
+var i: {} = null;
+>i : {}
+>null : null
+
+var j: () => {} = null;
+>j : () => {}
+>null : null
+
+var k: Function = null;
+>k : Function
+>null : null
+
+var l: (x: number) => string = null;
+>l : (x: number) => string
+>x : number
+>null : null
+
+ac = null;
+>ac = null : null
+>ac : C
+>null : null
+
+ai = null;
+>ai = null : null
+>ai : I
+>null : null
+
+ae = null;
+>ae = null : null
+>ae : E
+>null : null
+
+var m: number[] = null;
+>m : number[]
+>null : null
+
+var n: { foo: string } = null;
+>n : { foo: string; }
+>foo : string
+>null : null
+
+var o: <T>(x: T) => T = null;
+>o : <T>(x: T) => T
+>x : T
+>null : null
+
+var p: Number = null;
+>p : Number
+>null : null
+
+var q: String = null;
+>q : String
+>null : null
+
+function foo<T, U, V extends Date>(x: T, y: U, z: V) {
+>foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
+>x : T
+>y : U
+>z : V
+
+    x = null;
+>x = null : null
+>x : T
+>null : null
+
+    y = null;
+>y = null : null
+>y : U
+>null : null
+
+    z = null;
+>z = null : null
+>z : V
+>null : null
+}
+
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    x = null;
+//    y = null;
+//    z = null;
+//}

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/consumer.ts ===
+/// <reference path="./indirection.d.ts" />
+No type information for this code./// <reference path="./indirection2.d.ts" />
+No type information for this code.import "indirect";
+No type information for this code.import "foo";
+No type information for this code.import "indirect2";
+No type information for this code.import "foo2";
+No type information for this code.=== tests/cases/compiler/foo.d.ts ===
+export default 2 + 2;
+>2 + 2 : number
+>2 : 2
+>2 : 2
+
+export as namespace Foo;
+>Foo : typeof import("tests/cases/compiler/foo")
+
+=== tests/cases/compiler/foo2.d.ts ===
+export = 2 + 2;
+>2 + 2 : number
+>2 : 2
+>2 : 2
+
+export as namespace Foo2;
+>Foo2 : number
+
+=== tests/cases/compiler/indirection.d.ts ===
+/// <reference path="./foo.d.ts" />
+declare module "indirect" {
+>"indirect" : typeof import("indirect")
+
+    export default typeof Foo.default;
+>typeof Foo.default : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>Foo.default : number
+>Foo : typeof Foo
+>default : number
+}
+
+=== tests/cases/compiler/indirection2.d.ts ===
+/// <reference path="./foo2.d.ts" />
+declare module "indirect2" {
+>"indirect2" : typeof import("indirect2")
+
+    export = typeof Foo2;
+>typeof Foo2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>Foo2 : number
+}
+

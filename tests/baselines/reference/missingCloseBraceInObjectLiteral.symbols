@@ -1,0 +1,13 @@
+=== tests/cases/compiler/missingCloseBraceInObjectLiteral.ts ===
+var foo = {
+>foo : Symbol(foo, Decl(missingCloseBraceInObjectLiteral.ts, 0, 3))
+
+    a: 'a',
+>a : Symbol(a, Decl(missingCloseBraceInObjectLiteral.ts, 0, 11))
+
+    b: 'b',
+>b : Symbol(b, Decl(missingCloseBraceInObjectLiteral.ts, 1, 11))
+
+    c: 'c'
+>c : Symbol(c, Decl(missingCloseBraceInObjectLiteral.ts, 2, 11))
+

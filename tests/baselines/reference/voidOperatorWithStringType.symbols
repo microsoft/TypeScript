@@ -1,0 +1,123 @@
+=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithStringType.ts ===
+// void  operator on string type
+var STRING: string;
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : Symbol(STRING1, Decl(voidOperatorWithStringType.ts, 2, 3))
+
+function foo(): string { return "abc"; }
+>foo : Symbol(foo, Decl(voidOperatorWithStringType.ts, 2, 36))
+
+class A {
+>A : Symbol(A, Decl(voidOperatorWithStringType.ts, 4, 40))
+
+    public a: string;
+>a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
+
+    static foo() { return ""; }
+>foo : Symbol(A.foo, Decl(voidOperatorWithStringType.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(voidOperatorWithStringType.ts, 9, 1))
+
+    export var n: string;
+>n : Symbol(n, Decl(voidOperatorWithStringType.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(voidOperatorWithStringType.ts, 14, 3))
+>A : Symbol(A, Decl(voidOperatorWithStringType.ts, 4, 40))
+
+// string type var
+var ResultIsAny1 = void STRING;
+>ResultIsAny1 : Symbol(ResultIsAny1, Decl(voidOperatorWithStringType.ts, 17, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+var ResultIsAny2 = void STRING1;
+>ResultIsAny2 : Symbol(ResultIsAny2, Decl(voidOperatorWithStringType.ts, 18, 3))
+>STRING1 : Symbol(STRING1, Decl(voidOperatorWithStringType.ts, 2, 3))
+
+// string type literal
+var ResultIsAny3 = void "";
+>ResultIsAny3 : Symbol(ResultIsAny3, Decl(voidOperatorWithStringType.ts, 21, 3))
+
+var ResultIsAny4 = void { x: "", y: "" };
+>ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithStringType.ts, 22, 3))
+>x : Symbol(x, Decl(voidOperatorWithStringType.ts, 22, 25))
+>y : Symbol(y, Decl(voidOperatorWithStringType.ts, 22, 32))
+
+var ResultIsAny5 = void { x: "", y: (s: string) => { return s; } };
+>ResultIsAny5 : Symbol(ResultIsAny5, Decl(voidOperatorWithStringType.ts, 23, 3))
+>x : Symbol(x, Decl(voidOperatorWithStringType.ts, 23, 25))
+>y : Symbol(y, Decl(voidOperatorWithStringType.ts, 23, 32))
+>s : Symbol(s, Decl(voidOperatorWithStringType.ts, 23, 37))
+>s : Symbol(s, Decl(voidOperatorWithStringType.ts, 23, 37))
+
+// string type expressions
+var ResultIsAny6 = void objA.a;
+>ResultIsAny6 : Symbol(ResultIsAny6, Decl(voidOperatorWithStringType.ts, 26, 3))
+>objA.a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
+
+var ResultIsAny7 = void M.n;
+>ResultIsAny7 : Symbol(ResultIsAny7, Decl(voidOperatorWithStringType.ts, 27, 3))
+>M.n : Symbol(M.n, Decl(voidOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(voidOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithStringType.ts, 11, 14))
+
+var ResultIsAny8 = void STRING1[0];
+>ResultIsAny8 : Symbol(ResultIsAny8, Decl(voidOperatorWithStringType.ts, 28, 3))
+>STRING1 : Symbol(STRING1, Decl(voidOperatorWithStringType.ts, 2, 3))
+
+var ResultIsAny9 = void foo();
+>ResultIsAny9 : Symbol(ResultIsAny9, Decl(voidOperatorWithStringType.ts, 29, 3))
+>foo : Symbol(foo, Decl(voidOperatorWithStringType.ts, 2, 36))
+
+var ResultIsAny10 = void A.foo();
+>ResultIsAny10 : Symbol(ResultIsAny10, Decl(voidOperatorWithStringType.ts, 30, 3))
+>A.foo : Symbol(A.foo, Decl(voidOperatorWithStringType.ts, 7, 21))
+>A : Symbol(A, Decl(voidOperatorWithStringType.ts, 4, 40))
+>foo : Symbol(A.foo, Decl(voidOperatorWithStringType.ts, 7, 21))
+
+var ResultIsAny11 = void (STRING + STRING);
+>ResultIsAny11 : Symbol(ResultIsAny11, Decl(voidOperatorWithStringType.ts, 31, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+var ResultIsAny12 = void STRING.charAt(0);
+>ResultIsAny12 : Symbol(ResultIsAny12, Decl(voidOperatorWithStringType.ts, 32, 3))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+// multiple void  operators
+var ResultIsAny13 = void void STRING;
+>ResultIsAny13 : Symbol(ResultIsAny13, Decl(voidOperatorWithStringType.ts, 35, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+var ResultIsAny14 = void void void (STRING + STRING);
+>ResultIsAny14 : Symbol(ResultIsAny14, Decl(voidOperatorWithStringType.ts, 36, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+// miss assignment operators
+void "";
+void STRING;
+>STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
+
+void STRING1;
+>STRING1 : Symbol(STRING1, Decl(voidOperatorWithStringType.ts, 2, 3))
+
+void foo();
+>foo : Symbol(foo, Decl(voidOperatorWithStringType.ts, 2, 36))
+
+void objA.a,M.n;
+>objA.a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithStringType.ts, 14, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
+>M.n : Symbol(M.n, Decl(voidOperatorWithStringType.ts, 11, 14))
+>M : Symbol(M, Decl(voidOperatorWithStringType.ts, 9, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithStringType.ts, 11, 14))
+

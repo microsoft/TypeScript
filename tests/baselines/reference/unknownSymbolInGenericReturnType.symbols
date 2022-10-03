@@ -1,0 +1,43 @@
+=== tests/cases/compiler/unknownSymbolInGenericReturnType.ts ===
+class Linq {
+>Linq : Symbol(Linq, Decl(unknownSymbolInGenericReturnType.ts, 0, 0))
+
+    public static select<T, S>(values: T[], func: (v: T) => A): any[] {
+>select : Symbol(Linq.select, Decl(unknownSymbolInGenericReturnType.ts, 0, 12))
+>T : Symbol(T, Decl(unknownSymbolInGenericReturnType.ts, 1, 25))
+>S : Symbol(S, Decl(unknownSymbolInGenericReturnType.ts, 1, 27))
+>values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+>T : Symbol(T, Decl(unknownSymbolInGenericReturnType.ts, 1, 25))
+>func : Symbol(func, Decl(unknownSymbolInGenericReturnType.ts, 1, 43))
+>v : Symbol(v, Decl(unknownSymbolInGenericReturnType.ts, 1, 51))
+>T : Symbol(T, Decl(unknownSymbolInGenericReturnType.ts, 1, 25))
+>A : Symbol(A)
+
+        var result = new Array(values.length);
+>result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+        for (var i = 0; i < values.length; i++) {
+>i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+>i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+
+            result[i] = func(values[i]);
+>result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))
+>i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+>func : Symbol(func, Decl(unknownSymbolInGenericReturnType.ts, 1, 43))
+>values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+>i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+        }
+ 
+        return result;
+>result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))
+    }
+}
+

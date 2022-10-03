@@ -1,0 +1,38 @@
+=== tests/cases/compiler/collisionArgumentsArrowFunctions.ts ===
+var f1 = (i: number, ...arguments) => { //arguments is error
+>f1 : Symbol(f1, Decl(collisionArgumentsArrowFunctions.ts, 0, 3))
+>i : Symbol(i, Decl(collisionArgumentsArrowFunctions.ts, 0, 10))
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 0, 20), Decl(collisionArgumentsArrowFunctions.ts, 1, 7))
+
+    var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 0, 20), Decl(collisionArgumentsArrowFunctions.ts, 1, 7))
+}
+var f12 = (arguments: number, ...rest) => { //arguments is error
+>f12 : Symbol(f12, Decl(collisionArgumentsArrowFunctions.ts, 3, 3))
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 3, 11), Decl(collisionArgumentsArrowFunctions.ts, 4, 7))
+>rest : Symbol(rest, Decl(collisionArgumentsArrowFunctions.ts, 3, 29))
+
+    var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 3, 11), Decl(collisionArgumentsArrowFunctions.ts, 4, 7))
+}
+var f1NoError = (arguments: number) => { // no error
+>f1NoError : Symbol(f1NoError, Decl(collisionArgumentsArrowFunctions.ts, 6, 3))
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 6, 17), Decl(collisionArgumentsArrowFunctions.ts, 7, 7))
+
+    var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 6, 17), Decl(collisionArgumentsArrowFunctions.ts, 7, 7))
+}
+
+var f2 = (...restParameters) => {
+>f2 : Symbol(f2, Decl(collisionArgumentsArrowFunctions.ts, 10, 3))
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsArrowFunctions.ts, 10, 10))
+
+    var arguments = 10; // No Error
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 11, 7))
+}
+var f2NoError = () => {
+>f2NoError : Symbol(f2NoError, Decl(collisionArgumentsArrowFunctions.ts, 13, 3))
+
+    var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsArrowFunctions.ts, 14, 7))
+}

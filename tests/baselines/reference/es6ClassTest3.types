@@ -1,0 +1,39 @@
+=== tests/cases/compiler/es6ClassTest3.ts ===
+module M {	
+>M : typeof M
+
+	class Visibility {
+>Visibility : Visibility
+
+	    public foo() { };
+>foo : () => void
+
+	    private bar() { };
+>bar : () => void
+
+        private x: number;
+>x : number
+
+	    public y: number;
+>y : number
+
+	    public z: number;
+>z : number
+
+	    constructor() {
+	        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+
+	        this.y = 2;
+>this.y = 2 : 2
+>this.y : number
+>this : this
+>y : number
+>2 : 2
+	    }
+	}
+}

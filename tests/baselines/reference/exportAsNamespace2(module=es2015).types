@@ -1,0 +1,41 @@
+=== tests/cases/conformance/es2020/modules/0.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+
+export const b = 2;
+>b : 2
+>2 : 2
+
+=== tests/cases/conformance/es2020/modules/1.ts ===
+export * as ns from './0';
+>ns : typeof import("tests/cases/conformance/es2020/modules/0")
+
+ns.a;
+>ns.a : any
+>ns : any
+>a : any
+
+ns.b;
+>ns.b : any
+>ns : any
+>b : any
+
+=== tests/cases/conformance/es2020/modules/2.ts ===
+import * as foo from './1'
+>foo : typeof foo
+
+foo.ns.a;
+>foo.ns.a : 1
+>foo.ns : typeof foo.ns
+>foo : typeof foo
+>ns : typeof foo.ns
+>a : 1
+
+foo.ns.b;
+>foo.ns.b : 2
+>foo.ns : typeof foo.ns
+>foo : typeof foo
+>ns : typeof foo.ns
+>b : 2
+

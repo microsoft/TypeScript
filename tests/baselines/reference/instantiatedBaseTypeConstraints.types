@@ -1,0 +1,18 @@
+=== tests/cases/compiler/instantiatedBaseTypeConstraints.ts ===
+interface Foo<T extends Foo<T, C>, C> {
+  foo(bar: C): void;
+>foo : (bar: C) => void
+>bar : C
+}
+
+class Bar implements Foo<Bar, string> {
+>Bar : Bar
+
+  foo(bar: string): void {
+>foo : (bar: string) => void
+>bar : string
+  }
+}
+
+ 
+

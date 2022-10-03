@@ -1,0 +1,18 @@
+=== tests/cases/compiler/Bar.ts ===
+import Error = require('Foo');
+>Error : Symbol(Error, Decl(Bar.ts, 0, 0))
+
+class Bar extends Error {}
+>Bar : Symbol(Bar, Decl(Bar.ts, 0, 30))
+>Error : Symbol(Error, Decl(Bar.ts, 0, 0))
+
+export = Bar;
+>Bar : Symbol(Bar, Decl(Bar.ts, 0, 30))
+
+=== tests/cases/compiler/Foo.ts ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(Foo.ts, 0, 0))
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(Foo.ts, 0, 0))
+

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+export default function f1() {
+>f1 : Symbol(f1, Decl(m1.ts, 0, 0))
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import f1 from "./m1";
+>f1 : Symbol(f1, Decl(m2.ts, 0, 6))
+
+export default function f2() {
+>f2 : Symbol(f2, Decl(m2.ts, 0, 22))
+
+  f1();
+>f1 : Symbol(f1, Decl(m2.ts, 0, 6))
+}
+

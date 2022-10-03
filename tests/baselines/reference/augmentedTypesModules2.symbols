@@ -1,0 +1,64 @@
+=== tests/cases/compiler/augmentedTypesModules2.ts ===
+// module then function
+module m2 { }
+>m2 : Symbol(m2, Decl(augmentedTypesModules2.ts, 1, 13), Decl(augmentedTypesModules2.ts, 0, 0))
+
+function m2() { }; // ok since the module is not instantiated
+>m2 : Symbol(m2, Decl(augmentedTypesModules2.ts, 1, 13), Decl(augmentedTypesModules2.ts, 0, 0))
+
+module m2a { var y = 2; }
+>m2a : Symbol(m2a, Decl(augmentedTypesModules2.ts, 4, 25), Decl(augmentedTypesModules2.ts, 2, 18))
+>y : Symbol(y, Decl(augmentedTypesModules2.ts, 4, 16))
+
+function m2a() { }; // error since the module is instantiated
+>m2a : Symbol(m2a, Decl(augmentedTypesModules2.ts, 4, 25), Decl(augmentedTypesModules2.ts, 2, 18))
+
+module m2b { export var y = 2; }
+>m2b : Symbol(m2b, Decl(augmentedTypesModules2.ts, 7, 32), Decl(augmentedTypesModules2.ts, 5, 19))
+>y : Symbol(y, Decl(augmentedTypesModules2.ts, 7, 23))
+
+function m2b() { };  // error since the module is instantiated
+>m2b : Symbol(m2b, Decl(augmentedTypesModules2.ts, 7, 32), Decl(augmentedTypesModules2.ts, 5, 19))
+
+function m2c() { }; 
+>m2c : Symbol(m2c, Decl(augmentedTypesModules2.ts, 8, 19), Decl(augmentedTypesModules2.ts, 10, 19))
+
+module m2c { export var y = 2; } 
+>m2c : Symbol(m2c, Decl(augmentedTypesModules2.ts, 8, 19), Decl(augmentedTypesModules2.ts, 10, 19))
+>y : Symbol(y, Decl(augmentedTypesModules2.ts, 11, 23))
+
+module m2cc { export var y = 2; }
+>m2cc : Symbol(m2cc, Decl(augmentedTypesModules2.ts, 13, 33), Decl(augmentedTypesModules2.ts, 11, 32))
+>y : Symbol(y, Decl(augmentedTypesModules2.ts, 13, 24))
+
+function m2cc() { }; // error to have module first
+>m2cc : Symbol(m2cc, Decl(augmentedTypesModules2.ts, 13, 33), Decl(augmentedTypesModules2.ts, 11, 32))
+
+module m2d { }
+>m2d : Symbol(m2d, Decl(augmentedTypesModules2.ts, 16, 14), Decl(augmentedTypesModules2.ts, 14, 20))
+
+declare function m2d(): void; 
+>m2d : Symbol(m2d, Decl(augmentedTypesModules2.ts, 16, 14), Decl(augmentedTypesModules2.ts, 14, 20))
+
+declare function m2e(): void; 
+>m2e : Symbol(m2e, Decl(augmentedTypesModules2.ts, 17, 29), Decl(augmentedTypesModules2.ts, 19, 29))
+
+module m2e { }
+>m2e : Symbol(m2e, Decl(augmentedTypesModules2.ts, 17, 29), Decl(augmentedTypesModules2.ts, 19, 29))
+
+function m2f() { };
+>m2f : Symbol(m2f, Decl(augmentedTypesModules2.ts, 20, 14), Decl(augmentedTypesModules2.ts, 22, 19))
+
+module m2f { export interface I { foo(): void } } 
+>m2f : Symbol(m2f, Decl(augmentedTypesModules2.ts, 20, 14), Decl(augmentedTypesModules2.ts, 22, 19))
+>I : Symbol(I, Decl(augmentedTypesModules2.ts, 23, 12))
+>foo : Symbol(I.foo, Decl(augmentedTypesModules2.ts, 23, 33))
+
+function m2g() { };
+>m2g : Symbol(m2g, Decl(augmentedTypesModules2.ts, 23, 49), Decl(augmentedTypesModules2.ts, 25, 19))
+
+module m2g { export class C { foo() { } } } 
+>m2g : Symbol(m2g, Decl(augmentedTypesModules2.ts, 23, 49), Decl(augmentedTypesModules2.ts, 25, 19))
+>C : Symbol(C, Decl(augmentedTypesModules2.ts, 26, 12))
+>foo : Symbol(C.foo, Decl(augmentedTypesModules2.ts, 26, 29))
+

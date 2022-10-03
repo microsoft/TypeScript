@@ -1,0 +1,163 @@
+=== tests/cases/compiler/weakType.ts ===
+interface Settings {
+>Settings : Symbol(Settings, Decl(weakType.ts, 0, 0))
+
+    timeout?: number;
+>timeout : Symbol(Settings.timeout, Decl(weakType.ts, 0, 20))
+
+    onError?(): void;
+>onError : Symbol(Settings.onError, Decl(weakType.ts, 1, 21))
+}
+
+function getDefaultSettings() {
+>getDefaultSettings : Symbol(getDefaultSettings, Decl(weakType.ts, 3, 1))
+
+    return { timeout: 1000 };
+>timeout : Symbol(timeout, Decl(weakType.ts, 6, 12))
+}
+interface CtorOnly {
+>CtorOnly : Symbol(CtorOnly, Decl(weakType.ts, 7, 1))
+
+    new(s: string): { timeout: 1000 }
+>s : Symbol(s, Decl(weakType.ts, 9, 8))
+>timeout : Symbol(timeout, Decl(weakType.ts, 9, 21))
+}
+
+function doSomething(settings: Settings) { /* ... */ }
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+>settings : Symbol(settings, Decl(weakType.ts, 12, 21))
+>Settings : Symbol(Settings, Decl(weakType.ts, 0, 0))
+
+// forgot to call `getDefaultSettings`
+doSomething(getDefaultSettings);
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+>getDefaultSettings : Symbol(getDefaultSettings, Decl(weakType.ts, 3, 1))
+
+doSomething(() => ({ timeout: 1000 }));
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+>timeout : Symbol(timeout, Decl(weakType.ts, 15, 20))
+
+doSomething(null as CtorOnly);
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+>CtorOnly : Symbol(CtorOnly, Decl(weakType.ts, 7, 1))
+
+doSomething(12);
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+
+doSomething('completely wrong');
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+
+doSomething(false);
+>doSomething : Symbol(doSomething, Decl(weakType.ts, 10, 1))
+
+// this is an oddly popular way of defining settings
+// this example is from services/textChanges.ts
+type ConfigurableStart = { useStart?: boolean }
+>ConfigurableStart : Symbol(ConfigurableStart, Decl(weakType.ts, 19, 19))
+>useStart : Symbol(useStart, Decl(weakType.ts, 23, 26))
+
+type ConfigurableEnd = { useEnd?: boolean }
+>ConfigurableEnd : Symbol(ConfigurableEnd, Decl(weakType.ts, 23, 47))
+>useEnd : Symbol(useEnd, Decl(weakType.ts, 24, 24))
+
+type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
+>ConfigurableStartEnd : Symbol(ConfigurableStartEnd, Decl(weakType.ts, 24, 43))
+>ConfigurableStart : Symbol(ConfigurableStart, Decl(weakType.ts, 19, 19))
+>ConfigurableEnd : Symbol(ConfigurableEnd, Decl(weakType.ts, 23, 47))
+
+interface InsertOptions {
+>InsertOptions : Symbol(InsertOptions, Decl(weakType.ts, 25, 63))
+
+    prefix?: string
+>prefix : Symbol(InsertOptions.prefix, Decl(weakType.ts, 26, 25))
+
+    suffix?: string
+>suffix : Symbol(InsertOptions.suffix, Decl(weakType.ts, 27, 19))
+}
+type ChangeOptions = ConfigurableStartEnd & InsertOptions;
+>ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
+>ConfigurableStartEnd : Symbol(ConfigurableStartEnd, Decl(weakType.ts, 24, 43))
+>InsertOptions : Symbol(InsertOptions, Decl(weakType.ts, 25, 63))
+
+function del(options: ConfigurableStartEnd = {},
+>del : Symbol(del, Decl(weakType.ts, 30, 58))
+>options : Symbol(options, Decl(weakType.ts, 32, 13))
+>ConfigurableStartEnd : Symbol(ConfigurableStartEnd, Decl(weakType.ts, 24, 43))
+
+             error: { error?: number } = {}) {
+>error : Symbol(error, Decl(weakType.ts, 32, 48))
+>error : Symbol(error, Decl(weakType.ts, 33, 21))
+
+    let changes: ChangeOptions[];
+>changes : Symbol(changes, Decl(weakType.ts, 34, 7))
+>ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
+
+    changes.push(options);
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>changes : Symbol(changes, Decl(weakType.ts, 34, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>options : Symbol(options, Decl(weakType.ts, 32, 13))
+
+    changes.push(error);
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>changes : Symbol(changes, Decl(weakType.ts, 34, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>error : Symbol(error, Decl(weakType.ts, 32, 48))
+}
+
+class K {
+>K : Symbol(K, Decl(weakType.ts, 37, 1))
+
+    constructor(s: string) { }
+>s : Symbol(s, Decl(weakType.ts, 40, 16))
+}
+// Ctor isn't a weak type because it has a construct signature
+interface Ctor {
+>Ctor : Symbol(Ctor, Decl(weakType.ts, 41, 1))
+
+    new (s: string): K
+>s : Symbol(s, Decl(weakType.ts, 44, 9))
+>K : Symbol(K, Decl(weakType.ts, 37, 1))
+
+    n?: number
+>n : Symbol(Ctor.n, Decl(weakType.ts, 44, 22))
+}
+let ctor: Ctor = K
+>ctor : Symbol(ctor, Decl(weakType.ts, 47, 3))
+>Ctor : Symbol(Ctor, Decl(weakType.ts, 41, 1))
+>K : Symbol(K, Decl(weakType.ts, 37, 1))
+
+type Spoiler = { nope?: string }
+>Spoiler : Symbol(Spoiler, Decl(weakType.ts, 47, 18))
+>nope : Symbol(nope, Decl(weakType.ts, 49, 16))
+
+type Weak = {
+>Weak : Symbol(Weak, Decl(weakType.ts, 49, 32))
+
+    a?: number
+>a : Symbol(a, Decl(weakType.ts, 50, 13))
+
+    properties?: {
+>properties : Symbol(properties, Decl(weakType.ts, 51, 14))
+
+        b?: number
+>b : Symbol(b, Decl(weakType.ts, 52, 18))
+    }
+}
+declare let propertiesWrong: {
+>propertiesWrong : Symbol(propertiesWrong, Decl(weakType.ts, 56, 11))
+
+    properties: {
+>properties : Symbol(properties, Decl(weakType.ts, 56, 30))
+
+        wrong: string
+>wrong : Symbol(wrong, Decl(weakType.ts, 57, 17))
+    }
+}
+let weak: Weak & Spoiler = propertiesWrong
+>weak : Symbol(weak, Decl(weakType.ts, 61, 3))
+>Weak : Symbol(Weak, Decl(weakType.ts, 49, 32))
+>Spoiler : Symbol(Spoiler, Decl(weakType.ts, 47, 18))
+>propertiesWrong : Symbol(propertiesWrong, Decl(weakType.ts, 56, 11))
+
+

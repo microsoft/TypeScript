@@ -1,0 +1,53 @@
+=== tests/cases/compiler/m7Bugs.ts ===
+// scenario 1
+interface ISomething {
+   something: number;
+>something : number
+}
+
+var s: ISomething = <ISomething>({ });
+>s : ISomething
+><ISomething>({ }) : ISomething
+>({ }) : {}
+>{ } : {}
+
+
+// scenario 2
+interface A { x: string; }
+>x : string
+
+interface B extends A { }
+
+var x: B = <B>{ };
+>x : B
+><B>{ } : B
+>{ } : {}
+
+class C1 {
+>C1 : C1
+
+	public x: string;
+>x : string
+}
+
+class C2 extends C1 {}
+>C2 : C2
+>C1 : C1
+
+var y1: C1 = new C2();
+>y1 : C1
+>new C2() : C2
+>C2 : typeof C2
+
+var y2: C1 = <C1> new C2();
+>y2 : C1
+><C1> new C2() : C1
+>new C2() : C2
+>C2 : typeof C2
+
+var y3: C1 = <C1> {};
+>y3 : C1
+><C1> {} : C1
+>{} : {}
+
+

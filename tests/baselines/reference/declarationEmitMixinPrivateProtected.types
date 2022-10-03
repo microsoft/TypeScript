@@ -1,0 +1,72 @@
+=== tests/cases/compiler/first.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : <TMix>(mixin: TMix) => TMix
+>mixin : TMix
+
+const DisposableMixin = class {
+>DisposableMixin : typeof DisposableMixin
+>class {    protected _onDispose() {        this._assertIsStripped()    }    private _assertIsStripped() {    }} : typeof DisposableMixin
+
+    protected _onDispose() {
+>_onDispose : () => void
+
+        this._assertIsStripped()
+>this._assertIsStripped() : void
+>this._assertIsStripped : () => void
+>this : this
+>_assertIsStripped : () => void
+    }
+    private _assertIsStripped() {
+>_assertIsStripped : () => void
+    }
+};
+
+// No error, but definition is wrong. 
+export default mix(DisposableMixin);
+>mix(DisposableMixin) : typeof DisposableMixin
+>mix : <TMix>(mixin: TMix) => TMix
+>DisposableMixin : typeof DisposableMixin
+
+export class Monitor extends mix(DisposableMixin) {
+>Monitor : Monitor
+>mix(DisposableMixin) : DisposableMixin
+>mix : <TMix>(mixin: TMix) => TMix
+>DisposableMixin : typeof DisposableMixin
+
+    protected _onDispose() {
+>_onDispose : () => void
+    }
+}
+
+=== tests/cases/compiler/another.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : <TMix>(mixin: TMix) => TMix
+>mixin : TMix
+
+const DisposableMixin = class {
+>DisposableMixin : typeof DisposableMixin
+>class {    protected _onDispose() {        this._assertIsStripped()    }    private _assertIsStripped() {    }} : typeof DisposableMixin
+
+    protected _onDispose() {
+>_onDispose : () => void
+
+        this._assertIsStripped()
+>this._assertIsStripped() : void
+>this._assertIsStripped : () => void
+>this : this
+>_assertIsStripped : () => void
+    }
+    private _assertIsStripped() {
+>_assertIsStripped : () => void
+    }
+};
+
+export default class extends mix(DisposableMixin) {
+>mix(DisposableMixin) : DisposableMixin
+>mix : <TMix>(mixin: TMix) => TMix
+>DisposableMixin : typeof DisposableMixin
+
+    protected _onDispose() {
+>_onDispose : () => void
+    }
+}

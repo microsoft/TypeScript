@@ -1,0 +1,22 @@
+tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts(4,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts(4,11): error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts(4,16): error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
+
+
+==== tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts (3 errors) ====
+    var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
+    
+    var [x11 = 0, y11 = ""] = [1, "hello"];
+    var [a11, b11, c11] = [];
+         ~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+              ~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+                   ~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '2'.
+    
+    var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello", { x12: 5, y12: true }]];
+    
+    var [x13, y13] = [1, "hello"];
+    var [a3, b3] = [[x13, y13], { x: x13, y: y13 }];
+    

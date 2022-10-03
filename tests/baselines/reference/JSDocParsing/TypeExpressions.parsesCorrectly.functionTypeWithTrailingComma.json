@@ -1,0 +1,40 @@
+{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 13,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "parameters": {
+        "0": {
+            "kind": "Parameter",
+            "pos": 10,
+            "end": 11,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "type": {
+                "kind": "TypeReference",
+                "pos": 10,
+                "end": 11,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 1,
+                "typeName": {
+                    "kind": "Identifier",
+                    "pos": 10,
+                    "end": 11,
+                    "flags": "JSDoc",
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "escapedText": "a"
+                }
+            }
+        },
+        "length": 1,
+        "pos": 10,
+        "end": 12,
+        "hasTrailingComma": true,
+        "transformFlags": 1
+    }
+}

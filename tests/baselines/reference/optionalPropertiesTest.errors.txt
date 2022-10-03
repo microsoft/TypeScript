@@ -1,0 +1,60 @@
+tests/cases/compiler/optionalPropertiesTest.ts(14,1): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
+tests/cases/compiler/optionalPropertiesTest.ts(25,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
+tests/cases/compiler/optionalPropertiesTest.ts(26,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
+tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to type 'i1'.
+  Property 'M' is optional in type 'i2' but required in type 'i1'.
+
+
+==== tests/cases/compiler/optionalPropertiesTest.ts (4 errors) ====
+    var x: {p1:number; p2?:string; p3?:{():number;};};
+    
+    interface IFoo
+    {
+        id: number;
+        name?: string;
+        print?(): void;
+    }
+    
+    
+    var foo: IFoo;
+    foo = { id: 1234 };                // Ok
+    foo = { id: 1234, name: "test" };  // Ok
+    foo = { name: "test" };            // Error, id missing
+    ~~~
+!!! error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:5:5: 'id' is declared here.
+    foo = {id: 1234, print:()=>{}}	   // Ok
+    
+    var s = foo.name || "default";
+    if (foo.print !== undefined) foo.print();
+    
+    interface i1 { M: () => void; };
+    interface i2 { M?: () => void; };
+    interface i3 { M: number; };
+    interface i4 { M?: number; };
+    
+    var test1: i1 = {};
+        ~~~~~
+!!! error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:20:16: 'M' is declared here.
+    var test2: i3 = {};
+        ~~~~~
+!!! error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:22:16: 'M' is declared here.
+    var test3: i2 = {};
+    var test4: i4 = {};
+    var test5: i1 = { M: function () { } };
+    var test6: i3 = { M: 5 };
+    var test7: i2 = { M: function () { } };
+    test7 = {};
+    var test8: i4 = { M: 5 }
+    test8 = {};
+    var test9_1: i2;
+    var test9_2: i1;
+    test9_1 = test9_2;
+    var test10_1: i1;
+    var test10_2: i2;
+    test10_1 = test10_2;
+    ~~~~~~~~
+!!! error TS2322: Type 'i2' is not assignable to type 'i1'.
+!!! error TS2322:   Property 'M' is optional in type 'i2' but required in type 'i1'.

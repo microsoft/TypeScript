@@ -1,0 +1,103 @@
+=== tests/cases/conformance/enums/enumMergingErrors.ts ===
+// Enum with constant, computed, constant members split across 3 declarations with the same root module
+module M {
+>M : Symbol(M, Decl(enumMergingErrors.ts, 0, 0), Decl(enumMergingErrors.ts, 5, 1), Decl(enumMergingErrors.ts, 10, 1))
+
+    export enum E1 { A = 0 }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 1, 10), Decl(enumMergingErrors.ts, 6, 10), Decl(enumMergingErrors.ts, 11, 10))
+>A : Symbol(E1.A, Decl(enumMergingErrors.ts, 2, 20))
+
+    export enum E2 { C }
+>E2 : Symbol(E2, Decl(enumMergingErrors.ts, 2, 28), Decl(enumMergingErrors.ts, 7, 39), Decl(enumMergingErrors.ts, 12, 24))
+>C : Symbol(E2.C, Decl(enumMergingErrors.ts, 3, 20))
+
+    export enum E3 { A = 0 }
+>E3 : Symbol(E3, Decl(enumMergingErrors.ts, 3, 24), Decl(enumMergingErrors.ts, 8, 39), Decl(enumMergingErrors.ts, 13, 28))
+>A : Symbol(E3.A, Decl(enumMergingErrors.ts, 4, 20))
+}
+module M {
+>M : Symbol(M, Decl(enumMergingErrors.ts, 0, 0), Decl(enumMergingErrors.ts, 5, 1), Decl(enumMergingErrors.ts, 10, 1))
+
+    export enum E1 { B = 'foo'.length }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 1, 10), Decl(enumMergingErrors.ts, 6, 10), Decl(enumMergingErrors.ts, 11, 10))
+>B : Symbol(E1.B, Decl(enumMergingErrors.ts, 7, 20))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    export enum E2 { B = 'foo'.length }
+>E2 : Symbol(E2, Decl(enumMergingErrors.ts, 2, 28), Decl(enumMergingErrors.ts, 7, 39), Decl(enumMergingErrors.ts, 12, 24))
+>B : Symbol(E2.B, Decl(enumMergingErrors.ts, 8, 20))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    export enum E3 { C }
+>E3 : Symbol(E3, Decl(enumMergingErrors.ts, 3, 24), Decl(enumMergingErrors.ts, 8, 39), Decl(enumMergingErrors.ts, 13, 28))
+>C : Symbol(E3.C, Decl(enumMergingErrors.ts, 9, 20))
+}
+module M {
+>M : Symbol(M, Decl(enumMergingErrors.ts, 0, 0), Decl(enumMergingErrors.ts, 5, 1), Decl(enumMergingErrors.ts, 10, 1))
+
+    export enum E1 { C }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 1, 10), Decl(enumMergingErrors.ts, 6, 10), Decl(enumMergingErrors.ts, 11, 10))
+>C : Symbol(E1.C, Decl(enumMergingErrors.ts, 12, 20))
+
+    export enum E2 { A = 0 }
+>E2 : Symbol(E2, Decl(enumMergingErrors.ts, 2, 28), Decl(enumMergingErrors.ts, 7, 39), Decl(enumMergingErrors.ts, 12, 24))
+>A : Symbol(E2.A, Decl(enumMergingErrors.ts, 13, 20))
+
+    export enum E3 { B = 'foo'.length }
+>E3 : Symbol(E3, Decl(enumMergingErrors.ts, 3, 24), Decl(enumMergingErrors.ts, 8, 39), Decl(enumMergingErrors.ts, 13, 28))
+>B : Symbol(E3.B, Decl(enumMergingErrors.ts, 14, 20))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+// Enum with no initializer in either declaration with constant members with the same root module
+module M1 {
+>M1 : Symbol(M1, Decl(enumMergingErrors.ts, 15, 1), Decl(enumMergingErrors.ts, 20, 1), Decl(enumMergingErrors.ts, 23, 1))
+
+    export enum E1 { A = 0 }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 18, 11), Decl(enumMergingErrors.ts, 21, 11), Decl(enumMergingErrors.ts, 24, 11))
+>A : Symbol(E1.A, Decl(enumMergingErrors.ts, 19, 20))
+}
+module M1 {
+>M1 : Symbol(M1, Decl(enumMergingErrors.ts, 15, 1), Decl(enumMergingErrors.ts, 20, 1), Decl(enumMergingErrors.ts, 23, 1))
+
+    export enum E1 { B }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 18, 11), Decl(enumMergingErrors.ts, 21, 11), Decl(enumMergingErrors.ts, 24, 11))
+>B : Symbol(E1.B, Decl(enumMergingErrors.ts, 22, 20))
+}
+module M1 {
+>M1 : Symbol(M1, Decl(enumMergingErrors.ts, 15, 1), Decl(enumMergingErrors.ts, 20, 1), Decl(enumMergingErrors.ts, 23, 1))
+
+    export enum E1 { C }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 18, 11), Decl(enumMergingErrors.ts, 21, 11), Decl(enumMergingErrors.ts, 24, 11))
+>C : Symbol(E1.C, Decl(enumMergingErrors.ts, 25, 20))
+}
+
+
+// Enum with initializer in only one of three declarations with constant members with the same root module
+module M2 {
+>M2 : Symbol(M2, Decl(enumMergingErrors.ts, 26, 1), Decl(enumMergingErrors.ts, 32, 1), Decl(enumMergingErrors.ts, 35, 1))
+
+    export enum E1 { A }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 30, 11), Decl(enumMergingErrors.ts, 33, 11), Decl(enumMergingErrors.ts, 36, 11))
+>A : Symbol(E1.A, Decl(enumMergingErrors.ts, 31, 20))
+}
+module M2 {
+>M2 : Symbol(M2, Decl(enumMergingErrors.ts, 26, 1), Decl(enumMergingErrors.ts, 32, 1), Decl(enumMergingErrors.ts, 35, 1))
+
+    export enum E1 { B = 0 }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 30, 11), Decl(enumMergingErrors.ts, 33, 11), Decl(enumMergingErrors.ts, 36, 11))
+>B : Symbol(E1.B, Decl(enumMergingErrors.ts, 34, 20))
+}
+module M2 {
+>M2 : Symbol(M2, Decl(enumMergingErrors.ts, 26, 1), Decl(enumMergingErrors.ts, 32, 1), Decl(enumMergingErrors.ts, 35, 1))
+
+    export enum E1 { C }
+>E1 : Symbol(E1, Decl(enumMergingErrors.ts, 30, 11), Decl(enumMergingErrors.ts, 33, 11), Decl(enumMergingErrors.ts, 36, 11))
+>C : Symbol(E1.C, Decl(enumMergingErrors.ts, 37, 20))
+}
+
+
+

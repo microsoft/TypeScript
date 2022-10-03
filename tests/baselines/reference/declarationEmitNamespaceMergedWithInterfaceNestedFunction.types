@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts ===
+export interface Foo {
+    item: Bar;
+>item : Bar
+}
+
+interface Bar {
+    baz(): void;
+>baz : () => void
+}
+
+namespace Bar {
+>Bar : typeof Bar
+
+    export function biz() {
+>biz : () => number
+
+        return 0;
+>0 : 0
+    }
+}

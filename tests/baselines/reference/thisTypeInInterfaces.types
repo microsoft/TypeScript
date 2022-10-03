@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts ===
+interface I1 {
+    x: this;
+>x : this
+
+    f(x: this): this;
+>f : (x: this) => this
+>x : this
+}
+
+interface I2 {
+    (x: this): this;
+>x : this
+
+    new (x: this): this;
+>x : this
+
+    [x: string]: this;
+>x : string
+}
+
+interface Foo<T> {
+    x: T;
+>x : T
+
+    y: this;
+>y : this
+}
+
+interface I3 {
+    a: this[];
+>a : this[]
+
+    b: [this, this];
+>b : [this, this]
+
+    c: this | Date;
+>c : this | Date
+
+    d: this & Date;
+>d : this & Date
+
+    e: (((this)));
+>e : this
+
+    f: (x: this) => this;
+>f : (x: this) => this
+>x : this
+
+    g: new (x: this) => this;
+>g : new (x: this) => this
+>x : this
+
+    h: Foo<this>;
+>h : Foo<this>
+
+    i: Foo<this | (() => this)>;
+>i : Foo<this | (() => this)>
+
+    j: (x: any) => x is this;
+>j : (x: any) => x is this
+>x : any
+}
+

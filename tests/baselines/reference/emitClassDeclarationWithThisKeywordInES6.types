@@ -1,0 +1,54 @@
+=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithThisKeywordInES6.ts ===
+class B {
+>B : B
+
+    x = 10;
+>x : number
+>10 : 10
+
+    constructor() {
+        this.x = 10;
+>this.x = 10 : 10
+>this.x : number
+>this : this
+>x : number
+>10 : 10
+    }
+    static log(a: number) { }
+>log : (a: number) => void
+>a : number
+
+    foo() {
+>foo : () => void
+
+        B.log(this.x);
+>B.log(this.x) : void
+>B.log : (a: number) => void
+>B : typeof B
+>log : (a: number) => void
+>this.x : number
+>this : this
+>x : number
+    }
+
+    get X() {
+>X : number
+
+        return this.x;
+>this.x : number
+>this : this
+>x : number
+    }
+
+    set bX(y: number) {
+>bX : number
+>y : number
+
+        this.x = y;
+>this.x = y : number
+>this.x : number
+>this : this
+>x : number
+>y : number
+    }
+}

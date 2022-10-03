@@ -1,0 +1,26 @@
+=== tests/cases/compiler/superCallFromClassThatDerivesFromGenericType1.ts ===
+declare class B<T> {
+>B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+>T : Symbol(T, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 16))
+
+    m<U>(): B<U>;
+>m : Symbol(B.m, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 20))
+>U : Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 6))
+>B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+>U : Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 6))
+
+    static g(): B<any>;
+>g : Symbol(B.g, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 17))
+>B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+}
+
+class D extends B<any> {
+>D : Symbol(D, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 3, 1))
+>B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+    }
+}
+

@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck28.ts ===
+function* g(): IterableIterator<(x: string) => number> {
+>g : () => IterableIterator<(x: string) => number>
+>x : string
+
+    yield * {
+>yield * {        *[Symbol.iterator]() {            yield x => x.length;        }    } : void
+>{        *[Symbol.iterator]() {            yield x => x.length;        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, undefined>; }
+
+        *[Symbol.iterator]() {
+>[Symbol.iterator] : () => Generator<(x: string) => number, void, undefined>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+            yield x => x.length;
+>yield x => x.length : undefined
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+        }
+    };
+}

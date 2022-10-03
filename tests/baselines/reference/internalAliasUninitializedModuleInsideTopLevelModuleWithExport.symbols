@@ -1,0 +1,31 @@
+=== tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 0, 0))
+
+    export module b {
+>b : Symbol(b, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 0, 17))
+
+        export interface I {
+>I : Symbol(I, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
+
+            foo();
+>foo : Symbol(I.foo, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 2, 28))
+        }
+    }
+}
+
+export import b = a.b;
+>b : Symbol(b, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 6, 1))
+>a : Symbol(a, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 0, 0))
+>b : Symbol(b, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 0, 17))
+
+export var x: b.I;
+>x : Symbol(x, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 9, 10))
+>b : Symbol(b, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 6, 1))
+>I : Symbol(b.I, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
+
+x.foo();
+>x.foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 2, 28))
+>x : Symbol(x, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 9, 10))
+>foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts, 2, 28))
+

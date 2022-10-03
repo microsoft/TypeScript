@@ -1,0 +1,95 @@
+=== tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
+class Collection<T> {
+>Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
+
+    public add(x: T) { }
+>add : Symbol(Collection.add, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 21))
+>x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 1, 15))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
+}
+interface Utils {
+>Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters3.ts, 2, 1))
+
+    fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters3.ts, 3, 17))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 15))
+>Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+>folder : Symbol(folder, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 33))
+>s : Symbol(s, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 44))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
+>t : Symbol(t, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 49))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+>init : Symbol(init, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 61))
+>S : Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+
+    mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
+>mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
+>U : Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
+>V : Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 23))
+>Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
+>mapper : Symbol(mapper, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 40))
+>x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 50))
+>T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
+>U : Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
+>reducer : Symbol(reducer, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 61))
+>y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 72))
+>U : Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
+>V : Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
+>Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+>V : Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
+}
+var utils: Utils;
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
+>Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters3.ts, 2, 1))
+
+var c = new Collection<string>();
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+
+var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
+>r3 : Symbol(r3, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 3))
+>utils.mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
+>mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 29))
+>y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 50))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() });
+>r4 : Symbol(r4, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 3))
+>utils.mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
+>mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 29))
+>y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 58))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var f1 = (x: string) => { return 1 };
+>f1 : Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
+>x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 10))
+
+var f2 = (y: number) => { return new Date() };
+>f2 : Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
+>y : Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 10))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r5 = utils.mapReduce(c, f1, f2);
+>r5 : Symbol(r5, Decl(genericFunctionsWithOptionalParameters3.ts, 13, 3))
+>utils.mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>utils : Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
+>mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>f1 : Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
+>f2 : Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
+

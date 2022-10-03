@@ -1,0 +1,38 @@
+=== tests/cases/compiler/typeofExternalModules_core.ts ===
+import ext = require('./typeofExternalModules_external');
+>ext : typeof ext
+
+import exp = require('./typeofExternalModules_exportAssign');
+>exp : typeof exp
+
+var y1: typeof ext = ext;
+>y1 : typeof ext
+>ext : typeof ext
+>ext : typeof ext
+
+y1 = exp;
+>y1 = exp : typeof exp
+>y1 : typeof ext
+>exp : typeof exp
+
+var y2: typeof exp = exp;
+>y2 : typeof exp
+>exp : typeof exp
+>exp : typeof exp
+
+y2 = ext;
+>y2 = ext : typeof ext
+>y2 : typeof exp
+>ext : typeof ext
+
+=== tests/cases/compiler/typeofExternalModules_external.ts ===
+export class C { }
+>C : C
+
+=== tests/cases/compiler/typeofExternalModules_exportAssign.ts ===
+class D { }
+>D : D
+
+export = D;
+>D : D
+

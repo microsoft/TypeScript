@@ -1,0 +1,12 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator10.ts ===
+declare function f(): string | undefined;
+>f : () => string | undefined
+
+let gg = f() ?? 'foo'
+>gg : string
+>f() ?? 'foo' : string
+>f() : string | undefined
+>f : () => string | undefined
+>'foo' : "foo"
+
+

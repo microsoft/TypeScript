@@ -1,0 +1,14 @@
+=== tests/cases/compiler/inlineSourceMap2.ts ===
+// configuration errors
+
+var x = 0;
+>x : number
+>0 : 0
+
+console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+

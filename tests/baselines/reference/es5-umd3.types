@@ -1,0 +1,17 @@
+=== tests/cases/compiler/es5-umd3.ts ===
+export default class A
+>A : A
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : () => number
+    {
+        return 42;
+>42 : 42
+    }
+}
+

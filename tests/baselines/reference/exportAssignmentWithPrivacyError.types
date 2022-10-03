@@ -1,0 +1,33 @@
+=== tests/cases/compiler/exportAssignmentWithPrivacyError.ts ===
+interface connectmodule {
+    (res, req, next): void;
+>res : any
+>req : any
+>next : any
+}
+interface connectexport {
+    use: (mod: connectmodule) => connectexport;
+>use : (mod: connectmodule) => connectexport
+>mod : connectmodule
+
+    listen: (port: number) => void;
+>listen : (port: number) => void
+>port : number
+}
+
+var server: {
+>server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
+
+    (): connectexport;
+    test1: connectmodule;
+>test1 : connectmodule
+
+    test2(): connectmodule;
+>test2 : () => connectmodule
+
+};
+
+export = server;
+>server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
+
+

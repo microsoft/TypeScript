@@ -1,0 +1,23 @@
+=== tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts ===
+export = Foo;
+>Foo : Foo<T>
+
+interface Foo<T> {
+}
+
+function Foo<T>(array: T[]): Foo<T> {
+>Foo : typeof Foo
+>array : T[]
+
+    return undefined;
+>undefined : undefined
+}
+
+module Foo {
+>Foo : typeof Foo
+
+    export var x = "hello";
+>x : string
+>"hello" : "hello"
+}
+

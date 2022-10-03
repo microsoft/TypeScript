@@ -1,0 +1,51 @@
+=== tests/cases/compiler/doubleUnderscoreMappedTypes.ts ===
+interface Properties {
+    property1: string;
+>property1 : string
+
+    __property2: string;
+>__property2 : string
+}
+
+// As expected, I can make an object satisfying this interface
+const ok: Properties = {
+>ok : Properties
+>{    property1: "",    __property2: ""} : { property1: string; __property2: string; }
+
+    property1: "",
+>property1 : string
+>"" : ""
+
+    __property2: ""
+>__property2 : string
+>"" : ""
+
+};
+
+// As expected, "__property2" is indeed a key of the type
+type Keys = keyof Properties;
+>Keys : keyof Properties
+
+const k: Keys = "__property2"; // ok
+>k : keyof Properties
+>"__property2" : "__property2"
+
+// This should be valid
+type Property2Type = Properties["__property2"];
+>Property2Type : string
+
+// And should work with partial
+const partial: Partial<Properties> = {
+>partial : Partial<Properties>
+>{    property1: "",    __property2: ""} : { property1: string; __property2: string; }
+
+    property1: "",
+>property1 : string
+>"" : ""
+
+    __property2: ""
+>__property2 : string
+>"" : ""
+
+};
+

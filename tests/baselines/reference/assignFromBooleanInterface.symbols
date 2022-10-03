@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts ===
+var x = true;
+>x : Symbol(x, Decl(assignFromBooleanInterface.ts, 0, 3))
+
+var a: Boolean;
+>a : Symbol(a, Decl(assignFromBooleanInterface.ts, 1, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+x = a;
+>x : Symbol(x, Decl(assignFromBooleanInterface.ts, 0, 3))
+>a : Symbol(a, Decl(assignFromBooleanInterface.ts, 1, 3))
+
+a = x;
+>a : Symbol(a, Decl(assignFromBooleanInterface.ts, 1, 3))
+>x : Symbol(x, Decl(assignFromBooleanInterface.ts, 0, 3))
+

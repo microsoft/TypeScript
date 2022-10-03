@@ -1,0 +1,81 @@
+=== tests/cases/compiler/arrayconcat.ts ===
+interface IOptions {
+>IOptions : Symbol(IOptions, Decl(arrayconcat.ts, 0, 0))
+
+    name?: string;
+>name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
+
+    flag?: boolean;
+>flag : Symbol(IOptions.flag, Decl(arrayconcat.ts, 1, 18))
+
+    short?: string;
+>short : Symbol(IOptions.short, Decl(arrayconcat.ts, 2, 19))
+
+    usage?: string;
+>usage : Symbol(IOptions.usage, Decl(arrayconcat.ts, 3, 19))
+
+    set?: (s: string) => void;
+>set : Symbol(IOptions.set, Decl(arrayconcat.ts, 4, 19))
+>s : Symbol(s, Decl(arrayconcat.ts, 5, 11))
+
+    type?: string;
+>type : Symbol(IOptions.type, Decl(arrayconcat.ts, 5, 30))
+
+    experimental?: boolean;
+>experimental : Symbol(IOptions.experimental, Decl(arrayconcat.ts, 6, 18))
+}
+
+class parser {
+>parser : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
+
+	public options: IOptions[];
+>options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
+>IOptions : Symbol(IOptions, Decl(arrayconcat.ts, 0, 0))
+
+	public m() {
+>m : Symbol(parser.m, Decl(arrayconcat.ts, 11, 28))
+
+		this.options = this.options.sort(function(a, b) {
+>this.options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
+>this : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
+>options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
+>this.options.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>this.options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
+>this : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
+>options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(arrayconcat.ts, 14, 44))
+>b : Symbol(b, Decl(arrayconcat.ts, 14, 46))
+
+            var aName = a.name.toLowerCase();
+>aName : Symbol(aName, Decl(arrayconcat.ts, 15, 15))
+>a.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>a.name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
+>a : Symbol(a, Decl(arrayconcat.ts, 14, 44))
+>name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+            var bName = b.name.toLowerCase();
+>bName : Symbol(bName, Decl(arrayconcat.ts, 16, 15))
+>b.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>b.name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
+>b : Symbol(b, Decl(arrayconcat.ts, 14, 46))
+>name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+            if (aName > bName) {
+>aName : Symbol(aName, Decl(arrayconcat.ts, 15, 15))
+>bName : Symbol(bName, Decl(arrayconcat.ts, 16, 15))
+
+                return 1;
+            } else if (aName < bName) {
+>aName : Symbol(aName, Decl(arrayconcat.ts, 15, 15))
+>bName : Symbol(bName, Decl(arrayconcat.ts, 16, 15))
+
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+	}
+}

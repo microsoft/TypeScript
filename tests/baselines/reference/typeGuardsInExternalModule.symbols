@@ -1,0 +1,46 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInExternalModule.ts ===
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+// local variable in external module
+var num: number;
+>num : Symbol(num, Decl(typeGuardsInExternalModule.ts, 4, 3))
+
+var var1: string | number;
+>var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
+
+if (typeof var1 === "string") {
+>var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
+
+    num = var1.length; // string
+>num : Symbol(num, Decl(typeGuardsInExternalModule.ts, 4, 3))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+else {
+    num = var1; // number
+>num : Symbol(num, Decl(typeGuardsInExternalModule.ts, 4, 3))
+>var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
+}
+
+// exported variable in external module
+var strOrNum: string | number;
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInExternalModule.ts, 14, 3))
+
+export var var2: string | number;
+>var2 : Symbol(var2, Decl(typeGuardsInExternalModule.ts, 15, 10))
+
+if (typeof var2 === "string") {
+>var2 : Symbol(var2, Decl(typeGuardsInExternalModule.ts, 15, 10))
+
+    // export makes the var property and not variable
+    strOrNum = var2; // string | number
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInExternalModule.ts, 14, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInExternalModule.ts, 15, 10))
+}
+else {
+    strOrNum = var2; // number | string
+>strOrNum : Symbol(strOrNum, Decl(typeGuardsInExternalModule.ts, 14, 3))
+>var2 : Symbol(var2, Decl(typeGuardsInExternalModule.ts, 15, 10))
+}

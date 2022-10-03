@@ -1,0 +1,122 @@
+=== tests/cases/conformance/types/literal/numericStringLiteralTypes.ts ===
+type T0 = string & `${string}`;  // string
+>T0 : Symbol(T0, Decl(numericStringLiteralTypes.ts, 0, 0))
+
+type T1 = string & `${number}`;  // `${number}
+>T1 : Symbol(T1, Decl(numericStringLiteralTypes.ts, 0, 31))
+
+type T2 = string & `${bigint}`;  // `${bigint}
+>T2 : Symbol(T2, Decl(numericStringLiteralTypes.ts, 1, 31))
+
+type T3<T extends string> = string & `${T}`;  // `${T}
+>T3 : Symbol(T3, Decl(numericStringLiteralTypes.ts, 2, 31))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 3, 8))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 3, 8))
+
+type T4<T extends string> = string & `${Capitalize<`${T}`>}`;  // `${Capitalize<T>}`
+>T4 : Symbol(T4, Decl(numericStringLiteralTypes.ts, 3, 44))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 4, 8))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 4, 8))
+
+function f1(a: boolean[], x: `${number}`) {
+>f1 : Symbol(f1, Decl(numericStringLiteralTypes.ts, 4, 61))
+>a : Symbol(a, Decl(numericStringLiteralTypes.ts, 6, 12))
+>x : Symbol(x, Decl(numericStringLiteralTypes.ts, 6, 25))
+
+    let s = a[x];  // boolean
+>s : Symbol(s, Decl(numericStringLiteralTypes.ts, 7, 7))
+>a : Symbol(a, Decl(numericStringLiteralTypes.ts, 6, 12))
+>x : Symbol(x, Decl(numericStringLiteralTypes.ts, 6, 25))
+}
+
+function f2(a: boolean[], x: number | `${number}`) {
+>f2 : Symbol(f2, Decl(numericStringLiteralTypes.ts, 8, 1))
+>a : Symbol(a, Decl(numericStringLiteralTypes.ts, 10, 12))
+>x : Symbol(x, Decl(numericStringLiteralTypes.ts, 10, 25))
+
+    let s = a[x];  // boolean
+>s : Symbol(s, Decl(numericStringLiteralTypes.ts, 11, 7))
+>a : Symbol(a, Decl(numericStringLiteralTypes.ts, 10, 12))
+>x : Symbol(x, Decl(numericStringLiteralTypes.ts, 10, 25))
+}
+
+type T10 = boolean[][`${number}`];  // boolean
+>T10 : Symbol(T10, Decl(numericStringLiteralTypes.ts, 12, 1))
+
+type T11 = boolean[][number | `${number}`];  // boolean
+>T11 : Symbol(T11, Decl(numericStringLiteralTypes.ts, 14, 34))
+
+type T20<T extends number | `${number}`> = T;
+>T20 : Symbol(T20, Decl(numericStringLiteralTypes.ts, 15, 43))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 17, 9))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 17, 9))
+
+type T21<T extends unknown[]> = { [K in keyof T]: T20<K> };
+>T21 : Symbol(T21, Decl(numericStringLiteralTypes.ts, 17, 45))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 18, 9))
+>K : Symbol(K, Decl(numericStringLiteralTypes.ts, 18, 35))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 18, 9))
+>T20 : Symbol(T20, Decl(numericStringLiteralTypes.ts, 15, 43))
+>K : Symbol(K, Decl(numericStringLiteralTypes.ts, 18, 35))
+
+type Container<T> = {
+>Container : Symbol(Container, Decl(numericStringLiteralTypes.ts, 18, 59))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 20, 15))
+
+    value: T
+>value : Symbol(value, Decl(numericStringLiteralTypes.ts, 20, 21))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 20, 15))
+}
+
+type UnwrapContainers<T extends Container<unknown>[]> = { [K in keyof T]: T[K]['value'] };
+>UnwrapContainers : Symbol(UnwrapContainers, Decl(numericStringLiteralTypes.ts, 22, 1))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 24, 22))
+>Container : Symbol(Container, Decl(numericStringLiteralTypes.ts, 18, 59))
+>K : Symbol(K, Decl(numericStringLiteralTypes.ts, 24, 59))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 24, 22))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 24, 22))
+>K : Symbol(K, Decl(numericStringLiteralTypes.ts, 24, 59))
+
+declare function createContainer<T extends unknown>(value: T): Container<T>;
+>createContainer : Symbol(createContainer, Decl(numericStringLiteralTypes.ts, 24, 90))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 26, 33))
+>value : Symbol(value, Decl(numericStringLiteralTypes.ts, 26, 52))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 26, 33))
+>Container : Symbol(Container, Decl(numericStringLiteralTypes.ts, 18, 59))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 26, 33))
+
+declare function f<T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void): void;
+>f : Symbol(f, Decl(numericStringLiteralTypes.ts, 26, 76))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 28, 19))
+>Container : Symbol(Container, Decl(numericStringLiteralTypes.ts, 18, 59))
+>containers : Symbol(containers, Decl(numericStringLiteralTypes.ts, 28, 51))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 28, 19))
+>callback : Symbol(callback, Decl(numericStringLiteralTypes.ts, 28, 70))
+>values : Symbol(values, Decl(numericStringLiteralTypes.ts, 28, 82))
+>UnwrapContainers : Symbol(UnwrapContainers, Decl(numericStringLiteralTypes.ts, 22, 1))
+>T : Symbol(T, Decl(numericStringLiteralTypes.ts, 28, 19))
+
+const container1 = createContainer('hi')
+>container1 : Symbol(container1, Decl(numericStringLiteralTypes.ts, 30, 5))
+>createContainer : Symbol(createContainer, Decl(numericStringLiteralTypes.ts, 24, 90))
+
+const container2 = createContainer(2)
+>container2 : Symbol(container2, Decl(numericStringLiteralTypes.ts, 31, 5))
+>createContainer : Symbol(createContainer, Decl(numericStringLiteralTypes.ts, 24, 90))
+
+f([container1, container2], (value1, value2) => {
+>f : Symbol(f, Decl(numericStringLiteralTypes.ts, 26, 76))
+>container1 : Symbol(container1, Decl(numericStringLiteralTypes.ts, 30, 5))
+>container2 : Symbol(container2, Decl(numericStringLiteralTypes.ts, 31, 5))
+>value1 : Symbol(value1, Decl(numericStringLiteralTypes.ts, 33, 29))
+>value2 : Symbol(value2, Decl(numericStringLiteralTypes.ts, 33, 36))
+
+    value1;  // string
+>value1 : Symbol(value1, Decl(numericStringLiteralTypes.ts, 33, 29))
+
+    value2;  // number
+>value2 : Symbol(value2, Decl(numericStringLiteralTypes.ts, 33, 36))
+
+});
+

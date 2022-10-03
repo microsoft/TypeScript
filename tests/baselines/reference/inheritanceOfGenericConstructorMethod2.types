@@ -1,0 +1,54 @@
+=== tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts ===
+module M {
+>M : typeof M
+
+   export class C1 { }
+>C1 : C1
+
+   export class C2<T> { }
+>C2 : C2<T>
+}
+module N {
+>N : typeof N
+
+   export class D1 extends M.C1 { }
+>D1 : D1
+>M.C1 : M.C1
+>M : typeof M
+>C1 : typeof M.C1
+
+   export class D2<T> extends M.C2<T> { }
+>D2 : D2<T>
+>M.C2 : M.C2<T>
+>M : typeof M
+>C2 : typeof M.C2
+}
+
+var c = new M.C2<number>(); // no error
+>c : M.C2<number>
+>new M.C2<number>() : M.C2<number>
+>M.C2 : typeof M.C2
+>M : typeof M
+>C2 : typeof M.C2
+
+var n = new N.D1(); // no error
+>n : N.D1
+>new N.D1() : N.D1
+>N.D1 : typeof N.D1
+>N : typeof N
+>D1 : typeof N.D1
+
+var n2 = new N.D2<number>(); // error
+>n2 : N.D2<number>
+>new N.D2<number>() : N.D2<number>
+>N.D2 : typeof N.D2
+>N : typeof N
+>D2 : typeof N.D2
+
+var n3 = new N.D2(); // no error, D2<any>
+>n3 : N.D2<unknown>
+>new N.D2() : N.D2<unknown>
+>N.D2 : typeof N.D2
+>N : typeof N
+>D2 : typeof N.D2
+

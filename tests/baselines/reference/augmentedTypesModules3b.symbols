@@ -1,0 +1,51 @@
+=== tests/cases/compiler/augmentedTypesModules3b.ts ===
+class m3b { foo() { } }
+>m3b : Symbol(m3b, Decl(augmentedTypesModules3b.ts, 0, 0), Decl(augmentedTypesModules3b.ts, 0, 23))
+>foo : Symbol(m3b.foo, Decl(augmentedTypesModules3b.ts, 0, 11))
+
+module m3b { var y = 2; }
+>m3b : Symbol(m3b, Decl(augmentedTypesModules3b.ts, 0, 0), Decl(augmentedTypesModules3b.ts, 0, 23))
+>y : Symbol(y, Decl(augmentedTypesModules3b.ts, 1, 16))
+
+class m3c { foo() { } }
+>m3c : Symbol(m3c, Decl(augmentedTypesModules3b.ts, 1, 25), Decl(augmentedTypesModules3b.ts, 3, 23))
+>foo : Symbol(m3c.foo, Decl(augmentedTypesModules3b.ts, 3, 11))
+
+module m3c { export var y = 2; } 
+>m3c : Symbol(m3c, Decl(augmentedTypesModules3b.ts, 1, 25), Decl(augmentedTypesModules3b.ts, 3, 23))
+>y : Symbol(y, Decl(augmentedTypesModules3b.ts, 4, 23))
+
+declare class m3d { foo(): void }
+>m3d : Symbol(m3d, Decl(augmentedTypesModules3b.ts, 4, 32), Decl(augmentedTypesModules3b.ts, 6, 33))
+>foo : Symbol(m3d.foo, Decl(augmentedTypesModules3b.ts, 6, 19))
+
+module m3d { export var y = 2; } 
+>m3d : Symbol(m3d, Decl(augmentedTypesModules3b.ts, 4, 32), Decl(augmentedTypesModules3b.ts, 6, 33))
+>y : Symbol(y, Decl(augmentedTypesModules3b.ts, 7, 23))
+
+module m3e { export var y = 2; } 
+>m3e : Symbol(m3e, Decl(augmentedTypesModules3b.ts, 7, 32), Decl(augmentedTypesModules3b.ts, 9, 32))
+>y : Symbol(y, Decl(augmentedTypesModules3b.ts, 9, 23))
+
+declare class m3e { foo(): void } 
+>m3e : Symbol(m3e, Decl(augmentedTypesModules3b.ts, 7, 32), Decl(augmentedTypesModules3b.ts, 9, 32))
+>foo : Symbol(m3e.foo, Decl(augmentedTypesModules3b.ts, 10, 19))
+
+declare class m3f { foo(): void }
+>m3f : Symbol(m3f, Decl(augmentedTypesModules3b.ts, 10, 33), Decl(augmentedTypesModules3b.ts, 12, 33))
+>foo : Symbol(m3f.foo, Decl(augmentedTypesModules3b.ts, 12, 19))
+
+module m3f { export interface I { foo(): void } }
+>m3f : Symbol(m3f, Decl(augmentedTypesModules3b.ts, 10, 33), Decl(augmentedTypesModules3b.ts, 12, 33))
+>I : Symbol(I, Decl(augmentedTypesModules3b.ts, 13, 12))
+>foo : Symbol(I.foo, Decl(augmentedTypesModules3b.ts, 13, 33))
+
+declare class m3g { foo(): void }
+>m3g : Symbol(m3g, Decl(augmentedTypesModules3b.ts, 13, 49), Decl(augmentedTypesModules3b.ts, 15, 33))
+>foo : Symbol(m3g.foo, Decl(augmentedTypesModules3b.ts, 15, 19))
+
+module m3g { export class C { foo() { } } }
+>m3g : Symbol(m3g, Decl(augmentedTypesModules3b.ts, 13, 49), Decl(augmentedTypesModules3b.ts, 15, 33))
+>C : Symbol(C, Decl(augmentedTypesModules3b.ts, 16, 12))
+>foo : Symbol(C.foo, Decl(augmentedTypesModules3b.ts, 16, 29))
+

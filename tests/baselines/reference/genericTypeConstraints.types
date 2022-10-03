@@ -1,0 +1,24 @@
+=== tests/cases/compiler/genericTypeConstraints.ts ===
+class Foo {
+>Foo : Foo
+
+    fooMethod() {}
+>fooMethod : () => void
+}
+
+class FooExtended { }
+>FooExtended : FooExtended
+
+class Bar<T extends Foo> { }
+>Bar : Bar<T>
+
+class BarExtended extends Bar<FooExtended> {
+>BarExtended : BarExtended
+>Bar : Bar<FooExtended>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Bar
+    }
+}

@@ -1,0 +1,13 @@
+tests/cases/compiler/es6ExportEquals.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+tests/cases/compiler/es6ExportEquals.ts(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== tests/cases/compiler/es6ExportEquals.ts (2 errors) ====
+    export function f() { }
+    
+    export = f;
+    ~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    ~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    

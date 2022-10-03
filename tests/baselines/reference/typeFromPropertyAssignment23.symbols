@@ -1,0 +1,79 @@
+=== tests/cases/conformance/salsa/a.js ===
+class B {
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+    constructor () {
+        this.n = 1
+>this.n : Symbol(B.n, Decl(a.js, 1, 20))
+>this : Symbol(B, Decl(a.js, 0, 0))
+>n : Symbol(B.n, Decl(a.js, 1, 20))
+    }
+    foo() {
+>foo : Symbol(B.foo, Decl(a.js, 3, 5))
+    }
+}
+
+class C extends B { }
+>C : Symbol(C, Decl(a.js, 6, 1))
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+// this override should be fine (even if it's a little odd)
+C.prototype.foo = function() {
+>C.prototype.foo : Symbol(C.foo, Decl(a.js, 8, 21))
+>C.prototype : Symbol(C.foo, Decl(a.js, 8, 21))
+>C : Symbol(C, Decl(a.js, 6, 1))
+>prototype : Symbol(C.prototype)
+>foo : Symbol(C.foo, Decl(a.js, 8, 21))
+}
+
+class D extends B { }
+>D : Symbol(D, Decl(a.js, 12, 1))
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+D.prototype.foo = () =>  {
+>D.prototype.foo : Symbol(D.foo, Decl(a.js, 14, 21))
+>D.prototype : Symbol(D.foo, Decl(a.js, 14, 21))
+>D : Symbol(D, Decl(a.js, 12, 1))
+>prototype : Symbol(D.prototype)
+>foo : Symbol(D.foo, Decl(a.js, 14, 21))
+
+    this.n = 'not checked, so no error'
+>this : Symbol(globalThis)
+>n : Symbol(n, Decl(a.js, 15, 26))
+}
+
+// post-class prototype assignments are trying to show that these properties are abstract
+class Module {
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+}
+Module.prototype.identifier = undefined
+>Module.prototype.identifier : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>Module.prototype : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+>prototype : Symbol(Module.prototype)
+>identifier : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>undefined : Symbol(undefined)
+
+Module.prototype.size = null
+>Module.prototype.size : Symbol(Module.size, Decl(a.js, 22, 39))
+>Module.prototype : Symbol(Module.size, Decl(a.js, 22, 39))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+>prototype : Symbol(Module.prototype)
+>size : Symbol(Module.size, Decl(a.js, 22, 39))
+
+class NormalModule extends Module {
+>NormalModule : Symbol(NormalModule, Decl(a.js, 23, 28))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+
+    identifier() {
+>identifier : Symbol(NormalModule.identifier, Decl(a.js, 25, 35))
+
+        return 'normal'
+    }
+    size() {
+>size : Symbol(NormalModule.size, Decl(a.js, 28, 5))
+
+        return 0
+    }
+}
+

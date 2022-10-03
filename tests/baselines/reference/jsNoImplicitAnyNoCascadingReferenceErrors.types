@@ -1,0 +1,31 @@
+=== tests/cases/compiler/somelib.d.ts ===
+export declare class Foo<T> {
+>Foo : Foo<T>
+
+    prop: T;
+>prop : T
+}
+=== tests/cases/compiler/index.js ===
+import {Foo} from "./somelib";
+>Foo : typeof Foo
+
+class MyFoo extends Foo {
+>MyFoo : MyFoo
+>Foo : Foo<any>
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Foo
+
+        this.prop.alpha = 12;
+>this.prop.alpha = 12 : 12
+>this.prop.alpha : any
+>this.prop : any
+>this : this
+>prop : any
+>alpha : any
+>12 : 12
+    }
+}
+

@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel4.ts ===
+target:
+No type information for this code.while (true) {
+No type information for this code.}
+No type information for this code.
+No type information for this code.target: 
+No type information for this code.while (true) {
+No type information for this code.}
+No type information for this code.

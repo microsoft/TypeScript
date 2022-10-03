@@ -1,0 +1,15 @@
+tests/cases/compiler/contextualTypingOfArrayLiterals1.ts(5,26): error TS2322: Type 'number' is not assignable to type 'Date'.
+
+
+==== tests/cases/compiler/contextualTypingOfArrayLiterals1.ts (1 errors) ====
+    interface I {
+       [x: number]: Date;
+    }
+    
+    var x3: I = [new Date(), 1]; 
+                             ~
+!!! error TS2322: Type 'number' is not assignable to type 'Date'.
+!!! related TS6501 tests/cases/compiler/contextualTypingOfArrayLiterals1.ts:2:4: The expected type comes from this index signature.
+    var r2 = x3[1]; 
+    r2.getDate(); 
+    

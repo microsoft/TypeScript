@@ -1,0 +1,23 @@
+=== tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts ===
+export class BuildWorkspaceService {
+>BuildWorkspaceService : BuildWorkspaceService
+
+    public injectRequestService<P0, P1, P2>(service: P0) {
+>injectRequestService : <P0, P1, P2>(service: P0) => void
+>service : P0
+
+        this.injectBuildService<number>(new X(service));
+>this.injectBuildService<number>(new X(service)) : void
+>this.injectBuildService : <P0>(service: P0) => void
+>this : this
+>injectBuildService : <P0>(service: P0) => void
+>new X(service) : any
+>X : any
+>service : P0
+    }
+    public injectBuildService<P0>(service: P0) {
+>injectBuildService : <P0>(service: P0) => void
+>service : P0
+    }
+}
+

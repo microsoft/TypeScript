@@ -1,0 +1,7 @@
+=== tests/cases/compiler/typeParametersInStaticProperties.ts ===
+class foo<T> {
+>foo : foo<T>
+
+    static P: T;
+>P : T
+} 

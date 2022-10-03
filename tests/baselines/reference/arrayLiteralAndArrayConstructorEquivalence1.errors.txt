@@ -1,0 +1,19 @@
+tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts(3,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts (1 errors) ====
+    var myCars=new Array(); 
+    var myCars3 = new Array({});
+    var myCars4: Array; // error
+                 ~~~~~
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+    var myCars5: Array<any>[];
+     
+    myCars = myCars3;
+    myCars = myCars4;
+    myCars = myCars5;
+     
+    myCars3 = myCars;
+    myCars3 = myCars4;
+    myCars3 = myCars5;   
+    

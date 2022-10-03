@@ -1,0 +1,20 @@
+=== tests/cases/compiler/recursiveCloduleReference.ts ===
+module M
+>M : typeof M
+{
+  export class C {
+>C : C
+  }
+  export module C {
+>C : typeof M.C
+
+    export var C = M.C
+>C : typeof M.C
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+
+  };
+};
+ 
+

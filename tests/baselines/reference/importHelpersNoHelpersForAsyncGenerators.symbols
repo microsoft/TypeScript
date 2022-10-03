@@ -1,0 +1,13 @@
+=== tests/cases/compiler/main.ts ===
+export async function * f() {
+>f : Symbol(f, Decl(main.ts, 0, 0))
+
+    await 1;
+    yield 2;
+    yield* [3];
+}
+
+=== tests/cases/compiler/tslib.d.ts ===
+export {}
+No type information for this code.
+No type information for this code.

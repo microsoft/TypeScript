@@ -1,0 +1,114 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts ===
+declare const a: string | undefined
+>a : string | undefined
+
+declare const b: string | undefined
+>b : string | undefined
+
+declare const c: string | undefined
+>c : string | undefined
+
+// should be a syntax error
+a ?? b || c;
+>a ?? b || c : string | undefined
+>a : string | undefined
+>b || c : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// should be a syntax error
+a || b ?? c;
+>a || b ?? c : string | undefined
+>a || b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// should be a syntax error
+a ?? b && c;
+>a ?? b && c : string | undefined
+>a : string | undefined
+>b && c : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// should be a syntax error
+a && b ?? c;
+>a && b ?? c : string | undefined
+>a && b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+a ?? (b || c);
+>a ?? (b || c) : string | undefined
+>a : string | undefined
+>(b || c) : string | undefined
+>b || c : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+(a ?? b) || c;
+>(a ?? b) || c : string | undefined
+>(a ?? b) : string | undefined
+>a ?? b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+(a || b) ?? c;
+>(a || b) ?? c : string | undefined
+>(a || b) : string | undefined
+>a || b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+a || (b ?? c);
+>a || (b ?? c) : string | undefined
+>a : string | undefined
+>(b ?? c) : string | undefined
+>b ?? c : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+a ?? (b && c);
+>a ?? (b && c) : string | undefined
+>a : string | undefined
+>(b && c) : string | undefined
+>b && c : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+(a ?? b) && c;
+>(a ?? b) && c : string | undefined
+>(a ?? b) : string | undefined
+>a ?? b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+(a && b) ?? c;
+>(a && b) ?? c : string | undefined
+>(a && b) : string | undefined
+>a && b : string | undefined
+>a : string | undefined
+>b : string | undefined
+>c : string | undefined
+
+// Valid according to spec
+a && (b ?? c);
+>a && (b ?? c) : string | undefined
+>a : string | undefined
+>(b ?? c) : string | undefined
+>b ?? c : string | undefined
+>b : string | undefined
+>c : string | undefined
+

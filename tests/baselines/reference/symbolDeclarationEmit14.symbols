@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit14.ts ===
+class C {
+>C : Symbol(C, Decl(symbolDeclarationEmit14.ts, 0, 0))
+
+    get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit14.ts, 0, 9))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    get [Symbol.toStringTag]() { return ""; }
+>[Symbol.toStringTag] : Symbol(C[Symbol.toStringTag], Decl(symbolDeclarationEmit14.ts, 1, 45))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

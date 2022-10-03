@@ -1,0 +1,63 @@
+=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+module Generic {
+>Generic : Symbol(Generic, Decl(genericSetterInClassType.ts, 0, 0))
+
+    class C<T> {
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 16))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 1, 12))
+
+        get y(): T {
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 1, 12))
+
+            return 1 as never;
+        }
+        set y(v) { }
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+>v : Symbol(v, Decl(genericSetterInClassType.ts, 5, 14))
+    }
+
+    var c = new C<number>();
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 16))
+
+    c.y = c.y;
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))
+
+    class Box<T> {
+>Box : Symbol(Box, Decl(genericSetterInClassType.ts, 9, 14))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 11, 14))
+
+        #value!: T;
+>#value : Symbol(Box.#value, Decl(genericSetterInClassType.ts, 11, 18))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 11, 14))
+        
+        get value() {
+>value : Symbol(Box.value, Decl(genericSetterInClassType.ts, 12, 19), Decl(genericSetterInClassType.ts, 16, 9))
+
+            return this.#value;
+>this.#value : Symbol(Box.#value, Decl(genericSetterInClassType.ts, 11, 18))
+>this : Symbol(Box, Decl(genericSetterInClassType.ts, 9, 14))
+        }
+    
+        set value(value) {
+>value : Symbol(Box.value, Decl(genericSetterInClassType.ts, 12, 19), Decl(genericSetterInClassType.ts, 16, 9))
+>value : Symbol(value, Decl(genericSetterInClassType.ts, 18, 18))
+
+            this.#value = value;
+>this.#value : Symbol(Box.#value, Decl(genericSetterInClassType.ts, 11, 18))
+>this : Symbol(Box, Decl(genericSetterInClassType.ts, 9, 14))
+>value : Symbol(value, Decl(genericSetterInClassType.ts, 18, 18))
+        }
+    }
+    
+    new Box<number>().value = 3;
+>new Box<number>().value : Symbol(Box.value, Decl(genericSetterInClassType.ts, 12, 19), Decl(genericSetterInClassType.ts, 16, 9))
+>Box : Symbol(Box, Decl(genericSetterInClassType.ts, 9, 14))
+>value : Symbol(Box.value, Decl(genericSetterInClassType.ts, 12, 19), Decl(genericSetterInClassType.ts, 16, 9))
+}

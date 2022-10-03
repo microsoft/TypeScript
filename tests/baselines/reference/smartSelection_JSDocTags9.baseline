@@ -1,0 +1,21 @@
+/** @enum {/**/number} */
+const Foo = {
+    x: 0,
+    y: 1,
+};
+
+
+           number    
+
+
+    @enum {number}•  
+
+
+/** @enum {number} */
+
+
+/** @enum {number} */
+const Foo = {
+    x: 0,
+    y: 1,
+};

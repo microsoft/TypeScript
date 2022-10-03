@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts(10,10): error TS1005: ',' expected.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts(14,3): error TS2339: Property 'y' does not exist on type 'typeof m'.
+
+
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts (2 errors) ====
+    // module export
+    var x = "Foo";
+    module m {
+        export var x;
+    }
+    
+    module n {
+        var z = 10000;
+        export var y = {
+            m.x  // error
+             ~
+!!! error TS1005: ',' expected.
+        };
+    }
+    
+    m.y.x;
+      ~
+!!! error TS2339: Property 'y' does not exist on type 'typeof m'.
+    

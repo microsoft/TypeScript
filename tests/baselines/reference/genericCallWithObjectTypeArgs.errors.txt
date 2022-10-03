@@ -1,0 +1,31 @@
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts(20,17): error TS2345: Argument of type 'X<D>' is not assignable to parameter of type 'X<C>'.
+  Type 'D' is not assignable to type 'C'.
+    Types have separate declarations of a private property 'x'.
+
+
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts (1 errors) ====
+    class C {
+        private x: string;
+    }
+    
+    class D {
+        private x: string;
+    }
+    
+    class X<T> {
+        x: T;
+    }
+    
+    function foo<T>(t: X<T>, t2: X<T>) {
+        var x: T;
+        return x;
+    }
+    
+    var c1 = new X<C>();
+    var d1 = new X<D>();
+    var r = foo(c1, d1); // error
+                    ~~
+!!! error TS2345: Argument of type 'X<D>' is not assignable to parameter of type 'X<C>'.
+!!! error TS2345:   Type 'D' is not assignable to type 'C'.
+!!! error TS2345:     Types have separate declarations of a private property 'x'.
+    var r2 = foo(c1, c1); // ok

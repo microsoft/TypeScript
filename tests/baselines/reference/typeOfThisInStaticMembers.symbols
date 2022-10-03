@@ -1,0 +1,96 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers.ts, 0, 0))
+
+    constructor(x: number) { }
+>x : Symbol(x, Decl(typeOfThisInStaticMembers.ts, 1, 16))
+
+    static foo: number;
+>foo : Symbol(C.foo, Decl(typeOfThisInStaticMembers.ts, 1, 30))
+
+    static bar() {
+>bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers.ts, 2, 23))
+
+        // type of this is the constructor function type
+        var t = this;
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 5, 11))
+>this : Symbol(C, Decl(typeOfThisInStaticMembers.ts, 0, 0))
+
+        return this;
+>this : Symbol(C, Decl(typeOfThisInStaticMembers.ts, 0, 0))
+    }
+}
+
+var t = C.bar();
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 10, 3))
+>C.bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers.ts, 2, 23))
+>C : Symbol(C, Decl(typeOfThisInStaticMembers.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers.ts, 2, 23))
+
+// all ok
+var r2 = t.foo + 1;
+>r2 : Symbol(r2, Decl(typeOfThisInStaticMembers.ts, 12, 3))
+>t.foo : Symbol(C.foo, Decl(typeOfThisInStaticMembers.ts, 1, 30))
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 10, 3))
+>foo : Symbol(C.foo, Decl(typeOfThisInStaticMembers.ts, 1, 30))
+
+var r3 = t.bar();
+>r3 : Symbol(r3, Decl(typeOfThisInStaticMembers.ts, 13, 3))
+>t.bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers.ts, 2, 23))
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 10, 3))
+>bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers.ts, 2, 23))
+
+var r4 = new t(1);
+>r4 : Symbol(r4, Decl(typeOfThisInStaticMembers.ts, 14, 3))
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 10, 3))
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(typeOfThisInStaticMembers.ts, 14, 18))
+>T : Symbol(T, Decl(typeOfThisInStaticMembers.ts, 16, 9))
+
+    static test: number;
+>test : Symbol(C2.test, Decl(typeOfThisInStaticMembers.ts, 16, 13))
+
+    constructor(x: string) { }
+>x : Symbol(x, Decl(typeOfThisInStaticMembers.ts, 18, 16))
+
+    static foo: string;
+>foo : Symbol(C2.foo, Decl(typeOfThisInStaticMembers.ts, 18, 30))
+
+    static bar() {
+>bar : Symbol(C2.bar, Decl(typeOfThisInStaticMembers.ts, 19, 23))
+
+        // type of this is the constructor function type
+        var t = this;
+>t : Symbol(t, Decl(typeOfThisInStaticMembers.ts, 22, 11))
+>this : Symbol(C2, Decl(typeOfThisInStaticMembers.ts, 14, 18))
+
+        return this;
+>this : Symbol(C2, Decl(typeOfThisInStaticMembers.ts, 14, 18))
+    }
+}
+
+var t2 = C2.bar();
+>t2 : Symbol(t2, Decl(typeOfThisInStaticMembers.ts, 27, 3))
+>C2.bar : Symbol(C2.bar, Decl(typeOfThisInStaticMembers.ts, 19, 23))
+>C2 : Symbol(C2, Decl(typeOfThisInStaticMembers.ts, 14, 18))
+>bar : Symbol(C2.bar, Decl(typeOfThisInStaticMembers.ts, 19, 23))
+
+// all ok
+var r5 = t2.foo + 1;
+>r5 : Symbol(r5, Decl(typeOfThisInStaticMembers.ts, 29, 3))
+>t2.foo : Symbol(C2.foo, Decl(typeOfThisInStaticMembers.ts, 18, 30))
+>t2 : Symbol(t2, Decl(typeOfThisInStaticMembers.ts, 27, 3))
+>foo : Symbol(C2.foo, Decl(typeOfThisInStaticMembers.ts, 18, 30))
+
+var r6 = t2.bar();
+>r6 : Symbol(r6, Decl(typeOfThisInStaticMembers.ts, 30, 3))
+>t2.bar : Symbol(C2.bar, Decl(typeOfThisInStaticMembers.ts, 19, 23))
+>t2 : Symbol(t2, Decl(typeOfThisInStaticMembers.ts, 27, 3))
+>bar : Symbol(C2.bar, Decl(typeOfThisInStaticMembers.ts, 19, 23))
+
+var r7 = new t2('');
+>r7 : Symbol(r7, Decl(typeOfThisInStaticMembers.ts, 31, 3))
+>t2 : Symbol(t2, Decl(typeOfThisInStaticMembers.ts, 27, 3))
+
+

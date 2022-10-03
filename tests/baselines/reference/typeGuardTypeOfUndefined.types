@@ -1,0 +1,434 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardTypeOfUndefined.ts ===
+// undefined type guard adds no new type information
+function test1(a: any) {
+>test1 : (a: any) => void
+>a : any
+
+    if (typeof a !== "undefined") {
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"boolean" : "boolean"
+
+            a;
+>a : boolean
+        }
+        else {
+            a;
+>a : any
+        }
+    }
+    else {
+        a;
+>a : undefined
+    }
+}
+
+function test2(a: any) {
+>test2 : (a: any) => void
+>a : any
+
+    if (typeof a === "undefined") {
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : undefined
+>"boolean" : "boolean"
+
+            a;
+>a : never
+        }
+        else {
+            a;
+>a : undefined
+        }
+    }
+    else {
+        a;
+>a : any
+    }
+}
+
+function test3(a: any) {
+>test3 : (a: any) => void
+>a : any
+
+    if (typeof a === "undefined" || typeof a === "boolean") {
+>typeof a === "undefined" || typeof a === "boolean" : boolean
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : any
+    }
+}
+
+function test4(a: any) {
+>test4 : (a: any) => void
+>a : any
+
+    if (typeof a !== "undefined" && typeof a === "boolean") {
+>typeof a !== "undefined" && typeof a === "boolean" : boolean
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : any
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : any
+    }
+}
+
+function test5(a: boolean | void) {
+>test5 : (a: boolean | void) => void
+>a : boolean | void
+
+    if (typeof a !== "undefined") {
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean | void
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean
+>"boolean" : "boolean"
+
+            a;
+>a : boolean
+        }
+        else {
+            a;
+>a : never
+        }
+    }
+    else {
+        a;
+>a : undefined
+    }
+}
+
+function test6(a: boolean | void) {
+>test6 : (a: boolean | void) => void
+>a : boolean | void
+
+    if (typeof a === "undefined") {
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean | void
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : undefined
+>"boolean" : "boolean"
+
+            a;
+>a : never
+        }
+        else {
+            a;
+>a : undefined
+        }
+    }
+    else {
+        a;
+>a : boolean
+    }
+}
+
+function test7(a: boolean | void) {
+>test7 : (a: boolean | void) => void
+>a : boolean | void
+
+    if (typeof a === "undefined" || typeof a === "boolean") {
+>typeof a === "undefined" || typeof a === "boolean" : boolean
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean | void
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : never
+    }
+}
+
+function test8(a: boolean | void) {
+>test8 : (a: boolean | void) => void
+>a : boolean | void
+
+    if (typeof a !== "undefined" && typeof a === "boolean") {
+>typeof a !== "undefined" && typeof a === "boolean" : boolean
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean | void
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : undefined
+    }
+}
+
+function test9(a: boolean | number) {
+>test9 : (a: boolean | number) => void
+>a : number | boolean
+
+    if (typeof a !== "undefined") {
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+            a;
+>a : boolean
+        }
+        else {
+            a;
+>a : number
+        }
+    }
+    else {
+        a;
+>a : undefined
+    }
+}
+
+function test10(a: boolean | number) {
+>test10 : (a: boolean | number) => void
+>a : number | boolean
+
+    if (typeof a === "undefined") {
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : undefined
+>"boolean" : "boolean"
+
+            a;
+>a : never
+        }
+        else {
+            a;
+>a : undefined
+        }
+    }
+    else {
+        a;
+>a : number | boolean
+    }
+}
+
+function test11(a: boolean | number) {
+>test11 : (a: boolean | number) => void
+>a : number | boolean
+
+    if (typeof a === "undefined" || typeof a === "boolean") {
+>typeof a === "undefined" || typeof a === "boolean" : boolean
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : number
+    }
+}
+
+function test12(a: boolean | number) {
+>test12 : (a: boolean | number) => void
+>a : number | boolean
+
+    if (typeof a !== "undefined" && typeof a === "boolean") {
+>typeof a !== "undefined" && typeof a === "boolean" : boolean
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : number
+    }
+}
+
+function test13(a: boolean | number | void) {
+>test13 : (a: boolean | number | void) => void
+>a : number | boolean | void
+
+    if (typeof a !== "undefined") {
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean | void
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+            a;
+>a : boolean
+        }
+        else {
+            a;
+>a : number
+        }
+    }
+    else {
+        a;
+>a : undefined
+    }
+}
+
+function test14(a: boolean | number | void) {
+>test14 : (a: boolean | number | void) => void
+>a : number | boolean | void
+
+    if (typeof a === "undefined") {
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean | void
+>"undefined" : "undefined"
+
+        if (typeof a === "boolean") {
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : undefined
+>"boolean" : "boolean"
+
+            a;
+>a : never
+        }
+        else {
+            a;
+>a : undefined
+        }
+    }
+    else {
+        a;
+>a : number | boolean
+    }
+}
+
+function test15(a: boolean | number | void) {
+>test15 : (a: boolean | number | void) => void
+>a : number | boolean | void
+
+    if (typeof a === "undefined" || typeof a === "boolean") {
+>typeof a === "undefined" || typeof a === "boolean" : boolean
+>typeof a === "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean | void
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : number
+    }
+}
+
+function test16(a: boolean | number | void) {
+>test16 : (a: boolean | number | void) => void
+>a : number | boolean | void
+
+    if (typeof a !== "undefined" && typeof a === "boolean") {
+>typeof a !== "undefined" && typeof a === "boolean" : boolean
+>typeof a !== "undefined" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean | void
+>"undefined" : "undefined"
+>typeof a === "boolean" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : number | boolean
+>"boolean" : "boolean"
+
+		a;
+>a : boolean
+    }
+    else {
+        a;
+>a : number
+    }
+}
+

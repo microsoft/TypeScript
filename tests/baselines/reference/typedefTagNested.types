@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @typedef {Object} App
+ * @property {string} name
+ * @property {Object} icons
+ * @property {string} icons.image32
+ * @property {string} icons.image64
+ */
+var ex;
+>ex : any
+
+/** @type {App} */
+const app = {
+>app : App
+>{    name: 'name',    icons: {        image32: 'x.png',        image64: 'y.png',    }} : { name: string; icons: { image32: string; image64: string; }; }
+
+    name: 'name',
+>name : string
+>'name' : "name"
+
+    icons: {
+>icons : { image32: string; image64: string; }
+>{        image32: 'x.png',        image64: 'y.png',    } : { image32: string; image64: string; }
+
+        image32: 'x.png',
+>image32 : string
+>'x.png' : "x.png"
+
+        image64: 'y.png',
+>image64 : string
+>'y.png' : "y.png"
+    }
+}
+
+/** @typedef {Object} Opp
+ * @property {string} name
+ * @property {Object} oops
+ * @property {string} horrible
+ * @type {string} idea
+ */
+var intercessor = 1
+>intercessor : number
+>1 : 1
+
+/** @type {Opp} */
+var mistake;
+>mistake : string
+
+/** @typedef {Object} Upp
+ * @property {string} name
+ * @property {Object} not
+ * @property {string} nested
+ */
+
+/** @type {Upp} */
+var sala = { name: 'uppsala', not: 0, nested: "ok" };
+>sala : Upp
+>{ name: 'uppsala', not: 0, nested: "ok" } : { name: string; not: number; nested: string; }
+>name : string
+>'uppsala' : "uppsala"
+>not : number
+>0 : 0
+>nested : string
+>"ok" : "ok"
+
+sala.name
+>sala.name : string
+>sala : Upp
+>name : string
+
+sala.not
+>sala.not : Object
+>sala : Upp
+>not : Object
+
+sala.nested
+>sala.nested : string
+>sala : Upp
+>nested : string
+

@@ -1,0 +1,129 @@
+=== tests/cases/conformance/es2017/useObjectValuesAndEntries1.ts ===
+var o = { a: 1, b: 2 };
+>o : Symbol(o, Decl(useObjectValuesAndEntries1.ts, 0, 3))
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 0, 9))
+>b : Symbol(b, Decl(useObjectValuesAndEntries1.ts, 0, 15))
+
+for (var x of Object.values(o)) {
+>x : Symbol(x, Decl(useObjectValuesAndEntries1.ts, 2, 8))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>o : Symbol(o, Decl(useObjectValuesAndEntries1.ts, 0, 3))
+
+    let y = x;
+>y : Symbol(y, Decl(useObjectValuesAndEntries1.ts, 3, 7))
+>x : Symbol(x, Decl(useObjectValuesAndEntries1.ts, 2, 8))
+}
+
+var entries = Object.entries(o);                    // [string, number][]
+>entries : Symbol(entries, Decl(useObjectValuesAndEntries1.ts, 6, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>o : Symbol(o, Decl(useObjectValuesAndEntries1.ts, 0, 3))
+
+var values = Object.values(o);                      // number[]
+>values : Symbol(values, Decl(useObjectValuesAndEntries1.ts, 7, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>o : Symbol(o, Decl(useObjectValuesAndEntries1.ts, 0, 3))
+
+var entries1 = Object.entries(1);                   // [string, any][]
+>entries1 : Symbol(entries1, Decl(useObjectValuesAndEntries1.ts, 9, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+var values1 = Object.values(1);                     // any[]
+>values1 : Symbol(values1, Decl(useObjectValuesAndEntries1.ts, 10, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+var entries2 = Object.entries({ a: true, b: 2 });   // [string, number|boolean][]
+>entries2 : Symbol(entries2, Decl(useObjectValuesAndEntries1.ts, 12, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 12, 31))
+>b : Symbol(b, Decl(useObjectValuesAndEntries1.ts, 12, 40))
+
+var values2 = Object.values({ a: true, b: 2 });     // (number|boolean)[]
+>values2 : Symbol(values2, Decl(useObjectValuesAndEntries1.ts, 13, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 13, 29))
+>b : Symbol(b, Decl(useObjectValuesAndEntries1.ts, 13, 38))
+
+var entries3 = Object.entries({});                  // [string, {}][]
+>entries3 : Symbol(entries3, Decl(useObjectValuesAndEntries1.ts, 15, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+var values3 = Object.values({});                    // {}[]
+>values3 : Symbol(values3, Decl(useObjectValuesAndEntries1.ts, 16, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+var a = ["a", "b", "c"];
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 18, 3))
+
+var entries4 = Object.entries(a);                   // [string, string][]
+>entries4 : Symbol(entries4, Decl(useObjectValuesAndEntries1.ts, 19, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 18, 3))
+
+var values4 = Object.values(a);                     // string[]
+>values4 : Symbol(values4, Decl(useObjectValuesAndEntries1.ts, 20, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 18, 3))
+
+enum E { A, B }
+>E : Symbol(E, Decl(useObjectValuesAndEntries1.ts, 20, 31))
+>A : Symbol(E.A, Decl(useObjectValuesAndEntries1.ts, 22, 8))
+>B : Symbol(E.B, Decl(useObjectValuesAndEntries1.ts, 22, 11))
+
+var entries5 = Object.entries(E);                   // [string, any][]
+>entries5 : Symbol(entries5, Decl(useObjectValuesAndEntries1.ts, 23, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>E : Symbol(E, Decl(useObjectValuesAndEntries1.ts, 20, 31))
+
+var values5 = Object.values(E);                     // any[]
+>values5 : Symbol(values5, Decl(useObjectValuesAndEntries1.ts, 24, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>E : Symbol(E, Decl(useObjectValuesAndEntries1.ts, 20, 31))
+
+interface I { }
+>I : Symbol(I, Decl(useObjectValuesAndEntries1.ts, 24, 31))
+
+var i: I = {};
+>i : Symbol(i, Decl(useObjectValuesAndEntries1.ts, 27, 3))
+>I : Symbol(I, Decl(useObjectValuesAndEntries1.ts, 24, 31))
+
+var entries6 = Object.entries(i);                   // [string, any][]
+>entries6 : Symbol(entries6, Decl(useObjectValuesAndEntries1.ts, 28, 3))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>i : Symbol(i, Decl(useObjectValuesAndEntries1.ts, 27, 3))
+
+var values6 = Object.values(i);                     // any[]
+>values6 : Symbol(values6, Decl(useObjectValuesAndEntries1.ts, 29, 3))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>i : Symbol(i, Decl(useObjectValuesAndEntries1.ts, 27, 3))
+

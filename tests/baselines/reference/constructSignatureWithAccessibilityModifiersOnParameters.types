@@ -1,0 +1,48 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts ===
+// Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
+
+class C {
+>C : C
+
+    constructor(public x, private y) { }
+>x : any
+>y : any
+}
+
+class C2 {
+>C2 : C2
+
+    constructor(public x) { }
+>x : any
+}
+
+class C3 {
+>C3 : C3
+
+    constructor(private x) { }
+>x : any
+}
+
+interface I {
+    new (public x);
+>x : any
+}
+
+interface I2 {
+    new (private x);
+>x : any
+}
+
+var a: {
+>a : new (x: any) => any
+
+    new (public x);
+>x : any
+}
+
+var b: {
+>b : new (x: any) => any
+
+    new (private x);
+>x : any
+}

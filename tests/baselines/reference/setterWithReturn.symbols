@@ -1,0 +1,17 @@
+=== tests/cases/compiler/setterWithReturn.ts ===
+class C234 {
+>C234 : Symbol(C234, Decl(setterWithReturn.ts, 0, 0))
+
+    public set p1(arg1) {
+>p1 : Symbol(C234.p1, Decl(setterWithReturn.ts, 0, 12))
+>arg1 : Symbol(arg1, Decl(setterWithReturn.ts, 1, 18))
+
+        if (true) {
+            return arg1;
+>arg1 : Symbol(arg1, Decl(setterWithReturn.ts, 1, 18))
+        }
+        else {
+            return 0;
+        }
+   }
+}

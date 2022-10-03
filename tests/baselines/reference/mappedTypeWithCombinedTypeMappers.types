@@ -1,0 +1,39 @@
+=== tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts ===
+// Repro from #13351
+
+type Meta<T, A> = {
+>Meta : Meta<T, A>
+
+    readonly[P in keyof T]: {
+        value: T[P];
+>value : T[P]
+
+        also: A;
+>also : A
+
+        readonly children: Meta<T[P], A>;
+>children : Meta<T[P], A>
+
+    };
+}
+
+interface Input {
+    x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+declare const output: Meta<Input, boolean>;
+>output : Meta<Input, boolean>
+
+const shouldFail: { important: boolean } = output.x.children;
+>shouldFail : { important: boolean; }
+>important : boolean
+>output.x.children : string
+>output.x : { value: string; also: boolean; readonly children: string; }
+>output : Meta<Input, boolean>
+>x : { value: string; also: boolean; readonly children: string; }
+>children : string
+

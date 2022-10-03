@@ -1,0 +1,56 @@
+=== tests/cases/compiler/exportImportAndClodule.ts ===
+module K {
+>K : typeof K
+
+    export class L {
+>L : L
+
+        constructor(public name: string) { }
+>name : string
+    }
+    export module L {
+>L : typeof L
+
+        export var y = 12;
+>y : number
+>12 : 12
+
+        export interface Point {
+            x: number;
+>x : number
+
+            y: number;
+>y : number
+        }
+    }
+}
+module M {
+>M : typeof M
+
+    export import D = K.L;
+>D : typeof D
+>K : typeof K
+>L : D
+}
+var o: { name: string };
+>o : { name: string; }
+>name : string
+
+var o = new M.D('Hello');
+>o : { name: string; }
+>new M.D('Hello') : K.L
+>M.D : typeof K.L
+>M : typeof M
+>D : typeof K.L
+>'Hello' : "Hello"
+
+var p: { x: number; y: number; }
+>p : { x: number; y: number; }
+>x : number
+>y : number
+
+var p: M.D.Point;
+>p : { x: number; y: number; }
+>M : any
+>D : any
+

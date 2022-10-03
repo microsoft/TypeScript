@@ -1,0 +1,32 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer.ts ===
+interface Base {
+    [x: string]: { a: number }
+>x : string
+>a : number
+
+    x: {
+>x : { a: number; b: number; }
+
+        a: number; b: number;
+>a : number
+>b : number
+    }
+}
+
+interface Derived extends Base {
+    [x: string]: {
+>x : string
+
+        a: number; b: number
+>a : number
+>b : number
+
+    };
+    // error
+    y: {
+>y : { a: number; }
+
+        a: number;
+>a : number
+    }
+}

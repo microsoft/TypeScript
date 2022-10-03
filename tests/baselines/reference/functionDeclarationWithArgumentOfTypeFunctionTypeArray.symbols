@@ -1,0 +1,12 @@
+=== tests/cases/compiler/functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts ===
+function foo(args: { (x): number }[]) {
+>foo : Symbol(foo, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 0))
+>args : Symbol(args, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 13))
+>x : Symbol(x, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 22))
+
+    return args.length;
+>args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+

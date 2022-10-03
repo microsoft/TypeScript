@@ -1,0 +1,52 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts ===
+var globalCounter = 0;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 3))
+
+function foo() {
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+
+    globalCounter += 1;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 3))
+
+    return { 0: 2 };
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+}
+foo()[0] **= foo()[0];
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+
+var result_foo1 = foo()[0] **= foo()[0];
+>result_foo1 : Symbol(result_foo1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 6, 3))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+
+foo()[0] **= foo()[0] **= 2;
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+
+var result_foo2 = foo()[0] **= foo()[0] **= 2;
+>result_foo2 : Symbol(result_foo2, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 8, 3))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+
+foo()[0] **= foo()[0] ** 2;
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+
+var result_foo3 = foo()[0] **= foo()[0] ** 2;
+>result_foo3 : Symbol(result_foo3, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 10, 3))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
+

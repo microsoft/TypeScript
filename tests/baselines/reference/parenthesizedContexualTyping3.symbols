@@ -1,0 +1,113 @@
+=== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping3.ts ===
+// Contextual typing for parenthesized substitution expressions in tagged templates.
+
+/**
+ * tempFun - Can't have fun for too long.
+ */
+function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 5, 17))
+>tempStrs : Symbol(tempStrs, Decl(parenthesizedContexualTyping3.ts, 5, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(parenthesizedContexualTyping3.ts, 5, 51))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 5, 56))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 5, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 5, 17))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 5, 67))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 5, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 5, 17))
+
+function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T;
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>tempStrs : Symbol(tempStrs, Decl(parenthesizedContexualTyping3.ts, 6, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(parenthesizedContexualTyping3.ts, 6, 51))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 6, 56))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>h : Symbol(h, Decl(parenthesizedContexualTyping3.ts, 6, 67))
+>y : Symbol(y, Decl(parenthesizedContexualTyping3.ts, 6, 72))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 6, 83))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 6, 17))
+
+function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T {
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 7, 17))
+>tempStrs : Symbol(tempStrs, Decl(parenthesizedContexualTyping3.ts, 7, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(parenthesizedContexualTyping3.ts, 7, 51))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 7, 56))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 7, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 7, 17))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 7, 67))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 7, 17))
+>T : Symbol(T, Decl(parenthesizedContexualTyping3.ts, 7, 17))
+
+    return g(x);
+>g : Symbol(g, Decl(parenthesizedContexualTyping3.ts, 7, 51))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 7, 67))
+}
+
+var a = tempFun `${ x => x }  ${ 10 }`
+>a : Symbol(a, Decl(parenthesizedContexualTyping3.ts, 11, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 11, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 11, 19))
+
+var b = tempFun `${ (x => x) }  ${ 10 }`
+>b : Symbol(b, Decl(parenthesizedContexualTyping3.ts, 12, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 12, 21))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 12, 21))
+
+var c = tempFun `${ ((x => x)) } ${ 10 }`
+>c : Symbol(c, Decl(parenthesizedContexualTyping3.ts, 13, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 13, 22))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 13, 22))
+
+var d = tempFun `${ x => x } ${ x => x } ${ 10 }`
+>d : Symbol(d, Decl(parenthesizedContexualTyping3.ts, 14, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 14, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 14, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 14, 31))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 14, 31))
+
+var e = tempFun `${ x => x } ${ (x => x) } ${ 10 }`
+>e : Symbol(e, Decl(parenthesizedContexualTyping3.ts, 15, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 15, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 15, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 15, 33))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 15, 33))
+
+var f = tempFun `${ x => x } ${ ((x => x)) } ${ 10 }`
+>f : Symbol(f, Decl(parenthesizedContexualTyping3.ts, 16, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 16, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 16, 19))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 16, 34))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 16, 34))
+
+var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
+>g : Symbol(g, Decl(parenthesizedContexualTyping3.ts, 17, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 17, 21))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 17, 21))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 17, 37))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 17, 37))
+
+var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
+>h : Symbol(h, Decl(parenthesizedContexualTyping3.ts, 18, 3))
+>tempFun : Symbol(tempFun, Decl(parenthesizedContexualTyping3.ts, 0, 0), Decl(parenthesizedContexualTyping3.ts, 5, 77), Decl(parenthesizedContexualTyping3.ts, 6, 93))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 18, 21))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 18, 21))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 18, 37))
+>x : Symbol(x, Decl(parenthesizedContexualTyping3.ts, 18, 37))
+>undefined : Symbol(undefined)
+

@@ -1,0 +1,9 @@
+tests/cases/compiler/quotedAccessorName2.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/quotedAccessorName2.ts (1 errors) ====
+    class C {
+        static get "foo"() { return 0; }
+                   ~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }

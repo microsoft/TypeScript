@@ -1,0 +1,31 @@
+=== tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts ===
+interface Document {
+>Document : Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
+}
+interface Window {
+>Window : Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 1, 1))
+
+    document: Document;
+>document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+>Document : Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
+}
+declare var window: Window;
+>window : Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 11))
+>Window : Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 1, 1))
+
+module Foo {
+>Foo : Symbol(Foo, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 27))
+
+    var x = "test1";
+>x : Symbol(x, Decl(sourceMap-StringLiteralWithNewLine.ts, 8, 7))
+
+    var y = "test 2\
+>y : Symbol(y, Decl(sourceMap-StringLiteralWithNewLine.ts, 9, 7))
+
+isn't this a lot of fun";
+    var z = window.document;
+>z : Symbol(z, Decl(sourceMap-StringLiteralWithNewLine.ts, 11, 7))
+>window.document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+>window : Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 5, 11))
+>document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
+}

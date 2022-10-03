@@ -1,0 +1,34 @@
+=== tests/cases/compiler/collisionRestParameterInterfaceMembers.ts ===
+// call
+interface i1 {
+    (_i: number, ...restParameters); // no error - no code gen
+>_i : number
+>restParameters : any[]
+}
+interface i1NoError {
+    (_i: number);  // no error
+>_i : number
+}
+
+// new
+interface i2 {
+    new (_i: number, ...restParameters); // no error - no code gen
+>_i : number
+>restParameters : any[]
+}
+interface i2NoError {
+    new (_i: number);  // no error
+>_i : number
+}
+
+// method
+interface i3 {
+    foo (_i: number, ...restParameters); // no error - no code gen
+>foo : (_i: number, ...restParameters: any[]) => any
+>_i : number
+>restParameters : any[]
+
+    fooNoError (_i: number);  // no error
+>fooNoError : (_i: number) => any
+>_i : number
+}

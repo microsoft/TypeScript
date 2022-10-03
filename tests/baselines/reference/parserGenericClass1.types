@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericClass1.ts ===
+class C<T> {
+>C : C<T>
+}

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/systemModule9.ts ===
+import * as ns from 'file1';
+>ns : Symbol(ns, Decl(systemModule9.ts, 0, 6))
+
+import {a, b as c} from 'file2';
+>a : Symbol(a, Decl(systemModule9.ts, 1, 8))
+>c : Symbol(c, Decl(systemModule9.ts, 1, 10))
+
+import d from 'file3'
+>d : Symbol(d, Decl(systemModule9.ts, 2, 6))
+
+import 'file4'
+import e, * as ns2 from 'file5';
+>e : Symbol(e, Decl(systemModule9.ts, 4, 6))
+>ns2 : Symbol(ns2, Decl(systemModule9.ts, 4, 9))
+
+import ns3 = require('file6');
+>ns3 : Symbol(ns3, Decl(systemModule9.ts, 4, 32))
+
+ns.f();
+>ns : Symbol(ns, Decl(systemModule9.ts, 0, 6))
+
+a();
+>a : Symbol(a, Decl(systemModule9.ts, 1, 8))
+
+c();
+>c : Symbol(c, Decl(systemModule9.ts, 1, 10))
+
+d();
+>d : Symbol(d, Decl(systemModule9.ts, 2, 6))
+
+e();
+>e : Symbol(e, Decl(systemModule9.ts, 4, 6))
+
+ns2.f();
+>ns2 : Symbol(ns2, Decl(systemModule9.ts, 4, 9))
+
+ns3.f();
+>ns3 : Symbol(ns3, Decl(systemModule9.ts, 4, 32))
+
+export * from 'file7';
+
+var x, y = true;
+>x : Symbol(x, Decl(systemModule9.ts, 17, 3))
+>y : Symbol(y, Decl(systemModule9.ts, 17, 6))
+
+export {x};
+>x : Symbol(x, Decl(systemModule9.ts, 18, 8))
+
+export {y as z};
+>y : Symbol(y, Decl(systemModule9.ts, 17, 6))
+>z : Symbol(z, Decl(systemModule9.ts, 19, 8))
+

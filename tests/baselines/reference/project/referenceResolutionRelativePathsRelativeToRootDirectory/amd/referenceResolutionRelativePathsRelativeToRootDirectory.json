@@ -1,0 +1,20 @@
+{
+    "scenario": "referenceResolution1_FromFooFolder_RelativepathToFoo",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/src/ts/foo",
+    "inputFiles": [
+        "../../../src/ts/foo/foo.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "../../../bar/bar.ts",
+        "../../../src/ts/foo/foo.ts"
+    ],
+    "emittedFiles": [
+        "../../../bar/bar.js",
+        "../../../bar/bar.d.ts",
+        "../../../src/ts/foo/foo.js",
+        "../../../src/ts/foo/foo.d.ts"
+    ]
+}

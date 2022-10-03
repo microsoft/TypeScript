@@ -1,0 +1,118 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
+declare function map<T, U>(array: T, func: (x: T) => U): U;
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>array : T
+>func : (x: T) => U
+>x : T
+
+declare function identity<V>(y: V): V;
+>identity : <V>(y: V) => V
+>y : V
+
+var s: string;
+>s : string
+
+// dotted name
+var dottedIdentity = { x: identity };
+>dottedIdentity : { x: <V>(y: V) => V; }
+>{ x: identity } : { x: <V>(y: V) => V; }
+>x : <V>(y: V) => V
+>identity : <V>(y: V) => V
+
+s = map("", dottedIdentity.x);
+>s = map("", dottedIdentity.x) : string
+>s : string
+>map("", dottedIdentity.x) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>dottedIdentity.x : <V>(y: V) => V
+>dottedIdentity : { x: <V>(y: V) => V; }
+>x : <V>(y: V) => V
+
+// index expression
+s = map("", dottedIdentity['x']);
+>s = map("", dottedIdentity['x']) : string
+>s : string
+>map("", dottedIdentity['x']) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>dottedIdentity['x'] : <V>(y: V) => V
+>dottedIdentity : { x: <V>(y: V) => V; }
+>'x' : "x"
+
+// function call
+s = map("", (() => identity)());
+>s = map("", (() => identity)()) : string
+>s : string
+>map("", (() => identity)()) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>(() => identity)() : <V>(y: V) => V
+>(() => identity) : () => <V>(y: V) => V
+>() => identity : () => <V>(y: V) => V
+>identity : <V>(y: V) => V
+
+// construct
+interface IdentityConstructor {
+    new (): typeof identity;
+>identity : <V>(y: V) => V
+}
+var ic: IdentityConstructor;
+>ic : IdentityConstructor
+
+s = map("", new ic());
+>s = map("", new ic()) : string
+>s : string
+>map("", new ic()) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>new ic() : <V>(y: V) => V
+>ic : IdentityConstructor
+
+// assignment
+var t;
+>t : any
+
+s = map("", t = identity);
+>s = map("", t = identity) : string
+>s : string
+>map("", t = identity) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>t = identity : <V>(y: V) => V
+>t : any
+>identity : <V>(y: V) => V
+
+// type assertion
+s = map("", <typeof identity>identity);
+>s = map("", <typeof identity>identity) : string
+>s : string
+>map("", <typeof identity>identity) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+><typeof identity>identity : <V>(y: V) => V
+>identity : <V>(y: V) => V
+>identity : <V>(y: V) => V
+
+// parenthesized expression
+s = map("", (identity));
+>s = map("", (identity)) : string
+>s : string
+>map("", (identity)) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>(identity) : <V>(y: V) => V
+>identity : <V>(y: V) => V
+
+// comma
+s = map("", ("", identity));
+>s = map("", ("", identity)) : string
+>s : string
+>map("", ("", identity)) : string
+>map : <T, U>(array: T, func: (x: T) => U) => U
+>"" : ""
+>("", identity) : <V>(y: V) => V
+>"", identity : <V>(y: V) => V
+>"" : ""
+>identity : <V>(y: V) => V
+

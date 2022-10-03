@@ -1,0 +1,7 @@
+=== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration10_es2017.ts ===
+async function foo(a = await => await): Promise<void> {
+>foo : Symbol(foo, Decl(asyncFunctionDeclaration10_es2017.ts, 0, 0))
+>a : Symbol(a, Decl(asyncFunctionDeclaration10_es2017.ts, 0, 19))
+>await : Symbol(await, Decl(asyncFunctionDeclaration10_es2017.ts, 0, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

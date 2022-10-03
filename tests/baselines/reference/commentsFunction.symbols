@@ -1,0 +1,108 @@
+=== tests/cases/compiler/commentsFunction.ts ===
+/** This comment should appear for foo*/
+function foo() {
+>foo : Symbol(foo, Decl(commentsFunction.ts, 0, 0))
+
+} /* trailing comment of function */
+foo();
+>foo : Symbol(foo, Decl(commentsFunction.ts, 0, 0))
+
+/** This is comment for function signature*/
+function fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(fooWithParameters, Decl(commentsFunction.ts, 3, 6))
+>a : Symbol(a, Decl(commentsFunction.ts, 5, 27))
+
+    /** this is comment for b*/
+    b: number) {
+>b : Symbol(b, Decl(commentsFunction.ts, 5, 66))
+
+    var d = a;
+>d : Symbol(d, Decl(commentsFunction.ts, 8, 7))
+>a : Symbol(a, Decl(commentsFunction.ts, 5, 27))
+
+} // trailing comment of function
+fooWithParameters("a", 10);
+>fooWithParameters : Symbol(fooWithParameters, Decl(commentsFunction.ts, 3, 6))
+
+/** fooFunc
+ * comment
+ */
+var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string) {
+>fooFunc : Symbol(fooFunc, Decl(commentsFunction.ts, 14, 3))
+>FooFunctionValue : Symbol(FooFunctionValue, Decl(commentsFunction.ts, 14, 13))
+>b : Symbol(b, Decl(commentsFunction.ts, 14, 40))
+
+    return b;
+>b : Symbol(b, Decl(commentsFunction.ts, 14, 40))
+}
+
+/// lamdaFoo var comment
+var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+>lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 19, 3))
+>a : Symbol(a, Decl(commentsFunction.ts, 19, 46))
+>b : Symbol(b, Decl(commentsFunction.ts, 19, 68))
+>a : Symbol(a, Decl(commentsFunction.ts, 19, 46))
+>b : Symbol(b, Decl(commentsFunction.ts, 19, 68))
+
+var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+>lambddaNoVarComment : Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 20, 3))
+>a : Symbol(a, Decl(commentsFunction.ts, 20, 63))
+>b : Symbol(b, Decl(commentsFunction.ts, 20, 85))
+>a : Symbol(a, Decl(commentsFunction.ts, 20, 63))
+>b : Symbol(b, Decl(commentsFunction.ts, 20, 85))
+
+lambdaFoo(10, 20);
+>lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 19, 3))
+
+lambddaNoVarComment(10, 20);
+>lambddaNoVarComment : Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 20, 3))
+
+function blah(a: string /* multiline trailing comment 
+>blah : Symbol(blah, Decl(commentsFunction.ts, 22, 28))
+>a : Symbol(a, Decl(commentsFunction.ts, 24, 14))
+
+multiline */) {
+}
+
+function blah2(a: string /* single line multiple trailing comments */ /* second */) {
+>blah2 : Symbol(blah2, Decl(commentsFunction.ts, 26, 1))
+>a : Symbol(a, Decl(commentsFunction.ts, 28, 15))
+}
+
+function blah3(a: string // trailing commen single line
+>blah3 : Symbol(blah3, Decl(commentsFunction.ts, 29, 1))
+>a : Symbol(a, Decl(commentsFunction.ts, 31, 15))
+
+    ) {
+}
+
+lambdaFoo = (a, b) => a * b; // This is trailing comment
+>lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 19, 3))
+>a : Symbol(a, Decl(commentsFunction.ts, 35, 13))
+>b : Symbol(b, Decl(commentsFunction.ts, 35, 15))
+>a : Symbol(a, Decl(commentsFunction.ts, 35, 13))
+>b : Symbol(b, Decl(commentsFunction.ts, 35, 15))
+
+/*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/(() => 0); //trailing comment
+
+function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
+>blah4 : Symbol(blah4, Decl(commentsFunction.ts, 38, 29))
+>a : Symbol(a, Decl(commentsFunction.ts, 40, 15))
+>b : Symbol(b, Decl(commentsFunction.ts, 40, 35))
+}
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(commentsFunction.ts, 41, 1))
+
+    // should emit this
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(commentsFunction.ts, 46, 1))
+
+    /// This is some detached comment
+
+    // should emit this leading comment of } too
+}
+

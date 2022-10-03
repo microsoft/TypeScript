@@ -1,0 +1,16 @@
+=== tests/cases/compiler/circularModuleImports.ts ===
+module M
+>M : Symbol(M, Decl(circularModuleImports.ts, 0, 0))
+ 
+{
+ 
+    import A = B;
+>A : Symbol(A, Decl(circularModuleImports.ts, 2, 1))
+>B : Symbol(B, Decl(circularModuleImports.ts, 4, 17))
+ 
+    import B = A;
+>B : Symbol(B, Decl(circularModuleImports.ts, 4, 17))
+>A : Symbol(A, Decl(circularModuleImports.ts, 2, 1))
+ 
+}
+

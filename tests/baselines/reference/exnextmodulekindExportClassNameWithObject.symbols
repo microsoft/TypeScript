@@ -1,0 +1,4 @@
+=== tests/cases/conformance/externalModules/esnext/exnextmodulekindExportClassNameWithObject.ts ===
+export class Object {}
+>Object : Symbol(Object, Decl(exnextmodulekindExportClassNameWithObject.ts, 0, 0))
+

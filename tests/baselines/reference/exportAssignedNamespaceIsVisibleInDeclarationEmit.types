@@ -1,0 +1,20 @@
+=== tests/cases/compiler/thing.d.ts ===
+declare namespace Foo {
+>Foo : typeof Foo
+
+    export interface Bar {}
+    export function f(): Bar;
+>f : () => Bar
+}
+export = Foo;
+>Foo : typeof Foo
+
+=== tests/cases/compiler/index.ts ===
+import { f } from "./thing";
+>f : () => import("tests/cases/compiler/thing").Bar
+
+export const thing = f();
+>thing : import("tests/cases/compiler/thing").Bar
+>f() : import("tests/cases/compiler/thing").Bar
+>f : () => import("tests/cases/compiler/thing").Bar
+

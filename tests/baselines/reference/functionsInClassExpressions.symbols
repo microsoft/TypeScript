@@ -1,0 +1,27 @@
+=== tests/cases/compiler/functionsInClassExpressions.ts ===
+let Foo = class {
+>Foo : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 3))
+
+    constructor() {
+        this.bar++;
+>this.bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+>this : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 9))
+>bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+    }
+    bar = 0;
+>bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+
+    inc = () => {
+>inc : Symbol(Foo.inc, Decl(functionsInClassExpressions.ts, 4, 12))
+
+        this.bar++;
+>this.bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+>this : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 9))
+>bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+    }
+    m() { return this.bar; }
+>m : Symbol(Foo.m, Decl(functionsInClassExpressions.ts, 7, 5))
+>this.bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+>this : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 9))
+>bar : Symbol(Foo.bar, Decl(functionsInClassExpressions.ts, 3, 5))
+}

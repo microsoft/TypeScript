@@ -1,0 +1,53 @@
+=== tests/cases/compiler/binopAssignmentShouldHaveType.ts ===
+declare var console;
+>console : any
+
+"use strict";
+>"use strict" : "use strict"
+
+module Test {
+>Test : typeof Test
+
+ export class Bug {
+>Bug : Bug
+
+  getName():string {
+>getName : () => string
+
+   return "name";
+>"name" : "name"
+  }
+  bug() {
+>bug : () => void
+
+   var name:string= null;
+>name : string
+>null : null
+
+   if ((name= this.getName()).length > 0) {
+>(name= this.getName()).length > 0 : boolean
+>(name= this.getName()).length : number
+>(name= this.getName()) : string
+>name= this.getName() : string
+>name : string
+>this.getName() : string
+>this.getName : () => string
+>this : this
+>getName : () => string
+>length : number
+>0 : 0
+
+    console.log(name);
+>console.log(name) : any
+>console.log : any
+>console : any
+>log : any
+>name : string
+   }
+  }
+ }
+}
+
+ 
+
+

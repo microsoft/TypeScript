@@ -1,0 +1,13 @@
+Exit Code: 2
+Standard output:
+node_modules/clone/clone.js(167,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+node_modules/clone/clone.js(167,23): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+node_modules/clone/clone.js(167,43): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/clone/clone.js(176,14): error TS2532: Object is possibly 'undefined'.
+node_modules/clone/clone.js(186,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+node_modules/clone/clone.js(186,23): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+node_modules/clone/clone.js(186,52): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+
+Standard error:

@@ -1,0 +1,182 @@
+[
+  {
+    "marker": {
+      "fileName": "/b.ts",
+      "position": 26,
+      "name": "b"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 25,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Doc",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "tag",
+          "text": [
+            {
+              "text": "Tag text",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/c.ts",
+      "position": 118,
+      "name": "c"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 117,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Doc",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "tag",
+          "text": [
+            {
+              "text": "Tag text",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

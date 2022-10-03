@@ -1,0 +1,32 @@
+===================================================================
+JsFile: optionsInlineSourceMapSourceRoot.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3B0aW9uc0lubGluZVNvdXJjZU1hcFNvdXJjZVJvb3QuanMiLCJzb3VyY2VSb290IjoibG9jYWwvIiwic291cmNlcyI6WyJvcHRpb25zSW5saW5lU291cmNlTWFwU291cmNlUm9vdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMifQ==
+sourceRoot: local/
+sources: optionsInlineSourceMapSourceRoot.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/optionsInlineSourceMapSourceRoot.js
+sourceFile:optionsInlineSourceMapSourceRoot.ts
+-------------------------------------------------------------------
+>>>var a = 10;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >var 
+3 >    a
+4 >      = 
+5 >        10
+6 >          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3B0aW9uc0lubGluZVNvdXJjZU1hcFNvdXJjZVJvb3QuanMiLCJzb3VyY2VSb290IjoibG9jYWwvIiwic291cmNlcyI6WyJvcHRpb25zSW5saW5lU291cmNlTWFwU291cmNlUm9vdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMifQ==

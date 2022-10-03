@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration13.ts(3,4): error TS2389: Function implementation name must be 'foo'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration13.ts (1 errors) ====
+    class C {
+       foo();
+       bar() { }
+       ~~~
+!!! error TS2389: Function implementation name must be 'foo'.
+    }

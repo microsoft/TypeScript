@@ -1,0 +1,117 @@
+=== tests/cases/compiler/inheritedConstructorWithRestParams2.ts ===
+class IBaseBase<T, U> {
+>IBaseBase : IBaseBase<T, U>
+
+    constructor(x: U) { }
+>x : U
+}
+
+interface IBase<T, U> extends IBaseBase<T, U> { }
+
+class BaseBase2 {
+>BaseBase2 : BaseBase2
+
+    constructor(x: number) { }
+>x : number
+}
+
+declare class BaseBase<T, U> extends BaseBase2 implements IBase<T, U> {
+>BaseBase : BaseBase<T, U>
+>BaseBase2 : BaseBase2
+
+    constructor(x: T, ...y: U[]);
+>x : T
+>y : U[]
+
+    constructor(x1: T, x2: T, ...y: U[]);
+>x1 : T
+>x2 : T
+>y : U[]
+
+    constructor(x1: T, x2: U, y: T);
+>x1 : T
+>x2 : U
+>y : T
+}
+
+class Base extends BaseBase<string, number> {
+>Base : Base
+>BaseBase : BaseBase<string, number>
+}
+
+class Derived extends Base { }
+>Derived : Derived
+>Base : Base
+
+// Ok
+new Derived("", "");
+>new Derived("", "") : Derived
+>Derived : typeof Derived
+>"" : ""
+>"" : ""
+
+new Derived("", 3);
+>new Derived("", 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+
+new Derived("", 3, 3);
+>new Derived("", 3, 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+>3 : 3
+
+new Derived("", 3, 3, 3);
+>new Derived("", 3, 3, 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+>3 : 3
+>3 : 3
+
+new Derived("", 3, "");
+>new Derived("", 3, "") : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+>"" : ""
+
+new Derived("", "", 3);
+>new Derived("", "", 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>"" : ""
+>3 : 3
+
+new Derived("", "", 3, 3);
+>new Derived("", "", 3, 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>"" : ""
+>3 : 3
+>3 : 3
+
+// Errors
+new Derived(3);
+>new Derived(3) : Derived
+>Derived : typeof Derived
+>3 : 3
+
+new Derived("", 3, "", 3);
+>new Derived("", 3, "", 3) : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+>"" : ""
+>3 : 3
+
+new Derived("", 3, "", "");
+>new Derived("", 3, "", "") : Derived
+>Derived : typeof Derived
+>"" : ""
+>3 : 3
+>"" : ""
+>"" : ""
+

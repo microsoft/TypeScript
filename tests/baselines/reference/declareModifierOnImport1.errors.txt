@@ -1,0 +1,10 @@
+tests/cases/compiler/declareModifierOnImport1.ts(1,1): error TS1079: A 'declare' modifier cannot be used with an import declaration.
+tests/cases/compiler/declareModifierOnImport1.ts(1,20): error TS2503: Cannot find namespace 'b'.
+
+
+==== tests/cases/compiler/declareModifierOnImport1.ts (2 errors) ====
+    declare import a = b;
+    ~~~~~~~
+!!! error TS1079: A 'declare' modifier cannot be used with an import declaration.
+                       ~
+!!! error TS2503: Cannot find namespace 'b'.

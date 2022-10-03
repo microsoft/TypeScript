@@ -1,0 +1,156 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @typedef {any} Any
+ */
+
+/**
+ * @typedef {unknown} Unknown
+ */
+
+function fn() {
+>fn : () => void
+
+    try { } catch (x) { }                                            // should be OK
+>x : any
+
+    try { } catch (/** @type {any} */ err) { }                       // should be OK
+>err : any
+
+    try { } catch (/** @type {Any} */ err) { }                       // should be OK
+>err : any
+
+    try { } catch (/** @type {unknown} */ err) { }                   // should be OK
+>err : unknown
+
+    try { } catch (/** @type {Unknown} */ err) { }                   // should be OK
+>err : unknown
+
+    try { } catch (err) { err.foo; }                                 // should be OK
+>err : any
+>err.foo : any
+>err : any
+>foo : any
+
+    try { } catch (/** @type {any} */ err) { err.foo; }              // should be OK
+>err : any
+>err.foo : any
+>err : any
+>foo : any
+
+    try { } catch (/** @type {Any} */ err) { err.foo; }              // should be OK
+>err : any
+>err.foo : any
+>err : any
+>foo : any
+
+    try { } catch (/** @type {unknown} */ err) { console.log(err); } // should be OK
+>err : unknown
+>console.log(err) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>err : unknown
+
+    try { } catch (/** @type {Unknown} */ err) { console.log(err); } // should be OK
+>err : unknown
+>console.log(err) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>err : unknown
+
+    try { } catch (/** @type {unknown} */ err) { err.foo; }          // error in the body
+>err : unknown
+>err.foo : any
+>err : unknown
+>foo : any
+
+    try { } catch (/** @type {Unknown} */ err) { err.foo; }          // error in the body
+>err : unknown
+>err.foo : any
+>err : unknown
+>foo : any
+
+    try { } catch (/** @type {Error} */ err) { }                     // error in the type
+>err : any
+
+    try { } catch (/** @type {object} */ err) { }                    // error in the type
+>err : any
+
+    try { console.log(); }
+>console.log() : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+    // @ts-ignore
+    catch (/** @type {number} */ err) { // e should not be a `number`
+>err : any
+
+        console.log(err.toLowerCase());
+>console.log(err.toLowerCase()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>err.toLowerCase() : any
+>err.toLowerCase : any
+>err : any
+>toLowerCase : any
+    }
+
+	// minor bug: shows that the `catch` argument is skipped when checking scope
+	try { }
+	catch (err) {
+>err : any
+
+		/** @type {string} */
+		let err;
+>err : string
+	}
+	try { }
+	catch (err) {
+>err : any
+
+		/** @type {boolean} */
+		var err;
+>err : boolean
+	}
+
+    try { } catch ({ x }) { }                                        // should be OK
+>x : any
+
+    try { } catch (/** @type {any} */ { x }) { x.foo; }              // should be OK
+>x : any
+>x.foo : any
+>x : any
+>foo : any
+
+    try { } catch (/** @type {Any} */ { x }) { x.foo;}               // should be OK
+>x : any
+>x.foo : any
+>x : any
+>foo : any
+
+    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // should be OK
+>x : any
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : any
+
+    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // should be OK
+>x : any
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : any
+
+    try { } catch (/** @type {Error} */ { x }) { }                   // error in the type
+>x : any
+
+    try { } catch (/** @type {object} */ { x }) { }                  // error in the type
+>x : any
+}
+

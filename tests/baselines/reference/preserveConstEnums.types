@@ -1,0 +1,10 @@
+=== tests/cases/compiler/preserveConstEnums.ts ===
+const enum E {
+>E : E
+
+    Value = 1, Value2 = Value
+>Value : E.Value
+>1 : 1
+>Value2 : E.Value
+>Value : E
+}

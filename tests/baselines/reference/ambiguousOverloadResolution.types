@@ -1,0 +1,29 @@
+=== tests/cases/compiler/ambiguousOverloadResolution.ts ===
+class A { }
+>A : A
+
+class B extends A { x: number; }
+>B : B
+>A : A
+>x : number
+
+declare function f(p: A, q: B): number;
+>f : { (p: A, q: B): number; (p: B, q: A): string; }
+>p : A
+>q : B
+
+declare function f(p: B, q: A): string;
+>f : { (p: A, q: B): number; (p: B, q: A): string; }
+>p : B
+>q : A
+
+var x: B;
+>x : B
+
+var t: number = f(x, x); // Not an error
+>t : number
+>f(x, x) : number
+>f : { (p: A, q: B): number; (p: B, q: A): string; }
+>x : B
+>x : B
+

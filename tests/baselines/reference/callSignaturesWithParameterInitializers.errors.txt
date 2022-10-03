@@ -1,0 +1,72 @@
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers.ts(24,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers.ts(25,20): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers.ts(36,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers.ts(37,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers.ts (4 errors) ====
+    // Optional parameters allow initializers only in implementation signatures
+    
+    function foo(x = 1) { }
+    var f = function foo(x = 1) { }
+    var f2 = (x: number, y = 1) => { }
+    
+    foo(1);
+    foo();
+    f(1);
+    f();
+    f2(1);
+    f2(1, 2);
+    
+    class C {
+        foo(x = 1) { }
+    }
+    
+    var c: C;
+    c.foo();
+    c.foo(1);
+    
+    // these are errors
+    interface I {
+        (x = 1);
+         ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+        foo(x: number, y = 1);
+                       ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    }
+    
+    var i: I;
+    i();
+    i(1);
+    i.foo(1);
+    i.foo(1, 2);
+    
+    // these are errors
+    var a: {
+        (x = 1);
+         ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+        foo(x = 1);
+            ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+    }
+    
+    a();
+    a(1);
+    a.foo();
+    a.foo(1);
+    
+    var b = {
+        foo(x = 1) { },
+        a: function foo(x: number, y = 1) { },
+        b: (x = 1) => { }
+    }
+    
+    b.foo();
+    b.foo(1);
+    b.a(1);
+    b.a(1, 2);
+    b.b();
+    b.b(1);
+    

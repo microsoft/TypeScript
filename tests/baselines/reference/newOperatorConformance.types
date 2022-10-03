@@ -1,0 +1,137 @@
+=== tests/cases/conformance/expressions/newOperator/newOperatorConformance.ts ===
+class C0 {
+>C0 : C0
+
+}
+class C1 {
+>C1 : C1
+
+    constructor(n: number, s: string) { }
+>n : number
+>s : string
+}
+
+class T<T> {
+>T : globalThis.T<T>
+
+    constructor(n?: T) { }
+>n : T
+}
+
+var anyCtor: {
+>anyCtor : new () => any
+
+    new (): any;
+};
+
+var anyCtor1: {
+>anyCtor1 : new (n: any) => any
+
+    new (n): any;
+>n : any
+
+};
+
+interface nestedCtor {
+    new (): nestedCtor;
+}
+var nestedCtor: nestedCtor;
+>nestedCtor : nestedCtor
+
+// Construct expression with no parentheses for construct signature with 0 parameters
+var a = new C0;
+>a : C0
+>new C0 : C0
+>C0 : typeof C0
+
+var a: C0;
+>a : C0
+
+
+// Generic construct expression with no parentheses
+var c1 = new T;
+>c1 : T<unknown>
+>new T : T<unknown>
+>T : typeof T
+
+var c1: T<{}>;
+>c1 : T<unknown>
+
+// Construct expression where constructor is of type 'any' with no parentheses
+var d = new anyCtor;
+>d : any
+>new anyCtor : any
+>anyCtor : new () => any
+
+var d: any;
+>d : any
+
+// Construct expression where constructor is of type 'any' with > 1 arg
+var d = new anyCtor1(undefined);
+>d : any
+>new anyCtor1(undefined) : any
+>anyCtor1 : new (n: any) => any
+>undefined : undefined
+
+// Construct expression of type where apparent type has a construct signature with 0 arguments
+function newFn1<T extends { new (): number }>(s: T) {
+>newFn1 : <T extends new () => number>(s: T) => void
+>s : T
+
+    var p = new s;
+>p : number
+>new s : number
+>s : T
+
+    var p: number;
+>p : number
+}
+
+// Construct expression of type where apparent type has a construct signature with 1 arguments
+function newFn2<T extends { new (s: number): string}>(s: T) {
+>newFn2 : <T extends new (s: number) => string>(s: T) => void
+>s : number
+>s : T
+
+    var p = new s(32);
+>p : string
+>new s(32) : string
+>s : T
+>32 : 32
+
+    var p: string;
+>p : string
+}
+
+// Construct expression of void returning function
+function fnVoid(): void { }
+>fnVoid : () => void
+
+var t = new fnVoid();
+>t : any
+>new fnVoid() : any
+>fnVoid : () => void
+
+var t: any;
+>t : any
+
+// Chained new expressions
+var nested = new (new (new nestedCtor())())();
+>nested : nestedCtor
+>new (new (new nestedCtor())())() : nestedCtor
+>(new (new nestedCtor())()) : nestedCtor
+>new (new nestedCtor())() : nestedCtor
+>(new nestedCtor()) : nestedCtor
+>new nestedCtor() : nestedCtor
+>nestedCtor : nestedCtor
+
+var n = new nested();
+>n : nestedCtor
+>new nested() : nestedCtor
+>nested : nestedCtor
+
+var n = new nested();
+>n : nestedCtor
+>new nested() : nestedCtor
+>nested : nestedCtor
+

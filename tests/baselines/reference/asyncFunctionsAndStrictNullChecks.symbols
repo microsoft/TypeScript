@@ -1,0 +1,135 @@
+=== tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts ===
+declare namespace Windows.Foundation {
+>Windows : Symbol(Windows, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 26))
+
+    interface IPromise<TResult> {
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+
+        then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;
+>then : Symbol(IPromise.then, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 33), Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 145), Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 135), Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 135))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 13))
+>success : Symbol(success, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 16))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 27))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 13))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 58))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 68))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 13))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 95))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 108))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 13))
+
+        then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
+>then : Symbol(IPromise.then, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 33), Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 145), Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 135), Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 135))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 13))
+>success : Symbol(success, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 16))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 27))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 13))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 58))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 68))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 13))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 85))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 98))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 13))
+
+        then<U>(success?: (value: TResult) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;
+>then : Symbol(IPromise.then, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 33), Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 145), Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 135), Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 135))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 13))
+>success : Symbol(success, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 16))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 27))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 13))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 48))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 58))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 13))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 85))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 98))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 13))
+
+        then<U>(success?: (value: TResult) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
+>then : Symbol(IPromise.then, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 33), Decl(asyncFunctionsAndStrictNullChecks.ts, 2, 145), Decl(asyncFunctionsAndStrictNullChecks.ts, 3, 135), Decl(asyncFunctionsAndStrictNullChecks.ts, 4, 135))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 13))
+>success : Symbol(success, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 16))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 27))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 13))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 48))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 58))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 13))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 75))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 88))
+>IPromise : Symbol(IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 13))
+
+        done<U>(success?: (value: TResult) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
+>done : Symbol(IPromise.done, Decl(asyncFunctionsAndStrictNullChecks.ts, 5, 125))
+>U : Symbol(U, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 13))
+>success : Symbol(success, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 16))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 27))
+>TResult : Symbol(TResult, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 23))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 50))
+>error : Symbol(error, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 60))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 79))
+>progress : Symbol(progress, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 92))
+
+        cancel(): void;
+>cancel : Symbol(IPromise.cancel, Decl(asyncFunctionsAndStrictNullChecks.ts, 6, 122))
+    }
+}
+
+async function sample(promise: Windows.Foundation.IPromise<number>) {
+>sample : Symbol(sample, Decl(asyncFunctionsAndStrictNullChecks.ts, 10, 1))
+>promise : Symbol(promise, Decl(asyncFunctionsAndStrictNullChecks.ts, 12, 22))
+>Windows : Symbol(Windows, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 0))
+>Foundation : Symbol(Windows.Foundation, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 26))
+>IPromise : Symbol(Windows.Foundation.IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+
+    var number = await promise;
+>number : Symbol(number, Decl(asyncFunctionsAndStrictNullChecks.ts, 13, 7))
+>promise : Symbol(promise, Decl(asyncFunctionsAndStrictNullChecks.ts, 12, 22))
+}
+
+
+declare function resolve1<T>(value: T): Promise<T>;
+>resolve1 : Symbol(resolve1, Decl(asyncFunctionsAndStrictNullChecks.ts, 14, 1))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 29))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 26))
+
+declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
+>resolve2 : Symbol(resolve2, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 51))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 29))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+>Windows : Symbol(Windows, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 0))
+>Foundation : Symbol(Windows.Foundation, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 26))
+>IPromise : Symbol(Windows.Foundation.IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 38))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+
+async function sample2(x?: number) {
+>sample2 : Symbol(sample2, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 71))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 20, 23))
+
+    let x1 = await resolve1(x);
+>x1 : Symbol(x1, Decl(asyncFunctionsAndStrictNullChecks.ts, 21, 7))
+>resolve1 : Symbol(resolve1, Decl(asyncFunctionsAndStrictNullChecks.ts, 14, 1))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 20, 23))
+
+    let x2 = await resolve2(x);
+>x2 : Symbol(x2, Decl(asyncFunctionsAndStrictNullChecks.ts, 22, 7))
+>resolve2 : Symbol(resolve2, Decl(asyncFunctionsAndStrictNullChecks.ts, 17, 51))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 20, 23))
+}
+

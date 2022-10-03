@@ -1,0 +1,28 @@
+tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(1,19): error TS2313: Type parameter 'T' has a circular constraint.
+tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(4,19): error TS2339: Property 'foo' does not exist on type 'T'.
+tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(5,21): error TS2351: This expression is not constructable.
+  Type '{}' has no construct signatures.
+tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(7,17): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+
+
+==== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts (4 errors) ====
+    class A<T extends T> {
+                      ~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+        foo() {
+            var x: T;
+            var a = x.foo();
+                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'T'.
+            var b = new x(123);
+                        ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{}' has no construct signatures.
+            var c = x[1];
+            var d = x();
+                    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+        }
+    }

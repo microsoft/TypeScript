@@ -1,0 +1,30 @@
+=== tests/cases/compiler/classAttributeInferenceTemplate.ts ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(classAttributeInferenceTemplate.ts, 0, 0))
+
+    property;
+>property : Symbol(MyClass.property, Decl(classAttributeInferenceTemplate.ts, 0, 15))
+
+    property2;
+>property2 : Symbol(MyClass.property2, Decl(classAttributeInferenceTemplate.ts, 1, 13))
+
+    constructor() {
+        const variable = 'something'
+>variable : Symbol(variable, Decl(classAttributeInferenceTemplate.ts, 5, 13))
+
+        this.property = `foo`; // Correctly inferred as `string`
+>this.property : Symbol(MyClass.property, Decl(classAttributeInferenceTemplate.ts, 0, 15))
+>this : Symbol(MyClass, Decl(classAttributeInferenceTemplate.ts, 0, 0))
+>property : Symbol(MyClass.property, Decl(classAttributeInferenceTemplate.ts, 0, 15))
+
+        this.property2 = `foo-${variable}`; // Causes an error
+>this.property2 : Symbol(MyClass.property2, Decl(classAttributeInferenceTemplate.ts, 1, 13))
+>this : Symbol(MyClass, Decl(classAttributeInferenceTemplate.ts, 0, 0))
+>property2 : Symbol(MyClass.property2, Decl(classAttributeInferenceTemplate.ts, 1, 13))
+>variable : Symbol(variable, Decl(classAttributeInferenceTemplate.ts, 5, 13))
+
+        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+>localProperty : Symbol(localProperty, Decl(classAttributeInferenceTemplate.ts, 10, 13))
+>variable : Symbol(variable, Decl(classAttributeInferenceTemplate.ts, 5, 13))
+    }
+}

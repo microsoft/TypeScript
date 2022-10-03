@@ -1,0 +1,880 @@
+=== tests/cases/compiler/convertKeywordsYes.ts ===
+// reserved ES5 future in strict mode
+
+var constructor = 0;
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 2, 3))
+
+var any = 0;
+>any : Symbol(any, Decl(convertKeywordsYes.ts, 3, 3))
+
+var boolean = 0;
+>boolean : Symbol(boolean, Decl(convertKeywordsYes.ts, 4, 3))
+
+var implements = 0;
+>implements : Symbol(implements, Decl(convertKeywordsYes.ts, 5, 3))
+
+var interface = 0;
+>interface : Symbol(interface, Decl(convertKeywordsYes.ts, 6, 3))
+
+var let = 0;
+>let : Symbol(let, Decl(convertKeywordsYes.ts, 7, 3))
+
+var module = 0;
+>module : Symbol(module, Decl(convertKeywordsYes.ts, 8, 3))
+
+var number = 0;
+>number : Symbol(number, Decl(convertKeywordsYes.ts, 9, 3))
+
+var package = 0;
+>package : Symbol(package, Decl(convertKeywordsYes.ts, 10, 3))
+
+var private = 0;
+>private : Symbol(private, Decl(convertKeywordsYes.ts, 11, 3))
+
+var protected = 0;
+>protected : Symbol(protected, Decl(convertKeywordsYes.ts, 12, 3))
+
+var public = 0;
+>public : Symbol(public, Decl(convertKeywordsYes.ts, 13, 3))
+
+var set = 0;
+>set : Symbol(set, Decl(convertKeywordsYes.ts, 14, 3))
+
+var static = 0;
+>static : Symbol(static, Decl(convertKeywordsYes.ts, 15, 3))
+
+var string = 0;
+>string : Symbol(string, Decl(convertKeywordsYes.ts, 16, 3))
+
+var get = 0;
+>get : Symbol(get, Decl(convertKeywordsYes.ts, 17, 3))
+
+var yield = 0;
+>yield : Symbol(yield, Decl(convertKeywordsYes.ts, 18, 3))
+
+var declare = 0;
+>declare : Symbol(declare, Decl(convertKeywordsYes.ts, 19, 3))
+
+function bigGeneric<
+>bigGeneric : Symbol(bigGeneric, Decl(convertKeywordsYes.ts, 19, 16))
+
+    constructor,
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 21, 20))
+
+    implements ,
+>implements : Symbol(implements, Decl(convertKeywordsYes.ts, 22, 16))
+
+    interface ,
+>interface : Symbol(interface, Decl(convertKeywordsYes.ts, 23, 16))
+
+    let,
+>let : Symbol(let, Decl(convertKeywordsYes.ts, 24, 15))
+
+    module ,
+>module : Symbol(module, Decl(convertKeywordsYes.ts, 25, 8))
+
+    package,
+>package : Symbol(package, Decl(convertKeywordsYes.ts, 26, 12))
+
+    private ,
+>private : Symbol(private, Decl(convertKeywordsYes.ts, 27, 12))
+
+    protected,
+>protected : Symbol(protected, Decl(convertKeywordsYes.ts, 28, 13))
+
+    public ,
+>public : Symbol(public, Decl(convertKeywordsYes.ts, 29, 14))
+
+    set ,
+>set : Symbol(set, Decl(convertKeywordsYes.ts, 30, 12))
+
+    static ,
+>static : Symbol(static, Decl(convertKeywordsYes.ts, 31, 9))
+
+    get ,
+>get : Symbol(get, Decl(convertKeywordsYes.ts, 32, 12))
+
+    yield,
+>yield : Symbol(yield, Decl(convertKeywordsYes.ts, 33, 9))
+
+    declare
+>declare : Symbol(declare, Decl(convertKeywordsYes.ts, 34, 10))
+
+    >(c: constructor,
+>c : Symbol(c, Decl(convertKeywordsYes.ts, 36, 6))
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 21, 20))
+
+    a: any,
+>a : Symbol(a, Decl(convertKeywordsYes.ts, 36, 21))
+
+    b2: boolean,
+>b2 : Symbol(b2, Decl(convertKeywordsYes.ts, 37, 11))
+
+    i: implements ,
+>i : Symbol(i, Decl(convertKeywordsYes.ts, 38, 16))
+>implements : Symbol(implements, Decl(convertKeywordsYes.ts, 22, 16))
+
+    i2: interface ,
+>i2 : Symbol(i2, Decl(convertKeywordsYes.ts, 39, 19))
+>interface : Symbol(interface, Decl(convertKeywordsYes.ts, 23, 16))
+
+    l: let,
+>l : Symbol(l, Decl(convertKeywordsYes.ts, 40, 19))
+>let : Symbol(let, Decl(convertKeywordsYes.ts, 24, 15))
+
+    m: module ,
+>m : Symbol(m, Decl(convertKeywordsYes.ts, 41, 11))
+>module : Symbol(module, Decl(convertKeywordsYes.ts, 25, 8))
+
+    n: number,
+>n : Symbol(n, Decl(convertKeywordsYes.ts, 42, 15))
+
+    p: package,
+>p : Symbol(p, Decl(convertKeywordsYes.ts, 43, 14))
+>package : Symbol(package, Decl(convertKeywordsYes.ts, 26, 12))
+
+    p2: private ,
+>p2 : Symbol(p2, Decl(convertKeywordsYes.ts, 44, 15))
+>private : Symbol(private, Decl(convertKeywordsYes.ts, 27, 12))
+
+    p3: protected,
+>p3 : Symbol(p3, Decl(convertKeywordsYes.ts, 45, 17))
+>protected : Symbol(protected, Decl(convertKeywordsYes.ts, 28, 13))
+
+    p4: public ,
+>p4 : Symbol(p4, Decl(convertKeywordsYes.ts, 46, 18))
+>public : Symbol(public, Decl(convertKeywordsYes.ts, 29, 14))
+
+    s: set ,
+>s : Symbol(s, Decl(convertKeywordsYes.ts, 47, 16))
+>set : Symbol(set, Decl(convertKeywordsYes.ts, 30, 12))
+
+    s2: static ,
+>s2 : Symbol(s2, Decl(convertKeywordsYes.ts, 48, 12))
+>static : Symbol(static, Decl(convertKeywordsYes.ts, 31, 9))
+
+    s3: string,
+>s3 : Symbol(s3, Decl(convertKeywordsYes.ts, 49, 16))
+
+    g: get ,
+>g : Symbol(g, Decl(convertKeywordsYes.ts, 50, 15))
+>get : Symbol(get, Decl(convertKeywordsYes.ts, 32, 12))
+
+    y: yield,
+>y : Symbol(y, Decl(convertKeywordsYes.ts, 51, 12))
+>yield : Symbol(yield, Decl(convertKeywordsYes.ts, 33, 9))
+
+    d: declare ) { }
+>d : Symbol(d, Decl(convertKeywordsYes.ts, 52, 13))
+>declare : Symbol(declare, Decl(convertKeywordsYes.ts, 34, 10))
+
+var bigObject = {
+>bigObject : Symbol(bigObject, Decl(convertKeywordsYes.ts, 55, 3))
+
+    constructor: 0,
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 55, 17))
+
+    any: 0,
+>any : Symbol(any, Decl(convertKeywordsYes.ts, 56, 19))
+
+    boolean: 0,
+>boolean : Symbol(boolean, Decl(convertKeywordsYes.ts, 57, 11))
+
+    implements: 0,
+>implements : Symbol(implements, Decl(convertKeywordsYes.ts, 58, 15))
+
+    interface: 0,
+>interface : Symbol(interface, Decl(convertKeywordsYes.ts, 59, 18))
+
+    let: 0,
+>let : Symbol(let, Decl(convertKeywordsYes.ts, 60, 17))
+
+    module: 0,
+>module : Symbol(module, Decl(convertKeywordsYes.ts, 61, 11))
+
+    number: 0,
+>number : Symbol(number, Decl(convertKeywordsYes.ts, 62, 14))
+
+    package: 0,
+>package : Symbol(package, Decl(convertKeywordsYes.ts, 63, 14))
+
+    private: 0,
+>private : Symbol(private, Decl(convertKeywordsYes.ts, 64, 15))
+
+    protected: 0,
+>protected : Symbol(protected, Decl(convertKeywordsYes.ts, 65, 15))
+
+    public: 0,
+>public : Symbol(public, Decl(convertKeywordsYes.ts, 66, 17))
+
+    set: 0,
+>set : Symbol(set, Decl(convertKeywordsYes.ts, 67, 14))
+
+    static: 0,
+>static : Symbol(static, Decl(convertKeywordsYes.ts, 68, 11))
+
+    string: 0,
+>string : Symbol(string, Decl(convertKeywordsYes.ts, 69, 14))
+
+    get: 0,
+>get : Symbol(get, Decl(convertKeywordsYes.ts, 70, 14))
+
+    yield: 0,
+>yield : Symbol(yield, Decl(convertKeywordsYes.ts, 71, 11))
+
+    break: 0,
+>break : Symbol(break, Decl(convertKeywordsYes.ts, 72, 13))
+
+    case: 0,
+>case : Symbol(case, Decl(convertKeywordsYes.ts, 73, 13))
+
+    catch: 0,
+>catch : Symbol(catch, Decl(convertKeywordsYes.ts, 74, 12))
+
+    class: 0,
+>class : Symbol(class, Decl(convertKeywordsYes.ts, 75, 13))
+
+    continue: 0,
+>continue : Symbol(continue, Decl(convertKeywordsYes.ts, 76, 13))
+
+    const: 0,
+>const : Symbol(const, Decl(convertKeywordsYes.ts, 77, 16))
+
+    debugger: 0,
+>debugger : Symbol(debugger, Decl(convertKeywordsYes.ts, 78, 13))
+
+    declare: 0,
+>declare : Symbol(declare, Decl(convertKeywordsYes.ts, 80, 16))
+
+    default: 0,
+>default : Symbol(default, Decl(convertKeywordsYes.ts, 81, 15))
+
+    delete: 0,
+>delete : Symbol(delete, Decl(convertKeywordsYes.ts, 82, 15))
+
+    do: 0,
+>do : Symbol(do, Decl(convertKeywordsYes.ts, 83, 14))
+
+    else: 0,
+>else : Symbol(else, Decl(convertKeywordsYes.ts, 84, 10))
+
+    enum: 0,
+>enum : Symbol(enum, Decl(convertKeywordsYes.ts, 85, 12))
+
+    export: 0,
+>export : Symbol(export, Decl(convertKeywordsYes.ts, 86, 12))
+
+    extends: 0,
+>extends : Symbol(extends, Decl(convertKeywordsYes.ts, 87, 14))
+
+    false: 0,
+>false : Symbol(false, Decl(convertKeywordsYes.ts, 88, 15))
+
+    finally: 0,
+>finally : Symbol(finally, Decl(convertKeywordsYes.ts, 89, 13))
+
+    for: 0,
+>for : Symbol(for, Decl(convertKeywordsYes.ts, 90, 15))
+
+    function: 0,
+>function : Symbol(function, Decl(convertKeywordsYes.ts, 91, 11))
+
+    if: 0,
+>if : Symbol(if, Decl(convertKeywordsYes.ts, 92, 16))
+
+    import: 0,
+>import : Symbol(import, Decl(convertKeywordsYes.ts, 93, 10))
+
+    in: 0,
+>in : Symbol(in, Decl(convertKeywordsYes.ts, 95, 14))
+
+    instanceof: 0,
+>instanceof : Symbol(instanceof, Decl(convertKeywordsYes.ts, 96, 10))
+
+    new: 0,
+>new : Symbol(new, Decl(convertKeywordsYes.ts, 97, 18))
+
+    null: 0,
+>null : Symbol(null, Decl(convertKeywordsYes.ts, 98, 11))
+
+    return: 0,
+>return : Symbol(return, Decl(convertKeywordsYes.ts, 99, 12))
+
+    super: 0,
+>super : Symbol(super, Decl(convertKeywordsYes.ts, 100, 14))
+
+    switch: 0,
+>switch : Symbol(switch, Decl(convertKeywordsYes.ts, 101, 13))
+
+    this: 0,
+>this : Symbol(this, Decl(convertKeywordsYes.ts, 102, 14))
+
+    throw: 0,
+>throw : Symbol(throw, Decl(convertKeywordsYes.ts, 103, 12))
+
+    true: 0,
+>true : Symbol(true, Decl(convertKeywordsYes.ts, 104, 13))
+
+    try: 0,
+>try : Symbol(try, Decl(convertKeywordsYes.ts, 105, 12))
+
+    typeof: 0,
+>typeof : Symbol(typeof, Decl(convertKeywordsYes.ts, 106, 11))
+
+    var: 0,
+>var : Symbol(var, Decl(convertKeywordsYes.ts, 107, 14))
+
+    void: 0,
+>void : Symbol(void, Decl(convertKeywordsYes.ts, 108, 11))
+
+    while: 0,
+>while : Symbol(while, Decl(convertKeywordsYes.ts, 109, 12))
+
+    with: 0,
+>with : Symbol(with, Decl(convertKeywordsYes.ts, 110, 13))
+
+};
+
+interface bigInterface {
+>bigInterface : Symbol(bigInterface, Decl(convertKeywordsYes.ts, 112, 2))
+
+    constructor;
+>constructor : Symbol(bigInterface.constructor, Decl(convertKeywordsYes.ts, 114, 24))
+
+    any;
+>any : Symbol(bigInterface.any, Decl(convertKeywordsYes.ts, 115, 16))
+
+    boolean;
+>boolean : Symbol(bigInterface.boolean, Decl(convertKeywordsYes.ts, 116, 8))
+
+    implements;
+>implements : Symbol(bigInterface.implements, Decl(convertKeywordsYes.ts, 117, 12))
+
+    interface;
+>interface : Symbol(bigInterface.interface, Decl(convertKeywordsYes.ts, 118, 15))
+
+    let;
+>let : Symbol(bigInterface.let, Decl(convertKeywordsYes.ts, 119, 14))
+
+    module;
+>module : Symbol(bigInterface.module, Decl(convertKeywordsYes.ts, 120, 8))
+
+    number;
+>number : Symbol(bigInterface.number, Decl(convertKeywordsYes.ts, 121, 11))
+
+    package;
+>package : Symbol(bigInterface.package, Decl(convertKeywordsYes.ts, 122, 11))
+
+    private;
+>private : Symbol(bigInterface.private, Decl(convertKeywordsYes.ts, 123, 12))
+
+    protected;
+>protected : Symbol(bigInterface.protected, Decl(convertKeywordsYes.ts, 124, 12))
+
+    public;
+>public : Symbol(bigInterface.public, Decl(convertKeywordsYes.ts, 125, 14))
+
+    set;
+>set : Symbol(bigInterface.set, Decl(convertKeywordsYes.ts, 126, 11))
+
+    static;
+>static : Symbol(bigInterface.static, Decl(convertKeywordsYes.ts, 127, 8))
+
+    string;
+>string : Symbol(bigInterface.string, Decl(convertKeywordsYes.ts, 128, 11))
+
+    get;
+>get : Symbol(bigInterface.get, Decl(convertKeywordsYes.ts, 129, 11))
+
+    yield;
+>yield : Symbol(bigInterface.yield, Decl(convertKeywordsYes.ts, 130, 8))
+
+    break;
+>break : Symbol(bigInterface.break, Decl(convertKeywordsYes.ts, 131, 10))
+
+    case;
+>case : Symbol(bigInterface.case, Decl(convertKeywordsYes.ts, 132, 10))
+
+    catch;
+>catch : Symbol(bigInterface.catch, Decl(convertKeywordsYes.ts, 133, 9))
+
+    class;
+>class : Symbol(bigInterface.class, Decl(convertKeywordsYes.ts, 134, 10))
+
+    continue;
+>continue : Symbol(bigInterface.continue, Decl(convertKeywordsYes.ts, 135, 10))
+
+    const;
+>const : Symbol(bigInterface.const, Decl(convertKeywordsYes.ts, 136, 13))
+
+    debugger;
+>debugger : Symbol(bigInterface.debugger, Decl(convertKeywordsYes.ts, 137, 10))
+
+    declare;
+>declare : Symbol(bigInterface.declare, Decl(convertKeywordsYes.ts, 139, 13))
+
+    default;
+>default : Symbol(bigInterface.default, Decl(convertKeywordsYes.ts, 140, 12))
+
+    delete;
+>delete : Symbol(bigInterface.delete, Decl(convertKeywordsYes.ts, 141, 12))
+
+    do;
+>do : Symbol(bigInterface.do, Decl(convertKeywordsYes.ts, 142, 11))
+
+    else;
+>else : Symbol(bigInterface.else, Decl(convertKeywordsYes.ts, 143, 7))
+
+    enum;
+>enum : Symbol(bigInterface.enum, Decl(convertKeywordsYes.ts, 144, 9))
+
+    export;
+>export : Symbol(bigInterface.export, Decl(convertKeywordsYes.ts, 145, 9))
+
+    extends;
+>extends : Symbol(bigInterface.extends, Decl(convertKeywordsYes.ts, 146, 11))
+
+    false;
+>false : Symbol(bigInterface.false, Decl(convertKeywordsYes.ts, 147, 12))
+
+    finally;
+>finally : Symbol(bigInterface.finally, Decl(convertKeywordsYes.ts, 148, 10))
+
+    for;
+>for : Symbol(bigInterface.for, Decl(convertKeywordsYes.ts, 149, 12))
+
+    function;
+>function : Symbol(bigInterface.function, Decl(convertKeywordsYes.ts, 150, 8))
+
+    if;
+>if : Symbol(bigInterface.if, Decl(convertKeywordsYes.ts, 151, 13))
+
+    import;
+>import : Symbol(bigInterface.import, Decl(convertKeywordsYes.ts, 152, 7))
+
+    in;
+>in : Symbol(bigInterface.in, Decl(convertKeywordsYes.ts, 154, 11))
+
+    instanceof;
+>instanceof : Symbol(bigInterface.instanceof, Decl(convertKeywordsYes.ts, 155, 7))
+
+    new;
+>new : Symbol(bigInterface.new, Decl(convertKeywordsYes.ts, 156, 15))
+
+    null;
+>null : Symbol(bigInterface.null, Decl(convertKeywordsYes.ts, 157, 8))
+
+    return;
+>return : Symbol(bigInterface.return, Decl(convertKeywordsYes.ts, 158, 9))
+
+    super;
+>super : Symbol(bigInterface.super, Decl(convertKeywordsYes.ts, 159, 11))
+
+    switch;
+>switch : Symbol(bigInterface.switch, Decl(convertKeywordsYes.ts, 160, 10))
+
+    this;
+>this : Symbol(bigInterface.this, Decl(convertKeywordsYes.ts, 161, 11))
+
+    throw;
+>throw : Symbol(bigInterface.throw, Decl(convertKeywordsYes.ts, 162, 9))
+
+    true;
+>true : Symbol(bigInterface.true, Decl(convertKeywordsYes.ts, 163, 10))
+
+    try;
+>try : Symbol(bigInterface.try, Decl(convertKeywordsYes.ts, 164, 9))
+
+    typeof;
+>typeof : Symbol(bigInterface.typeof, Decl(convertKeywordsYes.ts, 165, 8))
+
+    var;
+>var : Symbol(bigInterface.var, Decl(convertKeywordsYes.ts, 166, 11))
+
+    void;
+>void : Symbol(bigInterface.void, Decl(convertKeywordsYes.ts, 167, 8))
+
+    while;
+>while : Symbol(bigInterface.while, Decl(convertKeywordsYes.ts, 168, 9))
+
+    with;
+>with : Symbol(bigInterface.with, Decl(convertKeywordsYes.ts, 169, 10))
+}
+
+class bigClass {
+>bigClass : Symbol(bigClass, Decl(convertKeywordsYes.ts, 171, 1))
+
+    public "constructor" = 0;
+>"constructor" : Symbol(bigClass["constructor"], Decl(convertKeywordsYes.ts, 173, 16))
+
+    public any = 0;
+>any : Symbol(bigClass.any, Decl(convertKeywordsYes.ts, 174, 29))
+
+    public boolean = 0;
+>boolean : Symbol(bigClass.boolean, Decl(convertKeywordsYes.ts, 175, 19))
+
+    public implements = 0;
+>implements : Symbol(bigClass.implements, Decl(convertKeywordsYes.ts, 176, 23))
+
+    public interface = 0;
+>interface : Symbol(bigClass.interface, Decl(convertKeywordsYes.ts, 177, 26))
+
+    public let = 0;
+>let : Symbol(bigClass.let, Decl(convertKeywordsYes.ts, 178, 25))
+
+    public module = 0;
+>module : Symbol(bigClass.module, Decl(convertKeywordsYes.ts, 179, 19))
+
+    public number = 0;
+>number : Symbol(bigClass.number, Decl(convertKeywordsYes.ts, 180, 22))
+
+    public package = 0;
+>package : Symbol(bigClass.package, Decl(convertKeywordsYes.ts, 181, 22))
+
+    public private = 0;
+>private : Symbol(bigClass.private, Decl(convertKeywordsYes.ts, 182, 23))
+
+    public protected = 0;
+>protected : Symbol(bigClass.protected, Decl(convertKeywordsYes.ts, 183, 23))
+
+    public public = 0;
+>public : Symbol(bigClass.public, Decl(convertKeywordsYes.ts, 184, 25))
+
+    public set = 0;
+>set : Symbol(bigClass.set, Decl(convertKeywordsYes.ts, 185, 22))
+
+    public static = 0;
+>static : Symbol(bigClass.static, Decl(convertKeywordsYes.ts, 186, 19))
+
+    public string = 0;
+>string : Symbol(bigClass.string, Decl(convertKeywordsYes.ts, 187, 22))
+
+    public get = 0;
+>get : Symbol(bigClass.get, Decl(convertKeywordsYes.ts, 188, 22))
+
+    public yield = 0;
+>yield : Symbol(bigClass.yield, Decl(convertKeywordsYes.ts, 189, 19))
+
+    public break = 0;
+>break : Symbol(bigClass.break, Decl(convertKeywordsYes.ts, 190, 21))
+
+    public case = 0;
+>case : Symbol(bigClass.case, Decl(convertKeywordsYes.ts, 191, 21))
+
+    public catch = 0;
+>catch : Symbol(bigClass.catch, Decl(convertKeywordsYes.ts, 192, 20))
+
+    public class = 0;
+>class : Symbol(bigClass.class, Decl(convertKeywordsYes.ts, 193, 21))
+
+    public continue = 0;
+>continue : Symbol(bigClass.continue, Decl(convertKeywordsYes.ts, 194, 21))
+
+    public const = 0;
+>const : Symbol(bigClass.const, Decl(convertKeywordsYes.ts, 195, 24))
+
+    public debugger = 0;
+>debugger : Symbol(bigClass.debugger, Decl(convertKeywordsYes.ts, 196, 21))
+
+    public declare = 0;
+>declare : Symbol(bigClass.declare, Decl(convertKeywordsYes.ts, 197, 24))
+
+    public default = 0;
+>default : Symbol(bigClass.default, Decl(convertKeywordsYes.ts, 198, 23))
+
+    public delete = 0;
+>delete : Symbol(bigClass.delete, Decl(convertKeywordsYes.ts, 199, 23))
+
+    public do = 0;
+>do : Symbol(bigClass.do, Decl(convertKeywordsYes.ts, 200, 22))
+
+    public else = 0;
+>else : Symbol(bigClass.else, Decl(convertKeywordsYes.ts, 201, 18))
+
+    public enum = 0;
+>enum : Symbol(bigClass.enum, Decl(convertKeywordsYes.ts, 202, 20))
+
+    public export = 0;
+>export : Symbol(bigClass.export, Decl(convertKeywordsYes.ts, 203, 20))
+
+    public extends = 0;
+>extends : Symbol(bigClass.extends, Decl(convertKeywordsYes.ts, 204, 22))
+
+    public false = 0;
+>false : Symbol(bigClass.false, Decl(convertKeywordsYes.ts, 205, 23))
+
+    public finally = 0;
+>finally : Symbol(bigClass.finally, Decl(convertKeywordsYes.ts, 206, 21))
+
+    public for = 0;
+>for : Symbol(bigClass.for, Decl(convertKeywordsYes.ts, 207, 23))
+
+    public function = 0;
+>function : Symbol(bigClass.function, Decl(convertKeywordsYes.ts, 208, 19))
+
+    public if = 0;
+>if : Symbol(bigClass.if, Decl(convertKeywordsYes.ts, 209, 24))
+
+    public import = 0;
+>import : Symbol(bigClass.import, Decl(convertKeywordsYes.ts, 210, 18))
+
+    public in = 0;
+>in : Symbol(bigClass.in, Decl(convertKeywordsYes.ts, 211, 22))
+
+    public instanceof = 0;
+>instanceof : Symbol(bigClass.instanceof, Decl(convertKeywordsYes.ts, 212, 18))
+
+    public new = 0;
+>new : Symbol(bigClass.new, Decl(convertKeywordsYes.ts, 213, 26))
+
+    public null = 0;
+>null : Symbol(bigClass.null, Decl(convertKeywordsYes.ts, 214, 19))
+
+    public return = 0;
+>return : Symbol(bigClass.return, Decl(convertKeywordsYes.ts, 215, 20))
+
+    public super = 0;
+>super : Symbol(bigClass.super, Decl(convertKeywordsYes.ts, 216, 22))
+
+    public switch = 0;
+>switch : Symbol(bigClass.switch, Decl(convertKeywordsYes.ts, 217, 21))
+
+    public this = 0;
+>this : Symbol(bigClass.this, Decl(convertKeywordsYes.ts, 218, 22))
+
+    public throw = 0;
+>throw : Symbol(bigClass.throw, Decl(convertKeywordsYes.ts, 219, 20))
+
+    public true = 0;
+>true : Symbol(bigClass.true, Decl(convertKeywordsYes.ts, 220, 21))
+
+    public try = 0;
+>try : Symbol(bigClass.try, Decl(convertKeywordsYes.ts, 221, 20))
+
+    public typeof = 0;
+>typeof : Symbol(bigClass.typeof, Decl(convertKeywordsYes.ts, 222, 19))
+
+    public var = 0;
+>var : Symbol(bigClass.var, Decl(convertKeywordsYes.ts, 223, 22))
+
+    public void = 0;
+>void : Symbol(bigClass.void, Decl(convertKeywordsYes.ts, 224, 19))
+
+    public while = 0;
+>while : Symbol(bigClass.while, Decl(convertKeywordsYes.ts, 225, 20))
+
+    public with = 0;
+>with : Symbol(bigClass.with, Decl(convertKeywordsYes.ts, 226, 21))
+}
+
+enum bigEnum {
+>bigEnum : Symbol(bigEnum, Decl(convertKeywordsYes.ts, 228, 1))
+
+    constructor,
+>constructor : Symbol(bigEnum.constructor, Decl(convertKeywordsYes.ts, 230, 14))
+
+    any,
+>any : Symbol(bigEnum.any, Decl(convertKeywordsYes.ts, 231, 16))
+
+    boolean,
+>boolean : Symbol(bigEnum.boolean, Decl(convertKeywordsYes.ts, 232, 8))
+
+    implements,
+>implements : Symbol(bigEnum.implements, Decl(convertKeywordsYes.ts, 233, 12))
+
+    interface,
+>interface : Symbol(bigEnum.interface, Decl(convertKeywordsYes.ts, 234, 15))
+
+    let,
+>let : Symbol(bigEnum.let, Decl(convertKeywordsYes.ts, 235, 14))
+
+    module,
+>module : Symbol(bigEnum.module, Decl(convertKeywordsYes.ts, 236, 8))
+
+    number,
+>number : Symbol(bigEnum.number, Decl(convertKeywordsYes.ts, 237, 11))
+
+    package,
+>package : Symbol(bigEnum.package, Decl(convertKeywordsYes.ts, 238, 11))
+
+    private,
+>private : Symbol(bigEnum.private, Decl(convertKeywordsYes.ts, 239, 12))
+
+    protected,
+>protected : Symbol(bigEnum.protected, Decl(convertKeywordsYes.ts, 240, 12))
+
+    public,
+>public : Symbol(bigEnum.public, Decl(convertKeywordsYes.ts, 241, 14))
+
+    set,
+>set : Symbol(bigEnum.set, Decl(convertKeywordsYes.ts, 242, 11))
+
+    static,
+>static : Symbol(bigEnum.static, Decl(convertKeywordsYes.ts, 243, 8))
+
+    string,
+>string : Symbol(bigEnum.string, Decl(convertKeywordsYes.ts, 244, 11))
+
+    get,
+>get : Symbol(bigEnum.get, Decl(convertKeywordsYes.ts, 245, 11))
+
+    yield,
+>yield : Symbol(bigEnum.yield, Decl(convertKeywordsYes.ts, 246, 8))
+
+    break,
+>break : Symbol(bigEnum.break, Decl(convertKeywordsYes.ts, 247, 10))
+
+    case,
+>case : Symbol(bigEnum.case, Decl(convertKeywordsYes.ts, 248, 10))
+
+    catch,
+>catch : Symbol(bigEnum.catch, Decl(convertKeywordsYes.ts, 249, 9))
+
+    class,
+>class : Symbol(bigEnum.class, Decl(convertKeywordsYes.ts, 250, 10))
+
+    continue,
+>continue : Symbol(bigEnum.continue, Decl(convertKeywordsYes.ts, 251, 10))
+
+    const,
+>const : Symbol(bigEnum.const, Decl(convertKeywordsYes.ts, 252, 13))
+
+    debugger,
+>debugger : Symbol(bigEnum.debugger, Decl(convertKeywordsYes.ts, 253, 10))
+
+    declare,
+>declare : Symbol(bigEnum.declare, Decl(convertKeywordsYes.ts, 255, 13))
+
+    default,
+>default : Symbol(bigEnum.default, Decl(convertKeywordsYes.ts, 256, 12))
+
+    delete,
+>delete : Symbol(bigEnum.delete, Decl(convertKeywordsYes.ts, 257, 12))
+
+    do,
+>do : Symbol(bigEnum.do, Decl(convertKeywordsYes.ts, 258, 11))
+
+    else,
+>else : Symbol(bigEnum.else, Decl(convertKeywordsYes.ts, 259, 7))
+
+    enum,
+>enum : Symbol(bigEnum.enum, Decl(convertKeywordsYes.ts, 260, 9))
+
+    export,
+>export : Symbol(bigEnum.export, Decl(convertKeywordsYes.ts, 261, 9))
+
+    extends,
+>extends : Symbol(bigEnum.extends, Decl(convertKeywordsYes.ts, 262, 11))
+
+    false,
+>false : Symbol(bigEnum.false, Decl(convertKeywordsYes.ts, 263, 12))
+
+    finally,
+>finally : Symbol(bigEnum.finally, Decl(convertKeywordsYes.ts, 264, 10))
+
+    for,
+>for : Symbol(bigEnum.for, Decl(convertKeywordsYes.ts, 265, 12))
+
+    function,
+>function : Symbol(bigEnum.function, Decl(convertKeywordsYes.ts, 266, 8))
+
+    if,
+>if : Symbol(bigEnum.if, Decl(convertKeywordsYes.ts, 267, 13))
+
+    import,
+>import : Symbol(bigEnum.import, Decl(convertKeywordsYes.ts, 268, 7))
+
+    in,
+>in : Symbol(bigEnum.in, Decl(convertKeywordsYes.ts, 270, 11))
+
+    instanceof,
+>instanceof : Symbol(bigEnum.instanceof, Decl(convertKeywordsYes.ts, 271, 7))
+
+    new,
+>new : Symbol(bigEnum.new, Decl(convertKeywordsYes.ts, 272, 15))
+
+    null,
+>null : Symbol(bigEnum.null, Decl(convertKeywordsYes.ts, 273, 8))
+
+    return,
+>return : Symbol(bigEnum.return, Decl(convertKeywordsYes.ts, 274, 9))
+
+    super,
+>super : Symbol(bigEnum.super, Decl(convertKeywordsYes.ts, 275, 11))
+
+    switch,
+>switch : Symbol(bigEnum.switch, Decl(convertKeywordsYes.ts, 276, 10))
+
+    this,
+>this : Symbol(bigEnum.this, Decl(convertKeywordsYes.ts, 277, 11))
+
+    throw,
+>throw : Symbol(bigEnum.throw, Decl(convertKeywordsYes.ts, 278, 9))
+
+    true,
+>true : Symbol(bigEnum.true, Decl(convertKeywordsYes.ts, 279, 10))
+
+    try,
+>try : Symbol(bigEnum.try, Decl(convertKeywordsYes.ts, 280, 9))
+
+    typeof,
+>typeof : Symbol(bigEnum.typeof, Decl(convertKeywordsYes.ts, 281, 8))
+
+    var,
+>var : Symbol(bigEnum.var, Decl(convertKeywordsYes.ts, 282, 11))
+
+    void,
+>void : Symbol(bigEnum.void, Decl(convertKeywordsYes.ts, 283, 8))
+
+    while,
+>while : Symbol(bigEnum.while, Decl(convertKeywordsYes.ts, 284, 9))
+
+    with,
+>with : Symbol(bigEnum.with, Decl(convertKeywordsYes.ts, 285, 10))
+}
+
+module bigModule {
+>bigModule : Symbol(bigModule, Decl(convertKeywordsYes.ts, 287, 1))
+
+    class constructor { }
+>constructor : Symbol(constructor, Decl(convertKeywordsYes.ts, 289, 18))
+
+    class implements { }
+>implements : Symbol(implements, Decl(convertKeywordsYes.ts, 290, 25))
+
+    class interface { }
+>interface : Symbol(interface, Decl(convertKeywordsYes.ts, 291, 24))
+
+    class let { }
+>let : Symbol(let, Decl(convertKeywordsYes.ts, 292, 23))
+
+    class module { }
+>module : Symbol(module, Decl(convertKeywordsYes.ts, 293, 17))
+
+    class package { }
+>package : Symbol(package, Decl(convertKeywordsYes.ts, 294, 20))
+
+    class private { }
+>private : Symbol(private, Decl(convertKeywordsYes.ts, 295, 21))
+
+    class protected { }
+>protected : Symbol(protected, Decl(convertKeywordsYes.ts, 296, 21))
+
+    class public { }
+>public : Symbol(public, Decl(convertKeywordsYes.ts, 297, 23))
+
+    class set { }
+>set : Symbol(set, Decl(convertKeywordsYes.ts, 298, 20))
+
+    class static { }
+>static : Symbol(static, Decl(convertKeywordsYes.ts, 299, 17))
+
+    class get { }
+>get : Symbol(get, Decl(convertKeywordsYes.ts, 300, 20))
+
+    class yield { }
+>yield : Symbol(yield, Decl(convertKeywordsYes.ts, 301, 17))
+
+    class declare { }
+>declare : Symbol(declare, Decl(convertKeywordsYes.ts, 302, 19))
+}

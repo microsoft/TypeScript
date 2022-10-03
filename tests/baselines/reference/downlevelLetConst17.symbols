@@ -1,0 +1,134 @@
+=== tests/cases/compiler/downlevelLetConst17.ts ===
+'use strict'
+
+declare function use(a: any);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>a : Symbol(a, Decl(downlevelLetConst17.ts, 2, 21))
+
+var x;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 4, 3))
+
+for (let x = 10; ;) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 5, 8))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 5, 8))
+}
+use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 4, 3))
+
+for (const x = 10; ;) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 10, 10))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 10, 10))
+}
+
+for (; ;) {
+    let x = 10;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 15, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 15, 7))
+
+    x = 1;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 15, 7))
+}
+
+for (; ;) {
+    const x = 10;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 21, 9))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 21, 9))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 25, 8))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 25, 8))
+
+    x = 1;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 25, 8))
+}
+
+for (; ;) {
+    let x;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 31, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 31, 7))
+
+    x = 1;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 31, 7))
+}
+
+while (true) {
+    let x;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 37, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 37, 7))
+}
+
+while (true) {
+    const x = true;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 42, 9))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 42, 9))
+}
+
+do {
+    let x;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 47, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 47, 7))
+
+} while (true);
+
+do {
+    let x;
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 52, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 52, 7))
+
+} while (true);
+
+for (let x in []) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 56, 8))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 56, 8))
+}
+
+for (const x in []) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 60, 10))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 60, 10))
+}
+
+for (const x of []) {
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 64, 10))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst17.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst17.ts, 64, 10))
+}

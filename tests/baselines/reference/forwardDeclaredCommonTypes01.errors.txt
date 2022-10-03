@@ -1,0 +1,40 @@
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(9,9): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(10,9): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(10,17): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(11,9): error TS2585: 'Map' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(12,9): error TS2585: 'WeakMap' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(13,9): error TS2585: 'Set' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/forwardDeclaredCommonTypes01.ts(14,9): error TS2585: 'WeakSet' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== tests/cases/compiler/forwardDeclaredCommonTypes01.ts (7 errors) ====
+    interface Promise<T> {}
+    interface Symbol {}
+    interface Map<K, V> {}
+    interface WeakMap<K extends object, V> {}
+    interface Set<T> {}
+    interface WeakSet<T extends object> {}
+    
+    (function() {
+        new Promise;
+            ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        new Symbol; Symbol();
+            ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+                    ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        new Map;
+            ~~~
+!!! error TS2585: 'Map' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        new WeakMap;
+            ~~~~~~~
+!!! error TS2585: 'WeakMap' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        new Set;
+            ~~~
+!!! error TS2585: 'Set' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        new WeakSet;
+            ~~~~~~~
+!!! error TS2585: 'WeakSet' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    });
+    

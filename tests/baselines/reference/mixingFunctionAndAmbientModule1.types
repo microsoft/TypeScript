@@ -1,0 +1,90 @@
+=== tests/cases/compiler/mixingFunctionAndAmbientModule1.ts ===
+module A {
+>A : typeof A
+
+    declare module My {
+>My : typeof My
+
+        export var x: number;
+>x : number
+    }
+    function My(s: string) { }
+>My : typeof My
+>s : string
+}
+
+module B {
+>B : typeof B
+
+    declare module My {
+>My : typeof My
+
+        export var x: number;
+>x : number
+    }
+    function My(s: boolean);
+>My : typeof My
+>s : boolean
+
+    function My(s: any) { }
+>My : typeof My
+>s : any
+}
+
+module C {
+>C : typeof C
+
+    declare module My {
+>My : typeof My
+
+        export var x: number;
+>x : number
+    }
+    declare function My(s: boolean);
+>My : typeof My
+>s : boolean
+}
+
+module D {
+>D : typeof D
+
+    declare module My {
+>My : typeof My
+
+        export var x: number;
+>x : number
+    }
+    declare function My(s: boolean);
+>My : typeof My
+>s : boolean
+
+    declare function My(s: any);
+>My : typeof My
+>s : any
+}
+
+
+module E {
+>E : typeof E
+
+    declare module My {
+>My : typeof My
+
+        export var x: number;
+>x : number
+    }
+    declare function My(s: boolean);
+>My : typeof My
+>s : boolean
+
+    declare module My {
+>My : typeof My
+
+        export var y: number;
+>y : number
+    }
+    declare function My(s: any);
+>My : typeof My
+>s : any
+}
+

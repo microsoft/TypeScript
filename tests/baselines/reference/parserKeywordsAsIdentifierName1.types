@@ -1,0 +1,18 @@
+=== tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName1.ts ===
+var big = {
+>big : { break: number; super: number; const: number; }
+>{   break : 0,   super : 0,   const : 0} : { break: number; super: number; const: number; }
+
+   break : 0,
+>break : number
+>0 : 0
+
+   super : 0,
+>super : number
+>0 : 0
+
+   const : 0
+>const : number
+>0 : 0
+}
+

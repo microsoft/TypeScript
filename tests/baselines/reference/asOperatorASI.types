@@ -1,0 +1,28 @@
+=== tests/cases/conformance/expressions/asOperator/asOperatorASI.ts ===
+class Foo { }
+>Foo : Foo
+
+declare function as(...args: any[]);
+>as : (...args: any[]) => any
+>args : any[]
+
+// Example 1
+var x = 10
+>x : number
+>10 : 10
+
+as `Hello world`; // should not error
+>as `Hello world` : any
+>as : (...args: any[]) => any
+>`Hello world` : "Hello world"
+
+// Example 2
+var y = 20
+>y : number
+>20 : 20
+
+as(Foo); // should emit
+>as(Foo) : any
+>as : (...args: any[]) => any
+>Foo : typeof Foo
+

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/contextualTypingOfArrayLiterals1.ts ===
+interface I {
+   [x: number]: Date;
+>x : number
+}
+
+var x3: I = [new Date(), 1]; 
+>x3 : I
+>[new Date(), 1] : (number | Date)[]
+>new Date() : Date
+>Date : DateConstructor
+>1 : 1
+
+var r2 = x3[1]; 
+>r2 : Date
+>x3[1] : Date
+>x3 : I
+>1 : 1
+
+r2.getDate(); 
+>r2.getDate() : number
+>r2.getDate : () => number
+>r2 : Date
+>getDate : () => number
+

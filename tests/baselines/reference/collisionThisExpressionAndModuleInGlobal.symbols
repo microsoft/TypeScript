@@ -1,0 +1,12 @@
+=== tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts ===
+module _this { //Error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndModuleInGlobal.ts, 0, 0))
+
+    class c {
+>c : Symbol(c, Decl(collisionThisExpressionAndModuleInGlobal.ts, 0, 14))
+    }
+}
+var f = () => this;
+>f : Symbol(f, Decl(collisionThisExpressionAndModuleInGlobal.ts, 4, 3))
+>this : Symbol(globalThis)
+

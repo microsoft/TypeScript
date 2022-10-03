@@ -1,0 +1,9 @@
+=== /node_modules/A/index.ts ===
+declare module "ext" {
+>"ext" : Symbol("ext", Decl(index.ts, 0, 0))
+}
+export {};
+
+=== /src/app.ts ===
+import "A"
+No type information for this code.

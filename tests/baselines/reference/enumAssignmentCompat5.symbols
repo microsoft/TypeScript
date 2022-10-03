@@ -1,0 +1,67 @@
+=== tests/cases/compiler/enumAssignmentCompat5.ts ===
+enum E {
+>E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
+
+    A, B, C
+>A : Symbol(E.A, Decl(enumAssignmentCompat5.ts, 0, 8))
+>B : Symbol(E.B, Decl(enumAssignmentCompat5.ts, 1, 6))
+>C : Symbol(E.C, Decl(enumAssignmentCompat5.ts, 1, 9))
+}
+enum Computed {
+>Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
+
+    A = 1 << 1,
+>A : Symbol(Computed.A, Decl(enumAssignmentCompat5.ts, 3, 15))
+
+    B = 1 << 2,
+>B : Symbol(Computed.B, Decl(enumAssignmentCompat5.ts, 4, 15))
+
+    C = 1 << 3,
+>C : Symbol(Computed.C, Decl(enumAssignmentCompat5.ts, 5, 15))
+}
+let n: number;
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+
+let e: E = n; // ok because it's too inconvenient otherwise
+>e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
+>E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+
+e = 0; // ok, in range
+>e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
+
+e = 4; // ok, out of range, but allowed computed enums don't have all members
+>e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
+
+let a: E.A = 0; // ok, A === 0
+>a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
+>E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
+>A : Symbol(E.A, Decl(enumAssignmentCompat5.ts, 0, 8))
+
+a = 2; // error, 2 !== 0
+>a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
+
+a = n; // ok
+>a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+
+let c: Computed = n; // ok
+>c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
+>Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+
+c = n; // ok
+>c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+
+c = 4; // ok
+>c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
+
+let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
+>ca : Symbol(ca, Decl(enumAssignmentCompat5.ts, 19, 3))
+>Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
+>A : Symbol(Computed.A, Decl(enumAssignmentCompat5.ts, 3, 15))
+
+
+
+

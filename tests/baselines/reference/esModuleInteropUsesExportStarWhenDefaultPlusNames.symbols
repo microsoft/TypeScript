@@ -1,0 +1,11 @@
+=== tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts ===
+import Deps, { var2 } from './dep';
+>Deps : Symbol(Deps, Decl(esModuleInteropUsesExportStarWhenDefaultPlusNames.ts, 0, 6))
+>var2 : Symbol(var2, Decl(esModuleInteropUsesExportStarWhenDefaultPlusNames.ts, 0, 14))
+
+void Deps;
+>Deps : Symbol(Deps, Decl(esModuleInteropUsesExportStarWhenDefaultPlusNames.ts, 0, 6))
+
+void var2;
+>var2 : Symbol(var2, Decl(esModuleInteropUsesExportStarWhenDefaultPlusNames.ts, 0, 14))
+

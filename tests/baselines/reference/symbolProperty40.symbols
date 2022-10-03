@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty40.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty40.ts, 0, 0))
+
+    [Symbol.iterator](x: string): string;
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty40.ts, 1, 22))
+
+    [Symbol.iterator](x: number): number;
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty40.ts, 2, 22))
+
+    [Symbol.iterator](x: any) {
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty40.ts, 3, 22))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+var c = new C;
+>c : Symbol(c, Decl(symbolProperty40.ts, 8, 3))
+>C : Symbol(C, Decl(symbolProperty40.ts, 0, 0))
+
+c[Symbol.iterator]("");
+>c : Symbol(c, Decl(symbolProperty40.ts, 8, 3))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+c[Symbol.iterator](0);
+>c : Symbol(c, Decl(symbolProperty40.ts, 8, 3))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+

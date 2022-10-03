@@ -1,0 +1,24 @@
+{
+    "scenario": "[Sourcemap]/[Sourceroot-RelativePath]: outputdir_module_simple: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_module_simple",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "sourceRoot": "../src",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m1.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "m1.js.map",
+        "m1.js",
+        "m1.d.ts",
+        "test.js.map",
+        "test.js",
+        "test.d.ts"
+    ]
+}

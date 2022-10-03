@@ -1,0 +1,81 @@
+=== /root/a.ts ===
+import { foo as foo1 } from "/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo1 : Symbol(foo1, Decl(a.ts, 0, 8))
+
+import { bar as bar1 } from "/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar1 : Symbol(bar1, Decl(a.ts, 1, 8))
+
+import { foo as foo2 } from "c:/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo2 : Symbol(foo2, Decl(a.ts, 2, 8))
+
+import { bar as bar2 } from "c:/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar2 : Symbol(bar2, Decl(a.ts, 3, 8))
+
+import { foo as foo3 } from "c:\\foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo3 : Symbol(foo3, Decl(a.ts, 4, 8))
+
+import { bar as bar3 } from "c:\\bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar3 : Symbol(bar3, Decl(a.ts, 5, 8))
+
+import { foo as foo4 } from "//server/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo4 : Symbol(foo4, Decl(a.ts, 6, 8))
+
+import { bar as bar4 } from "//server/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar4 : Symbol(bar4, Decl(a.ts, 7, 8))
+
+import { foo as foo5 } from "\\\\server\\foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo5 : Symbol(foo5, Decl(a.ts, 8, 8))
+
+import { bar as bar5 } from "\\\\server\\bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar5 : Symbol(bar5, Decl(a.ts, 9, 8))
+
+import { foo as foo6 } from "file:///foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo6 : Symbol(foo6, Decl(a.ts, 10, 8))
+
+import { bar as bar6 } from "file:///bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar6 : Symbol(bar6, Decl(a.ts, 11, 8))
+
+import { foo as foo7 } from "file://c:/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo7 : Symbol(foo7, Decl(a.ts, 12, 8))
+
+import { bar as bar7 } from "file://c:/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar7 : Symbol(bar7, Decl(a.ts, 13, 8))
+
+import { foo as foo8 } from "file://server/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo8 : Symbol(foo8, Decl(a.ts, 14, 8))
+
+import { bar as bar8 } from "file://server/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar8 : Symbol(bar8, Decl(a.ts, 15, 8))
+
+import { foo as foo9 } from "http://server/foo";
+>foo : Symbol(foo1, Decl(foo.ts, 0, 0))
+>foo9 : Symbol(foo9, Decl(a.ts, 16, 8))
+
+import { bar as bar9 } from "http://server/bar";
+>bar : Symbol(bar1, Decl(bar.js, 0, 0))
+>bar9 : Symbol(bar9, Decl(a.ts, 17, 8))
+
+=== /root/src/foo.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(foo.ts, 0, 0))
+
+=== /root/src/bar.js ===
+export function bar() {}
+>bar : Symbol(bar, Decl(bar.js, 0, 0))
+

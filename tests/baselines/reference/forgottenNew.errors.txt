@@ -1,0 +1,11 @@
+tests/cases/conformance/expressions/functionCalls/forgottenNew.ts(5,14): error TS2348: Value of type 'typeof NullLogger' is not callable. Did you mean to include 'new'?
+
+
+==== tests/cases/conformance/expressions/functionCalls/forgottenNew.ts (1 errors) ====
+    module Tools {
+        export class NullLogger { }
+    }
+    
+    var logger = Tools.NullLogger();
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS2348: Value of type 'typeof NullLogger' is not callable. Did you mean to include 'new'?

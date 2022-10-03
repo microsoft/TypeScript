@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+const Foo = (props: any) => undefined;
+>Foo : (props: any) => undefined
+>(props: any) => undefined : (props: any) => undefined
+>props : any
+>undefined : undefined
+
+function Greet(x: {name?: string}) {
+>Greet : (x: {    name?: string;}) => undefined
+>x : { name?: string | undefined; }
+>name : string | undefined
+
+	return undefined;
+>undefined : undefined
+}
+
+// Error
+const foo = <Foo />;
+>foo : JSX.Element
+><Foo /> : JSX.Element
+>Foo : (props: any) => undefined
+
+const G = <Greet />;
+>G : JSX.Element
+><Greet /> : JSX.Element
+>Greet : (x: { name?: string | undefined; }) => undefined
+

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericFunctions2.ts ===
+declare function map <T, U > (items: T[], f: (x: T) => U): U[];
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>items : T[]
+>f : (x: T) => U
+>x : T
+
+var myItems: string[];
+>myItems : string[]
+
+var lengths = map(myItems, x => x.length);
+>lengths : number[]
+>map(myItems, x => x.length) : number[]
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>myItems : string[]
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/test.ts ===
+export interface T {
+>T : Symbol(T, Decl(test.ts, 0, 0))
+
+    value: string
+>value : Symbol(T.value, Decl(test.ts, 0, 20))
+}
+
+=== tests/cases/compiler/main.ts ===
+export const a: import("./test") = null;
+>a : Symbol(a, Decl(main.ts, 0, 12))
+

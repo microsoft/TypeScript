@@ -1,0 +1,96 @@
+=== tests/cases/conformance/types/members/objectTypePropertyAccess.ts ===
+// Index notation should resolve to the type of a declared property with that same name
+class C {
+>C : Symbol(C, Decl(objectTypePropertyAccess.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(objectTypePropertyAccess.ts, 1, 9))
+}
+
+var c: C;
+>c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
+>C : Symbol(C, Decl(objectTypePropertyAccess.ts, 0, 0))
+
+var r1 = c.toString();
+>r1 : Symbol(r1, Decl(objectTypePropertyAccess.ts, 6, 3))
+>c.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r2 = c['toString']();
+>r2 : Symbol(r2, Decl(objectTypePropertyAccess.ts, 7, 3))
+>c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r3 = c.foo;
+>r3 : Symbol(r3, Decl(objectTypePropertyAccess.ts, 8, 3))
+>c.foo : Symbol(C.foo, Decl(objectTypePropertyAccess.ts, 1, 9))
+>c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(objectTypePropertyAccess.ts, 1, 9))
+
+var r4 = c['foo'];
+>r4 : Symbol(r4, Decl(objectTypePropertyAccess.ts, 9, 3), Decl(objectTypePropertyAccess.ts, 15, 3))
+>c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
+>'foo' : Symbol(C.foo, Decl(objectTypePropertyAccess.ts, 1, 9))
+
+interface I {
+>I : Symbol(I, Decl(objectTypePropertyAccess.ts, 9, 18))
+
+    bar: string;
+>bar : Symbol(I.bar, Decl(objectTypePropertyAccess.ts, 11, 13))
+}
+var i: I;
+>i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
+>I : Symbol(I, Decl(objectTypePropertyAccess.ts, 9, 18))
+
+var r4 = i.toString();
+>r4 : Symbol(r4, Decl(objectTypePropertyAccess.ts, 9, 3), Decl(objectTypePropertyAccess.ts, 15, 3))
+>i.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r5 = i['toString']();
+>r5 : Symbol(r5, Decl(objectTypePropertyAccess.ts, 16, 3))
+>i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r6 = i.bar;
+>r6 : Symbol(r6, Decl(objectTypePropertyAccess.ts, 17, 3))
+>i.bar : Symbol(I.bar, Decl(objectTypePropertyAccess.ts, 11, 13))
+>i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
+>bar : Symbol(I.bar, Decl(objectTypePropertyAccess.ts, 11, 13))
+
+var r7 = i['bar'];
+>r7 : Symbol(r7, Decl(objectTypePropertyAccess.ts, 18, 3))
+>i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
+>'bar' : Symbol(I.bar, Decl(objectTypePropertyAccess.ts, 11, 13))
+
+var a = {
+>a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
+
+    foo: ''
+>foo : Symbol(foo, Decl(objectTypePropertyAccess.ts, 20, 9))
+}
+
+var r8 = a.toString();
+>r8 : Symbol(r8, Decl(objectTypePropertyAccess.ts, 24, 3))
+>a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r9 = a['toString']();
+>r9 : Symbol(r9, Decl(objectTypePropertyAccess.ts, 25, 3))
+>a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+var r10 = a.foo;
+>r10 : Symbol(r10, Decl(objectTypePropertyAccess.ts, 26, 3))
+>a.foo : Symbol(foo, Decl(objectTypePropertyAccess.ts, 20, 9))
+>a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
+>foo : Symbol(foo, Decl(objectTypePropertyAccess.ts, 20, 9))
+
+var r11 = a['foo'];
+>r11 : Symbol(r11, Decl(objectTypePropertyAccess.ts, 27, 3))
+>a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
+>'foo' : Symbol(foo, Decl(objectTypePropertyAccess.ts, 20, 9))
+

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/castFunctionExpressionShouldBeParenthesized.ts ===
+(function a() { } as any)().foo()
+>a : Symbol(a, Decl(castFunctionExpressionShouldBeParenthesized.ts, 0, 1))
+

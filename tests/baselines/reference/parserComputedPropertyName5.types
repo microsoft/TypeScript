@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts ===
+var v = { public get [e]() { } };
+>v : { [x: number]: void; }
+>{ public get [e]() { } } : { [x: number]: void; }
+>[e] : void
+>e : any
+

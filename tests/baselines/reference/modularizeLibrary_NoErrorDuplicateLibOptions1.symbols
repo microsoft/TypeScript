@@ -1,0 +1,185 @@
+=== tests/cases/compiler/modularizeLibrary_NoErrorDuplicateLibOptions1.ts ===
+// Using Es6 array
+function f(x: number, y: number, z: number) {
+>f : Symbol(f, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 0, 0))
+>x : Symbol(x, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 1, 11))
+>y : Symbol(y, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 1, 21))
+>z : Symbol(z, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 1, 32))
+
+    return Array.from(arguments);
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+f(1, 2, 3);  // no error
+>f : Symbol(f, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 0, 0))
+
+// Using ES6 collection
+var m = new Map<string, number>();
+>m : Symbol(m, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 8, 3))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+m.clear();
+>m.clear : Symbol(Map.clear, Decl(lib.es2015.collection.d.ts, --, --))
+>m : Symbol(m, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 8, 3))
+>clear : Symbol(Map.clear, Decl(lib.es2015.collection.d.ts, --, --))
+
+// Using ES6 iterable
+m.keys();
+>m.keys : Symbol(Map.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>m : Symbol(m, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 8, 3))
+>keys : Symbol(Map.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+// Using ES6 function
+function Baz() { }
+>Baz : Symbol(Baz, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 11, 9))
+
+Baz.name;
+>Baz.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+>Baz : Symbol(Baz, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 11, 9))
+>name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+
+// Using ES6 generator
+function* gen() {
+>gen : Symbol(gen, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 15, 9))
+
+    let i = 0;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 19, 7))
+
+    while (i < 10) {
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 19, 7))
+
+        yield i;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 19, 7))
+
+        i++;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 19, 7))
+    }
+}
+
+function* gen2() {
+>gen2 : Symbol(gen2, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 24, 1))
+
+    let i = 0;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 27, 7))
+
+    while (i < 10) {
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 27, 7))
+
+        yield i;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 27, 7))
+
+        i++;
+>i : Symbol(i, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 27, 7))
+    }
+}
+
+// Using ES6 math
+Math.sign(1);
+>Math.sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
+
+// Using ES6 object
+var o = {
+>o : Symbol(o, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 38, 3))
+
+    a: 2,
+>a : Symbol(a, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 38, 9))
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 39, 9))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 40, 25))
+
+        return false;
+    }
+};
+o.hasOwnProperty(Symbol.hasInstance);
+>o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 38, 3))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+// Using ES6 promise
+async function out() {
+>out : Symbol(out, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 44, 37))
+
+    return new Promise(function (resolve, reject) {});
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 48, 33))
+>reject : Symbol(reject, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 48, 41))
+}
+
+declare var console: any;
+>console : Symbol(console, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 51, 11))
+
+out().then(() => {
+>out().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>out : Symbol(out, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 44, 37))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    console.log("Yea!");
+>console : Symbol(console, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 51, 11))
+
+});
+
+// Using Es6 proxy
+var t = {}
+>t : Symbol(t, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 57, 3))
+
+var p = new Proxy(t, {});
+>p : Symbol(p, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 58, 3))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --))
+>t : Symbol(t, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 57, 3))
+
+// Using ES6 reflect
+Reflect.isExtensible({});
+>Reflect.isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
+
+// Using Es6 regexp
+var reg = new RegExp("/s");
+>reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 64, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+reg.flags;
+>reg.flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
+>reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 64, 3))
+>flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
+
+// Using ES6 string
+var str = "Hello world";
+>str : Symbol(str, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 68, 3))
+
+str.includes("hello", 0);
+>str.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>str : Symbol(str, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 68, 3))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+// Using ES6 symbol
+var s = Symbol();
+>s : Symbol(s, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 72, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+// Using ES6 wellknown-symbol
+const o1 = {
+>o1 : Symbol(o1, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 75, 5))
+
+    [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 75, 12))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(modularizeLibrary_NoErrorDuplicateLibOptions1.ts, 76, 25))
+
+        return false;
+    }
+}

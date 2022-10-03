@@ -1,0 +1,23 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : () => string
+>"foo" : "foo"
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+// https://github.com/microsoft/TypeScript/issues/36780
+async function func() {
+>func : () => Promise<void>
+
+    const packageName = '.';
+>packageName : "."
+>'.' : "."
+
+    const packageJson = await import(packageName + '/package.json');
+>packageJson : any
+>await import(packageName + '/package.json') : any
+>import(packageName + '/package.json') : Promise<any>
+>packageName + '/package.json' : string
+>packageName : "."
+>'/package.json' : "/package.json"
+}
+

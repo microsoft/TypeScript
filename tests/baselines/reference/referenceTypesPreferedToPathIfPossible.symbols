@@ -1,0 +1,19 @@
+=== tests/cases/compiler/usage.ts ===
+import { parse } from "url";
+>parse : Symbol(parse, Decl(usage.ts, 0, 8))
+
+export const thing = () => parse();
+>thing : Symbol(thing, Decl(usage.ts, 1, 12))
+>parse : Symbol(parse, Decl(usage.ts, 0, 8))
+
+=== node_modules/@types/node/index.d.ts ===
+declare module "url" {
+>"url" : Symbol("url", Decl(index.d.ts, 0, 0))
+
+    export class Url {}
+>Url : Symbol(Url, Decl(index.d.ts, 0, 22))
+
+    export function parse(): Url; 
+>parse : Symbol(parse, Decl(index.d.ts, 1, 23))
+>Url : Symbol(Url, Decl(index.d.ts, 0, 22))
+}

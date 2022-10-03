@@ -1,0 +1,38 @@
+=== tests/cases/compiler/declFileTypeofClass.ts ===
+class c {
+>c : Symbol(c, Decl(declFileTypeofClass.ts, 0, 0))
+
+    static x : string;
+>x : Symbol(c.x, Decl(declFileTypeofClass.ts, 0, 9))
+
+    private static y: number;
+>y : Symbol(c.y, Decl(declFileTypeofClass.ts, 1, 22))
+
+    private x3: string;
+>x3 : Symbol(c.x3, Decl(declFileTypeofClass.ts, 2, 29))
+
+    public y3: number;
+>y3 : Symbol(c.y3, Decl(declFileTypeofClass.ts, 3, 23))
+}
+
+var x: c;
+>x : Symbol(x, Decl(declFileTypeofClass.ts, 7, 3))
+>c : Symbol(c, Decl(declFileTypeofClass.ts, 0, 0))
+
+var y = c;
+>y : Symbol(y, Decl(declFileTypeofClass.ts, 8, 3))
+>c : Symbol(c, Decl(declFileTypeofClass.ts, 0, 0))
+
+var z: typeof c;
+>z : Symbol(z, Decl(declFileTypeofClass.ts, 9, 3))
+>c : Symbol(c, Decl(declFileTypeofClass.ts, 0, 0))
+
+class genericC<T>
+>genericC : Symbol(genericC, Decl(declFileTypeofClass.ts, 9, 16))
+>T : Symbol(T, Decl(declFileTypeofClass.ts, 10, 15))
+{
+}
+var genericX = genericC;
+>genericX : Symbol(genericX, Decl(declFileTypeofClass.ts, 13, 3))
+>genericC : Symbol(genericC, Decl(declFileTypeofClass.ts, 9, 16))
+

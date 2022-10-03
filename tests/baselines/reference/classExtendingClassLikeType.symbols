@@ -1,0 +1,154 @@
+=== tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts ===
+interface Base<T, U> {
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 0, 15))
+>U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
+
+    x: T;
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 0, 15))
+
+    y: U;
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
+}
+
+// Error, no Base constructor function
+class D0 extends Base<string, string> {
+>D0 : Symbol(D0, Decl(classExtendingClassLikeType.ts, 3, 1))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+}
+
+interface BaseConstructor {
+>BaseConstructor : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+    new (x: string, y: string): Base<string, string>;
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 10, 9))
+>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 10, 19))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+
+    new <T>(x: T): Base<T, T>;
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 11, 9))
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 11, 12))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 11, 9))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 11, 9))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 11, 9))
+
+    new <T>(x: T, y: T): Base<T, T>;
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 12, 9))
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 12, 12))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 12, 9))
+>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 12, 17))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 12, 9))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 12, 9))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 12, 9))
+
+    new <T, U>(x: T, y: U): Base<T, U>;
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 13, 9))
+>U : Symbol(U, Decl(classExtendingClassLikeType.ts, 13, 11))
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 13, 15))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 13, 9))
+>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 13, 20))
+>U : Symbol(U, Decl(classExtendingClassLikeType.ts, 13, 11))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendingClassLikeType.ts, 13, 9))
+>U : Symbol(U, Decl(classExtendingClassLikeType.ts, 13, 11))
+}
+
+declare function getBase(): BaseConstructor;
+>getBase : Symbol(getBase, Decl(classExtendingClassLikeType.ts, 14, 1))
+>BaseConstructor : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+class D1 extends getBase() {
+>D1 : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
+>getBase : Symbol(getBase, Decl(classExtendingClassLikeType.ts, 14, 1))
+
+    constructor() {
+        super("abc", "def");
+>super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+        this.x = "x";
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+
+        this.y = "y";
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+    }
+}
+
+class D2 extends getBase() <number> {
+>D2 : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
+>getBase : Symbol(getBase, Decl(classExtendingClassLikeType.ts, 14, 1))
+
+    constructor() {
+        super(10);
+>super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+        super(10, 20);
+>super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+        this.x = 1;
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+
+        this.y = 2;
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+    }
+}
+
+class D3 extends getBase() <string, number> {
+>D3 : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
+>getBase : Symbol(getBase, Decl(classExtendingClassLikeType.ts, 14, 1))
+
+    constructor() {
+        super("abc", 42);
+>super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+
+        this.x = "x";
+>this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+>this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
+>x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
+
+        this.y = 2;
+>this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+>this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
+>y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
+    }
+}
+
+// Error, no constructors with three type arguments
+class D4 extends getBase() <string, string, string> {
+>D4 : Symbol(D4, Decl(classExtendingClassLikeType.ts, 41, 1))
+>getBase : Symbol(getBase, Decl(classExtendingClassLikeType.ts, 14, 1))
+}
+
+interface BadBaseConstructor {
+>BadBaseConstructor : Symbol(BadBaseConstructor, Decl(classExtendingClassLikeType.ts, 45, 1))
+
+    new (x: string): Base<string, string>;
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 48, 9))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+
+    new (x: number): Base<number, number>;
+>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 49, 9))
+>Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
+}
+
+declare function getBadBase(): BadBaseConstructor;
+>getBadBase : Symbol(getBadBase, Decl(classExtendingClassLikeType.ts, 50, 1))
+>BadBaseConstructor : Symbol(BadBaseConstructor, Decl(classExtendingClassLikeType.ts, 45, 1))
+
+// Error, constructor return types differ
+class D5 extends getBadBase() {
+>D5 : Symbol(D5, Decl(classExtendingClassLikeType.ts, 52, 50))
+>getBadBase : Symbol(getBadBase, Decl(classExtendingClassLikeType.ts, 50, 1))
+}
+

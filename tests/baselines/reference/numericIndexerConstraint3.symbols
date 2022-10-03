@@ -1,0 +1,27 @@
+=== tests/cases/compiler/numericIndexerConstraint3.ts ===
+class A {
+>A : Symbol(A, Decl(numericIndexerConstraint3.ts, 0, 0))
+
+    foo: number;
+>foo : Symbol(A.foo, Decl(numericIndexerConstraint3.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(numericIndexerConstraint3.ts, 2, 1))
+>A : Symbol(A, Decl(numericIndexerConstraint3.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(B.bar, Decl(numericIndexerConstraint3.ts, 4, 19))
+}
+
+class C {
+>C : Symbol(C, Decl(numericIndexerConstraint3.ts, 6, 1))
+
+    0: B;
+>0 : Symbol(C[0], Decl(numericIndexerConstraint3.ts, 8, 9))
+>B : Symbol(B, Decl(numericIndexerConstraint3.ts, 2, 1))
+
+    [x: number]: A;
+>x : Symbol(x, Decl(numericIndexerConstraint3.ts, 10, 5))
+>A : Symbol(A, Decl(numericIndexerConstraint3.ts, 0, 0))
+}

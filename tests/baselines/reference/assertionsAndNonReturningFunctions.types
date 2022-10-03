@@ -1,0 +1,152 @@
+=== tests/cases/conformance/jsdoc/assertionsAndNonReturningFunctions.js ===
+/** @typedef {(check: boolean) => asserts check} AssertFunc */
+
+/** @type {AssertFunc} */
+const assert = check => {
+>assert : AssertFunc
+>check => {    if (!check) throw new Error();} : (check: boolean) => asserts check
+>check : boolean
+
+    if (!check) throw new Error();
+>!check : boolean
+>check : boolean
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+/** @type {(x: unknown) => asserts x is string } */
+function assertIsString(x) {
+>assertIsString : (x: unknown) => asserts x is string
+>x : unknown
+
+    if (!(typeof x === "string")) throw new Error();
+>!(typeof x === "string") : boolean
+>(typeof x === "string") : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+/**
+ * @param {boolean} check
+ * @returns {asserts check}
+*/
+function assert2(check) {
+>assert2 : (check: boolean) => asserts check
+>check : boolean
+
+    if (!check) throw new Error();
+>!check : boolean
+>check : boolean
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+/**
+ * @returns {never}
+ */
+function fail() {
+>fail : () => never
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+/**
+ * @param {*} x 
+ */
+function f1(x) {
+>f1 : (x: any) => void
+>x : any
+
+    if (!!true) {
+>!!true : boolean
+>!true : boolean
+>true : true
+
+        assert(typeof x === "string");
+>assert(typeof x === "string") : void
+>assert : AssertFunc
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : boolean
+>!true : boolean
+>true : true
+
+        assert2(typeof x === "string");
+>assert2(typeof x === "string") : void
+>assert2 : (check: boolean) => asserts check
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : boolean
+>!true : boolean
+>true : true
+
+        assertIsString(x);
+>assertIsString(x) : void
+>assertIsString : (x: unknown) => asserts x is string
+>x : any
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : boolean
+>!true : boolean
+>true : true
+
+        fail();
+>fail() : never
+>fail : () => never
+
+        x;  // Unreachable
+>x : any
+    }
+}
+
+/**
+ * @param {boolean} b 
+ */
+function f2(b) {
+>f2 : (b: boolean) => 1 | 0
+>b : boolean
+
+    switch (b) {
+>b : boolean
+
+        case true: return 1;
+>true : true
+>1 : 1
+
+        case false: return 0;
+>false : false
+>0 : 0
+    }
+    b;  // Unreachable
+>b : never
+}
+

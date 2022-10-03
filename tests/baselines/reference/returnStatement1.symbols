@@ -1,0 +1,14 @@
+=== tests/cases/compiler/returnStatement1.ts ===
+function f() {
+>f : Symbol(f, Decl(returnStatement1.ts, 0, 0))
+
+    return function (s) {
+>s : Symbol(s, Decl(returnStatement1.ts, 1, 21))
+
+        var x = s;
+>x : Symbol(x, Decl(returnStatement1.ts, 2, 11))
+>s : Symbol(s, Decl(returnStatement1.ts, 1, 21))
+
+    };
+    ("harmless extra line");
+}

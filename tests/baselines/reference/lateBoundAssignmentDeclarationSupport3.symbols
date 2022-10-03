@@ -1,0 +1,54 @@
+=== tests/cases/conformance/salsa/usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport3.js");
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>require : Symbol(require)
+>"./lateBoundAssignmentDeclarationSupport3.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+
+const y = x["my-fake-sym"];
+>y : Symbol(y, Decl(usage.js, 1, 5))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+
+const z = x[x.S];
+>z : Symbol(z, Decl(usage.js, 2, 5))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+
+=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport3.js, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const _str = "my-fake-sym";
+>_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport3.js, 2, 5))
+
+Object.defineProperty(module.exports, _sym, { value: "ok" });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport3.js, 1, 5))
+>value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport3.js, 4, 45))
+
+Object.defineProperty(module.exports, _str, { value: "ok" });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport3.js, 2, 5))
+>value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 45))
+
+module.exports.S = _sym;
+>module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
+>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
+>_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport3.js, 1, 5))
+

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/commentInMethodCall.ts ===
+//commment here
+var s: string[];
+>s : Symbol(s, Decl(commentInMethodCall.ts, 1, 3))
+
+s.map(// do something
+>s.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(commentInMethodCall.ts, 1, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+    function () { });
+

@@ -1,0 +1,6 @@
+=== tests/cases/compiler/arrowFunctionInExpressionStatement2.ts ===
+module M {
+>M : Symbol(M, Decl(arrowFunctionInExpressionStatement2.ts, 0, 0))
+
+    () => 0;
+}

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/classDeclarations/classExtendingNull.ts ===
+class C1 extends null { }
+>C1 : C1
+>null : null
+
+class C2 extends (null) { }
+>C2 : C2
+>(null) : null
+>null : null
+
+class C3 extends null { x = 1; }
+>C3 : C3
+>null : null
+>x : number
+>1 : 1
+
+class C4 extends (null) { x = 1; }
+>C4 : C4
+>(null) : null
+>null : null
+>x : number
+>1 : 1
+

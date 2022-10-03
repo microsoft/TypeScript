@@ -1,0 +1,36 @@
+=== tests/cases/compiler/superAccessInFatArrow1.ts ===
+module test {
+>test : Symbol(test, Decl(superAccessInFatArrow1.ts, 0, 0))
+
+    export class A {
+>A : Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
+
+        foo() {
+>foo : Symbol(A.foo, Decl(superAccessInFatArrow1.ts, 1, 20))
+        }
+    }
+    export class B extends A {
+>B : Symbol(B, Decl(superAccessInFatArrow1.ts, 4, 5))
+>A : Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
+
+        bar(callback: () => void ) {
+>bar : Symbol(B.bar, Decl(superAccessInFatArrow1.ts, 5, 30))
+>callback : Symbol(callback, Decl(superAccessInFatArrow1.ts, 6, 12))
+        }
+        runme() {
+>runme : Symbol(B.runme, Decl(superAccessInFatArrow1.ts, 7, 9))
+
+            this.bar(() => {
+>this.bar : Symbol(B.bar, Decl(superAccessInFatArrow1.ts, 5, 30))
+>this : Symbol(B, Decl(superAccessInFatArrow1.ts, 4, 5))
+>bar : Symbol(B.bar, Decl(superAccessInFatArrow1.ts, 5, 30))
+
+                super.foo();
+>super.foo : Symbol(A.foo, Decl(superAccessInFatArrow1.ts, 1, 20))
+>super : Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
+>foo : Symbol(A.foo, Decl(superAccessInFatArrow1.ts, 1, 20))
+
+            });
+        }
+    }
+}

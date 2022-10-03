@@ -1,0 +1,12 @@
+=== tests/cases/conformance/salsa/bug28576.js ===
+import x from 'arglebaz'
+>x : any
+{
+    x.bar = 1
+>x.bar = 1 : 1
+>x.bar : any
+>x : any
+>bar : any
+>1 : 1
+}
+

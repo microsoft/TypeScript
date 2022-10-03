@@ -1,0 +1,44 @@
+tests/cases/compiler/systemModule16.ts(1,20): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(2,20): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(3,15): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(4,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(7,32): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(8,32): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== tests/cases/compiler/systemModule16.ts (10 errors) ====
+    import * as x from "foo";
+                       ~~~~~
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import * as y from "bar";
+                       ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export * from "foo";
+                  ~~~~~
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export * from "bar"
+                  ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export {x}
+    export {y}
+    import {a1, b1, c1 as d1} from "foo";
+                                   ~~~~~
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export {a2, b2, c2 as d2} from "bar";
+                                   ~~~~~
+!!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    x,y,a1,b1,d1;
+    ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    

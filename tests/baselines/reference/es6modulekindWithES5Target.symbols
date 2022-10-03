@@ -1,0 +1,46 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target.ts ===
+export class C {
+>C : Symbol(C, Decl(es6modulekindWithES5Target.ts, 0, 0))
+
+    static s = 0;
+>s : Symbol(C.s, Decl(es6modulekindWithES5Target.ts, 0, 16))
+
+    p = 1;
+>p : Symbol(C.p, Decl(es6modulekindWithES5Target.ts, 1, 17))
+
+    method() { }
+>method : Symbol(C.method, Decl(es6modulekindWithES5Target.ts, 2, 10))
+}
+export { C as C2 };
+>C : Symbol(C, Decl(es6modulekindWithES5Target.ts, 0, 0))
+>C2 : Symbol(C2, Decl(es6modulekindWithES5Target.ts, 5, 8))
+
+declare function foo(...args: any[]): any;
+>foo : Symbol(foo, Decl(es6modulekindWithES5Target.ts, 5, 19))
+>args : Symbol(args, Decl(es6modulekindWithES5Target.ts, 7, 21))
+
+@foo
+>foo : Symbol(foo, Decl(es6modulekindWithES5Target.ts, 5, 19))
+
+export class D {
+>D : Symbol(D, Decl(es6modulekindWithES5Target.ts, 7, 42))
+
+    static s = 0;
+>s : Symbol(D.s, Decl(es6modulekindWithES5Target.ts, 9, 16))
+
+    p = 1;
+>p : Symbol(D.p, Decl(es6modulekindWithES5Target.ts, 10, 17))
+
+    method() { }
+>method : Symbol(D.method, Decl(es6modulekindWithES5Target.ts, 11, 10))
+}
+export { D as D2 };
+>D : Symbol(D, Decl(es6modulekindWithES5Target.ts, 7, 42))
+>D2 : Symbol(D2, Decl(es6modulekindWithES5Target.ts, 14, 8))
+
+class E { }
+>E : Symbol(E, Decl(es6modulekindWithES5Target.ts, 14, 19))
+
+export {E};
+>E : Symbol(E, Decl(es6modulekindWithES5Target.ts, 17, 8))
+

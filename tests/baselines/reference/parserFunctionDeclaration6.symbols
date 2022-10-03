@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration6.ts ===
+{
+    function foo();
+>foo : Symbol(foo, Decl(parserFunctionDeclaration6.ts, 0, 1))
+
+    function bar() { }
+>bar : Symbol(bar, Decl(parserFunctionDeclaration6.ts, 1, 19))
+}

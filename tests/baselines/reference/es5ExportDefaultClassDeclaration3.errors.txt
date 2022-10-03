@@ -1,0 +1,20 @@
+tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts(1,21): error TS2449: Class 'C' used before its declaration.
+
+
+==== tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts (1 errors) ====
+    var before: C = new C();
+                        ~
+!!! error TS2449: Class 'C' used before its declaration.
+!!! related TS2728 tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts:3:22: 'C' is declared here.
+    
+    export default class C {
+        method(): C {
+            return new C();
+        }
+    }
+    
+    var after: C = new C();
+    
+    var t: typeof C = C;
+    
+    

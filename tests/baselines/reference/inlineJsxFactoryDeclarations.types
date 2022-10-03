@@ -1,0 +1,81 @@
+=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            [e: string]: any;
+>e : string
+        }
+    }
+}
+export function dom(): void;
+>dom : () => void
+
+export function otherdom(): void;
+>otherdom : () => void
+
+export function createElement(): void;
+>createElement : () => void
+
+export { dom as default };
+>dom : () => void
+>default : () => void
+
+=== tests/cases/conformance/jsx/inline/otherreacty.tsx ===
+/** @jsx React.createElement */
+import * as React from "./renderer";
+>React : typeof React
+
+<h></h>
+><h></h> : error
+>h : any
+>h : any
+
+=== tests/cases/conformance/jsx/inline/other.tsx ===
+/** @jsx h */
+import { dom as h } from "./renderer"
+>dom : () => void
+>h : () => void
+
+export const prerendered = <h></h>;
+>prerendered : error
+><h></h> : error
+>h : () => void
+>h : () => void
+
+=== tests/cases/conformance/jsx/inline/othernoalias.tsx ===
+/** @jsx otherdom */
+import { otherdom } from "./renderer"
+>otherdom : () => void
+
+export const prerendered2 = <h></h>;
+>prerendered2 : error
+><h></h> : error
+>h : any
+>h : any
+
+=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+import React from "./renderer"
+>React : () => void
+
+export const prerendered3 = <h></h>;
+>prerendered3 : error
+><h></h> : error
+>h : any
+>h : any
+
+=== tests/cases/conformance/jsx/inline/index.tsx ===
+/** @jsx dom */
+import { dom } from "./renderer"
+>dom : () => void
+
+<h></h>
+><h></h> : error
+>h : any
+>h : any
+
+export * from "./other";
+export * from "./othernoalias";
+export * from "./reacty";
+

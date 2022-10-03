@@ -1,0 +1,116 @@
+===================================================================
+JsFile: computedPropertyNamesSourceMap2_ES6.js
+mapUrl: computedPropertyNamesSourceMap2_ES6.js.map
+sourceRoot: 
+sources: computedPropertyNamesSourceMap2_ES6.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.js
+sourceFile:computedPropertyNamesSourceMap2_ES6.ts
+-------------------------------------------------------------------
+>>>var v = {
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^^^^^^^^->
+1 >
+2 >var 
+3 >    v
+4 >      = 
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+---
+>>>    ["hello"]() {
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^
+4 >            ^
+5 >             ^^^^^->
+1->{
+  >    
+2 >    [
+3 >     "hello"
+4 >            ]
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+---
+>>>        debugger;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+3 >                ^
+1->() {
+  >        
+2 >        debugger
+3 >                ;
+1->Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
+---
+>>>    },
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >	
+2 >    }
+1 >Emitted(4, 5) Source(4, 2) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 3) + SourceIndex(0)
+---
+>>>    get ["goodbye"]() {
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^^^^^^
+5 >                  ^
+1->,
+  >	
+2 >    get 
+3 >        [
+4 >         "goodbye"
+5 >                  ]
+1->Emitted(5, 5) Source(5, 2) + SourceIndex(0)
+2 >Emitted(5, 9) Source(5, 6) + SourceIndex(0)
+3 >Emitted(5, 10) Source(5, 7) + SourceIndex(0)
+4 >Emitted(5, 19) Source(5, 16) + SourceIndex(0)
+5 >Emitted(5, 20) Source(5, 17) + SourceIndex(0)
+---
+>>>        return 0;
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^
+1 >() {
+  >		
+2 >        return 
+3 >               0
+4 >                ;
+1 >Emitted(6, 9) Source(6, 3) + SourceIndex(0)
+2 >Emitted(6, 16) Source(6, 10) + SourceIndex(0)
+3 >Emitted(6, 17) Source(6, 11) + SourceIndex(0)
+4 >Emitted(6, 18) Source(6, 12) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >	
+2 >    }
+1 >Emitted(7, 5) Source(7, 2) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 3) + SourceIndex(0)
+---
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+2 > 
+1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
+2 >Emitted(8, 3) Source(8, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=computedPropertyNamesSourceMap2_ES6.js.map

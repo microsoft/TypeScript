@@ -1,0 +1,36 @@
+=== tests/cases/compiler/sourceMap-Comments2.ts ===
+function foo(str: string, num: number): void {
+>foo : Symbol(foo, Decl(sourceMap-Comments2.ts, 0, 0))
+>str : Symbol(str, Decl(sourceMap-Comments2.ts, 0, 13))
+>num : Symbol(num, Decl(sourceMap-Comments2.ts, 0, 25))
+
+    return;
+}
+
+/**
+ * some sort of block quote
+ */
+function bar(str: string, num: number): void {
+>bar : Symbol(bar, Decl(sourceMap-Comments2.ts, 2, 1))
+>str : Symbol(str, Decl(sourceMap-Comments2.ts, 7, 13))
+>num : Symbol(num, Decl(sourceMap-Comments2.ts, 7, 25))
+
+    return;
+}
+
+// some sort of comment
+function baz(str: string, num: number): void {
+>baz : Symbol(baz, Decl(sourceMap-Comments2.ts, 9, 1))
+>str : Symbol(str, Decl(sourceMap-Comments2.ts, 12, 13))
+>num : Symbol(num, Decl(sourceMap-Comments2.ts, 12, 25))
+
+    return;
+}
+
+function qat(str: string, num: number): void {
+>qat : Symbol(qat, Decl(sourceMap-Comments2.ts, 14, 1))
+>str : Symbol(str, Decl(sourceMap-Comments2.ts, 16, 13))
+>num : Symbol(num, Decl(sourceMap-Comments2.ts, 16, 25))
+
+    return;
+}

@@ -1,0 +1,174 @@
+type X = {
+  /**/foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+
+  foo          
+
+
+  foo?         
+
+
+  foo?: string;
+
+
+          ↲
+••foo?: string;
+  readonly bar: { x: number };
+  meh↲
+
+
+         {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+================================================================================
+
+type X = {
+  foo?: string;
+  /**/readonly bar: { x: number };
+  meh
+}
+
+
+  readonly                    
+
+
+  readonly bar                
+
+
+  readonly bar: { x: number };
+
+
+          ↲
+••foo?: string;
+  readonly bar: { x: number };
+  meh↲
+
+
+         {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+================================================================================
+
+type X = {
+  foo?: string;
+  readonly /**/bar: { x: number };
+  meh
+}
+
+
+           bar                
+
+
+  readonly bar                
+
+
+  readonly bar: { x: number };
+
+
+          ↲
+••foo?: string;
+  readonly bar: { x: number };
+  meh↲
+
+
+         {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+================================================================================
+
+type X = {
+  foo?: string;
+  readonly bar: { x: num/**/ber };
+  meh
+}
+
+
+                     number   
+
+
+                  x: number   
+
+
+                { x: number } 
+
+
+  readonly bar: { x: number };
+
+
+          ↲
+••foo?: string;
+  readonly bar: { x: number };
+  meh↲
+
+
+         {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+================================================================================
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  /**/meh
+}
+
+
+  meh
+
+
+          ↲
+••foo?: string;
+  readonly bar: { x: number };
+  meh↲
+
+
+         {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}
+
+type X = {
+  foo?: string;
+  readonly bar: { x: number };
+  meh
+}

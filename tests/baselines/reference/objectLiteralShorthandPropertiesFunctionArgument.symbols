@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument.ts ===
+var id: number = 10000;
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 0, 3))
+
+var name: string = "my name";
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 1, 3))
+
+var person = { name, id };
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 20))
+
+function foo(p: { name: string; id: number }) { }
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 26))
+>p : Symbol(p, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 5, 13))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 5, 17))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 5, 31))
+
+foo(person);
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 26))
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 3, 3))
+
+
+var obj = { name: name, id: id };
+>obj : Symbol(obj, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 11))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 1, 3))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 9, 23))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesFunctionArgument.ts, 0, 3))
+

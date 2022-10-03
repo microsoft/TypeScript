@@ -1,0 +1,70 @@
+=== tests/cases/compiler/mappedTypeIndexedAccess.ts ===
+// Repro from #15756
+
+type Pairs<T> = {
+>Pairs : Symbol(Pairs, Decl(mappedTypeIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 2, 11))
+
+    [TKey in keyof T]: {
+>TKey : Symbol(TKey, Decl(mappedTypeIndexedAccess.ts, 3, 5))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 2, 11))
+
+        key: TKey;
+>key : Symbol(key, Decl(mappedTypeIndexedAccess.ts, 3, 24))
+>TKey : Symbol(TKey, Decl(mappedTypeIndexedAccess.ts, 3, 5))
+
+        value: T[TKey];
+>value : Symbol(value, Decl(mappedTypeIndexedAccess.ts, 4, 18))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 2, 11))
+>TKey : Symbol(TKey, Decl(mappedTypeIndexedAccess.ts, 3, 5))
+
+    };
+};
+
+type Pair<T> = Pairs<T>[keyof T];
+>Pair : Symbol(Pair, Decl(mappedTypeIndexedAccess.ts, 7, 2))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 9, 10))
+>Pairs : Symbol(Pairs, Decl(mappedTypeIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 9, 10))
+>T : Symbol(T, Decl(mappedTypeIndexedAccess.ts, 9, 10))
+
+type FooBar = {
+>FooBar : Symbol(FooBar, Decl(mappedTypeIndexedAccess.ts, 9, 33))
+
+    foo: string;
+>foo : Symbol(foo, Decl(mappedTypeIndexedAccess.ts, 11, 15))
+
+    bar: number;
+>bar : Symbol(bar, Decl(mappedTypeIndexedAccess.ts, 12, 16))
+
+};
+
+// Error expected here
+let pair1: Pair<FooBar> = {
+>pair1 : Symbol(pair1, Decl(mappedTypeIndexedAccess.ts, 17, 3))
+>Pair : Symbol(Pair, Decl(mappedTypeIndexedAccess.ts, 7, 2))
+>FooBar : Symbol(FooBar, Decl(mappedTypeIndexedAccess.ts, 9, 33))
+
+    key: "foo",
+>key : Symbol(key, Decl(mappedTypeIndexedAccess.ts, 17, 27))
+
+    value: 3
+>value : Symbol(value, Decl(mappedTypeIndexedAccess.ts, 18, 15))
+
+};
+
+// Error expected here
+let pair2: Pairs<FooBar>[keyof FooBar] = {
+>pair2 : Symbol(pair2, Decl(mappedTypeIndexedAccess.ts, 23, 3))
+>Pairs : Symbol(Pairs, Decl(mappedTypeIndexedAccess.ts, 0, 0))
+>FooBar : Symbol(FooBar, Decl(mappedTypeIndexedAccess.ts, 9, 33))
+>FooBar : Symbol(FooBar, Decl(mappedTypeIndexedAccess.ts, 9, 33))
+
+    key: "foo",
+>key : Symbol(key, Decl(mappedTypeIndexedAccess.ts, 23, 42))
+
+    value: 3
+>value : Symbol(value, Decl(mappedTypeIndexedAccess.ts, 24, 15))
+
+};
+

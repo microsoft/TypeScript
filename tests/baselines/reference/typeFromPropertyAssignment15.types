@@ -1,0 +1,57 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = {};
+>Outer : typeof Outer
+>{} : {}
+
+Outer.Inner = class {
+>Outer.Inner = class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+>class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
+
+    constructor() {
+        this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+    m() { }
+>m : () => void
+}
+
+/** @type {Outer.Inner} */
+var inner
+>inner : Inner
+
+inner.x
+>inner.x : number
+>inner : Inner
+>x : number
+
+inner.m()
+>inner.m() : void
+>inner.m : () => void
+>inner : Inner
+>m : () => void
+
+var inno = new Outer.Inner()
+>inno : Inner
+>new Outer.Inner() : Inner
+>Outer.Inner : typeof Inner
+>Outer : typeof Outer
+>Inner : typeof Inner
+
+inno.x
+>inno.x : number
+>inno : Inner
+>x : number
+
+inno.m()
+>inno.m() : void
+>inno.m : () => void
+>inno : Inner
+>m : () => void
+

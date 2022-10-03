@@ -1,0 +1,72 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts ===
+class C {
+>C : C
+
+    y: string;
+>y : string
+
+    constructor(private x: string, protected z: string) { }
+>x : string
+>z : string
+}
+
+var c: C;
+>c : C
+
+var r = c.y;
+>r : string
+>c.y : string
+>c : C
+>y : string
+
+var r2 = c.x; // error
+>r2 : string
+>c.x : string
+>c : C
+>x : string
+
+var r3 = c.z; // error
+>r3 : string
+>c.z : string
+>c : C
+>z : string
+
+class D<T> {
+>D : D<T>
+
+    y: T;
+>y : T
+
+    constructor(a: T, private x: T, protected z: T) { }
+>a : T
+>x : T
+>z : T
+}
+
+var d: D<string>;
+>d : D<string>
+
+var r = d.y;
+>r : string
+>d.y : string
+>d : D<string>
+>y : string
+
+var r2 = d.x; // error
+>r2 : string
+>d.x : string
+>d : D<string>
+>x : string
+
+var r3 = d.a; // error
+>r3 : string
+>d.a : any
+>d : D<string>
+>a : any
+
+var r4 = d.z; // error
+>r4 : string
+>d.z : string
+>d : D<string>
+>z : string
+

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/copyrightWithNewLine1.ts ===
+/*****************************
+* (c) Copyright - Important
+****************************/
+
+import model = require("./greeter")
+>model : Symbol(model, Decl(copyrightWithNewLine1.ts, 0, 0))
+
+var el = document.getElementById('content');
+>el : Symbol(el, Decl(copyrightWithNewLine1.ts, 5, 3))
+>document.getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --))
+
+var greeter = new model.Greeter(el);
+>greeter : Symbol(greeter, Decl(copyrightWithNewLine1.ts, 6, 3))
+>model : Symbol(model, Decl(copyrightWithNewLine1.ts, 0, 0))
+>el : Symbol(el, Decl(copyrightWithNewLine1.ts, 5, 3))
+
+/** things */
+greeter.start();
+>greeter : Symbol(greeter, Decl(copyrightWithNewLine1.ts, 6, 3))
+

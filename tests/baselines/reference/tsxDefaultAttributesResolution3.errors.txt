@@ -1,0 +1,20 @@
+tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    interface Prop {
+        x: false;
+    }
+    class Poisoned extends React.Component<Prop, {}> {
+        render() {
+            return <div>Hello</div>;
+        }
+    }
+    
+    // Error
+    let p = <Poisoned x/>;
+                      ~
+!!! error TS2322: Type 'true' is not assignable to type 'false'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode; }'

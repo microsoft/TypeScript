@@ -1,0 +1,58 @@
+=== tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts ===
+// Repro from #20196
+
+type A = {
+>A : Symbol(A, Decl(functionCallOnConstrainedTypeVariable.ts, 0, 0))
+
+  a: (x: number) => string
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10))
+>x : Symbol(x, Decl(functionCallOnConstrainedTypeVariable.ts, 3, 6))
+
+};
+type B = {
+>B : Symbol(B, Decl(functionCallOnConstrainedTypeVariable.ts, 4, 2))
+
+  a: (x: boolean) => string
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+>x : Symbol(x, Decl(functionCallOnConstrainedTypeVariable.ts, 6, 6))
+
+};
+
+function call0(p: A | B) { 
+>call0 : Symbol(call0, Decl(functionCallOnConstrainedTypeVariable.ts, 7, 2))
+>p : Symbol(p, Decl(functionCallOnConstrainedTypeVariable.ts, 9, 15))
+>A : Symbol(A, Decl(functionCallOnConstrainedTypeVariable.ts, 0, 0))
+>B : Symbol(B, Decl(functionCallOnConstrainedTypeVariable.ts, 4, 2))
+
+  p.a("s"); // Error
+>p.a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+>p : Symbol(p, Decl(functionCallOnConstrainedTypeVariable.ts, 9, 15))
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+}
+
+function callN<T extends A | B>(p: T) {
+>callN : Symbol(callN, Decl(functionCallOnConstrainedTypeVariable.ts, 11, 1))
+>T : Symbol(T, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 15))
+>A : Symbol(A, Decl(functionCallOnConstrainedTypeVariable.ts, 0, 0))
+>B : Symbol(B, Decl(functionCallOnConstrainedTypeVariable.ts, 4, 2))
+>p : Symbol(p, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 32))
+>T : Symbol(T, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 15))
+
+  p.a("s"); // Error
+>p.a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+>p : Symbol(p, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 32))
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+  
+  var a: T["a"] = p.a;
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 16, 5))
+>T : Symbol(T, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 15))
+>p.a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+>p : Symbol(p, Decl(functionCallOnConstrainedTypeVariable.ts, 13, 32))
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10), Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+
+  a(""); // Error
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 16, 5))
+
+  a("", "", "", ""); // Error
+>a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 16, 5))
+}

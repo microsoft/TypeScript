@@ -1,0 +1,34 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethod.ts ===
+class A1 {
+>A1 : A1
+
+    #method(param: string): string {
+>#method : (param: string) => string
+>param : string
+
+        return "";
+>"" : ""
+    }
+    constructor(name: string) {
+>name : string
+
+        this.#method("")
+>this.#method("") : string
+>this.#method : (param: string) => string
+>this : this
+>"" : ""
+
+        this.#method(1) // Error
+>this.#method(1) : string
+>this.#method : (param: string) => string
+>this : this
+>1 : 1
+
+        this.#method()  // Error 
+>this.#method() : string
+>this.#method : (param: string) => string
+>this : this
+
+    }
+}
+

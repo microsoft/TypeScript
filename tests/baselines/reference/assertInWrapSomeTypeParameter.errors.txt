@@ -1,0 +1,11 @@
+tests/cases/compiler/assertInWrapSomeTypeParameter.ts(2,26): error TS1005: '>' expected.
+
+
+==== tests/cases/compiler/assertInWrapSomeTypeParameter.ts (1 errors) ====
+    class C<T extends C<T>> {
+        foo<U extends C<C<T>>(x: U) {
+                             ~
+!!! error TS1005: '>' expected.
+            return null;
+        }
+    }

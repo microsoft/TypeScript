@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers9.ts, 0, 0))
+
+    static f = 1
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers9.ts, 0, 9))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(typeOfThisInStaticMembers9.ts, 2, 1))
+>C : Symbol(C, Decl(typeOfThisInStaticMembers9.ts, 0, 0))
+
+    static arrowFunctionBoundary = () => super.f + 1;
+>arrowFunctionBoundary : Symbol(D.arrowFunctionBoundary, Decl(typeOfThisInStaticMembers9.ts, 4, 19))
+>super.f : Symbol(C.f, Decl(typeOfThisInStaticMembers9.ts, 0, 9))
+>super : Symbol(C, Decl(typeOfThisInStaticMembers9.ts, 0, 0))
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers9.ts, 0, 9))
+
+    static functionExprBoundary = function () { return super.f + 2 };
+>functionExprBoundary : Symbol(D.functionExprBoundary, Decl(typeOfThisInStaticMembers9.ts, 5, 53))
+
+    static classExprBoundary = class { a = super.f + 3 };
+>classExprBoundary : Symbol(D.classExprBoundary, Decl(typeOfThisInStaticMembers9.ts, 6, 69))
+>a : Symbol((Anonymous class).a, Decl(typeOfThisInStaticMembers9.ts, 7, 38))
+
+    static functionAndClassDeclBoundary = (() => {
+>functionAndClassDeclBoundary : Symbol(D.functionAndClassDeclBoundary, Decl(typeOfThisInStaticMembers9.ts, 7, 57))
+
+        function foo () {
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers9.ts, 8, 50))
+
+            return super.f + 4
+        }
+        class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers9.ts, 11, 9))
+
+            a = super.f + 5
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers9.ts, 12, 17))
+
+            method () {
+>method : Symbol(C.method, Decl(typeOfThisInStaticMembers9.ts, 13, 27))
+
+                return super.f +6
+            }
+        }
+    })();
+}
+

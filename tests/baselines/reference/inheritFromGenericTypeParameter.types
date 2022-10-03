@@ -1,0 +1,6 @@
+=== tests/cases/compiler/inheritFromGenericTypeParameter.ts ===
+class C<T> extends T { }
+>C : C<T>
+>T : any
+
+interface I<T> extends T { }

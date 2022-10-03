@@ -1,0 +1,39 @@
+=== tests/cases/compiler/staticInheritance.ts ===
+function doThing(x: { n: string }) { }
+>doThing : (x: {    n: string;}) => void
+>x : { n: string; }
+>n : string
+
+class A {
+>A : A
+
+    static n: string;
+>n : string
+
+    p = doThing(A); // OK
+>p : void
+>doThing(A) : void
+>doThing : (x: { n: string; }) => void
+>A : typeof A
+}
+class B extends A {
+>B : B
+>A : A
+
+    p1 = doThing(A); // OK
+>p1 : void
+>doThing(A) : void
+>doThing : (x: { n: string; }) => void
+>A : typeof A
+
+    p2 = doThing(B); // OK
+>p2 : void
+>doThing(B) : void
+>doThing : (x: { n: string; }) => void
+>B : typeof B
+}
+doThing(B); //OK
+>doThing(B) : void
+>doThing : (x: { n: string; }) => void
+>B : typeof B
+

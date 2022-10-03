@@ -1,0 +1,47 @@
+=== tests/cases/compiler/refs.d.ts ===
+declare module "path";
+>"path" : Symbol("path", Decl(refs.d.ts, 0, 0))
+
+=== tests/cases/compiler/file.ts ===
+import path from "path";
+>path : Symbol(path, Decl(file.ts, 0, 6))
+
+path.resolve("", "../");
+>path : Symbol(path, Decl(file.ts, 0, 6))
+
+export class Foo { }
+>Foo : Symbol(Foo, Decl(file.ts, 1, 24))
+
+=== tests/cases/compiler/file2.ts ===
+import * as path from "path";
+>path : Symbol(path, Decl(file2.ts, 0, 6))
+
+path.resolve("", "../");
+>path : Symbol(path, Decl(file2.ts, 0, 6))
+
+export class Foo2 { }
+>Foo2 : Symbol(Foo2, Decl(file2.ts, 1, 24))
+
+=== tests/cases/compiler/file3.ts ===
+import {default as resolve} from "path";
+>default : Symbol(resolve, Decl(refs.d.ts, 0, 0))
+>resolve : Symbol(resolve, Decl(file3.ts, 0, 8))
+
+resolve("", "../");
+>resolve : Symbol(resolve, Decl(file3.ts, 0, 8))
+
+export class Foo3 { }
+>Foo3 : Symbol(Foo3, Decl(file3.ts, 1, 19))
+
+=== tests/cases/compiler/file4.ts ===
+import {Bar, default as resolve} from "path";
+>Bar : Symbol(Bar, Decl(file4.ts, 0, 8))
+>default : Symbol(Bar, Decl(refs.d.ts, 0, 0))
+>resolve : Symbol(resolve, Decl(file4.ts, 0, 12))
+
+resolve("", "../");
+>resolve : Symbol(resolve, Decl(file4.ts, 0, 12))
+
+export { Bar }
+>Bar : Symbol(Bar, Decl(file4.ts, 2, 8))
+

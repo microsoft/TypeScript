@@ -1,0 +1,18 @@
+=== tests/cases/compiler/typeInferenceTypePredicate2.ts ===
+[true, true, false, null]
+>[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>[true, true, false, null]    .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    .filter((thing): thing is boolean => thing !== null)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 1, 13))
+>thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 1, 13))
+>thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 1, 13))
+
+    .map(thing => thing.toString());
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 2, 9))
+>thing.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 2, 9))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+

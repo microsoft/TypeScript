@@ -1,0 +1,77 @@
+tests/cases/compiler/superInObjectLiterals_ES6.ts(17,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/compiler/superInObjectLiterals_ES6.ts(20,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/compiler/superInObjectLiterals_ES6.ts(23,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/compiler/superInObjectLiterals_ES6.ts(49,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/compiler/superInObjectLiterals_ES6.ts(52,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+
+
+==== tests/cases/compiler/superInObjectLiterals_ES6.ts (5 errors) ====
+    var obj = {
+        __proto__: {
+            method() {
+            }
+        },
+        method() {
+            super.method();
+        },
+        get prop() {
+            super.method();
+            return 10;
+        },
+        set prop(value) {
+            super.method();
+        },
+        p1: function () {
+            super.method();
+            ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+        },
+        p2: function f() {
+            super.method();
+            ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+        },
+        p3: () => {
+            super.method();
+            ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+        }
+    };
+    
+    class A {
+        method() { }
+    }
+    
+    class B extends A {
+        f() {
+            var obj = {
+                __proto__: {
+                    method() {
+                    }
+                },
+                method() {
+                    super.method();
+                },
+                get prop() {
+                    super.method();
+                    return 10;
+                },
+                set prop(value) {
+                    super.method();
+                },
+                p1: function () {
+                    super.method();
+                    ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+                },
+                p2: function f() {
+                    super.method();
+                    ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+                },
+                p3: () => {
+                    super.method();
+                }
+            };
+        }
+    }

@@ -1,0 +1,58 @@
+=== /src/app.ts ===
+import { MyClass } from "./library-a";
+>MyClass : Symbol(MyClass, Decl(app.ts, 0, 8))
+
+import { MyClass2 } from "./library-b";
+>MyClass2 : Symbol(MyClass2, Decl(app.ts, 1, 8))
+
+let x: MyClass;
+>x : Symbol(x, Decl(app.ts, 3, 3))
+>MyClass : Symbol(MyClass, Decl(app.ts, 0, 8))
+
+let y: MyClass2;
+>y : Symbol(y, Decl(app.ts, 4, 3))
+>MyClass2 : Symbol(MyClass2, Decl(app.ts, 1, 8))
+
+x = y;
+>x : Symbol(x, Decl(app.ts, 3, 3))
+>y : Symbol(y, Decl(app.ts, 4, 3))
+
+y = x;
+>y : Symbol(y, Decl(app.ts, 4, 3))
+>x : Symbol(x, Decl(app.ts, 3, 3))
+
+/*
+# To reproduce in a real project:
+
+mkdir src; cd src
+mkdir library-a
+echo 'export class MyClass { private x: number; }' > library-a/index.ts
+
+mkdir library-b; cd library-b
+echo 'import {MyClass} from "library-a"; export { MyClass as MyClass2 }' > index.ts
+mkdir node_modules; cd node_modules
+
+ln -s ../../library-a library-a # Linux
+# Windows: open command prompt as administrator and run: mklink /D library-a ..\..\library-a
+
+cd ../.. # back to src
+echo 'import { MyClass } from "./library-a"; import { MyClass2 } from "./library-b"; let x: MyClass; let y: MyClass2; x = y; y = x;' > app.ts
+tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
+*/
+
+=== /src/library-a/index.ts ===
+// When symlinked files are in node_modules, they are resolved with realpath;
+// so a linked file does not create a duplicate SourceFile of the real one.
+
+export class MyClass { private x: number; }
+>MyClass : Symbol(MyClass, Decl(index.ts, 0, 0))
+>x : Symbol(MyClass.x, Decl(index.ts, 3, 22))
+
+=== /src/library-b/index.ts ===
+import {MyClass} from "library-a";
+>MyClass : Symbol(MyClass, Decl(index.ts, 0, 8))
+
+export { MyClass as MyClass2 }
+>MyClass : Symbol(MyClass, Decl(index.ts, 0, 8))
+>MyClass2 : Symbol(MyClass2, Decl(index.ts, 1, 8))
+

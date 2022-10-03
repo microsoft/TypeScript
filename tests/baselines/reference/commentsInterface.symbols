@@ -1,0 +1,230 @@
+=== tests/cases/compiler/commentsInterface.ts ===
+/** this is interface 1*/
+interface i1 {
+>i1 : Symbol(i1, Decl(commentsInterface.ts, 0, 0))
+}
+var i1_i: i1;
+>i1_i : Symbol(i1_i, Decl(commentsInterface.ts, 3, 3))
+>i1 : Symbol(i1, Decl(commentsInterface.ts, 0, 0))
+
+interface nc_i1 {
+>nc_i1 : Symbol(nc_i1, Decl(commentsInterface.ts, 3, 13))
+}
+var nc_i1_i: nc_i1;
+>nc_i1_i : Symbol(nc_i1_i, Decl(commentsInterface.ts, 6, 3))
+>nc_i1 : Symbol(nc_i1, Decl(commentsInterface.ts, 3, 13))
+
+/** this is interface 2 with memebers*/
+interface i2 {
+>i2 : Symbol(i2, Decl(commentsInterface.ts, 6, 19))
+
+    /** this is x*/
+    x: number;
+>x : Symbol(i2.x, Decl(commentsInterface.ts, 8, 14))
+
+    /** this is foo*/
+    foo: (/**param help*/b: number) => string;
+>foo : Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>b : Symbol(b, Decl(commentsInterface.ts, 12, 10))
+
+    /** this is indexer*/
+    [/**string param*/i: string]: any;
+>i : Symbol(i, Decl(commentsInterface.ts, 14, 5))
+
+    /**new method*/
+    new (/** param*/i: i1);
+>i : Symbol(i, Decl(commentsInterface.ts, 16, 9))
+>i1 : Symbol(i1, Decl(commentsInterface.ts, 0, 0))
+
+    nc_x: number;
+>nc_x : Symbol(i2.nc_x, Decl(commentsInterface.ts, 16, 27))
+
+    nc_foo: (b: number) => string;
+>nc_foo : Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>b : Symbol(b, Decl(commentsInterface.ts, 18, 13))
+
+    [i: number]: number;
+>i : Symbol(i, Decl(commentsInterface.ts, 19, 5))
+
+    /** this is call signature*/
+    (/**paramhelp a*/a: number,/**paramhelp b*/ b: number) : number;
+>a : Symbol(a, Decl(commentsInterface.ts, 21, 5))
+>b : Symbol(b, Decl(commentsInterface.ts, 21, 31))
+
+    /** this is fnfoo*/
+    fnfoo(/**param help*/b: number): string;
+>fnfoo : Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>b : Symbol(b, Decl(commentsInterface.ts, 23, 10))
+
+    nc_fnfoo(b: number): string;
+>nc_fnfoo : Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>b : Symbol(b, Decl(commentsInterface.ts, 24, 13))
+
+    // nc_y
+    nc_y: number;
+>nc_y : Symbol(i2.nc_y, Decl(commentsInterface.ts, 24, 32))
+}
+var i2_i: i2;
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>i2 : Symbol(i2, Decl(commentsInterface.ts, 6, 19))
+
+var i2_i_x = i2_i.x;
+>i2_i_x : Symbol(i2_i_x, Decl(commentsInterface.ts, 29, 3))
+>i2_i.x : Symbol(i2.x, Decl(commentsInterface.ts, 8, 14))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>x : Symbol(i2.x, Decl(commentsInterface.ts, 8, 14))
+
+var i2_i_foo = i2_i.foo;
+>i2_i_foo : Symbol(i2_i_foo, Decl(commentsInterface.ts, 30, 3))
+>i2_i.foo : Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>foo : Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+
+var i2_i_foo_r = i2_i.foo(30);
+>i2_i_foo_r : Symbol(i2_i_foo_r, Decl(commentsInterface.ts, 31, 3))
+>i2_i.foo : Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>foo : Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+
+var i2_i_i2_si = i2_i["hello"];
+>i2_i_i2_si : Symbol(i2_i_i2_si, Decl(commentsInterface.ts, 32, 3))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+
+var i2_i_i2_ii = i2_i[30];
+>i2_i_i2_ii : Symbol(i2_i_i2_ii, Decl(commentsInterface.ts, 33, 3))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+
+var i2_i_n = new i2_i(i1_i);
+>i2_i_n : Symbol(i2_i_n, Decl(commentsInterface.ts, 34, 3))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>i1_i : Symbol(i1_i, Decl(commentsInterface.ts, 3, 3))
+
+var i2_i_nc_x = i2_i.nc_x;
+>i2_i_nc_x : Symbol(i2_i_nc_x, Decl(commentsInterface.ts, 35, 3))
+>i2_i.nc_x : Symbol(i2.nc_x, Decl(commentsInterface.ts, 16, 27))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_x : Symbol(i2.nc_x, Decl(commentsInterface.ts, 16, 27))
+
+var i2_i_nc_foo = i2_i.nc_foo;
+>i2_i_nc_foo : Symbol(i2_i_nc_foo, Decl(commentsInterface.ts, 36, 3))
+>i2_i.nc_foo : Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_foo : Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+
+var i2_i_nc_foo_r = i2_i.nc_foo(30);
+>i2_i_nc_foo_r : Symbol(i2_i_nc_foo_r, Decl(commentsInterface.ts, 37, 3))
+>i2_i.nc_foo : Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_foo : Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+
+var i2_i_r = i2_i(10, 20);
+>i2_i_r : Symbol(i2_i_r, Decl(commentsInterface.ts, 38, 3))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+
+var i2_i_fnfoo = i2_i.fnfoo;
+>i2_i_fnfoo : Symbol(i2_i_fnfoo, Decl(commentsInterface.ts, 39, 3))
+>i2_i.fnfoo : Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>fnfoo : Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+
+var i2_i_fnfoo_r = i2_i.fnfoo(10);
+>i2_i_fnfoo_r : Symbol(i2_i_fnfoo_r, Decl(commentsInterface.ts, 40, 3))
+>i2_i.fnfoo : Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>fnfoo : Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+
+var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
+>i2_i_nc_fnfoo : Symbol(i2_i_nc_fnfoo, Decl(commentsInterface.ts, 41, 3))
+>i2_i.nc_fnfoo : Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_fnfoo : Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+
+var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
+>i2_i_nc_fnfoo_r : Symbol(i2_i_nc_fnfoo_r, Decl(commentsInterface.ts, 42, 3))
+>i2_i.nc_fnfoo : Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>i2_i : Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_fnfoo : Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+
+interface i3 {
+>i3 : Symbol(i3, Decl(commentsInterface.ts, 42, 40))
+
+    /** Comment i3 x*/
+    x: number;
+>x : Symbol(i3.x, Decl(commentsInterface.ts, 43, 14))
+
+    /** Function i3 f*/
+    f(/**number parameter*/a: number): string;
+>f : Symbol(i3.f, Decl(commentsInterface.ts, 45, 14))
+>a : Symbol(a, Decl(commentsInterface.ts, 47, 6))
+
+    /** i3 l*/
+    l: (/**comment i3 l b*/b: number) => string;
+>l : Symbol(i3.l, Decl(commentsInterface.ts, 47, 46))
+>b : Symbol(b, Decl(commentsInterface.ts, 49, 8))
+
+    nc_x: number;
+>nc_x : Symbol(i3.nc_x, Decl(commentsInterface.ts, 49, 48))
+
+    nc_f(a: number): string;
+>nc_f : Symbol(i3.nc_f, Decl(commentsInterface.ts, 50, 17))
+>a : Symbol(a, Decl(commentsInterface.ts, 51, 9))
+
+    nc_l: (b: number) => string;
+>nc_l : Symbol(i3.nc_l, Decl(commentsInterface.ts, 51, 28))
+>b : Symbol(b, Decl(commentsInterface.ts, 52, 11))
+}
+var i3_i: i3;
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>i3 : Symbol(i3, Decl(commentsInterface.ts, 42, 40))
+
+i3_i = {
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+
+    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,
+>f : Symbol(f, Decl(commentsInterface.ts, 55, 8))
+>a : Symbol(a, Decl(commentsInterface.ts, 56, 19))
+>a : Symbol(a, Decl(commentsInterface.ts, 56, 19))
+
+    l: this.f,
+>l : Symbol(l, Decl(commentsInterface.ts, 56, 56))
+>this : Symbol(globalThis)
+
+    /** own x*/
+    x: this.f(10),
+>x : Symbol(x, Decl(commentsInterface.ts, 57, 14))
+>this : Symbol(globalThis)
+
+    nc_x: this.l(this.x),
+>nc_x : Symbol(nc_x, Decl(commentsInterface.ts, 59, 18))
+>this : Symbol(globalThis)
+>this : Symbol(globalThis)
+
+    nc_f: this.f,
+>nc_f : Symbol(nc_f, Decl(commentsInterface.ts, 60, 25))
+>this : Symbol(globalThis)
+
+    nc_l: this.l
+>nc_l : Symbol(nc_l, Decl(commentsInterface.ts, 61, 17))
+>this : Symbol(globalThis)
+
+};
+i3_i.f(10);
+>i3_i.f : Symbol(i3.f, Decl(commentsInterface.ts, 45, 14))
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>f : Symbol(i3.f, Decl(commentsInterface.ts, 45, 14))
+
+i3_i.l(10);
+>i3_i.l : Symbol(i3.l, Decl(commentsInterface.ts, 47, 46))
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>l : Symbol(i3.l, Decl(commentsInterface.ts, 47, 46))
+
+i3_i.nc_f(10);
+>i3_i.nc_f : Symbol(i3.nc_f, Decl(commentsInterface.ts, 50, 17))
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>nc_f : Symbol(i3.nc_f, Decl(commentsInterface.ts, 50, 17))
+
+i3_i.nc_l(10);
+>i3_i.nc_l : Symbol(i3.nc_l, Decl(commentsInterface.ts, 51, 28))
+>i3_i : Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>nc_l : Symbol(i3.nc_l, Decl(commentsInterface.ts, 51, 28))
+

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/fillInMissingTypeArgsOnConstructCalls.ts ===
+class A<T extends Object>{
+>A : Symbol(A, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 0))
+>T : Symbol(T, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 8))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+      list: T ;
+>list : Symbol(A.list, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 26))
+>T : Symbol(T, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 8))
+}
+var a = new A();
+>a : Symbol(a, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 3, 3))
+>A : Symbol(A, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 0))
+

@@ -1,0 +1,76 @@
+=== tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts ===
+interface Box<T> {
+>Box : Symbol(Box, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 0))
+>T : Symbol(T, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 14))
+
+    v: T;
+>v : Symbol(Box.v, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 18))
+>T : Symbol(T, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 14))
+}
+
+interface ErrorResult {
+>ErrorResult : Symbol(ErrorResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 2, 1))
+
+    readonly error: true
+>error : Symbol(ErrorResult.error, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 4, 23))
+}
+
+interface AsyncLoaderProps<TResult extends {}> {
+>AsyncLoaderProps : Symbol(AsyncLoaderProps, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 6, 1))
+>TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))
+
+    readonly asyncLoad: () => Box<TResult>;
+>asyncLoad : Symbol(AsyncLoaderProps.asyncLoad, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 48))
+>Box : Symbol(Box, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))
+
+    readonly children: (result: Exclude<TResult, ErrorResult>) => string;
+>children : Symbol(AsyncLoaderProps.children, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 9, 43))
+>result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 10, 24))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))
+>ErrorResult : Symbol(ErrorResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 2, 1))
+}
+
+class AsyncLoader<TResult extends {}> {
+>AsyncLoader : Symbol(AsyncLoader, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 11, 1))
+>TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 13, 18))
+
+    constructor(props: string, context: any);
+>props : Symbol(props, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 14, 16))
+>context : Symbol(context, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 14, 30))
+
+    constructor(props: AsyncLoaderProps<TResult>);
+>props : Symbol(props, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 15, 16))
+>AsyncLoaderProps : Symbol(AsyncLoaderProps, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 6, 1))
+>TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 13, 18))
+
+    constructor(...args: any[]) {}
+>args : Symbol(args, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 16, 16))
+}
+
+function load(): Box<{ success: true } | ErrorResult> {
+>load : Symbol(load, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 17, 1))
+>Box : Symbol(Box, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 0))
+>success : Symbol(success, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 19, 22))
+>ErrorResult : Symbol(ErrorResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 2, 1))
+
+    return null as any;
+}
+
+new AsyncLoader({
+>AsyncLoader : Symbol(AsyncLoader, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 11, 1))
+
+    asyncLoad: load,
+>asyncLoad : Symbol(asyncLoad, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 23, 17))
+>load : Symbol(load, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 17, 1))
+
+    children: result => result.success as any,
+>children : Symbol(children, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 24, 20))
+>result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 25, 13))
+>result.success : Symbol(success, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 19, 22))
+>result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 25, 13))
+>success : Symbol(success, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 19, 22))
+
+}); // should work fine
+

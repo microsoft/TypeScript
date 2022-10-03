@@ -1,0 +1,39 @@
+=== tests/cases/conformance/ambient/consumer.ts ===
+/// <reference path="decls.ts" />
+import imp1 = require('equ');
+>imp1 : Symbol(imp1, Decl(consumer.ts, 0, 0))
+
+
+// Ambient external module members are always exported with or without export keyword when module lacks export assignment
+import imp3 = require('equ2');
+>imp3 : Symbol(imp3, Decl(consumer.ts, 1, 29))
+
+var n = imp3.x;
+>n : Symbol(n, Decl(consumer.ts, 6, 3), Decl(consumer.ts, 7, 3))
+>imp3.x : Symbol(imp3.x, Decl(decls.ts, 7, 7))
+>imp3 : Symbol(imp3, Decl(consumer.ts, 1, 29))
+>x : Symbol(imp3.x, Decl(decls.ts, 7, 7))
+
+var n: number;
+>n : Symbol(n, Decl(consumer.ts, 6, 3), Decl(consumer.ts, 7, 3))
+
+=== tests/cases/conformance/ambient/decls.ts ===
+// Ambient external module with export assignment
+declare module 'equ' {
+>'equ' : Symbol("equ", Decl(decls.ts, 0, 0))
+
+    var x;
+>x : Symbol(x, Decl(decls.ts, 2, 7))
+
+    export = x;
+>x : Symbol(x, Decl(decls.ts, 2, 7))
+}
+
+declare module 'equ2' {
+>'equ2' : Symbol("equ2", Decl(decls.ts, 4, 1))
+
+    var x: number;
+>x : Symbol(x, Decl(decls.ts, 7, 7))
+}
+
+// Ambient external import declaration referencing ambient external module using top level module name

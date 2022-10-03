@@ -1,0 +1,25 @@
+=== tests/cases/compiler/callSignaturesShouldBeResolvedBeforeSpecialization.ts ===
+interface I1<T> {
+    (value: T): void;
+>value : T
+
+    field1: I1<boolean>;
+>field1 : I1<boolean>
+}
+
+function foo() {
+>foo : () => void
+
+    var test: I1<string>;
+>test : I1<string>
+
+    test("expects boolean instead of string"); // should not error - "test" should not expect a boolean
+>test("expects boolean instead of string") : void
+>test : I1<string>
+>"expects boolean instead of string" : "expects boolean instead of string"
+
+    test(true); // should error - string expected
+>test(true) : void
+>test : I1<string>
+>true : true
+}

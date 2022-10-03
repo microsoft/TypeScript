@@ -1,0 +1,22 @@
+tests/cases/compiler/setterWithReturn.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/setterWithReturn.ts(4,13): error TS2408: Setters cannot return a value.
+tests/cases/compiler/setterWithReturn.ts(7,13): error TS2408: Setters cannot return a value.
+
+
+==== tests/cases/compiler/setterWithReturn.ts (3 errors) ====
+    class C234 {
+        public set p1(arg1) {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            if (true) {
+                return arg1;
+                ~~~~~~~~~~~~
+!!! error TS2408: Setters cannot return a value.
+            }
+            else {
+                return 0;
+                ~~~~~~~~~
+!!! error TS2408: Setters cannot return a value.
+            }
+       }
+    }

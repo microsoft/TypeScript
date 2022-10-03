@@ -1,0 +1,3 @@
+=== tests/cases/compiler/exportDefaultMissingName.ts ===
+export default xyzzy;
+No type information for this code.

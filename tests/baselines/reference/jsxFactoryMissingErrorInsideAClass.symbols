@@ -1,0 +1,11 @@
+=== tests/cases/compiler/test.tsx ===
+export class C {
+>C : Symbol(C, Decl(test.tsx, 0, 0))
+
+    factory() {
+>factory : Symbol(C.factory, Decl(test.tsx, 0, 16))
+
+        return <div></div>;
+    }
+}
+

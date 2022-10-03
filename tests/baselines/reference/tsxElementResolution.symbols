@@ -1,0 +1,55 @@
+=== tests/cases/conformance/jsx/tsxElementResolution.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxElementResolution.tsx, 0, 0))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution.tsx, 0, 23))
+
+		foundFirst: { x: string };
+>foundFirst : Symbol(IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 1, 30))
+>x : Symbol(x, Decl(tsxElementResolution.tsx, 2, 15))
+
+		'string_named';
+>'string_named' : Symbol(IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 2, 28))
+
+		'var';
+>'var' : Symbol(IntrinsicElements['var'], Decl(tsxElementResolution.tsx, 3, 17))
+	}
+}
+
+class foundFirst { }
+>foundFirst : Symbol(foundFirst, Decl(tsxElementResolution.tsx, 6, 1))
+
+class Other {}
+>Other : Symbol(Other, Decl(tsxElementResolution.tsx, 8, 20))
+
+module Dotted {
+>Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 9, 14))
+
+	export class Name { }
+>Name : Symbol(Name, Decl(tsxElementResolution.tsx, 11, 15))
+}
+
+// Should find the intrinsic element, not the class element
+var a = <foundFirst  x="hello" />;
+>a : Symbol(a, Decl(tsxElementResolution.tsx, 16, 3))
+>foundFirst : Symbol(JSX.IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 1, 30))
+>x : Symbol(x, Decl(tsxElementResolution.tsx, 16, 19))
+
+var b = <string_named />;
+>b : Symbol(b, Decl(tsxElementResolution.tsx, 17, 3))
+>string_named : Symbol(JSX.IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 2, 28))
+
+// TODO: This should not be a parse error (should
+//        parse a property name here, not identifier)
+// var c = <var />;
+var d = <Other />;
+>d : Symbol(d, Decl(tsxElementResolution.tsx, 21, 3))
+>Other : Symbol(Other, Decl(tsxElementResolution.tsx, 8, 20))
+
+var e = <Dotted.Name />;
+>e : Symbol(e, Decl(tsxElementResolution.tsx, 22, 3))
+>Dotted.Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 15))
+>Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 9, 14))
+>Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 11, 15))
+

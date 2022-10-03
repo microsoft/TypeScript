@@ -1,0 +1,19 @@
+=== tests/cases/compiler/typeInferenceConflictingCandidates.ts ===
+declare function g<T>(a: T, b: T, c: (t: T) => T): T;
+>g : Symbol(g, Decl(typeInferenceConflictingCandidates.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+>a : Symbol(a, Decl(typeInferenceConflictingCandidates.ts, 0, 22))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+>b : Symbol(b, Decl(typeInferenceConflictingCandidates.ts, 0, 27))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+>c : Symbol(c, Decl(typeInferenceConflictingCandidates.ts, 0, 33))
+>t : Symbol(t, Decl(typeInferenceConflictingCandidates.ts, 0, 38))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+>T : Symbol(T, Decl(typeInferenceConflictingCandidates.ts, 0, 19))
+
+g("", 3, a => a);
+>g : Symbol(g, Decl(typeInferenceConflictingCandidates.ts, 0, 0))
+>a : Symbol(a, Decl(typeInferenceConflictingCandidates.ts, 2, 8))
+>a : Symbol(a, Decl(typeInferenceConflictingCandidates.ts, 2, 8))
+

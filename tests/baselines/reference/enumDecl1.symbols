@@ -1,0 +1,18 @@
+=== tests/cases/compiler/enumDecl1.ts ===
+declare module mAmbient {
+>mAmbient : Symbol(mAmbient, Decl(enumDecl1.ts, 0, 0))
+
+    enum e {
+>e : Symbol(e, Decl(enumDecl1.ts, 0, 25))
+
+        x,
+>x : Symbol(e.x, Decl(enumDecl1.ts, 1, 12))
+
+        y,
+>y : Symbol(e.y, Decl(enumDecl1.ts, 2, 10))
+
+        z
+>z : Symbol(e.z, Decl(enumDecl1.ts, 3, 10))
+    }
+}
+

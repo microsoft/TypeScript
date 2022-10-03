@@ -1,0 +1,119 @@
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(2,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(5,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(8,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(10,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(13,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'void'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(17,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(18,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(19,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(20,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(31,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(38,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(46,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(48,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(51,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+
+
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (17 errors) ====
+    var aNumber: number;
+    for (aNumber in {}) { }
+         ~~~~~~~
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+    
+    var aBoolean: boolean;
+    for (aBoolean in {}) { }
+         ~~~~~~~~
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+    
+    var aRegExp: RegExp;
+    for (aRegExp in {}) { }
+         ~~~~~~~
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+    
+    for (var idx : number in {}) { }
+             ~~~
+!!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+    
+    function fn(): void { }
+    for (var x in fn()) { }
+                  ~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'void'.
+    
+    var c : string, d:string, e;
+    
+    for (var x in c || d) { }
+                  ~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+    for (var x in e ? c : d) { }
+                  ~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+    for (var x in 42 ? c : d) { }
+                  ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+    for (var x in '' ? c : d) { }
+                  ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+    for (var x in 42 ? d[x] : c[x]) { }
+    for (var x in c[23]) { }
+                  ~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+    
+    for (var x in (<T>(x: T) => x)) { }
+    for (var x in function (x: string, y: number) { return x + y }) { }
+    
+    class A {
+        biz() : number{
+            for (var x in this.biz()) { }
+                          ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+            for (var x in this.biz) { }
+            for (var x in this) { }
+                     ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts:29:18: 'x' was also declared here.
+            return null;
+        }
+    
+        static baz() : number {
+            for (var x in this) { }
+            for (var x in this.baz) { }
+            for (var x in this.baz()) { }
+                          ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+    
+            return null;
+        }
+    }
+    
+    class B extends A {
+        boz() {
+            for (var x in this.biz()) { }
+                          ~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+            for (var x in this.biz) { }
+            for (var x in this) { }
+                     ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts:46:18: 'x' was also declared here.
+    
+            for (var x in super.biz) { }
+            for (var x in super.biz()) { }
+                          ~~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+            return null;
+        }
+    }
+    
+    interface I {
+        id: number;
+        [idx: number]: number;
+    }
+    var i: I;
+    
+    for (var x in i[42]) { } 
+                  ~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
+    

@@ -1,0 +1,41 @@
+=== tests/cases/compiler/recursiveInheritance2.ts ===
+interface A { (): B; };
+>A : Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
+>B : Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
+
+declare var a: A;
+>a : Symbol(a, Decl(recursiveInheritance2.ts, 1, 11))
+>A : Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
+
+var x = a();
+>x : Symbol(x, Decl(recursiveInheritance2.ts, 2, 3))
+>a : Symbol(a, Decl(recursiveInheritance2.ts, 1, 11))
+
+interface B { (): C; };
+>B : Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
+>C : Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
+
+declare var b: B;
+>b : Symbol(b, Decl(recursiveInheritance2.ts, 5, 11))
+>B : Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
+
+var y = b();
+>y : Symbol(y, Decl(recursiveInheritance2.ts, 6, 3))
+>b : Symbol(b, Decl(recursiveInheritance2.ts, 5, 11))
+
+interface C { (): A; };
+>C : Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
+>A : Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
+
+declare var c: C;
+>c : Symbol(c, Decl(recursiveInheritance2.ts, 9, 11))
+>C : Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
+
+var z = c();
+>z : Symbol(z, Decl(recursiveInheritance2.ts, 10, 3))
+>c : Symbol(c, Decl(recursiveInheritance2.ts, 9, 11))
+
+x = y;
+>x : Symbol(x, Decl(recursiveInheritance2.ts, 2, 3))
+>y : Symbol(y, Decl(recursiveInheritance2.ts, 6, 3))
+

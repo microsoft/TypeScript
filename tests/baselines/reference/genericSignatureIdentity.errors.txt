@@ -1,0 +1,36 @@
+tests/cases/compiler/genericSignatureIdentity.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T extends number>(x: T) => T'.
+tests/cases/compiler/genericSignatureIdentity.ts(14,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: T) => T'.
+tests/cases/compiler/genericSignatureIdentity.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: any) => any'.
+
+
+==== tests/cases/compiler/genericSignatureIdentity.ts (3 errors) ====
+    // This test is here to remind us of our current limits of type identity checking.
+    // Ideally all of the below declarations would be considered different (and thus errors)
+    // but they aren't because we erase type parameters to type any and don't check that
+    // constraints are identical.
+    
+    var x: {
+        <T extends Date>(x: T): T;
+    };
+    
+    var x: {
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T extends number>(x: T) => T'.
+!!! related TS6203 tests/cases/compiler/genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+        <T extends number>(x: T): T;
+    };
+    
+    var x: {
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: T) => T'.
+!!! related TS6203 tests/cases/compiler/genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+        <T>(x: T): T;
+    };
+    
+    var x: {
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: any) => any'.
+!!! related TS6203 tests/cases/compiler/genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+        <T>(x: any): any;
+    };
+    

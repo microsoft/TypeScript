@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck50.ts(2,11): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck50.ts (1 errors) ====
+    function* g() {
+        yield yield;
+              ~~~~~
+!!! error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+    }

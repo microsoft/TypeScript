@@ -1,0 +1,73 @@
+=== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts ===
+class A { a }
+>A : A
+>a : any
+
+class B extends A { b }
+>B : B
+>A : A
+>b : any
+
+class C<T> extends Array<T> { c }
+>C : C<T>
+>Array : T[]
+>c : any
+
+declare var ara: A[];
+>ara : A[]
+
+declare var arb: B[];
+>arb : B[]
+
+declare var cra: C<A>;
+>cra : C<A>
+
+declare var crb: C<B>;
+>crb : C<B>
+
+declare var rra: ReadonlyArray<A>;
+>rra : readonly A[]
+
+declare var rrb: ReadonlyArray<B>;
+>rrb : readonly B[]
+
+rra = ara;
+>rra = ara : A[]
+>rra : readonly A[]
+>ara : A[]
+
+rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
+>rrb = arb : B[]
+>rrb : readonly B[]
+>arb : B[]
+
+rra = arb;
+>rra = arb : B[]
+>rra : readonly A[]
+>arb : B[]
+
+rrb = ara; // error: 'A' is not assignable to 'B'
+>rrb = ara : A[]
+>rrb : readonly B[]
+>ara : A[]
+
+rra = cra;
+>rra = cra : C<A>
+>rra : readonly A[]
+>cra : C<A>
+
+rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
+>rra = crb : C<B>
+>rra : readonly A[]
+>crb : C<B>
+
+rrb = crb;
+>rrb = crb : C<B>
+>rrb : readonly B[]
+>crb : C<B>
+
+rrb = cra; // error: 'A' is not assignable to 'B'
+>rrb = cra : C<A>
+>rrb : readonly B[]
+>cra : C<A>
+

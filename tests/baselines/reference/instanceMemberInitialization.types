@@ -1,0 +1,53 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberInitialization.ts ===
+class C {
+>C : C
+
+    x = 1;
+>x : number
+>1 : 1
+}
+
+var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+c.x = 3;
+>c.x = 3 : 3
+>c.x : number
+>c : C
+>x : number
+>3 : 3
+
+var c2 = new C();
+>c2 : C
+>new C() : C
+>C : typeof C
+
+var r = c.x === c2.x;
+>r : boolean
+>c.x === c2.x : boolean
+>c.x : number
+>c : C
+>x : number
+>c2.x : number
+>c2 : C
+>x : number
+
+// #31792
+
+
+
+class MyMap<K, V> {
+>MyMap : MyMap<K, V>
+
+    constructor(private readonly Map_: { new<K, V>(): any }) {}
+>Map_ : new <K, V>() => any
+
+    private readonly store = new this.Map_<K, V>();
+>store : any
+>new this.Map_<K, V>() : any
+>this.Map_ : new <K, V>() => any
+>this : this
+>Map_ : new <K, V>() => any
+}

@@ -1,0 +1,10 @@
+tests/cases/compiler/ParameterList6.ts(2,19): error TS2369: A parameter property is only allowed in a constructor implementation.
+
+
+==== tests/cases/compiler/ParameterList6.ts (1 errors) ====
+    class C {
+      constructor(C: (public A) => any) {
+                      ~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+      }
+    }

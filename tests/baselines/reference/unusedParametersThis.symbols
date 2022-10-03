@@ -1,0 +1,92 @@
+=== tests/cases/compiler/unusedParametersThis.ts ===
+class A {
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+    public a: number;
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+
+    public method(this: this): number {
+>method : Symbol(A.method, Decl(unusedParametersThis.ts, 1, 21))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 3, 18))
+
+        return this.a;
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 3, 18))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+    }
+
+    public method2(this: A): number {
+>method2 : Symbol(A.method2, Decl(unusedParametersThis.ts, 5, 5))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 7, 19))
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+        return this.a;
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 7, 19))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+    }
+
+    public method3(this: this): number {
+>method3 : Symbol(A.method3, Decl(unusedParametersThis.ts, 9, 5))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 11, 19))
+
+        var fn = () => this.a;
+>fn : Symbol(fn, Decl(unusedParametersThis.ts, 12, 11))
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 11, 19))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+
+        return fn();
+>fn : Symbol(fn, Decl(unusedParametersThis.ts, 12, 11))
+    }
+
+    public method4(this: A): number {
+>method4 : Symbol(A.method4, Decl(unusedParametersThis.ts, 14, 5))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 16, 19))
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+        var fn = () => this.a;
+>fn : Symbol(fn, Decl(unusedParametersThis.ts, 17, 11))
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 16, 19))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+
+        return fn();
+>fn : Symbol(fn, Decl(unusedParametersThis.ts, 17, 11))
+    }
+
+    static staticMethod(this: A): number {
+>staticMethod : Symbol(A.staticMethod, Decl(unusedParametersThis.ts, 19, 5))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 21, 24))
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+        return this.a;
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 21, 24))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+    }
+}
+
+function f(this: A): number {
+>f : Symbol(f, Decl(unusedParametersThis.ts, 24, 1))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 26, 11))
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+    return this.a
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 26, 11))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+}
+
+var f2 = function f2(this: A): number {
+>f2 : Symbol(f2, Decl(unusedParametersThis.ts, 30, 3))
+>f2 : Symbol(f2, Decl(unusedParametersThis.ts, 30, 8))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 30, 21))
+>A : Symbol(A, Decl(unusedParametersThis.ts, 0, 0))
+
+    return this.a;
+>this.a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+>this : Symbol(this, Decl(unusedParametersThis.ts, 30, 21))
+>a : Symbol(A.a, Decl(unusedParametersThis.ts, 0, 9))
+
+};

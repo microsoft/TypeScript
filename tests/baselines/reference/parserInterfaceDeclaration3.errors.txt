@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration3.ts(1,1): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+
+
+==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration3.ts (1 errors) ====
+    public interface I {
+    ~~~~~~
+!!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+    }

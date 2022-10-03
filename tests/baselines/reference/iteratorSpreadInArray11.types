@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray11.ts ===
+var iter: Iterable<number>;
+>iter : Iterable<number>
+
+var array = [...iter];
+>array : number[]
+>[...iter] : number[]
+>...iter : number
+>iter : Iterable<number>
+

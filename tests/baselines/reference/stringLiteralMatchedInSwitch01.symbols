@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralMatchedInSwitch01.ts ===
+type S = "a" | "b";
+>S : Symbol(S, Decl(stringLiteralMatchedInSwitch01.ts, 0, 0))
+
+type T = S[] | S;
+>T : Symbol(T, Decl(stringLiteralMatchedInSwitch01.ts, 0, 19))
+>S : Symbol(S, Decl(stringLiteralMatchedInSwitch01.ts, 0, 0))
+>S : Symbol(S, Decl(stringLiteralMatchedInSwitch01.ts, 0, 0))
+
+var foo: T;
+>foo : Symbol(foo, Decl(stringLiteralMatchedInSwitch01.ts, 3, 3))
+>T : Symbol(T, Decl(stringLiteralMatchedInSwitch01.ts, 0, 19))
+
+switch (foo) {
+>foo : Symbol(foo, Decl(stringLiteralMatchedInSwitch01.ts, 3, 3))
+
+    case "a":
+    case "b":
+        break;
+    default:
+        foo = (foo as S[])[0];
+>foo : Symbol(foo, Decl(stringLiteralMatchedInSwitch01.ts, 3, 3))
+>foo : Symbol(foo, Decl(stringLiteralMatchedInSwitch01.ts, 3, 3))
+>S : Symbol(S, Decl(stringLiteralMatchedInSwitch01.ts, 0, 0))
+
+        break;
+}

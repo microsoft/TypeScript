@@ -1,0 +1,28 @@
+=== tests/cases/compiler/propertyParameterWithQuestionMark.ts ===
+class C {
+>C : C
+
+    constructor(public x?) { }
+>x : any
+}
+
+// x should be an optional property
+var v: C = {}; // Should succeed
+>v : C
+>{} : {}
+
+var v2: { x? }
+>v2 : { x?: any; }
+>x : any
+
+v = v2; // Should succeed
+>v = v2 : { x?: any; }
+>v : C
+>v2 : { x?: any; }
+
+var v3: { x } = new C; // Should fail
+>v3 : { x: any; }
+>x : any
+>new C : C
+>C : typeof C
+

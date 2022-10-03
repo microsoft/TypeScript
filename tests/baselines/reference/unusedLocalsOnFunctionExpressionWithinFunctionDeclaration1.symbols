@@ -1,0 +1,19 @@
+=== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts ===
+function greeter(person: string, person2: string) {
+>greeter : Symbol(greeter, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 0, 0))
+>person : Symbol(person, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 0, 17))
+>person2 : Symbol(person2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 0, 32))
+
+    var unused = 20;
+>unused : Symbol(unused, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 1, 7))
+
+    var maker = function (child: string): void {
+>maker : Symbol(maker, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 2, 7))
+>child : Symbol(child, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 2, 26))
+
+        var unused2 = 22;
+>unused2 : Symbol(unused2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 3, 11))
+    }
+    person2 = "dummy value";
+>person2 : Symbol(person2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts, 0, 32))
+}

@@ -1,0 +1,15 @@
+tests/cases/compiler/genericFunduleInModule.ts(8,8): error TS2749: 'A.B' refers to a value, but is being used as a type here. Did you mean 'typeof A.B'?
+
+
+==== tests/cases/compiler/genericFunduleInModule.ts (1 errors) ====
+    module A {
+        export function B<T>(x: T) { return x; }
+        export module B {
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B;
+           ~~~
+!!! error TS2749: 'A.B' refers to a value, but is being used as a type here. Did you mean 'typeof A.B'?
+    A.B(1);

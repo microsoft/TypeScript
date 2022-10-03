@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperatorES6.ts ===
+var x = `abc${ new String("Hi") }def`;
+>x : string
+>`abc${ new String("Hi") }def` : string
+>new String("Hi") : String
+>String : StringConstructor
+>"Hi" : "Hi"
+

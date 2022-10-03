@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts ===
+class A {
+>A : A
+
+    self() {
+>self : () => this
+
+        return this;
+>this : this
+    }
+}
+
+function f<T extends A>(x: T) {
+>f : <T extends A>(x: T) => void
+>x : T
+
+    function g<U extends T>(x: U) {
+>g : <U extends T>(x: U) => void
+>x : U
+
+        x = x.self();
+>x = x.self() : U
+>x : U
+>x.self() : U
+>x.self : () => U
+>x : U
+>self : () => U
+    }
+    x = x.self();
+>x = x.self() : T
+>x : T
+>x.self() : T
+>x.self : () => T
+>x : T
+>self : () => T
+}
+
+class B<T extends A> {
+>B : B<T>
+
+    foo(x: T) {
+>foo : (x: T) => void
+>x : T
+
+        x = x.self();
+>x = x.self() : T
+>x : T
+>x.self() : T
+>x.self : () => T
+>x : T
+>self : () => T
+    }
+    bar<U extends T>(x: U) {
+>bar : <U extends T>(x: U) => void
+>x : U
+
+        x = x.self();
+>x = x.self() : U
+>x : U
+>x.self() : U
+>x.self : () => U
+>x : U
+>self : () => U
+    }
+}
+

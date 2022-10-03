@@ -1,0 +1,61 @@
+=== tests/cases/conformance/generators/generatorImplicitAny.ts ===
+function* g() {}
+>g : Symbol(g, Decl(generatorImplicitAny.ts, 0, 0))
+
+// https://github.com/microsoft/TypeScript/issues/35105
+declare function noop(): void;
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+
+declare function f<T>(value: T): void;
+>f : Symbol(f, Decl(generatorImplicitAny.ts, 3, 30))
+>T : Symbol(T, Decl(generatorImplicitAny.ts, 4, 19))
+>value : Symbol(value, Decl(generatorImplicitAny.ts, 4, 22))
+>T : Symbol(T, Decl(generatorImplicitAny.ts, 4, 19))
+
+function* g2() {
+>g2 : Symbol(g2, Decl(generatorImplicitAny.ts, 4, 38))
+
+    const value = yield; // error: implicit any
+>value : Symbol(value, Decl(generatorImplicitAny.ts, 7, 9))
+}
+
+function* g3() {
+>g3 : Symbol(g3, Decl(generatorImplicitAny.ts, 8, 1))
+
+    const value: string = yield; // ok, contextually typed by `value`.
+>value : Symbol(value, Decl(generatorImplicitAny.ts, 11, 9))
+}
+
+function* g4() {
+>g4 : Symbol(g4, Decl(generatorImplicitAny.ts, 12, 1))
+
+    yield; // ok, result is unused
+    yield, noop(); // ok, result is unused
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+
+    noop(), yield, noop(); // ok, result is unused
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+
+    (yield); // ok, result is unused
+    (yield, noop()), noop(); // ok, result is unused
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+>noop : Symbol(noop, Decl(generatorImplicitAny.ts, 0, 16))
+
+    for(yield; false; yield); // ok, results are unused
+    void (yield); // ok, results are unused
+}
+
+function* g5() {
+>g5 : Symbol(g5, Decl(generatorImplicitAny.ts, 22, 1))
+
+    f(yield); // error: implicit any
+>f : Symbol(f, Decl(generatorImplicitAny.ts, 3, 30))
+}
+
+function* g6() {
+>g6 : Symbol(g6, Decl(generatorImplicitAny.ts, 26, 1))
+
+    f<string>(yield); // ok, contextually typed by f<string>
+>f : Symbol(f, Decl(generatorImplicitAny.ts, 3, 30))
+}

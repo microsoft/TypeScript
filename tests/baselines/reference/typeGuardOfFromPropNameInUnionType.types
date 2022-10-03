@@ -1,0 +1,337 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts ===
+class A { a: string; }
+>A : A
+>a : string
+
+class B { b: number; }
+>B : B
+>b : number
+
+class C { b: Object; }
+>C : C
+>b : Object
+
+class D { a: Date; }
+>D : D
+>a : Date
+
+function namedClasses(x: A | B) {
+>namedClasses : (x: A | B) => void
+>x : A | B
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : A | B
+
+        x.a = "1";
+>x.a = "1" : "1"
+>x.a : string
+>x : A
+>a : string
+>"1" : "1"
+
+    } else {
+        x.b = 1;
+>x.b = 1 : 1
+>x.b : number
+>x : B
+>b : number
+>1 : 1
+    }
+}
+
+function multipleClasses(x: A | B | C | D) {
+>multipleClasses : (x: A | B | C | D) => void
+>x : A | B | C | D
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : A | B | C | D
+
+        let y: string | Date = x.a;
+>y : string | Date
+>x.a : string | Date
+>x : A | D
+>a : string | Date
+
+    } else {
+        let z: number | Object = x.b;
+>z : number | Object
+>x.b : number | Object
+>x : B | C
+>b : number | Object
+    }
+}
+
+function anonymousClasses(x: { a: string; } | { b: number; }) {
+>anonymousClasses : (x: {    a: string;} | {    b: number;}) => void
+>x : { a: string; } | { b: number; }
+>a : string
+>b : number
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: string; } | { b: number; }
+
+        let y: string = x.a;
+>y : string
+>x.a : string
+>x : { a: string; }
+>a : string
+
+    } else {
+        let z: number = x.b;
+>z : number
+>x.b : number
+>x : { b: number; }
+>b : number
+    }
+}
+
+class AWithOptionalProp { a?: string; }
+>AWithOptionalProp : AWithOptionalProp
+>a : string
+
+class BWithOptionalProp { b?: string; }
+>BWithOptionalProp : BWithOptionalProp
+>b : string
+
+function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+>positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
+>x : AWithOptionalProp | BWithOptionalProp
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : AWithOptionalProp | BWithOptionalProp
+
+        x.a = "1";
+>x.a = "1" : "1"
+>x.a : string
+>x : AWithOptionalProp
+>a : string
+>"1" : "1"
+
+    } else {
+        const y: string = x instanceof AWithOptionalProp
+>y : string
+>x instanceof AWithOptionalProp            ? x.a            : x.b : string
+>x instanceof AWithOptionalProp : boolean
+>x : AWithOptionalProp | BWithOptionalProp
+>AWithOptionalProp : typeof AWithOptionalProp
+
+            ? x.a
+>x.a : string
+>x : AWithOptionalProp
+>a : string
+
+            : x.b
+>x.b : string
+>x : BWithOptionalProp
+>b : string
+    }
+}
+
+function inParenthesizedExpression(x: A | B) {
+>inParenthesizedExpression : (x: A | B) => void
+>x : A | B
+
+    if ("a" in (x)) {
+>"a" in (x) : boolean
+>"a" : "a"
+>(x) : A | B
+>x : A | B
+
+        let y: string = x.a;
+>y : string
+>x.a : string
+>x : A
+>a : string
+
+    } else {
+        let z: number = x.b;
+>z : number
+>x.b : number
+>x : B
+>b : number
+    }
+}
+
+class ClassWithUnionProp { prop: A | B; }
+>ClassWithUnionProp : ClassWithUnionProp
+>prop : A | B
+
+function inProperty(x: ClassWithUnionProp) {
+>inProperty : (x: ClassWithUnionProp) => void
+>x : ClassWithUnionProp
+
+    if ("a" in x.prop) {
+>"a" in x.prop : boolean
+>"a" : "a"
+>x.prop : A | B
+>x : ClassWithUnionProp
+>prop : A | B
+
+        let y: string = x.prop.a;
+>y : string
+>x.prop.a : string
+>x.prop : A
+>x : ClassWithUnionProp
+>prop : A
+>a : string
+
+    } else {
+        let z: number = x.prop.b;
+>z : number
+>x.prop.b : number
+>x.prop : B
+>x : ClassWithUnionProp
+>prop : B
+>b : number
+    }
+}
+
+class NestedClassWithProp { outer: ClassWithUnionProp; }
+>NestedClassWithProp : NestedClassWithProp
+>outer : ClassWithUnionProp
+
+function innestedProperty(x: NestedClassWithProp) {
+>innestedProperty : (x: NestedClassWithProp) => void
+>x : NestedClassWithProp
+
+    if ("a" in x.outer.prop) {
+>"a" in x.outer.prop : boolean
+>"a" : "a"
+>x.outer.prop : A | B
+>x.outer : ClassWithUnionProp
+>x : NestedClassWithProp
+>outer : ClassWithUnionProp
+>prop : A | B
+
+        let y: string = x.outer.prop.a;
+>y : string
+>x.outer.prop.a : string
+>x.outer.prop : A
+>x.outer : ClassWithUnionProp
+>x : NestedClassWithProp
+>outer : ClassWithUnionProp
+>prop : A
+>a : string
+
+    } else {
+        let z: number = x.outer.prop.b;
+>z : number
+>x.outer.prop.b : number
+>x.outer.prop : B
+>x.outer : ClassWithUnionProp
+>x : NestedClassWithProp
+>outer : ClassWithUnionProp
+>prop : B
+>b : number
+    }
+}
+
+class InMemberOfClass {
+>InMemberOfClass : InMemberOfClass
+
+    protected prop: A | B;
+>prop : A | B
+
+    inThis() {
+>inThis : () => void
+
+        if ("a" in this.prop) {
+>"a" in this.prop : boolean
+>"a" : "a"
+>this.prop : A | B
+>this : this
+>prop : A | B
+
+            let y: string = this.prop.a;
+>y : string
+>this.prop.a : string
+>this.prop : A
+>this : this
+>prop : A
+>a : string
+
+        } else {
+            let z: number = this.prop.b;
+>z : number
+>this.prop.b : number
+>this.prop : B
+>this : this
+>prop : B
+>b : number
+        }
+    }
+}
+
+// added for completeness
+class SelfAssert {
+>SelfAssert : SelfAssert
+
+    a: string;
+>a : string
+
+    inThis() {
+>inThis : () => void
+
+        if ("a" in this) {
+>"a" in this : boolean
+>"a" : "a"
+>this : this
+
+            let y: string = this.a;
+>y : string
+>this.a : string
+>this : this
+>a : string
+
+        } else {
+        }
+    }
+}
+
+interface Indexed {
+    [s: string]: any;
+>s : string
+}
+
+function f(i: Indexed) {
+>f : (i: Indexed) => any
+>i : Indexed
+
+    if ("a" in i) {
+>"a" in i : boolean
+>"a" : "a"
+>i : Indexed
+
+        return i.a;
+>i.a : any
+>i : Indexed
+>a : any
+    }
+    else if ("b" in i) {
+>"b" in i : boolean
+>"b" : "b"
+>i : Indexed
+
+        return i.b;
+>i.b : any
+>i : Indexed
+>b : any
+    }
+    return "c" in i && i.c;
+>"c" in i && i.c : any
+>"c" in i : boolean
+>"c" : "c"
+>i : Indexed
+>i.c : any
+>i : Indexed
+>c : any
+}
+

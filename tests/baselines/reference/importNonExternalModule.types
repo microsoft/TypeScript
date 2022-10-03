@@ -1,0 +1,23 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : any
+
+// Import should fail.  foo_0 not an external module
+if(foo.answer === 42){
+>foo.answer === 42 : boolean
+>foo.answer : any
+>foo : any
+>answer : any
+>42 : 42
+
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+module foo {
+>foo : typeof foo
+
+	export var answer = 42;
+>answer : number
+>42 : 42
+}
+

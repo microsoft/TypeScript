@@ -1,0 +1,48 @@
+=== tests/cases/compiler/objectLiteralIndexers.ts ===
+interface A {
+    x: number;
+>x : number
+}
+
+interface B extends A {
+    y: string;
+>y : string
+}
+
+var a: A;
+>a : A
+
+var b: B;
+>b : B
+
+var c: any;
+>c : any
+
+var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer is A, number indexer is B
+>o1 : { [s: string]: A; [n: number]: B; }
+>s : string
+>n : number
+>{ x: a, 0: b } : { x: A; 0: B; }
+>x : A
+>a : A
+>0 : B
+>b : B
+
+o1 = { x: b, 0: c }; // both indexers are any
+>o1 = { x: b, 0: c } : { x: B; 0: any; }
+>o1 : { [s: string]: A; [n: number]: B; }
+>{ x: b, 0: c } : { x: B; 0: any; }
+>x : B
+>b : B
+>0 : any
+>c : any
+
+o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
+>o1 = { x: c, 0: b } : { x: any; 0: B; }
+>o1 : { [s: string]: A; [n: number]: B; }
+>{ x: c, 0: b } : { x: any; 0: B; }
+>x : any
+>c : any
+>0 : B
+>b : B
+

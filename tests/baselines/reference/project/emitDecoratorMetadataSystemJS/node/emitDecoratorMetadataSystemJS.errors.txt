@@ -1,0 +1,27 @@
+main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tsconfig.json (0 errors) ====
+    {
+      "compileOnSave": true,
+      "compilerOptions": {
+        "target": "es5",
+        "module": "system",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+      },
+      "files": [
+        "main.ts"
+      ]
+    }
+==== main.ts (1 errors) ====
+    import * as ng from "angular2/core";
+                        ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    declare function foo(...args: any[]);
+    
+    @foo
+    export class MyClass1 {
+        constructor(private _elementRef: ng.ElementRef){}
+    }

@@ -1,0 +1,75 @@
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(2,15): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,15): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,32): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(7,20): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(10,18): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,18): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,11): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(20,16): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(21,16): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
+
+
+==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (16 errors) ====
+    // grammar error from checker
+    var ara: Array.<number> = [1,2,3];
+                  ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
+    function f(x: ?number, y: Array.<number>) {
+                  ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+                                   ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+        return x ? x + y[1] : y[0];
+    }
+    function hof(ctor: function(new: number, string)) {
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+        return new ctor('hi');
+    }
+    function hof2(f: function(this: number, string): string) {
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+        return f(12, 'hullo');
+                     ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    }
+    var whatevs: * = 1001;
+                 ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var ques: ? = 'what';
+              ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var g: function(number, number): number = (n,m) => n + m;
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var most: !string = 'definite';
+              ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var postfixdef: number! = 101;
+                    ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var postfixopt: number? = undefined;
+        ~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+                    ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
+    var nns: Array<?number>;
+                   ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var dns: Array<!number>;
+                   ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var anys: Array<*>;
+                    ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
+    

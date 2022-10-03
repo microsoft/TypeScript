@@ -1,0 +1,56 @@
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(15,21): error TS6133: 'b' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(17,17): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(19,17): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(19,20): error TS6133: 'b' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(23,23): error TS6133: 'b' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(25,19): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(27,19): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts(27,22): error TS6133: 'b' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts (8 errors) ====
+    function t1() {
+        for (const [_a, b] of [['key', 1]]) {
+            console.log(b);
+        }
+    
+        for (const [a, _b] of [['key', 1]]) {
+            console.log(a);
+        }
+    
+        for (const [_a, _b] of [['key', 1]]) {}
+    }
+    
+    
+    function t2() {
+        for (const [_a, b] of [['key', 1]]) {}
+                        ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    
+        for (const [a, _b] of [['key', 1]]) {}
+                    ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    
+        for (const [a, b] of [['key', 1]]) {}
+                    ~
+!!! error TS6133: 'a' is declared but its value is never read.
+                       ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    }
+    
+    function t3() {
+        for (const [[[_a, b]]] of [[[['key', 1]]]]) {}
+                          ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    
+        for (const [[[a, _b]]] of [[[['key', 1]]]]) {}
+                      ~
+!!! error TS6133: 'a' is declared but its value is never read.
+    
+        for (const [[[a, b]]] of [[[['key', 1]]]]) {}
+                      ~
+!!! error TS6133: 'a' is declared but its value is never read.
+                         ~
+!!! error TS6133: 'b' is declared but its value is never read.
+    }
+    

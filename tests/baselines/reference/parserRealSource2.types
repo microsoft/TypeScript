@@ -1,0 +1,1226 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource2.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    export function hasFlag(val: number, flag: number) {
+>hasFlag : (val: number, flag: number) => boolean
+>val : number
+>flag : number
+
+        return (val & flag) != 0;
+>(val & flag) != 0 : boolean
+>(val & flag) : number
+>val & flag : number
+>val : number
+>flag : number
+>0 : 0
+    }
+
+    export enum ErrorRecoverySet {
+>ErrorRecoverySet : ErrorRecoverySet
+
+        None = 0,
+>None : ErrorRecoverySet
+>0 : 0
+
+        Comma = 1, // Comma
+>Comma : ErrorRecoverySet
+>1 : 1
+
+        SColon = 1 << 1, // SColon
+>SColon : ErrorRecoverySet
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Asg = 1 << 2, // Asg
+>Asg : ErrorRecoverySet
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        BinOp = 1 << 3, // Lsh, Rsh, Rs2, Le, Ge, INSTANCEOF, EQ, NE, Eqv, NEqv, LogAnd, LogOr, AsgMul, AsgDiv
+>BinOp : ErrorRecoverySet
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        // AsgMod, AsgAdd, AsgSub, AsgLsh, AsgRsh, AsgRs2, AsgAnd, AsgXor, AsgOr, QMark, Mult, Div, 
+        // Pct, GT, LT, And, Xor, Or
+        RBrack = 1 << 4, // RBrack
+>RBrack : ErrorRecoverySet
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        RCurly = 1 << 5, // RCurly
+>RCurly : ErrorRecoverySet
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        RParen = 1 << 6, // RParen
+>RParen : ErrorRecoverySet
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        Dot = 1 << 7, // Dot
+>Dot : ErrorRecoverySet
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        Colon = 1 << 8, // Colon
+>Colon : ErrorRecoverySet
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        PrimType = 1 << 9, // number, string, boolean
+>PrimType : ErrorRecoverySet
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        AddOp = 1 << 10, // Add, Sub
+>AddOp : ErrorRecoverySet
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        LCurly = 1 << 11, // LCurly
+>LCurly : ErrorRecoverySet
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        PreOp = 1 << 12, // Tilde, Bang, Inc, Dec
+>PreOp : ErrorRecoverySet
+>1 << 12 : number
+>1 : 1
+>12 : 12
+
+        RegExp = 1 << 13, // RegExp
+>RegExp : ErrorRecoverySet
+>1 << 13 : number
+>1 : 1
+>13 : 13
+
+        LParen = 1 << 14, // LParen
+>LParen : ErrorRecoverySet
+>1 << 14 : number
+>1 : 1
+>14 : 14
+
+        LBrack = 1 << 15, // LBrack
+>LBrack : ErrorRecoverySet
+>1 << 15 : number
+>1 : 1
+>15 : 15
+
+        Scope = 1 << 16, // Scope
+>Scope : ErrorRecoverySet
+>1 << 16 : number
+>1 : 1
+>16 : 16
+
+        In = 1 << 17, // IN
+>In : ErrorRecoverySet
+>1 << 17 : number
+>1 : 1
+>17 : 17
+
+        SCase = 1 << 18, // CASE, DEFAULT
+>SCase : ErrorRecoverySet
+>1 << 18 : number
+>1 : 1
+>18 : 18
+
+        Else = 1 << 19, // ELSE
+>Else : ErrorRecoverySet
+>1 << 19 : number
+>1 : 1
+>19 : 19
+
+        Catch = 1 << 20, // CATCH, FINALLY
+>Catch : ErrorRecoverySet
+>1 << 20 : number
+>1 : 1
+>20 : 20
+
+        Var = 1 << 21, // 
+>Var : ErrorRecoverySet
+>1 << 21 : number
+>1 : 1
+>21 : 21
+
+        Stmt = 1 << 22, // BREAK, RETURN, THROW, DEBUGGER, FOR, SWITCH, DO, IF, TRY, WITH
+>Stmt : ErrorRecoverySet
+>1 << 22 : number
+>1 : 1
+>22 : 22
+
+        While = 1 << 23, // WHILE
+>While : ErrorRecoverySet
+>1 << 23 : number
+>1 : 1
+>23 : 23
+
+        ID = 1 << 24, // ID
+>ID : ErrorRecoverySet
+>1 << 24 : number
+>1 : 1
+>24 : 24
+
+        Prefix = 1 << 25, // VOID, DELETE, TYPEOF, AWAIT
+>Prefix : ErrorRecoverySet
+>1 << 25 : number
+>1 : 1
+>25 : 25
+
+        Literal = 1 << 26, // IntCon, FltCon, StrCon
+>Literal : ErrorRecoverySet
+>1 << 26 : number
+>1 : 1
+>26 : 26
+
+        RLit = 1 << 27, // THIS, TRUE, FALSE, NULL
+>RLit : ErrorRecoverySet
+>1 << 27 : number
+>1 : 1
+>27 : 27
+
+        Func = 1 << 28, // FUNCTION
+>Func : ErrorRecoverySet
+>1 << 28 : number
+>1 : 1
+>28 : 28
+
+        EOF = 1 << 29, // EOF
+>EOF : ErrorRecoverySet
+>1 << 29 : number
+>1 : 1
+>29 : 29
+
+        // REVIEW: Name this something clearer.
+        TypeScriptS = 1 << 30, // PROPERTY, PRIVATE, STATIC, INTERFACE, CLASS, MODULE, EXPORT, IMPORT
+>TypeScriptS : ErrorRecoverySet
+>1 << 30 : number
+>1 : 1
+>30 : 30
+
+        ExprStart = SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix | RLit | Func | Literal,
+>ExprStart : ErrorRecoverySet
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix | RLit | Func | Literal : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix | RLit | Func : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix | RLit : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID | Prefix : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack | ID : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen | LBrack : number
+>SColon | AddOp | LCurly | PreOp | RegExp | LParen : number
+>SColon | AddOp | LCurly | PreOp | RegExp : number
+>SColon | AddOp | LCurly | PreOp : number
+>SColon | AddOp | LCurly : number
+>SColon | AddOp : number
+>SColon : ErrorRecoverySet
+>AddOp : ErrorRecoverySet
+>LCurly : ErrorRecoverySet
+>PreOp : ErrorRecoverySet
+>RegExp : ErrorRecoverySet
+>LParen : ErrorRecoverySet
+>LBrack : ErrorRecoverySet
+>ID : ErrorRecoverySet
+>Prefix : ErrorRecoverySet
+>RLit : ErrorRecoverySet
+>Func : ErrorRecoverySet
+>Literal : ErrorRecoverySet
+
+        StmtStart = ExprStart | SColon | Var | Stmt | While | TypeScriptS,
+>StmtStart : ErrorRecoverySet
+>ExprStart | SColon | Var | Stmt | While | TypeScriptS : number
+>ExprStart | SColon | Var | Stmt | While : number
+>ExprStart | SColon | Var | Stmt : number
+>ExprStart | SColon | Var : number
+>ExprStart | SColon : number
+>ExprStart : ErrorRecoverySet
+>SColon : ErrorRecoverySet
+>Var : ErrorRecoverySet
+>Stmt : ErrorRecoverySet
+>While : ErrorRecoverySet
+>TypeScriptS : ErrorRecoverySet
+
+        Postfix = Dot | LParen | LBrack,
+>Postfix : ErrorRecoverySet
+>Dot | LParen | LBrack : number
+>Dot | LParen : number
+>Dot : ErrorRecoverySet
+>LParen : ErrorRecoverySet
+>LBrack : ErrorRecoverySet
+    }
+
+    export enum AllowedElements {
+>AllowedElements : AllowedElements
+
+        None = 0,
+>None : AllowedElements
+>0 : 0
+
+        ModuleDeclarations = 1 << 2,
+>ModuleDeclarations : AllowedElements
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        ClassDeclarations = 1 << 3,
+>ClassDeclarations : AllowedElements
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        InterfaceDeclarations = 1 << 4,
+>InterfaceDeclarations : AllowedElements
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        AmbientDeclarations = 1 << 10,
+>AmbientDeclarations : AllowedElements
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        Properties = 1 << 11,
+>Properties : AllowedElements
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        Global = ModuleDeclarations | ClassDeclarations | InterfaceDeclarations | AmbientDeclarations,
+>Global : AllowedElements
+>ModuleDeclarations | ClassDeclarations | InterfaceDeclarations | AmbientDeclarations : number
+>ModuleDeclarations | ClassDeclarations | InterfaceDeclarations : number
+>ModuleDeclarations | ClassDeclarations : number
+>ModuleDeclarations : AllowedElements
+>ClassDeclarations : AllowedElements
+>InterfaceDeclarations : AllowedElements
+>AmbientDeclarations : AllowedElements
+
+        QuickParse = Global | Properties,
+>QuickParse : AllowedElements
+>Global | Properties : number
+>Global : AllowedElements
+>Properties : AllowedElements
+    }
+
+    export enum Modifiers {
+>Modifiers : Modifiers
+
+        None = 0,
+>None : Modifiers
+>0 : 0
+
+        Private = 1,
+>Private : Modifiers
+>1 : 1
+
+        Public = 1 << 1,
+>Public : Modifiers
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Readonly = 1 << 2,
+>Readonly : Modifiers
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : Modifiers
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Exported = 1 << 4,
+>Exported : Modifiers
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        Getter = 1 << 5,
+>Getter : Modifiers
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        Setter = 1 << 6,
+>Setter : Modifiers
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        Static = 1 << 7,
+>Static : Modifiers
+>1 << 7 : number
+>1 : 1
+>7 : 7
+    }
+
+    export enum ASTFlags {
+>ASTFlags : ASTFlags
+
+        None = 0,
+>None : ASTFlags
+>0 : 0
+
+        ExplicitSemicolon = 1, // statment terminated by an explicit semicolon
+>ExplicitSemicolon : ASTFlags
+>1 : 1
+
+        AutomaticSemicolon = 1 << 1, // statment terminated by an automatic semicolon
+>AutomaticSemicolon : ASTFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Writeable = 1 << 2,  // node is lhs that can be modified
+>Writeable : ASTFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Error = 1 << 3, // node has an error
+>Error : ASTFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        DotLHSPartial = 1 << 4, // node is the lhs of an incomplete dot expr at cursor
+>DotLHSPartial : ASTFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        DotLHS = 1 << 5, // node is the lhs of a dot expr
+>DotLHS : ASTFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        IsStatement = 1 << 6, // node is a statement
+>IsStatement : ASTFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        StrictMode = 1 << 7, // node is in the strict mode environment
+>StrictMode : ASTFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        PossibleOptionalParameter = 1 << 8,
+>PossibleOptionalParameter : ASTFlags
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        ClassBaseConstructorCall = 1 << 9,
+>ClassBaseConstructorCall : ASTFlags
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        OptionalName = 1 << 10,
+>OptionalName : ASTFlags
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        // REVIEW: This flag is to mark lambda nodes to note that the LParen of an expression has already been matched in the lambda header.
+        //         The flag is used to communicate this piece of information to the calling parseTerm, which intern will remove it.
+        //         Once we have a better way to associate information with nodes, this flag should not be used.
+        SkipNextRParen = 1 << 11, 
+>SkipNextRParen : ASTFlags
+>1 << 11 : number
+>1 : 1
+>11 : 11
+    }
+
+    export enum DeclFlags {
+>DeclFlags : DeclFlags
+
+        None = 0,
+>None : DeclFlags
+>0 : 0
+
+        Exported = 1,
+>Exported : DeclFlags
+>1 : 1
+
+        Private = 1 << 1,
+>Private : DeclFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Public = 1 << 2,
+>Public : DeclFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : DeclFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Static = 1 << 4,
+>Static : DeclFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        LocalStatic = 1 << 5,
+>LocalStatic : DeclFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        GetAccessor = 1 << 6,
+>GetAccessor : DeclFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        SetAccessor = 1 << 7,
+>SetAccessor : DeclFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+    }
+
+    export enum ModuleFlags {
+>ModuleFlags : ModuleFlags
+
+        None = 0,
+>None : ModuleFlags
+>0 : 0
+
+        Exported = 1,
+>Exported : ModuleFlags
+>1 : 1
+
+        Private = 1 << 1,
+>Private : ModuleFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Public = 1 << 2,
+>Public : ModuleFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : ModuleFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Static = 1 << 4,
+>Static : ModuleFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        LocalStatic = 1 << 5,
+>LocalStatic : ModuleFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        GetAccessor = 1 << 6,
+>GetAccessor : ModuleFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        SetAccessor = 1 << 7,
+>SetAccessor : ModuleFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        IsEnum = 1 << 8,
+>IsEnum : ModuleFlags
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        ShouldEmitModuleDecl = 1 << 9,
+>ShouldEmitModuleDecl : ModuleFlags
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        IsWholeFile = 1 << 10,
+>IsWholeFile : ModuleFlags
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        IsDynamic = 1 << 11,
+>IsDynamic : ModuleFlags
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        MustCaptureThis = 1 << 12,
+>MustCaptureThis : ModuleFlags
+>1 << 12 : number
+>1 : 1
+>12 : 12
+    }
+
+    export enum SymbolFlags {
+>SymbolFlags : SymbolFlags
+
+        None = 0,
+>None : SymbolFlags
+>0 : 0
+
+        Exported = 1,
+>Exported : SymbolFlags
+>1 : 1
+
+        Private = 1 << 1,
+>Private : SymbolFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Public = 1 << 2,
+>Public : SymbolFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : SymbolFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Static = 1 << 4,
+>Static : SymbolFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        LocalStatic = 1 << 5,
+>LocalStatic : SymbolFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        GetAccessor = 1 << 6,
+>GetAccessor : SymbolFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        SetAccessor = 1 << 7,
+>SetAccessor : SymbolFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        Property = 1 << 8,
+>Property : SymbolFlags
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        Readonly = 1 << 9,
+>Readonly : SymbolFlags
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        ModuleMember = 1 << 10,
+>ModuleMember : SymbolFlags
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        InterfaceMember = 1 << 11,
+>InterfaceMember : SymbolFlags
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        ClassMember = 1 << 12,
+>ClassMember : SymbolFlags
+>1 << 12 : number
+>1 : 1
+>12 : 12
+
+        BuiltIn = 1 << 13,
+>BuiltIn : SymbolFlags
+>1 << 13 : number
+>1 : 1
+>13 : 13
+
+        TypeSetDuringScopeAssignment = 1 << 14,
+>TypeSetDuringScopeAssignment : SymbolFlags
+>1 << 14 : number
+>1 : 1
+>14 : 14
+
+        Constant = 1 << 15,
+>Constant : SymbolFlags
+>1 << 15 : number
+>1 : 1
+>15 : 15
+
+        Optional = 1 << 16,
+>Optional : SymbolFlags
+>1 << 16 : number
+>1 : 1
+>16 : 16
+
+        RecursivelyReferenced = 1 << 17,
+>RecursivelyReferenced : SymbolFlags
+>1 << 17 : number
+>1 : 1
+>17 : 17
+
+        Bound = 1 << 18,
+>Bound : SymbolFlags
+>1 << 18 : number
+>1 : 1
+>18 : 18
+
+        CompilerGenerated = 1 << 19,
+>CompilerGenerated : SymbolFlags
+>1 << 19 : number
+>1 : 1
+>19 : 19
+    }
+
+    export enum VarFlags {
+>VarFlags : VarFlags
+
+        None = 0,
+>None : VarFlags
+>0 : 0
+
+        Exported = 1,
+>Exported : VarFlags
+>1 : 1
+
+        Private = 1 << 1,
+>Private : VarFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Public = 1 << 2,
+>Public : VarFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : VarFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Static = 1 << 4,
+>Static : VarFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        LocalStatic = 1 << 5,
+>LocalStatic : VarFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        GetAccessor = 1 << 6,
+>GetAccessor : VarFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        SetAccessor = 1 << 7,
+>SetAccessor : VarFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        AutoInit = 1 << 8,
+>AutoInit : VarFlags
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        Property = 1 << 9,
+>Property : VarFlags
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        Readonly = 1 << 10,
+>Readonly : VarFlags
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        Class = 1 << 11,
+>Class : VarFlags
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        ClassProperty = 1 << 12,
+>ClassProperty : VarFlags
+>1 << 12 : number
+>1 : 1
+>12 : 12
+
+        ClassBodyProperty = 1 << 13,
+>ClassBodyProperty : VarFlags
+>1 << 13 : number
+>1 : 1
+>13 : 13
+
+        ClassConstructorProperty = 1 << 14,
+>ClassConstructorProperty : VarFlags
+>1 << 14 : number
+>1 : 1
+>14 : 14
+
+        ClassSuperMustBeFirstCallInConstructor = 1 << 15,
+>ClassSuperMustBeFirstCallInConstructor : VarFlags
+>1 << 15 : number
+>1 : 1
+>15 : 15
+
+        Constant = 1 << 16,
+>Constant : VarFlags
+>1 << 16 : number
+>1 : 1
+>16 : 16
+
+        MustCaptureThis = 1 << 17,
+>MustCaptureThis : VarFlags
+>1 << 17 : number
+>1 : 1
+>17 : 17
+    }
+
+    export enum FncFlags {
+>FncFlags : FncFlags
+
+        None = 0,
+>None : FncFlags
+>0 : 0
+
+        Exported = 1,
+>Exported : FncFlags
+>1 : 1
+
+        Private = 1 << 1,
+>Private : FncFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        Public = 1 << 2,
+>Public : FncFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        Ambient = 1 << 3,
+>Ambient : FncFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        Static = 1 << 4,
+>Static : FncFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        LocalStatic = 1 << 5,
+>LocalStatic : FncFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        GetAccessor = 1 << 6,
+>GetAccessor : FncFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        SetAccessor = 1 << 7,
+>SetAccessor : FncFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+
+        Definition = 1 << 8,
+>Definition : FncFlags
+>1 << 8 : number
+>1 : 1
+>8 : 8
+
+        Signature = 1 << 9,
+>Signature : FncFlags
+>1 << 9 : number
+>1 : 1
+>9 : 9
+
+        Method = 1 << 10,
+>Method : FncFlags
+>1 << 10 : number
+>1 : 1
+>10 : 10
+
+        HasReturnExpression = 1 << 11,
+>HasReturnExpression : FncFlags
+>1 << 11 : number
+>1 : 1
+>11 : 11
+
+        CallMember = 1 << 12,
+>CallMember : FncFlags
+>1 << 12 : number
+>1 : 1
+>12 : 12
+
+        ConstructMember = 1 << 13,
+>ConstructMember : FncFlags
+>1 << 13 : number
+>1 : 1
+>13 : 13
+
+        HasSelfReference = 1 << 14,
+>HasSelfReference : FncFlags
+>1 << 14 : number
+>1 : 1
+>14 : 14
+
+        IsFatArrowFunction = 1 << 15,
+>IsFatArrowFunction : FncFlags
+>1 << 15 : number
+>1 : 1
+>15 : 15
+
+        IndexerMember = 1 << 16,
+>IndexerMember : FncFlags
+>1 << 16 : number
+>1 : 1
+>16 : 16
+
+        IsFunctionExpression = 1 << 17,
+>IsFunctionExpression : FncFlags
+>1 << 17 : number
+>1 : 1
+>17 : 17
+
+        ClassMethod = 1 << 18,
+>ClassMethod : FncFlags
+>1 << 18 : number
+>1 : 1
+>18 : 18
+
+        ClassPropertyMethodExported = 1 << 19,
+>ClassPropertyMethodExported : FncFlags
+>1 << 19 : number
+>1 : 1
+>19 : 19
+    }
+
+    export enum SignatureFlags {
+>SignatureFlags : SignatureFlags
+
+        None = 0,
+>None : SignatureFlags
+>0 : 0
+
+        IsIndexer = 1,
+>IsIndexer : SignatureFlags
+>1 : 1
+
+        IsStringIndexer = 1 << 1,
+>IsStringIndexer : SignatureFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        IsNumberIndexer = 1 << 2,
+>IsNumberIndexer : SignatureFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+    }
+
+    export function ToDeclFlags(fncFlags: FncFlags) : DeclFlags;
+>ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
+>fncFlags : FncFlags
+
+    export function ToDeclFlags(varFlags: VarFlags) : DeclFlags;
+>ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
+>varFlags : VarFlags
+
+    export function ToDeclFlags(symFlags: SymbolFlags): DeclFlags;
+>ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
+>symFlags : SymbolFlags
+
+    export function ToDeclFlags(moduleFlags: ModuleFlags): DeclFlags;
+>ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
+>moduleFlags : ModuleFlags
+
+    export function ToDeclFlags(fncOrVarOrSymbolOrModuleFlags: any) {
+>ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
+>fncOrVarOrSymbolOrModuleFlags : any
+
+        return <DeclFlags>fncOrVarOrSymbolOrModuleFlags;
+><DeclFlags>fncOrVarOrSymbolOrModuleFlags : DeclFlags
+>fncOrVarOrSymbolOrModuleFlags : any
+    }
+
+    export enum TypeFlags {
+>TypeFlags : TypeFlags
+
+        None = 0,
+>None : TypeFlags
+>0 : 0
+
+        HasImplementation = 1,
+>HasImplementation : TypeFlags
+>1 : 1
+
+        HasSelfReference = 1 << 1,
+>HasSelfReference : TypeFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        MergeResult = 1 << 2,
+>MergeResult : TypeFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        IsEnum = 1 << 3,
+>IsEnum : TypeFlags
+>1 << 3 : number
+>1 : 1
+>3 : 3
+
+        BuildingName = 1 << 4,
+>BuildingName : TypeFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        HasBaseType = 1 << 5,
+>HasBaseType : TypeFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        HasBaseTypeOfObject = 1 << 6,
+>HasBaseTypeOfObject : TypeFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+
+        IsClass = 1 << 7,
+>IsClass : TypeFlags
+>1 << 7 : number
+>1 : 1
+>7 : 7
+    }
+
+    export enum TypeRelationshipFlags {
+>TypeRelationshipFlags : TypeRelationshipFlags
+
+        SuccessfulComparison = 0,
+>SuccessfulComparison : TypeRelationshipFlags
+>0 : 0
+
+        SourceIsNullTargetIsVoidOrUndefined = 1,
+>SourceIsNullTargetIsVoidOrUndefined : TypeRelationshipFlags
+>1 : 1
+
+        RequiredPropertyIsMissing = 1 << 1,
+>RequiredPropertyIsMissing : TypeRelationshipFlags
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+        IncompatibleSignatures = 1 << 2,
+>IncompatibleSignatures : TypeRelationshipFlags
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+        SourceSignatureHasTooManyParameters = 3,
+>SourceSignatureHasTooManyParameters : TypeRelationshipFlags
+>3 : 3
+
+        IncompatibleReturnTypes = 1 << 4,
+>IncompatibleReturnTypes : TypeRelationshipFlags
+>1 << 4 : number
+>1 : 1
+>4 : 4
+
+        IncompatiblePropertyTypes = 1 << 5,
+>IncompatiblePropertyTypes : TypeRelationshipFlags
+>1 << 5 : number
+>1 : 1
+>5 : 5
+
+        IncompatibleParameterTypes = 1 << 6,
+>IncompatibleParameterTypes : TypeRelationshipFlags
+>1 << 6 : number
+>1 : 1
+>6 : 6
+    }
+
+    export enum CodeGenTarget {
+>CodeGenTarget : CodeGenTarget
+
+        ES3 = 0,
+>ES3 : CodeGenTarget.ES3
+>0 : 0
+
+        ES5 = 1,
+>ES5 : CodeGenTarget.ES5
+>1 : 1
+    }
+
+    export enum ModuleGenTarget {
+>ModuleGenTarget : ModuleGenTarget
+
+        Synchronous = 0,
+>Synchronous : ModuleGenTarget
+>0 : 0
+
+        Asynchronous = 1,
+>Asynchronous : ModuleGenTarget
+>1 : 1
+
+        Local = 1 << 1,
+>Local : ModuleGenTarget
+>1 << 1 : number
+>1 : 1
+>1 : 1
+    }
+
+    // Compiler defaults to generating ES5-compliant code for
+    //  - getters and setters
+    export var codeGenTarget: CodeGenTarget = CodeGenTarget.ES3;
+>codeGenTarget : CodeGenTarget
+>CodeGenTarget.ES3 : CodeGenTarget.ES3
+>CodeGenTarget : typeof CodeGenTarget
+>ES3 : CodeGenTarget.ES3
+
+    export var moduleGenTarget: ModuleGenTarget = ModuleGenTarget.Synchronous;
+>moduleGenTarget : ModuleGenTarget
+>ModuleGenTarget.Synchronous : ModuleGenTarget
+>ModuleGenTarget : typeof ModuleGenTarget
+>Synchronous : ModuleGenTarget
+
+    export var optimizeModuleCodeGen = true;
+>optimizeModuleCodeGen : boolean
+>true : true
+
+    export function flagsToString(e, flags: number): string {
+>flagsToString : (e: any, flags: number) => string
+>e : any
+>flags : number
+
+        var builder = "";
+>builder : string
+>"" : ""
+
+        for (var i = 1; i < (1 << 31) ; i = i << 1) {
+>i : number
+>1 : 1
+>i < (1 << 31) : boolean
+>i : number
+>(1 << 31) : number
+>1 << 31 : number
+>1 : 1
+>31 : 31
+>i = i << 1 : number
+>i : number
+>i << 1 : number
+>i : number
+>1 : 1
+
+            if ((flags & i) != 0) {
+>(flags & i) != 0 : boolean
+>(flags & i) : number
+>flags & i : number
+>flags : number
+>i : number
+>0 : 0
+
+                for (var k in e) {
+>k : string
+>e : any
+
+                    if (e[k] == i) {
+>e[k] == i : boolean
+>e[k] : any
+>e : any
+>k : string
+>i : number
+
+                        if (builder.length > 0) {
+>builder.length > 0 : boolean
+>builder.length : number
+>builder : string
+>length : number
+>0 : 0
+
+                            builder += "|";
+>builder += "|" : string
+>builder : string
+>"|" : "|"
+                        }
+                        builder += k;
+>builder += k : string
+>builder : string
+>k : string
+
+                        break;
+                    }
+                }
+            }
+        }
+        return builder;
+>builder : string
+    }
+
+}

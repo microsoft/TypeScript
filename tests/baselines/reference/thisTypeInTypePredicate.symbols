@@ -1,0 +1,18 @@
+=== tests/cases/conformance/types/thisType/thisTypeInTypePredicate.ts ===
+declare function filter<S>(f: (this: void, x: any) => x is S): S[];
+>filter : Symbol(filter, Decl(thisTypeInTypePredicate.ts, 0, 0))
+>S : Symbol(S, Decl(thisTypeInTypePredicate.ts, 0, 24))
+>f : Symbol(f, Decl(thisTypeInTypePredicate.ts, 0, 27))
+>this : Symbol(this, Decl(thisTypeInTypePredicate.ts, 0, 31))
+>x : Symbol(x, Decl(thisTypeInTypePredicate.ts, 0, 42))
+>x : Symbol(x, Decl(thisTypeInTypePredicate.ts, 0, 42))
+>S : Symbol(S, Decl(thisTypeInTypePredicate.ts, 0, 24))
+>S : Symbol(S, Decl(thisTypeInTypePredicate.ts, 0, 24))
+
+const numbers = filter<number>((x): x is number => 'number' == typeof x)
+>numbers : Symbol(numbers, Decl(thisTypeInTypePredicate.ts, 1, 5))
+>filter : Symbol(filter, Decl(thisTypeInTypePredicate.ts, 0, 0))
+>x : Symbol(x, Decl(thisTypeInTypePredicate.ts, 1, 32))
+>x : Symbol(x, Decl(thisTypeInTypePredicate.ts, 1, 32))
+>x : Symbol(x, Decl(thisTypeInTypePredicate.ts, 1, 32))
+

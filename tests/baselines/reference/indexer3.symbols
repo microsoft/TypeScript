@@ -1,0 +1,11 @@
+=== tests/cases/compiler/indexer3.ts ===
+var dateMap: { [x: string]: Date; } = {}
+>dateMap : Symbol(dateMap, Decl(indexer3.ts, 0, 3))
+>x : Symbol(x, Decl(indexer3.ts, 0, 16))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var r: Date = dateMap["hello"] // result type includes indexer using BCT
+>r : Symbol(r, Decl(indexer3.ts, 1, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>dateMap : Symbol(dateMap, Decl(indexer3.ts, 0, 3))
+

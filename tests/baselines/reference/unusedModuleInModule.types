@@ -1,0 +1,5 @@
+=== tests/cases/compiler/unusedModuleInModule.ts ===
+module A {
+No type information for this code.    module B {}
+No type information for this code.}
+No type information for this code.

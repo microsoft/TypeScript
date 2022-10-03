@@ -1,0 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement1.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement1.d.ts(1,9): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement1.d.ts (2 errors) ====
+    var v = 1;
+    ~~~
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+            ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.

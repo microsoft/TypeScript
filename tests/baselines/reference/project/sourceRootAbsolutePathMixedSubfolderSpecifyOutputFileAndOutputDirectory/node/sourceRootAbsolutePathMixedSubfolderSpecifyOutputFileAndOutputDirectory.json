@@ -1,0 +1,25 @@
+{
+    "scenario": "[Sourcemap]/[Sourceroot-AbsolutePath]:outputdir_mixed_subfolder: specify outputFile and outputDirectory",
+    "projectRoot": "tests/cases/projects/outputdir_mixed_subfolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/outAndOutDirFile.js",
+    "outDir": "outdir/outAndOutDirFolder",
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true,
+    "sourceRoot": "tests/cases/projects/outputdir_mixed_subfolder/src",
+    "resolveSourceRoot": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "ref/m1.ts",
+        "ref/m2.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "bin/outAndOutDirFile.js.map",
+        "bin/outAndOutDirFile.js",
+        "bin/outAndOutDirFile.d.ts"
+    ]
+}

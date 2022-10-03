@@ -1,0 +1,61 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts ===
+var x: any = { p: 0 };
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+>p : Symbol(p, Decl(typeGuardsWithAny.ts, 0, 14))
+
+if (x instanceof Object) {
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x.p; // No error, type any unaffected by instanceof type guard
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+else {
+    x.p; // No error, type any unaffected by instanceof type guard
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+
+if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+
+    x.p; // Error, type any narrowed by primitive type check
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+else {
+    x.p; // No error, type unaffected in this branch
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+
+if (typeof x === "number") {
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+
+    x.p; // Error, type any narrowed by primitive type check
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+else {
+    x.p; // No error, type unaffected in this branch
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+
+if (typeof x === "boolean") {
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+
+    x.p; // Error, type any narrowed by primitive type check
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+else {
+    x.p; // No error, type unaffected in this branch
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+
+if (typeof x === "object") {
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+
+    x.p; // No error, type any only affected by primitive type check
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+else {
+    x.p; // No error, type unaffected in this branch
+>x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
+}
+

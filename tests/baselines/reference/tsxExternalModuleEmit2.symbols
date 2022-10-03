@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsx/modules.d.ts ===
+declare module 'mod' {
+>'mod' : Symbol("mod", Decl(modules.d.ts, 0, 0))
+
+  var y: any;
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
+
+  export default y;
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
+}
+
+=== tests/cases/conformance/jsx/app.tsx ===
+import Main from 'mod';
+>Main : Symbol(Main, Decl(app.tsx, 0, 6))
+
+declare var Foo, React;
+>Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+>React : Symbol(React, Decl(app.tsx, 1, 16))
+
+// Should see mod_1['default'] in emit here
+<Foo handler={Main}></Foo>;
+>Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+>handler : Symbol(handler, Decl(app.tsx, 3, 4))
+>Main : Symbol(Main, Decl(app.tsx, 0, 6))
+>Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+
+// Should see mod_1['default'] in emit here
+<Foo {...Main}></Foo>;
+>Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+>Main : Symbol(Main, Decl(app.tsx, 0, 6))
+>Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+
+

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyAndFunctionWithSameName.ts ===
+class C {
+>C : Symbol(C, Decl(staticPropertyAndFunctionWithSameName.ts, 0, 0))
+
+    static f: number;
+>f : Symbol(C.f, Decl(staticPropertyAndFunctionWithSameName.ts, 0, 9))
+
+    f: number;
+>f : Symbol(C.f, Decl(staticPropertyAndFunctionWithSameName.ts, 1, 21))
+}
+
+class D {
+>D : Symbol(D, Decl(staticPropertyAndFunctionWithSameName.ts, 3, 1))
+
+    static f: number;
+>f : Symbol(D.f, Decl(staticPropertyAndFunctionWithSameName.ts, 5, 9))
+
+    f() { }
+>f : Symbol(D.f, Decl(staticPropertyAndFunctionWithSameName.ts, 6, 21))
+}

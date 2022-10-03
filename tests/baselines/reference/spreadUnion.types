@@ -1,0 +1,42 @@
+=== tests/cases/conformance/types/spread/spreadUnion.ts ===
+var union: { a: number } | { b: string };
+>union : { a: number; } | { b: string; }
+>a : number
+>b : string
+
+var o3: { a: number } | { b: string };
+>o3 : { a: number; } | { b: string; }
+>a : number
+>b : string
+
+var o3 =  { ...union };
+>o3 : { a: number; } | { b: string; }
+>{ ...union } : { a: number; } | { b: string; }
+>union : { a: number; } | { b: string; }
+
+var o4: { a: boolean } | { b: string , a: boolean};
+>o4 : { a: boolean; } | { b: string; a: boolean; }
+>a : boolean
+>b : string
+>a : boolean
+
+var o4 =  { ...union, a: false };
+>o4 : { a: boolean; } | { b: string; a: boolean; }
+>{ ...union, a: false } : { a: boolean; } | { a: boolean; b: string; }
+>union : { a: number; } | { b: string; }
+>a : boolean
+>false : false
+
+var o5: { a: number } | { b: string } | { a: number, b: string };
+>o5 : { a: number; } | { b: string; } | { a: number; b: string; }
+>a : number
+>b : string
+>a : number
+>b : string
+
+var o5 =  { ...union, ...union };
+>o5 : { a: number; } | { b: string; } | { a: number; b: string; }
+>{ ...union, ...union } : { a: number; } | { b: string; a: number; } | { a: number; b: string; } | { b: string; }
+>union : { a: number; } | { b: string; }
+>union : { a: number; } | { b: string; }
+

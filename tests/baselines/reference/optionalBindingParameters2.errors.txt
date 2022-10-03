@@ -1,0 +1,21 @@
+tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts(1,14): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts(7,7): error TS2322: Type 'boolean' is not assignable to type 'string'.
+tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts(7,23): error TS2322: Type 'string' is not assignable to type 'boolean'.
+
+
+==== tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts (3 errors) ====
+    function foo({ x, y, z }?: { x: string; y: number; z: boolean }) {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+    
+    }
+    
+    foo({ x: "", y: 0, z: false });
+    
+    foo({ x: false, y: 0, z: "" });
+          ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts:1:30: The expected type comes from property 'x' which is declared here on type '{ x: string; y: number; z: boolean; }'
+                          ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts:1:52: The expected type comes from property 'z' which is declared here on type '{ x: string; y: number; z: boolean; }'

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/intersectionOfMixinConstructorTypeAndNonConstructorType.ts ===
+// Repro for #17388
+
+declare let x: {foo: undefined} & {new(...args: any[]): any};
+>x : Symbol(x, Decl(intersectionOfMixinConstructorTypeAndNonConstructorType.ts, 2, 11))
+>foo : Symbol(foo, Decl(intersectionOfMixinConstructorTypeAndNonConstructorType.ts, 2, 16))
+>args : Symbol(args, Decl(intersectionOfMixinConstructorTypeAndNonConstructorType.ts, 2, 39))
+
+new x();
+>x : Symbol(x, Decl(intersectionOfMixinConstructorTypeAndNonConstructorType.ts, 2, 11))
+

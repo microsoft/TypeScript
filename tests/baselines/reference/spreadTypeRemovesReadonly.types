@@ -1,0 +1,24 @@
+=== tests/cases/compiler/spreadTypeRemovesReadonly.ts ===
+interface ReadonlyData {
+    readonly value: string;
+>value : string
+}
+
+const data: ReadonlyData = { value: 'foo' };
+>data : ReadonlyData
+>{ value: 'foo' } : { value: string; }
+>value : string
+>'foo' : "foo"
+
+const clone = { ...data };
+>clone : { value: string; }
+>{ ...data } : { value: string; }
+>data : ReadonlyData
+
+clone.value = 'bar';
+>clone.value = 'bar' : "bar"
+>clone.value : string
+>clone : { value: string; }
+>value : string
+>'bar' : "bar"
+

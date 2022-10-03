@@ -1,0 +1,19 @@
+=== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts ===
+function bar() {
+>bar : Symbol(bar, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 0, 0))
+
+    var x = {
+>x : Symbol(x, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 1, 7))
+
+        get _extraOccluded() {
+>_extraOccluded : Symbol(_extraOccluded, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 1, 13))
+
+            var occluded = 0;
+>occluded : Symbol(occluded, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 3, 15))
+
+            return occluded;
+>occluded : Symbol(occluded, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 3, 15))
+
+        },
+    }
+}

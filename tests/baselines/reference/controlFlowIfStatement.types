@@ -1,0 +1,161 @@
+=== tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
+let x: string | number | boolean | RegExp;
+>x : string | number | boolean | RegExp
+
+let cond: boolean;
+>cond : boolean
+
+x = /a/;
+>x = /a/ : RegExp
+>x : string | number | boolean | RegExp
+>/a/ : RegExp
+
+if (x /* RegExp */, (x = true)) {
+>x /* RegExp */, (x = true) : true
+>x : RegExp
+>(x = true) : true
+>x = true : true
+>x : string | number | boolean | RegExp
+>true : true
+
+    x; // boolean
+>x : true
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean | RegExp
+>"" : ""
+}
+else {
+    x; // boolean
+>x : true
+
+    x = 42;
+>x = 42 : 42
+>x : string | number | boolean | RegExp
+>42 : 42
+}
+x; // string | number
+>x : string | number
+
+function a() {
+>a : () => void
+
+    let x: string | number;
+>x : string | number
+
+    if (cond) {
+>cond : boolean
+
+        x = 42;
+>x = 42 : 42
+>x : string | number
+>42 : 42
+    }
+    else {
+        x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+
+        return;
+    }
+    x; // number
+>x : number
+}
+function b() {
+>b : () => void
+
+    let x: string | number;
+>x : string | number
+
+    if (cond) {
+>cond : boolean
+
+        x = 42;
+>x = 42 : 42
+>x : string | number
+>42 : 42
+
+        throw "";
+>"" : ""
+    }
+    else {
+        x = "";
+>x = "" : ""
+>x : string | number
+>"" : ""
+    }
+    x; // string
+>x : string
+}
+function c<T>(data: string | T): T {
+>c : <T>(data: string | T) => T
+>data : string | T
+
+    if (typeof data === 'string') {
+>typeof data === 'string' : boolean
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>data : string | T
+>'string' : "string"
+
+        return JSON.parse(data);
+>JSON.parse(data) : any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>JSON : JSON
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>data : string | (T & string)
+    }
+    else {
+        return data;
+>data : T
+    }
+}
+function d<T extends string>(data: string | T): never {
+>d : <T extends string>(data: string | T) => never
+>data : string | T
+
+    if (typeof data === 'string') {
+>typeof data === 'string' : boolean
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>data : string | T
+>'string' : "string"
+
+        throw new Error('will always happen');
+>new Error('will always happen') : Error
+>Error : ErrorConstructor
+>'will always happen' : "will always happen"
+    }
+    else {
+        return data;
+>data : never
+    }
+}
+
+interface I<T> {
+  p: T;
+>p : T
+}
+function e(x: I<"A" | "B">) {
+>e : (x: I<"A" | "B">) => void
+>x : I<"A" | "B">
+
+    if (x.p === "A") {
+>x.p === "A" : boolean
+>x.p : "A" | "B"
+>x : I<"A" | "B">
+>p : "A" | "B"
+>"A" : "A"
+
+        let a: "A" = (null as unknown as typeof x.p)
+>a : "A"
+>(null as unknown as typeof x.p) : "A"
+>null as unknown as typeof x.p : "A"
+>null as unknown : unknown
+>null : null
+>x.p : "A"
+>x : I<"A" | "B">
+>p : "A"
+    }
+}
+

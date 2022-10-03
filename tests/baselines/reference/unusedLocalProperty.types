@@ -1,0 +1,30 @@
+=== tests/cases/compiler/unusedLocalProperty.ts ===
+declare var console: { log(msg: any): void; }
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>msg : any
+
+class Animal {
+>Animal : Animal
+
+    constructor(private species: string) {
+>species : string
+    }
+
+    printSpecies() {
+>printSpecies : () => void
+
+        let { species } = this;
+>species : string
+>this : this
+
+        console.log(species);
+>console.log(species) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>species : string
+    }
+}
+
+

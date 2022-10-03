@@ -1,0 +1,45 @@
+tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts(13,11): error TS2430: Interface 'E' incorrectly extends interface 'D'.
+  'string' index signatures are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts(28,11): error TS2430: Interface 'E2' incorrectly extends interface 'D2'.
+  'number' index signatures are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts (2 errors) ====
+    // string indexer tests
+    interface A {
+        [s: string]: number;
+    }
+    interface B {
+        [s: string]: number;
+    }
+    interface C extends A, B { } // ok
+    
+    interface D {
+        [s: string]: string;
+    }
+    interface E extends A, D { } // error
+              ~
+!!! error TS2430: Interface 'E' incorrectly extends interface 'D'.
+!!! error TS2430:   'string' index signatures are incompatible.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
+    
+    
+    // Same tests for number indexer
+    interface A2 {
+        [s: number]: number;
+    }
+    interface B2 {
+        [s: number]: number;
+    }
+    interface C2 extends A2, B2 { } // ok
+    
+    interface D2 {
+        [s: number]: string;
+    }
+    interface E2 extends A2, D2 { } // error
+              ~~
+!!! error TS2430: Interface 'E2' incorrectly extends interface 'D2'.
+!!! error TS2430:   'number' index signatures are incompatible.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.

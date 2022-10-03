@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget4.ts ===
+target1:
+No type information for this code.target2:
+No type information for this code.while (true) {
+No type information for this code.  continue target2;
+No type information for this code.}
+No type information for this code.

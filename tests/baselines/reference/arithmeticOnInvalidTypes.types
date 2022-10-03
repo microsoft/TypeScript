@@ -1,0 +1,31 @@
+=== tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
+var x: Number;
+>x : Number
+
+var y: Number;
+>y : Number
+
+var z = x + y;
+>z : any
+>x + y : any
+>x : Number
+>y : Number
+
+var z2 = x - y;
+>z2 : number
+>x - y : number
+>x : Number
+>y : Number
+
+var z3 = x * y;
+>z3 : number
+>x * y : number
+>x : Number
+>y : Number
+
+var z4 = x / y;
+>z4 : number
+>x / y : number
+>x : Number
+>y : Number
+

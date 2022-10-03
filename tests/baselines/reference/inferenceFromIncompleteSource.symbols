@@ -1,0 +1,37 @@
+=== tests/cases/compiler/inferenceFromIncompleteSource.ts ===
+// Repro from #42030
+
+interface ListProps<T, K extends keyof T> {
+>ListProps : Symbol(ListProps, Decl(inferenceFromIncompleteSource.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 2, 20))
+>K : Symbol(K, Decl(inferenceFromIncompleteSource.ts, 2, 22))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 2, 20))
+
+  items: T[];
+>items : Symbol(ListProps.items, Decl(inferenceFromIncompleteSource.ts, 2, 43))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 2, 20))
+
+  itemKey: K;
+>itemKey : Symbol(ListProps.itemKey, Decl(inferenceFromIncompleteSource.ts, 3, 13))
+>K : Symbol(K, Decl(inferenceFromIncompleteSource.ts, 2, 22))
+
+  prop: number;
+>prop : Symbol(ListProps.prop, Decl(inferenceFromIncompleteSource.ts, 4, 13))
+}
+
+declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;
+>Component : Symbol(Component, Decl(inferenceFromIncompleteSource.ts, 8, 13))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 8, 26))
+>K : Symbol(K, Decl(inferenceFromIncompleteSource.ts, 8, 28))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 8, 26))
+>x : Symbol(x, Decl(inferenceFromIncompleteSource.ts, 8, 48))
+>ListProps : Symbol(ListProps, Decl(inferenceFromIncompleteSource.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 8, 26))
+>K : Symbol(K, Decl(inferenceFromIncompleteSource.ts, 8, 28))
+
+Component({items: [{name:' string'}], itemKey: 'name' });
+>Component : Symbol(Component, Decl(inferenceFromIncompleteSource.ts, 8, 13))
+>items : Symbol(items, Decl(inferenceFromIncompleteSource.ts, 10, 11))
+>name : Symbol(name, Decl(inferenceFromIncompleteSource.ts, 10, 20))
+>itemKey : Symbol(itemKey, Decl(inferenceFromIncompleteSource.ts, 10, 37))
+

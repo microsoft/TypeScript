@@ -1,0 +1,95 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(21,12): error TS1029: 'private' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(22,12): error TS1029: 'private' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(23,12): error TS1029: 'private' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(24,12): error TS1029: 'private' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(26,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(27,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(28,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(29,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(31,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(32,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(33,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(34,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(39,13): error TS1028: Accessibility modifier already seen.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(40,12): error TS1028: Accessibility modifier already seen.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(41,13): error TS1028: Accessibility modifier already seen.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(42,12): error TS1028: Accessibility modifier already seen.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (16 errors) ====
+    // No errors
+    class C {
+        private static privateProperty;
+        private static privateMethod() { }
+        private static get privateGetter() { return 0; }
+        private static set privateSetter(a: number) { }
+    
+        protected static protectedProperty;
+        protected static protectedMethod() { }
+        protected static get protectedGetter() { return 0; }
+        protected static set protectedSetter(a: number) { }
+    
+        public static publicProperty;
+        public static publicMethod() { }
+        public static get publicGetter() { return 0; }
+        public static set publicSetter(a: number) { }
+    }
+    
+    // Errors, accessibility modifiers must precede static
+    class D {
+        static private privateProperty;
+               ~~~~~~~
+!!! error TS1029: 'private' modifier must precede 'static' modifier.
+        static private privateMethod() { }
+               ~~~~~~~
+!!! error TS1029: 'private' modifier must precede 'static' modifier.
+        static private get privateGetter() { return 0; }
+               ~~~~~~~
+!!! error TS1029: 'private' modifier must precede 'static' modifier.
+        static private set privateSetter(a: number) { }
+               ~~~~~~~
+!!! error TS1029: 'private' modifier must precede 'static' modifier.
+    
+        static protected protectedProperty;
+               ~~~~~~~~~
+!!! error TS1029: 'protected' modifier must precede 'static' modifier.
+        static protected protectedMethod() { }
+               ~~~~~~~~~
+!!! error TS1029: 'protected' modifier must precede 'static' modifier.
+        static protected get protectedGetter() { return 0; }
+               ~~~~~~~~~
+!!! error TS1029: 'protected' modifier must precede 'static' modifier.
+        static protected set protectedSetter(a: number) { }
+               ~~~~~~~~~
+!!! error TS1029: 'protected' modifier must precede 'static' modifier.
+    
+        static public publicProperty;
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+        static public publicMethod() { }
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+        static public get publicGetter() { return 0; }
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+        static public set publicSetter(a: number) { }
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
+    }
+    
+    // Errors, multiple accessibility modifier
+    class E {
+        private public protected property;
+                ~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+        public protected method() { }
+               ~~~~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+        private protected get getter() { return 0; }
+                ~~~~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+        public public set setter(a: number) { }
+               ~~~~~~
+!!! error TS1028: Accessibility modifier already seen.
+    }
+    

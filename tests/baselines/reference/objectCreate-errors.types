@@ -1,0 +1,70 @@
+=== tests/cases/compiler/objectCreate-errors.ts ===
+var e1 = Object.create(1);               // Error
+>e1 : any
+>Object.create(1) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>1 : 1
+
+var e2 = Object.create("string");        // Error
+>e2 : any
+>Object.create("string") : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>"string" : "string"
+
+var e3 = Object.create(false);           // Error
+>e3 : any
+>Object.create(false) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>false : false
+
+var e4 = Object.create(undefined);       // Error
+>e4 : any
+>Object.create(undefined) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>undefined : undefined
+
+ 
+var e5 = Object.create(1, {});           // Error
+>e5 : any
+>Object.create(1, {}) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>1 : 1
+>{} : {}
+
+var e6 = Object.create("string", {});    // Error
+>e6 : any
+>Object.create("string", {}) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>"string" : "string"
+>{} : {}
+
+var e7 = Object.create(false, {});       // Error
+>e7 : any
+>Object.create(false, {}) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>false : false
+>{} : {}
+
+var e8 = Object.create(undefined, {});   // Error
+>e8 : any
+>Object.create(undefined, {}) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>undefined : undefined
+>{} : {}
+

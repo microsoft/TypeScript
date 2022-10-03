@@ -1,0 +1,84 @@
+=== tests/cases/compiler/castTest.ts ===
+var x : any = 0;
+>x : Symbol(x, Decl(castTest.ts, 0, 3))
+
+var z = <number> x;
+>z : Symbol(z, Decl(castTest.ts, 1, 3))
+>x : Symbol(x, Decl(castTest.ts, 0, 3))
+
+var y = x + z;
+>y : Symbol(y, Decl(castTest.ts, 2, 3))
+>x : Symbol(x, Decl(castTest.ts, 0, 3))
+>z : Symbol(z, Decl(castTest.ts, 1, 3))
+
+var a = <any>0;
+>a : Symbol(a, Decl(castTest.ts, 4, 3))
+
+var b = <boolean>true;
+>b : Symbol(b, Decl(castTest.ts, 5, 3))
+
+var s = <string>"";
+>s : Symbol(s, Decl(castTest.ts, 6, 3))
+
+var ar = <any[]>null;
+>ar : Symbol(ar, Decl(castTest.ts, 8, 3))
+
+var f = <(res : number) => void>null;
+>f : Symbol(f, Decl(castTest.ts, 10, 3))
+>res : Symbol(res, Decl(castTest.ts, 10, 10))
+
+declare class Point
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+{
+    x: number;
+>x : Symbol(Point.x, Decl(castTest.ts, 13, 1))
+
+    y: number;
+>y : Symbol(Point.y, Decl(castTest.ts, 14, 14))
+
+    add(dx: number, dy: number): Point;
+>add : Symbol(Point.add, Decl(castTest.ts, 15, 14))
+>dx : Symbol(dx, Decl(castTest.ts, 16, 8))
+>dy : Symbol(dy, Decl(castTest.ts, 16, 19))
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+
+    mult(p: Point): Point;
+>mult : Symbol(Point.mult, Decl(castTest.ts, 16, 39))
+>p : Symbol(p, Decl(castTest.ts, 17, 9))
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+
+    constructor(x: number, y: number);
+>x : Symbol(x, Decl(castTest.ts, 18, 16))
+>y : Symbol(y, Decl(castTest.ts, 18, 26))
+}
+
+var p_cast = <Point> ({
+>p_cast : Symbol(p_cast, Decl(castTest.ts, 21, 3))
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+
+    x: 0,
+>x : Symbol(x, Decl(castTest.ts, 21, 23))
+
+    y: 0,
+>y : Symbol(y, Decl(castTest.ts, 22, 9))
+
+    add: function(dx, dy) {
+>add : Symbol(add, Decl(castTest.ts, 23, 9))
+>dx : Symbol(dx, Decl(castTest.ts, 24, 18))
+>dy : Symbol(dy, Decl(castTest.ts, 24, 21))
+
+        return new Point(this.x + dx, this.y + dy);
+>Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+>dx : Symbol(dx, Decl(castTest.ts, 24, 18))
+>dy : Symbol(dy, Decl(castTest.ts, 24, 21))
+
+    },
+    mult: function(p) { return p; }
+>mult : Symbol(mult, Decl(castTest.ts, 26, 6))
+>p : Symbol(p, Decl(castTest.ts, 27, 19))
+>p : Symbol(p, Decl(castTest.ts, 27, 19))
+
+})
+
+

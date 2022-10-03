@@ -1,0 +1,7 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/declarationEmitReadonly.ts ===
+class C {
+>C : Symbol(C, Decl(declarationEmitReadonly.ts, 0, 0))
+
+    constructor(readonly x: number) {}
+>x : Symbol(C.x, Decl(declarationEmitReadonly.ts, 1, 16))
+}

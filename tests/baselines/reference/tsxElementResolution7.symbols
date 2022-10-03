@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements { }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+}
+
+module my {
+>my : Symbol(my, Decl(file.tsx, 3, 1))
+
+    export var div: any;
+>div : Symbol(div, Decl(file.tsx, 6, 14))
+}
+// OK
+<my.div n='x' />;
+>my.div : Symbol(my.div, Decl(file.tsx, 6, 14))
+>my : Symbol(my, Decl(file.tsx, 3, 1))
+>div : Symbol(my.div, Decl(file.tsx, 6, 14))
+>n : Symbol(n, Decl(file.tsx, 9, 7))
+
+// Error
+<my.other />;
+>my : Symbol(my, Decl(file.tsx, 3, 1))
+
+module q {
+>q : Symbol(q, Decl(file.tsx, 11, 13))
+
+    import mine = my;
+>mine : Symbol(mine, Decl(file.tsx, 13, 10))
+>my : Symbol(mine, Decl(file.tsx, 3, 1))
+
+    // OK
+    <mine.div n='x' />;
+>mine.div : Symbol(mine.div, Decl(file.tsx, 6, 14))
+>mine : Symbol(mine, Decl(file.tsx, 13, 10))
+>div : Symbol(mine.div, Decl(file.tsx, 6, 14))
+>n : Symbol(n, Decl(file.tsx, 16, 13))
+
+    // Error
+    <mine.non />;
+>mine : Symbol(mine, Decl(file.tsx, 13, 10))
+}
+

@@ -1,0 +1,13 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass8.ts ===
+declare function dec(): (target: Function, paramIndex: number) => void;
+>dec : Symbol(dec, Decl(decoratorOnClass8.ts, 0, 0))
+>target : Symbol(target, Decl(decoratorOnClass8.ts, 0, 25))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>paramIndex : Symbol(paramIndex, Decl(decoratorOnClass8.ts, 0, 42))
+
+@dec()
+>dec : Symbol(dec, Decl(decoratorOnClass8.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClass8.ts, 0, 71))
+}

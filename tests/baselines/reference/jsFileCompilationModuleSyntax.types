@@ -1,0 +1,3 @@
+=== tests/cases/compiler/a.js ===
+module M { }
+No type information for this code.

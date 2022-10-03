@@ -1,0 +1,10 @@
+=== tests/cases/compiler/recursiveSpecializationOfExtendedTypeWithError.ts ===
+interface HTMLSelectElement {
+    options: HTMLSelectElement;
+>options : HTMLSelectElement
+
+    <A>(name: A): any;
+>name : A
+}
+ 
+

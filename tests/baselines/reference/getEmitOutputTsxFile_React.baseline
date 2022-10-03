@@ -1,0 +1,33 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile1.js.map
+{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":[],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,GAAW,CAAC,CAAC;AAClB;IAAA;IAGA,CAAC;IAAD,UAAC;AAAD,CAAC,AAHD,IAGC"}
+FileName : /tests/cases/fourslash/inputFile1.js
+// regular ts file
+var t = 5;
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
+//# sourceMappingURL=inputFile1.js.map
+FileName : /tests/cases/fourslash/inputFile1.d.ts
+declare var t: number;
+declare class Bar {
+    x: string;
+    y: number;
+}
+
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile2.js.map
+{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["inputFile2.tsx"],"names":[],"mappings":"AACA,IAAI,CAAC,GAAG,QAAQ,CAAC;AACjB,IAAI,CAAC,GAAG,6BAAK,IAAI,EAAG,CAAC,GAAI,CAAA"}
+FileName : /tests/cases/fourslash/inputFile2.js
+var y = "my div";
+var x = React.createElement("div", { name: y });
+//# sourceMappingURL=inputFile2.js.map
+FileName : /tests/cases/fourslash/inputFile2.d.ts
+declare var React: any;
+declare var y: string;
+declare var x: any;
+

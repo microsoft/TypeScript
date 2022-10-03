@@ -1,0 +1,221 @@
+=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+// Repro from #14091
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(typeVariableTypeGuards.ts, 0, 0))
+
+    foo(): void
+>foo : Symbol(Foo.foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+}
+
+class A<P extends Partial<Foo>> {
+>A : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
+>P : Symbol(P, Decl(typeVariableTypeGuards.ts, 6, 8))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(typeVariableTypeGuards.ts, 0, 0))
+
+    constructor(public props: Readonly<P>) {}
+>props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(typeVariableTypeGuards.ts, 6, 8))
+
+    doSomething() {
+>doSomething : Symbol(A.doSomething, Decl(typeVariableTypeGuards.ts, 7, 45))
+
+        this.props.foo && this.props.foo()
+>this.props.foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+>this.props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
+>this : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
+>props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
+>foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+>this.props.foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+>this.props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
+>this : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
+>props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
+>foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+    }
+}
+
+// Repro from #14415
+
+interface Banana {
+>Banana : Symbol(Banana, Decl(typeVariableTypeGuards.ts, 11, 1))
+
+    color: 'yellow';
+>color : Symbol(Banana.color, Decl(typeVariableTypeGuards.ts, 15, 18))
+}
+
+class Monkey<T extends Banana | undefined> {
+>Monkey : Symbol(Monkey, Decl(typeVariableTypeGuards.ts, 17, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 19, 13))
+>Banana : Symbol(Banana, Decl(typeVariableTypeGuards.ts, 11, 1))
+
+    constructor(public a: T) {}
+>a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 19, 13))
+
+    render() {
+>render : Symbol(Monkey.render, Decl(typeVariableTypeGuards.ts, 20, 31))
+
+        if (this.a) {
+>this.a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>this : Symbol(Monkey, Decl(typeVariableTypeGuards.ts, 17, 1))
+>a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+
+            this.a.color;
+>this.a.color : Symbol(Banana.color, Decl(typeVariableTypeGuards.ts, 15, 18))
+>this.a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>this : Symbol(Monkey, Decl(typeVariableTypeGuards.ts, 17, 1))
+>a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>color : Symbol(Banana.color, Decl(typeVariableTypeGuards.ts, 15, 18))
+        }
+    }
+}
+
+interface BigBanana extends Banana {
+>BigBanana : Symbol(BigBanana, Decl(typeVariableTypeGuards.ts, 26, 1))
+>Banana : Symbol(Banana, Decl(typeVariableTypeGuards.ts, 11, 1))
+}
+
+class BigMonkey extends Monkey<BigBanana> {
+>BigMonkey : Symbol(BigMonkey, Decl(typeVariableTypeGuards.ts, 29, 1))
+>Monkey : Symbol(Monkey, Decl(typeVariableTypeGuards.ts, 17, 1))
+>BigBanana : Symbol(BigBanana, Decl(typeVariableTypeGuards.ts, 26, 1))
+
+    render() {
+>render : Symbol(BigMonkey.render, Decl(typeVariableTypeGuards.ts, 31, 43))
+
+        if (this.a) {
+>this.a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>this : Symbol(BigMonkey, Decl(typeVariableTypeGuards.ts, 29, 1))
+>a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+
+            this.a.color;
+>this.a.color : Symbol(Banana.color, Decl(typeVariableTypeGuards.ts, 15, 18))
+>this.a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>this : Symbol(BigMonkey, Decl(typeVariableTypeGuards.ts, 29, 1))
+>a : Symbol(Monkey.a, Decl(typeVariableTypeGuards.ts, 20, 16))
+>color : Symbol(Banana.color, Decl(typeVariableTypeGuards.ts, 15, 18))
+        }
+    }
+}
+
+// Another repro
+
+type Item = {
+>Item : Symbol(Item, Decl(typeVariableTypeGuards.ts, 37, 1))
+
+    (): string;
+    x: string;
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+}
+
+function f1<T extends Item | undefined>(obj: T) {
+>f1 : Symbol(f1, Decl(typeVariableTypeGuards.ts, 44, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 46, 12))
+>Item : Symbol(Item, Decl(typeVariableTypeGuards.ts, 37, 1))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 46, 12))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
+
+        obj.x;
+>obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj["x"];
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
+>"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj();
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
+    }
+}
+
+function f2<T extends Item | undefined>(obj: T | undefined) {
+>f2 : Symbol(f2, Decl(typeVariableTypeGuards.ts, 52, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 54, 12))
+>Item : Symbol(Item, Decl(typeVariableTypeGuards.ts, 37, 1))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 54, 12))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
+
+        obj.x;
+>obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj["x"];
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
+>"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj();
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
+    }
+}
+
+function f3<T extends Item | undefined>(obj: T | null) {
+>f3 : Symbol(f3, Decl(typeVariableTypeGuards.ts, 60, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 62, 12))
+>Item : Symbol(Item, Decl(typeVariableTypeGuards.ts, 37, 1))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 62, 12))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
+
+        obj.x;
+>obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj["x"];
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
+>"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+
+        obj();
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
+    }
+}
+
+function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
+>f4 : Symbol(f4, Decl(typeVariableTypeGuards.ts, 68, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 70, 12))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 70, 44))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 70, 12))
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 70, 63))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 70, 44))
+
+        obj[x].length;
+>obj[x].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 70, 44))
+>x : Symbol(x, Decl(typeVariableTypeGuards.ts, 70, 63))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+>f5 : Symbol(f5, Decl(typeVariableTypeGuards.ts, 74, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>K : Symbol(K, Decl(typeVariableTypeGuards.ts, 76, 14))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>key : Symbol(key, Decl(typeVariableTypeGuards.ts, 76, 53))
+>K : Symbol(K, Decl(typeVariableTypeGuards.ts, 76, 14))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+
+        obj[key];
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+>key : Symbol(key, Decl(typeVariableTypeGuards.ts, 76, 53))
+    }
+}
+

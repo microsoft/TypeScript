@@ -1,0 +1,46 @@
+=== tests/cases/compiler/contextualSignatureInstatiationContravariance.ts ===
+interface Animal { x }
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationContravariance.ts, 0, 0))
+>x : Symbol(Animal.x, Decl(contextualSignatureInstatiationContravariance.ts, 0, 18))
+
+interface Giraffe extends Animal { y }
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationContravariance.ts, 0, 22))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationContravariance.ts, 0, 0))
+>y : Symbol(Giraffe.y, Decl(contextualSignatureInstatiationContravariance.ts, 1, 34))
+
+interface Elephant extends Animal { y2 }
+>Elephant : Symbol(Elephant, Decl(contextualSignatureInstatiationContravariance.ts, 1, 38))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationContravariance.ts, 0, 0))
+>y2 : Symbol(Elephant.y2, Decl(contextualSignatureInstatiationContravariance.ts, 2, 35))
+
+var f2: <T extends Animal>(x: T, y: T) => void;
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationContravariance.ts, 4, 3))
+>T : Symbol(T, Decl(contextualSignatureInstatiationContravariance.ts, 4, 9))
+>Animal : Symbol(Animal, Decl(contextualSignatureInstatiationContravariance.ts, 0, 0))
+>x : Symbol(x, Decl(contextualSignatureInstatiationContravariance.ts, 4, 27))
+>T : Symbol(T, Decl(contextualSignatureInstatiationContravariance.ts, 4, 9))
+>y : Symbol(y, Decl(contextualSignatureInstatiationContravariance.ts, 4, 32))
+>T : Symbol(T, Decl(contextualSignatureInstatiationContravariance.ts, 4, 9))
+
+var g2: (g: Giraffe, e: Elephant) => void;
+>g2 : Symbol(g2, Decl(contextualSignatureInstatiationContravariance.ts, 6, 3))
+>g : Symbol(g, Decl(contextualSignatureInstatiationContravariance.ts, 6, 9))
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationContravariance.ts, 0, 22))
+>e : Symbol(e, Decl(contextualSignatureInstatiationContravariance.ts, 6, 20))
+>Elephant : Symbol(Elephant, Decl(contextualSignatureInstatiationContravariance.ts, 1, 38))
+
+g2 = f2; // error because Giraffe and Elephant are disjoint types
+>g2 : Symbol(g2, Decl(contextualSignatureInstatiationContravariance.ts, 6, 3))
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationContravariance.ts, 4, 3))
+
+var h2: (g1: Giraffe, g2: Giraffe) => void;
+>h2 : Symbol(h2, Decl(contextualSignatureInstatiationContravariance.ts, 9, 3))
+>g1 : Symbol(g1, Decl(contextualSignatureInstatiationContravariance.ts, 9, 9))
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationContravariance.ts, 0, 22))
+>g2 : Symbol(g2, Decl(contextualSignatureInstatiationContravariance.ts, 9, 21))
+>Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationContravariance.ts, 0, 22))
+
+h2 = f2; // valid because Giraffe satisfies the constraint. It is safe in the traditional contravariant fashion.
+>h2 : Symbol(h2, Decl(contextualSignatureInstatiationContravariance.ts, 9, 3))
+>f2 : Symbol(f2, Decl(contextualSignatureInstatiationContravariance.ts, 4, 3))
+

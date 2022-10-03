@@ -1,0 +1,49 @@
+=== tests/cases/conformance/classes/members/classTypes/indexersInClassType.ts ===
+class C {
+>C : Symbol(C, Decl(indexersInClassType.ts, 0, 0))
+
+    [x: number]: Date;
+>x : Symbol(x, Decl(indexersInClassType.ts, 1, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(indexersInClassType.ts, 2, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    1: Date;
+>1 : Symbol(C[1], Decl(indexersInClassType.ts, 2, 24))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    'a': {}
+>'a' : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
+
+    fn() {
+>fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
+
+        return this;
+>this : Symbol(C, Decl(indexersInClassType.ts, 0, 0))
+    }
+}
+
+var c = new C();
+>c : Symbol(c, Decl(indexersInClassType.ts, 11, 3))
+>C : Symbol(C, Decl(indexersInClassType.ts, 0, 0))
+
+var r = c.fn();
+>r : Symbol(r, Decl(indexersInClassType.ts, 12, 3))
+>c.fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
+>c : Symbol(c, Decl(indexersInClassType.ts, 11, 3))
+>fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
+
+var r2 = r[1];
+>r2 : Symbol(r2, Decl(indexersInClassType.ts, 13, 3))
+>r : Symbol(r, Decl(indexersInClassType.ts, 12, 3))
+>1 : Symbol(C[1], Decl(indexersInClassType.ts, 2, 24))
+
+var r3 = r.a
+>r3 : Symbol(r3, Decl(indexersInClassType.ts, 14, 3))
+>r.a : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
+>r : Symbol(r, Decl(indexersInClassType.ts, 12, 3))
+>a : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
+
+

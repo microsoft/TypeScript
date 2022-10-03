@@ -1,0 +1,62 @@
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(1,11): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(5,11): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(10,15): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(14,15): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts (6 errors) ====
+    interface A<T> {
+              ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+        x: T;
+    }
+    
+    interface A<T, U> { // error
+              ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+        y: T;
+    }
+    
+    module M {
+        interface A<T> {
+                  ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+            x: T;
+        }
+    
+        interface A<T, U> { // error
+                  ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+            y: T;
+        }
+    }
+    
+    module M2 {
+        interface A<T> {
+            x: T;
+        }
+    }
+    
+    module M2 {
+        interface A<T, U> { // ok, different declaration space than other M2
+            y: T;
+        }
+    }
+    
+    module M3 {
+        export interface A<T> {
+                         ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+            x: T;
+        }
+    }
+    
+    module M3 {
+        export interface A<T, U> { // error
+                         ~
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
+            y: T;
+        }
+    }

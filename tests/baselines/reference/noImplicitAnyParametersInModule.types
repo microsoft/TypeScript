@@ -1,0 +1,105 @@
+=== tests/cases/compiler/noImplicitAnyParametersInModule.ts ===
+module M {
+>M : typeof M
+
+    // No implicit-'any' errors.
+    function m_f1(): void { }
+>m_f1 : () => void
+
+    // Implicit-'any' error for x.
+    function m_f2(x): void { }
+>m_f2 : (x: any) => void
+>x : any
+
+    // No implicit-'any' errors.
+    function m_f3(x: any): void { }
+>m_f3 : (x: any) => void
+>x : any
+
+    // Implicit-'any' errors for x, y, and z.
+    function m_f4(x, y, z): void { }
+>m_f4 : (x: any, y: any, z: any) => void
+>x : any
+>y : any
+>z : any
+
+    // Implicit-'any' errors for x and z.
+    function m_f5(x, y: any, z): void { }
+>m_f5 : (x: any, y: any, z: any) => void
+>x : any
+>y : any
+>z : any
+
+    // Implicit-'any[]' error for r.
+    function m_f6(...r): void { }
+>m_f6 : (...r: any[]) => void
+>r : any[]
+
+    // Implicit-'any'/'any[]' errors for x and r.
+    function m_f7(x, ...r): void { }
+>m_f7 : (x: any, ...r: any[]) => void
+>x : any
+>r : any[]
+
+    // Implicit-'any' errors for x1, y2, x3, and y3.
+    function m_f8(x1, y1: number): any;
+>m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
+>x1 : any
+>y1 : number
+
+    function m_f8(x2: string, y2): any;
+>m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
+>x2 : string
+>y2 : any
+
+    function m_f8(x3, y3): any { }
+>m_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
+>x3 : any
+>y3 : any
+
+    // No implicit-'any' errors.
+    var m_f9 = () => "";
+>m_f9 : () => string
+>() => "" : () => string
+>"" : ""
+
+    // Implicit-'any' error for x.
+    var m_f10 = (x) => "";
+>m_f10 : (x: any) => string
+>(x) => "" : (x: any) => string
+>x : any
+>"" : ""
+
+    // Implicit-'any' errors for x, y, and z.
+    var m_f11 = (x, y, z) => "";
+>m_f11 : (x: any, y: any, z: any) => string
+>(x, y, z) => "" : (x: any, y: any, z: any) => string
+>x : any
+>y : any
+>z : any
+>"" : ""
+
+    // Implicit-'any' errors for x and z.
+    var m_f12 = (x, y: any, z) => "";
+>m_f12 : (x: any, y: any, z: any) => string
+>(x, y: any, z) => "" : (x: any, y: any, z: any) => string
+>x : any
+>y : any
+>z : any
+>"" : ""
+
+    // Implicit-'any[]' errors for r.
+    var m_f13 = (...r) => "";
+>m_f13 : (...r: any[]) => string
+>(...r) => "" : (...r: any[]) => string
+>r : any[]
+>"" : ""
+
+    // Implicit-'any'/'any[]' errors for x and r.
+    var m_f14 = (x, ...r) => "";
+>m_f14 : (x: any, ...r: any[]) => string
+>(x, ...r) => "" : (x: any, ...r: any[]) => string
+>x : any
+>r : any[]
+>"" : ""
+}

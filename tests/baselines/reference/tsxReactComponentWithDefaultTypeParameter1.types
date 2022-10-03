@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    a: number,
+>a : number
+
+    b: string
+>b : string
+}
+
+declare class MyComp<P = Prop> extends React.Component<P, {}> {
+>MyComp : MyComp<P>
+>React.Component : React.Component<P, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    internalProp: P;
+>internalProp : P
+}
+
+let x = <MyComp a={10} b="hi" />
+>x : JSX.Element
+><MyComp a={10} b="hi" /> : JSX.Element
+>MyComp : typeof MyComp
+>a : number
+>10 : 10
+>b : string
+

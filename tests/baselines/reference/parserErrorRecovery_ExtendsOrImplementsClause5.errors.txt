@@ -1,0 +1,17 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause5.ts(1,17): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause5.ts(1,18): error TS1009: Trailing comma not allowed.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause5.ts(1,31): error TS2304: Cannot find name 'B'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause5.ts(1,32): error TS1009: Trailing comma not allowed.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause5.ts (4 errors) ====
+    class C extends A, implements B, {
+                    ~
+!!! error TS2304: Cannot find name 'A'.
+                     ~
+!!! error TS1009: Trailing comma not allowed.
+                                  ~
+!!! error TS2304: Cannot find name 'B'.
+                                   ~
+!!! error TS1009: Trailing comma not allowed.
+    }

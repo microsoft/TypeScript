@@ -1,0 +1,67 @@
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+  Type 'Number' has no call signatures.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(26,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(29,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+  Type 'String' has no call signatures.
+
+
+==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (6 errors) ====
+    module NonGeneric {
+        class C {
+            x: string;
+            get y() {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return 1;
+            }
+            set y(v) { }
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            fn() { return this; }
+            constructor(public a: number, private b: number) { }
+        }
+    
+        class D extends C { e: string; }
+    
+        var d = new D(1, 2);
+        var r = d.fn();
+        var r2 = r.x;
+        var r3 = r.y;
+        r.y = 4;
+        var r6 = d.y(); // error
+                   ~
+!!! error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+!!! error TS6234:   Type 'Number' has no call signatures.
+    
+    }
+    
+    module Generic {
+        class C<T, U> {
+            x: T;
+            get y() {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return null;
+            }
+            set y(v: U) { }
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            fn() { return this; }
+            constructor(public a: T, private b: U) { }
+        }
+    
+        class D<T, U> extends C<T, U> { e: T; }
+    
+        var d = new D(1, '');
+        var r = d.fn();
+        var r2 = r.x;
+        var r3 = r.y;
+        r.y = '';
+        var r6 = d.y(); // error
+                   ~
+!!! error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+!!! error TS6234:   Type 'String' has no call signatures.
+    }

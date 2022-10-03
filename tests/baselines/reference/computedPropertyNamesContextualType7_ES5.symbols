@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType7_ES5.ts ===
+interface I<T> {
+>I : Symbol(I, Decl(computedPropertyNamesContextualType7_ES5.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 0, 12))
+
+    [n: number]: T;
+>n : Symbol(n, Decl(computedPropertyNamesContextualType7_ES5.ts, 1, 5))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 0, 12))
+}
+interface J<T> {
+>J : Symbol(J, Decl(computedPropertyNamesContextualType7_ES5.ts, 2, 1))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 3, 12))
+
+    [s: string]: T;
+>s : Symbol(s, Decl(computedPropertyNamesContextualType7_ES5.ts, 4, 5))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 3, 12))
+}
+
+declare function foo<T>(obj: I<T>): T;
+>foo : Symbol(foo, Decl(computedPropertyNamesContextualType7_ES5.ts, 5, 1))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 21))
+>obj : Symbol(obj, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 24))
+>I : Symbol(I, Decl(computedPropertyNamesContextualType7_ES5.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 21))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 21))
+
+declare function g<T>(obj: J<T>): T;
+>g : Symbol(g, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 38))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 8, 19))
+>obj : Symbol(obj, Decl(computedPropertyNamesContextualType7_ES5.ts, 8, 22))
+>J : Symbol(J, Decl(computedPropertyNamesContextualType7_ES5.ts, 2, 1))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 8, 19))
+>T : Symbol(T, Decl(computedPropertyNamesContextualType7_ES5.ts, 8, 19))
+
+foo({
+>foo : Symbol(foo, Decl(computedPropertyNamesContextualType7_ES5.ts, 5, 1))
+
+    0: () => { },
+>0 : Symbol(0, Decl(computedPropertyNamesContextualType7_ES5.ts, 10, 5))
+
+    ["hi" + "bye"]: true,
+>["hi" + "bye"] : Symbol(["hi" + "bye"], Decl(computedPropertyNamesContextualType7_ES5.ts, 11, 17))
+
+    [0 + 1]: 0,
+>[0 + 1] : Symbol([0 + 1], Decl(computedPropertyNamesContextualType7_ES5.ts, 12, 25))
+
+    [+"hi"]: [0]
+>[+"hi"] : Symbol([+"hi"], Decl(computedPropertyNamesContextualType7_ES5.ts, 13, 15))
+
+});
+
+g({ p: "" });
+>g : Symbol(g, Decl(computedPropertyNamesContextualType7_ES5.ts, 7, 38))
+>p : Symbol(p, Decl(computedPropertyNamesContextualType7_ES5.ts, 17, 3))
+

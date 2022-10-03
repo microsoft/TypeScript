@@ -1,0 +1,41 @@
+=== tests/cases/compiler/clodulesDerivedClasses.ts ===
+class Shape {
+>Shape : Shape
+
+    id: number;
+>id : number
+}
+
+module Shape.Utils {
+>Shape : typeof Shape
+>Utils : typeof Utils
+
+    export function convert(): Shape { return null;}
+>convert : () => Shape
+>null : null
+}
+
+class Path extends Shape {
+>Path : Path
+>Shape : Shape
+
+    name: string;
+>name : string
+
+}
+
+module Path.Utils {
+>Path : typeof Path
+>Utils : typeof Utils
+
+    export function convert2(): Path {
+>convert2 : () => Path
+
+        return null;
+>null : null
+    }
+}
+
+
+
+

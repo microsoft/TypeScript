@@ -1,0 +1,68 @@
+=== tests/cases/compiler/systemModule9.ts ===
+import * as ns from 'file1';
+>ns : any
+
+import {a, b as c} from 'file2';
+>a : any
+>b : any
+>c : any
+
+import d from 'file3'
+>d : any
+
+import 'file4'
+import e, * as ns2 from 'file5';
+>e : any
+>ns2 : any
+
+import ns3 = require('file6');
+>ns3 : any
+
+ns.f();
+>ns.f() : any
+>ns.f : any
+>ns : any
+>f : any
+
+a();
+>a() : any
+>a : any
+
+c();
+>c() : any
+>c : any
+
+d();
+>d() : any
+>d : any
+
+e();
+>e() : any
+>e : any
+
+ns2.f();
+>ns2.f() : any
+>ns2.f : any
+>ns2 : any
+>f : any
+
+ns3.f();
+>ns3.f() : any
+>ns3.f : any
+>ns3 : any
+>f : any
+
+export * from 'file7';
+
+var x, y = true;
+>x : any
+>y : boolean
+>true : true
+
+export {x};
+>x : any
+
+export {y as z};
+>y : boolean
+>z : boolean
+

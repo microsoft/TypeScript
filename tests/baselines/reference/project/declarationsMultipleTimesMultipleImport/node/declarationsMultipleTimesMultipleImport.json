@@ -1,0 +1,23 @@
+{
+    "scenario": "declarations_MultipleTimesMultipleImport",
+    "projectRoot": "tests/cases/projects/declarations_MultipleTimesMultipleImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "m4.ts",
+        "m5.ts",
+        "useModule.ts"
+    ],
+    "emittedFiles": [
+        "m4.js",
+        "m4.d.ts",
+        "m5.js",
+        "m5.d.ts",
+        "useModule.js",
+        "useModule.d.ts"
+    ]
+}

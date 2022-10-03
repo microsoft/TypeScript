@@ -1,0 +1,30 @@
+=== tests/cases/compiler/assignmentStricterConstraints.ts ===
+var f = function <T, S extends T>(x: T, y: S): void {
+>f : <T, S extends T>(x: T, y: S) => void
+>function <T, S extends T>(x: T, y: S): void {    x = y} : <T, S extends T>(x: T, y: S) => void
+>x : T
+>y : S
+
+    x = y
+>x = y : S
+>x : T
+>y : S
+}
+
+var g = function <T, S>(x: T, y: S): void { }
+>g : <T, S>(x: T, y: S) => void
+>function <T, S>(x: T, y: S): void { } : <T, S>(x: T, y: S) => void
+>x : T
+>y : S
+
+g = f
+>g = f : <T, S extends T>(x: T, y: S) => void
+>g : <T, S>(x: T, y: S) => void
+>f : <T, S extends T>(x: T, y: S) => void
+
+g(1, "")
+>g(1, "") : void
+>g : <T, S>(x: T, y: S) => void
+>1 : 1
+>"" : ""
+

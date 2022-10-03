@@ -1,0 +1,44 @@
+=== tests/cases/compiler/keyofIsLiteralContexualType.ts ===
+// keyof T is a literal contextual type
+
+function foo<T extends { a: string, b: string }>() {
+>foo : Symbol(foo, Decl(keyofIsLiteralContexualType.ts, 0, 0))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 2, 13))
+>a : Symbol(a, Decl(keyofIsLiteralContexualType.ts, 2, 24))
+>b : Symbol(b, Decl(keyofIsLiteralContexualType.ts, 2, 35))
+
+    let a: (keyof T)[] = ["a", "b"];
+>a : Symbol(a, Decl(keyofIsLiteralContexualType.ts, 3, 7))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 2, 13))
+
+    let b: (keyof T)[] = ["a", "b", "c"];
+>b : Symbol(b, Decl(keyofIsLiteralContexualType.ts, 4, 7))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 2, 13))
+}
+
+// Repro from #12455
+
+declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
+>pick : Symbol(pick, Decl(keyofIsLiteralContexualType.ts, 5, 1))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
+>K : Symbol(K, Decl(keyofIsLiteralContexualType.ts, 9, 24))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
+>obj : Symbol(obj, Decl(keyofIsLiteralContexualType.ts, 9, 44))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
+>propNames : Symbol(propNames, Decl(keyofIsLiteralContexualType.ts, 9, 51))
+>K : Symbol(K, Decl(keyofIsLiteralContexualType.ts, 9, 24))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofIsLiteralContexualType.ts, 9, 22))
+>K : Symbol(K, Decl(keyofIsLiteralContexualType.ts, 9, 24))
+
+let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
+>x : Symbol(x, Decl(keyofIsLiteralContexualType.ts, 11, 3))
+>pick : Symbol(pick, Decl(keyofIsLiteralContexualType.ts, 5, 1))
+>a : Symbol(a, Decl(keyofIsLiteralContexualType.ts, 11, 14))
+>b : Symbol(b, Decl(keyofIsLiteralContexualType.ts, 11, 21))
+>c : Symbol(c, Decl(keyofIsLiteralContexualType.ts, 11, 28))
+
+let b = x.b;  // Error
+>b : Symbol(b, Decl(keyofIsLiteralContexualType.ts, 12, 3))
+>x : Symbol(x, Decl(keyofIsLiteralContexualType.ts, 11, 3))
+

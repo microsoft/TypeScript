@@ -1,0 +1,18 @@
+=== tests/cases/compiler/es6ImportNameSpaceImportAmd_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== tests/cases/compiler/es6ImportNameSpaceImportAmd_1.ts ===
+import * as nameSpaceBinding from "es6ImportNameSpaceImportAmd_0";
+>nameSpaceBinding : typeof nameSpaceBinding
+
+var x = nameSpaceBinding.a;
+>x : number
+>nameSpaceBinding.a : number
+>nameSpaceBinding : typeof nameSpaceBinding
+>a : number
+
+import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide this
+>nameSpaceBinding2 : typeof nameSpaceBinding
+

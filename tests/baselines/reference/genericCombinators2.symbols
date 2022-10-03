@@ -1,0 +1,100 @@
+=== tests/cases/compiler/genericCombinators2.ts ===
+interface Collection<T, U> {
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCombinators2.ts, 0, 21))
+>U : Symbol(U, Decl(genericCombinators2.ts, 0, 23))
+
+    length: number;
+>length : Symbol(Collection.length, Decl(genericCombinators2.ts, 0, 28))
+
+    add(x: T, y: U): void;
+>add : Symbol(Collection.add, Decl(genericCombinators2.ts, 1, 19))
+>x : Symbol(x, Decl(genericCombinators2.ts, 2, 8))
+>T : Symbol(T, Decl(genericCombinators2.ts, 0, 21))
+>y : Symbol(y, Decl(genericCombinators2.ts, 2, 13))
+>U : Symbol(U, Decl(genericCombinators2.ts, 0, 23))
+
+    remove(x: T, y: U): boolean;
+>remove : Symbol(Collection.remove, Decl(genericCombinators2.ts, 2, 26))
+>x : Symbol(x, Decl(genericCombinators2.ts, 3, 11))
+>T : Symbol(T, Decl(genericCombinators2.ts, 0, 21))
+>y : Symbol(y, Decl(genericCombinators2.ts, 3, 16))
+>U : Symbol(U, Decl(genericCombinators2.ts, 0, 23))
+}
+
+interface Combinators {
+>Combinators : Symbol(Combinators, Decl(genericCombinators2.ts, 4, 1))
+
+    map<T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>;
+>map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>T : Symbol(T, Decl(genericCombinators2.ts, 7, 8))
+>U : Symbol(U, Decl(genericCombinators2.ts, 7, 10))
+>c : Symbol(c, Decl(genericCombinators2.ts, 7, 14))
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCombinators2.ts, 7, 8))
+>U : Symbol(U, Decl(genericCombinators2.ts, 7, 10))
+>f : Symbol(f, Decl(genericCombinators2.ts, 7, 34))
+>x : Symbol(x, Decl(genericCombinators2.ts, 7, 39))
+>T : Symbol(T, Decl(genericCombinators2.ts, 7, 8))
+>y : Symbol(y, Decl(genericCombinators2.ts, 7, 44))
+>U : Symbol(U, Decl(genericCombinators2.ts, 7, 10))
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+
+    map<T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>;
+>map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>T : Symbol(T, Decl(genericCombinators2.ts, 8, 8))
+>U : Symbol(U, Decl(genericCombinators2.ts, 8, 10))
+>V : Symbol(V, Decl(genericCombinators2.ts, 8, 13))
+>c : Symbol(c, Decl(genericCombinators2.ts, 8, 17))
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCombinators2.ts, 8, 8))
+>U : Symbol(U, Decl(genericCombinators2.ts, 8, 10))
+>f : Symbol(f, Decl(genericCombinators2.ts, 8, 37))
+>x : Symbol(x, Decl(genericCombinators2.ts, 8, 42))
+>T : Symbol(T, Decl(genericCombinators2.ts, 8, 8))
+>y : Symbol(y, Decl(genericCombinators2.ts, 8, 47))
+>U : Symbol(U, Decl(genericCombinators2.ts, 8, 10))
+>V : Symbol(V, Decl(genericCombinators2.ts, 8, 13))
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCombinators2.ts, 8, 8))
+>V : Symbol(V, Decl(genericCombinators2.ts, 8, 13))
+}
+
+var _: Combinators;
+>_ : Symbol(_, Decl(genericCombinators2.ts, 11, 3))
+>Combinators : Symbol(Combinators, Decl(genericCombinators2.ts, 4, 1))
+
+var c2: Collection<number, string>;
+>c2 : Symbol(c2, Decl(genericCombinators2.ts, 12, 3))
+>Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
+
+var rf1 = (x: number, y: string) => { return x.toFixed() };
+>rf1 : Symbol(rf1, Decl(genericCombinators2.ts, 13, 3))
+>x : Symbol(x, Decl(genericCombinators2.ts, 13, 11))
+>y : Symbol(y, Decl(genericCombinators2.ts, 13, 21))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericCombinators2.ts, 13, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
+>r5a : Symbol(r5a, Decl(genericCombinators2.ts, 14, 3))
+>_.map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>_ : Symbol(_, Decl(genericCombinators2.ts, 11, 3))
+>map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>c2 : Symbol(c2, Decl(genericCombinators2.ts, 12, 3))
+>x : Symbol(x, Decl(genericCombinators2.ts, 14, 43))
+>y : Symbol(y, Decl(genericCombinators2.ts, 14, 45))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericCombinators2.ts, 14, 43))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+var r5b = _.map<number, string, Date>(c2, rf1);
+>r5b : Symbol(r5b, Decl(genericCombinators2.ts, 15, 3))
+>_.map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>_ : Symbol(_, Decl(genericCombinators2.ts, 11, 3))
+>map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>c2 : Symbol(c2, Decl(genericCombinators2.ts, 12, 3))
+>rf1 : Symbol(rf1, Decl(genericCombinators2.ts, 13, 3))
+

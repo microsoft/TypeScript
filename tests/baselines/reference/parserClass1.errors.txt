@@ -1,0 +1,15 @@
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts(1,40): error TS2304: Cannot find name 'ILogger'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts (1 errors) ====
+        export class NullLogger implements ILogger {
+                                           ~~~~~~~
+!!! error TS2304: Cannot find name 'ILogger'.
+            public information(): boolean { return false; }
+            public debug(): boolean { return false; }
+            public warning(): boolean { return false; }
+            public error(): boolean { return false; }
+            public fatal(): boolean { return false; }
+            public log(s: string): void {
+            }
+        }

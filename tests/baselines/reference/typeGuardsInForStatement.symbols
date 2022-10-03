@@ -1,0 +1,62 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInForStatement.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(typeGuardsInForStatement.ts, 0, 3))
+
+function a(x: string | number) {
+>a : Symbol(a, Decl(typeGuardsInForStatement.ts, 0, 18))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+
+    for (x = undefined; typeof x !== "number"; x = undefined) {
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+>undefined : Symbol(undefined)
+
+        x; // string
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+    }
+    x; // number
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 1, 11))
+}
+function b(x: string | number) {
+>b : Symbol(b, Decl(typeGuardsInForStatement.ts, 6, 1))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+
+    for (x = undefined; typeof x !== "number"; x = undefined) {
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+>undefined : Symbol(undefined)
+
+        x; // string
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+
+        if (cond) continue;
+>cond : Symbol(cond, Decl(typeGuardsInForStatement.ts, 0, 3))
+    }
+    x; // number
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 7, 11))
+}
+function c(x: string | number) {
+>c : Symbol(c, Decl(typeGuardsInForStatement.ts, 13, 1))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+
+    for (x = undefined; typeof x !== "number"; x = undefined) {
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+>undefined : Symbol(undefined)
+
+        x; // string
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+
+        if (cond) break;
+>cond : Symbol(cond, Decl(typeGuardsInForStatement.ts, 0, 3))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(typeGuardsInForStatement.ts, 14, 11))
+}
+

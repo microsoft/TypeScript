@@ -1,0 +1,25 @@
+=== tests/cases/compiler/externalModuleQualification.ts ===
+export var ID = "test";
+>ID : string
+>"test" : "test"
+
+export class DiffEditor<A, B, C> {
+>DiffEditor : DiffEditor<A, B, C>
+
+    private previousDiffAction: NavigateAction;
+>previousDiffAction : NavigateAction
+
+    constructor(id: string = ID) {
+>id : string
+>ID : string
+    }
+}
+class NavigateAction {
+>NavigateAction : NavigateAction
+
+    f(editor: DiffEditor<any, any, any>) {
+>f : (editor: DiffEditor<any, any, any>) => void
+>editor : DiffEditor<any, any, any>
+    }
+}
+

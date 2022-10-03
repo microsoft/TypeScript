@@ -1,0 +1,5 @@
+=== tests/cases/compiler/destructuringWithNumberLiteral.ts ===
+var { toExponential } = 0;
+>toExponential : (fractionDigits?: number) => string
+>0 : 0
+

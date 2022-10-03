@@ -1,0 +1,245 @@
+=== tests/cases/conformance/salsa/first.js ===
+/**
+ * @constructor
+ * @param {number} numberOxen
+ */
+function Wagon(numberOxen) {
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>numberOxen : Symbol(numberOxen, Decl(first.js, 4, 15))
+
+    this.numberOxen = numberOxen
+>this.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>this : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>numberOxen : Symbol(numberOxen, Decl(first.js, 4, 15))
+}
+/** @param {Wagon[]=} wagons */
+Wagon.circle = function (wagons) {
+>Wagon.circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>circle : Symbol(Wagon.circle, Decl(first.js, 6, 1))
+>wagons : Symbol(wagons, Decl(first.js, 8, 25))
+
+    return wagons ? wagons.length : 3.14;
+>wagons : Symbol(wagons, Decl(first.js, 8, 25))
+>wagons.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>wagons : Symbol(wagons, Decl(first.js, 8, 25))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+/** @param {*[]=} supplies - *[]= is my favourite type */
+Wagon.prototype.load = function (supplies) {
+>Wagon.prototype : Symbol(Wagon.load, Decl(first.js, 10, 1))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>load : Symbol(Wagon.load, Decl(first.js, 10, 1))
+>supplies : Symbol(supplies, Decl(first.js, 12, 33))
+}
+/** @param {*[]=} supplies - Yep, still a great type */
+Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+>Wagon.prototype : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+>supplies : Symbol(supplies, Decl(first.js, 15, 24))
+>supplies : Symbol(supplies, Decl(first.js, 15, 24))
+>supplies.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>supplies : Symbol(supplies, Decl(first.js, 15, 24))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+Wagon.prototype.speed = function () {
+>Wagon.prototype : Symbol(Wagon.speed, Decl(first.js, 15, 68))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>speed : Symbol(Wagon.speed, Decl(first.js, 15, 68))
+
+    return this.numberOxen / this.weight()
+>this.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>this : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>this.weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+>this : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+}
+// ok
+class Sql extends Wagon {
+>Sql : Symbol(Sql, Decl(first.js, 18, 1))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+
+    constructor() {
+        super(); // error: not enough arguments
+>super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+
+        this.foonly = 12
+>this.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
+>this : Symbol(Sql, Decl(first.js, 18, 1))
+>foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
+    }
+    /**
+     * @param {Array.<string>} files
+     * @param {"csv" | "json" | "xmlolololol"} format
+     * This is not assignable, so should have a type error
+     */
+    load(files, format) {
+>load : Symbol(Sql.load, Decl(first.js, 24, 5))
+>files : Symbol(files, Decl(first.js, 30, 9))
+>format : Symbol(format, Decl(first.js, 30, 15))
+
+        if (format === "xmlolololol") {
+>format : Symbol(format, Decl(first.js, 30, 15))
+
+            throw new Error("please do not use XML. It was a joke.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            super.speed() // run faster
+>super.speed : Symbol(Wagon.speed, Decl(first.js, 15, 68))
+>super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>speed : Symbol(Wagon.speed, Decl(first.js, 15, 68))
+
+            if (super.weight() < 0) {
+>super.weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+>super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+>weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+
+                // ????????????????????????
+            }
+        }
+    }
+}
+var db = new Sql();
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
+>Sql : Symbol(Sql, Decl(first.js, 18, 1))
+
+db.numberOxen = db.foonly
+>db.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
+>numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>db.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
+>foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
+
+// error, can't extend a TS constructor function
+class Drakkhen extends Dragon {
+>Drakkhen : Symbol(Drakkhen, Decl(first.js, 43, 25))
+>Dragon : Symbol(Dragon, Decl(second.ts, 0, 0))
+
+}
+
+=== tests/cases/conformance/salsa/second.ts ===
+/**
+ * @constructor
+ */
+function Dragon(numberEaten: number) {
+>Dragon : Symbol(Dragon, Decl(second.ts, 0, 0))
+>numberEaten : Symbol(numberEaten, Decl(second.ts, 3, 16))
+
+    this.numberEaten = numberEaten
+>numberEaten : Symbol(numberEaten, Decl(second.ts, 3, 16))
+}
+// error!
+class Firedrake extends Dragon {
+>Firedrake : Symbol(Firedrake, Decl(second.ts, 5, 1))
+>Dragon : Symbol(Dragon, Decl(second.ts, 0, 0))
+
+    constructor() {
+        super();
+    }
+}
+// ok
+class Conestoga extends Wagon {
+>Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+
+    constructor(public drunkOO: true) {
+>drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
+
+        // error: wrong type
+        super('nope');
+>super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+    }
+    // should error since others is not optional
+    static circle(others: (typeof Wagon)[]) {
+>circle : Symbol(Conestoga.circle, Decl(second.ts, 17, 5))
+>others : Symbol(others, Decl(second.ts, 19, 18))
+>Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
+
+        return others.length
+>others.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>others : Symbol(others, Decl(second.ts, 19, 18))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+var c = new Conestoga(true);
+>c : Symbol(c, Decl(second.ts, 23, 3))
+>Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))
+
+c.drunkOO
+>c.drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
+>c : Symbol(c, Decl(second.ts, 23, 3))
+>drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
+
+c.numberOxen
+>c.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+>c : Symbol(c, Decl(second.ts, 23, 3))
+>numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
+
+=== tests/cases/conformance/salsa/generic.js ===
+/**
+ * @template T
+ * @param {T} flavour
+ */
+function Soup(flavour) {
+>Soup : Symbol(Soup, Decl(generic.js, 0, 0))
+>flavour : Symbol(flavour, Decl(generic.js, 4, 14))
+
+    this.flavour = flavour
+>this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>this : Symbol(Soup, Decl(generic.js, 0, 0))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>flavour : Symbol(flavour, Decl(generic.js, 4, 14))
+}
+/** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+class Chowder extends Soup {
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+>Soup : Symbol(Soup, Decl(generic.js, 0, 0))
+
+    log() {
+>log : Symbol(Chowder.log, Decl(generic.js, 8, 28))
+
+        return this.flavour
+>this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>this : Symbol(Chowder, Decl(generic.js, 6, 1))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+    }
+}
+
+var soup = new Soup(1);
+>soup : Symbol(soup, Decl(generic.js, 14, 3))
+>Soup : Symbol(Soup, Decl(generic.js, 0, 0))
+
+soup.flavour
+>soup.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>soup : Symbol(soup, Decl(generic.js, 14, 3))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+
+var chowder = new Chowder({ claim: "ignorant" });
+>chowder : Symbol(chowder, Decl(generic.js, 16, 3))
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+>claim : Symbol(claim, Decl(generic.js, 16, 27))
+
+chowder.flavour.claim
+>chowder.flavour.claim : Symbol(claim, Decl(generic.js, 7, 20))
+>chowder.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>chowder : Symbol(chowder, Decl(generic.js, 16, 3))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>claim : Symbol(claim, Decl(generic.js, 7, 20))
+
+var errorNoArgs = new Chowder();
+>errorNoArgs : Symbol(errorNoArgs, Decl(generic.js, 18, 3))
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+
+var errorArgType = new Chowder(0);
+>errorArgType : Symbol(errorArgType, Decl(generic.js, 19, 3))
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+
+

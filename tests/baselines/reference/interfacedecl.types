@@ -1,0 +1,80 @@
+=== tests/cases/compiler/interfacedecl.ts ===
+interface a0 {
+    (): string;
+    (a, b, c?: string): number;
+>a : any
+>b : any
+>c : string
+    
+    new (): string;
+    new (s: string);
+>s : string
+
+    [n: number]: ()=>string;
+>n : number
+
+    [s: string]: any;
+>s : string
+
+    p1;
+>p1 : any
+
+    p2: string;
+>p2 : string
+
+    p3?;
+>p3 : any
+
+    p4?: number;
+>p4 : number
+
+    p5: (s: number) =>string;
+>p5 : (s: number) => string
+>s : number
+
+    f1();
+>f1 : () => any
+
+    f2? ();
+>f2 : () => any
+
+    f3(a: string): number;
+>f3 : (a: string) => number
+>a : string
+
+    f4? (s: number): string;
+>f4 : (s: number) => string
+>s : number
+}
+
+
+interface a1 {
+    [n: number]: number;
+>n : number
+}
+
+interface a2 {
+    [s: string]: number;
+>s : string
+}
+
+interface a {
+}
+
+interface b extends a {
+}
+
+interface c extends a, b {
+}
+
+interface d extends a {
+}
+
+class c1 implements a {
+>c1 : c1
+}
+var instance2 = new c1();
+>instance2 : c1
+>new c1() : c1
+>c1 : typeof c1
+

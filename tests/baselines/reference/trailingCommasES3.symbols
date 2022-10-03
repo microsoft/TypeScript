@@ -1,0 +1,36 @@
+=== tests/cases/compiler/trailingCommasES3.ts ===
+var o1 = { a: 1, b: 2 };
+>o1 : Symbol(o1, Decl(trailingCommasES3.ts, 0, 3))
+>a : Symbol(a, Decl(trailingCommasES3.ts, 0, 10))
+>b : Symbol(b, Decl(trailingCommasES3.ts, 0, 16))
+
+var o2 = { a: 1, b: 2, };
+>o2 : Symbol(o2, Decl(trailingCommasES3.ts, 1, 3))
+>a : Symbol(a, Decl(trailingCommasES3.ts, 1, 10))
+>b : Symbol(b, Decl(trailingCommasES3.ts, 1, 16))
+
+var o3 = { a: 1, };
+>o3 : Symbol(o3, Decl(trailingCommasES3.ts, 2, 3))
+>a : Symbol(a, Decl(trailingCommasES3.ts, 2, 10))
+
+var o4 = {};
+>o4 : Symbol(o4, Decl(trailingCommasES3.ts, 3, 3))
+
+var a1 = [1, 2];
+>a1 : Symbol(a1, Decl(trailingCommasES3.ts, 5, 3))
+
+var a2 = [1, 2, ];
+>a2 : Symbol(a2, Decl(trailingCommasES3.ts, 6, 3))
+
+var a3 = [1, ];
+>a3 : Symbol(a3, Decl(trailingCommasES3.ts, 7, 3))
+
+var a4 = [];
+>a4 : Symbol(a4, Decl(trailingCommasES3.ts, 8, 3))
+
+var a5 = [1, , ];
+>a5 : Symbol(a5, Decl(trailingCommasES3.ts, 9, 3))
+
+var a6 = [, , ];
+>a6 : Symbol(a6, Decl(trailingCommasES3.ts, 10, 3))
+

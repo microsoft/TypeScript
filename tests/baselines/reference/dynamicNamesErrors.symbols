@@ -1,0 +1,162 @@
+=== tests/cases/compiler/dynamicNamesErrors.ts ===
+const c0 = "1";
+>c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
+
+const c1 = 1;
+>c1 : Symbol(c1, Decl(dynamicNamesErrors.ts, 1, 5))
+
+interface T0 {
+>T0 : Symbol(T0, Decl(dynamicNamesErrors.ts, 1, 13))
+
+    [c0]: number;
+>[c0] : Symbol(T0[c0], Decl(dynamicNamesErrors.ts, 3, 14))
+>c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
+
+    1: number;
+>1 : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17))
+}
+
+interface T1 {
+>T1 : Symbol(T1, Decl(dynamicNamesErrors.ts, 6, 1))
+
+    [c0]: number;
+>[c0] : Symbol(T1[c0], Decl(dynamicNamesErrors.ts, 8, 14))
+>c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
+}
+
+interface T2 {
+>T2 : Symbol(T2, Decl(dynamicNamesErrors.ts, 10, 1))
+
+    [c0]: string;
+>[c0] : Symbol(T2[c0], Decl(dynamicNamesErrors.ts, 12, 14))
+>c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
+}
+
+interface T3 {
+>T3 : Symbol(T3, Decl(dynamicNamesErrors.ts, 14, 1))
+
+    [c0]: number;
+>[c0] : Symbol(T3[c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
+>c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
+
+    [c1]: string;
+>[c1] : Symbol(T3[c0], Decl(dynamicNamesErrors.ts, 16, 14), Decl(dynamicNamesErrors.ts, 17, 17))
+>c1 : Symbol(c1, Decl(dynamicNamesErrors.ts, 1, 5))
+}
+
+let t1: T1;
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
+>T1 : Symbol(T1, Decl(dynamicNamesErrors.ts, 6, 1))
+
+let t2: T2;
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
+>T2 : Symbol(T2, Decl(dynamicNamesErrors.ts, 10, 1))
+
+t1 = t2;
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
+
+t2 = t1;
+>t2 : Symbol(t2, Decl(dynamicNamesErrors.ts, 22, 3))
+>t1 : Symbol(t1, Decl(dynamicNamesErrors.ts, 21, 3))
+
+const x = Symbol();
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const y = Symbol();
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const z = Symbol();
+>z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const w = Symbol();
+>w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export interface InterfaceMemberVisibility {
+>InterfaceMemberVisibility : Symbol(InterfaceMemberVisibility, Decl(dynamicNamesErrors.ts, 29, 19))
+
+    [x]: number;
+>[x] : Symbol(InterfaceMemberVisibility[x], Decl(dynamicNamesErrors.ts, 31, 44))
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+
+    [y](): number;
+>[y] : Symbol(InterfaceMemberVisibility[y], Decl(dynamicNamesErrors.ts, 32, 16))
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+}
+
+export class ClassMemberVisibility {
+>ClassMemberVisibility : Symbol(ClassMemberVisibility, Decl(dynamicNamesErrors.ts, 34, 1))
+
+    static [x]: number;
+>[x] : Symbol(ClassMemberVisibility[x], Decl(dynamicNamesErrors.ts, 36, 36))
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+
+    static [y](): number { return 0; }
+>[y] : Symbol(ClassMemberVisibility[y], Decl(dynamicNamesErrors.ts, 37, 23))
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+
+    static get [z](): number { return 0; }
+>[z] : Symbol(ClassMemberVisibility[z], Decl(dynamicNamesErrors.ts, 38, 38))
+>z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
+
+    static set [w](value: number) { }
+>[w] : Symbol(ClassMemberVisibility[w], Decl(dynamicNamesErrors.ts, 39, 42))
+>w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
+>value : Symbol(value, Decl(dynamicNamesErrors.ts, 40, 19))
+
+    [x]: number;
+>[x] : Symbol(ClassMemberVisibility[x], Decl(dynamicNamesErrors.ts, 40, 37))
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+
+    [y](): number { return 0; }
+>[y] : Symbol(ClassMemberVisibility[y], Decl(dynamicNamesErrors.ts, 42, 16))
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+
+    get [z](): number { return 0; }
+>[z] : Symbol(ClassMemberVisibility[z], Decl(dynamicNamesErrors.ts, 43, 31))
+>z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
+
+    set [w](value: number) { }
+>[w] : Symbol(ClassMemberVisibility[w], Decl(dynamicNamesErrors.ts, 44, 35))
+>w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
+>value : Symbol(value, Decl(dynamicNamesErrors.ts, 45, 12))
+}
+
+export type ObjectTypeVisibility = {
+>ObjectTypeVisibility : Symbol(ObjectTypeVisibility, Decl(dynamicNamesErrors.ts, 46, 1))
+
+    [x]: number;
+>[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 48, 36))
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+
+    [y](): number;
+>[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 49, 16))
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+
+};
+
+export const ObjectLiteralVisibility = {
+>ObjectLiteralVisibility : Symbol(ObjectLiteralVisibility, Decl(dynamicNamesErrors.ts, 53, 12))
+
+    [x]: 0,
+>[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 53, 40))
+>x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
+
+    [y](): number { return 0; },
+>[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 54, 11))
+>y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
+
+    get [z](): number { return 0; },
+>[z] : Symbol([z], Decl(dynamicNamesErrors.ts, 55, 32))
+>z : Symbol(z, Decl(dynamicNamesErrors.ts, 28, 5))
+
+    set [w](value: number) { },
+>[w] : Symbol([w], Decl(dynamicNamesErrors.ts, 56, 36))
+>w : Symbol(w, Decl(dynamicNamesErrors.ts, 29, 5))
+>value : Symbol(value, Decl(dynamicNamesErrors.ts, 57, 12))
+
+};

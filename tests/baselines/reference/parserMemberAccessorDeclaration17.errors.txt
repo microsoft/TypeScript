@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration17.ts(2,13): error TS1051: A 'set' accessor cannot have an optional parameter.
+
+
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration17.ts (1 errors) ====
+    class C {
+       set Foo(a?: number) { }
+                ~
+!!! error TS1051: A 'set' accessor cannot have an optional parameter.
+    }

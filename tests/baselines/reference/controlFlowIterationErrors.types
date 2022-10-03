@@ -1,0 +1,265 @@
+=== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts ===
+let cond: boolean;
+>cond : boolean
+
+function len(s: string) {
+>len : (s: string) => number
+>s : string
+
+    return s.length;
+>s.length : number
+>s : string
+>length : number
+}
+
+function f1() {
+>f1 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string) => number
+>x : string | number
+
+        x;
+>x : number
+    }
+    x;
+>x : string | number
+}
+
+function f2() {
+>f2 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x;
+>x : string | number
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string) => number
+>x : string | number
+    }
+    x;
+>x : string | number
+}
+
+declare function foo(x: string): number;
+>foo : { (x: string): number; (x: number): string; }
+>x : string
+
+declare function foo(x: number): string;
+>foo : { (x: string): number; (x: number): string; }
+>x : number
+
+function g1() {
+>g1 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x = foo(x);
+>x = foo(x) : never
+>x : string | number | boolean
+>foo(x) : never
+>foo : { (x: string): number; (x: number): string; }
+>x : string | number
+
+        x;
+>x : never
+    }
+    x;
+>x : string | number
+}
+
+function g2() {
+>g2 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
+
+    while (cond) {
+>cond : boolean
+
+        x;
+>x : string | number
+
+        x = foo(x);
+>x = foo(x) : never
+>x : string | number | boolean
+>foo(x) : never
+>foo : { (x: string): number; (x: number): string; }
+>x : string | number
+    }
+    x;
+>x : string | number
+}
+
+function asNumber(x: string | number): number {
+>asNumber : (x: string | number) => number
+>x : string | number
+
+    return +x;
+>+x : number
+>x : string | number
+}
+
+function h1() {
+>h1 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "0";
+>x = "0" : "0"
+>x : string | number | boolean
+>"0" : "0"
+
+    while (cond) {
+>cond : boolean
+
+        x = +x + 1;
+>x = +x + 1 : number
+>x : string | number | boolean
+>+x + 1 : number
+>+x : number
+>x : string | number
+>1 : 1
+
+        x;
+>x : number
+    }
+}
+
+function h2() {
+>h2 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "0";
+>x = "0" : "0"
+>x : string | number | boolean
+>"0" : "0"
+
+    while (cond) {
+>cond : boolean
+
+        x = asNumber(x) + 1;
+>x = asNumber(x) + 1 : number
+>x : string | number | boolean
+>asNumber(x) + 1 : number
+>asNumber(x) : number
+>asNumber : (x: string | number) => number
+>x : string | number
+>1 : 1
+
+        x;
+>x : number
+    }
+}
+
+function h3() {
+>h3 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "0";
+>x = "0" : "0"
+>x : string | number | boolean
+>"0" : "0"
+
+    while (cond) {
+>cond : boolean
+
+        let y = asNumber(x);
+>y : number
+>asNumber(x) : number
+>asNumber : (x: string | number) => number
+>x : string | number
+
+        x = y + 1;
+>x = y + 1 : number
+>x : string | number | boolean
+>y + 1 : number
+>y : number
+>1 : 1
+
+        x;
+>x : number
+    }
+}
+
+function h4() {
+>h4 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "0";
+>x = "0" : "0"
+>x : string | number | boolean
+>"0" : "0"
+
+    while (cond) {
+>cond : boolean
+
+        x;
+>x : string | number
+
+        let y = asNumber(x);
+>y : number
+>asNumber(x) : number
+>asNumber : (x: string | number) => number
+>x : string | number
+
+        x = y + 1;
+>x = y + 1 : number
+>x : string | number | boolean
+>y + 1 : number
+>y : number
+>1 : 1
+
+        x;
+>x : number
+    }
+}
+

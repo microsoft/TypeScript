@@ -1,0 +1,96 @@
+=== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts ===
+function foo1(bar: "a"): number {
+>foo1 : Symbol(foo1, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 0))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 14))
+
+    switch(bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 0, 14))
+
+        case "a":
+            return 1;
+    }
+}
+
+function foo2(bar: "a"): number {
+>foo2 : Symbol(foo2, Decl(exhaustiveSwitchImplicitReturn.ts, 5, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 7, 14))
+
+    switch(bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 7, 14))
+
+        case "a":
+            return 1;
+    }
+
+    let unusedVariable;
+>unusedVariable : Symbol(unusedVariable, Decl(exhaustiveSwitchImplicitReturn.ts, 13, 7))
+}
+
+function foo3(bar: "a"): number {
+>foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 14, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 16, 14))
+
+    switch(bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 16, 14))
+
+        case "a":
+            return 1;
+    }
+
+    function neverCalled() {}
+>neverCalled : Symbol(neverCalled, Decl(exhaustiveSwitchImplicitReturn.ts, 20, 5))
+}
+
+function foo4(bar: "a"): number {
+>foo4 : Symbol(foo4, Decl(exhaustiveSwitchImplicitReturn.ts, 23, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+
+    switch(bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+
+        case "a":
+            return 1;
+    }
+
+    foo3(bar);
+>foo3 : Symbol(foo3, Decl(exhaustiveSwitchImplicitReturn.ts, 14, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 25, 14))
+}
+
+function foo5(bar: "a" | "b"): number {
+>foo5 : Symbol(foo5, Decl(exhaustiveSwitchImplicitReturn.ts, 32, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 34, 14))
+
+    switch(bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 34, 14))
+
+        case "a":
+            return 1;
+    }
+}
+
+function foo6(bar: "a", a: boolean, b: boolean): number {
+>foo6 : Symbol(foo6, Decl(exhaustiveSwitchImplicitReturn.ts, 39, 1))
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 14))
+>a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 23))
+>b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 35))
+
+    if (a) {
+>a : Symbol(a, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 23))
+
+        switch (bar) {
+>bar : Symbol(bar, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 14))
+
+            case "a": return 1;
+        }
+    }
+    else {
+        switch (b) {
+>b : Symbol(b, Decl(exhaustiveSwitchImplicitReturn.ts, 41, 35))
+
+            case true: return -1;
+            case false: return 0;
+        }
+    }
+}
+

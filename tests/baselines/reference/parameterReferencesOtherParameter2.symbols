@@ -1,0 +1,21 @@
+=== tests/cases/compiler/parameterReferencesOtherParameter2.ts ===
+class Model {
+>Model : Symbol(Model, Decl(parameterReferencesOtherParameter2.ts, 0, 0))
+
+    public name: string;
+>name : Symbol(Model.name, Decl(parameterReferencesOtherParameter2.ts, 0, 13))
+}
+
+class UI {
+>UI : Symbol(UI, Decl(parameterReferencesOtherParameter2.ts, 2, 1))
+
+    constructor(model: Model, foo = model.name)
+>model : Symbol(model, Decl(parameterReferencesOtherParameter2.ts, 5, 16))
+>Model : Symbol(Model, Decl(parameterReferencesOtherParameter2.ts, 0, 0))
+>foo : Symbol(foo, Decl(parameterReferencesOtherParameter2.ts, 5, 29))
+>model.name : Symbol(Model.name, Decl(parameterReferencesOtherParameter2.ts, 0, 13))
+>model : Symbol(model, Decl(parameterReferencesOtherParameter2.ts, 5, 16))
+>name : Symbol(Model.name, Decl(parameterReferencesOtherParameter2.ts, 0, 13))
+    {
+    }
+}

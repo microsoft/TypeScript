@@ -1,0 +1,161 @@
+=== tests/cases/compiler/overload1.ts ===
+module O {
+>O : typeof O
+
+    export class A {
+>A : A
+        
+    }
+
+    export class B extends A {
+>B : B
+>A : A
+    }
+
+    export class C extends B {
+>C : C
+>B : B
+        
+    }
+
+    export interface I {
+        f(s:string):number;
+>f : { (s: string): number; (n: number): string; }
+>s : string
+
+        f(n:number):string;
+>f : { (s: string): number; (n: number): string; }
+>n : number
+
+        g(n1:number,n2:number):number;
+>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+>n1 : number
+>n2 : number
+
+        g(n:number):string;
+>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+>n : number
+
+        g(a:A):C;
+>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+>a : A
+
+        g(c:C):string;
+>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+>c : C
+
+        h(s1:string,s2:number):string;
+>h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>s1 : string
+>s2 : number
+
+        h(s1:number,s2:string):number;
+>h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>s1 : number
+>s2 : string
+    }
+}
+
+declare var x:O.I;
+>x : O.I
+>O : any
+
+var e:string=x.g(new O.A()); // matches overload but bad assignment
+>e : string
+>x.g(new O.A()) : O.C
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>new O.A() : O.A
+>O.A : typeof O.A
+>O : typeof O
+>A : typeof O.A
+
+var y:string=x.f(3); // good
+>y : string
+>x.f(3) : string
+>x.f : { (s: string): number; (n: number): string; }
+>x : O.I
+>f : { (s: string): number; (n: number): string; }
+>3 : 3
+
+y=x.f("nope"); // can't assign number to string
+>y=x.f("nope") : number
+>y : string
+>x.f("nope") : number
+>x.f : { (s: string): number; (n: number): string; }
+>x : O.I
+>f : { (s: string): number; (n: number): string; }
+>"nope" : "nope"
+
+var z:string=x.g(x.g(3,3)); // good
+>z : string
+>x.g(x.g(3,3)) : string
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g(3,3) : number
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>3 : 3
+>3 : 3
+
+z=x.g(2,2,2); // no match
+>z=x.g(2,2,2) : never
+>z : string
+>x.g(2,2,2) : never
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>2 : 2
+>2 : 2
+>2 : 2
+
+z=x.g(); // no match
+>z=x.g() : never
+>z : string
+>x.g() : never
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+
+z=x.g(new O.B()); // ambiguous (up and down conversion)
+>z=x.g(new O.B()) : O.C
+>z : string
+>x.g(new O.B()) : O.C
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>new O.B() : O.B
+>O.B : typeof O.B
+>O : typeof O
+>B : typeof O.B
+
+z=x.h(2,2); // no match
+>z=x.h(2,2) : never
+>z : string
+>x.h(2,2) : never
+>x.h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>x : O.I
+>h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>2 : 2
+>2 : 2
+
+z=x.h("hello",0); // good
+>z=x.h("hello",0) : string
+>z : string
+>x.h("hello",0) : string
+>x.h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>x : O.I
+>h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+>"hello" : "hello"
+>0 : 0
+
+var v=x.g;
+>v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>x : O.I
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+
+

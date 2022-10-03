@@ -1,0 +1,49 @@
+{
+    "kind": "TypeLiteral",
+    "pos": 1,
+    "end": 11,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "members": {
+        "0": {
+            "kind": "PropertySignature",
+            "pos": 2,
+            "end": 6,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 5,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "foo"
+            }
+        },
+        "1": {
+            "kind": "PropertySignature",
+            "pos": 6,
+            "end": 10,
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 1,
+            "name": {
+                "kind": "Identifier",
+                "pos": 6,
+                "end": 10,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "bar"
+            }
+        },
+        "length": 2,
+        "pos": 2,
+        "end": 10,
+        "hasTrailingComma": false,
+        "transformFlags": 1
+    }
+}

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/Symbols/symbolType19.ts ===
+enum E { }
+>E : Symbol(E, Decl(symbolType19.ts, 0, 0))
+
+var x: symbol | E;
+>x : Symbol(x, Decl(symbolType19.ts, 1, 3))
+>E : Symbol(E, Decl(symbolType19.ts, 0, 0))
+
+x;
+>x : Symbol(x, Decl(symbolType19.ts, 1, 3))
+
+if (typeof x === "number") {
+>x : Symbol(x, Decl(symbolType19.ts, 1, 3))
+
+    x;
+>x : Symbol(x, Decl(symbolType19.ts, 1, 3))
+}
+else {
+    x;
+>x : Symbol(x, Decl(symbolType19.ts, 1, 3))
+}

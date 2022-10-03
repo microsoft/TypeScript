@@ -1,0 +1,23 @@
+=== tests/cases/compiler/targetTypeObjectLiteral.ts ===
+var z: { x: number; y: (w:string)=>number;} = {
+>z : { x: number; y: (w: string) => number; }
+>x : number
+>y : (w: string) => number
+>w : string
+>{    x: 12,    y: function(w) {        return 0;    }} : { x: number; y: (w: string) => number; }
+
+    x: 12,
+>x : number
+>12 : 12
+
+    y: function(w) {
+>y : (w: string) => number
+>function(w) {        return 0;    } : (w: string) => number
+>w : string
+
+        return 0;
+>0 : 0
+
+    }
+
+}

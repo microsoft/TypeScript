@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexers.ts ===
+// Type inference infers from indexers in target type, no errors expected
+
+function foo<T>(x: T) {
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 2, 13))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 2, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 2, 13))
+
+    return x;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 2, 16))
+}
+
+var a: {
+>a : Symbol(a, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 6, 3))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 7, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [x: number]: Date;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 8, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+};
+var r = foo(a);
+>r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 10, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 0, 0))
+>a : Symbol(a, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 6, 3))
+
+function other<T extends Date>(arg: T) {
+>other : Symbol(other, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 10, 15))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 12, 15))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>arg : Symbol(arg, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 12, 31))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 12, 15))
+
+    var b: {
+>b : Symbol(b, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 13, 7))
+
+        [x: string]: Object;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 14, 9))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        [x: number]: T
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 15, 9))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 12, 15))
+
+    };
+    var r2 = foo(b);
+>r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 17, 7))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 0, 0))
+>b : Symbol(b, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 13, 7))
+
+    var d = r2[1]; 
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 18, 7))
+>r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 17, 7))
+
+    var e = r2['1']; 
+>e : Symbol(e, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 19, 7))
+>r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndIndexers.ts, 17, 7))
+}

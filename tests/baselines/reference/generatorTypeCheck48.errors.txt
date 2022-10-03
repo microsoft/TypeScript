@@ -1,0 +1,17 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck48.ts(1,11): error TS7055: 'g', which lacks return-type annotation, implicitly has an 'any' yield type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck48.ts(5,11): error TS7055: 'h', which lacks return-type annotation, implicitly has an 'any' yield type.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck48.ts (2 errors) ====
+    function* g() {
+              ~
+!!! error TS7055: 'g', which lacks return-type annotation, implicitly has an 'any' yield type.
+        yield;
+    }
+    
+    function* h() {
+              ~
+!!! error TS7055: 'h', which lacks return-type annotation, implicitly has an 'any' yield type.
+        yield undefined;
+    }
+    

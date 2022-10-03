@@ -1,0 +1,17 @@
+=== tests/cases/compiler/scopingInCatchBlocks.ts ===
+try { } catch(ex1) { 
+>ex1 : Symbol(ex1, Decl(scopingInCatchBlocks.ts, 0, 14))
+
+	throw ex1;
+>ex1 : Symbol(ex1, Decl(scopingInCatchBlocks.ts, 0, 14))
+}
+
+try { } catch(ex1) { } // should not error
+>ex1 : Symbol(ex1, Decl(scopingInCatchBlocks.ts, 4, 14))
+
+try { } catch(ex1) { } // should not error
+>ex1 : Symbol(ex1, Decl(scopingInCatchBlocks.ts, 6, 14))
+
+var x = ex1; // should error
+>x : Symbol(x, Decl(scopingInCatchBlocks.ts, 8, 3))
+

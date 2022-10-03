@@ -1,0 +1,87 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts ===
+// Tests that readonly parameter properties behave like regular readonly properties
+
+class A {
+>A : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+
+    constructor(readonly x: number) {
+>x : Symbol(A.x, Decl(readonlyConstructorAssignment.ts, 3, 16))
+
+        this.x = 0;
+>this.x : Symbol(A.x, Decl(readonlyConstructorAssignment.ts, 3, 16))
+>this : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+>x : Symbol(A.x, Decl(readonlyConstructorAssignment.ts, 3, 16))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(readonlyConstructorAssignment.ts, 6, 1))
+>A : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(readonlyConstructorAssignment.ts, 9, 16))
+
+        super(x);
+>super : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(readonlyConstructorAssignment.ts, 9, 16))
+
+        // Fails, x is readonly
+        this.x = 1;
+>this.x : Symbol(A.x, Decl(readonlyConstructorAssignment.ts, 3, 16))
+>this : Symbol(B, Decl(readonlyConstructorAssignment.ts, 6, 1))
+>x : Symbol(A.x, Decl(readonlyConstructorAssignment.ts, 3, 16))
+    }
+}
+
+class C extends A {
+>C : Symbol(C, Decl(readonlyConstructorAssignment.ts, 14, 1))
+>A : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+
+    // This is the usual behavior of readonly properties:
+    // if one is redeclared in a base class, then it can be assigned to.
+    constructor(readonly x: number) {
+>x : Symbol(C.x, Decl(readonlyConstructorAssignment.ts, 19, 16))
+
+        super(x);
+>super : Symbol(A, Decl(readonlyConstructorAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(readonlyConstructorAssignment.ts, 19, 16))
+
+        this.x = 1;
+>this.x : Symbol(C.x, Decl(readonlyConstructorAssignment.ts, 19, 16))
+>this : Symbol(C, Decl(readonlyConstructorAssignment.ts, 14, 1))
+>x : Symbol(C.x, Decl(readonlyConstructorAssignment.ts, 19, 16))
+    }
+}
+
+class D {
+>D : Symbol(D, Decl(readonlyConstructorAssignment.ts, 23, 1))
+
+    constructor(private readonly x: number) {
+>x : Symbol(D.x, Decl(readonlyConstructorAssignment.ts, 26, 16))
+
+        this.x = 0;
+>this.x : Symbol(D.x, Decl(readonlyConstructorAssignment.ts, 26, 16))
+>this : Symbol(D, Decl(readonlyConstructorAssignment.ts, 23, 1))
+>x : Symbol(D.x, Decl(readonlyConstructorAssignment.ts, 26, 16))
+    }
+}
+
+// Fails, can't redeclare readonly property
+class E extends D {
+>E : Symbol(E, Decl(readonlyConstructorAssignment.ts, 29, 1))
+>D : Symbol(D, Decl(readonlyConstructorAssignment.ts, 23, 1))
+
+    constructor(readonly x: number) {
+>x : Symbol(E.x, Decl(readonlyConstructorAssignment.ts, 33, 16))
+
+        super(x);
+>super : Symbol(D, Decl(readonlyConstructorAssignment.ts, 23, 1))
+>x : Symbol(x, Decl(readonlyConstructorAssignment.ts, 33, 16))
+
+        this.x = 1;
+>this.x : Symbol(E.x, Decl(readonlyConstructorAssignment.ts, 33, 16))
+>this : Symbol(E, Decl(readonlyConstructorAssignment.ts, 29, 1))
+>x : Symbol(E.x, Decl(readonlyConstructorAssignment.ts, 33, 16))
+    }
+}
+

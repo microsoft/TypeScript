@@ -1,0 +1,10 @@
+tests/cases/compiler/class2.ts(1,29): error TS1128: Declaration or statement expected.
+tests/cases/compiler/class2.ts(1,45): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/compiler/class2.ts (2 errors) ====
+    class foo { constructor() { static f = 3; } }
+                                ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                                                ~
+!!! error TS1128: Declaration or statement expected.

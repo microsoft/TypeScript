@@ -1,0 +1,36 @@
+=== tests/cases/compiler/constructorOverloads4.ts ===
+declare module M {    
+>M : typeof M
+
+    export class Function {
+>Function : Function
+
+        constructor(...args: string[]);
+>args : string[]
+    }
+    export function Function(...args: any[]): any;
+>Function : typeof Function
+>args : any[]
+
+    export function Function(...args: string[]): Function;
+>Function : typeof Function
+>args : string[]
+}
+
+
+(new M.Function("return 5"))();
+>(new M.Function("return 5"))() : any
+>(new M.Function("return 5")) : M.Function
+>new M.Function("return 5") : M.Function
+>M.Function : typeof M.Function
+>M : typeof M
+>Function : typeof M.Function
+>"return 5" : "return 5"
+
+M.Function("yo");
+>M.Function("yo") : any
+>M.Function : typeof M.Function
+>M : typeof M
+>Function : typeof M.Function
+>"yo" : "yo"
+

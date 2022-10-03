@@ -1,0 +1,47 @@
+=== tests/cases/compiler/intersectionsAndReadonlyProperties.ts ===
+// readonly and non-readonly
+type Intersection1 = { readonly a: number } & { a: number };
+>Intersection1 : Symbol(Intersection1, Decl(intersectionsAndReadonlyProperties.ts, 0, 0))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 1, 22))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 1, 47))
+
+declare let i1: Intersection1;
+>i1 : Symbol(i1, Decl(intersectionsAndReadonlyProperties.ts, 2, 11))
+>Intersection1 : Symbol(Intersection1, Decl(intersectionsAndReadonlyProperties.ts, 0, 0))
+
+i1.a = 2;
+>i1.a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 1, 22), Decl(intersectionsAndReadonlyProperties.ts, 1, 47))
+>i1 : Symbol(i1, Decl(intersectionsAndReadonlyProperties.ts, 2, 11))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 1, 22), Decl(intersectionsAndReadonlyProperties.ts, 1, 47))
+
+// getter and setter
+type Intersection2 = { get a(): number } & { set a(v: number) };
+>Intersection2 : Symbol(Intersection2, Decl(intersectionsAndReadonlyProperties.ts, 4, 9))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 7, 22))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 7, 44))
+>v : Symbol(v, Decl(intersectionsAndReadonlyProperties.ts, 7, 51))
+
+declare let i2: Intersection2;
+>i2 : Symbol(i2, Decl(intersectionsAndReadonlyProperties.ts, 8, 11))
+>Intersection2 : Symbol(Intersection2, Decl(intersectionsAndReadonlyProperties.ts, 4, 9))
+
+i2.a = 2;
+>i2.a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 7, 22), Decl(intersectionsAndReadonlyProperties.ts, 7, 44))
+>i2 : Symbol(i2, Decl(intersectionsAndReadonlyProperties.ts, 8, 11))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 7, 22), Decl(intersectionsAndReadonlyProperties.ts, 7, 44))
+
+// assignment to an all read-only property should still be disallowed
+type IntersectionAllReadonly = { readonly a: number } & { get a(): number };
+>IntersectionAllReadonly : Symbol(IntersectionAllReadonly, Decl(intersectionsAndReadonlyProperties.ts, 10, 9))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 13, 32))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 13, 57))
+
+declare let ia: IntersectionAllReadonly;
+>ia : Symbol(ia, Decl(intersectionsAndReadonlyProperties.ts, 14, 11))
+>IntersectionAllReadonly : Symbol(IntersectionAllReadonly, Decl(intersectionsAndReadonlyProperties.ts, 10, 9))
+
+ia.a = 2; // Error
+>ia.a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 13, 32), Decl(intersectionsAndReadonlyProperties.ts, 13, 57))
+>ia : Symbol(ia, Decl(intersectionsAndReadonlyProperties.ts, 14, 11))
+>a : Symbol(a, Decl(intersectionsAndReadonlyProperties.ts, 13, 32), Decl(intersectionsAndReadonlyProperties.ts, 13, 57))
+

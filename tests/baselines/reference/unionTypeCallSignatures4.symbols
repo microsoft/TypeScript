@@ -1,0 +1,89 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures4.ts ===
+type F1 = (a: string, b?: string) => void;
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures4.ts, 0, 0))
+>a : Symbol(a, Decl(unionTypeCallSignatures4.ts, 0, 11))
+>b : Symbol(b, Decl(unionTypeCallSignatures4.ts, 0, 21))
+
+type F2 = (a: string, b?: string, c?: string) => void;
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures4.ts, 0, 42))
+>a : Symbol(a, Decl(unionTypeCallSignatures4.ts, 1, 11))
+>b : Symbol(b, Decl(unionTypeCallSignatures4.ts, 1, 21))
+>c : Symbol(c, Decl(unionTypeCallSignatures4.ts, 1, 33))
+
+type F3 = (a: string, ...rest: string[]) => void;
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures4.ts, 1, 54))
+>a : Symbol(a, Decl(unionTypeCallSignatures4.ts, 2, 11))
+>rest : Symbol(rest, Decl(unionTypeCallSignatures4.ts, 2, 21))
+
+type F4 = (a: string, b?: string, ...rest: string[]) => void;
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures4.ts, 2, 49))
+>a : Symbol(a, Decl(unionTypeCallSignatures4.ts, 3, 11))
+>b : Symbol(b, Decl(unionTypeCallSignatures4.ts, 3, 21))
+>rest : Symbol(rest, Decl(unionTypeCallSignatures4.ts, 3, 33))
+
+type F5 = (a: string, b: string) => void;
+>F5 : Symbol(F5, Decl(unionTypeCallSignatures4.ts, 3, 61))
+>a : Symbol(a, Decl(unionTypeCallSignatures4.ts, 4, 11))
+>b : Symbol(b, Decl(unionTypeCallSignatures4.ts, 4, 21))
+
+var f12: F1 | F2;
+>f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures4.ts, 0, 0))
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures4.ts, 0, 42))
+
+f12("a");
+>f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
+
+f12("a", "b");
+>f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
+
+f12("a", "b", "c");  // ok
+>f12 : Symbol(f12, Decl(unionTypeCallSignatures4.ts, 6, 3))
+
+var f34: F3 | F4;
+>f34 : Symbol(f34, Decl(unionTypeCallSignatures4.ts, 11, 3))
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures4.ts, 1, 54))
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures4.ts, 2, 49))
+
+f34("a");
+>f34 : Symbol(f34, Decl(unionTypeCallSignatures4.ts, 11, 3))
+
+f34("a", "b");
+>f34 : Symbol(f34, Decl(unionTypeCallSignatures4.ts, 11, 3))
+
+f34("a", "b", "c");
+>f34 : Symbol(f34, Decl(unionTypeCallSignatures4.ts, 11, 3))
+
+var f1234: F1 | F2 | F3 | F4;
+>f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures4.ts, 0, 0))
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures4.ts, 0, 42))
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures4.ts, 1, 54))
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures4.ts, 2, 49))
+
+f1234("a");
+>f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
+
+f1234("a", "b");
+>f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
+
+f1234("a", "b", "c");  // ok
+>f1234 : Symbol(f1234, Decl(unionTypeCallSignatures4.ts, 16, 3))
+
+var f12345: F1 | F2 | F3 | F4 | F5;
+>f12345 : Symbol(f12345, Decl(unionTypeCallSignatures4.ts, 21, 3))
+>F1 : Symbol(F1, Decl(unionTypeCallSignatures4.ts, 0, 0))
+>F2 : Symbol(F2, Decl(unionTypeCallSignatures4.ts, 0, 42))
+>F3 : Symbol(F3, Decl(unionTypeCallSignatures4.ts, 1, 54))
+>F4 : Symbol(F4, Decl(unionTypeCallSignatures4.ts, 2, 49))
+>F5 : Symbol(F5, Decl(unionTypeCallSignatures4.ts, 3, 61))
+
+f12345("a");  // error
+>f12345 : Symbol(f12345, Decl(unionTypeCallSignatures4.ts, 21, 3))
+
+f12345("a", "b");
+>f12345 : Symbol(f12345, Decl(unionTypeCallSignatures4.ts, 21, 3))
+
+f12345("a", "b", "c");  // error
+>f12345 : Symbol(f12345, Decl(unionTypeCallSignatures4.ts, 21, 3))
+

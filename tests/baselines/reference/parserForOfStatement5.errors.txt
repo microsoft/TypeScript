@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts(1,10): error TS2483: The left-hand side of a 'for...of' statement cannot use a type annotation.
+tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts(1,23): error TS2304: Cannot find name 'X'.
+
+
+==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts (2 errors) ====
+    for (var a: number of X) {
+             ~
+!!! error TS2483: The left-hand side of a 'for...of' statement cannot use a type annotation.
+                          ~
+!!! error TS2304: Cannot find name 'X'.
+    }

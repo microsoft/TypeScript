@@ -1,0 +1,288 @@
+=== tests/cases/compiler/controlFlowPropertyDeclarations.ts ===
+// Repro from ##8913
+
+declare var require:any;
+>require : Symbol(require, Decl(controlFlowPropertyDeclarations.ts, 2, 11))
+
+var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
+>HTMLDOMPropertyConfig : Symbol(HTMLDOMPropertyConfig, Decl(controlFlowPropertyDeclarations.ts, 4, 3))
+>require : Symbol(require, Decl(controlFlowPropertyDeclarations.ts, 2, 11))
+
+// Populate property map with ReactJS's attribute and property mappings
+// TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
+for (var propname in HTMLDOMPropertyConfig.Properties) {
+>propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
+>HTMLDOMPropertyConfig : Symbol(HTMLDOMPropertyConfig, Decl(controlFlowPropertyDeclarations.ts, 4, 3))
+
+  if (!HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname)) {
+>HTMLDOMPropertyConfig : Symbol(HTMLDOMPropertyConfig, Decl(controlFlowPropertyDeclarations.ts, 4, 3))
+>propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
+
+    continue;
+  }
+
+  var mapFrom = HTMLDOMPropertyConfig.DOMAttributeNames[propname] || propname.toLowerCase();
+>mapFrom : Symbol(mapFrom, Decl(controlFlowPropertyDeclarations.ts, 13, 5))
+>HTMLDOMPropertyConfig : Symbol(HTMLDOMPropertyConfig, Decl(controlFlowPropertyDeclarations.ts, 4, 3))
+>propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
+>propname.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Repeats a string a certain number of times.
+ * Also: the future is bright and consists of native string repetition:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/repeat
+ *
+ * @param {string} string  String to repeat
+ * @param {number} times   Number of times to repeat string. Integer.
+ * @see http://jsperf.com/string-repeater/2
+ */
+function repeatString(string, times) {
+>repeatString : Symbol(repeatString, Decl(controlFlowPropertyDeclarations.ts, 14, 1))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 25, 22))
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+
+  if (times === 1) {
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+
+    return string;
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 25, 22))
+  }
+  if (times < 0) { throw new Error(); }
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  var repeated = '';
+>repeated : Symbol(repeated, Decl(controlFlowPropertyDeclarations.ts, 30, 5))
+
+  while (times) {
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+
+    if (times & 1) {
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+
+      repeated += string;
+>repeated : Symbol(repeated, Decl(controlFlowPropertyDeclarations.ts, 30, 5))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 25, 22))
+    }
+    if (times >>= 1) {
+>times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
+
+      string += string;
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 25, 22))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 25, 22))
+    }
+  }
+  return repeated;
+>repeated : Symbol(repeated, Decl(controlFlowPropertyDeclarations.ts, 30, 5))
+}
+
+/**
+ * Determine if the string ends with the specified substring.
+ *
+ * @param {string} haystack String to search in
+ * @param {string} needle   String to search for
+ * @return {boolean}
+ */
+function endsWith(haystack, needle) {
+>endsWith : Symbol(endsWith, Decl(controlFlowPropertyDeclarations.ts, 40, 1))
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 49, 18))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 49, 27))
+
+  return haystack.slice(-needle.length) === needle;
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 49, 18))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 49, 27))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 49, 27))
+}
+
+/**
+ * Trim the specified substring off the string. If the string does not end
+ * with the specified substring, this is a no-op.
+ *
+ * @param {string} haystack String to search in
+ * @param {string} needle   String to search for
+ * @return {string}
+ */
+function trimEnd(haystack, needle) {
+>trimEnd : Symbol(trimEnd, Decl(controlFlowPropertyDeclarations.ts, 51, 1))
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 61, 17))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 61, 26))
+
+  return endsWith(haystack, needle)
+>endsWith : Symbol(endsWith, Decl(controlFlowPropertyDeclarations.ts, 40, 1))
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 61, 17))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 61, 26))
+
+    ? haystack.slice(0, -needle.length)
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 61, 17))
+>needle : Symbol(needle, Decl(controlFlowPropertyDeclarations.ts, 61, 26))
+
+    : haystack;
+>haystack : Symbol(haystack, Decl(controlFlowPropertyDeclarations.ts, 61, 17))
+}
+
+/**
+ * Convert a hyphenated string to camelCase.
+ */
+function hyphenToCamelCase(string) {
+>hyphenToCamelCase : Symbol(hyphenToCamelCase, Decl(controlFlowPropertyDeclarations.ts, 65, 1))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 70, 27))
+
+  return string.replace(/-(.)/g, function(match, chr) {
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 70, 27))
+>match : Symbol(match, Decl(controlFlowPropertyDeclarations.ts, 71, 42))
+>chr : Symbol(chr, Decl(controlFlowPropertyDeclarations.ts, 71, 48))
+
+    return chr.toUpperCase();
+>chr : Symbol(chr, Decl(controlFlowPropertyDeclarations.ts, 71, 48))
+
+  });
+}
+
+/**
+ * Determines if the specified string consists entirely of whitespace.
+ */
+function isEmpty(string) {
+>isEmpty : Symbol(isEmpty, Decl(controlFlowPropertyDeclarations.ts, 74, 1))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
+
+   return !/[^\s]/.test(string);
+>/[^\s]/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
+}
+
+/**
+ * Determines if the CSS value can be converted from a
+ * 'px' suffixed string to a numeric value
+ *
+ * @param {string} value CSS property value
+ * @return {boolean}
+ */
+function isConvertiblePixelValue(value) {
+>isConvertiblePixelValue : Symbol(isConvertiblePixelValue, Decl(controlFlowPropertyDeclarations.ts, 81, 1))
+>value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
+
+  return /^\d+px$/.test(value);
+>/^\d+px$/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
+}
+
+export class HTMLtoJSX {
+>HTMLtoJSX : Symbol(HTMLtoJSX, Decl(controlFlowPropertyDeclarations.ts, 92, 1))
+
+    private output: string;
+>output : Symbol(HTMLtoJSX.output, Decl(controlFlowPropertyDeclarations.ts, 94, 24))
+
+    private level: number;
+>level : Symbol(HTMLtoJSX.level, Decl(controlFlowPropertyDeclarations.ts, 95, 27))
+
+    private _inPreTag: boolean;
+>_inPreTag : Symbol(HTMLtoJSX._inPreTag, Decl(controlFlowPropertyDeclarations.ts, 96, 26))
+
+
+  /**
+   * Handles processing of the specified text node
+   *
+   * @param {TextNode} node
+   */
+  _visitText = (node) => {
+>_visitText : Symbol(HTMLtoJSX._visitText, Decl(controlFlowPropertyDeclarations.ts, 97, 31))
+>node : Symbol(node, Decl(controlFlowPropertyDeclarations.ts, 105, 16))
+
+    var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();
+>parentTag : Symbol(parentTag, Decl(controlFlowPropertyDeclarations.ts, 106, 7))
+>node : Symbol(node, Decl(controlFlowPropertyDeclarations.ts, 105, 16))
+>node : Symbol(node, Decl(controlFlowPropertyDeclarations.ts, 105, 16))
+
+    if (parentTag === 'textarea' || parentTag === 'style') {
+>parentTag : Symbol(parentTag, Decl(controlFlowPropertyDeclarations.ts, 106, 7))
+>parentTag : Symbol(parentTag, Decl(controlFlowPropertyDeclarations.ts, 106, 7))
+
+      // Ignore text content of textareas and styles, as it will have already been moved
+      // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.
+      return;
+    }
+
+    var text = ''
+>text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
+
+    if (this._inPreTag) {
+>this._inPreTag : Symbol(HTMLtoJSX._inPreTag, Decl(controlFlowPropertyDeclarations.ts, 96, 26))
+>this : Symbol(HTMLtoJSX, Decl(controlFlowPropertyDeclarations.ts, 92, 1))
+>_inPreTag : Symbol(HTMLtoJSX._inPreTag, Decl(controlFlowPropertyDeclarations.ts, 96, 26))
+
+      // If this text is contained within a <pre>, we need to ensure the JSX
+      // whitespace coalescing rules don't eat the whitespace. This means
+      // wrapping newlines and sequences of two or more spaces in variables.
+      text = text
+>text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
+>text        .replace(/\r/g, '')        .replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>text        .replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
+
+        .replace(/\r/g, '')
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
+
+          return '{' + JSON.stringify(whitespace) + '}';
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
+
+        });
+    } else {
+      // If there's a newline in the text, adjust the indent level
+      if (text.indexOf('\n') > -1) {
+>text.indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
+>indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
+      }
+    }
+    this.output += text;
+>this.output : Symbol(HTMLtoJSX.output, Decl(controlFlowPropertyDeclarations.ts, 94, 24))
+>this : Symbol(HTMLtoJSX, Decl(controlFlowPropertyDeclarations.ts, 92, 1))
+>output : Symbol(HTMLtoJSX.output, Decl(controlFlowPropertyDeclarations.ts, 94, 24))
+>text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
+  }
+
+
+
+};
+
+/**
+ * Handles parsing of inline styles
+ */
+export class StyleParser {
+>StyleParser : Symbol(StyleParser, Decl(controlFlowPropertyDeclarations.ts, 134, 2))
+
+  styles = {};
+>styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
+
+  toJSXString = () => {
+>toJSXString : Symbol(StyleParser.toJSXString, Decl(controlFlowPropertyDeclarations.ts, 140, 14))
+
+    for (var key in this.styles) {
+>key : Symbol(key, Decl(controlFlowPropertyDeclarations.ts, 142, 12))
+>this.styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
+>this : Symbol(StyleParser, Decl(controlFlowPropertyDeclarations.ts, 134, 2))
+>styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
+
+      if (!this.styles.hasOwnProperty(key)) {
+>this.styles.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>this.styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
+>this : Symbol(StyleParser, Decl(controlFlowPropertyDeclarations.ts, 134, 2))
+>styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(controlFlowPropertyDeclarations.ts, 142, 12))
+      }
+    }
+  }
+}

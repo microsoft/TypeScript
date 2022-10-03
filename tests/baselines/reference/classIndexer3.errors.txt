@@ -1,0 +1,16 @@
+tests/cases/compiler/classIndexer3.ts(9,5): error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
+
+
+==== tests/cases/compiler/classIndexer3.ts (1 errors) ====
+    class C123 {
+        [s: string]: number;
+        constructor() {
+        }
+    }
+    
+    class D123 extends C123 {
+        x: number;
+        y: string;
+        ~
+!!! error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
+    }

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/wrappedIncovations2.ts ===
+var v = this.
+>v : Symbol(v, Decl(wrappedIncovations2.ts, 0, 3))
+>this : Symbol(globalThis)
+
+  foo().
+  bar().
+  baz();

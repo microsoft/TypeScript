@@ -1,0 +1,49 @@
+=== tests/cases/compiler/widenedTypes.ts ===
+null instanceof (() => { });
+({}) instanceof null; // Ok because null is a subtype of function
+
+null in {};
+"" in null;
+
+for (var a in null) { }
+>a : Symbol(a, Decl(widenedTypes.ts, 6, 8))
+
+var t = [3, (3, null)];
+>t : Symbol(t, Decl(widenedTypes.ts, 8, 3))
+
+t[3] = "";
+>t : Symbol(t, Decl(widenedTypes.ts, 8, 3))
+
+var x: typeof undefined = 3;
+>x : Symbol(x, Decl(widenedTypes.ts, 11, 3))
+>undefined : Symbol(undefined)
+
+x = 3;
+>x : Symbol(x, Decl(widenedTypes.ts, 11, 3))
+
+var y;
+>y : Symbol(y, Decl(widenedTypes.ts, 14, 3))
+
+var u = [3, (y = null)];
+>u : Symbol(u, Decl(widenedTypes.ts, 15, 3))
+>y : Symbol(y, Decl(widenedTypes.ts, 14, 3))
+
+u[3] = "";
+>u : Symbol(u, Decl(widenedTypes.ts, 15, 3))
+
+var ob: { x: typeof undefined } = { x: "" };
+>ob : Symbol(ob, Decl(widenedTypes.ts, 18, 3))
+>x : Symbol(x, Decl(widenedTypes.ts, 18, 9))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(widenedTypes.ts, 18, 35))
+
+// Highlights the difference between array literals and object literals
+var arr: string[] = [3, null]; // not assignable because null is not widened. BCT is {}
+>arr : Symbol(arr, Decl(widenedTypes.ts, 21, 3))
+
+var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
+>obj : Symbol(obj, Decl(widenedTypes.ts, 22, 3))
+>x : Symbol(x, Decl(widenedTypes.ts, 22, 12))
+>x : Symbol(x, Decl(widenedTypes.ts, 22, 37))
+>y : Symbol(y, Decl(widenedTypes.ts, 22, 43))
+

@@ -1,0 +1,17 @@
+tests/cases/compiler/exactSpellingSuggestion.ts(9,4): error TS2551: Property 'bit_2' does not exist on type 'typeof U8'. Did you mean 'BIT_2'?
+
+
+==== tests/cases/compiler/exactSpellingSuggestion.ts (1 errors) ====
+    // Fixes #16245 -- always suggest the exact match, even when
+    // other options are very close
+    enum U8 {
+        BIT_0 = 1 << 0,
+        BIT_1 = 1 << 1,
+        BIT_2 = 1 << 2
+    }
+    
+    U8.bit_2
+       ~~~~~
+!!! error TS2551: Property 'bit_2' does not exist on type 'typeof U8'. Did you mean 'BIT_2'?
+!!! related TS2728 tests/cases/compiler/exactSpellingSuggestion.ts:6:5: 'BIT_2' is declared here.
+    

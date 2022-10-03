@@ -1,0 +1,40 @@
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(4,18): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(6,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(9,18): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(11,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(14,5): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts(17,1): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts (6 errors) ====
+    "use strict";
+    function foo(a: number) {
+        if (a === 1) {
+            function foo() { } // Error to declare function in block scope
+                     ~~~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+            foo();
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        else {
+            function foo() { } // Error to declare function in block scope
+                     ~~~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+            foo();
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        foo(10);
+        foo(); // not ok - needs number
+        ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts:2:14: An argument for 'a' was not provided.
+    }
+    foo(10);
+    foo(); // not ok - needs number
+    ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts:2:14: An argument for 'a' was not provided.

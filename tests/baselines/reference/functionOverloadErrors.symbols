@@ -1,0 +1,288 @@
+=== tests/cases/conformance/functions/functionOverloadErrors.ts ===
+//Function overload signature with initializer
+function fn1(x = 3);
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 0, 0), Decl(functionOverloadErrors.ts, 1, 20))
+>x : Symbol(x, Decl(functionOverloadErrors.ts, 1, 13))
+
+function fn1() { }
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 0, 0), Decl(functionOverloadErrors.ts, 1, 20))
+
+//Multiple function overload signatures that are identical
+function fn2a();
+>fn2a : Symbol(fn2a, Decl(functionOverloadErrors.ts, 2, 18), Decl(functionOverloadErrors.ts, 5, 16), Decl(functionOverloadErrors.ts, 6, 16))
+
+function fn2a();
+>fn2a : Symbol(fn2a, Decl(functionOverloadErrors.ts, 2, 18), Decl(functionOverloadErrors.ts, 5, 16), Decl(functionOverloadErrors.ts, 6, 16))
+
+function fn2a() {
+>fn2a : Symbol(fn2a, Decl(functionOverloadErrors.ts, 2, 18), Decl(functionOverloadErrors.ts, 5, 16), Decl(functionOverloadErrors.ts, 6, 16))
+
+}
+function fn2b(n: number[]);
+>fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 10, 14))
+
+function fn2b(n: Array<number>);
+>fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 11, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function fn2b() {
+>fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
+}
+
+//Multiple function overload signatures that differ only by return type
+function fn3(x: string): string;
+>fn3 : Symbol(fn3, Decl(functionOverloadErrors.ts, 13, 1), Decl(functionOverloadErrors.ts, 16, 32), Decl(functionOverloadErrors.ts, 17, 32))
+>x : Symbol(x, Decl(functionOverloadErrors.ts, 16, 13))
+
+function fn3(y: string): number;
+>fn3 : Symbol(fn3, Decl(functionOverloadErrors.ts, 13, 1), Decl(functionOverloadErrors.ts, 16, 32), Decl(functionOverloadErrors.ts, 17, 32))
+>y : Symbol(y, Decl(functionOverloadErrors.ts, 17, 13))
+
+function fn3(): any {
+>fn3 : Symbol(fn3, Decl(functionOverloadErrors.ts, 13, 1), Decl(functionOverloadErrors.ts, 16, 32), Decl(functionOverloadErrors.ts, 17, 32))
+
+    return null;
+}
+
+//Function overload with rest param and another with only an optional parameter
+function fn6(...t: any[]);
+>fn6 : Symbol(fn6, Decl(functionOverloadErrors.ts, 20, 1), Decl(functionOverloadErrors.ts, 23, 26), Decl(functionOverloadErrors.ts, 24, 22))
+>t : Symbol(t, Decl(functionOverloadErrors.ts, 23, 13))
+
+function fn6(x?: any);
+>fn6 : Symbol(fn6, Decl(functionOverloadErrors.ts, 20, 1), Decl(functionOverloadErrors.ts, 23, 26), Decl(functionOverloadErrors.ts, 24, 22))
+>x : Symbol(x, Decl(functionOverloadErrors.ts, 24, 13))
+
+function fn6() { }
+>fn6 : Symbol(fn6, Decl(functionOverloadErrors.ts, 20, 1), Decl(functionOverloadErrors.ts, 23, 26), Decl(functionOverloadErrors.ts, 24, 22))
+
+//Function overload with rest param and another with only optional parameters
+function fn7(...t: any[]);
+>fn7 : Symbol(fn7, Decl(functionOverloadErrors.ts, 25, 18), Decl(functionOverloadErrors.ts, 28, 26), Decl(functionOverloadErrors.ts, 29, 40))
+>t : Symbol(t, Decl(functionOverloadErrors.ts, 28, 13))
+
+function fn7(x?: any, y?: any, z?: any);
+>fn7 : Symbol(fn7, Decl(functionOverloadErrors.ts, 25, 18), Decl(functionOverloadErrors.ts, 28, 26), Decl(functionOverloadErrors.ts, 29, 40))
+>x : Symbol(x, Decl(functionOverloadErrors.ts, 29, 13))
+>y : Symbol(y, Decl(functionOverloadErrors.ts, 29, 21))
+>z : Symbol(z, Decl(functionOverloadErrors.ts, 29, 30))
+
+function fn7() { }
+>fn7 : Symbol(fn7, Decl(functionOverloadErrors.ts, 25, 18), Decl(functionOverloadErrors.ts, 28, 26), Decl(functionOverloadErrors.ts, 29, 40))
+
+//Function overloads that differ only by type parameter name
+function fn8<T>(n: string);
+>fn8 : Symbol(fn8, Decl(functionOverloadErrors.ts, 30, 18), Decl(functionOverloadErrors.ts, 33, 27), Decl(functionOverloadErrors.ts, 34, 27))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 33, 13))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 33, 16))
+
+function fn8<S>(n: string);
+>fn8 : Symbol(fn8, Decl(functionOverloadErrors.ts, 30, 18), Decl(functionOverloadErrors.ts, 33, 27), Decl(functionOverloadErrors.ts, 34, 27))
+>S : Symbol(S, Decl(functionOverloadErrors.ts, 34, 13))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 34, 16))
+
+function fn8() { }
+>fn8 : Symbol(fn8, Decl(functionOverloadErrors.ts, 30, 18), Decl(functionOverloadErrors.ts, 33, 27), Decl(functionOverloadErrors.ts, 34, 27))
+
+//Function overloads that differ only by type parameter name when used in parameter type annotations
+function fn9<T>(n: T);
+>fn9 : Symbol(fn9, Decl(functionOverloadErrors.ts, 35, 18), Decl(functionOverloadErrors.ts, 38, 22), Decl(functionOverloadErrors.ts, 39, 22))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 38, 13))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 38, 16))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 38, 13))
+
+function fn9<S>(n: S);
+>fn9 : Symbol(fn9, Decl(functionOverloadErrors.ts, 35, 18), Decl(functionOverloadErrors.ts, 38, 22), Decl(functionOverloadErrors.ts, 39, 22))
+>S : Symbol(S, Decl(functionOverloadErrors.ts, 39, 13))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 39, 16))
+>S : Symbol(S, Decl(functionOverloadErrors.ts, 39, 13))
+
+function fn9() { }
+>fn9 : Symbol(fn9, Decl(functionOverloadErrors.ts, 35, 18), Decl(functionOverloadErrors.ts, 38, 22), Decl(functionOverloadErrors.ts, 39, 22))
+
+//Function overloads that differ only by type parameter constraints
+function fn10<T extends Window>();
+>fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 43, 14))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+function fn10<S extends Date>();
+>fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
+>S : Symbol(S, Decl(functionOverloadErrors.ts, 44, 14))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+function fn10() { }
+>fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
+
+// (actually OK)
+
+//Function overloads that differ only by type parameter constraints where constraints are structually identical
+function fn11<T extends Window>();
+>fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 49, 14))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+function fn11<S extends typeof window>();
+>fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))
+>S : Symbol(S, Decl(functionOverloadErrors.ts, 50, 14))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+function fn11() { }
+>fn11 : Symbol(fn11, Decl(functionOverloadErrors.ts, 45, 19), Decl(functionOverloadErrors.ts, 49, 34), Decl(functionOverloadErrors.ts, 50, 41))
+
+//Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
+interface List<T> {
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 54, 15))
+
+    parents: List<List<T>>;
+>parents : Symbol(List.parents, Decl(functionOverloadErrors.ts, 54, 19))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 54, 15))
+}
+function fn12<T extends List<List<any>>>();
+>fn12 : Symbol(fn12, Decl(functionOverloadErrors.ts, 56, 1), Decl(functionOverloadErrors.ts, 57, 43), Decl(functionOverloadErrors.ts, 58, 37))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 57, 14))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+
+function fn12<T extends List<any>>();
+>fn12 : Symbol(fn12, Decl(functionOverloadErrors.ts, 56, 1), Decl(functionOverloadErrors.ts, 57, 43), Decl(functionOverloadErrors.ts, 58, 37))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 58, 14))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+
+function fn12() { }
+>fn12 : Symbol(fn12, Decl(functionOverloadErrors.ts, 56, 1), Decl(functionOverloadErrors.ts, 57, 43), Decl(functionOverloadErrors.ts, 58, 37))
+
+//Function overloads that differ by accessibility
+class cls {
+>cls : Symbol(cls, Decl(functionOverloadErrors.ts, 59, 19))
+
+    public f();
+>f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+
+    private f(s: string);
+>f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+>s : Symbol(s, Decl(functionOverloadErrors.ts, 64, 14))
+
+    f() { }
+>f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+
+    private g(s: string);
+>g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+>s : Symbol(s, Decl(functionOverloadErrors.ts, 67, 14))
+
+    public g();
+>g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+
+    g() { }
+>g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+}
+
+//Function overloads with differing export
+module M {
+>M : Symbol(M, Decl(functionOverloadErrors.ts, 70, 1))
+
+    export function fn1();
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10))
+
+    function fn1(n: string);
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 75, 17))
+
+    function fn1() { } 
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+
+    function fn2(n: string);
+>fn2 : Symbol(fn2, Decl(functionOverloadErrors.ts, 76, 22), Decl(functionOverloadErrors.ts, 78, 28), Decl(functionOverloadErrors.ts, 79, 26))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 78, 17))
+
+    export function fn2();
+>fn2 : Symbol(fn2, Decl(functionOverloadErrors.ts, 78, 28), Decl(functionOverloadErrors.ts, 79, 26))
+
+    export function fn2() { } 
+>fn2 : Symbol(fn2, Decl(functionOverloadErrors.ts, 78, 28), Decl(functionOverloadErrors.ts, 79, 26))
+}
+
+//Function overloads with differing ambience
+declare function dfn1();
+>dfn1 : Symbol(dfn1, Decl(functionOverloadErrors.ts, 81, 1), Decl(functionOverloadErrors.ts, 84, 24), Decl(functionOverloadErrors.ts, 85, 25))
+
+function dfn1(s: string);
+>dfn1 : Symbol(dfn1, Decl(functionOverloadErrors.ts, 81, 1), Decl(functionOverloadErrors.ts, 84, 24), Decl(functionOverloadErrors.ts, 85, 25))
+>s : Symbol(s, Decl(functionOverloadErrors.ts, 85, 14))
+
+function dfn1() { }
+>dfn1 : Symbol(dfn1, Decl(functionOverloadErrors.ts, 81, 1), Decl(functionOverloadErrors.ts, 84, 24), Decl(functionOverloadErrors.ts, 85, 25))
+
+function dfn2();
+>dfn2 : Symbol(dfn2, Decl(functionOverloadErrors.ts, 86, 19), Decl(functionOverloadErrors.ts, 88, 16), Decl(functionOverloadErrors.ts, 89, 33))
+
+declare function dfn2(s: string);
+>dfn2 : Symbol(dfn2, Decl(functionOverloadErrors.ts, 86, 19), Decl(functionOverloadErrors.ts, 88, 16), Decl(functionOverloadErrors.ts, 89, 33))
+>s : Symbol(s, Decl(functionOverloadErrors.ts, 89, 22))
+
+function dfn2() { }
+>dfn2 : Symbol(dfn2, Decl(functionOverloadErrors.ts, 86, 19), Decl(functionOverloadErrors.ts, 88, 16), Decl(functionOverloadErrors.ts, 89, 33))
+
+//Function overloads with fewer params than implementation signature
+function fewerParams();
+>fewerParams : Symbol(fewerParams, Decl(functionOverloadErrors.ts, 90, 19), Decl(functionOverloadErrors.ts, 93, 23))
+
+function fewerParams(n: string) {
+>fewerParams : Symbol(fewerParams, Decl(functionOverloadErrors.ts, 90, 19), Decl(functionOverloadErrors.ts, 93, 23))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 94, 21))
+}
+
+//Function implementation whose parameter types are not assignable to all corresponding overload signature parameters
+function fn13(n: string);
+>fn13 : Symbol(fn13, Decl(functionOverloadErrors.ts, 95, 1), Decl(functionOverloadErrors.ts, 98, 25))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 98, 14))
+
+function fn13(n: number) { }
+>fn13 : Symbol(fn13, Decl(functionOverloadErrors.ts, 95, 1), Decl(functionOverloadErrors.ts, 98, 25))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 99, 14))
+
+//Function overloads where return types are not all subtype of implementation return type
+function fn14(n: string): string;
+>fn14 : Symbol(fn14, Decl(functionOverloadErrors.ts, 99, 28), Decl(functionOverloadErrors.ts, 102, 33))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 102, 14))
+
+function fn14() {
+>fn14 : Symbol(fn14, Decl(functionOverloadErrors.ts, 99, 28), Decl(functionOverloadErrors.ts, 102, 33))
+
+    return 3;
+}
+
+//Function overloads where return types are different infinitely recursive type reference
+function fn15<T extends List<List<any>>>(): T;
+>fn15 : Symbol(fn15, Decl(functionOverloadErrors.ts, 105, 1), Decl(functionOverloadErrors.ts, 108, 46), Decl(functionOverloadErrors.ts, 109, 40))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 108, 14))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 108, 14))
+
+function fn15<T extends List<any>>(): T;
+>fn15 : Symbol(fn15, Decl(functionOverloadErrors.ts, 105, 1), Decl(functionOverloadErrors.ts, 108, 46), Decl(functionOverloadErrors.ts, 109, 40))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 109, 14))
+>List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+>T : Symbol(T, Decl(functionOverloadErrors.ts, 109, 14))
+
+function fn15() {
+>fn15 : Symbol(fn15, Decl(functionOverloadErrors.ts, 105, 1), Decl(functionOverloadErrors.ts, 108, 46), Decl(functionOverloadErrors.ts, 109, 40))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+//Function overloads which use initializer expressions
+function initExpr(n = 13);
+>initExpr : Symbol(initExpr, Decl(functionOverloadErrors.ts, 112, 1), Decl(functionOverloadErrors.ts, 115, 26))
+>n : Symbol(n, Decl(functionOverloadErrors.ts, 115, 18))
+
+function initExpr() { }
+>initExpr : Symbol(initExpr, Decl(functionOverloadErrors.ts, 112, 1), Decl(functionOverloadErrors.ts, 115, 26))
+

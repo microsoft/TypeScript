@@ -1,0 +1,8 @@
+tests/cases/compiler/classExtendsInterface_not.ts(1,20): error TS2339: Property 'bogus' does not exist on type '""'.
+
+
+==== tests/cases/compiler/classExtendsInterface_not.ts (1 errors) ====
+    class C extends "".bogus {}
+                       ~~~~~
+!!! error TS2339: Property 'bogus' does not exist on type '""'.
+    

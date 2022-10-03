@@ -1,0 +1,8 @@
+tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts(1,7): error TS18029: Private identifiers are not allowed in variable declarations.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts (1 errors) ====
+    const #foo = 3;
+          ~~~~
+!!! error TS18029: Private identifiers are not allowed in variable declarations.
+    

@@ -1,0 +1,47 @@
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(5,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(11,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(15,10): error TS2339: Property '#z' does not exist on type 'C'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js (9 errors) ====
+    function A() { }
+    A.prototype = {
+      #x: 1,         // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      #m() {},       // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      get #p() { return "" } // Error
+          ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+          ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    class B { }
+    B.prototype = {
+      #y: 2,         // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      #m() {},       // Error
+      ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+      get #p() { return "" } // Error
+          ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+          ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    class C {
+      constructor() {
+        this.#z = 3;
+             ~~
+!!! error TS2339: Property '#z' does not exist on type 'C'.
+      }
+    }

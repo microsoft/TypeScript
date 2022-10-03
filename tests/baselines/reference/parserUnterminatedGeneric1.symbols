@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts ===
+ interface IQService {
+>IQService : Symbol(IQService, Decl(parserUnterminatedGeneric1.ts, 0, 0))
+
+        all(promises: IPromise < any > []): IPromise<
+>all : Symbol(IQService.all, Decl(parserUnterminatedGeneric1.ts, 0, 22))
+>promises : Symbol(promises, Decl(parserUnterminatedGeneric1.ts, 1, 12))
+>IPromise : Symbol(IPromise)
+>IPromise : Symbol(IPromise)
+

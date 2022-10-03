@@ -1,0 +1,54 @@
+=== tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts ===
+// All errors
+
+// naked break not allowed
+break;
+
+// non-existent label
+ONE:
+for (var x in {}) break TWO;
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+
+// break from inside function
+TWO:
+for (var x in {}) {
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+
+    var fn = () => {
+>fn : Symbol(fn, Decl(invalidForInBreakStatements.ts, 12, 7), Decl(invalidForInBreakStatements.ts, 19, 7))
+
+        break TWO;
+    }
+}
+
+THREE:
+for (var x in {}) {
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+
+    var fn = function () {
+>fn : Symbol(fn, Decl(invalidForInBreakStatements.ts, 12, 7), Decl(invalidForInBreakStatements.ts, 19, 7))
+
+        break THREE;
+    }
+}
+
+// break forward
+for (var x in {}) {
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+
+    break FIVE;
+    FIVE:
+    for (var x in {}) { }
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+}
+
+// label on non-loop statement
+NINE:
+var y = 12;
+>y : Symbol(y, Decl(invalidForInBreakStatements.ts, 33, 3))
+
+for (var x in {}) {
+>x : Symbol(x, Decl(invalidForInBreakStatements.ts, 7, 8), Decl(invalidForInBreakStatements.ts, 11, 8), Decl(invalidForInBreakStatements.ts, 18, 8), Decl(invalidForInBreakStatements.ts, 25, 8), Decl(invalidForInBreakStatements.ts, 28, 12) ... and 1 more)
+
+    break NINE;
+}

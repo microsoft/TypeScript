@@ -1,0 +1,24 @@
+=== tests/cases/compiler/file2.ts ===
+import f = require('./file1');
+>f : typeof f
+
+f.foo();
+>f.foo() : any
+>f.foo : () => any
+>f : typeof f
+>foo : () => any
+
+=== tests/cases/compiler/file1.ts ===
+export function foo() {
+>foo : () => any
+
+var classes = undefined;
+>classes : any
+>undefined : undefined
+
+    return new classes(null);
+>new classes(null) : any
+>classes : any
+>null : null
+}
+

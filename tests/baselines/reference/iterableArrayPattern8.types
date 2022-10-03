@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern8.ts ===
+class Bar { x }
+>Bar : Bar
+>x : any
+
+class Foo extends Bar { y }
+>Foo : Foo
+>Bar : Bar
+>y : any
+
+class FooIterator {
+>FooIterator : FooIterator
+
+    next() {
+>next : () => { value: Foo; done: boolean; }
+
+        return {
+>{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
+
+            value: new Foo,
+>value : Foo
+>new Foo : Foo
+>Foo : typeof Foo
+
+            done: false
+>done : boolean
+>false : false
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+var a: Bar, b: string;
+>a : Bar
+>b : string
+
+[a, ...b] = new FooIterator;
+>[a, ...b] = new FooIterator : FooIterator
+>[a, ...b] : [Bar, ...string[]]
+>a : Bar
+>...b : string
+>b : string
+>new FooIterator : FooIterator
+>FooIterator : typeof FooIterator
+

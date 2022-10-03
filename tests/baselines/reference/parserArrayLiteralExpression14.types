@@ -1,0 +1,16 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression14.ts ===
+var v = [,,1,1,,1,,1,1,,1];
+>v : number[]
+>[,,1,1,,1,,1,1,,1] : number[]
+> : undefined
+> : undefined
+>1 : 1
+>1 : 1
+> : undefined
+>1 : 1
+> : undefined
+>1 : 1
+>1 : 1
+> : undefined
+>1 : 1
+

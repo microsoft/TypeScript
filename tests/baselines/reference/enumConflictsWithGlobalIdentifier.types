@@ -1,0 +1,20 @@
+=== tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts ===
+enum Position { 
+>Position : Position
+
+    IgnoreRulesSpecific = 0,
+>IgnoreRulesSpecific : Position.IgnoreRulesSpecific
+>0 : 0
+}
+var x = IgnoreRulesSpecific.
+>x : any
+>IgnoreRulesSpecific. : any
+>IgnoreRulesSpecific : any
+
+var y = Position.IgnoreRulesSpecific;
+> : any
+>y : Position
+>Position.IgnoreRulesSpecific : Position
+>Position : typeof Position
+>IgnoreRulesSpecific : Position
+

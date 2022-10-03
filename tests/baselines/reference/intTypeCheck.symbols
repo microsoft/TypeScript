@@ -1,0 +1,634 @@
+=== tests/cases/compiler/intTypeCheck.ts ===
+interface i1 {
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+    //Property Signatures
+    p;
+>p : Symbol(i1.p, Decl(intTypeCheck.ts, 0, 14))
+
+    p1?;
+>p1 : Symbol(i1.p1, Decl(intTypeCheck.ts, 2, 6))
+
+    p2?: string;
+>p2 : Symbol(i1.p2, Decl(intTypeCheck.ts, 3, 8))
+
+    p3();
+>p3 : Symbol(i1.p3, Decl(intTypeCheck.ts, 4, 16))
+
+    p4? ();
+>p4 : Symbol(i1.p4, Decl(intTypeCheck.ts, 5, 9))
+
+    p5? (): void;
+>p5 : Symbol(i1.p5, Decl(intTypeCheck.ts, 6, 11))
+
+    p6(pa1): void;
+>p6 : Symbol(i1.p6, Decl(intTypeCheck.ts, 7, 17))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 8, 7))
+
+    p7? (pa1, pa2): void;
+>p7 : Symbol(i1.p7, Decl(intTypeCheck.ts, 8, 18))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 9, 9))
+>pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 9, 13))
+}
+interface i2 {
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+    //Call Signatures
+    ();
+    (): number;
+    (p);
+>p : Symbol(p, Decl(intTypeCheck.ts, 15, 5))
+
+    (p1: string);
+>p1 : Symbol(p1, Decl(intTypeCheck.ts, 16, 5))
+
+    (p2?: string);
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 17, 5))
+
+    (...p3: any[]);
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 18, 5))
+
+    (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(intTypeCheck.ts, 19, 5))
+>p5 : Symbol(p5, Decl(intTypeCheck.ts, 19, 16))
+
+    (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(intTypeCheck.ts, 20, 5))
+>p7 : Symbol(p7, Decl(intTypeCheck.ts, 20, 16))
+}
+interface i3 {
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+    //Construct Signatures
+    new ();
+    new (): number;
+    new (p: string);
+>p : Symbol(p, Decl(intTypeCheck.ts, 26, 9))
+
+    new (p2?: string);
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 27, 9))
+
+    new (...p3: any[]);
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 28, 9))
+
+    new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(intTypeCheck.ts, 29, 9))
+>p5 : Symbol(p5, Decl(intTypeCheck.ts, 29, 20))
+
+    new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(intTypeCheck.ts, 30, 9))
+>p7 : Symbol(p7, Decl(intTypeCheck.ts, 30, 20))
+}
+interface i4 {
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+    // Used to be indexer, now it is a computed property
+    [p];
+>[p] : Symbol(i4[p], Decl(intTypeCheck.ts, 32, 14))
+
+    //Index Signatures
+    [p1: string];
+>p1 : Symbol(p1, Decl(intTypeCheck.ts, 36, 5))
+
+    [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 37, 5))
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 37, 16))
+}
+interface i5 extends i1 { }
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+interface i6 extends i2 { }
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+interface i7 extends i3 { }
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+interface i8 extends i4 { }
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+interface i9 { }
+>i9 : Symbol(i9, Decl(intTypeCheck.ts, 42, 27))
+
+class Base { foo() { } }
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+>foo : Symbol(Base.foo, Decl(intTypeCheck.ts, 45, 12))
+
+interface i11 {
+>i11 : Symbol(i11, Decl(intTypeCheck.ts, 45, 24))
+
+    //Call Signatures
+    ();
+    (): number;
+    (p);
+>p : Symbol(p, Decl(intTypeCheck.ts, 51, 5))
+
+    (p1: string);
+>p1 : Symbol(p1, Decl(intTypeCheck.ts, 52, 5))
+
+    (p2?: string);
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 53, 5))
+
+    (...p3: any[]);
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 54, 5))
+
+    (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(intTypeCheck.ts, 55, 5))
+>p5 : Symbol(p5, Decl(intTypeCheck.ts, 55, 16))
+
+    (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(intTypeCheck.ts, 56, 5))
+>p7 : Symbol(p7, Decl(intTypeCheck.ts, 56, 16))
+
+    //(p8?: string, ...p9: any[]);
+    //(p10:string, p8?: string, ...p9: any[]);
+
+    //Construct Signatures
+    new ();
+    new (): number;
+    new (p: string);
+>p : Symbol(p, Decl(intTypeCheck.ts, 63, 9))
+
+    new (p2?: string);
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 64, 9))
+
+    new (...p3: any[]);
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 65, 9))
+
+    new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(intTypeCheck.ts, 66, 9))
+>p5 : Symbol(p5, Decl(intTypeCheck.ts, 66, 20))
+
+    new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(intTypeCheck.ts, 67, 9))
+>p7 : Symbol(p7, Decl(intTypeCheck.ts, 67, 20))
+    
+    // Used to be indexer, now it is a computed property
+    [p];
+>[p] : Symbol(i11[p], Decl(intTypeCheck.ts, 67, 35))
+
+    //Index Signatures
+    [p1: string];
+>p1 : Symbol(p1, Decl(intTypeCheck.ts, 72, 5))
+
+    [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(intTypeCheck.ts, 73, 5))
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 73, 16))
+
+    //Property Signatures
+    p;
+>p : Symbol(i11.p, Decl(intTypeCheck.ts, 73, 29))
+
+    p1?;
+>p1 : Symbol(i11.p1, Decl(intTypeCheck.ts, 76, 6))
+
+    p2?: string;
+>p2 : Symbol(i11.p2, Decl(intTypeCheck.ts, 77, 8))
+
+    p3();
+>p3 : Symbol(i11.p3, Decl(intTypeCheck.ts, 78, 16))
+
+    p4? ();
+>p4 : Symbol(i11.p4, Decl(intTypeCheck.ts, 79, 9))
+
+    p5? (): void;
+>p5 : Symbol(i11.p5, Decl(intTypeCheck.ts, 80, 11))
+
+    p6(pa1): void;
+>p6 : Symbol(i11.p6, Decl(intTypeCheck.ts, 81, 17))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 82, 7))
+
+    p7(pa1, pa2): void;
+>p7 : Symbol(i11.p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 83, 7))
+>pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 83, 11))
+
+    p7? (pa1, pa2): void;
+>p7 : Symbol(i11.p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 84, 9))
+>pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 84, 13))
+}
+
+var anyVar: any;
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+//
+// Property signatures
+//
+var obj0: i1;
+>obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+var obj1: i1 = {
+>obj1 : Symbol(obj1, Decl(intTypeCheck.ts, 92, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+    p: null,
+>p : Symbol(p, Decl(intTypeCheck.ts, 92, 16))
+
+    p3: function ():any { return 0; },
+>p3 : Symbol(p3, Decl(intTypeCheck.ts, 93, 12))
+
+    p6: function (pa1):any { return 0; },
+>p6 : Symbol(p6, Decl(intTypeCheck.ts, 94, 38))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 95, 18))
+
+    p7: function (pa1, pa2):any { return 0; }
+>p7 : Symbol(p7, Decl(intTypeCheck.ts, 95, 41))
+>pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 96, 18))
+>pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 96, 22))
+
+};
+var obj2: i1 = new Object();
+>obj2 : Symbol(obj2, Decl(intTypeCheck.ts, 98, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj3: i1 = new obj0;
+>obj3 : Symbol(obj3, Decl(intTypeCheck.ts, 99, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 3))
+
+var obj4: i1 = new Base;
+>obj4 : Symbol(obj4, Decl(intTypeCheck.ts, 100, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj5: i1 = null;
+>obj5 : Symbol(obj5, Decl(intTypeCheck.ts, 101, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+var obj6: i1 = function () { };
+>obj6 : Symbol(obj6, Decl(intTypeCheck.ts, 102, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+//var obj7: i1 = function foo() { };
+var obj8: i1 = <i1> anyVar;
+>obj8 : Symbol(obj8, Decl(intTypeCheck.ts, 104, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj9: i1 = new <i1> anyVar;
+>obj9 : Symbol(obj9, Decl(intTypeCheck.ts, 105, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj10: i1 = new {};
+>obj10 : Symbol(obj10, Decl(intTypeCheck.ts, 106, 3))
+>i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
+
+//
+// Call signatures
+//
+var obj11: i2;
+>obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+var obj12: i2 = {};
+>obj12 : Symbol(obj12, Decl(intTypeCheck.ts, 111, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+var obj13: i2 = new Object();
+>obj13 : Symbol(obj13, Decl(intTypeCheck.ts, 112, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj14: i2 = new obj11;
+>obj14 : Symbol(obj14, Decl(intTypeCheck.ts, 113, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 3))
+
+var obj15: i2 = new Base;
+>obj15 : Symbol(obj15, Decl(intTypeCheck.ts, 114, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj16: i2 = null;
+>obj16 : Symbol(obj16, Decl(intTypeCheck.ts, 115, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+var obj17: i2 = function ():any { return 0; };
+>obj17 : Symbol(obj17, Decl(intTypeCheck.ts, 116, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+//var obj18: i2 = function foo() { };
+var obj19: i2 = <i2> anyVar;
+>obj19 : Symbol(obj19, Decl(intTypeCheck.ts, 118, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj20: i2 = new <i2> anyVar;
+>obj20 : Symbol(obj20, Decl(intTypeCheck.ts, 119, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj21: i2 = new {};
+>obj21 : Symbol(obj21, Decl(intTypeCheck.ts, 120, 3))
+>i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
+
+//
+// Construct Signatures
+//
+var obj22: i3;
+>obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+var obj23: i3 = {};
+>obj23 : Symbol(obj23, Decl(intTypeCheck.ts, 125, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+var obj24: i3 = new Object();
+>obj24 : Symbol(obj24, Decl(intTypeCheck.ts, 126, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj25: i3 = new obj22;
+>obj25 : Symbol(obj25, Decl(intTypeCheck.ts, 127, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 3))
+
+var obj26: i3 = new Base;
+>obj26 : Symbol(obj26, Decl(intTypeCheck.ts, 128, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj27: i3 = null;
+>obj27 : Symbol(obj27, Decl(intTypeCheck.ts, 129, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+var obj28: i3 = function () { };
+>obj28 : Symbol(obj28, Decl(intTypeCheck.ts, 130, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+//var obj29: i3 = function foo() { };
+var obj30: i3 = <i3> anyVar;
+>obj30 : Symbol(obj30, Decl(intTypeCheck.ts, 132, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj31: i3 = new <i3> anyVar;
+>obj31 : Symbol(obj31, Decl(intTypeCheck.ts, 133, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj32: i3 = new {};
+>obj32 : Symbol(obj32, Decl(intTypeCheck.ts, 134, 3))
+>i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
+
+//
+// Index Signatures
+//
+var obj33: i4;
+>obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+var obj34: i4 = {};
+>obj34 : Symbol(obj34, Decl(intTypeCheck.ts, 139, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+var obj35: i4 = new Object();
+>obj35 : Symbol(obj35, Decl(intTypeCheck.ts, 140, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj36: i4 = new obj33;
+>obj36 : Symbol(obj36, Decl(intTypeCheck.ts, 141, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 3))
+
+var obj37: i4 = new Base;
+>obj37 : Symbol(obj37, Decl(intTypeCheck.ts, 142, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj38: i4 = null;
+>obj38 : Symbol(obj38, Decl(intTypeCheck.ts, 143, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+var obj39: i4 = function () { };
+>obj39 : Symbol(obj39, Decl(intTypeCheck.ts, 144, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+//var obj40: i4 = function foo() { };
+var obj41: i4 = <i4> anyVar;
+>obj41 : Symbol(obj41, Decl(intTypeCheck.ts, 146, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj42: i4 = new <i4> anyVar;
+>obj42 : Symbol(obj42, Decl(intTypeCheck.ts, 147, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj43: i4 = new {};
+>obj43 : Symbol(obj43, Decl(intTypeCheck.ts, 148, 3))
+>i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
+
+//
+// Interface Derived I1
+//
+var obj44: i5;
+>obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+
+var obj45: i5 = {};
+>obj45 : Symbol(obj45, Decl(intTypeCheck.ts, 153, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+
+var obj46: i5 = new Object();
+>obj46 : Symbol(obj46, Decl(intTypeCheck.ts, 154, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj47: i5 = new obj44;
+>obj47 : Symbol(obj47, Decl(intTypeCheck.ts, 155, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 3))
+
+var obj48: i5 = new Base;
+>obj48 : Symbol(obj48, Decl(intTypeCheck.ts, 156, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj49: i5 = null;
+>obj49 : Symbol(obj49, Decl(intTypeCheck.ts, 157, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+
+var obj50: i5 = function () { };
+>obj50 : Symbol(obj50, Decl(intTypeCheck.ts, 158, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+
+//var obj51: i5 = function foo() { };
+var obj52: i5 = <i5> anyVar;
+>obj52 : Symbol(obj52, Decl(intTypeCheck.ts, 160, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj53: i5 = new <i5> anyVar;
+>obj53 : Symbol(obj53, Decl(intTypeCheck.ts, 161, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj54: i5 = new {};
+>obj54 : Symbol(obj54, Decl(intTypeCheck.ts, 162, 3))
+>i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
+
+//
+// Interface Derived I2
+//
+var obj55: i6;
+>obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+
+var obj56: i6 = {};
+>obj56 : Symbol(obj56, Decl(intTypeCheck.ts, 167, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+
+var obj57: i6 = new Object();
+>obj57 : Symbol(obj57, Decl(intTypeCheck.ts, 168, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj58: i6 = new obj55;
+>obj58 : Symbol(obj58, Decl(intTypeCheck.ts, 169, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 3))
+
+var obj59: i6 = new Base;
+>obj59 : Symbol(obj59, Decl(intTypeCheck.ts, 170, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj60: i6 = null;
+>obj60 : Symbol(obj60, Decl(intTypeCheck.ts, 171, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+
+var obj61: i6 = function () { };
+>obj61 : Symbol(obj61, Decl(intTypeCheck.ts, 172, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+
+//var obj62: i6 = function foo() { };
+var obj63: i6 = <i6> anyVar;
+>obj63 : Symbol(obj63, Decl(intTypeCheck.ts, 174, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj64: i6 = new <i6> anyVar;
+>obj64 : Symbol(obj64, Decl(intTypeCheck.ts, 175, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj65: i6 = new {};
+>obj65 : Symbol(obj65, Decl(intTypeCheck.ts, 176, 3))
+>i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
+
+//
+// Interface Derived I3
+//
+var obj66: i7;
+>obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+
+var obj67: i7 = {};
+>obj67 : Symbol(obj67, Decl(intTypeCheck.ts, 181, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+
+var obj68: i7 = new Object();
+>obj68 : Symbol(obj68, Decl(intTypeCheck.ts, 182, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj69: i7 = new obj66;
+>obj69 : Symbol(obj69, Decl(intTypeCheck.ts, 183, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 3))
+
+var obj70: i7 = <i7>new Base;
+>obj70 : Symbol(obj70, Decl(intTypeCheck.ts, 184, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj71: i7 = null;
+>obj71 : Symbol(obj71, Decl(intTypeCheck.ts, 185, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+
+var obj72: i7 = function () { };
+>obj72 : Symbol(obj72, Decl(intTypeCheck.ts, 186, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+
+//var obj73: i7 = function foo() { };
+var obj74: i7 = <i7> anyVar;
+>obj74 : Symbol(obj74, Decl(intTypeCheck.ts, 188, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj75: i7 = new <i7> anyVar;
+>obj75 : Symbol(obj75, Decl(intTypeCheck.ts, 189, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj76: i7 = new {};
+>obj76 : Symbol(obj76, Decl(intTypeCheck.ts, 190, 3))
+>i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
+
+//
+// Interface Derived I4
+//
+var obj77: i8;
+>obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+
+var obj78: i8 = {};
+>obj78 : Symbol(obj78, Decl(intTypeCheck.ts, 195, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+
+var obj79: i8 = new Object();
+>obj79 : Symbol(obj79, Decl(intTypeCheck.ts, 196, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var obj80: i8 = new obj77;
+>obj80 : Symbol(obj80, Decl(intTypeCheck.ts, 197, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 3))
+
+var obj81: i8 = new Base;
+>obj81 : Symbol(obj81, Decl(intTypeCheck.ts, 198, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+
+var obj82: i8 = null;
+>obj82 : Symbol(obj82, Decl(intTypeCheck.ts, 199, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+
+var obj83: i8 = function () { };
+>obj83 : Symbol(obj83, Decl(intTypeCheck.ts, 200, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+
+//var obj84: i8 = function foo() { };
+var obj85: i8 = <i8> anyVar;
+>obj85 : Symbol(obj85, Decl(intTypeCheck.ts, 202, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj86: i8 = new <i8> anyVar;
+>obj86 : Symbol(obj86, Decl(intTypeCheck.ts, 203, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+>anyVar : Symbol(anyVar, Decl(intTypeCheck.ts, 87, 3))
+
+var obj87: i8 = new {};
+>obj87 : Symbol(obj87, Decl(intTypeCheck.ts, 204, 3))
+>i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
+

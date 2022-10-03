@@ -1,0 +1,17 @@
+/a.ts(1,22): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+
+
+==== /a.ts (1 errors) ====
+    import foo = require("foo");
+                         ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "main": "oof" }
+    
+==== /node_modules/foo/oof/package.json (0 errors) ====
+    { "main": "ofo" }
+    
+==== /node_modules/foo/oof/ofo.js (0 errors) ====
+    module.exports = 0;
+    

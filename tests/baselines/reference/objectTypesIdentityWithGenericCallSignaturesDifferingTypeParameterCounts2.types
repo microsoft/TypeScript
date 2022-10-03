@@ -1,0 +1,106 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts ===
+// object types are identical structurally
+
+
+interface I<X, Y, Z, A> {
+    (x: X): X;
+>x : X
+}
+
+interface I2 {
+    <Y, Z, A, B>(x: Y): Y;
+>x : Y
+}
+
+var a: { <Z, A, B, C, D>(x: Z): Z }
+>a : <Z, A, B, C, D>(x: Z) => Z
+>x : Z
+
+function foo1(x: I<string, boolean, number, string>);
+>foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : I<string, boolean, number, string>
+
+function foo1(x: I<string, boolean, number, string>); // error
+>foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : I<string, boolean, number, string>
+
+function foo1(x: any) { }
+>foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : any
+
+function foo2(x: I2);
+>foo2 : { (x: I2): any; (x: I2): any; }
+>x : I2
+
+function foo2(x: I2); // error
+>foo2 : { (x: I2): any; (x: I2): any; }
+>x : I2
+
+function foo2(x: any) { }
+>foo2 : { (x: I2): any; (x: I2): any; }
+>x : any
+
+function foo3(x: typeof a);
+>foo3 : { (x: typeof a): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
+>x : <Z, A, B, C, D>(x: Z) => Z
+>a : <Z, A, B, C, D>(x: Z) => Z
+
+function foo3(x: typeof a); // error
+>foo3 : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: typeof a): any; }
+>x : <Z, A, B, C, D>(x: Z) => Z
+>a : <Z, A, B, C, D>(x: Z) => Z
+
+function foo3(x: any) { }
+>foo3 : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
+>x : any
+
+function foo13(x: I<boolean, string, number, Date>);
+>foo13 : { (x: I<boolean, string, number, Date>): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
+>x : I<boolean, string, number, Date>
+
+function foo13(x: typeof a); // ok
+>foo13 : { (x: I<boolean, string, number, Date>): any; (x: typeof a): any; }
+>x : <Z, A, B, C, D>(x: Z) => Z
+>a : <Z, A, B, C, D>(x: Z) => Z
+
+function foo13(x: any) { }
+>foo13 : { (x: I<boolean, string, number, Date>): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
+>x : any
+
+function foo14(x: I<boolean, string, number, Date>);
+>foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : I<boolean, string, number, Date>
+
+function foo14(x: I2); // error
+>foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : I2
+
+function foo14(x: any) { }
+>foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : any
+
+function foo14b(x: typeof a);
+>foo14b : { (x: typeof a): any; (x: I2): any; }
+>x : <Z, A, B, C, D>(x: Z) => Z
+>a : <Z, A, B, C, D>(x: Z) => Z
+
+function foo14b(x: I2); // ok
+>foo14b : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: I2): any; }
+>x : I2
+
+function foo14b(x: any) { }
+>foo14b : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: I2): any; }
+>x : any
+
+function foo15(x: I<boolean, string, number, Date>);
+>foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : I<boolean, string, number, Date>
+
+function foo15(x: I2); // ok
+>foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : I2
+
+function foo15(x: any) { }
+>foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
+>x : any
+

@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty58.ts ===
+interface SymbolConstructor {
+    foo: string;
+>foo : string
+}
+
+var obj = {
+>obj : { [x: string]: number; }
+>{    [Symbol.foo]: 0} : { [x: string]: number; }
+
+    [Symbol.foo]: 0
+>[Symbol.foo] : number
+>Symbol.foo : string
+>Symbol : SymbolConstructor
+>foo : string
+>0 : 0
+}

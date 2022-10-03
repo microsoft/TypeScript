@@ -1,0 +1,63 @@
+=== tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
+var a1 = null;
+>a1 : null
+>null : null
+
+var a2 = undefined;
+>a2 : undefined
+>undefined : undefined
+
+var a3 = void 0;
+>a3 : undefined
+>void 0 : undefined
+>0 : 0
+
+var b1 = [];
+>b1 : never[]
+>[] : never[]
+
+var b2 = [,];
+>b2 : undefined[]
+>[,] : undefined[]
+> : undefined
+
+var b3 = [undefined];
+>b3 : undefined[]
+>[undefined] : undefined[]
+>undefined : undefined
+
+var b4 = [[], []];
+>b4 : never[][]
+>[[], []] : never[][]
+>[] : never[]
+>[] : never[]
+
+var b5 = [[], [,]];
+>b5 : undefined[][]
+>[[], [,]] : undefined[][]
+>[] : never[]
+>[,] : undefined[]
+> : undefined
+
+declare function f<T>(x: T): T;
+>f : <T>(x: T) => T
+>x : T
+
+var c1 = f(null);
+>c1 : null
+>f(null) : null
+>f : <T>(x: T) => T
+>null : null
+
+var c2 = f(undefined);
+>c2 : undefined
+>f(undefined) : undefined
+>f : <T>(x: T) => T
+>undefined : undefined
+
+var c3 = f([]);
+>c3 : never[]
+>f([]) : never[]
+>f : <T>(x: T) => T
+>[] : never[]
+

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/index.ts ===
+if (true) {
+No type information for this code.
+No type information for this code.

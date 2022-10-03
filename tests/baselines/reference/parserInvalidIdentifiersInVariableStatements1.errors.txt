@@ -1,0 +1,17 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts(1,5): error TS1389: 'export' is not allowed as a variable declaration name.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts(3,5): error TS1389: 'class' is not allowed as a variable declaration name.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts(3,10): error TS1005: '{' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts (3 errors) ====
+    var export;
+        ~~~~~~
+!!! error TS1389: 'export' is not allowed as a variable declaration name.
+    var foo;
+    var class;
+        ~~~~~
+!!! error TS1389: 'class' is not allowed as a variable declaration name.
+             ~
+!!! error TS1005: '{' expected.
+    var bar;
+    

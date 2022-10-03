@@ -1,0 +1,118 @@
+=== tests/cases/conformance/salsa/expando.ts ===
+function ExpandoMerge(n: number) {
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>n : Symbol(n, Decl(expando.ts, 0, 22))
+
+    return n;
+>n : Symbol(n, Decl(expando.ts, 0, 22))
+}
+ExpandoMerge.p1 = 111
+>ExpandoMerge.p1 : Symbol(ExpandoMerge.p1, Decl(expando.ts, 2, 1))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p1 : Symbol(ExpandoMerge.p1, Decl(expando.ts, 2, 1))
+
+ExpandoMerge.m = function(n: number) {
+>ExpandoMerge.m : Symbol(ExpandoMerge.m, Decl(expando.ts, 3, 21))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>m : Symbol(ExpandoMerge.m, Decl(expando.ts, 3, 21))
+>n : Symbol(n, Decl(expando.ts, 4, 26))
+
+    return n + 1;
+>n : Symbol(n, Decl(expando.ts, 4, 26))
+}
+ExpandoMerge.p4 = 44444;
+>ExpandoMerge.p4 : Symbol(ExpandoMerge.p4, Decl(expando.ts, 6, 1), Decl(ns.ts, 2, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p4 : Symbol(ExpandoMerge.p4, Decl(expando.ts, 6, 1), Decl(ns.ts, 2, 14))
+
+ExpandoMerge.p5 = 555555;
+>ExpandoMerge.p5 : Symbol(ExpandoMerge.p5, Decl(expando.ts, 7, 24), Decl(ns.ts, 3, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p5 : Symbol(ExpandoMerge.p5, Decl(expando.ts, 7, 24), Decl(ns.ts, 3, 14))
+
+ExpandoMerge.p6 = 66666;
+>ExpandoMerge.p6 : Symbol(ExpandoMerge.p6, Decl(expando.ts, 8, 25), Decl(ns.ts, 4, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p6 : Symbol(ExpandoMerge.p6, Decl(expando.ts, 8, 25), Decl(ns.ts, 4, 14))
+
+ExpandoMerge.p7 = 777777;
+>ExpandoMerge.p7 : Symbol(ExpandoMerge.p7, Decl(expando.ts, 9, 24), Decl(ns.ts, 5, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p7 : Symbol(ExpandoMerge.p7, Decl(expando.ts, 9, 24), Decl(ns.ts, 5, 14))
+
+ExpandoMerge.p8 = false; // type error
+>ExpandoMerge.p8 : Symbol(ExpandoMerge.p8, Decl(expando.ts, 10, 25), Decl(ns.ts, 6, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p8 : Symbol(ExpandoMerge.p8, Decl(expando.ts, 10, 25), Decl(ns.ts, 6, 14))
+
+ExpandoMerge.p9 = false; // type error
+>ExpandoMerge.p9 : Symbol(ExpandoMerge.p9, Decl(expando.ts, 11, 24), Decl(ns.ts, 7, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p9 : Symbol(ExpandoMerge.p9, Decl(expando.ts, 11, 24), Decl(ns.ts, 7, 14))
+
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+>n : Symbol(n, Decl(expando.ts, 13, 3))
+>ExpandoMerge.p1 : Symbol(ExpandoMerge.p1, Decl(expando.ts, 2, 1))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p1 : Symbol(ExpandoMerge.p1, Decl(expando.ts, 2, 1))
+>ExpandoMerge.p2 : Symbol(ExpandoMerge.p2, Decl(ns.ts, 10, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p2 : Symbol(ExpandoMerge.p2, Decl(ns.ts, 10, 14))
+>ExpandoMerge.p3 : Symbol(ExpandoMerge.p3, Decl(ns.ts, 1, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p3 : Symbol(ExpandoMerge.p3, Decl(ns.ts, 1, 14))
+>ExpandoMerge.p4 : Symbol(ExpandoMerge.p4, Decl(expando.ts, 6, 1), Decl(ns.ts, 2, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p4 : Symbol(ExpandoMerge.p4, Decl(expando.ts, 6, 1), Decl(ns.ts, 2, 14))
+>ExpandoMerge.p5 : Symbol(ExpandoMerge.p5, Decl(expando.ts, 7, 24), Decl(ns.ts, 3, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p5 : Symbol(ExpandoMerge.p5, Decl(expando.ts, 7, 24), Decl(ns.ts, 3, 14))
+>ExpandoMerge.p6 : Symbol(ExpandoMerge.p6, Decl(expando.ts, 8, 25), Decl(ns.ts, 4, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p6 : Symbol(ExpandoMerge.p6, Decl(expando.ts, 8, 25), Decl(ns.ts, 4, 14))
+>ExpandoMerge.p7 : Symbol(ExpandoMerge.p7, Decl(expando.ts, 9, 24), Decl(ns.ts, 5, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p7 : Symbol(ExpandoMerge.p7, Decl(expando.ts, 9, 24), Decl(ns.ts, 5, 14))
+>ExpandoMerge.p8 : Symbol(ExpandoMerge.p8, Decl(expando.ts, 10, 25), Decl(ns.ts, 6, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p8 : Symbol(ExpandoMerge.p8, Decl(expando.ts, 10, 25), Decl(ns.ts, 6, 14))
+>ExpandoMerge.p9 : Symbol(ExpandoMerge.p9, Decl(expando.ts, 11, 24), Decl(ns.ts, 7, 14))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>p9 : Symbol(ExpandoMerge.p9, Decl(expando.ts, 11, 24), Decl(ns.ts, 7, 14))
+>ExpandoMerge.m : Symbol(ExpandoMerge.m, Decl(expando.ts, 3, 21))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+>m : Symbol(ExpandoMerge.m, Decl(expando.ts, 3, 21))
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+
+=== tests/cases/conformance/salsa/ns.ts ===
+namespace ExpandoMerge {
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+
+    export var p3 = 333;
+>p3 : Symbol(p3, Decl(ns.ts, 1, 14))
+
+    export var p4 = 4;
+>p4 : Symbol(p4, Decl(expando.ts, 6, 1), Decl(ns.ts, 2, 14))
+
+    export var p5 = 5;
+>p5 : Symbol(p5, Decl(expando.ts, 7, 24), Decl(ns.ts, 3, 14))
+
+    export let p6 = 6;
+>p6 : Symbol(p6, Decl(expando.ts, 8, 25), Decl(ns.ts, 4, 14))
+
+    export let p7 = 7;
+>p7 : Symbol(p7, Decl(expando.ts, 9, 24), Decl(ns.ts, 5, 14))
+
+    export var p8 = 6;
+>p8 : Symbol(p8, Decl(expando.ts, 10, 25), Decl(ns.ts, 6, 14))
+
+    export let p9 = 7;
+>p9 : Symbol(p9, Decl(expando.ts, 11, 24), Decl(ns.ts, 7, 14))
+}
+namespace ExpandoMerge {
+>ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
+
+    export var p2 = 222;
+>p2 : Symbol(p2, Decl(ns.ts, 10, 14))
+}
+

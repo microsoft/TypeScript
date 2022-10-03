@@ -1,0 +1,13 @@
+=== tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts ===
+function f(x: TemplateStringsArray, y: string, z: string) {
+>f : Symbol(f, Decl(taggedTemplatesWithIncompleteTemplateExpressions3.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplatesWithIncompleteTemplateExpressions3.ts, 0, 11))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(taggedTemplatesWithIncompleteTemplateExpressions3.ts, 0, 35))
+>z : Symbol(z, Decl(taggedTemplatesWithIncompleteTemplateExpressions3.ts, 0, 46))
+}
+
+// Incomplete call, not enough parameters.
+f `123qdawdrqw${ 1 }${
+>f : Symbol(f, Decl(taggedTemplatesWithIncompleteTemplateExpressions3.ts, 0, 0))
+

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/context.ts ===
+export const Key = Symbol();
+>Key : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export interface Context {
+  [Key]: string;
+>[Key] : string
+>Key : unique symbol
+}
+=== tests/cases/compiler/index.ts ===
+import { Key, Context } from "./context";
+>Key : unique symbol
+>Context : any
+
+export const context: Context = {
+>context : Context
+>{  [Key]: 'bar',} : { [Key]: string; }
+
+  [Key]: 'bar',
+>[Key] : string
+>Key : unique symbol
+>'bar' : "bar"
+}
+
+export const withContext = ({ [Key]: value }: Context) => value;
+>withContext : ({ [Key]: value }: Context) => string
+>({ [Key]: value }: Context) => value : ({ [Key]: value }: Context) => string
+>Key : unique symbol
+>value : string
+>value : string
+

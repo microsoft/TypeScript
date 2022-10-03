@@ -1,0 +1,21 @@
+=== tests/cases/compiler/superCallWithCommentEmit01.ts ===
+class A {
+>A : Symbol(A, Decl(superCallWithCommentEmit01.ts, 0, 0))
+
+    constructor(public text: string) { }
+>text : Symbol(A.text, Decl(superCallWithCommentEmit01.ts, 1, 16))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(superCallWithCommentEmit01.ts, 2, 1))
+>A : Symbol(A, Decl(superCallWithCommentEmit01.ts, 0, 0))
+
+    constructor(text: string) {
+>text : Symbol(text, Decl(superCallWithCommentEmit01.ts, 5, 16))
+
+        // this is subclass constructor
+        super(text)
+>super : Symbol(A, Decl(superCallWithCommentEmit01.ts, 0, 0))
+>text : Symbol(text, Decl(superCallWithCommentEmit01.ts, 5, 16))
+     }
+}

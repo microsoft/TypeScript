@@ -1,0 +1,11 @@
+/a.js(2,16): error TS1003: Identifier expected.
+
+
+==== /a.js (1 errors) ====
+    class A { constructor() { this.x = 0; } }
+    /** @implements */
+                   
+!!! error TS1003: Identifier expected.
+    class B  {
+    }
+    

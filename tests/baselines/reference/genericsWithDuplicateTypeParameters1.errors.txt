@@ -1,0 +1,49 @@
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(2,16): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(3,12): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(4,17): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(5,18): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(8,16): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(9,10): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(10,11): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(14,22): error TS2300: Duplicate identifier 'X'.
+tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(15,23): error TS2300: Duplicate identifier 'X'.
+
+
+==== tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts (10 errors) ====
+    function f<x, x>() { }
+                  ~
+!!! error TS2300: Duplicate identifier 'x'.
+    function f2<X, X>(a: X, b: X): X { return null; }
+                   ~
+!!! error TS2300: Duplicate identifier 'X'.
+    class C<X, X> {
+               ~
+!!! error TS2300: Duplicate identifier 'X'.
+        public f<x, x>() {}
+                    ~
+!!! error TS2300: Duplicate identifier 'x'.
+        public f2<X, X>(a: X, b: X): X { return null; }
+                     ~
+!!! error TS2300: Duplicate identifier 'X'.
+    }
+    
+    interface I<X, X> {
+                   ~
+!!! error TS2300: Duplicate identifier 'X'.
+        f<X, X>();
+             ~
+!!! error TS2300: Duplicate identifier 'X'.
+        f2<X, X>(a: X, b: X): X;
+              ~
+!!! error TS2300: Duplicate identifier 'X'.
+    }
+    
+    var m = {
+        a: function f<X, X>() {},
+                         ~
+!!! error TS2300: Duplicate identifier 'X'.
+        b: function f2<X, X>(a: X, b: X): X { return null; }
+                          ~
+!!! error TS2300: Duplicate identifier 'X'.
+    }

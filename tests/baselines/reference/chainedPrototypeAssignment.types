@@ -1,0 +1,107 @@
+=== tests/cases/conformance/salsa/use.js ===
+/// <reference path='./types.d.ts'/>
+var mod = require('./mod');
+>mod : typeof mod
+>require('./mod') : typeof mod
+>require : (name: string) => any
+>'./mod' : "./mod"
+
+var a = new mod.A()
+>a : A
+>new mod.A() : A
+>mod.A : typeof A
+>mod : typeof mod
+>A : typeof A
+
+var b = new mod.B()
+>b : B
+>new mod.B() : B
+>mod.B : typeof B
+>mod : typeof mod
+>B : typeof B
+
+a.m('nope')
+>a.m('nope') : number
+>a.m : (n: number) => number
+>a : A
+>m : (n: number) => number
+>'nope' : "nope"
+
+b.m('not really')
+>b.m('not really') : number
+>b.m : (n: number) => number
+>b : B
+>m : (n: number) => number
+>'not really' : "not really"
+
+=== tests/cases/conformance/salsa/types.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+
+=== tests/cases/conformance/salsa/mod.js ===
+/// <reference path='./types.d.ts'/>
+var A = function A() {
+>A : typeof A
+>function A() {    this.a = 1} : typeof A
+>A : typeof A
+
+    this.a = 1
+>this.a = 1 : 1
+>this.a : any
+>this : this
+>a : any
+>1 : 1
+}
+var B = function B() {
+>B : typeof B
+>function B() {    this.b = 2} : typeof B
+>B : typeof B
+
+    this.b = 2
+>this.b = 2 : 2
+>this.b : any
+>this : this
+>b : any
+>2 : 2
+}
+exports.A = A
+>exports.A = A : typeof A
+>exports.A : typeof A
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>A : typeof A
+>A : typeof A
+
+exports.B = B
+>exports.B = B : typeof B
+>exports.B : typeof B
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>B : typeof B
+>B : typeof B
+
+A.prototype = B.prototype = {
+>A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
+>A.prototype : { m(n: number): number; }
+>A : typeof A
+>prototype : { m(n: number): number; }
+>B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
+>B.prototype : { m(n: number): number; }
+>B : typeof B
+>prototype : { m(n: number): number; }
+>{    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
+
+    /** @param {number} n */
+    m(n) {
+>m : (n: number) => number
+>n : number
+
+        return n + 1
+>n + 1 : number
+>n : number
+>1 : 1
+    }
+}
+

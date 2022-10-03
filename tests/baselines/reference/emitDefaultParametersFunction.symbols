@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunction.ts ===
+function foo(x: string, y = 10) { }
+>foo : Symbol(foo, Decl(emitDefaultParametersFunction.ts, 0, 0))
+>x : Symbol(x, Decl(emitDefaultParametersFunction.ts, 0, 13))
+>y : Symbol(y, Decl(emitDefaultParametersFunction.ts, 0, 23))
+
+function baz(x: string, y = 5, ...rest) { }
+>baz : Symbol(baz, Decl(emitDefaultParametersFunction.ts, 0, 35))
+>x : Symbol(x, Decl(emitDefaultParametersFunction.ts, 1, 13))
+>y : Symbol(y, Decl(emitDefaultParametersFunction.ts, 1, 23))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunction.ts, 1, 30))
+
+function bar(y = 10) { }
+>bar : Symbol(bar, Decl(emitDefaultParametersFunction.ts, 1, 43))
+>y : Symbol(y, Decl(emitDefaultParametersFunction.ts, 2, 13))
+
+function bar1(y = 10, ...rest) { }
+>bar1 : Symbol(bar1, Decl(emitDefaultParametersFunction.ts, 2, 24))
+>y : Symbol(y, Decl(emitDefaultParametersFunction.ts, 3, 14))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunction.ts, 3, 21))
+

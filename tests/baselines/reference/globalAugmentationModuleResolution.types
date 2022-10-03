@@ -1,0 +1,9 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+export { };
+
+declare global {
+>global : typeof global
+
+  var x: number;
+>x : number
+}

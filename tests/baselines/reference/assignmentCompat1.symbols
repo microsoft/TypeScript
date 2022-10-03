@@ -1,0 +1,39 @@
+=== tests/cases/compiler/assignmentCompat1.ts ===
+var x = { one: 1 };
+>x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
+>one : Symbol(one, Decl(assignmentCompat1.ts, 0, 9))
+
+var y: { [index: string]: any };
+>y : Symbol(y, Decl(assignmentCompat1.ts, 1, 3))
+>index : Symbol(index, Decl(assignmentCompat1.ts, 1, 10))
+
+var z: { [index: number]: any };
+>z : Symbol(z, Decl(assignmentCompat1.ts, 2, 3))
+>index : Symbol(index, Decl(assignmentCompat1.ts, 2, 10))
+
+x = y;  // Error
+>x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
+>y : Symbol(y, Decl(assignmentCompat1.ts, 1, 3))
+
+y = x;  // Ok because index signature type is any
+>y : Symbol(y, Decl(assignmentCompat1.ts, 1, 3))
+>x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
+
+x = z;  // Error
+>x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
+>z : Symbol(z, Decl(assignmentCompat1.ts, 2, 3))
+
+z = x;  // Ok because index signature type is any
+>z : Symbol(z, Decl(assignmentCompat1.ts, 2, 3))
+>x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
+
+y = "foo"; // Error
+>y : Symbol(y, Decl(assignmentCompat1.ts, 1, 3))
+
+z = "foo"; // OK, string has numeric indexer
+>z : Symbol(z, Decl(assignmentCompat1.ts, 2, 3))
+
+z = false; // Error
+>z : Symbol(z, Decl(assignmentCompat1.ts, 2, 3))
+
+

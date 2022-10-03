@@ -1,0 +1,199 @@
+// === /tests/cases/fourslash/foo.js ===
+// var x = { "/*FIND ALL REFS*/[|someProperty|]": 0 }
+// x["[|someProperty|]"] = 3;
+// x.[|someProperty|] = 5;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.js",
+      "kind": "property",
+      "name": "(property) \"someProperty\": number",
+      "textSpan": {
+        "start": 11,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"someProperty\"",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 11,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 10,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 33,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 30,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 55,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 53,
+          "length": 19
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/foo.js ===
+// var x = { "[|someProperty|]": 0 }
+// x["/*FIND ALL REFS*/[|someProperty|]"] = 3;
+// x.[|someProperty|] = 5;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.js",
+      "kind": "property",
+      "name": "(property) \"someProperty\": number",
+      "textSpan": {
+        "start": 11,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"someProperty\"",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 11,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 10,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 33,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 30,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 55,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 53,
+          "length": 19
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

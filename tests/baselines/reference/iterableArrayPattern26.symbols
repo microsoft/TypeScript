@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern26.ts ===
+function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
+>takeFirstTwoEntries : Symbol(takeFirstTwoEntries, Decl(iterableArrayPattern26.ts, 0, 0))
+>k1 : Symbol(k1, Decl(iterableArrayPattern26.ts, 0, 34))
+>v1 : Symbol(v1, Decl(iterableArrayPattern26.ts, 0, 37))
+>k2 : Symbol(k2, Decl(iterableArrayPattern26.ts, 0, 44))
+>v2 : Symbol(v2, Decl(iterableArrayPattern26.ts, 0, 47))
+
+takeFirstTwoEntries(new Map([["", 0], ["hello", 1]]));
+>takeFirstTwoEntries : Symbol(takeFirstTwoEntries, Decl(iterableArrayPattern26.ts, 0, 0))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

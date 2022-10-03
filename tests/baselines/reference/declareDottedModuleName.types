@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declareDottedModuleName.ts ===
+module M {
+No type information for this code.    module P.Q { } // This shouldnt be emitted
+No type information for this code.}
+No type information for this code.
+No type information for this code.module M {
+No type information for this code.    export module R.S { }  //This should be emitted
+No type information for this code.}
+No type information for this code.
+No type information for this code.module T.U { // This needs to be emitted
+No type information for this code.}
+No type information for this code.

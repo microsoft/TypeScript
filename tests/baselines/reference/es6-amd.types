@@ -1,0 +1,16 @@
+=== tests/cases/compiler/es6-amd.ts ===
+class A
+>A : A
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : () => number
+    {
+        return 42;
+>42 : 42
+    }
+}

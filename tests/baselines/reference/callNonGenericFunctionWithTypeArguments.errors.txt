@@ -1,0 +1,73 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(5,11): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(8,13): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(11,13): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(18,22): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(24,14): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(31,23): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(37,15): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(40,10): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped function calls may not accept type arguments.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts (9 errors) ====
+    // it is always illegal to provide type arguments to a non-generic function
+    // all invocations here are illegal
+    
+    function f(x: number) { return null; }
+    var r = f<string>(1);
+              ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    var f2 = (x: number) => { return null; }
+    var r2 = f2<string>(1);
+                ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    var f3: { (x: number): any; }
+    var r3 = f3<string>(1);
+                ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    class C {
+        f(x: number) {
+            return null;
+        }
+    }
+    var r4 = (new C()).f<string>(1);
+                         ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    interface I {
+        f(x: number): any;
+    }
+    var i: I;
+    var r5 = i.f<string>(1);
+                 ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    class C2 {
+        f(x: number) {
+            return null;
+        }
+    }
+    var r6 = (new C2()).f<string>(1);
+                          ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    interface I2 {
+        f(x: number);
+    }
+    var i2: I2;
+    var r7 = i2.f<string>(1);
+                  ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    var a;
+    var r8 = a<number>();
+             ~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    var a2: any;
+    var r8 = a2<number>();
+             ~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.

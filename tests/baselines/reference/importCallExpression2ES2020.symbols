@@ -1,0 +1,34 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export class B {
+>B : Symbol(B, Decl(0.ts, 0, 0))
+
+    print() { return "I am B"}
+>print : Symbol(B.print, Decl(0.ts, 0, 16))
+}
+
+=== tests/cases/conformance/dynamicImport/2.ts ===
+function foo(x: Promise<any>) {
+>foo : Symbol(foo, Decl(2.ts, 0, 0))
+>x : Symbol(x, Decl(2.ts, 0, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    x.then(value => {
+>x.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(2.ts, 0, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(2.ts, 1, 11))
+
+        let b = new value.B();
+>b : Symbol(b, Decl(2.ts, 2, 11))
+>value : Symbol(value, Decl(2.ts, 1, 11))
+
+        b.print();
+>b : Symbol(b, Decl(2.ts, 2, 11))
+
+    })
+}
+
+foo(import("./0"));
+>foo : Symbol(foo, Decl(2.ts, 0, 0))
+>"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+

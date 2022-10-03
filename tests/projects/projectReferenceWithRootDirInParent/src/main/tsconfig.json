@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "references": [
+    { "path": "../other" }
+  ]
+}

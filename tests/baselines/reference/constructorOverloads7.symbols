@@ -1,0 +1,55 @@
+=== tests/cases/compiler/constructorOverloads7.ts ===
+declare class Point
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+{
+    x: number;
+>x : Symbol(Point.x, Decl(constructorOverloads7.ts, 1, 1))
+
+    y: number;
+>y : Symbol(Point.y, Decl(constructorOverloads7.ts, 2, 14))
+
+    constructor(x: number, y: number);
+>x : Symbol(x, Decl(constructorOverloads7.ts, 4, 16))
+>y : Symbol(y, Decl(constructorOverloads7.ts, 4, 26))
+
+     add(dx: number, dy: number): Point;
+>add : Symbol(Point.add, Decl(constructorOverloads7.ts, 4, 38))
+>dx : Symbol(dx, Decl(constructorOverloads7.ts, 6, 9))
+>dy : Symbol(dy, Decl(constructorOverloads7.ts, 6, 20))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+
+     origin: Point;
+>origin : Symbol(Point.origin, Decl(constructorOverloads7.ts, 6, 40))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+
+}
+
+// Type provided by extern declaration
+// Because Point is a constructor function, this is inferred
+// to be Point and return type is inferred to be void
+function Point(x, y) {
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+>x : Symbol(x, Decl(constructorOverloads7.ts, 14, 15))
+>y : Symbol(y, Decl(constructorOverloads7.ts, 14, 17))
+
+    this.x = x;
+>x : Symbol(x, Decl(constructorOverloads7.ts, 14, 15))
+
+    this.y = y;
+>y : Symbol(y, Decl(constructorOverloads7.ts, 14, 17))
+
+    return this;
+}
+
+declare function EF1(a:number, b:number):number;
+>EF1 : Symbol(EF1, Decl(constructorOverloads7.ts, 19, 1), Decl(constructorOverloads7.ts, 21, 48))
+>a : Symbol(a, Decl(constructorOverloads7.ts, 21, 21))
+>b : Symbol(b, Decl(constructorOverloads7.ts, 21, 30))
+
+function EF1(a,b) { return a+b; }
+>EF1 : Symbol(EF1, Decl(constructorOverloads7.ts, 19, 1), Decl(constructorOverloads7.ts, 21, 48))
+>a : Symbol(a, Decl(constructorOverloads7.ts, 23, 13))
+>b : Symbol(b, Decl(constructorOverloads7.ts, 23, 15))
+>a : Symbol(a, Decl(constructorOverloads7.ts, 23, 13))
+>b : Symbol(b, Decl(constructorOverloads7.ts, 23, 15))
+

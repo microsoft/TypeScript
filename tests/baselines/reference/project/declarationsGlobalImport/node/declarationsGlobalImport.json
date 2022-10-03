@@ -1,0 +1,20 @@
+{
+    "scenario": "declarations_GlobalImport",
+    "projectRoot": "tests/cases/projects/declarations_GlobalImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "glo_m4.ts",
+        "useModule.ts"
+    ],
+    "emittedFiles": [
+        "glo_m4.js",
+        "glo_m4.d.ts",
+        "useModule.js",
+        "useModule.d.ts"
+    ]
+}

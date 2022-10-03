@@ -1,0 +1,22 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
+module A {
+>A : Symbol(A, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 0))
+
+    export interface Point {
+>Point : Symbol(Point, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 2, 28))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 3, 18))
+    }
+
+    // valid since Point is exported
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 14))
+>Point : Symbol(Point, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 10))
+>x : Symbol(x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 32))
+>y : Symbol(y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 8, 38))
+}
+

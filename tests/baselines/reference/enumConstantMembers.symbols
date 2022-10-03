@@ -1,0 +1,99 @@
+=== tests/cases/conformance/enums/enumConstantMembers.ts ===
+// Constant members allow negatives, but not decimals. Also hex literals are allowed
+enum E1 {
+>E1 : Symbol(E1, Decl(enumConstantMembers.ts, 0, 0))
+
+    a = 1,
+>a : Symbol(E1.a, Decl(enumConstantMembers.ts, 1, 9))
+
+    b
+>b : Symbol(E1.b, Decl(enumConstantMembers.ts, 2, 10))
+}
+enum E2 {
+>E2 : Symbol(E2, Decl(enumConstantMembers.ts, 4, 1))
+
+    a = - 1,
+>a : Symbol(E2.a, Decl(enumConstantMembers.ts, 5, 9))
+
+    b
+>b : Symbol(E2.b, Decl(enumConstantMembers.ts, 6, 12))
+}
+enum E3 {
+>E3 : Symbol(E3, Decl(enumConstantMembers.ts, 8, 1))
+
+    a = 0.1,
+>a : Symbol(E3.a, Decl(enumConstantMembers.ts, 9, 9))
+
+    b // Error because 0.1 is not a constant
+>b : Symbol(E3.b, Decl(enumConstantMembers.ts, 10, 12))
+}
+
+declare enum E4 {
+>E4 : Symbol(E4, Decl(enumConstantMembers.ts, 12, 1))
+
+    a = 1,
+>a : Symbol(E4.a, Decl(enumConstantMembers.ts, 14, 17))
+
+    b = -1,
+>b : Symbol(E4.b, Decl(enumConstantMembers.ts, 15, 10))
+
+    c = 0.1 // Not a constant
+>c : Symbol(E4.c, Decl(enumConstantMembers.ts, 16, 11))
+}
+
+enum E5 {
+>E5 : Symbol(E5, Decl(enumConstantMembers.ts, 18, 1))
+
+    a = 1 / 0,
+>a : Symbol(E5.a, Decl(enumConstantMembers.ts, 20, 9))
+
+    b = 2 / 0.0,
+>b : Symbol(E5.b, Decl(enumConstantMembers.ts, 21, 14))
+
+    c = 1.0 / 0.0,
+>c : Symbol(E5.c, Decl(enumConstantMembers.ts, 22, 16))
+
+    d = 0.0 / 0.0,
+>d : Symbol(E5.d, Decl(enumConstantMembers.ts, 23, 18))
+
+    e = NaN,
+>e : Symbol(E5.e, Decl(enumConstantMembers.ts, 24, 18))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+    f = Infinity,
+>f : Symbol(E5.f, Decl(enumConstantMembers.ts, 25, 12))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+    g = -Infinity
+>g : Symbol(E5.g, Decl(enumConstantMembers.ts, 26, 17))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+
+const enum E6 {
+>E6 : Symbol(E6, Decl(enumConstantMembers.ts, 28, 1))
+
+    a = 1 / 0,
+>a : Symbol(E6.a, Decl(enumConstantMembers.ts, 30, 15))
+
+    b = 2 / 0.0,
+>b : Symbol(E6.b, Decl(enumConstantMembers.ts, 31, 14))
+
+    c = 1.0 / 0.0,
+>c : Symbol(E6.c, Decl(enumConstantMembers.ts, 32, 16))
+
+    d = 0.0 / 0.0,
+>d : Symbol(E6.d, Decl(enumConstantMembers.ts, 33, 18))
+
+    e = NaN,
+>e : Symbol(E6.e, Decl(enumConstantMembers.ts, 34, 18))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+    f = Infinity,
+>f : Symbol(E6.f, Decl(enumConstantMembers.ts, 35, 12))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+    g = -Infinity
+>g : Symbol(E6.g, Decl(enumConstantMembers.ts, 36, 17))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+

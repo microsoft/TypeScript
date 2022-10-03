@@ -1,0 +1,342 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts ===
+// these operators require their operands to be of type Any, the Number primitive type, or
+// an enum type
+enum E { a, b, c }
+>E : E
+>a : E.a
+>b : E.b
+>c : E.c
+
+var a: any;
+>a : any
+
+var b: boolean;
+>b : boolean
+
+var c: number;
+>c : number
+
+var d: string;
+>d : string
+
+var e: { a: number };
+>e : { a: number; }
+>a : number
+
+var f: Number;
+>f : Number
+
+// All of the below should be an error unless otherwise noted
+// operator **
+var r1a1 = a ** a; //ok
+>r1a1 : number
+>a ** a : number
+>a : any
+>a : any
+
+var r1a2 = a ** b;
+>r1a2 : number
+>a ** b : number
+>a : any
+>b : boolean
+
+var r1a3 = a ** c; //ok
+>r1a3 : number
+>a ** c : number
+>a : any
+>c : number
+
+var r1a4 = a ** d;
+>r1a4 : number
+>a ** d : number
+>a : any
+>d : string
+
+var r1a5 = a ** e;
+>r1a5 : number
+>a ** e : number
+>a : any
+>e : { a: number; }
+
+var r1a6 = a ** f;
+>r1a6 : number
+>a ** f : number
+>a : any
+>f : Number
+
+var r1b1 = b ** a;
+>r1b1 : number
+>b ** a : number
+>b : boolean
+>a : any
+
+var r1b2 = b ** b;
+>r1b2 : number
+>b ** b : number
+>b : boolean
+>b : boolean
+
+var r1b3 = b ** c;
+>r1b3 : number
+>b ** c : number
+>b : boolean
+>c : number
+
+var r1b4 = b ** d;
+>r1b4 : number
+>b ** d : number
+>b : boolean
+>d : string
+
+var r1b5 = b ** e;
+>r1b5 : number
+>b ** e : number
+>b : boolean
+>e : { a: number; }
+
+var r1b6 = b ** f;
+>r1b6 : number
+>b ** f : number
+>b : boolean
+>f : Number
+
+var r1c1 = c ** a; //ok
+>r1c1 : number
+>c ** a : number
+>c : number
+>a : any
+
+var r1c2 = c ** b;
+>r1c2 : number
+>c ** b : number
+>c : number
+>b : boolean
+
+var r1c3 = c ** c; //ok
+>r1c3 : number
+>c ** c : number
+>c : number
+>c : number
+
+var r1c4 = c ** d;
+>r1c4 : number
+>c ** d : number
+>c : number
+>d : string
+
+var r1c5 = c ** e;
+>r1c5 : number
+>c ** e : number
+>c : number
+>e : { a: number; }
+
+var r1c6 = c ** f;
+>r1c6 : number
+>c ** f : number
+>c : number
+>f : Number
+
+var r1d1 = d ** a;
+>r1d1 : number
+>d ** a : number
+>d : string
+>a : any
+
+var r1d2 = d ** b;
+>r1d2 : number
+>d ** b : number
+>d : string
+>b : boolean
+
+var r1d3 = d ** c;
+>r1d3 : number
+>d ** c : number
+>d : string
+>c : number
+
+var r1d4 = d ** d;
+>r1d4 : number
+>d ** d : number
+>d : string
+>d : string
+
+var r1d5 = d ** e;
+>r1d5 : number
+>d ** e : number
+>d : string
+>e : { a: number; }
+
+var r1d6 = d ** f;
+>r1d6 : number
+>d ** f : number
+>d : string
+>f : Number
+
+var r1e1 = e ** a;
+>r1e1 : number
+>e ** a : number
+>e : { a: number; }
+>a : any
+
+var r1e2 = e ** b;
+>r1e2 : number
+>e ** b : number
+>e : { a: number; }
+>b : boolean
+
+var r1e3 = e ** c;
+>r1e3 : number
+>e ** c : number
+>e : { a: number; }
+>c : number
+
+var r1e4 = e ** d;
+>r1e4 : number
+>e ** d : number
+>e : { a: number; }
+>d : string
+
+var r1e5 = e ** e;
+>r1e5 : number
+>e ** e : number
+>e : { a: number; }
+>e : { a: number; }
+
+var r1e6 = e ** f;
+>r1e6 : number
+>e ** f : number
+>e : { a: number; }
+>f : Number
+
+var r1f1 = f ** a;
+>r1f1 : number
+>f ** a : number
+>f : Number
+>a : any
+
+var r1f2 = f ** b;
+>r1f2 : number
+>f ** b : number
+>f : Number
+>b : boolean
+
+var r1f3 = f ** c;
+>r1f3 : number
+>f ** c : number
+>f : Number
+>c : number
+
+var r1f4 = f ** d;
+>r1f4 : number
+>f ** d : number
+>f : Number
+>d : string
+
+var r1f5 = f ** e;
+>r1f5 : number
+>f ** e : number
+>f : Number
+>e : { a: number; }
+
+var r1f6 = f ** f;
+>r1f6 : number
+>f ** f : number
+>f : Number
+>f : Number
+
+var r1g1 = E.a ** a; //ok
+>r1g1 : number
+>E.a ** a : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>a : any
+
+var r1g2 = E.a ** b;
+>r1g2 : number
+>E.a ** b : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>b : boolean
+
+var r1g3 = E.a ** c; //ok
+>r1g3 : number
+>E.a ** c : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>c : number
+
+var r1g4 = E.a ** d;
+>r1g4 : number
+>E.a ** d : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>d : string
+
+var r1g5 = E.a ** e;
+>r1g5 : number
+>E.a ** e : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>e : { a: number; }
+
+var r1g6 = E.a ** f;
+>r1g6 : number
+>E.a ** f : number
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>f : Number
+
+var r1h1 = a ** E.b; //ok
+>r1h1 : number
+>a ** E.b : number
+>a : any
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var r1h2 = b ** E.b;
+>r1h2 : number
+>b ** E.b : number
+>b : boolean
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var r1h3 = c ** E.b; //ok
+>r1h3 : number
+>c ** E.b : number
+>c : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var r1h4 = d ** E.b;
+>r1h4 : number
+>d ** E.b : number
+>d : string
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var r1h5 = e ** E.b;
+>r1h5 : number
+>e ** E.b : number
+>e : { a: number; }
+>E.b : E.b
+>E : typeof E
+>b : E.b
+
+var r1h6 = f ** E.b
+>r1h6 : number
+>f ** E.b : number
+>f : Number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+

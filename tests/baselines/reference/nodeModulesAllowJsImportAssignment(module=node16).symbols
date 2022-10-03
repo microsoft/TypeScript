@@ -1,0 +1,43 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+import fs = require("fs");
+>fs : Symbol(fs, Decl(index.js, 0, 0))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(index.js, 0, 0))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(index.js, 2, 12))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+import fs = require("fs");
+>fs : Symbol(fs, Decl(index.js, 0, 0))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(index.js, 0, 0))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(index.js, 2, 12))
+
+=== tests/cases/conformance/node/allowJs/file.js ===
+// esm format file
+const __require = null;
+>__require : Symbol(__require, Decl(file.js, 1, 5))
+
+const _createRequire = null;
+>_createRequire : Symbol(_createRequire, Decl(file.js, 2, 5))
+
+import fs = require("fs");
+>fs : Symbol(fs, Decl(file.js, 2, 28))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(file.js, 2, 28))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(file.js, 4, 12))
+
+=== tests/cases/conformance/node/allowJs/types.d.ts ===
+declare module "fs";
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+

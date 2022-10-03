@@ -1,0 +1,60 @@
+tests/cases/compiler/staticVisibility.ts(9,9): error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+tests/cases/compiler/staticVisibility.ts(12,9): error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
+tests/cases/compiler/staticVisibility.ts(17,9): error TS2304: Cannot find name 'v'.
+tests/cases/compiler/staticVisibility.ts(18,14): error TS2339: Property 'p' does not exist on type 'typeof C1'.
+tests/cases/compiler/staticVisibility.ts(30,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/staticVisibility.ts(32,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/staticVisibility.ts(32,29): error TS2304: Cannot find name 'barback'.
+
+
+==== tests/cases/compiler/staticVisibility.ts (7 errors) ====
+    class C1 {
+        
+        p: any;
+        static s: any;
+    
+        constructor() {
+            var v = 0;
+    
+            s = 1; // should be error
+            ~
+!!! error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+            C1.s = 1; // should be ok
+    
+            b(); // should be error
+            ~
+!!! error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
+            C1.b(); // should be ok
+        }
+    
+        static b() {
+            v = 1; // should be error
+            ~
+!!! error TS2304: Cannot find name 'v'.
+            this.p = 0; // should be error
+                 ~
+!!! error TS2339: Property 'p' does not exist on type 'typeof C1'.
+            C1.s = 1; // should be ok
+        }
+    }
+    
+    class C2 {
+     
+    barback:string = "";
+     
+    
+    
+    
+    static get Bar() {return "bar";} // ok
+               ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+     
+    static set Bar(bar:string) {barback = bar;} // not ok
+               ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                                ~~~~~~~
+!!! error TS2304: Cannot find name 'barback'.
+    
+    }
+    
+    

@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,12): error TS18004: No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts(1,14): error TS1005: ',' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts (2 errors) ====
+    var tt = { aa; }
+               ~~
+!!! error TS18004: No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer.
+                 ~
+!!! error TS1005: ',' expected.
+    
+    if (true) {
+    }

@@ -1,0 +1,36 @@
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+==== ref/m1.ts (0 errors) ====
+    var m1_a1 = 10;
+    class m1_c1 {
+        public m1_c1_p1: number;
+    }
+    
+    var m1_instance1 = new m1_c1();
+    function m1_f1() {
+        return m1_instance1;
+    }
+==== ../outputdir_multifolder_ref/m2.ts (0 errors) ====
+    var m2_a1 = 10;
+    class m2_c1 {
+        public m2_c1_p1: number;
+    }
+    
+    var m2_instance1 = new m2_c1();
+    function m2_f1() {
+        return m2_instance1;
+    }
+==== test.ts (0 errors) ====
+    /// <reference path='ref/m1.ts'/>
+    /// <reference path='../outputdir_multifolder_ref/m2.ts'/>
+    var a1 = 10;
+    class c1 {
+        public p1: number;
+    }
+    
+    var instance1 = new c1();
+    function f1() {
+        return instance1;
+    }

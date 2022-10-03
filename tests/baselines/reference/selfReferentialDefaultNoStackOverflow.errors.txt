@@ -1,0 +1,16 @@
+tests/cases/compiler/QSpinner.js(3,1): error TS7022: 'default' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== tests/cases/compiler/QSpinner.js (1 errors) ====
+    import DefaultSpinner from './QSpinner'
+    
+    export default {
+    ~~~~~~~~~~~~~~~~
+      mixins: [DefaultSpinner],
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      name: 'QSpinner'
+    ~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS7022: 'default' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    

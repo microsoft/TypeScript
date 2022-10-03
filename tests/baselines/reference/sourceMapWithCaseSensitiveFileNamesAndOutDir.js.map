@@ -1,0 +1,4 @@
+//// [app.js.map]
+{"version":3,"file":"app.js","sourceRoot":"","sources":["../testFiles/app.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}
+//// [app2.js.map]
+{"version":3,"file":"app2.js","sourceRoot":"","sources":["../testFiles/app2.ts"],"names":[],"mappings":"AAAA;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}

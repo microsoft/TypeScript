@@ -1,0 +1,73 @@
+=== tests/cases/compiler/declarationEmitOverloadedPrivateInference.ts ===
+function noArgs(): string {
+>noArgs : Symbol(noArgs, Decl(declarationEmitOverloadedPrivateInference.ts, 0, 0))
+
+    return null as any;
+}
+
+function oneArg(input: string): string {
+>oneArg : Symbol(oneArg, Decl(declarationEmitOverloadedPrivateInference.ts, 2, 1))
+>input : Symbol(input, Decl(declarationEmitOverloadedPrivateInference.ts, 4, 16))
+
+    return null as any;
+}
+
+export class Wrapper {
+>Wrapper : Symbol(Wrapper, Decl(declarationEmitOverloadedPrivateInference.ts, 6, 1))
+
+    private proxy<T, U>(fn: (options: T) => U): (options: T) => U;
+>proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 20))
+>fn : Symbol(fn, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 24))
+>options : Symbol(options, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 29))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 20))
+>options : Symbol(options, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 49))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 9, 20))
+
+    private proxy<T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U;
+>proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 20))
+>fn : Symbol(fn, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 24))
+>options : Symbol(options, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 29))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 20))
+>noArgs : Symbol(noArgs, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 47))
+>options : Symbol(options, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 64))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 10, 20))
+
+    private proxy<T, U>(fn: (options: T) => U) {
+>proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 20))
+>fn : Symbol(fn, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 24))
+>options : Symbol(options, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 29))
+>T : Symbol(T, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 18))
+>U : Symbol(U, Decl(declarationEmitOverloadedPrivateInference.ts, 12, 20))
+
+        return null as any;
+    }
+
+    public Proxies = {
+>Proxies : Symbol(Wrapper.Proxies, Decl(declarationEmitOverloadedPrivateInference.ts, 14, 5))
+
+        Failure: this.proxy(noArgs, true),
+>Failure : Symbol(Failure, Decl(declarationEmitOverloadedPrivateInference.ts, 16, 22))
+>this.proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>this : Symbol(Wrapper, Decl(declarationEmitOverloadedPrivateInference.ts, 6, 1))
+>proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>noArgs : Symbol(noArgs, Decl(declarationEmitOverloadedPrivateInference.ts, 0, 0))
+
+        Success: this.proxy(oneArg),
+>Success : Symbol(Success, Decl(declarationEmitOverloadedPrivateInference.ts, 17, 42))
+>this.proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>this : Symbol(Wrapper, Decl(declarationEmitOverloadedPrivateInference.ts, 6, 1))
+>proxy : Symbol(Wrapper.proxy, Decl(declarationEmitOverloadedPrivateInference.ts, 8, 22), Decl(declarationEmitOverloadedPrivateInference.ts, 9, 66), Decl(declarationEmitOverloadedPrivateInference.ts, 10, 82))
+>oneArg : Symbol(oneArg, Decl(declarationEmitOverloadedPrivateInference.ts, 2, 1))
+
+    };
+}

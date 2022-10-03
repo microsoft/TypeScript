@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/Symbols/symbolProperty35.ts(8,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'I1' and 'I2'.
+  Named property '[Symbol.toStringTag]' of types 'I1' and 'I2' are not identical.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty35.ts (1 errors) ====
+    interface I1 {
+        [Symbol.toStringTag](): { x: string }
+    }
+    interface I2 {
+        [Symbol.toStringTag](): { x: number }
+    }
+    
+    interface I3 extends I1, I2 { }
+              ~~
+!!! error TS2320: Interface 'I3' cannot simultaneously extend types 'I1' and 'I2'.
+!!! error TS2320:   Named property '[Symbol.toStringTag]' of types 'I1' and 'I2' are not identical.

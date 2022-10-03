@@ -1,0 +1,77 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts ===
+abstract class A<T> {
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
+
+    t: T;
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
+    
+    abstract foo(): T;
+>foo : Symbol(A.foo, Decl(classAbstractGeneric.ts, 1, 9))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
+
+    abstract bar(t: T);
+>bar : Symbol(A.bar, Decl(classAbstractGeneric.ts, 3, 22))
+>t : Symbol(t, Decl(classAbstractGeneric.ts, 4, 17))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 0, 17))
+}
+
+abstract class B<T> extends A<T> {}
+>B : Symbol(B, Decl(classAbstractGeneric.ts, 5, 1))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 7, 17))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 7, 17))
+
+class C<T> extends A<T> {} // error -- inherits abstract methods
+>C : Symbol(C, Decl(classAbstractGeneric.ts, 7, 35))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 9, 8))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 9, 8))
+
+class D extends A<number> {} // error -- inherits abstract methods
+>D : Symbol(D, Decl(classAbstractGeneric.ts, 9, 26))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+
+class E<T> extends A<T> { // error -- doesn't implement bar
+>E : Symbol(E, Decl(classAbstractGeneric.ts, 11, 28))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 13, 8))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 13, 8))
+
+    foo() { return this.t; }
+>foo : Symbol(E.foo, Decl(classAbstractGeneric.ts, 13, 25))
+>this.t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
+>this : Symbol(E, Decl(classAbstractGeneric.ts, 11, 28))
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
+}
+
+class F<T> extends A<T> { // error -- doesn't implement foo
+>F : Symbol(F, Decl(classAbstractGeneric.ts, 15, 1))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 17, 8))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 17, 8))
+
+    bar(t : T) {}
+>bar : Symbol(F.bar, Decl(classAbstractGeneric.ts, 17, 25))
+>t : Symbol(t, Decl(classAbstractGeneric.ts, 18, 8))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 17, 8))
+}
+
+class G<T> extends A<T> {
+>G : Symbol(G, Decl(classAbstractGeneric.ts, 19, 1))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 21, 8))
+>A : Symbol(A, Decl(classAbstractGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 21, 8))
+
+    foo() { return this.t; }
+>foo : Symbol(G.foo, Decl(classAbstractGeneric.ts, 21, 25))
+>this.t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
+>this : Symbol(G, Decl(classAbstractGeneric.ts, 19, 1))
+>t : Symbol(A.t, Decl(classAbstractGeneric.ts, 0, 21))
+
+    bar(t: T) { }
+>bar : Symbol(G.bar, Decl(classAbstractGeneric.ts, 22, 28))
+>t : Symbol(t, Decl(classAbstractGeneric.ts, 23, 8))
+>T : Symbol(T, Decl(classAbstractGeneric.ts, 21, 8))
+}

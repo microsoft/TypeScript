@@ -1,0 +1,13 @@
+tests/cases/compiler/restParamsWithNonRestParams.ts(4,1): error TS2555: Expected at least 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/restParamsWithNonRestParams.ts (1 errors) ====
+    function foo(...b:number[]){}
+    foo(); // ok
+    function foo2(a:string, ...b:number[]){}
+    foo2(); // should be an error
+    ~~~~~~
+!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/restParamsWithNonRestParams.ts:3:15: An argument for 'a' was not provided.
+    function foo3(a?:string, ...b:number[]){}
+    foo3(); // error but shouldn't be

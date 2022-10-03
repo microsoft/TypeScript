@@ -1,0 +1,134 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// Pretty much all of this should be an error, (since enums are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
+
+export enum A {}
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+export enum B {
+>B : Symbol(B, Decl(index.js, 3, 16))
+
+    Member
+>Member : Symbol(B.Member, Decl(index.js, 5, 15))
+}
+
+enum C {}
+>C : Symbol(C, Decl(index.js, 7, 1))
+
+export { C };
+>C : Symbol(C, Decl(index.js, 11, 8))
+
+enum DD {}
+>DD : Symbol(DD, Decl(index.js, 11, 13))
+
+export { DD as D };
+>DD : Symbol(DD, Decl(index.js, 11, 13))
+>D : Symbol(D, Decl(index.js, 15, 8))
+
+export enum E {}
+>E : Symbol(E, Decl(index.js, 15, 19))
+
+export { E as EE };
+>E : Symbol(E, Decl(index.js, 15, 19))
+>EE : Symbol(EE, Decl(index.js, 18, 8))
+
+export { F as FF };
+>F : Symbol(F, Decl(index.js, 20, 19))
+>FF : Symbol(FF, Decl(index.js, 20, 8))
+
+export enum F {}
+>F : Symbol(F, Decl(index.js, 20, 19))
+
+export enum G {
+>G : Symbol(G, Decl(index.js, 21, 16))
+
+    A = 1,
+>A : Symbol(G.A, Decl(index.js, 23, 15))
+
+    B,
+>B : Symbol(G.B, Decl(index.js, 24, 10))
+
+    C
+>C : Symbol(G.C, Decl(index.js, 25, 6))
+}
+
+export enum H {
+>H : Symbol(H, Decl(index.js, 27, 1))
+
+    A = "a",
+>A : Symbol(H.A, Decl(index.js, 29, 15))
+
+    B = "b"
+>B : Symbol(H.B, Decl(index.js, 30, 12))
+}
+
+export enum I {
+>I : Symbol(I, Decl(index.js, 32, 1))
+
+    A = "a",
+>A : Symbol(I.A, Decl(index.js, 34, 15))
+
+    B = 0,
+>B : Symbol(I.B, Decl(index.js, 35, 12))
+
+    C
+>C : Symbol(I.C, Decl(index.js, 36, 10))
+}
+
+export const enum J {
+>J : Symbol(J, Decl(index.js, 38, 1))
+
+    A = 1,
+>A : Symbol(J.A, Decl(index.js, 40, 21))
+
+    B,
+>B : Symbol(J.B, Decl(index.js, 41, 10))
+
+    C
+>C : Symbol(J.C, Decl(index.js, 42, 6))
+}
+
+export enum K {
+>K : Symbol(K, Decl(index.js, 44, 1))
+
+    None   = 0,
+>None : Symbol(K.None, Decl(index.js, 46, 15))
+
+    A = 1 << 0,
+>A : Symbol(K.A, Decl(index.js, 47, 15))
+
+    B = 1 << 1,
+>B : Symbol(K.B, Decl(index.js, 48, 15))
+
+    C = 1 << 2,
+>C : Symbol(K.C, Decl(index.js, 49, 15))
+
+    Mask = A | B | C,
+>Mask : Symbol(K.Mask, Decl(index.js, 50, 15))
+>A : Symbol(K.A, Decl(index.js, 47, 15))
+>B : Symbol(K.B, Decl(index.js, 48, 15))
+>C : Symbol(K.C, Decl(index.js, 49, 15))
+}
+
+export const enum L {
+>L : Symbol(L, Decl(index.js, 52, 1))
+
+    None   = 0,
+>None : Symbol(L.None, Decl(index.js, 54, 21))
+
+    A = 1 << 0,
+>A : Symbol(L.A, Decl(index.js, 55, 15))
+
+    B = 1 << 1,
+>B : Symbol(L.B, Decl(index.js, 56, 15))
+
+    C = 1 << 2,
+>C : Symbol(L.C, Decl(index.js, 57, 15))
+
+    Mask = A | B | C,
+>Mask : Symbol(L.Mask, Decl(index.js, 58, 15))
+>A : Symbol(L.A, Decl(index.js, 55, 15))
+>B : Symbol(L.B, Decl(index.js, 56, 15))
+>C : Symbol(L.C, Decl(index.js, 57, 15))
+}
+

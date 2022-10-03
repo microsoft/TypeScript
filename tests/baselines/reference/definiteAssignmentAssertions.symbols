@@ -1,0 +1,156 @@
+=== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts ===
+// Suppress strict property initialization check
+
+class C1 {
+>C1 : Symbol(C1, Decl(definiteAssignmentAssertions.ts, 0, 0))
+
+    a!: number;
+>a : Symbol(C1.a, Decl(definiteAssignmentAssertions.ts, 2, 10))
+
+    b: string;  // Error
+>b : Symbol(C1.b, Decl(definiteAssignmentAssertions.ts, 3, 15))
+}
+
+// Suppress definite assignment check in constructor
+
+class C2 {
+>C2 : Symbol(C2, Decl(definiteAssignmentAssertions.ts, 5, 1))
+
+    a!: number;
+>a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+
+    constructor() {
+        let x = this.a;
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 12, 11))
+>this.a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+>this : Symbol(C2, Decl(definiteAssignmentAssertions.ts, 5, 1))
+>a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+    }
+}
+
+// Definite assignment assertion requires type annotation, no initializer, no static modifier
+
+class C3 {
+>C3 : Symbol(C3, Decl(definiteAssignmentAssertions.ts, 14, 1))
+
+    a! = 1;
+>a : Symbol(C3.a, Decl(definiteAssignmentAssertions.ts, 18, 10))
+
+    b!: number = 1;
+>b : Symbol(C3.b, Decl(definiteAssignmentAssertions.ts, 19, 11))
+
+    static c!: number;
+>c : Symbol(C3.c, Decl(definiteAssignmentAssertions.ts, 20, 19))
+
+    d!;
+>d : Symbol(C3.d, Decl(definiteAssignmentAssertions.ts, 21, 22))
+}
+
+// Definite assignment assertion not permitted in ambient context
+
+declare class C4 {
+>C4 : Symbol(C4, Decl(definiteAssignmentAssertions.ts, 23, 1))
+
+    a!: number;
+>a : Symbol(C4.a, Decl(definiteAssignmentAssertions.ts, 27, 18))
+}
+
+// Definite assignment assertion not permitted on abstract property
+
+abstract class C5 {
+>C5 : Symbol(C5, Decl(definiteAssignmentAssertions.ts, 29, 1))
+
+    abstract a!: number;
+>a : Symbol(C5.a, Decl(definiteAssignmentAssertions.ts, 33, 19))
+}
+
+// Suppress definite assignment check for variable
+
+function f1() {
+>f1 : Symbol(f1, Decl(definiteAssignmentAssertions.ts, 35, 1))
+
+    let x!: number;
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 40, 7))
+
+    let y = x;
+>y : Symbol(y, Decl(definiteAssignmentAssertions.ts, 41, 7))
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 40, 7))
+
+    var a!: number;
+>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 42, 7))
+
+    var b = a;
+>b : Symbol(b, Decl(definiteAssignmentAssertions.ts, 43, 7))
+>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 42, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(definiteAssignmentAssertions.ts, 44, 1))
+
+    let x!: string | number;
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 47, 7))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 47, 7))
+
+        let s: string = x;
+>s : Symbol(s, Decl(definiteAssignmentAssertions.ts, 49, 11))
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 47, 7))
+    }
+    else {
+        let n: number = x;
+>n : Symbol(n, Decl(definiteAssignmentAssertions.ts, 52, 11))
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 47, 7))
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(definiteAssignmentAssertions.ts, 54, 1))
+
+    let x!: number;
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 57, 7))
+
+    const g = () => {
+>g : Symbol(g, Decl(definiteAssignmentAssertions.ts, 58, 9))
+
+        x = 1;
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 57, 7))
+    }
+    g();
+>g : Symbol(g, Decl(definiteAssignmentAssertions.ts, 58, 9))
+
+    let y = x;
+>y : Symbol(y, Decl(definiteAssignmentAssertions.ts, 62, 7))
+>x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 57, 7))
+}
+
+// Definite assignment assertion requires type annotation and no initializer
+
+function f4() {
+>f4 : Symbol(f4, Decl(definiteAssignmentAssertions.ts, 63, 1))
+
+    let a!;
+>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 68, 7))
+
+    let b! = 1;
+>b : Symbol(b, Decl(definiteAssignmentAssertions.ts, 69, 7))
+
+    let c!: number = 1;
+>c : Symbol(c, Decl(definiteAssignmentAssertions.ts, 70, 7))
+}
+
+// Definite assignment assertion not permitted in ambient context
+
+declare let v1!: number;
+>v1 : Symbol(v1, Decl(definiteAssignmentAssertions.ts, 75, 11))
+
+declare var v2!: number;
+>v2 : Symbol(v2, Decl(definiteAssignmentAssertions.ts, 76, 11))
+
+declare namespace foo {
+>foo : Symbol(foo, Decl(definiteAssignmentAssertions.ts, 76, 24))
+
+	var v!: number;
+>v : Symbol(v, Decl(definiteAssignmentAssertions.ts, 79, 4))
+}
+

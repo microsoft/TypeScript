@@ -1,0 +1,7 @@
+tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts(1,3): error TS1126: Unexpected end of text.
+
+
+==== tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts (1 errors) ====
+    "\
+      
+!!! error TS1126: Unexpected end of text.

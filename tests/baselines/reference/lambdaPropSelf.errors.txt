@@ -1,0 +1,29 @@
+tests/cases/compiler/lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
+
+
+==== tests/cases/compiler/lambdaPropSelf.ts (1 errors) ====
+    declare var ko: any;
+    
+    class Person {
+        children: string[];
+    
+        constructor (public name: string, children: string[]) {
+            this.children = ko.observableArray(children);
+        }
+    
+        addChild = () => this.children.push("New child");
+    }
+    
+    
+    class T {
+         fo() {
+            var x = this;
+        }
+    }
+    
+    module M {
+        var x = this;
+                ~~~~
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+    }
+    

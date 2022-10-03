@@ -1,0 +1,23 @@
+=== tests/cases/compiler/types/component.d.ts ===
+declare module '@namespace/component' {
+>'@namespace/component' : Symbol("@namespace/component", Decl(component.d.ts, 0, 0))
+
+    export class Foo {}
+>Foo : Symbol(Foo, Decl(component.d.ts, 0, 39))
+}
+=== tests/cases/compiler/packages/somepackage/index.d.ts ===
+import { Foo } from "@namespace/component";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+export declare const item: typeof Foo;
+>item : Symbol(item, Decl(index.d.ts, 1, 20))
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+=== tests/cases/compiler/packages/secondpackage/index.ts ===
+import { item } from "../somepackage";
+>item : Symbol(item, Decl(index.ts, 0, 8))
+
+export const reeexported = item;
+>reeexported : Symbol(reeexported, Decl(index.ts, 1, 12))
+>item : Symbol(item, Decl(index.ts, 0, 8))
+

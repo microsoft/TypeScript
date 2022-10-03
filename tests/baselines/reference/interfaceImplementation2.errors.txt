@@ -1,0 +1,22 @@
+tests/cases/compiler/interfaceImplementation2.ts(8,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
+  Property 'iFn' is missing in type 'C3' but required in type 'I1'.
+
+
+==== tests/cases/compiler/interfaceImplementation2.ts (1 errors) ====
+    interface I1 {
+        iObj:{ };
+        iNum:number;
+        iAny:any;
+        iFn():void;
+    }
+    
+    class C3 implements I1 {
+          ~~
+!!! error TS2420: Class 'C3' incorrectly implements interface 'I1'.
+!!! error TS2420:   Property 'iFn' is missing in type 'C3' but required in type 'I1'.
+!!! related TS2728 tests/cases/compiler/interfaceImplementation2.ts:5:5: 'iFn' is declared here.
+        public iObj:{ };
+        public iNum:number;
+        public iAny:any;
+    }
+    

@@ -1,0 +1,65 @@
+=== tests/cases/conformance/salsa/index.js ===
+/// <reference path='node.d.ts' />
+const C = require("./semver")
+>C : typeof C
+>require("./semver") : typeof C
+>require : (name: string) => any
+>"./semver" : "./semver"
+
+var two = C.f(1)
+>two : any
+>C.f(1) : any
+>C.f : (n: any) => any
+>C : typeof C
+>f : (n: any) => any
+>1 : 1
+
+var c = new C
+>c : C
+>new C : C
+>C : typeof C
+
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+=== tests/cases/conformance/salsa/semver.js ===
+/// <reference path='node.d.ts' />
+exports = module.exports = C
+>exports = module.exports = C : typeof C
+>exports : typeof C
+>module.exports = C : typeof C
+>module.exports : typeof C
+>module : { exports: typeof C; }
+>exports : typeof C
+>C : typeof C
+
+exports.f = n => n + 1
+>exports.f = n => n + 1 : (n: any) => any
+>exports.f : (n: any) => any
+>exports : typeof C
+>f : (n: any) => any
+>n => n + 1 : (n: any) => any
+>n : any
+>n + 1 : any
+>n : any
+>1 : 1
+
+function C() {
+>C : typeof C
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : this
+>p : any
+>1 : 1
+}

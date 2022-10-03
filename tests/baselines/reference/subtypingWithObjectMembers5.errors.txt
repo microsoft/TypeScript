@@ -1,0 +1,93 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(16,11): error TS2420: Class 'B' incorrectly implements interface 'A'.
+  Property 'foo' is missing in type 'B' but required in type 'A'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(24,11): error TS2420: Class 'B2' incorrectly implements interface 'A2'.
+  Property '1' is missing in type 'B2' but required in type 'A2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(32,11): error TS2420: Class 'B3' incorrectly implements interface 'A3'.
+  Property ''1'' is missing in type 'B3' but required in type 'A3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(43,11): error TS2559: Type 'B' has no properties in common with type 'A'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(51,11): error TS2559: Type 'B2' has no properties in common with type 'A2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(59,11): error TS2559: Type 'B3' has no properties in common with type 'A3'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts (6 errors) ====
+    interface Base {
+        foo: string;
+    }
+    
+    interface Derived extends Base {
+        bar: string;
+    }
+    
+    // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+    // foo properties are valid, bar properties cause errors in the derived class declarations
+    module NotOptional {
+        interface A {
+            foo: Base;
+        }
+    
+        class B implements A {
+              ~
+!!! error TS2420: Class 'B' incorrectly implements interface 'A'.
+!!! error TS2420:   Property 'foo' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:13:9: 'foo' is declared here.
+            fooo: Derived; // error
+        }
+    
+        interface A2 {
+            1: Base;
+        }
+    
+        class B2 implements A2 {
+              ~~
+!!! error TS2420: Class 'B2' incorrectly implements interface 'A2'.
+!!! error TS2420:   Property '1' is missing in type 'B2' but required in type 'A2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:21:9: '1' is declared here.
+            2: Derived; // error
+        }
+    
+        interface A3 {
+            '1': Base;
+        }
+    
+        class B3 implements A3 {
+              ~~
+!!! error TS2420: Class 'B3' incorrectly implements interface 'A3'.
+!!! error TS2420:   Property ''1'' is missing in type 'B3' but required in type 'A3'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:29:9: ''1'' is declared here.
+            '1.0': Derived; // error
+        }
+    }
+    
+    // same cases as above but with optional
+    module Optional {
+        interface A {
+            foo?: Base;
+        }
+    
+        class B implements A {
+              ~
+!!! error TS2559: Type 'B' has no properties in common with type 'A'.
+            fooo: Derived; // weak type error
+        }
+    
+        interface A2 {
+            1?: Base;
+        }
+    
+        class B2 implements A2 {
+              ~~
+!!! error TS2559: Type 'B2' has no properties in common with type 'A2'.
+            2: Derived; // weak type error
+        }
+    
+        interface A3 {
+            '1'?: Base;
+        }
+    
+        class B3 implements A3 {
+              ~~
+!!! error TS2559: Type 'B3' has no properties in common with type 'A3'.
+            '1.0': Derived; // weak type error
+        }
+    }
+    

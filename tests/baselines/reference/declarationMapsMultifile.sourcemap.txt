@@ -1,0 +1,206 @@
+===================================================================
+JsFile: a.d.ts
+mapUrl: a.d.ts.map
+sourceRoot: 
+sources: a.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/a.d.ts
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>export declare class Foo {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^
+3 >                     ^^^
+1 >
+2 >export class 
+3 >                     Foo
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
+3 >Emitted(1, 25) Source(1, 17) + SourceIndex(0)
+---
+>>>    doThing(x: {
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^
+5 >             ^^
+6 >               ^^^^->
+1 > {
+  >    
+2 >    doThing
+3 >           (
+4 >            x
+5 >             : 
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>        a: number;
+1->^^^^^^^^
+2 >        ^
+3 >         ^^
+4 >           ^^^^^^
+5 >                 ^
+1->{
+2 >        a
+3 >         : 
+4 >           number
+5 >                 
+1->Emitted(3, 9) Source(2, 17) + SourceIndex(0)
+2 >Emitted(3, 10) Source(2, 18) + SourceIndex(0)
+3 >Emitted(3, 12) Source(2, 20) + SourceIndex(0)
+4 >Emitted(3, 18) Source(2, 26) + SourceIndex(0)
+5 >Emitted(3, 19) Source(2, 26) + SourceIndex(0)
+---
+>>>    }): {
+1 >^^^^^
+2 >     ^^^^^^^^^^^^^^->
+1 >}
+1 >Emitted(4, 6) Source(2, 27) + SourceIndex(0)
+---
+>>>        b: number;
+>>>    };
+>>>    static make(): Foo;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^
+1->) {
+  >        return {b: x.a};
+  >    }
+  >    
+2 >    static
+3 >           
+4 >           make
+1->Emitted(7, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(7, 11) Source(5, 11) + SourceIndex(0)
+3 >Emitted(7, 12) Source(5, 12) + SourceIndex(0)
+4 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >() {
+  >        return new Foo();
+  >    }
+  >}
+1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=a.d.ts.map===================================================================
+JsFile: index.d.ts
+mapUrl: index.d.ts.map
+sourceRoot: 
+sources: index.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/index.d.ts
+sourceFile:index.ts
+-------------------------------------------------------------------
+>>>import { Foo } from "./a";
+1 >
+2 >^^^^^^^
+3 >       ^^
+4 >         ^^^
+5 >            ^^
+6 >              ^^^^^^
+7 >                    ^^^^^
+8 >                         ^
+1 >
+2 >import 
+3 >       {
+4 >         Foo
+5 >            }
+6 >               from 
+7 >                    "./a"
+8 >                         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 9) + SourceIndex(0)
+4 >Emitted(1, 13) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 13) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 19) + SourceIndex(0)
+7 >Emitted(1, 26) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 27) Source(1, 25) + SourceIndex(0)
+---
+>>>declare const c: Foo;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^
+4 >              ^
+5 >               ^^^^^
+6 >                    ^
+7 >                     ^^^->
+1 >
+  >
+  >
+2 >
+3 >        const 
+4 >              c
+5 >                = new Foo()
+6 >                    ;
+1 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 9) Source(3, 1) + SourceIndex(0)
+3 >Emitted(2, 15) Source(3, 7) + SourceIndex(0)
+4 >Emitted(2, 16) Source(3, 8) + SourceIndex(0)
+5 >Emitted(2, 21) Source(3, 20) + SourceIndex(0)
+6 >Emitted(2, 22) Source(3, 21) + SourceIndex(0)
+---
+>>>export declare let x: {
+1->
+2 >^^^^^^^^^^^^^^^
+3 >               ^^^^
+4 >                   ^
+1->
+  >c.doThing({a: 42});
+  >
+  >
+2 >export 
+3 >               let 
+4 >                   x
+1->Emitted(3, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(3, 16) Source(6, 8) + SourceIndex(0)
+3 >Emitted(3, 20) Source(6, 12) + SourceIndex(0)
+4 >Emitted(3, 21) Source(6, 13) + SourceIndex(0)
+---
+>>>    b: number;
+>>>};
+1 >^
+2 > ^
+3 >  ^^^^^^^^^^^^^^^^^->
+1 > = c.doThing({a: 12})
+2 > ;
+1 >Emitted(5, 2) Source(6, 34) + SourceIndex(0)
+2 >Emitted(5, 3) Source(6, 35) + SourceIndex(0)
+---
+>>>export { c, Foo };
+1->
+2 >^^^^^^^
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^^^
+7 >               ^^
+8 >                 ^
+9 >                  ^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >export 
+3 >       { 
+4 >         c
+5 >          , 
+6 >            Foo
+7 >                }
+8 >                 ;
+1->Emitted(6, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(6, 8) Source(7, 8) + SourceIndex(0)
+3 >Emitted(6, 10) Source(7, 10) + SourceIndex(0)
+4 >Emitted(6, 11) Source(7, 11) + SourceIndex(0)
+5 >Emitted(6, 13) Source(7, 13) + SourceIndex(0)
+6 >Emitted(6, 16) Source(7, 16) + SourceIndex(0)
+7 >Emitted(6, 18) Source(7, 18) + SourceIndex(0)
+8 >Emitted(6, 19) Source(7, 19) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=index.d.ts.map

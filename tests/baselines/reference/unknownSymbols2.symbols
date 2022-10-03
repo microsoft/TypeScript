@@ -1,0 +1,55 @@
+=== tests/cases/compiler/unknownSymbols2.ts ===
+module M {
+>M : Symbol(M, Decl(unknownSymbols2.ts, 0, 0))
+
+    var x: asdf;
+>x : Symbol(x, Decl(unknownSymbols2.ts, 1, 7))
+>asdf : Symbol(asdf)
+
+    var y = x + asdf;
+>y : Symbol(y, Decl(unknownSymbols2.ts, 2, 7))
+>x : Symbol(x, Decl(unknownSymbols2.ts, 1, 7))
+
+    var z = <asdf>x; // should be an error
+>z : Symbol(z, Decl(unknownSymbols2.ts, 3, 7))
+>asdf : Symbol(asdf)
+>x : Symbol(x, Decl(unknownSymbols2.ts, 1, 7))
+
+    if (asdf) {
+    }
+    else if (qwerty) {
+    }
+
+    try {
+    }
+    catch (asdf) { // no error
+>asdf : Symbol(asdf, Decl(unknownSymbols2.ts, 11, 11))
+    }
+
+    switch (asdf) {
+        case qwerty:
+            break;
+        default:
+            break;
+    }
+
+    var a = () => asdf;
+>a : Symbol(a, Decl(unknownSymbols2.ts, 21, 7))
+
+    var b = (asdf) => { return qwerty };
+>b : Symbol(b, Decl(unknownSymbols2.ts, 22, 7))
+>asdf : Symbol(asdf, Decl(unknownSymbols2.ts, 22, 13))
+
+    module N {
+>N : Symbol(N, Decl(unknownSymbols2.ts, 22, 40))
+
+        var x = 1;
+>x : Symbol(x, Decl(unknownSymbols2.ts, 25, 11))
+    }
+    import c = N;
+>c : Symbol(c, Decl(unknownSymbols2.ts, 26, 5))
+>N : Symbol(N, Decl(unknownSymbols2.ts, 22, 40))
+
+    import d = asdf;
+>d : Symbol(d, Decl(unknownSymbols2.ts, 27, 17))
+}

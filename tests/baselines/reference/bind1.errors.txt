@@ -1,0 +1,11 @@
+tests/cases/compiler/bind1.ts(2,31): error TS2304: Cannot find name 'I'.
+
+
+==== tests/cases/compiler/bind1.ts (1 errors) ====
+    module M {
+        export class C implements I {} // this should be an unresolved symbol I error
+                                  ~
+!!! error TS2304: Cannot find name 'I'.
+    }
+    
+    

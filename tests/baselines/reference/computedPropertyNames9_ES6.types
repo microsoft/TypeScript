@@ -1,0 +1,42 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames9_ES6.ts ===
+function f(s: string): string;
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>s : string
+
+function f(n: number): number;
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>n : number
+
+function f<T>(x: T): T;
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>x : T
+
+function f(x): any { }
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>x : any
+
+var v = {
+>v : { [x: string]: number; [x: number]: number; }
+>{    [f("")]: 0,    [f(0)]: 0,    [f(true)]: 0} : { [x: string]: number; [x: number]: number; }
+
+    [f("")]: 0,
+>[f("")] : number
+>f("") : string
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>"" : ""
+>0 : 0
+
+    [f(0)]: 0,
+>[f(0)] : number
+>f(0) : number
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>0 : 0
+>0 : 0
+
+    [f(true)]: 0
+>[f(true)] : number
+>f(true) : true
+>f : { (s: string): string; (n: number): number; <T>(x: T): T; }
+>true : true
+>0 : 0
+}

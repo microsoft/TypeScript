@@ -1,0 +1,19 @@
+=== tests/cases/compiler/functionOverloads19.ts ===
+function foo(bar:{b:string;});
+>foo : { (bar: {    b: string;}): any; (bar: { a: string; }): any; }
+>bar : { b: string; }
+>b : string
+
+function foo(bar:{a:string;});
+>foo : { (bar: { b: string; }): any; (bar: {    a: string;}): any; }
+>bar : { a: string; }
+>a : string
+
+function foo(bar:{a:any;}) { return {a:""} }
+>foo : { (bar: { b: string; }): any; (bar: { a: string; }): any; }
+>bar : { a: any; }
+>a : any
+>{a:""} : { a: string; }
+>a : string
+>"" : ""
+

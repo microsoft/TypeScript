@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts ===
+var x: Undefined;
+>x : Undefined
+
+var y = undefined;
+>y : any
+>undefined : undefined
+

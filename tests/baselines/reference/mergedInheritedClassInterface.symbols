@@ -1,0 +1,130 @@
+=== tests/cases/conformance/classes/classDeclarations/mergedInheritedClassInterface.ts ===
+interface BaseInterface {
+>BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
+
+    required: number;
+>required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+
+    optional?: number;
+>optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+}
+
+class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(mergedInheritedClassInterface.ts, 3, 1))
+
+    baseMethod() { }
+>baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 17))
+
+    baseNumber: number;
+>baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 20))
+}
+
+interface Child extends BaseInterface {
+>Child : Symbol(Child, Decl(mergedInheritedClassInterface.ts, 8, 1), Decl(mergedInheritedClassInterface.ts, 12, 1))
+>BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
+
+    additional: number;
+>additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
+}
+
+class Child extends BaseClass {
+>Child : Symbol(Child, Decl(mergedInheritedClassInterface.ts, 8, 1), Decl(mergedInheritedClassInterface.ts, 12, 1))
+>BaseClass : Symbol(BaseClass, Decl(mergedInheritedClassInterface.ts, 3, 1))
+
+    classNumber: number;
+>classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 31))
+
+    method() { }
+>method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
+}
+
+interface ChildNoBaseClass extends BaseInterface {
+>ChildNoBaseClass : Symbol(ChildNoBaseClass, Decl(mergedInheritedClassInterface.ts, 17, 1), Decl(mergedInheritedClassInterface.ts, 21, 1))
+>BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
+
+    additional2: string;
+>additional2 : Symbol(ChildNoBaseClass.additional2, Decl(mergedInheritedClassInterface.ts, 19, 50))
+}
+class ChildNoBaseClass {
+>ChildNoBaseClass : Symbol(ChildNoBaseClass, Decl(mergedInheritedClassInterface.ts, 17, 1), Decl(mergedInheritedClassInterface.ts, 21, 1))
+
+    classString: string;
+>classString : Symbol(ChildNoBaseClass.classString, Decl(mergedInheritedClassInterface.ts, 22, 24))
+
+    method2() { }
+>method2 : Symbol(ChildNoBaseClass.method2, Decl(mergedInheritedClassInterface.ts, 23, 24))
+}
+class Grandchild extends ChildNoBaseClass {
+>Grandchild : Symbol(Grandchild, Decl(mergedInheritedClassInterface.ts, 25, 1))
+>ChildNoBaseClass : Symbol(ChildNoBaseClass, Decl(mergedInheritedClassInterface.ts, 17, 1), Decl(mergedInheritedClassInterface.ts, 21, 1))
+}
+
+// checks if properties actually were merged
+var child : Child;
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>Child : Symbol(Child, Decl(mergedInheritedClassInterface.ts, 8, 1), Decl(mergedInheritedClassInterface.ts, 12, 1))
+
+child.required;
+>child.required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+
+child.optional;
+>child.optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+
+child.additional;
+>child.additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
+
+child.baseNumber;
+>child.baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 20))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 20))
+
+child.classNumber;
+>child.classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 31))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 31))
+
+child.baseMethod();
+>child.baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 17))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 17))
+
+child.method();
+>child.method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 30, 3))
+>method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
+
+var grandchild: Grandchild;
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>Grandchild : Symbol(Grandchild, Decl(mergedInheritedClassInterface.ts, 25, 1))
+
+grandchild.required;
+>grandchild.required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+
+grandchild.optional;
+>grandchild.optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+
+grandchild.additional2;
+>grandchild.additional2 : Symbol(ChildNoBaseClass.additional2, Decl(mergedInheritedClassInterface.ts, 19, 50))
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>additional2 : Symbol(ChildNoBaseClass.additional2, Decl(mergedInheritedClassInterface.ts, 19, 50))
+
+grandchild.classString;
+>grandchild.classString : Symbol(ChildNoBaseClass.classString, Decl(mergedInheritedClassInterface.ts, 22, 24))
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>classString : Symbol(ChildNoBaseClass.classString, Decl(mergedInheritedClassInterface.ts, 22, 24))
+
+grandchild.method2();
+>grandchild.method2 : Symbol(ChildNoBaseClass.method2, Decl(mergedInheritedClassInterface.ts, 23, 24))
+>grandchild : Symbol(grandchild, Decl(mergedInheritedClassInterface.ts, 39, 3))
+>method2 : Symbol(ChildNoBaseClass.method2, Decl(mergedInheritedClassInterface.ts, 23, 24))
+

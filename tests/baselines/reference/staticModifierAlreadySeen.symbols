@@ -1,0 +1,12 @@
+=== tests/cases/compiler/staticModifierAlreadySeen.ts ===
+class C {
+>C : Symbol(C, Decl(staticModifierAlreadySeen.ts, 0, 0))
+
+    static static foo = 1;
+>static : Symbol(C.static, Decl(staticModifierAlreadySeen.ts, 0, 9), Decl(staticModifierAlreadySeen.ts, 1, 26))
+>foo : Symbol(C.foo, Decl(staticModifierAlreadySeen.ts, 1, 17))
+
+    public static static bar() { }
+>static : Symbol(C.static, Decl(staticModifierAlreadySeen.ts, 0, 9), Decl(staticModifierAlreadySeen.ts, 1, 26))
+>bar : Symbol(C.bar, Decl(staticModifierAlreadySeen.ts, 2, 24))
+}

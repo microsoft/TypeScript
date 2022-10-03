@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts(1,17): error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts(1,26): error TS2304: Cannot find name 'X'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement6.ts (2 errors) ====
+    for (var a = 1, b = 2 in X) {
+                    ~
+!!! error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
+                             ~
+!!! error TS2304: Cannot find name 'X'.
+    }

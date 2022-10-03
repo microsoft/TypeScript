@@ -1,0 +1,48 @@
+tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(10,8): error TS2741: Property 'x' is missing in type 'typeof Bar' but required in type 'Bar'.
+tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(11,8): error TS2740: Type 'DateConstructor' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(17,4): error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(26,5): error TS2322: Type '() => number' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts (4 errors) ====
+    class Bar {
+        x!: string;
+    }
+    
+    declare function getNum(): number;
+    
+    declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
+    
+    foo({
+        x: Bar,
+           ~~~
+!!! error TS2741: Property 'x' is missing in type 'typeof Bar' but required in type 'Bar'.
+!!! related TS2728 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:2:5: 'x' is declared here.
+!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:10:8: Did you mean to use 'new' with this expression?
+        y: Date
+           ~~~~
+!!! error TS2740: Type 'DateConstructor' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:11:8: Did you mean to use 'new' with this expression?
+    }, getNum());
+    
+    foo({
+        x: new Bar(),
+        y: new Date()
+    }, getNum);
+       ~~~~~~
+!!! error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+!!! related TS6212 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:17:4: Did you mean to call this expression?
+    
+    
+    foo({
+        x: new Bar(),
+        y: new Date()
+    }, getNum(), [
+        1,
+        2,
+        getNum
+        ~~~~~~
+!!! error TS2322: Type '() => number' is not assignable to type 'number'.
+!!! related TS6212 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:26:5: Did you mean to call this expression?
+    ]);
+    

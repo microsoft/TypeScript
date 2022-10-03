@@ -1,0 +1,158 @@
+=== tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts ===
+class A {
+>A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(A.foo, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+>A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(B.bar, Decl(objectTypeHidingMembersOfExtendedObject.ts, 4, 19))
+}
+
+interface Object {
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
+
+    data: A;
+>data : Symbol(Object.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 8, 18))
+>A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(objectTypeHidingMembersOfExtendedObject.ts, 10, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
+}
+
+class C {
+>C : Symbol(C, Decl(objectTypeHidingMembersOfExtendedObject.ts, 11, 1))
+
+    valueOf() { }
+>valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+
+    data: B;
+>data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(objectTypeHidingMembersOfExtendedObject.ts, 16, 5))
+}
+
+var c: C;
+>c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+>C : Symbol(C, Decl(objectTypeHidingMembersOfExtendedObject.ts, 11, 1))
+
+var r1: void = c.valueOf();
+>r1 : Symbol(r1, Decl(objectTypeHidingMembersOfExtendedObject.ts, 20, 3))
+>c.valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+>c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+>valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+
+var r1b: B = c.data;
+>r1b : Symbol(r1b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 21, 3))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+>c.data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+>c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+>data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+
+var r1c = r1b['hm']; // should be 'Object'
+>r1c : Symbol(r1c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 22, 3))
+>r1b : Symbol(r1b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 21, 3))
+
+var r1d = c['hm']; // should be 'any'
+>r1d : Symbol(r1d, Decl(objectTypeHidingMembersOfExtendedObject.ts, 23, 3))
+>c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+
+interface I {
+>I : Symbol(I, Decl(objectTypeHidingMembersOfExtendedObject.ts, 23, 18))
+
+    valueOf(): void;
+>valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+
+    data: B;
+>data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(objectTypeHidingMembersOfExtendedObject.ts, 28, 5))
+}
+
+var i: I;
+>i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+>I : Symbol(I, Decl(objectTypeHidingMembersOfExtendedObject.ts, 23, 18))
+
+var r2: void = i.valueOf();
+>r2 : Symbol(r2, Decl(objectTypeHidingMembersOfExtendedObject.ts, 32, 3))
+>i.valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+>i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+>valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+
+var r2b: B = i.data;
+>r2b : Symbol(r2b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 33, 3))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+>i.data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+>i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+>data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+
+var r2c = r2b['hm']; // should be 'Object'
+>r2c : Symbol(r2c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 34, 3))
+>r2b : Symbol(r2b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 33, 3))
+
+var r2d = i['hm']; // should be 'any'
+>r2d : Symbol(r2d, Decl(objectTypeHidingMembersOfExtendedObject.ts, 35, 3))
+>i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+
+var a = {
+>a : Symbol(a, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 3))
+
+    valueOf: () => { },
+>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 9))
+
+    data: new B()
+>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 38, 23))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+}
+
+var r3: void = a.valueOf();
+>r3 : Symbol(r3, Decl(objectTypeHidingMembersOfExtendedObject.ts, 42, 3))
+>a.valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 9))
+>a : Symbol(a, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 3))
+>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 9))
+
+var r3b: B = a.data;
+>r3b : Symbol(r3b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 43, 3))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+>a.data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 38, 23))
+>a : Symbol(a, Decl(objectTypeHidingMembersOfExtendedObject.ts, 37, 3))
+>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 38, 23))
+
+var r3c = r3b['hm']; // should be 'Object'
+>r3c : Symbol(r3c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 44, 3))
+>r3b : Symbol(r3b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 43, 3))
+
+var r3d = i['hm'];
+>r3d : Symbol(r3d, Decl(objectTypeHidingMembersOfExtendedObject.ts, 45, 3))
+>i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+
+var b: {
+>b : Symbol(b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 47, 3))
+
+    valueOf(): void;
+>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 47, 8))
+
+    data: B;
+>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 48, 20))
+>B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+
+    [x: string]: any;
+>x : Symbol(x, Decl(objectTypeHidingMembersOfExtendedObject.ts, 50, 5))
+}
+
+var r4: void = b.valueOf();
+>r4 : Symbol(r4, Decl(objectTypeHidingMembersOfExtendedObject.ts, 53, 3))
+>b.valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 47, 8))
+>b : Symbol(b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 47, 3))
+>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 47, 8))
+

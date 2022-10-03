@@ -1,0 +1,85 @@
+=== tests/cases/compiler/indexedAccessTypeConstraints.ts ===
+// Repro from #14557
+
+interface IData<T> {
+    content: T;
+>content : T
+}
+
+type Data<T> = {
+>Data : Data<T>
+
+    get: <K extends keyof T>(prop: K) => T[K];
+>get : <K extends keyof T>(prop: K) => T[K]
+>prop : K
+
+};
+
+class Parent<M> {
+>Parent : Parent<M>
+
+    constructor(private data: Data<M>) {}
+>data : Data<M>
+
+    getData(): Data<M> {
+>getData : () => Data<M>
+
+        return this.data;
+>this.data : Data<M>
+>this : this
+>data : Data<M>
+    }
+}
+
+export class Foo<C> extends Parent<IData<C>> {
+>Foo : Foo<C>
+>Parent : Parent<IData<C>>
+
+    getContent(): C {
+>getContent : () => C
+
+        return this.getData().get('content');
+>this.getData().get('content') : C
+>this.getData().get : <K extends "content">(prop: K) => IData<C>[K]
+>this.getData() : Data<IData<C>>
+>this.getData : () => Data<IData<C>>
+>this : this
+>getData : () => Data<IData<C>>
+>get : <K extends "content">(prop: K) => IData<C>[K]
+>'content' : "content"
+    }
+}
+
+export class Bar<C, T extends IData<C>> extends Parent<T> {
+>Bar : Bar<C, T>
+>Parent : Parent<T>
+
+    getContent(): C {
+>getContent : () => C
+
+        return this.getData().get('content');
+>this.getData().get('content') : T["content"]
+>this.getData().get : <K extends keyof T>(prop: K) => T[K]
+>this.getData() : Data<T>
+>this.getData : () => Data<T>
+>this : this
+>getData : () => Data<T>
+>get : <K extends keyof T>(prop: K) => T[K]
+>'content' : "content"
+    }
+}
+
+// Repro from #14557
+
+function foo<C, T extends { content: C }>(x: C, y: T['content']) {
+>foo : <C, T extends { content: C; }>(x: C, y: T['content']) => void
+>content : C
+>x : C
+>y : T["content"]
+
+    x = y;
+>x = y : T["content"]
+>x : C
+>y : T["content"]
+}
+

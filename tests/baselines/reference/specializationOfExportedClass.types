@@ -1,0 +1,16 @@
+=== tests/cases/compiler/specializationOfExportedClass.ts ===
+module M {
+>M : typeof M
+
+export class C<T> { }
+>C : C<T>
+
+}
+ 
+var x = new M.C<string>();
+>x : M.C<string>
+>new M.C<string>() : M.C<string>
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+

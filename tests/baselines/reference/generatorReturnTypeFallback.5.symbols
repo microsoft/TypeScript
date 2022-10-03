@@ -1,0 +1,8 @@
+=== tests/cases/conformance/generators/generatorReturnTypeFallback.5.ts ===
+// Allow generators to fallback to IterableIterator if they do not need a type for the sent value while in strictNullChecks mode.
+function* f(): IterableIterator<number> {
+>f : Symbol(f, Decl(generatorReturnTypeFallback.5.ts, 0, 0))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield 1;
+}

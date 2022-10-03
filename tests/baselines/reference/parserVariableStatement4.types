@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement4.ts ===
+var
+    a
+>a : any
+
+  , b
+>b : any
+
+  , c
+>c : any
+

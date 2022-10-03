@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.ts ===
+class C {
+>C : Symbol(C, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 0, 0))
+
+    private foo(x: number);
+>foo : Symbol(C.foo, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 0, 9), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 1, 27), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 2, 27))
+>x : Symbol(x, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 1, 16))
+
+    private foo(x: string);
+>foo : Symbol(C.foo, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 0, 9), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 1, 27), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 2, 27))
+>x : Symbol(x, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 2, 16))
+
+    private foo(x: any) { }
+>foo : Symbol(C.foo, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 0, 9), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 1, 27), Decl(declFileForClassWithPrivateOverloadedFunction.ts, 2, 27))
+>x : Symbol(x, Decl(declFileForClassWithPrivateOverloadedFunction.ts, 3, 16))
+}

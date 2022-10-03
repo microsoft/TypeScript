@@ -1,0 +1,41 @@
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,25): error TS2450: Enum 'Enum' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,30): error TS2729: Property 'A' is used before its initialization.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(3,31): error TS2448: Block-scoped variable 'ObjLiteral' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(3,42): error TS2729: Property 'A' is used before its initialization.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(4,40): error TS2729: Property 'A' is used before its initialization.
+
+
+==== tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts (5 errors) ====
+    class Foo {
+        static enumMember = Enum.A;
+                            ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts:7:6: 'Enum' is declared here.
+                                 ~
+!!! error TS2729: Property 'A' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts:8:5: 'A' is declared here.
+        static objLiteralMember = ObjLiteral.A;
+                                  ~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'ObjLiteral' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts:11:7: 'ObjLiteral' is declared here.
+                                             ~
+!!! error TS2729: Property 'A' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts:12:5: 'A' is declared here.
+        static namespaceMember = Namespace.A;
+                                           ~
+!!! error TS2729: Property 'A' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts:16:16: 'A' is declared here.
+    }
+    
+    enum Enum {
+        A
+    }
+    
+    const ObjLiteral = {
+        A: 0
+    };
+    
+    namespace Namespace {
+        export let A = 0
+    }
+    

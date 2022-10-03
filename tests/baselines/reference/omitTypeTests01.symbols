@@ -1,0 +1,47 @@
+=== tests/cases/compiler/omitTypeTests01.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(omitTypeTests01.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(omitTypeTests01.ts, 0, 15))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(omitTypeTests01.ts, 1, 14))
+
+    c: boolean;
+>c : Symbol(Foo.c, Decl(omitTypeTests01.ts, 2, 14))
+}
+
+export type Bar = Omit<Foo, "c">;
+>Bar : Symbol(Bar, Decl(omitTypeTests01.ts, 4, 1))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(omitTypeTests01.ts, 0, 0))
+
+export type Baz = Omit<Foo, "b" | "c">;
+>Baz : Symbol(Baz, Decl(omitTypeTests01.ts, 6, 33))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(omitTypeTests01.ts, 0, 0))
+
+export function getBarA(bar: Bar) {
+>getBarA : Symbol(getBarA, Decl(omitTypeTests01.ts, 7, 39))
+>bar : Symbol(bar, Decl(omitTypeTests01.ts, 9, 24))
+>Bar : Symbol(Bar, Decl(omitTypeTests01.ts, 4, 1))
+
+    return bar.a;
+>bar.a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
+>bar : Symbol(bar, Decl(omitTypeTests01.ts, 9, 24))
+>a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
+}
+
+export function getBazA(baz: Baz) {
+>getBazA : Symbol(getBazA, Decl(omitTypeTests01.ts, 11, 1))
+>baz : Symbol(baz, Decl(omitTypeTests01.ts, 13, 24))
+>Baz : Symbol(Baz, Decl(omitTypeTests01.ts, 6, 33))
+
+    return baz.a;
+>baz.a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
+>baz : Symbol(baz, Decl(omitTypeTests01.ts, 13, 24))
+>a : Symbol(a, Decl(omitTypeTests01.ts, 0, 15))
+}
+
+

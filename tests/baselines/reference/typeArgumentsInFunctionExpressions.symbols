@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeArgumentsInFunctionExpressions.ts ===
+var obj = function f<T>(a: T) { // should not error
+>obj : Symbol(obj, Decl(typeArgumentsInFunctionExpressions.ts, 0, 3))
+>f : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 0, 9))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
+>a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 0, 24))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
+
+    var x: T;
+>x : Symbol(x, Decl(typeArgumentsInFunctionExpressions.ts, 1, 7))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
+
+    return a;
+>a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 0, 24))
+
+};
+ 
+var obj2 = function f<T>(a: T): T { // should not error
+>obj2 : Symbol(obj2, Decl(typeArgumentsInFunctionExpressions.ts, 5, 3))
+>f : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 5, 10))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+>a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 5, 25))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+
+    var x: T;
+>x : Symbol(x, Decl(typeArgumentsInFunctionExpressions.ts, 6, 7))
+>T : Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+
+    return a;
+>a : Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 5, 25))
+
+};
+
+

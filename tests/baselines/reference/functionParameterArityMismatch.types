@@ -1,0 +1,97 @@
+=== tests/cases/compiler/functionParameterArityMismatch.ts ===
+declare function f1(a: number);
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
+>a : number
+
+declare function f1(a: number, b: number, c: number);
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
+>a : number
+>b : number
+>c : number
+
+f1();
+>f1() : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
+
+f1(1, 2);
+>f1(1, 2) : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
+>1 : 1
+>2 : 2
+
+f1(1, 2, 3, 4);
+>f1(1, 2, 3, 4) : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+declare function f2();
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+
+declare function f2(a: number, b: number);
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>a : number
+>b : number
+
+declare function f2(a: number, b: number, c: number, d: number);
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>a : number
+>b : number
+>c : number
+>d : number
+
+declare function f2(a: number, b: number, c: number, d: number, e: number, f: number);
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>a : number
+>b : number
+>c : number
+>d : number
+>e : number
+>f : number
+
+f2(1);
+>f2(1) : any
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>1 : 1
+
+f2(1, 2, 3);
+>f2(1, 2, 3) : any
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+
+f2(1, 2, 3, 4, 5);
+>f2(1, 2, 3, 4, 5) : any
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+f2(1, 2, 3, 4, 5, 6, 7);
+>f2(1, 2, 3, 4, 5, 6, 7) : any
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+>7 : 7
+
+f2(...[1], 2, 3, 4, 5, 6);
+>f2(...[1], 2, 3, 4, 5, 6) : any
+>f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
+>...[1] : number
+>[1] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+

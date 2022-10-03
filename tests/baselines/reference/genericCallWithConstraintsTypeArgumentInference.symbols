@@ -1,0 +1,465 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference.ts ===
+// Basic type inference with generic calls and constraints, no errors expected
+
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 28))
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>baz : Symbol(Derived2.baz, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 4, 32))
+
+var b: Base;
+>b : Symbol(b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 5, 3))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+
+var d1: Derived;
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+var d2: Derived2;
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+
+function foo<T extends Base>(t: T) {
+>foo : Symbol(foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 17))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 9, 13))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 9, 29))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 9, 13))
+
+    return t;
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 9, 29))
+}
+
+var r = foo(b); // Base
+>r : Symbol(r, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 13, 3))
+>foo : Symbol(foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 17))
+>b : Symbol(b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 5, 3))
+
+var r2 = foo(d1); // Derived
+>r2 : Symbol(r2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 14, 3))
+>foo : Symbol(foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 17))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+function foo2<T extends Base, U extends Derived>(t: T, u: U) {
+>foo2 : Symbol(foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 14, 17))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 14))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 29))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 49))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 14))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 54))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 29))
+
+    return u;
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 16, 54))
+}
+
+function foo2b<T extends Base, U extends Derived>(u: U) {
+>foo2b : Symbol(foo2b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 18, 1))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 20, 15))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 20, 30))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 20, 50))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 20, 30))
+
+    var x: T;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 21, 7))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 20, 15))
+
+    return x;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 21, 7))
+}
+
+function foo2c<T extends Base, U extends Derived>() {
+>foo2c : Symbol(foo2c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 23, 1))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 25, 15))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 25, 30))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+    var x: T;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 26, 7))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 25, 15))
+
+    return x;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 26, 7))
+}
+
+var r3 = foo2b(d1); // Base
+>r3 : Symbol(r3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 30, 3))
+>foo2b : Symbol(foo2b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 18, 1))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r3b = foo2c(); // Base
+>r3b : Symbol(r3b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 31, 3))
+>foo2c : Symbol(foo2c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 23, 1))
+
+class C<T extends Base, U extends Derived> {
+>C : Symbol(C, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 31, 18))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 8))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 23))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+    constructor(public t: T, public u: U) {
+>t : Symbol(C.t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 34, 16))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 8))
+>u : Symbol(C.u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 34, 28))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 23))
+    }
+
+    foo(t: T, u: U) {
+>foo : Symbol(C.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 35, 5))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 37, 8))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 8))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 37, 13))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 23))
+
+        return t;
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 37, 8))
+    }
+
+    foo2(t: T, u: U) {
+>foo2 : Symbol(C.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 39, 5))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 41, 9))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 8))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 41, 14))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 23))
+
+        return u;
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 41, 14))
+    }
+
+    foo3<T extends Derived>(t: T, u: U) {
+>foo3 : Symbol(C.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 43, 5))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 45, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 45, 28))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 45, 9))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 45, 33))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 23))
+
+        return t;
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 45, 28))
+    }
+
+    foo4<U extends Derived2>(t: T, u: U) {
+>foo4 : Symbol(C.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 47, 5))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 49, 9))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 49, 29))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 33, 8))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 49, 34))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 49, 9))
+
+        return t;
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 49, 29))
+    }
+
+    foo5<T extends Derived, U extends Derived2>(t: T, u: U) {
+>foo5 : Symbol(C.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 51, 5))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 27))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 48))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 9))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 53))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 27))
+
+        return t;
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 53, 48))
+    }
+
+    foo6<T extends Derived, U extends Derived2>() {
+>foo6 : Symbol(C.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 55, 5))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 57, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 57, 27))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+
+        var x: T;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 58, 11))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 57, 9))
+
+        return x;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 58, 11))
+    }
+
+    foo7<T extends Base, U extends Derived>(u: U) {
+>foo7 : Symbol(C.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 60, 5))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 62, 9))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 62, 24))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 62, 44))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 62, 24))
+
+        var x: T;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 63, 11))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 62, 9))
+
+        return x;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 63, 11))
+    }
+
+    foo8<T extends Base, U extends Derived>() {
+>foo8 : Symbol(C.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 65, 5))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 67, 9))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 67, 24))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+        var x: T;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 68, 11))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 67, 9))
+
+        return x;
+>x : Symbol(x, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 68, 11))
+    }
+}
+
+var c = new C(b, d1);
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>C : Symbol(C, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 31, 18))
+>b : Symbol(b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 5, 3))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r4 = c.foo(d1, d2); // Base
+>r4 : Symbol(r4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 74, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 97, 3))
+>c.foo : Symbol(C.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 35, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo : Symbol(C.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 35, 5))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r5 = c.foo2(b, d2); // Derived
+>r5 : Symbol(r5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 75, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 98, 3))
+>c.foo2 : Symbol(C.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 39, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo2 : Symbol(C.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 39, 5))
+>b : Symbol(b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 5, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r6 = c.foo3(d1, d1); // Derived
+>r6 : Symbol(r6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 76, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 99, 3))
+>c.foo3 : Symbol(C.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 43, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo3 : Symbol(C.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 43, 5))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r7 = c.foo4(d1, d2); // Base
+>r7 : Symbol(r7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 77, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 100, 3))
+>c.foo4 : Symbol(C.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 47, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo4 : Symbol(C.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 47, 5))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r8 = c.foo5(d1, d2); // Derived
+>r8 : Symbol(r8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 78, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 101, 3))
+>c.foo5 : Symbol(C.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 51, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo5 : Symbol(C.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 51, 5))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r8b = c.foo5(d2, d2); // Derived2
+>r8b : Symbol(r8b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 79, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 102, 3))
+>c.foo5 : Symbol(C.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 51, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo5 : Symbol(C.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 51, 5))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r9 = c.foo6(); // Derived
+>r9 : Symbol(r9, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 80, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 103, 3))
+>c.foo6 : Symbol(C.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 55, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo6 : Symbol(C.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 55, 5))
+
+var r10 = c.foo7(d1); // Base
+>r10 : Symbol(r10, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 81, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 104, 3))
+>c.foo7 : Symbol(C.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 60, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo7 : Symbol(C.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 60, 5))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r11 = c.foo8(); // Base
+>r11 : Symbol(r11, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 82, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 105, 3))
+>c.foo8 : Symbol(C.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 65, 5))
+>c : Symbol(c, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 73, 3))
+>foo8 : Symbol(C.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 65, 5))
+
+interface I<T extends Base, U extends Derived> {
+>I : Symbol(I, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 82, 19))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+    new (t: T, u: U);
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 85, 9))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 85, 14))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+
+    foo(t: T, u: U): T;
+>foo : Symbol(I.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 85, 21))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 86, 8))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 86, 13))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+
+    foo2(t: T, u: U): U;
+>foo2 : Symbol(I.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 86, 23))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 87, 9))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 87, 14))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+
+    foo3<T extends Derived>(t: T, u: U): T;
+>foo3 : Symbol(I.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 87, 24))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 28))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 9))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 33))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 27))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 9))
+
+    foo4<U extends Derived2>(t: T, u: U): T;
+>foo4 : Symbol(I.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 43))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 9))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 29))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 34))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 9))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 84, 12))
+
+    foo5<T extends Derived, U extends Derived2>(t: T, u: U): T;
+>foo5 : Symbol(I.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 44))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 27))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>t : Symbol(t, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 48))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 9))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 53))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 27))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 9))
+
+    foo6<T extends Derived, U extends Derived2>(): T;
+>foo6 : Symbol(I.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 63))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 9))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 27))
+>Derived2 : Symbol(Derived2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 3, 43))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 9))
+
+    foo7<T extends Base, U extends Derived>(u: U): T;
+>foo7 : Symbol(I.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 53))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 9))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 24))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>u : Symbol(u, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 44))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 24))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 9))
+
+    foo8<T extends Base, U extends Derived>(): T;
+>foo8 : Symbol(I.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 53))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 93, 9))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>U : Symbol(U, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 93, 24))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+>T : Symbol(T, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 93, 9))
+}
+
+var i: I<Base, Derived>;
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>I : Symbol(I, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 82, 19))
+>Base : Symbol(Base, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 2, 27))
+
+var r4 = i.foo(d1, d2); // Base
+>r4 : Symbol(r4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 74, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 97, 3))
+>i.foo : Symbol(I.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 85, 21))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo : Symbol(I.foo, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 85, 21))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r5 = i.foo2(b, d2); // Derived
+>r5 : Symbol(r5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 75, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 98, 3))
+>i.foo2 : Symbol(I.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 86, 23))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo2 : Symbol(I.foo2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 86, 23))
+>b : Symbol(b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 5, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r6 = i.foo3(d1, d1); // Derived
+>r6 : Symbol(r6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 76, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 99, 3))
+>i.foo3 : Symbol(I.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 87, 24))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo3 : Symbol(I.foo3, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 87, 24))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r7 = i.foo4(d1, d2); // Base
+>r7 : Symbol(r7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 77, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 100, 3))
+>i.foo4 : Symbol(I.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 43))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo4 : Symbol(I.foo4, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 88, 43))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r8 = i.foo5(d1, d2); // Derived
+>r8 : Symbol(r8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 78, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 101, 3))
+>i.foo5 : Symbol(I.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 44))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo5 : Symbol(I.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 44))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r8b = i.foo5(d2, d2); // Derived2
+>r8b : Symbol(r8b, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 79, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 102, 3))
+>i.foo5 : Symbol(I.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 44))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo5 : Symbol(I.foo5, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 89, 44))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+>d2 : Symbol(d2, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 7, 3))
+
+var r9 = i.foo6(); // Derived
+>r9 : Symbol(r9, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 80, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 103, 3))
+>i.foo6 : Symbol(I.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 63))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo6 : Symbol(I.foo6, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 90, 63))
+
+var r10 = i.foo7(d1); // Base
+>r10 : Symbol(r10, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 81, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 104, 3))
+>i.foo7 : Symbol(I.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 53))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo7 : Symbol(I.foo7, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 91, 53))
+>d1 : Symbol(d1, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 6, 3))
+
+var r11 = i.foo8(); // Base
+>r11 : Symbol(r11, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 82, 3), Decl(genericCallWithConstraintsTypeArgumentInference.ts, 105, 3))
+>i.foo8 : Symbol(I.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 53))
+>i : Symbol(i, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 96, 3))
+>foo8 : Symbol(I.foo8, Decl(genericCallWithConstraintsTypeArgumentInference.ts, 92, 53))
+

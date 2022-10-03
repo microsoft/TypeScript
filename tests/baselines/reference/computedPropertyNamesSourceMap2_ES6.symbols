@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.ts ===
+var v = {
+>v : Symbol(v, Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 3))
+
+    ["hello"]() {
+>["hello"] : Symbol(["hello"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 9))
+>"hello" : Symbol(["hello"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 9))
+
+        debugger;
+	},
+	get ["goodbye"]() {
+>["goodbye"] : Symbol(["goodbye"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 3, 3))
+>"goodbye" : Symbol(["goodbye"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 3, 3))
+
+		return 0;
+	}
+}

@@ -1,0 +1,7 @@
+{
+    "scenario": "nested local module - with recursive typecheck",
+    "projectRoot": "tests/cases/projects/NestedLocalModule-WithRecursiveTypecheck",
+    "inputFiles": [
+        "test1.ts"
+    ]
+}

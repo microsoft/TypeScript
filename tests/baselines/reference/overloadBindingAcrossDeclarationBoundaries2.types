@@ -1,0 +1,87 @@
+=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file0.ts ===
+interface Opt1 {
+    p?: any;
+>p : any
+}
+interface Opt2 {
+    q?: any;
+>q : any
+}
+interface Opt3 {
+    r?: any;
+>r : any
+}
+interface Opt4 {
+    s?: any;
+>s : any
+}
+
+interface A {
+    a(o: Opt1): Opt1;
+>a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>o : Opt1
+
+    a(o: Opt2): Opt2;
+>a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>o : Opt2
+
+    (o: Opt1): Opt1;
+>o : Opt1
+
+    (o: Opt2): Opt2;
+>o : Opt2
+
+    new (o: Opt1): Opt1;
+>o : Opt1
+
+    new (o: Opt2): Opt2;
+>o : Opt2
+}
+
+=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file1.ts ===
+interface A {
+    a(o: Opt3): Opt3;
+>a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>o : Opt3
+
+    a(o: Opt4): Opt4;
+>a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>o : Opt4
+
+    (o: Opt3): Opt3;
+>o : Opt3
+
+    (o: Opt4): Opt4;
+>o : Opt4
+
+    new (o: Opt3): Opt3;
+>o : Opt3
+
+    new (o: Opt4): Opt4;
+>o : Opt4
+}
+
+var a: A;
+>a : A
+
+// These should all be Opt3
+var a1 = a.a({});
+>a1 : Opt3
+>a.a({}) : Opt3
+>a.a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>a : A
+>a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }
+>{} : {}
+
+var a1 = a({});
+>a1 : Opt3
+>a({}) : Opt3
+>a : A
+>{} : {}
+
+var a1 = new a({});
+>a1 : Opt3
+>new a({}) : Opt3
+>a : A
+>{} : {}
+

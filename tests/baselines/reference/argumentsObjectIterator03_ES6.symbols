@@ -1,0 +1,20 @@
+=== tests/cases/compiler/argumentsObjectIterator03_ES6.ts ===
+function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, number] {
+>asReversedTuple : Symbol(asReversedTuple, Decl(argumentsObjectIterator03_ES6.ts, 0, 0))
+>a : Symbol(a, Decl(argumentsObjectIterator03_ES6.ts, 0, 25))
+>b : Symbol(b, Decl(argumentsObjectIterator03_ES6.ts, 0, 35))
+>c : Symbol(c, Decl(argumentsObjectIterator03_ES6.ts, 0, 46))
+
+    let [x, y, z] = arguments;
+>x : Symbol(x, Decl(argumentsObjectIterator03_ES6.ts, 1, 9))
+>y : Symbol(y, Decl(argumentsObjectIterator03_ES6.ts, 1, 11))
+>z : Symbol(z, Decl(argumentsObjectIterator03_ES6.ts, 1, 14))
+>arguments : Symbol(arguments)
+    
+    return [z, y, x];
+>z : Symbol(z, Decl(argumentsObjectIterator03_ES6.ts, 1, 14))
+>y : Symbol(y, Decl(argumentsObjectIterator03_ES6.ts, 1, 11))
+>x : Symbol(x, Decl(argumentsObjectIterator03_ES6.ts, 1, 9))
+}
+
+

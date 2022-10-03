@@ -1,0 +1,55 @@
+=== tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react'
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+
+interface ResizablePanelProps {
+>ResizablePanelProps : Symbol(ResizablePanelProps, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 25))
+
+  children: [React.ReactNode, React.ReactNode]
+>children : Symbol(ResizablePanelProps.children, Decl(checkJsxChildrenCanBeTupleType.tsx, 4, 31))
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>ReactNode : Symbol(React.ReactNode, Decl(react16.d.ts, 216, 49))
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>ReactNode : Symbol(React.ReactNode, Decl(react16.d.ts, 216, 49))
+}
+
+class ResizablePanel extends React.Component<
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+
+  ResizablePanelProps, any> {}
+>ResizablePanelProps : Symbol(ResizablePanelProps, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 25))
+
+const test = <ResizablePanel>
+>test : Symbol(test, Decl(checkJsxChildrenCanBeTupleType.tsx, 11, 5))
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+  <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+</ResizablePanel>
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+const testErr = <ResizablePanel>
+>testErr : Symbol(testErr, Decl(checkJsxChildrenCanBeTupleType.tsx, 16, 5))
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+  <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+</ResizablePanel>
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+

@@ -1,0 +1,6 @@
+=== tests/cases/compiler/typeofInObjectLiteralType.ts ===
+var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
+>a : Symbol(a, Decl(typeofInObjectLiteralType.ts, 0, 3))
+>b : Symbol(b, Decl(typeofInObjectLiteralType.ts, 0, 8))
+>c : Symbol(c, Decl(typeofInObjectLiteralType.ts, 0, 19))
+

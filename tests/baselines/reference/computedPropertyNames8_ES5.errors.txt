@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES5.ts(5,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES5.ts (1 errors) ====
+    function f<T, U extends string>() {
+        var t: T;
+        var u: U;
+        var v = {
+            [t]: 0,
+            ~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+            [u]: 1
+        };
+    }

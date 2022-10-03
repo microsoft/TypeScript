@@ -1,0 +1,47 @@
+=== tests/cases/compiler/commentsArgumentsOfCallExpression1.ts ===
+function foo(/*c1*/ x: any) { }
+>foo : (x: any) => void
+>x : any
+
+foo(/*c2*/ 1);
+>foo(/*c2*/ 1) : void
+>foo : (x: any) => void
+>1 : 1
+
+foo(/*c3*/ function () { });
+>foo(/*c3*/ function () { }) : void
+>foo : (x: any) => void
+>function () { } : () => void
+
+foo(
+>foo(    /*c4*/    () => { }) : void
+>foo : (x: any) => void
+
+    /*c4*/
+    () => { });
+>() => { } : () => void
+
+foo(
+>foo(    /*c5*/    /*c6*/    () => { }) : void
+>foo : (x: any) => void
+
+    /*c5*/
+    /*c6*/
+    () => { });
+>() => { } : () => void
+
+foo(/*c7*/
+>foo(/*c7*/    () => { }) : void
+>foo : (x: any) => void
+
+    () => { });
+>() => { } : () => void
+
+foo(
+>foo(    /*c7*/    /*c8*/() => { }) : void
+>foo : (x: any) => void
+
+    /*c7*/
+    /*c8*/() => { });
+>() => { } : () => void
+

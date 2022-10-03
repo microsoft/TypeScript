@@ -1,0 +1,18 @@
+=== tests/cases/compiler/numericIndexerConstraint2.ts ===
+class Foo { foo() { } }
+>Foo : Foo
+>foo : () => void
+
+var x: { [index: string]: Foo; };
+>x : { [index: string]: Foo; }
+>index : string
+
+var a: { one: number; };
+>a : { one: number; }
+>one : number
+
+x = a;
+>x = a : { one: number; }
+>x : { [index: string]: Foo; }
+>a : { one: number; }
+

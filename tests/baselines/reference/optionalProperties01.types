@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts ===
+interface Foo {
+  required1: string;
+>required1 : string
+
+  required2: string;
+>required2 : string
+
+  optional?: string;
+>optional : string | undefined
+}
+
+const foo1 = { required1: "hello" } as Foo;
+>foo1 : Foo
+>{ required1: "hello" } as Foo : Foo
+>{ required1: "hello" } : { required1: string; }
+>required1 : string
+>"hello" : "hello"
+
+const foo2 = { required1: "hello", optional: "bar" } as Foo;
+>foo2 : Foo
+>{ required1: "hello", optional: "bar" } as Foo : Foo
+>{ required1: "hello", optional: "bar" } : { required1: string; optional: string; }
+>required1 : string
+>"hello" : "hello"
+>optional : string
+>"bar" : "bar"
+

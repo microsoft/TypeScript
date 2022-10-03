@@ -1,0 +1,52 @@
+=== tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts ===
+interface Sequence<T> {
+    each(iterator: (value: T) => void): void;
+>each : (iterator: (value: T) => void) => void
+>iterator : (value: T) => void
+>value : T
+
+    map<U>(iterator: (value: T) => U): Sequence<U>;
+>map : <U>(iterator: (value: T) => U) => Sequence<U>
+>iterator : (value: T) => U
+>value : T
+
+    filter(iterator: (value: T) => boolean): Sequence<T>;
+>filter : (iterator: (value: T) => boolean) => Sequence<T>
+>iterator : (value: T) => boolean
+>value : T
+
+    groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
+>groupBy : <K>(keySelector: (value: T) => K) => Sequence<{    key: K;    items: T[];}>
+>keySelector : (value: T) => K
+>value : T
+>key : K
+>items : T[]
+}
+
+var s: Sequence<string>;
+>s : Sequence<string>
+
+var s2 = s.groupBy(s => s.length);
+>s2 : Sequence<{ key: number; items: string[]; }>
+>s.groupBy(s => s.length) : Sequence<{ key: number; items: string[]; }>
+>s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
+>s : Sequence<string>
+>groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+var s3 = s2.each(x => { x.key /* Type is K, should be number */ });
+>s3 : void
+>s2.each(x => { x.key /* Type is K, should be number */ }) : void
+>s2.each : (iterator: (value: { key: number; items: string[]; }) => void) => void
+>s2 : Sequence<{ key: number; items: string[]; }>
+>each : (iterator: (value: { key: number; items: string[]; }) => void) => void
+>x => { x.key /* Type is K, should be number */ } : (x: { key: number; items: string[]; }) => void
+>x : { key: number; items: string[]; }
+>x.key : number
+>x : { key: number; items: string[]; }
+>key : number
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/unusedInterfaceinNamespace1.ts ===
+namespace Validation {
+>Validation : Symbol(Validation, Decl(unusedInterfaceinNamespace1.ts, 0, 0))
+
+    interface i1 {
+>i1 : Symbol(i1, Decl(unusedInterfaceinNamespace1.ts, 0, 22))
+
+    }
+}

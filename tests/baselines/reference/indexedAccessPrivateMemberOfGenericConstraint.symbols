@@ -1,0 +1,37 @@
+=== tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts ===
+class A {
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+
+  private a: number;
+>a : Symbol(A.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+
+  private a: string;
+>a : Symbol(B.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 4, 9))
+}
+
+type X<T extends A> = [T["a"], (T | B)["a"]];
+>X : Symbol(X, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 6, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 8, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 8, 7))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 8, 7))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+
+type Y<T extends A | B> = T["a"];
+>Y : Symbol(Y, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 8, 45))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 9, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 9, 7))
+
+type Z<T extends A & B> = T["a"];
+>Z : Symbol(Z, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 9, 33))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 10, 7))
+>A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+>B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+>T : Symbol(T, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 10, 7))
+

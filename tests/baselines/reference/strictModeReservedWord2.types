@@ -1,0 +1,53 @@
+=== tests/cases/compiler/strictModeReservedWord2.ts ===
+"use strict"
+>"use strict" : "use strict"
+
+interface public { }
+interface implements {
+    foo(package, protected);
+>foo : (package: any, protected: any) => any
+>package : any
+>protected : any
+}
+enum package { }
+>package : package
+
+enum foo {
+>foo : foo
+
+    public,
+>public : foo.public
+
+    private,
+>private : foo.private
+
+    pacakge
+>pacakge : foo.pacakge
+}
+
+const enum private {
+>private : private
+
+    public,
+>public : private.public
+
+    private,
+>private : private.private
+
+    pacakge
+>pacakge : private.pacakge
+}
+
+const enum bar {
+>bar : bar
+
+    public,
+>public : bar.public
+
+    private,
+>private : bar.private
+
+    pacakge
+>pacakge : bar.pacakge
+}
+

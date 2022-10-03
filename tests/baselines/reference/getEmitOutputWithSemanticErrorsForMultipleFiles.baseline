@@ -1,0 +1,10 @@
+EmitSkipped: false
+
+FileName : /tests/cases/fourslash/inputFile1.js
+// File to emit, does not contain semantic errors
+// expected to be emitted correctelly regardless of the semantic errors in the other file
+var noErrors = true;
+
+FileName : /tests/cases/fourslash/inputFile1.d.ts
+declare var noErrors: boolean;
+

@@ -1,0 +1,15 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts ===
+declare function foo3(cb: (x: number) => number): typeof cb;
+>foo3 : (cb: (x: number) => number) => typeof cb
+>cb : (x: number) => number
+>x : number
+>cb : (x: number) => number
+
+var r5 = foo3((x: number) => ''); // error
+>r5 : (x: number) => number
+>foo3((x: number) => '') : (x: number) => number
+>foo3 : (cb: (x: number) => number) => (x: number) => number
+>(x: number) => '' : (x: number) => string
+>x : number
+>'' : ""
+

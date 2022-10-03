@@ -1,0 +1,147 @@
+=== tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts ===
+interface Foo { foo: any }
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+>foo : Symbol(Foo.foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 15))
+
+interface Bar { bar: any }
+>Bar : Symbol(Bar, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 26))
+>bar : Symbol(Bar.bar, Decl(unionTypeErrorMessageTypeRefs01.ts, 1, 15))
+
+interface Baz { baz: any }
+>Baz : Symbol(Baz, Decl(unionTypeErrorMessageTypeRefs01.ts, 1, 26))
+>baz : Symbol(Baz.baz, Decl(unionTypeErrorMessageTypeRefs01.ts, 2, 15))
+
+interface Kwah { kwah: any }
+>Kwah : Symbol(Kwah, Decl(unionTypeErrorMessageTypeRefs01.ts, 2, 26))
+>kwah : Symbol(Kwah.kwah, Decl(unionTypeErrorMessageTypeRefs01.ts, 3, 16))
+
+////////
+
+interface A<T> {
+>A : Symbol(A, Decl(unionTypeErrorMessageTypeRefs01.ts, 3, 28))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 7, 12))
+
+    aProp: T;
+>aProp : Symbol(A.aProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 7, 16))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 7, 12))
+}
+
+interface B<T> {
+>B : Symbol(B, Decl(unionTypeErrorMessageTypeRefs01.ts, 9, 1))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 11, 12))
+
+    bProp: T;
+>bProp : Symbol(B.bProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 11, 16))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 11, 12))
+}
+
+interface C<T> {
+>C : Symbol(C, Decl(unionTypeErrorMessageTypeRefs01.ts, 13, 1))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 15, 12))
+
+    cProp: T;
+>cProp : Symbol(C.cProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 15, 16))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 15, 12))
+}
+
+declare const a: A<Foo>;
+>a : Symbol(a, Decl(unionTypeErrorMessageTypeRefs01.ts, 19, 13))
+>A : Symbol(A, Decl(unionTypeErrorMessageTypeRefs01.ts, 3, 28))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare const b: B<Foo>;
+>b : Symbol(b, Decl(unionTypeErrorMessageTypeRefs01.ts, 20, 13))
+>B : Symbol(B, Decl(unionTypeErrorMessageTypeRefs01.ts, 9, 1))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare const c: C<Foo>;
+>c : Symbol(c, Decl(unionTypeErrorMessageTypeRefs01.ts, 21, 13))
+>C : Symbol(C, Decl(unionTypeErrorMessageTypeRefs01.ts, 13, 1))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare let thingOfInterfaces: A<Bar> | B<Baz> | C<Kwah>;
+>thingOfInterfaces : Symbol(thingOfInterfaces, Decl(unionTypeErrorMessageTypeRefs01.ts, 22, 11))
+>A : Symbol(A, Decl(unionTypeErrorMessageTypeRefs01.ts, 3, 28))
+>Bar : Symbol(Bar, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 26))
+>B : Symbol(B, Decl(unionTypeErrorMessageTypeRefs01.ts, 9, 1))
+>Baz : Symbol(Baz, Decl(unionTypeErrorMessageTypeRefs01.ts, 1, 26))
+>C : Symbol(C, Decl(unionTypeErrorMessageTypeRefs01.ts, 13, 1))
+>Kwah : Symbol(Kwah, Decl(unionTypeErrorMessageTypeRefs01.ts, 2, 26))
+
+thingOfInterfaces = a;
+>thingOfInterfaces : Symbol(thingOfInterfaces, Decl(unionTypeErrorMessageTypeRefs01.ts, 22, 11))
+>a : Symbol(a, Decl(unionTypeErrorMessageTypeRefs01.ts, 19, 13))
+
+thingOfInterfaces = b;
+>thingOfInterfaces : Symbol(thingOfInterfaces, Decl(unionTypeErrorMessageTypeRefs01.ts, 22, 11))
+>b : Symbol(b, Decl(unionTypeErrorMessageTypeRefs01.ts, 20, 13))
+
+thingOfInterfaces = c;
+>thingOfInterfaces : Symbol(thingOfInterfaces, Decl(unionTypeErrorMessageTypeRefs01.ts, 22, 11))
+>c : Symbol(c, Decl(unionTypeErrorMessageTypeRefs01.ts, 21, 13))
+
+////////
+
+type X<T> = {
+>X : Symbol(X, Decl(unionTypeErrorMessageTypeRefs01.ts, 26, 22))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 7))
+
+    xProp: T;
+>xProp : Symbol(xProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 13))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 7))
+}
+
+type Y<T> = {
+>Y : Symbol(Y, Decl(unionTypeErrorMessageTypeRefs01.ts, 32, 1))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 7))
+
+    yProp: T;
+>yProp : Symbol(yProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 13))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 7))
+}
+
+type Z<T> = {
+>Z : Symbol(Z, Decl(unionTypeErrorMessageTypeRefs01.ts, 36, 1))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 7))
+
+    zProp: T;
+>zProp : Symbol(zProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 13))
+>T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 7))
+}
+
+declare const x: X<Foo>;
+>x : Symbol(x, Decl(unionTypeErrorMessageTypeRefs01.ts, 42, 13))
+>X : Symbol(X, Decl(unionTypeErrorMessageTypeRefs01.ts, 26, 22))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare const y: Y<Foo>;
+>y : Symbol(y, Decl(unionTypeErrorMessageTypeRefs01.ts, 43, 13))
+>Y : Symbol(Y, Decl(unionTypeErrorMessageTypeRefs01.ts, 32, 1))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare const z: Z<Foo>;
+>z : Symbol(z, Decl(unionTypeErrorMessageTypeRefs01.ts, 44, 13))
+>Z : Symbol(Z, Decl(unionTypeErrorMessageTypeRefs01.ts, 36, 1))
+>Foo : Symbol(Foo, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 0))
+
+declare let thingOfTypeAliases: X<Bar> | Y<Baz> | Z<Kwah>;
+>thingOfTypeAliases : Symbol(thingOfTypeAliases, Decl(unionTypeErrorMessageTypeRefs01.ts, 45, 11))
+>X : Symbol(X, Decl(unionTypeErrorMessageTypeRefs01.ts, 26, 22))
+>Bar : Symbol(Bar, Decl(unionTypeErrorMessageTypeRefs01.ts, 0, 26))
+>Y : Symbol(Y, Decl(unionTypeErrorMessageTypeRefs01.ts, 32, 1))
+>Baz : Symbol(Baz, Decl(unionTypeErrorMessageTypeRefs01.ts, 1, 26))
+>Z : Symbol(Z, Decl(unionTypeErrorMessageTypeRefs01.ts, 36, 1))
+>Kwah : Symbol(Kwah, Decl(unionTypeErrorMessageTypeRefs01.ts, 2, 26))
+
+thingOfTypeAliases = x;
+>thingOfTypeAliases : Symbol(thingOfTypeAliases, Decl(unionTypeErrorMessageTypeRefs01.ts, 45, 11))
+>x : Symbol(x, Decl(unionTypeErrorMessageTypeRefs01.ts, 42, 13))
+
+thingOfTypeAliases = y;
+>thingOfTypeAliases : Symbol(thingOfTypeAliases, Decl(unionTypeErrorMessageTypeRefs01.ts, 45, 11))
+>y : Symbol(y, Decl(unionTypeErrorMessageTypeRefs01.ts, 43, 13))
+
+thingOfTypeAliases = z;
+>thingOfTypeAliases : Symbol(thingOfTypeAliases, Decl(unionTypeErrorMessageTypeRefs01.ts, 45, 11))
+>z : Symbol(z, Decl(unionTypeErrorMessageTypeRefs01.ts, 44, 13))
+

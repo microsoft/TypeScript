@@ -1,0 +1,164 @@
+tests/cases/compiler/reachabilityChecks5.ts(5,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(18,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/reachabilityChecks5.ts(30,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(40,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(51,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(79,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(85,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks5.ts(93,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(96,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks5.ts(115,18): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(122,13): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/reachabilityChecks5.ts (11 errors) ====
+    function f0(x): number {
+        while (true);
+    }
+    
+    function f1(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (x) {
+            return 1
+        }
+    }
+    
+    function f2(x): number {
+        while (x) {
+            throw new Error();
+        }
+        return 1;
+    }
+    
+    function f3(x): number {
+                    ~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        while (x) {
+            throw new Error();
+        }
+    }
+    
+    function f3_1 (x): number {
+        while (x) {
+        }
+        throw new Error();
+    }
+    
+    function f4(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            if (x) {
+                return 1;
+            }
+        }
+        catch (e) {
+        }
+    }
+    
+    function f5(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            if (x) {
+                return 1;
+            }
+        }
+        catch (e) {
+            return 2;
+        }
+    }
+    
+    function f6(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            if (x) {
+                return 1;
+            }
+            else 
+            {
+                throw new Error();
+            }
+        }
+        catch (e) {
+        }
+    }
+    
+    function f7(x): number {
+        try {
+            if (x) {
+                return 1;
+            }
+            else {
+                throw new Error();
+            }
+        }
+        catch (e) {
+            return 1;
+        }
+    }
+    
+    function f8(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            if (true) {
+                x++;
+            }
+            else {
+                return 1;
+                ~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+            }
+        }
+        catch (e) {
+            return 1;
+        }
+    }
+    
+    function f9(x): number {
+                    ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            while (false) {
+                return 1;
+                ~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+            }
+        }
+        catch (e) {
+            return 1;
+        }
+    }
+    
+    function f10(x): number {
+        try {
+            do {
+                x++;
+            } while (true);
+        }
+        catch (e) {
+            return 1;
+        }
+    }
+    
+    function f11(x): number {
+                     ~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        test:
+        try {
+            do {
+                do {
+                    break test;
+                } while (true);
+                x++;
+                ~~~~
+!!! error TS7027: Unreachable code detected.
+            } while (true);
+        }
+        catch (e) {
+            return 1;
+        }
+    }

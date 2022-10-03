@@ -1,0 +1,46 @@
+=== tests/cases/compiler/subSubClassCanAccessProtectedConstructor.ts ===
+class Base {
+>Base : Base
+
+    protected constructor() { }
+    public instance1 = new Base(); // allowed
+>instance1 : Base
+>new Base() : Base
+>Base : typeof Base
+}
+
+class Subclass extends Base {
+>Subclass : Subclass
+>Base : Base
+
+    public instance1_1 = new Base(); // allowed
+>instance1_1 : Base
+>new Base() : Base
+>Base : typeof Base
+
+    public instance1_2 = new Subclass(); // allowed
+>instance1_2 : Subclass
+>new Subclass() : Subclass
+>Subclass : typeof Subclass
+}
+
+class SubclassOfSubclass extends Subclass {
+>SubclassOfSubclass : SubclassOfSubclass
+>Subclass : Subclass
+
+    public instance2_1 = new Base(); // allowed
+>instance2_1 : Base
+>new Base() : Base
+>Base : typeof Base
+
+    public instance2_2 = new Subclass(); // allowed
+>instance2_2 : Subclass
+>new Subclass() : Subclass
+>Subclass : typeof Subclass
+
+    public instance2_3 = new SubclassOfSubclass(); // allowed
+>instance2_3 : SubclassOfSubclass
+>new SubclassOfSubclass() : SubclassOfSubclass
+>SubclassOfSubclass : typeof SubclassOfSubclass
+}
+

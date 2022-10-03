@@ -1,0 +1,50 @@
+=== tests/cases/compiler/subtypingTransitivity.ts ===
+class B {
+>B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+
+    x: Object;
+>x : Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(subtypingTransitivity.ts, 2, 1))
+>B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+
+    public x: string;
+>x : Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
+}
+class D2 extends B {
+>D2 : Symbol(D2, Decl(subtypingTransitivity.ts, 6, 1))
+>B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+
+    public x: number;
+>x : Symbol(D2.x, Decl(subtypingTransitivity.ts, 7, 20))
+}
+
+var b: B;
+>b : Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
+>B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
+>D : Symbol(D, Decl(subtypingTransitivity.ts, 2, 1))
+
+var d2: D2;
+>d2 : Symbol(d2, Decl(subtypingTransitivity.ts, 13, 3))
+>D2 : Symbol(D2, Decl(subtypingTransitivity.ts, 6, 1))
+
+d.x = '';
+>d.x : Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
+>d : Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
+>x : Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
+
+b = d;
+>b : Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
+>d : Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
+
+b.x = 1; // assigned number to string
+>b.x : Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
+>b : Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
+>x : Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
+

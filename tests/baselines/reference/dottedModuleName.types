@@ -1,0 +1,50 @@
+=== tests/cases/compiler/dottedModuleName.ts ===
+module M {
+>M : typeof M
+
+    export module N {
+>N : typeof N
+
+	export function f(x:number)=>2*x;
+>f : (x: number) => any
+>x : number
+>2*x : number
+>2 : 2
+>x : any
+
+	export module X.Y.Z {
+>X : typeof X
+>Y : typeof Y
+>Z : typeof Z
+
+	    export var v2=f(v);
+>v2 : any
+>f(v) : any
+>f : (x: number) => any
+>v : any
+	}
+    }
+}
+
+
+
+module M.N {
+>M : typeof M
+>N : typeof N
+
+    export module X {
+>X : typeof X
+
+	export module Y.Z {
+>Y : typeof Y
+>Z : typeof Z
+
+	    export var v=f(10);
+>v : any
+>f(10) : any
+>f : (x: number) => any
+>10 : 10
+	}
+    }
+}
+

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/recursiveExcessPropertyChecks.ts ===
+// Repro from #35804
+
+interface ITreeItem {    
+>ITreeItem : Symbol(ITreeItem, Decl(recursiveExcessPropertyChecks.ts, 0, 0))
+
+  Parent?: this;
+>Parent : Symbol(ITreeItem.Parent, Decl(recursiveExcessPropertyChecks.ts, 2, 21))
+}
+
+type NodeWithId = ITreeItem & { Id?: number };
+>NodeWithId : Symbol(NodeWithId, Decl(recursiveExcessPropertyChecks.ts, 4, 1))
+>ITreeItem : Symbol(ITreeItem, Decl(recursiveExcessPropertyChecks.ts, 0, 0))
+>Id : Symbol(Id, Decl(recursiveExcessPropertyChecks.ts, 6, 31))
+
+function getMaxId(items: NodeWithId[]) {
+>getMaxId : Symbol(getMaxId, Decl(recursiveExcessPropertyChecks.ts, 6, 46))
+>items : Symbol(items, Decl(recursiveExcessPropertyChecks.ts, 8, 18))
+>NodeWithId : Symbol(NodeWithId, Decl(recursiveExcessPropertyChecks.ts, 4, 1))
+}
+
+const nodes = [] as ITreeItem[];
+>nodes : Symbol(nodes, Decl(recursiveExcessPropertyChecks.ts, 11, 5))
+>ITreeItem : Symbol(ITreeItem, Decl(recursiveExcessPropertyChecks.ts, 0, 0))
+
+getMaxId(nodes);
+>getMaxId : Symbol(getMaxId, Decl(recursiveExcessPropertyChecks.ts, 6, 46))
+>nodes : Symbol(nodes, Decl(recursiveExcessPropertyChecks.ts, 11, 5))
+

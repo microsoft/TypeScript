@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments05.ts ===
+function f(arguments) {
+>f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments05.ts, 0, 0))
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments05.ts, 0, 11))
+
+    var a = () => arguments;
+>a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments05.ts, 1, 7))
+>arguments : Symbol(arguments)
+}

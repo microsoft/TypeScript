@@ -1,0 +1,48 @@
+=== tests/cases/conformance/salsa/bluebird.js ===
+!function outer (f) { return f }(
+>!function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : boolean
+>function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : () => void
+>function outer (f) { return f } : (f: () => void) => () => void
+>outer : (f: () => void) => () => void
+>f : () => void
+>f : () => void
+
+    function inner () {
+>function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    } : () => void
+>inner : () => void
+
+        function Async() {
+>Async : typeof Async
+
+            this._trampolineEnabled = true;
+>this._trampolineEnabled = true : true
+>this._trampolineEnabled : any
+>this : this
+>_trampolineEnabled : any
+>true : true
+        }
+
+        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {
+>Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
+>Async.prototype.disableTrampolineIfNecessary : any
+>Async.prototype : any
+>Async : typeof Async
+>prototype : any
+>disableTrampolineIfNecessary : any
+>function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
+>dtin : (b: any) => void
+>b : any
+
+            if (b) {
+>b : any
+
+                this._trampolineEnabled = false;
+>this._trampolineEnabled = false : false
+>this._trampolineEnabled : boolean
+>this : this
+>_trampolineEnabled : boolean
+>false : false
+            }
+        };
+    })
+

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/index.js ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(index.js, 0, 0))
+
+    property;
+>property : Symbol(MyClass.property, Decl(index.js, 0, 15))
+
+    property2;
+>property2 : Symbol(MyClass.property2, Decl(index.js, 1, 13))
+
+    constructor() {
+        const variable = 'something'
+>variable : Symbol(variable, Decl(index.js, 5, 13))
+
+        this.property = `foo`; // Correctly inferred as `string`
+>this.property : Symbol(MyClass.property, Decl(index.js, 0, 15))
+>this : Symbol(MyClass, Decl(index.js, 0, 0))
+>property : Symbol(MyClass.property, Decl(index.js, 0, 15))
+
+        this.property2 = `foo-${variable}`; // Causes an error
+>this.property2 : Symbol(MyClass.property2, Decl(index.js, 1, 13))
+>this : Symbol(MyClass, Decl(index.js, 0, 0))
+>property2 : Symbol(MyClass.property2, Decl(index.js, 1, 13))
+>variable : Symbol(variable, Decl(index.js, 5, 13))
+
+        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+>localProperty : Symbol(localProperty, Decl(index.js, 10, 13))
+>variable : Symbol(variable, Decl(index.js, 5, 13))
+    }
+}

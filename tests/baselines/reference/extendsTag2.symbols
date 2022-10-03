@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @constructor
+ */
+class A {
+>A : Symbol(A, Decl(foo.js, 0, 0))
+
+    constructor() {}
+}
+
+/**
+ * @extends {A}
+ */
+
+/**
+ * @constructor
+ */
+class B extends A {
+>B : Symbol(B, Decl(foo.js, 5, 1))
+>A : Symbol(A, Decl(foo.js, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(A, Decl(foo.js, 0, 0))
+    }
+}
+

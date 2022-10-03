@@ -1,0 +1,19 @@
+=== tests/cases/compiler/indexer2.ts ===
+interface IHeapObjectProperty {}
+>IHeapObjectProperty : Symbol(IHeapObjectProperty, Decl(indexer2.ts, 0, 0))
+
+interface IDirectChildrenMap { 
+>IDirectChildrenMap : Symbol(IDirectChildrenMap, Decl(indexer2.ts, 0, 32))
+
+        hasOwnProperty(objectId: number) : boolean; 
+>hasOwnProperty : Symbol(IDirectChildrenMap.hasOwnProperty, Decl(indexer2.ts, 1, 30))
+>objectId : Symbol(objectId, Decl(indexer2.ts, 2, 23))
+
+        [objectId: number] : IHeapObjectProperty[]; 
+>objectId : Symbol(objectId, Decl(indexer2.ts, 3, 9))
+>IHeapObjectProperty : Symbol(IHeapObjectProperty, Decl(indexer2.ts, 0, 0))
+}    
+var directChildrenMap = <IDirectChildrenMap>{}; 
+>directChildrenMap : Symbol(directChildrenMap, Decl(indexer2.ts, 5, 3))
+>IDirectChildrenMap : Symbol(IDirectChildrenMap, Decl(indexer2.ts, 0, 32))
+

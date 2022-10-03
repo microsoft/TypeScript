@@ -1,0 +1,27 @@
+=== tests/cases/compiler/global.ts ===
+module M {
+>M : typeof M
+
+    export function f(y:number) {
+>f : (y: number) => number
+>y : number
+
+        return x+y;
+>x+y : number
+>x : number
+>y : number
+    }
+}
+
+var x=10;
+>x : number
+>10 : 10
+
+M.f(3);
+>M.f(3) : number
+>M.f : (y: number) => number
+>M : typeof M
+>f : (y: number) => number
+>3 : 3
+
+

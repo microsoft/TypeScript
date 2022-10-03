@@ -1,0 +1,63 @@
+tests/cases/compiler/strictNullEmptyDestructuring.ts(3,5): error TS2461: Type 'null' is not an array type.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(3,5): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(5,5): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(7,2): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(9,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(11,2): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(13,5): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(15,2): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(17,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(19,2): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(21,5): error TS2533: Object is possibly 'null' or 'undefined'.
+tests/cases/compiler/strictNullEmptyDestructuring.ts(23,2): error TS2533: Object is possibly 'null' or 'undefined'.
+
+
+==== tests/cases/compiler/strictNullEmptyDestructuring.ts (12 errors) ====
+    // Repro from #20873
+    
+    let [] = null;
+        ~~
+!!! error TS2461: Type 'null' is not an array type.
+        ~~
+!!! error TS2531: Object is possibly 'null'.
+    
+    let { } = null;
+        ~~~
+!!! error TS2531: Object is possibly 'null'.
+    
+    ({} = null);
+     ~~
+!!! error TS2531: Object is possibly 'null'.
+    
+    let { } = undefined;
+        ~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    ({} = undefined);
+     ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    let { } = Math.random() ? {} : null;
+        ~~~
+!!! error TS2531: Object is possibly 'null'.
+    
+    ({} = Math.random() ? {} : null);
+     ~~
+!!! error TS2531: Object is possibly 'null'.
+    
+    let { } = Math.random() ? {} : undefined;
+        ~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    ({} = Math.random() ? {} : undefined);
+     ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    let { } = Math.random() ? null : undefined;
+        ~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+    
+    ({} = Math.random() ? null : undefined);
+     ~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+    

@@ -1,0 +1,150 @@
+=== tests/cases/compiler/qualify.ts ===
+module M {
+>M : Symbol(M, Decl(qualify.ts, 0, 0), Decl(qualify.ts, 5, 1))
+
+    export var m=0;
+>m : Symbol(m, Decl(qualify.ts, 1, 14))
+
+    export module N {
+>N : Symbol(N, Decl(qualify.ts, 1, 19), Decl(qualify.ts, 7, 10))
+
+        export var n=1;
+>n : Symbol(n, Decl(qualify.ts, 3, 18))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(qualify.ts, 0, 0), Decl(qualify.ts, 5, 1))
+
+    export module N {
+>N : Symbol(N, Decl(qualify.ts, 1, 19), Decl(qualify.ts, 7, 10))
+
+        var y=m;
+>y : Symbol(y, Decl(qualify.ts, 9, 11))
+>m : Symbol(m, Decl(qualify.ts, 1, 14))
+
+        var x=n+y;
+>x : Symbol(x, Decl(qualify.ts, 10, 11))
+>n : Symbol(n, Decl(qualify.ts, 3, 18))
+>y : Symbol(y, Decl(qualify.ts, 9, 11))
+    }
+}
+
+
+module T {
+>T : Symbol(T, Decl(qualify.ts, 12, 1))
+
+    export interface I {
+>I : Symbol(I, Decl(qualify.ts, 15, 10))
+
+        p;
+>p : Symbol(I.p, Decl(qualify.ts, 16, 24))
+    }
+    export module U {
+>U : Symbol(U, Decl(qualify.ts, 18, 5))
+
+        var z:I=3;
+>z : Symbol(z, Decl(qualify.ts, 20, 11))
+>I : Symbol(I, Decl(qualify.ts, 15, 10))
+
+        export interface I2 {
+>I2 : Symbol(I2, Decl(qualify.ts, 20, 18))
+
+            q;
+>q : Symbol(I2.q, Decl(qualify.ts, 21, 29))
+        }
+    }
+}
+
+module Peer {
+>Peer : Symbol(Peer, Decl(qualify.ts, 25, 1))
+
+    export module U2 {
+>U2 : Symbol(U2, Decl(qualify.ts, 27, 13))
+
+        var z:T.U.I2=3;
+>z : Symbol(z, Decl(qualify.ts, 29, 11))
+>T : Symbol(T, Decl(qualify.ts, 12, 1))
+>U : Symbol(T.U, Decl(qualify.ts, 18, 5))
+>I2 : Symbol(T.U.I2, Decl(qualify.ts, 20, 18))
+    }
+}
+
+module Everest {
+>Everest : Symbol(Everest, Decl(qualify.ts, 31, 1))
+
+    export module K1 {
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+
+        export interface I3 {
+>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+
+            zeep;
+>zeep : Symbol(I3.zeep, Decl(qualify.ts, 35, 29))
+        }
+    }
+    export module K2 {
+>K2 : Symbol(K2, Decl(qualify.ts, 38, 5))
+
+        export interface I4 {
+>I4 : Symbol(I4, Decl(qualify.ts, 39, 22))
+
+            z;
+>z : Symbol(I4.z, Decl(qualify.ts, 40, 29))
+        }
+        var v1:I4;
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+>I4 : Symbol(I4, Decl(qualify.ts, 39, 22))
+
+        var v2:K1.I3=v1;
+>v2 : Symbol(v2, Decl(qualify.ts, 44, 11))
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+>I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+
+        var v3:K1.I3[]=v1;
+>v3 : Symbol(v3, Decl(qualify.ts, 45, 11))
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+>I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+
+        var v4:()=>K1.I3=v1;
+>v4 : Symbol(v4, Decl(qualify.ts, 46, 11))
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+>I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+
+        var v5:(k:K1.I3)=>void=v1;
+>v5 : Symbol(v5, Decl(qualify.ts, 47, 11))
+>k : Symbol(k, Decl(qualify.ts, 47, 16))
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+>I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+
+        var v6:{k:K1.I3;}=v1;
+>v6 : Symbol(v6, Decl(qualify.ts, 48, 11))
+>k : Symbol(k, Decl(qualify.ts, 48, 16))
+>K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+>I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
+>v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+    }
+}
+
+interface I {
+>I : Symbol(I, Decl(qualify.ts, 50, 1))
+
+    k;
+>k : Symbol(I.k, Decl(qualify.ts, 52, 13))
+}
+
+var y:I;
+>y : Symbol(y, Decl(qualify.ts, 56, 3))
+>I : Symbol(I, Decl(qualify.ts, 50, 1))
+
+var x:T.I=y;
+>x : Symbol(x, Decl(qualify.ts, 57, 3))
+>T : Symbol(T, Decl(qualify.ts, 12, 1))
+>I : Symbol(T.I, Decl(qualify.ts, 15, 10))
+>y : Symbol(y, Decl(qualify.ts, 56, 3))
+
+

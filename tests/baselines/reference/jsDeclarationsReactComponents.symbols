@@ -1,0 +1,199 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents1.jsx ===
+/// <reference path="react16.d.ts" />
+import React from "react";
+>React : Symbol(React, Decl(jsDeclarationsReactComponents1.jsx, 1, 6))
+
+import PropTypes from "prop-types"
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents1.jsx, 2, 6))
+
+const TabbedShowLayout = ({
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+
+}) => {
+    return (
+        <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+    );
+};
+
+TabbedShowLayout.propTypes = {
+>TabbedShowLayout.propTypes : Symbol(TabbedShowLayout.propTypes, Decl(jsDeclarationsReactComponents1.jsx, 9, 2))
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+>propTypes : Symbol(TabbedShowLayout.propTypes, Decl(jsDeclarationsReactComponents1.jsx, 9, 2))
+
+    version: PropTypes.number,
+>version : Symbol(version, Decl(jsDeclarationsReactComponents1.jsx, 11, 30))
+>PropTypes.number : Symbol(PropTypes.number, Decl(react16.d.ts, 64, 16))
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents1.jsx, 2, 6))
+>number : Symbol(PropTypes.number, Decl(react16.d.ts, 64, 16))
+
+};
+
+TabbedShowLayout.defaultProps = {
+>TabbedShowLayout.defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+>defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+
+    tabs: undefined
+>tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents1.jsx, 16, 33))
+>undefined : Symbol(undefined)
+
+};
+
+export default TabbedShowLayout;
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents2.jsx ===
+import React from "react";
+>React : Symbol(React, Decl(jsDeclarationsReactComponents2.jsx, 0, 6))
+
+/**
+ * @type {React.SFC}
+ */
+const TabbedShowLayout = () => {
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
+
+    return (
+        <div className="" key="">
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(jsDeclarationsReactComponents2.jsx, 6, 12))
+>key : Symbol(key, Decl(jsDeclarationsReactComponents2.jsx, 6, 25))
+
+            ok
+        </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+    );
+};
+
+TabbedShowLayout.defaultProps = {
+>TabbedShowLayout.defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
+>defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
+
+    tabs: "default value"
+>tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents2.jsx, 12, 33))
+
+};
+
+export default TabbedShowLayout;
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
+
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents3.jsx ===
+import React from "react";
+>React : Symbol(React, Decl(jsDeclarationsReactComponents3.jsx, 0, 6))
+
+/**
+ * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
+ */
+const TabbedShowLayout = () => {
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
+
+    return (
+        <div className="" key="">
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(jsDeclarationsReactComponents3.jsx, 6, 12))
+>key : Symbol(key, Decl(jsDeclarationsReactComponents3.jsx, 6, 25))
+
+            ok
+        </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+    );
+};
+
+TabbedShowLayout.defaultProps = {
+>TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
+>defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
+
+    tabs: "default value"
+>tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents3.jsx, 12, 33))
+
+};
+
+export default TabbedShowLayout;
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
+
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents4.jsx ===
+import React from "react";
+>React : Symbol(React, Decl(jsDeclarationsReactComponents4.jsx, 0, 6))
+
+const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+>prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
+
+    return (
+        <div className={prop.className} key="">
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 3, 12))
+>prop.className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
+>prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
+>className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
+>key : Symbol(key, Decl(jsDeclarationsReactComponents4.jsx, 3, 39))
+
+            ok
+        </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+    );
+};
+
+TabbedShowLayout.defaultProps = {
+>TabbedShowLayout.defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+>defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+
+    tabs: "default value"
+>tabs : Symbol(tabs, Decl(jsDeclarationsReactComponents4.jsx, 9, 33))
+
+};
+
+export default TabbedShowLayout;
+>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+import React from 'react';
+>React : Symbol(React, Decl(jsDeclarationsReactComponents5.jsx, 0, 6))
+
+import PropTypes from 'prop-types';
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+
+function Tree({ allowDropOnRoot }) {
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>allowDropOnRoot : Symbol(allowDropOnRoot, Decl(jsDeclarationsReactComponents5.jsx, 3, 15))
+
+  return <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+Tree.propTypes = {
+>Tree.propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+
+    classes: PropTypes.object,
+>classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 7, 18))
+>PropTypes.object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+>object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
+
+};
+
+Tree.defaultProps = {
+>Tree.defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+
+    classes: {},
+>classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 11, 21))
+
+    parentSource: 'parent_id',
+>parentSource : Symbol(parentSource, Decl(jsDeclarationsReactComponents5.jsx, 12, 16))
+
+};
+
+export default Tree;
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+

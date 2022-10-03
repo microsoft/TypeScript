@@ -1,0 +1,15 @@
+=== tests/cases/compiler/implementsInClassExpression.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(implementsInClassExpression.ts, 0, 0))
+
+    doThing(): void;
+>doThing : Symbol(Foo.doThing, Decl(implementsInClassExpression.ts, 0, 15))
+}
+
+let cls = class implements Foo {
+>cls : Symbol(cls, Decl(implementsInClassExpression.ts, 4, 3))
+>Foo : Symbol(Foo, Decl(implementsInClassExpression.ts, 0, 0))
+
+    doThing() { }
+>doThing : Symbol(cls.doThing, Decl(implementsInClassExpression.ts, 4, 32))
+}

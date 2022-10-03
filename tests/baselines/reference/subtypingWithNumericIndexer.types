@@ -1,0 +1,77 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts ===
+// Derived type indexer must be subtype of base type indexer
+
+interface Base { foo: string; }
+>foo : string
+
+interface Derived extends Base { bar: string; }
+>bar : string
+
+interface Derived2 extends Derived { baz: string; }
+>baz : string
+
+class A {
+>A : A
+
+    [x: number]: Base;
+>x : number
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    [x: number]: Derived; // ok
+>x : number
+}
+
+class B2 extends A {
+>B2 : B2
+>A : A
+
+    [x: number]: Derived2; // ok
+>x : number
+}
+
+module Generics {
+>Generics : typeof Generics
+
+    class A<T extends Base> {
+>A : A<T>
+
+        [x: number]: T;
+>x : number
+    }
+
+    class B extends A<Base> {
+>B : B
+>A : A<Base>
+
+        [x: number]: Derived; // ok
+>x : number
+    }
+
+    class B2 extends A<Base> {
+>B2 : B2
+>A : A<Base>
+
+        [x: number]: Derived2; // ok
+>x : number
+    }
+
+    class B3<T extends Base> extends A<T> {
+>B3 : B3<T>
+>A : A<T>
+
+        [x: number]: Derived; // error, BUG?
+>x : number
+    }
+
+    class B4<T extends Base> extends A<T> {
+>B4 : B4<T>
+>A : A<T>
+
+        [x: number]: Derived2; // error, BUG?
+>x : number
+    }
+}

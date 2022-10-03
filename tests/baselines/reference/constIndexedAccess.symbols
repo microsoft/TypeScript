@@ -1,0 +1,85 @@
+=== tests/cases/compiler/constIndexedAccess.ts ===
+const enum numbers {
+>numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
+
+    zero,
+>zero : Symbol(numbers.zero, Decl(constIndexedAccess.ts, 0, 20))
+
+    one
+>one : Symbol(numbers.one, Decl(constIndexedAccess.ts, 1, 9))
+}
+
+interface indexAccess {
+>indexAccess : Symbol(indexAccess, Decl(constIndexedAccess.ts, 3, 1))
+
+    0: string;
+>0 : Symbol(indexAccess[0], Decl(constIndexedAccess.ts, 5, 23))
+
+    1: number;
+>1 : Symbol(indexAccess[1], Decl(constIndexedAccess.ts, 6, 14))
+}
+
+let test: indexAccess;
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>indexAccess : Symbol(indexAccess, Decl(constIndexedAccess.ts, 3, 1))
+
+let s = test[0];
+>s : Symbol(s, Decl(constIndexedAccess.ts, 12, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>0 : Symbol(indexAccess[0], Decl(constIndexedAccess.ts, 5, 23))
+
+let n = test[1];
+>n : Symbol(n, Decl(constIndexedAccess.ts, 13, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>1 : Symbol(indexAccess[1], Decl(constIndexedAccess.ts, 6, 14))
+
+let s1 = test[numbers.zero];
+>s1 : Symbol(s1, Decl(constIndexedAccess.ts, 15, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbers.zero : Symbol(numbers.zero, Decl(constIndexedAccess.ts, 0, 20))
+>numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
+>zero : Symbol(numbers.zero, Decl(constIndexedAccess.ts, 0, 20))
+
+let n1 = test[numbers.one];
+>n1 : Symbol(n1, Decl(constIndexedAccess.ts, 16, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbers.one : Symbol(numbers.one, Decl(constIndexedAccess.ts, 1, 9))
+>numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
+>one : Symbol(numbers.one, Decl(constIndexedAccess.ts, 1, 9))
+
+let s2 = test[numbers["zero"]];
+>s2 : Symbol(s2, Decl(constIndexedAccess.ts, 18, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
+>"zero" : Symbol(numbers.zero, Decl(constIndexedAccess.ts, 0, 20))
+
+let n2 = test[numbers["one"]];
+>n2 : Symbol(n2, Decl(constIndexedAccess.ts, 19, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
+>"one" : Symbol(numbers.one, Decl(constIndexedAccess.ts, 1, 9))
+
+enum numbersNotConst {
+>numbersNotConst : Symbol(numbersNotConst, Decl(constIndexedAccess.ts, 19, 30))
+
+    zero,
+>zero : Symbol(numbersNotConst.zero, Decl(constIndexedAccess.ts, 21, 22))
+
+    one
+>one : Symbol(numbersNotConst.one, Decl(constIndexedAccess.ts, 22, 9))
+}
+
+let s3 = test[numbersNotConst.zero];
+>s3 : Symbol(s3, Decl(constIndexedAccess.ts, 26, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbersNotConst.zero : Symbol(numbersNotConst.zero, Decl(constIndexedAccess.ts, 21, 22))
+>numbersNotConst : Symbol(numbersNotConst, Decl(constIndexedAccess.ts, 19, 30))
+>zero : Symbol(numbersNotConst.zero, Decl(constIndexedAccess.ts, 21, 22))
+
+let n3 = test[numbersNotConst.one];
+>n3 : Symbol(n3, Decl(constIndexedAccess.ts, 27, 3))
+>test : Symbol(test, Decl(constIndexedAccess.ts, 10, 3))
+>numbersNotConst.one : Symbol(numbersNotConst.one, Decl(constIndexedAccess.ts, 22, 9))
+>numbersNotConst : Symbol(numbersNotConst, Decl(constIndexedAccess.ts, 19, 30))
+>one : Symbol(numbersNotConst.one, Decl(constIndexedAccess.ts, 22, 9))
+

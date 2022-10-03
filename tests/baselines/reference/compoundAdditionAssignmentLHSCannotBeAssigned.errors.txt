@@ -1,0 +1,35 @@
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(5,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(8,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(11,1): error TS2322: Type 'string' is not assignable to type 'E'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(14,1): error TS2322: Type 'string' is not assignable to type '{ a: string; }'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(17,1): error TS2322: Type 'string' is not assignable to type 'void'.
+
+
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts (5 errors) ====
+    // string can add every type, and result string cannot be assigned to below types
+    enum E { a, b, c }
+    
+    var x1: boolean;
+    x1 += '';
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+    
+    var x2: number;
+    x2 += '';
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+    var x3: E;
+    x3 += '';
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'E'.
+    
+    var x4: {a: string};
+    x4 += '';
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type '{ a: string; }'.
+    
+    var x5: void;
+    x5 += '';
+    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'void'.

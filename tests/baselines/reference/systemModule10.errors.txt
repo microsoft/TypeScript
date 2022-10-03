@@ -1,0 +1,17 @@
+tests/cases/compiler/systemModule10.ts(1,20): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/systemModule10.ts(2,21): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/systemModule10.ts (2 errors) ====
+    import n, {x} from 'file1'
+                       ~~~~~~~
+!!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    import n2 = require('file2');
+                        ~~~~~~~
+!!! error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    export {x}
+    export {x as y}
+    export {n}
+    export {n as n1}
+    export {n2}
+    export {n2 as n3}

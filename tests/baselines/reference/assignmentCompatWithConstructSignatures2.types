@@ -1,0 +1,148 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts ===
+// void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+
+interface T {
+    f: new (x: number) => void;
+>f : new (x: number) => void
+>x : number
+}
+var t: T;
+>t : T
+
+var a: { f: new (x: number) => void };
+>a : { f: new (x: number) => void; }
+>f : new (x: number) => void
+>x : number
+
+t = a;
+>t = a : { f: new (x: number) => void; }
+>t : T
+>a : { f: new (x: number) => void; }
+
+a = t;
+>a = t : T
+>a : { f: new (x: number) => void; }
+>t : T
+
+interface S {
+    f: new (x: number) => string;
+>f : new (x: number) => string
+>x : number
+}
+var s: S;
+>s : S
+
+var a2: { f: new (x: number) => string };
+>a2 : { f: new (x: number) => string; }
+>f : new (x: number) => string
+>x : number
+
+t = s;
+>t = s : S
+>t : T
+>s : S
+
+t = a2;
+>t = a2 : { f: new (x: number) => string; }
+>t : T
+>a2 : { f: new (x: number) => string; }
+
+a = s;
+>a = s : S
+>a : { f: new (x: number) => void; }
+>s : S
+
+a = a2;
+>a = a2 : { f: new (x: number) => string; }
+>a : { f: new (x: number) => void; }
+>a2 : { f: new (x: number) => string; }
+
+// errors
+t = () => 1;
+>t = () => 1 : () => number
+>t : T
+>() => 1 : () => number
+>1 : 1
+
+t = function (x: number) { return ''; }
+>t = function (x: number) { return ''; } : (x: number) => string
+>t : T
+>function (x: number) { return ''; } : (x: number) => string
+>x : number
+>'' : ""
+
+a = () => 1;
+>a = () => 1 : () => number
+>a : { f: new (x: number) => void; }
+>() => 1 : () => number
+>1 : 1
+
+a = function (x: number) { return ''; }
+>a = function (x: number) { return ''; } : (x: number) => string
+>a : { f: new (x: number) => void; }
+>function (x: number) { return ''; } : (x: number) => string
+>x : number
+>'' : ""
+
+interface S2 {
+    f(x: string): void;
+>f : (x: string) => void
+>x : string
+}
+var s2: S2;
+>s2 : S2
+
+var a3: { f(x: string): void };
+>a3 : { f(x: string): void; }
+>f : (x: string) => void
+>x : string
+
+// these are errors
+t = s2;
+>t = s2 : S2
+>t : T
+>s2 : S2
+
+t = a3;
+>t = a3 : { f(x: string): void; }
+>t : T
+>a3 : { f(x: string): void; }
+
+t = (x: string) => 1;
+>t = (x: string) => 1 : (x: string) => number
+>t : T
+>(x: string) => 1 : (x: string) => number
+>x : string
+>1 : 1
+
+t = function (x: string) { return ''; }
+>t = function (x: string) { return ''; } : (x: string) => string
+>t : T
+>function (x: string) { return ''; } : (x: string) => string
+>x : string
+>'' : ""
+
+a = s2;
+>a = s2 : S2
+>a : { f: new (x: number) => void; }
+>s2 : S2
+
+a = a3;
+>a = a3 : { f(x: string): void; }
+>a : { f: new (x: number) => void; }
+>a3 : { f(x: string): void; }
+
+a = (x: string) => 1;
+>a = (x: string) => 1 : (x: string) => number
+>a : { f: new (x: number) => void; }
+>(x: string) => 1 : (x: string) => number
+>x : string
+>1 : 1
+
+a = function (x: string) { return ''; }
+>a = function (x: string) { return ''; } : (x: string) => string
+>a : { f: new (x: number) => void; }
+>function (x: string) { return ''; } : (x: string) => string
+>x : string
+>'' : ""
+

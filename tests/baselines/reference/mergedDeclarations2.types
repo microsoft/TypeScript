@@ -1,0 +1,22 @@
+=== tests/cases/compiler/mergedDeclarations2.ts ===
+enum Foo {
+>Foo : Foo
+
+    b
+>b : Foo.b
+}
+enum Foo {
+>Foo : Foo
+
+    a = b
+>a : Foo.b
+>b : Foo
+}
+
+module Foo {
+>Foo : typeof Foo
+
+    export var x = b
+>x : any
+>b : any
+}

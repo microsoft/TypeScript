@@ -1,0 +1,9 @@
+=== tests/cases/compiler/protoInIndexer.ts ===
+class X {
+>X : Symbol(X, Decl(protoInIndexer.ts, 0, 0))
+
+    constructor() {
+        this['__proto__'] = null; // used to cause ICE
+>this : Symbol(X, Decl(protoInIndexer.ts, 0, 0))
+    }
+}

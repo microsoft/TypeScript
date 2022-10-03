@@ -1,0 +1,63 @@
+// === /tests/cases/fourslash/findAllRefsOfConstructor_withModifier.ts ===
+// class X {
+//     public /*FIND ALL REFS*/[|constructor|]() {}
+// }
+// var x = new [|X|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor_withModifier.ts",
+      "kind": "class",
+      "name": "class X",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 39
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 11
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor_withModifier.ts",
+        "contextSpan": {
+          "start": 14,
+          "length": 23
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 52,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor_withModifier.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

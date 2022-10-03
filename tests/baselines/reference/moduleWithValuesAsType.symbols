@@ -1,0 +1,12 @@
+=== tests/cases/compiler/moduleWithValuesAsType.ts ===
+module A {
+>A : Symbol(A, Decl(moduleWithValuesAsType.ts, 0, 0))
+
+    var b = 1;
+>b : Symbol(b, Decl(moduleWithValuesAsType.ts, 1, 7))
+}
+
+var a: A; // no error
+>a : Symbol(a, Decl(moduleWithValuesAsType.ts, 4, 3))
+>A : Symbol(A)
+

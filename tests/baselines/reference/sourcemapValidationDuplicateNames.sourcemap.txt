@@ -1,0 +1,228 @@
+===================================================================
+JsFile: sourcemapValidationDuplicateNames.js
+mapUrl: sourcemapValidationDuplicateNames.js.map
+sourceRoot: 
+sources: sourcemapValidationDuplicateNames.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourcemapValidationDuplicateNames.js
+sourceFile:sourcemapValidationDuplicateNames.ts
+-------------------------------------------------------------------
+>>>var m1;
+1 >
+2 >^^^^
+3 >    ^^
+4 >      ^
+5 >       ^^^^^^^^^^->
+1 >
+2 >module 
+3 >    m1
+4 >       {
+  >          var x = 10;
+  >          export class c {
+  >          }
+  >      }
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 7) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 8) Source(5, 2) + SourceIndex(0)
+---
+>>>(function (m1) {
+1->
+2 >^^^^^^^^^^^
+3 >           ^^
+4 >             ^^^->
+1->
+2 >module 
+3 >           m1
+1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
+3 >Emitted(2, 14) Source(1, 10) + SourceIndex(0)
+---
+>>>    var x = 10;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^
+6 >              ^
+7 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
+2 >    var 
+3 >        x
+4 >          = 
+5 >            10
+6 >              ;
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(2, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(3, 13) Source(2, 13) + SourceIndex(0)
+5 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
+6 >Emitted(3, 16) Source(2, 16) + SourceIndex(0)
+---
+>>>    var c = /** @class */ (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^->
+1->
+  >    
+1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+---
+>>>        function c() {
+1->^^^^^^^^
+2 >        ^^->
+1->
+1->Emitted(5, 9) Source(3, 5) + SourceIndex(0)
+---
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1->export class c {
+  >    
+2 >        }
+1->Emitted(6, 9) Source(4, 5) + SourceIndex(0)
+2 >Emitted(6, 10) Source(4, 6) + SourceIndex(0)
+---
+>>>        return c;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(7, 9) Source(4, 5) + SourceIndex(0)
+2 >Emitted(7, 17) Source(4, 6) + SourceIndex(0)
+---
+>>>    }());
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^^^
+5 >         ^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class c {
+  >         }
+1 >Emitted(8, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(4, 6) + SourceIndex(0)
+3 >Emitted(8, 6) Source(3, 5) + SourceIndex(0)
+4 >Emitted(8, 10) Source(4, 6) + SourceIndex(0)
+---
+>>>    m1.c = c;
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^
+4 >            ^
+5 >             ^^^^^^^^->
+1->
+2 >    c
+3 >         {
+  >            }
+4 >            
+1->Emitted(9, 5) Source(3, 18) + SourceIndex(0)
+2 >Emitted(9, 9) Source(3, 19) + SourceIndex(0)
+3 >Emitted(9, 13) Source(4, 6) + SourceIndex(0)
+4 >Emitted(9, 14) Source(4, 6) + SourceIndex(0)
+---
+>>>})(m1 || (m1 = {}));
+1->
+2 >^
+3 > ^^
+4 >   ^^
+5 >     ^^^^^
+6 >          ^^
+7 >            ^^^^^^^^
+1->
+  >
+2 >}
+3 > 
+4 >   m1
+5 >     
+6 >          m1
+7 >             {
+  >                var x = 10;
+  >                export class c {
+  >                }
+  >            }
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(5, 2) + SourceIndex(0)
+3 >Emitted(10, 4) Source(1, 8) + SourceIndex(0)
+4 >Emitted(10, 6) Source(1, 10) + SourceIndex(0)
+5 >Emitted(10, 11) Source(1, 8) + SourceIndex(0)
+6 >Emitted(10, 13) Source(1, 10) + SourceIndex(0)
+7 >Emitted(10, 21) Source(5, 2) + SourceIndex(0)
+---
+>>>(function (m1) {
+1 >
+2 >^^^^^^^^^^^
+3 >           ^^
+4 >             ^^^^^^^^^^^->
+1 >
+  >
+2 >module 
+3 >           m1
+1 >Emitted(11, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(11, 12) Source(6, 8) + SourceIndex(0)
+3 >Emitted(11, 14) Source(6, 10) + SourceIndex(0)
+---
+>>>    var b = new m1.c();
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^^^
+6 >                ^^
+7 >                  ^
+8 >                   ^
+9 >                    ^^
+10>                      ^
+1-> {
+  >    
+2 >    var 
+3 >        b
+4 >          = 
+5 >            new 
+6 >                m1
+7 >                  .
+8 >                   c
+9 >                    ()
+10>                      ;
+1->Emitted(12, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(12, 9) Source(7, 9) + SourceIndex(0)
+3 >Emitted(12, 10) Source(7, 10) + SourceIndex(0)
+4 >Emitted(12, 13) Source(7, 13) + SourceIndex(0)
+5 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
+6 >Emitted(12, 19) Source(7, 19) + SourceIndex(0)
+7 >Emitted(12, 20) Source(7, 20) + SourceIndex(0)
+8 >Emitted(12, 21) Source(7, 21) + SourceIndex(0)
+9 >Emitted(12, 23) Source(7, 23) + SourceIndex(0)
+10>Emitted(12, 24) Source(7, 24) + SourceIndex(0)
+---
+>>>})(m1 || (m1 = {}));
+1 >
+2 >^
+3 > ^^
+4 >   ^^
+5 >     ^^^^^
+6 >          ^^
+7 >            ^^^^^^^^
+8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+3 > 
+4 >   m1
+5 >     
+6 >          m1
+7 >             {
+  >                var b = new m1.c();
+  >            }
+1 >Emitted(13, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(8, 2) + SourceIndex(0)
+3 >Emitted(13, 4) Source(6, 8) + SourceIndex(0)
+4 >Emitted(13, 6) Source(6, 10) + SourceIndex(0)
+5 >Emitted(13, 11) Source(6, 8) + SourceIndex(0)
+6 >Emitted(13, 13) Source(6, 10) + SourceIndex(0)
+7 >Emitted(13, 21) Source(8, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourcemapValidationDuplicateNames.js.map

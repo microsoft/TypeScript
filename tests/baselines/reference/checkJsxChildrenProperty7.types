@@ -1,0 +1,101 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: JSX.Element | JSX.Element[];
+>children : JSX.Element | JSX.Element[]
+>JSX : any
+>JSX : any
+}
+
+class Button extends React.Component<any, any> {
+>Button : Button
+>React.Component : React.Component<any, any>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return (<div>My Button</div>)
+>(<div>My Button</div>) : JSX.Element
+><div>My Button</div> : JSX.Element
+>div : any
+>div : any
+    }
+}
+
+function AnotherButton(p: any) {
+>AnotherButton : (p: any) => JSX.Element
+>p : any
+
+    return <h1>Just Another Button</h1>;
+><h1>Just Another Button</h1> : JSX.Element
+>h1 : any
+>h1 : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => JSX.Element
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : JSX.Element
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// Error: whitespaces matters
+let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
+>k1 : JSX.Element
+><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+><Button /> : JSX.Element
+>Button : typeof Button
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
+>Comp : (p: Prop) => JSX.Element
+
+let k2 = <Comp a={10} b="hi"><Button />
+>k2 : JSX.Element
+><Comp a={10} b="hi"><Button />    <AnotherButton />  </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+><Button /> : JSX.Element
+>Button : typeof Button
+
+    <AnotherButton />  </Comp>;
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
+>Comp : (p: Prop) => JSX.Element
+
+let k3 = <Comp a={10} b="hi">    <Button />
+>k3 : JSX.Element
+><Comp a={10} b="hi">    <Button />    <AnotherButton /></Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+><Button /> : JSX.Element
+>Button : typeof Button
+
+    <AnotherButton /></Comp>;
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
+>Comp : (p: Prop) => JSX.Element
+

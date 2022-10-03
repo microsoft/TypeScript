@@ -1,0 +1,34 @@
+=== tests/cases/compiler/f1.ts ===
+export class A {x: number;}
+>A : Symbol(A, Decl(f1.ts, 0, 0))
+>x : Symbol(A.x, Decl(f1.ts, 0, 16))
+
+=== tests/cases/compiler/f2.ts ===
+import {A} from "./f1";
+>A : Symbol(A, Decl(f2.ts, 0, 8))
+
+// change the shape of Array<T>
+declare global {
+>global : Symbol(global, Decl(f2.ts, 0, 23))
+
+    interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 3, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 4, 20))
+
+        getA(): A;
+>getA : Symbol(Array.getA, Decl(f2.ts, 4, 24))
+>A : Symbol(A, Decl(f2.ts, 0, 8))
+    }
+}
+
+let x = [1];
+>x : Symbol(x, Decl(f2.ts, 9, 3))
+
+let y = x.getA().x;
+>y : Symbol(y, Decl(f2.ts, 10, 3))
+>x.getA().x : Symbol(A.x, Decl(f1.ts, 0, 16))
+>x.getA : Symbol(Array.getA, Decl(f2.ts, 4, 24))
+>x : Symbol(x, Decl(f2.ts, 9, 3))
+>getA : Symbol(Array.getA, Decl(f2.ts, 4, 24))
+>x : Symbol(A.x, Decl(f1.ts, 0, 16))
+

@@ -1,0 +1,9 @@
+tests/cases/conformance/salsa/bug24492.js(2,5): error TS2304: Cannot find name 'D'.
+
+
+==== tests/cases/conformance/salsa/bug24492.js (1 errors) ====
+    module.exports.D = class { }
+    new D()
+        ~
+!!! error TS2304: Cannot find name 'D'.
+    

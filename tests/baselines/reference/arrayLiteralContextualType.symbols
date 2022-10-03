@@ -1,0 +1,73 @@
+=== tests/cases/compiler/arrayLiteralContextualType.ts ===
+interface IAnimal {
+>IAnimal : Symbol(IAnimal, Decl(arrayLiteralContextualType.ts, 0, 0))
+
+    name: string;
+>name : Symbol(IAnimal.name, Decl(arrayLiteralContextualType.ts, 0, 19))
+}
+
+class Giraffe {
+>Giraffe : Symbol(Giraffe, Decl(arrayLiteralContextualType.ts, 2, 1))
+
+    name = "Giraffe";
+>name : Symbol(Giraffe.name, Decl(arrayLiteralContextualType.ts, 4, 15))
+
+    neckLength = "3m";
+>neckLength : Symbol(Giraffe.neckLength, Decl(arrayLiteralContextualType.ts, 5, 21))
+}
+
+class Elephant {
+>Elephant : Symbol(Elephant, Decl(arrayLiteralContextualType.ts, 7, 1))
+
+    name = "Elephant";
+>name : Symbol(Elephant.name, Decl(arrayLiteralContextualType.ts, 9, 16))
+
+    trunkDiameter = "20cm";
+>trunkDiameter : Symbol(Elephant.trunkDiameter, Decl(arrayLiteralContextualType.ts, 10, 22))
+}
+
+function foo(animals: IAnimal[]) { }
+>foo : Symbol(foo, Decl(arrayLiteralContextualType.ts, 12, 1))
+>animals : Symbol(animals, Decl(arrayLiteralContextualType.ts, 14, 13))
+>IAnimal : Symbol(IAnimal, Decl(arrayLiteralContextualType.ts, 0, 0))
+
+function bar(animals: { [n: number]: IAnimal }) { }
+>bar : Symbol(bar, Decl(arrayLiteralContextualType.ts, 14, 36))
+>animals : Symbol(animals, Decl(arrayLiteralContextualType.ts, 15, 13))
+>n : Symbol(n, Decl(arrayLiteralContextualType.ts, 15, 25))
+>IAnimal : Symbol(IAnimal, Decl(arrayLiteralContextualType.ts, 0, 0))
+
+foo([
+>foo : Symbol(foo, Decl(arrayLiteralContextualType.ts, 12, 1))
+
+    new Giraffe(),
+>Giraffe : Symbol(Giraffe, Decl(arrayLiteralContextualType.ts, 2, 1))
+
+    new Elephant()
+>Elephant : Symbol(Elephant, Decl(arrayLiteralContextualType.ts, 7, 1))
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+bar([
+>bar : Symbol(bar, Decl(arrayLiteralContextualType.ts, 14, 36))
+
+    new Giraffe(),
+>Giraffe : Symbol(Giraffe, Decl(arrayLiteralContextualType.ts, 2, 1))
+
+    new Elephant()
+>Elephant : Symbol(Elephant, Decl(arrayLiteralContextualType.ts, 7, 1))
+
+]); // Legal because of the contextual type IAnimal provided by the parameter
+
+var arr = [new Giraffe(), new Elephant()];
+>arr : Symbol(arr, Decl(arrayLiteralContextualType.ts, 26, 3))
+>Giraffe : Symbol(Giraffe, Decl(arrayLiteralContextualType.ts, 2, 1))
+>Elephant : Symbol(Elephant, Decl(arrayLiteralContextualType.ts, 7, 1))
+
+foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
+>foo : Symbol(foo, Decl(arrayLiteralContextualType.ts, 12, 1))
+>arr : Symbol(arr, Decl(arrayLiteralContextualType.ts, 26, 3))
+
+bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
+>bar : Symbol(bar, Decl(arrayLiteralContextualType.ts, 14, 36))
+>arr : Symbol(arr, Decl(arrayLiteralContextualType.ts, 26, 3))
+

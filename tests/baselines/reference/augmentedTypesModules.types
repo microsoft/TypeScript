@@ -1,0 +1,221 @@
+=== tests/cases/compiler/augmentedTypesModules.ts ===
+// module then var
+module m1 { }
+var m1 = 1; // Should be allowed
+>m1 : number
+>1 : 1
+
+module m1a { var y = 2; } // error
+>m1a : typeof m1a
+>y : number
+>2 : 2
+
+var m1a = 1; // error
+>m1a : number
+>1 : 1
+
+module m1b { export var y = 2; } // error
+>m1b : typeof m1b
+>y : number
+>2 : 2
+
+var m1b = 1; // error
+>m1b : number
+>1 : 1
+
+module m1c {
+    export interface I { foo(): void; }
+>foo : () => void
+}
+var m1c = 1; // Should be allowed
+>m1c : number
+>1 : 1
+
+module m1d { // error
+>m1d : typeof m1d
+
+    export class I { foo() { } }
+>I : I
+>foo : () => void
+}
+var m1d = 1; // error
+>m1d : number
+>1 : 1
+
+// module then function
+module m2 { }
+function m2() { }; // ok since the module is not instantiated
+>m2 : () => void
+
+module m2a { var y = 2; }
+>m2a : typeof m2a
+>y : number
+>2 : 2
+
+function m2a() { }; // error since the module is instantiated
+>m2a : typeof m2a
+
+module m2b { export var y = 2; }
+>m2b : typeof m2b
+>y : number
+>2 : 2
+
+function m2b() { };  // error since the module is instantiated
+>m2b : typeof m2b
+
+// should be errors to have function first
+function m2c() { }; 
+>m2c : typeof m2c
+
+module m2c { export var y = 2; } 
+>m2c : typeof m2c
+>y : number
+>2 : 2
+
+module m2d { }
+declare function m2d(): void; 
+>m2d : () => void
+
+declare function m2e(): void; 
+>m2e : () => void
+
+module m2e { }
+
+function m2f() { };
+>m2f : () => void
+
+module m2f { export interface I { foo(): void } } 
+>foo : () => void
+
+function m2g() { };
+>m2g : typeof m2g
+
+module m2g { export class C { foo() { } } } 
+>m2g : typeof m2g
+>C : C
+>foo : () => void
+
+// module then class
+module m3 { }
+class m3 { } // ok since the module is not instantiated
+>m3 : m3
+
+module m3a { var y = 2; }
+>m3a : typeof m3a
+>y : number
+>2 : 2
+
+class m3a { foo() { } } // error, class isn't ambient or declared before the module
+>m3a : m3a
+>foo : () => void
+
+class m3b { foo() { } }
+>m3b : m3b
+>foo : () => void
+
+module m3b { var y = 2; }
+>m3b : typeof m3b
+>y : number
+>2 : 2
+
+class m3c { foo() { } }
+>m3c : m3c
+>foo : () => void
+
+module m3c { export var y = 2; } 
+>m3c : typeof m3c
+>y : number
+>2 : 2
+
+declare class m3d { foo(): void }
+>m3d : m3d
+>foo : () => void
+
+module m3d { export var y = 2; } 
+>m3d : typeof m3d
+>y : number
+>2 : 2
+
+module m3e { export var y = 2; } 
+>m3e : typeof m3e
+>y : number
+>2 : 2
+
+declare class m3e { foo(): void } 
+>m3e : m3e
+>foo : () => void
+
+declare class m3f { foo(): void }
+>m3f : m3f
+>foo : () => void
+
+module m3f { export interface I { foo(): void } }
+>foo : () => void
+
+declare class m3g { foo(): void }
+>m3g : m3g
+>foo : () => void
+
+module m3g { export class C { foo() { } } }
+>m3g : typeof m3g
+>C : C
+>foo : () => void
+
+// module then enum
+// should be errors
+module m4 { }
+enum m4 { }
+>m4 : m4
+
+module m4a { var y = 2; }
+>m4a : typeof m4a
+>y : number
+>2 : 2
+
+enum m4a { One }
+>m4a : m4a
+>One : m4a.One
+
+module m4b { export var y = 2; }
+>m4b : typeof m4b
+>y : number
+>2 : 2
+
+enum m4b { One }
+>m4b : m4b
+>One : m4b.One
+
+module m4c { interface I { foo(): void } }
+>foo : () => void
+
+enum m4c { One }
+>m4c : m4c
+>One : m4c.One
+
+module m4d { class C { foo() { } } }
+>m4d : typeof m4d
+>C : C
+>foo : () => void
+
+enum m4d { One }
+>m4d : m4d
+>One : m4d.One
+
+//// module then module
+
+module m5 { export var y = 2; }
+>m5 : typeof m5
+>y : number
+>2 : 2
+
+module m5 { export interface I { foo(): void } } // should already be reasonably well covered
+>foo : () => void
+
+// module then import
+module m6 { export var y = 2; }
+>m6 : typeof m6
+>y : number
+>2 : 2
+
+//import m6 = require('');
+

@@ -1,0 +1,278 @@
+=== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts ===
+class MyClass {
+>MyClass : MyClass
+
+    private p: number = 123;
+>p : number
+>123 : 123
+
+    protected pp: number = 123;
+>pp : number
+>123 : 123
+
+    public ppp: number = 123;
+>ppp : number
+>123 : 123
+
+    private static sp: number = 123;
+>sp : number
+>123 : 123
+
+    protected static spp: number = 123;
+>spp : number
+>123 : 123
+
+    public static sppp: number = 123;
+>sppp : number
+>123 : 123
+}
+
+interface MyClass {
+    extension1(p: number): void;
+>extension1 : (p: number) => void
+>p : number
+
+    extension2(p: number): void;
+>extension2 : (p: number) => void
+>p : number
+
+    extension3(p: number): void;
+>extension3 : (p: number) => void
+>p : number
+}
+
+class MyGenericClass<T> {
+>MyGenericClass : MyGenericClass<T>
+
+    private p: T;
+>p : T
+
+    protected pp: T;
+>pp : T
+
+    public ppp: T;
+>ppp : T
+
+    private static sp: number;
+>sp : number
+
+    protected static spp: number;
+>spp : number
+
+    public static sppp: number;
+>sppp : number
+}
+
+MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
+>MyClass.prototype.extension1 = function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
+>MyClass.prototype.extension1 : (p: number) => void
+>MyClass.prototype : MyClass
+>MyClass : typeof MyClass
+>prototype : MyClass
+>extension1 : (p: number) => void
+>function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
+>this : MyClass
+>p : number
+
+    this.p = p;
+>this.p = p : number
+>this.p : number
+>this : MyClass
+>p : number
+>p : number
+
+    this.pp = p;
+>this.pp = p : number
+>this.pp : number
+>this : MyClass
+>pp : number
+>p : number
+
+    this.ppp = p;
+>this.ppp = p : number
+>this.ppp : number
+>this : MyClass
+>ppp : number
+>p : number
+
+    MyClass.sp = p;
+>MyClass.sp = p : number
+>MyClass.sp : number
+>MyClass : typeof MyClass
+>sp : number
+>p : number
+
+    MyClass.spp = p;
+>MyClass.spp = p : number
+>MyClass.spp : number
+>MyClass : typeof MyClass
+>spp : number
+>p : number
+
+    MyClass.sppp = p;
+>MyClass.sppp = p : number
+>MyClass.sppp : number
+>MyClass : typeof MyClass
+>sppp : number
+>p : number
+}
+
+MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) { 
+>MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
+>MyClass.prototype.extension2 : (p: number) => void
+>MyClass.prototype : MyClass
+>MyClass : typeof MyClass
+>prototype : MyClass
+>extension2 : (p: number) => void
+>function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
+>this : T
+>p : number
+
+    this.p = p;
+>this.p = p : number
+>this.p : number
+>this : T
+>p : number
+>p : number
+
+    this.pp = p;
+>this.pp = p : number
+>this.pp : number
+>this : T
+>pp : number
+>p : number
+
+    this.ppp = p;
+>this.ppp = p : number
+>this.ppp : number
+>this : T
+>ppp : number
+>p : number
+
+    MyClass.sp = p;
+>MyClass.sp = p : number
+>MyClass.sp : number
+>MyClass : typeof MyClass
+>sp : number
+>p : number
+
+    MyClass.spp = p;
+>MyClass.spp = p : number
+>MyClass.spp : number
+>MyClass : typeof MyClass
+>spp : number
+>p : number
+
+    MyClass.sppp = p;
+>MyClass.sppp = p : number
+>MyClass.sppp : number
+>MyClass : typeof MyClass
+>sppp : number
+>p : number
+}
+
+function extension3<T extends MyClass> (this: T, p: number) { 
+>extension3 : <T extends MyClass>(this: T, p: number) => void
+>this : T
+>p : number
+
+    this.p = p;
+>this.p = p : number
+>this.p : number
+>this : T
+>p : number
+>p : number
+
+    this.pp = p;
+>this.pp = p : number
+>this.pp : number
+>this : T
+>pp : number
+>p : number
+
+    this.ppp = p;
+>this.ppp = p : number
+>this.ppp : number
+>this : T
+>ppp : number
+>p : number
+
+    MyClass.sp = p;
+>MyClass.sp = p : number
+>MyClass.sp : number
+>MyClass : typeof MyClass
+>sp : number
+>p : number
+
+    MyClass.spp = p;
+>MyClass.spp = p : number
+>MyClass.spp : number
+>MyClass : typeof MyClass
+>spp : number
+>p : number
+
+    MyClass.sppp = p;
+>MyClass.sppp = p : number
+>MyClass.sppp : number
+>MyClass : typeof MyClass
+>sppp : number
+>p : number
+}
+
+MyClass.prototype.extension3 = extension3;
+>MyClass.prototype.extension3 = extension3 : <T extends MyClass>(this: T, p: number) => void
+>MyClass.prototype.extension3 : (p: number) => void
+>MyClass.prototype : MyClass
+>MyClass : typeof MyClass
+>prototype : MyClass
+>extension3 : (p: number) => void
+>extension3 : <T extends MyClass>(this: T, p: number) => void
+
+function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
+>extension4 : <T extends number>(this: MyGenericClass<T>, p: T) => void
+>this : MyGenericClass<T>
+>p : T
+
+    this.p = p;
+>this.p = p : T
+>this.p : T
+>this : MyGenericClass<T>
+>p : T
+>p : T
+
+    this.pp = p;
+>this.pp = p : T
+>this.pp : T
+>this : MyGenericClass<T>
+>pp : T
+>p : T
+
+    this.ppp = p;
+>this.ppp = p : T
+>this.ppp : T
+>this : MyGenericClass<T>
+>ppp : T
+>p : T
+
+    MyGenericClass.sp = p;
+>MyGenericClass.sp = p : T
+>MyGenericClass.sp : number
+>MyGenericClass : typeof MyGenericClass
+>sp : number
+>p : T
+
+    MyGenericClass.spp = p;
+>MyGenericClass.spp = p : T
+>MyGenericClass.spp : number
+>MyGenericClass : typeof MyGenericClass
+>spp : number
+>p : T
+
+    MyGenericClass.sppp = p;
+>MyGenericClass.sppp = p : T
+>MyGenericClass.sppp : number
+>MyGenericClass : typeof MyGenericClass
+>sppp : number
+>p : T
+}
+

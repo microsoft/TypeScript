@@ -1,0 +1,67 @@
+=== tests/cases/compiler/functionTypeArgumentArityErrors.ts ===
+// Overloaded functions with default type arguments
+declare function f1<A = any>(): void;
+>f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+
+declare function f1<A, B, C, D = any>(): void;
+>f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+
+f1<number, number>();
+>f1<number, number>() : void
+>f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+
+f1<number, number, number, number, number>();
+>f1<number, number, number, number, number>() : void
+>f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+
+// Overloaded functions with no default type arguments
+declare function f2<A>(): void;
+>f2 : { <A>(): void; <A, B, C>(): void; }
+
+declare function f2<A, B, C>(): void;
+>f2 : { <A>(): void; <A, B, C>(): void; }
+
+f2<number, number>();
+>f2<number, number>() : void
+>f2 : { <A>(): void; <A, B, C>(): void; }
+
+f2<number, number, number, number>();
+>f2<number, number, number, number>() : void
+>f2 : { <A>(): void; <A, B, C>(): void; }
+
+// Overloaded non-generic functions
+declare function f3(): void;
+>f3 : { (): void; (a: any): void; }
+
+declare function f3(a): void;
+>f3 : { (): void; (a: any): void; }
+>a : any
+
+f3<number>();
+>f3<number>() : void
+>f3 : { (): void; (a: any): void; }
+
+// Generic function with default type parameters
+declare function f4<A, B, C = any>(): void;
+>f4 : <A, B, C = any>() => void
+
+f4<number>();
+>f4<number>() : void
+>f4 : <A, B, C = any>() => void
+
+f4<number, number, number, number>();
+>f4<number, number, number, number>() : void
+>f4 : <A, B, C = any>() => void
+
+// Generic function with no default type arguments
+declare function f5<A, B>(): void;
+>f5 : <A, B>() => void
+
+f5<number>();
+>f5<number>() : void
+>f5 : <A, B>() => void
+
+f5<number, number, number>();
+>f5<number, number, number>() : void
+>f5 : <A, B>() => void
+

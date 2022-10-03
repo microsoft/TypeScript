@@ -1,0 +1,13 @@
+=== tests/cases/compiler/declarationEmitInferredDefaultExportType.ts ===
+// test.ts
+export default {
+  foo: [],
+>foo : Symbol(foo, Decl(declarationEmitInferredDefaultExportType.ts, 1, 16))
+
+  bar: undefined,
+>bar : Symbol(bar, Decl(declarationEmitInferredDefaultExportType.ts, 2, 10))
+>undefined : Symbol(undefined)
+
+  baz: null
+>baz : Symbol(baz, Decl(declarationEmitInferredDefaultExportType.ts, 3, 17))
+}

@@ -1,0 +1,35 @@
+tests/cases/compiler/classSideInheritance3.ts(16,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+  Types of construct signatures are incompatible.
+    Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+  Types of construct signatures are incompatible.
+    Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+
+
+==== tests/cases/compiler/classSideInheritance3.ts (2 errors) ====
+    class A {
+        constructor(public x: string) {
+        }
+    }
+    class B extends A {
+        constructor(x: string, public data: string) {
+            super(x);
+        }
+    }
+    class C extends A {
+        constructor(x: string) {
+            super(x);
+        }
+    }
+    
+    var r1: typeof A = B; // error
+        ~~
+!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322:   Types of construct signatures are incompatible.
+!!! error TS2322:     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+    var r2: new (x: string) => A = B; // error
+        ~~
+!!! error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+!!! error TS2322:   Types of construct signatures are incompatible.
+!!! error TS2322:     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
+    var r3: typeof A = C; // ok

@@ -1,0 +1,60 @@
+=== tests/cases/compiler/genericWithOpenTypeParameters1.ts ===
+class B<T> {
+>B : B<T>
+
+   foo(x: T): T { return null; }
+>foo : (x: T) => T
+>x : T
+>null : null
+}
+
+var x: B<number>;
+>x : B<number>
+
+x.foo(1); // no error
+>x.foo(1) : number
+>x.foo : (x: number) => number
+>x : B<number>
+>foo : (x: number) => number
+>1 : 1
+
+var f = <T>(x: B<T>) => { return x.foo(1); } // error
+>f : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo(1); } : <T>(x: B<T>) => T
+>x : B<T>
+>x.foo(1) : T
+>x.foo : (x: T) => T
+>x : B<T>
+>foo : (x: T) => T
+>1 : 1
+
+var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
+>f2 : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo<T>(1); } : <T>(x: B<T>) => T
+>x : B<T>
+>x.foo<T>(1) : T
+>x.foo : (x: T) => T
+>x : B<T>
+>foo : (x: T) => T
+>1 : 1
+
+var f3 = <T>(x: B<T>) => { return x.foo<number>(1); } // error
+>f3 : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo<number>(1); } : <T>(x: B<T>) => T
+>x : B<T>
+>x.foo<number>(1) : T
+>x.foo : (x: T) => T
+>x : B<T>
+>foo : (x: T) => T
+>1 : 1
+
+var f4 = (x: B<number>) => { return x.foo(1); } // no error
+>f4 : (x: B<number>) => number
+>(x: B<number>) => { return x.foo(1); } : (x: B<number>) => number
+>x : B<number>
+>x.foo(1) : number
+>x.foo : (x: number) => number
+>x : B<number>
+>foo : (x: number) => number
+>1 : 1
+

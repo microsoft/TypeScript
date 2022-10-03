@@ -1,0 +1,130 @@
+=== tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts ===
+const 𝑚 = 4;
+>𝑚 : 4
+>4 : 4
+
+const 𝑀 = 5;
+>𝑀 : 5
+>5 : 5
+
+console.log(𝑀 + 𝑚); // 9
+>console.log(𝑀 + 𝑚) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>𝑀 + 𝑚 : number
+>𝑀 : 5
+>𝑚 : 4
+
+class K {
+>K : K
+
+    #𝑚 = 4;
+>#𝑚 : number
+>4 : 4
+
+    #𝑀 = 5;
+>#𝑀 : number
+>5 : 5
+}
+
+// lower 8 bits look like 'a'
+const ၡ = 6;
+>ၡ : 6
+>6 : 6
+
+console.log(ၡ ** ၡ);
+>console.log(ၡ ** ၡ) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ၡ ** ၡ : number
+>ၡ : 6
+>ၡ : 6
+
+// lower 8 bits aren't a valid unicode character
+const ဒ = 7;
+>ဒ : 7
+>7 : 7
+
+console.log(ဒ ** ဒ);
+>console.log(ဒ ** ဒ) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ဒ ** ဒ : number
+>ဒ : 7
+>ဒ : 7
+
+// a mix, for good measure
+const ဒၡ𝑀 = 7;
+>ဒၡ𝑀 : 7
+>7 : 7
+
+console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+>console.log(ဒၡ𝑀 ** ဒၡ𝑀) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ဒၡ𝑀 ** ဒၡ𝑀 : number
+>ဒၡ𝑀 : 7
+>ဒၡ𝑀 : 7
+
+const ၡ𝑀ဒ = 7;
+>ၡ𝑀ဒ : 7
+>7 : 7
+
+console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+>console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ၡ𝑀ဒ ** ၡ𝑀ဒ : number
+>ၡ𝑀ဒ : 7
+>ၡ𝑀ဒ : 7
+
+const 𝑀ဒၡ = 7;
+>𝑀ဒၡ : 7
+>7 : 7
+
+console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+>console.log(𝑀ဒၡ ** 𝑀ဒၡ) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>𝑀ဒၡ ** 𝑀ဒၡ : number
+>𝑀ဒၡ : 7
+>𝑀ဒၡ : 7
+
+const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
+>𝓱𝓮𝓵𝓵𝓸 : "𝔀𝓸𝓻𝓵𝓭"
+>"𝔀𝓸𝓻𝓵𝓭" : "𝔀𝓸𝓻𝓵𝓭"
+
+const Ɐⱱ = "ok"; // BMP
+>Ɐⱱ : "ok"
+>"ok" : "ok"
+
+const 𓀸𓀹𓀺 = "ok"; // SMP
+>𓀸𓀹𓀺 : "ok"
+>"ok" : "ok"
+
+const 𡚭𡚮𡚯 = "ok"; // SIP
+>𡚭𡚮𡚯 : "ok"
+>"ok" : "ok"
+
+const 𡚭𓀺ⱱ𝓮 = "ok";
+>𡚭𓀺ⱱ𝓮 : "ok"
+>"ok" : "ok"
+
+const 𓀺ⱱ𝓮𡚭 = "ok";
+>𓀺ⱱ𝓮𡚭 : "ok"
+>"ok" : "ok"
+
+const ⱱ𝓮𡚭𓀺 = "ok";
+>ⱱ𝓮𡚭𓀺 : "ok"
+>"ok" : "ok"
+
+const 𝓮𡚭𓀺ⱱ = "ok";
+>𝓮𡚭𓀺ⱱ : "ok"
+>"ok" : "ok"
+

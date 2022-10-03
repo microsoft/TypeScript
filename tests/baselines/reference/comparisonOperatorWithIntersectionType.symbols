@@ -1,0 +1,16 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts ===
+declare let a: { a: 1 }
+>a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 0, 11))
+>a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 0, 16))
+
+a > 1;
+>a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 0, 11))
+
+declare let b: { a: 1 } & { b: number }
+>b : Symbol(b, Decl(comparisonOperatorWithIntersectionType.ts, 3, 11))
+>a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 3, 16))
+>b : Symbol(b, Decl(comparisonOperatorWithIntersectionType.ts, 3, 27))
+
+b > 1;
+>b : Symbol(b, Decl(comparisonOperatorWithIntersectionType.ts, 3, 11))
+

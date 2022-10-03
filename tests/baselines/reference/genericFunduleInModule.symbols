@@ -1,0 +1,29 @@
+=== tests/cases/compiler/genericFunduleInModule.ts ===
+module A {
+>A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+
+    export function B<T>(x: T) { return x; }
+>B : Symbol(B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+>T : Symbol(T, Decl(genericFunduleInModule.ts, 1, 22))
+>x : Symbol(x, Decl(genericFunduleInModule.ts, 1, 25))
+>T : Symbol(T, Decl(genericFunduleInModule.ts, 1, 22))
+>x : Symbol(x, Decl(genericFunduleInModule.ts, 1, 25))
+
+    export module B {
+>B : Symbol(B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+
+        export var x = 1;
+>x : Symbol(x, Decl(genericFunduleInModule.ts, 3, 18))
+    }
+}
+
+var b: A.B;
+>b : Symbol(b, Decl(genericFunduleInModule.ts, 7, 3))
+>A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+>B : Symbol(A.B)
+
+A.B(1);
+>A.B : Symbol(A.B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+>A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+>B : Symbol(A.B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+

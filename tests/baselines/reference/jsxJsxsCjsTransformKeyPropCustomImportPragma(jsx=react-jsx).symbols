@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsx/jsxs/react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const props2 = { answer: 42 }
+>props2 : Symbol(props2, Decl(react.tsx, 3, 5))
+>answer : Symbol(answer, Decl(react.tsx, 3, 16))
+
+const a2 = <div key="foo" {...props2}>text</div>;
+>a2 : Symbol(a2, Decl(react.tsx, 4, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>key : Symbol(key, Decl(react.tsx, 4, 15))
+>props2 : Symbol(props2, Decl(react.tsx, 3, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+const b2 = <div {...props2} key="bar">text</div>;
+>b2 : Symbol(b2, Decl(react.tsx, 5, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>props2 : Symbol(props2, Decl(react.tsx, 3, 5))
+>key : Symbol(key, Decl(react.tsx, 5, 27))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export {};
+
+=== tests/cases/conformance/jsx/jsxs/preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const props = { answer: 42 }
+>props : Symbol(props, Decl(preact.tsx, 2, 5))
+>answer : Symbol(answer, Decl(preact.tsx, 2, 15))
+
+const a = <div key="foo" {...props}>text</div>;
+>a : Symbol(a, Decl(preact.tsx, 3, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>key : Symbol(key, Decl(preact.tsx, 3, 14))
+>props : Symbol(props, Decl(preact.tsx, 2, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+const b = <div {...props} key="bar">text</div>;
+>b : Symbol(b, Decl(preact.tsx, 4, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>props : Symbol(props, Decl(preact.tsx, 2, 5))
+>key : Symbol(key, Decl(preact.tsx, 4, 25))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export {};
+

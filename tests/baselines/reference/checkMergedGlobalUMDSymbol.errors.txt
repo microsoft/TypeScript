@@ -1,0 +1,23 @@
+tests/cases/compiler/global.d.ts(6,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'THREE' must be of type 'typeof import("tests/cases/compiler/global")', but here has type 'typeof import("tests/cases/compiler/three")'.
+
+
+==== tests/cases/compiler/three.d.ts (0 errors) ====
+    export namespace THREE {
+      export class Vector2 {}
+    }
+    
+==== tests/cases/compiler/global.d.ts (1 errors) ====
+    import * as _three from './three';
+    
+    export as namespace THREE;
+    
+    declare global {
+      export const THREE: typeof _three;
+                   ~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'THREE' must be of type 'typeof import("tests/cases/compiler/global")', but here has type 'typeof import("tests/cases/compiler/three")'.
+!!! related TS6203 tests/cases/compiler/global.d.ts:1:1: 'THREE' was also declared here.
+    }
+    
+==== tests/cases/compiler/test.ts (0 errors) ====
+    const m = THREE
+    

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts ===
+declare module X { export interface bar { } }
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration2_A.ts, 0, 0))
+>bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration2_A.ts, 0, 18))
+
+=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
+declare module X { export interface foo { } }
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 0, 0))
+>foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 0, 18))
+
+export { X };
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 1, 8))
+
+export declare function foo(): X.foo;
+>foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 1, 13))
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 0, 0))
+>foo : Symbol(X.foo, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 0, 18))
+
+export declare function bar(): X.bar; // error
+>bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 2, 37))
+>X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration2_B.ts, 0, 0))
+>bar : Symbol(X.bar)
+

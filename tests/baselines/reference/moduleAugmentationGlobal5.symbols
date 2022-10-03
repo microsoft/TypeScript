@@ -1,0 +1,31 @@
+=== tests/cases/compiler/f3.ts ===
+/// <reference path="f1.d.ts"/>
+No type information for this code./// <reference path="f2.d.ts"/>
+No type information for this code.import "A";
+No type information for this code.import "B";
+No type information for this code.
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/f1.d.ts ===
+declare module "A" {
+>"A" : Symbol("A", Decl(f1.d.ts, 0, 0))
+
+    global {
+>global : Symbol(global, Decl(f1.d.ts, 0, 20))
+
+        interface Something {x}
+>Something : Symbol(Something, Decl(f1.d.ts, 1, 12), Decl(f2.d.ts, 1, 12))
+>x : Symbol(Something.x, Decl(f1.d.ts, 2, 29))
+    }
+}
+=== tests/cases/compiler/f2.d.ts ===
+declare module "B" {
+>"B" : Symbol("B", Decl(f2.d.ts, 0, 0))
+
+    global {
+>global : Symbol(global, Decl(f2.d.ts, 0, 20))
+
+        interface Something {y}
+>Something : Symbol(Something, Decl(f1.d.ts, 1, 12), Decl(f2.d.ts, 1, 12))
+>y : Symbol(Something.y, Decl(f2.d.ts, 2, 29))
+    }
+}

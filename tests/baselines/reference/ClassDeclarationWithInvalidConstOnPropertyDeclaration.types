@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts ===
+class AtomicNumbers {
+>AtomicNumbers : AtomicNumbers
+
+  static const H = 1;
+>H : number
+>1 : 1
+}

@@ -1,0 +1,13 @@
+tests/cases/compiler/unusedParametersInLambda2.ts(3,17): error TS6133: 'X' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedParametersInLambda2.ts (1 errors) ====
+    class A {
+        public f1() {
+            return (X, Y) => {
+                    ~
+!!! error TS6133: 'X' is declared but its value is never read.
+                Y;
+            }
+        }
+    }

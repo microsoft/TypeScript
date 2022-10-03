@@ -1,0 +1,145 @@
+=== tests/cases/compiler/genericDefaultsErrors.ts ===
+declare const x: any;
+>x : Symbol(x, Decl(genericDefaultsErrors.ts, 0, 13))
+
+declare function f03<T extends string = number>(): void; // error
+>f03 : Symbol(f03, Decl(genericDefaultsErrors.ts, 0, 21))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 2, 21))
+
+declare function f04<T extends string, U extends number = T>(): void; // error
+>f04 : Symbol(f04, Decl(genericDefaultsErrors.ts, 2, 56))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 3, 21))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 3, 38))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 3, 21))
+
+declare function f05<T, U extends number = T>(): void; // error
+>f05 : Symbol(f05, Decl(genericDefaultsErrors.ts, 3, 69))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 4, 21))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 4, 23))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 4, 21))
+
+declare function f06<T, U extends T = number>(): void; // error
+>f06 : Symbol(f06, Decl(genericDefaultsErrors.ts, 4, 54))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 5, 21))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 5, 23))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 5, 21))
+
+declare function f11<T, U, V = number>(): void;
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 7, 21))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 7, 23))
+>V : Symbol(V, Decl(genericDefaultsErrors.ts, 7, 26))
+
+f11(); // ok
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+
+f11<1>(); // error
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+
+f11<1, 2>(); // ok
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+
+f11<1, 2, 3>(); // ok
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+
+f11<1, 2, 3, 4>(); // error
+>f11 : Symbol(f11, Decl(genericDefaultsErrors.ts, 5, 54))
+
+declare function f12<T, U = T>(a?: U): void;
+>f12 : Symbol(f12, Decl(genericDefaultsErrors.ts, 12, 18))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 14, 21))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 14, 23))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 14, 21))
+>a : Symbol(a, Decl(genericDefaultsErrors.ts, 14, 31))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 14, 23))
+
+f12<number>(); // ok
+>f12 : Symbol(f12, Decl(genericDefaultsErrors.ts, 12, 18))
+
+f12<number>("a"); // error
+>f12 : Symbol(f12, Decl(genericDefaultsErrors.ts, 12, 18))
+
+interface i00<T> { } // ok
+>i00 : Symbol(i00, Decl(genericDefaultsErrors.ts, 16, 17), Decl(genericDefaultsErrors.ts, 18, 20))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 18, 14))
+
+interface i00<U = number> { } // error
+>i00 : Symbol(i00, Decl(genericDefaultsErrors.ts, 16, 17), Decl(genericDefaultsErrors.ts, 18, 20))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 19, 14))
+
+interface i01<T = number> { } // ok
+>i01 : Symbol(i01, Decl(genericDefaultsErrors.ts, 19, 29), Decl(genericDefaultsErrors.ts, 21, 29))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 21, 14), Decl(genericDefaultsErrors.ts, 22, 14))
+
+interface i01<T = string> { } // error
+>i01 : Symbol(i01, Decl(genericDefaultsErrors.ts, 19, 29), Decl(genericDefaultsErrors.ts, 21, 29))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 21, 14), Decl(genericDefaultsErrors.ts, 22, 14))
+
+interface i04<T = number, U> { } // error
+>i04 : Symbol(i04, Decl(genericDefaultsErrors.ts, 22, 29))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 24, 14))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 24, 25))
+
+interface i05<T extends string = number> { } // error
+>i05 : Symbol(i05, Decl(genericDefaultsErrors.ts, 24, 32))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 25, 14))
+
+interface i06<T extends string, U extends number = T> { } // error
+>i06 : Symbol(i06, Decl(genericDefaultsErrors.ts, 25, 44))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 26, 14))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 26, 31))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 26, 14))
+
+interface i07<T, U extends number = T> { } // error
+>i07 : Symbol(i07, Decl(genericDefaultsErrors.ts, 26, 57))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 27, 14))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 27, 16))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 27, 14))
+
+interface i08<T, U extends T = number> { } // error
+>i08 : Symbol(i08, Decl(genericDefaultsErrors.ts, 27, 42))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 28, 14))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 28, 16))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 28, 14))
+
+interface i09<T, U, V = number> { }
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 30, 14))
+>U : Symbol(U, Decl(genericDefaultsErrors.ts, 30, 16))
+>V : Symbol(V, Decl(genericDefaultsErrors.ts, 30, 19))
+
+type i09t00 = i09; // error
+>i09t00 : Symbol(i09t00, Decl(genericDefaultsErrors.ts, 30, 35))
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+
+type i09t01 = i09<1>; // error
+>i09t01 : Symbol(i09t01, Decl(genericDefaultsErrors.ts, 31, 18))
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+
+type i09t02 = i09<1, 2>; // ok
+>i09t02 : Symbol(i09t02, Decl(genericDefaultsErrors.ts, 32, 21))
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+
+type i09t03 = i09<1, 2, 3>; // ok
+>i09t03 : Symbol(i09t03, Decl(genericDefaultsErrors.ts, 33, 24))
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+
+type i09t04 = i09<1, 2, 3, 4>; // error
+>i09t04 : Symbol(i09t04, Decl(genericDefaultsErrors.ts, 34, 27))
+>i09 : Symbol(i09, Decl(genericDefaultsErrors.ts, 28, 42))
+
+interface i10 { x: T; } // error
+>i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))
+>x : Symbol(i10.x, Decl(genericDefaultsErrors.ts, 37, 15))
+>T : Symbol(T)
+
+interface i10<T = number> {}
+>i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 38, 14))
+
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference> {}
+>SelfReference : Symbol(SelfReference, Decl(genericDefaultsErrors.ts, 38, 28))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 41, 24))
+>SelfReference : Symbol(SelfReference, Decl(genericDefaultsErrors.ts, 38, 28))
+

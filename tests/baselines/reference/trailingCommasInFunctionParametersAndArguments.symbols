@@ -1,0 +1,61 @@
+=== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
+function f1(x,) {}
+>f1 : Symbol(f1, Decl(trailingCommasInFunctionParametersAndArguments.ts, 0, 0))
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 0, 12))
+
+f1(1,);
+>f1 : Symbol(f1, Decl(trailingCommasInFunctionParametersAndArguments.ts, 0, 0))
+
+function f2(...args,) {}
+>f2 : Symbol(f2, Decl(trailingCommasInFunctionParametersAndArguments.ts, 2, 7))
+>args : Symbol(args, Decl(trailingCommasInFunctionParametersAndArguments.ts, 4, 12))
+
+// Allowed for ambient declarations
+declare function f25(...args,): void;
+>f25 : Symbol(f25, Decl(trailingCommasInFunctionParametersAndArguments.ts, 4, 24))
+>args : Symbol(args, Decl(trailingCommasInFunctionParametersAndArguments.ts, 7, 21))
+
+f2(...[],);
+>f2 : Symbol(f2, Decl(trailingCommasInFunctionParametersAndArguments.ts, 2, 7))
+
+// Not confused by overloads
+declare function f3(x, ): number;
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 12, 33))
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 12, 20))
+
+declare function f3(x, y,): string;
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 12, 33))
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 13, 20))
+>y : Symbol(y, Decl(trailingCommasInFunctionParametersAndArguments.ts, 13, 22))
+
+<number>f3(1,);
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 12, 33))
+
+<string>f3(1, 2,);
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 12, 33))
+
+// Works for constructors too
+class X {
+>X : Symbol(X, Decl(trailingCommasInFunctionParametersAndArguments.ts, 16, 18))
+
+    constructor(a,) { }
+>a : Symbol(a, Decl(trailingCommasInFunctionParametersAndArguments.ts, 20, 16))
+
+    // See trailingCommasInGetter.ts
+    set x(value,) { }
+>x : Symbol(X.x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 20, 23))
+>value : Symbol(value, Decl(trailingCommasInFunctionParametersAndArguments.ts, 22, 10))
+}
+interface Y {
+>Y : Symbol(Y, Decl(trailingCommasInFunctionParametersAndArguments.ts, 23, 1))
+
+    new(x,);
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 25, 8))
+
+    (x,);
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 26, 5))
+}
+
+new X(1,);
+>X : Symbol(X, Decl(trailingCommasInFunctionParametersAndArguments.ts, 16, 18))
+

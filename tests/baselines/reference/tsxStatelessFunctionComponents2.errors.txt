@@ -1,0 +1,55 @@
+tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(25,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
+tests/cases/conformance/jsx/file.tsx(27,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+    import React = require('react');
+    
+    function Greet(x: {name?: string}) {
+    	return <div>Hello, {x}</div>;
+    }
+    
+    class BigGreeter extends React.Component<{ name?: string }, {}> {
+    	render() {
+    		return <div></div>;
+    	}
+    	greeting: string;
+    }
+    
+    // OK
+    let a = <Greet />;
+    // OK - always valid to specify 'key'
+    let b = <Greet key="k" />;
+    // Error - not allowed to specify 'ref' on SFCs
+    let c = <Greet ref="myRef" />;
+                   ~~~
+!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+    
+    
+    // OK - ref is valid for classes
+    let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
+    // Error ('subtr' not on string)
+    let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
+                                             ~~~~~
+!!! error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
+!!! related TS2728 /.lib/lib.d.ts:438:5: 'substr' is declared here.
+    // Error (ref callback is contextually typed)
+    let f = <BigGreeter ref={x => x.notARealProperty} />;
+                                    ~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+    
+    // OK - key is always valid
+    let g = <BigGreeter key={100} />;
+    
+    // OK - contextually typed intrinsic ref callback parameter
+    let h = <div ref={x => x.innerText} />;
+    // Error - property not on ontextually typed intrinsic ref callback parameter
+    let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
+    
+    

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts ===
+declare module "OuterModule" {
+>"OuterModule" : typeof import("OuterModule")
+
+    import m2 = require("./SubModule");
+>m2 : any
+
+    class SubModule {
+>SubModule : SubModule
+
+        public static StaticVar: number;
+>StaticVar : number
+
+        public InstanceVar: number;
+>InstanceVar : number
+
+        public x: m2.c;
+>x : m2.c
+>m2 : any
+
+        constructor();
+    }
+    export = SubModule;
+>SubModule : SubModule
+}

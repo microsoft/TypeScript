@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList4.ts(1,14): error TS1127: Invalid character.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList4.ts (1 errors) ====
+    function f(a,¬) {
+                 ~
+!!! error TS1127: Invalid character.
+    }

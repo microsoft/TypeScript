@@ -1,0 +1,70 @@
+=== tests/cases/compiler/parameterNamesInTypeParameterList.ts ===
+function f0<T extends typeof a>(a: T) {
+>f0 : <T extends any>(a: T) => void
+>a : any
+>a : T
+
+	a.b;
+>a.b : any
+>a : T
+>b : any
+}
+
+function f1<T extends typeof a>({a}: {a:T}) {
+>f1 : <T extends any>({ a }: {    a: T;}) => void
+>a : any
+>a : T
+>a : T
+
+	a.b;
+>a.b : any
+>a : T
+>b : any
+}
+
+function f2<T extends typeof a>([a]: T[]) {
+>f2 : <T extends any>([a]: T[]) => void
+>a : any
+>a : T
+
+	a.b;
+>a.b : any
+>a : T
+>b : any
+}
+
+class A {
+>A : A
+
+	m0<T extends typeof a>(a: T) {
+>m0 : <T extends any>(a: T) => void
+>a : any
+>a : T
+
+		a.b
+>a.b : any
+>a : T
+>b : any
+	}
+	m1<T extends typeof a>({a}: {a:T}) {
+>m1 : <T extends any>({ a }: {    a: T;}) => void
+>a : any
+>a : T
+>a : T
+
+		a.b
+>a.b : any
+>a : T
+>b : any
+	}
+	m2<T extends typeof a>([a]: T[]) {
+>m2 : <T extends any>([a]: T[]) => void
+>a : any
+>a : T
+
+		a.b
+>a.b : any
+>a : T
+>b : any
+	}
+}

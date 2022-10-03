@@ -1,0 +1,17 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty.ts ===
+interface Base {
+    x: { a: number };
+>x : { a: number; }
+>a : number
+}
+
+interface Derived extends Base {
+    x: {
+>x : { a: number; b: number; }
+
+        a: number; b: number;
+>a : number
+>b : number
+
+    };
+}

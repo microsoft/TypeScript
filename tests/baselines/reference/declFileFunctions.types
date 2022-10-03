@@ -1,0 +1,188 @@
+=== tests/cases/compiler/declFileFunctions_0.ts ===
+/** This comment should appear for foo*/
+export function foo() {
+>foo : () => void
+}
+/** This is comment for function signature*/
+export function fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : (a: string, b: number) => void
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+export function fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+}
+
+export function fooWithOverloads(a: string): string;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+export function fooWithOverloads(a: number): number;
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+export function fooWithOverloads(a: any): any {
+>fooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+    return a;
+>a : any
+}
+
+export function fooWithSingleOverload(a: string): string;
+>fooWithSingleOverload : (a: string) => string
+>a : string
+
+export function fooWithSingleOverload(a: any) {
+>fooWithSingleOverload : (a: string) => string
+>a : any
+
+    return a;
+>a : any
+}
+
+export function fooWithTypePredicate(a: any): a is number {
+>fooWithTypePredicate : (a: any) => a is number
+>a : any
+
+    return true;
+>true : true
+}
+export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+>fooWithTypePredicateAndMulitpleParams : (a: any, b: any, c: any) => a is number
+>a : any
+>b : any
+>c : any
+
+    return true;
+>true : true
+}
+export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
+>fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
+>a : any
+
+    return true;
+>true : true
+}
+export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
+>fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
+>a : any
+>rest : any[]
+
+    return true;
+>true : true
+}
+
+/** This comment should appear for nonExportedFoo*/
+function nonExportedFoo() {
+>nonExportedFoo : () => void
+}
+/** This is comment for function signature*/
+function nonExportedFooWithParameters(/** this is comment about a*/a: string,
+>nonExportedFooWithParameters : (a: string, b: number) => void
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
+>nonExportedFooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+}
+
+function nonExportedFooWithOverloads(a: string): string;
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+function nonExportedFooWithOverloads(a: number): number;
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+function nonExportedFooWithOverloads(a: any): any {
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+    return a;
+>a : any
+}
+
+=== tests/cases/compiler/declFileFunctions_1.ts ===
+/** This comment should appear for foo*/
+function globalfoo() {
+>globalfoo : () => void
+}
+/** This is comment for function signature*/
+function globalfooWithParameters(/** this is comment about a*/a: string,
+>globalfooWithParameters : (a: string, b: number) => void
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+function globalfooWithRestParameters(a: string, ...rests: string[]) {
+>globalfooWithRestParameters : (a: string, ...rests: string[]) => string
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+>"" : ""
+}
+function globalfooWithOverloads(a: string): string;
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
+>a : string
+
+function globalfooWithOverloads(a: number): number;
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
+>a : number
+
+function globalfooWithOverloads(a: any): any {
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
+>a : any
+
+    return a;
+>a : any
+}

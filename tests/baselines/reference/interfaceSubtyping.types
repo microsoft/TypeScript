@@ -1,0 +1,16 @@
+=== tests/cases/compiler/interfaceSubtyping.ts ===
+interface iface {
+    foo(): void;
+>foo : () => void
+}
+class Camera implements iface{
+>Camera : Camera
+
+    constructor (public str: string) {
+>str : string
+    }
+    foo() {  return "s";   }
+>foo : () => string
+>"s" : "s"
+}
+

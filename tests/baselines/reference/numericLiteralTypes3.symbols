@@ -1,0 +1,336 @@
+=== tests/cases/conformance/types/literal/numericLiteralTypes3.ts ===
+type A = 1;
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+
+type B = 2 | 3;
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+
+type C = 1 | 2 | 3;
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+
+type D = 0 | 1 | 2;
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+function f1(a: A, b: B, c: C, d: D) {
+>f1 : Symbol(f1, Decl(numericLiteralTypes3.ts, 3, 19))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 5, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 5, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 5, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    a = a;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+
+    a = b;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 5, 17))
+
+    a = c;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 5, 23))
+
+    a = d;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 5, 12))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 5, 29))
+}
+
+function f2(a: A, b: B, c: C, d: D) {
+>f2 : Symbol(f2, Decl(numericLiteralTypes3.ts, 10, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 12, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 12, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 12, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    b = a;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 12, 12))
+
+    b = b;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+
+    b = c;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 12, 23))
+
+    b = d;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 12, 17))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 12, 29))
+}
+
+function f3(a: A, b: B, c: C, d: D) {
+>f3 : Symbol(f3, Decl(numericLiteralTypes3.ts, 17, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 19, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 19, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 19, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    c = a;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 19, 12))
+
+    c = b;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 19, 17))
+
+    c = c;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+
+    c = d;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 19, 23))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 19, 29))
+}
+
+function f4(a: A, b: B, c: C, d: D) {
+>f4 : Symbol(f4, Decl(numericLiteralTypes3.ts, 24, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 26, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 26, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 26, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    d = a;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 26, 12))
+
+    d = b;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 26, 17))
+
+    d = c;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 26, 23))
+
+    d = d;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 26, 29))
+}
+
+function f5(a: A, b: B, c: C, d: D) {
+>f5 : Symbol(f5, Decl(numericLiteralTypes3.ts, 31, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 33, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 33, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 33, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 33, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    a = 0;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 33, 12))
+
+    a = 1;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 33, 12))
+
+    a = 2;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 33, 12))
+
+    a = 3;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 33, 12))
+
+    b = 0;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 33, 17))
+
+    b = 1;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 33, 17))
+
+    b = 2;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 33, 17))
+
+    b = 3;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 33, 17))
+
+    c = 0;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 33, 23))
+
+    c = 1;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 33, 23))
+
+    c = 2;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 33, 23))
+
+    c = 3;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 33, 23))
+
+    d = 0;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 33, 29))
+
+    d = 1;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 33, 29))
+
+    d = 2;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 33, 29))
+
+    d = 3;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 33, 29))
+}
+
+function f6(a: A, b: B, c: C, d: D) {
+>f6 : Symbol(f6, Decl(numericLiteralTypes3.ts, 50, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 52, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 52, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 52, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 52, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    a === 0;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 52, 12))
+
+    a === 1;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 52, 12))
+
+    a === 2;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 52, 12))
+
+    a === 3;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 52, 12))
+
+    b === 0;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 52, 17))
+
+    b === 1;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 52, 17))
+
+    b === 2;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 52, 17))
+
+    b === 3;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 52, 17))
+
+    c === 0;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 52, 23))
+
+    c === 1;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 52, 23))
+
+    c === 2;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 52, 23))
+
+    c === 3;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 52, 23))
+
+    d === 0;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 52, 29))
+
+    d === 1;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 52, 29))
+
+    d === 2;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 52, 29))
+
+    d === 3;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 52, 29))
+}
+
+function f7(a: A, b: B, c: C, d: D) {
+>f7 : Symbol(f7, Decl(numericLiteralTypes3.ts, 69, 1))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+>A : Symbol(A, Decl(numericLiteralTypes3.ts, 0, 0))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+>B : Symbol(B, Decl(numericLiteralTypes3.ts, 0, 11))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+>C : Symbol(C, Decl(numericLiteralTypes3.ts, 1, 15))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+>D : Symbol(D, Decl(numericLiteralTypes3.ts, 2, 19))
+
+    a === a;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+
+    a === b;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+
+    a === c;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+
+    a === d;
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+
+    b === a;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+
+    b === b;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+
+    b === c;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+
+    b === d;
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+
+    c === a;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+
+    c === b;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+
+    c === c;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+
+    c === d;
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+
+    d === a;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+>a : Symbol(a, Decl(numericLiteralTypes3.ts, 71, 12))
+
+    d === b;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+>b : Symbol(b, Decl(numericLiteralTypes3.ts, 71, 17))
+
+    d === c;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+>c : Symbol(c, Decl(numericLiteralTypes3.ts, 71, 23))
+
+    d === d;
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+>d : Symbol(d, Decl(numericLiteralTypes3.ts, 71, 29))
+}
+
+function f8(x: 0 | 2 | 4) {
+>f8 : Symbol(f8, Decl(numericLiteralTypes3.ts, 88, 1))
+>x : Symbol(x, Decl(numericLiteralTypes3.ts, 90, 12))
+
+    switch (x) {
+>x : Symbol(x, Decl(numericLiteralTypes3.ts, 90, 12))
+
+        case 0: return;
+        case 1: return;
+        case 2: return;
+        case 3: return;
+        case 4: return;
+        case 5: return;
+    }
+}

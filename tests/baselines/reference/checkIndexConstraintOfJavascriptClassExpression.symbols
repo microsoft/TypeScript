@@ -1,0 +1,31 @@
+=== tests/cases/compiler/weird.js ===
+someFunction(function(BaseClass) {
+>BaseClass : Symbol(BaseClass, Decl(weird.js, 0, 22))
+
+    'use strict';
+    const DEFAULT_MESSAGE = "nop!";
+>DEFAULT_MESSAGE : Symbol(DEFAULT_MESSAGE, Decl(weird.js, 2, 9))
+
+    class Hello extends BaseClass {
+>Hello : Symbol(Hello, Decl(weird.js, 2, 35))
+>BaseClass : Symbol(BaseClass, Decl(weird.js, 0, 22))
+
+        constructor() {
+            super();
+            this.foo = "bar";
+>this.foo : Symbol(Hello.foo, Decl(weird.js, 5, 20))
+>this : Symbol(Hello, Decl(weird.js, 2, 35))
+>foo : Symbol(Hello.foo, Decl(weird.js, 5, 20))
+        }
+        _render(error) {
+>_render : Symbol(Hello._render, Decl(weird.js, 7, 9))
+>error : Symbol(error, Decl(weird.js, 8, 16))
+
+            const message = error.message || DEFAULT_MESSAGE;
+>message : Symbol(message, Decl(weird.js, 9, 17))
+>error : Symbol(error, Decl(weird.js, 8, 16))
+>DEFAULT_MESSAGE : Symbol(DEFAULT_MESSAGE, Decl(weird.js, 2, 9))
+        }
+    }
+});
+

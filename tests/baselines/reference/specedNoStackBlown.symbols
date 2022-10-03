@@ -1,0 +1,158 @@
+=== tests/cases/compiler/specedNoStackBlown.ts ===
+// Type definitions for spected 0.7
+// Project: https://github.com/25th-floor/spected
+// Definitions by: Benjamin Makus <https://github.com/benneq>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.8
+
+declare function spected<ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT): Result<ROOTINPUT, SPEC>;
+>spected : Symbol(spected, Decl(specedNoStackBlown.ts, 0, 0))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>SPEC : Symbol(SPEC, Decl(specedNoStackBlown.ts, 6, 35))
+>SpecValue : Symbol(SpecValue, Decl(specedNoStackBlown.ts, 24, 115))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>SpecValue : Symbol(SpecValue, Decl(specedNoStackBlown.ts, 24, 115))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>spec : Symbol(spec, Decl(specedNoStackBlown.ts, 6, 116))
+>SPEC : Symbol(SPEC, Decl(specedNoStackBlown.ts, 6, 35))
+>input : Symbol(input, Decl(specedNoStackBlown.ts, 6, 127))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>Result : Symbol(Result, Decl(specedNoStackBlown.ts, 30, 75))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 6, 25))
+>SPEC : Symbol(SPEC, Decl(specedNoStackBlown.ts, 6, 35))
+
+type Predicate<INPUT, ROOTINPUT> = (value: INPUT, inputs: ROOTINPUT) => boolean;
+>Predicate : Symbol(Predicate, Decl(specedNoStackBlown.ts, 6, 171))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 8, 15))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 8, 21))
+>value : Symbol(value, Decl(specedNoStackBlown.ts, 8, 36))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 8, 15))
+>inputs : Symbol(inputs, Decl(specedNoStackBlown.ts, 8, 49))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 8, 21))
+
+type ErrorMsg<INPUT> =
+>ErrorMsg : Symbol(ErrorMsg, Decl(specedNoStackBlown.ts, 8, 80))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 10, 14))
+
+    | (string | number | boolean | symbol | null | undefined | object)
+    | ((value: INPUT, field: string) => any);
+>value : Symbol(value, Decl(specedNoStackBlown.ts, 12, 8))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 10, 14))
+>field : Symbol(field, Decl(specedNoStackBlown.ts, 12, 21))
+
+export type Spec<INPUT, ROOTINPUT = any> = [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>];
+>Spec : Symbol(Spec, Decl(specedNoStackBlown.ts, 12, 45))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 14, 17))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 14, 23))
+>Predicate : Symbol(Predicate, Decl(specedNoStackBlown.ts, 6, 171))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 14, 17))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 14, 23))
+>ErrorMsg : Symbol(ErrorMsg, Decl(specedNoStackBlown.ts, 8, 80))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 14, 17))
+
+export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Spec : Symbol(Spec, Decl(specedNoStackBlown.ts, 12, 45))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))
+
+export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<infer U>]
+>SpecFunction : Symbol(SpecFunction, Decl(specedNoStackBlown.ts, 16, 78))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(specedNoStackBlown.ts, 18, 87))
+
+    ? (value: INPUT) => ReadonlyArray<SpecArray<U, ROOTINPUT>>
+>value : Symbol(value, Decl(specedNoStackBlown.ts, 19, 7))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>U : Symbol(U, Decl(specedNoStackBlown.ts, 18, 87))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
+
+    : [INPUT] extends [object]
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+
+        ? (value: INPUT) => SpecObject<INPUT, ROOTINPUT>
+>value : Symbol(value, Decl(specedNoStackBlown.ts, 21, 11))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>SpecObject : Symbol(SpecObject, Decl(specedNoStackBlown.ts, 22, 56))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
+
+        : (value: INPUT) => SpecArray<INPUT, ROOTINPUT>;
+>value : Symbol(value, Decl(specedNoStackBlown.ts, 22, 11))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
+
+export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>}>;
+>SpecObject : Symbol(SpecObject, Decl(specedNoStackBlown.ts, 22, 56))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 24, 23))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 24, 29))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(specedNoStackBlown.ts, 24, 59))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 24, 23))
+>SpecValue : Symbol(SpecValue, Decl(specedNoStackBlown.ts, 24, 115))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 24, 23))
+>key : Symbol(key, Decl(specedNoStackBlown.ts, 24, 59))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 24, 29))
+
+export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<any>]
+>SpecValue : Symbol(SpecValue, Decl(specedNoStackBlown.ts, 24, 115))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+    ? SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT>
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+>SpecFunction : Symbol(SpecFunction, Decl(specedNoStackBlown.ts, 16, 78))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+
+        : [INPUT] extends [object]
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+
+            ? SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT> | SpecObject<INPUT, ROOTINPUT>
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+>SpecFunction : Symbol(SpecFunction, Decl(specedNoStackBlown.ts, 16, 78))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+>SpecObject : Symbol(SpecObject, Decl(specedNoStackBlown.ts, 22, 56))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+
+            : SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT>;
+>SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+>SpecFunction : Symbol(SpecFunction, Decl(specedNoStackBlown.ts, 16, 78))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
+>ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
+
+export type Result<INPUT, SPEC> = {[key in keyof INPUT]: true | any[] | Result<INPUT[key], any>};
+>Result : Symbol(Result, Decl(specedNoStackBlown.ts, 30, 75))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 32, 19))
+>SPEC : Symbol(SPEC, Decl(specedNoStackBlown.ts, 32, 25))
+>key : Symbol(key, Decl(specedNoStackBlown.ts, 32, 36))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 32, 19))
+>Result : Symbol(Result, Decl(specedNoStackBlown.ts, 30, 75))
+>INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 32, 19))
+>key : Symbol(key, Decl(specedNoStackBlown.ts, 32, 36))
+
+export default spected;
+>spected : Symbol(spected, Decl(specedNoStackBlown.ts, 0, 0))
+

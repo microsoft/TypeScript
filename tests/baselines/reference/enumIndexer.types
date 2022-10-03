@@ -1,0 +1,40 @@
+=== tests/cases/compiler/enumIndexer.ts ===
+enum MyEnumType {
+>MyEnumType : MyEnumType
+
+    foo, bar
+>foo : MyEnumType.foo
+>bar : MyEnumType.bar
+}
+var _arr = [{ key: 'foo' }, { key: 'bar' }]
+>_arr : { key: string; }[]
+>[{ key: 'foo' }, { key: 'bar' }] : { key: string; }[]
+>{ key: 'foo' } : { key: string; }
+>key : string
+>'foo' : "foo"
+>{ key: 'bar' } : { key: string; }
+>key : string
+>'bar' : "bar"
+
+var enumValue = MyEnumType.foo;
+>enumValue : MyEnumType
+>MyEnumType.foo : MyEnumType.foo
+>MyEnumType : typeof MyEnumType
+>foo : MyEnumType.foo
+
+var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
+>x : boolean[]
+>_arr.map(o => MyEnumType[o.key] === enumValue) : boolean[]
+>_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
+>_arr : { key: string; }[]
+>map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
+>o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
+>o : { key: string; }
+>MyEnumType[o.key] === enumValue : boolean
+>MyEnumType[o.key] : error
+>MyEnumType : typeof MyEnumType
+>o.key : string
+>o : { key: string; }
+>key : string
+>enumValue : MyEnumType
+

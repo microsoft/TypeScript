@@ -1,0 +1,8 @@
+=== tests/cases/compiler/b.js ===
+var x = "hello";
+>x : Symbol(x, Decl(b.js, 0, 3), Decl(a.ts, 0, 3))
+
+=== tests/cases/compiler/a.ts ===
+var x = 10; // Error reported
+>x : Symbol(x, Decl(b.js, 0, 3), Decl(a.ts, 0, 3))
+

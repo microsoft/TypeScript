@@ -1,0 +1,197 @@
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorGetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorPropertyIsError.ts(2,15): error TS1005: '(' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorSetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts(2,19): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts(3,14): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(2,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsStrictError.ts(4,16): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInClassComputedPropertyIsError.ts(2,14): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInClassComputedPropertyIsError.ts(2,14): error TS2693: 'yield' only refers to a type, but is being used as a value here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts(2,19): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(2,15): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/methodIsOk.ts (0 errors) ====
+    class C1 {
+        async * f() {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMethodNameIsOk.ts (0 errors) ====
+    class C2 {
+        async * await() {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldMethodNameIsOk.ts (0 errors) ====
+    class C3 {
+        async * yield() {
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts (1 errors) ====
+    class C4 {
+        async * f(await) {
+                  ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts (1 errors) ====
+    class C5 {
+        async * f(yield) {
+                  ~~~~~
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts (1 errors) ====
+    class C6 {
+        async * f(a = await 1) {
+                      ~~~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts (1 errors) ====
+    class C7 {
+        async * f(a = yield) {
+                      ~~~~~
+!!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedAsyncGeneratorIsOk.ts (0 errors) ====
+    class C8 {
+        async * f() {
+            async function * g() {
+            }
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts (1 errors) ====
+    class C9 {
+        async * f() {
+            function yield() {
+                     ~~~~~
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+            }
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts (1 errors) ====
+    class C10 {
+        async * f() {
+            const x = function yield() {
+                               ~~~~~
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+            };
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts (1 errors) ====
+    class C11 {
+        async * f() {
+            function await() {
+                     ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+            }
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts (1 errors) ====
+    class C12 {
+        async * f() {
+            const x = function await() {
+                               ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+            };
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts (0 errors) ====
+    class C13 {
+        async * f() {
+            yield;
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldWithValueIsOk.ts (0 errors) ====
+    class C14 {
+        async * f() {
+            yield 1;
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts (1 errors) ====
+    class C15 {
+        async * f() {
+            yield *;
+                   ~
+!!! error TS1109: Expression expected.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts (0 errors) ====
+    class C16 {
+        async * f() {
+            yield * [];
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitWithValueIsOk.ts (0 errors) ====
+    class C17 {
+        async * f() {
+            await 1;
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts (1 errors) ====
+    class C18 {
+        async * f() {
+            await;
+                 ~
+!!! error TS1109: Expression expected.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitAsTypeIsOk.ts (0 errors) ====
+    interface await {}
+    class C19 {
+        async * f() {
+            let x: await;
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsStrictError.ts (1 errors) ====
+    interface yield {}
+    class C20 {
+        async * f() {
+            let x: yield;
+                   ~~~~~
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInClassComputedPropertyIsError.ts (2 errors) ====
+    class C21 {
+        async * [yield]() {
+                 ~~~~~
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                 ~~~~~
+!!! error TS2693: 'yield' only refers to a type, but is being used as a value here.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts (0 errors) ====
+    class C22 {
+        async * f() {
+            const x = { [yield]: 1 };
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorGetAccessorIsError.ts (1 errors) ====
+    class C23 {
+        async * get x() {
+                    ~
+!!! error TS1005: '(' expected.
+            return 1;
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorSetAccessorIsError.ts (1 errors) ====
+    class C24 {
+        async * set x(value: number) {
+                    ~
+!!! error TS1005: '(' expected.
+        }
+    }
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorPropertyIsError.ts (1 errors) ====
+    class C25 {
+        async * x = 1;
+                  ~
+!!! error TS1005: '(' expected.
+    }
+    

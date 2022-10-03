@@ -1,0 +1,39 @@
+=== tests/cases/compiler/overloadOnConstConstraintChecks3.ts ===
+class A { private x = 1} 
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks3.ts, 0, 0))
+>x : Symbol(A.x, Decl(overloadOnConstConstraintChecks3.ts, 0, 9))
+
+class B extends A {}
+>B : Symbol(B, Decl(overloadOnConstConstraintChecks3.ts, 0, 24))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks3.ts, 0, 0))
+
+class C extends A {
+>C : Symbol(C, Decl(overloadOnConstConstraintChecks3.ts, 1, 20))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks3.ts, 0, 0))
+
+    public foo() { }
+>foo : Symbol(C.foo, Decl(overloadOnConstConstraintChecks3.ts, 2, 19))
+}
+function foo(name: 'hi'): B;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks3.ts, 4, 1), Decl(overloadOnConstConstraintChecks3.ts, 5, 28), Decl(overloadOnConstConstraintChecks3.ts, 6, 29), Decl(overloadOnConstConstraintChecks3.ts, 7, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks3.ts, 5, 13))
+>B : Symbol(B, Decl(overloadOnConstConstraintChecks3.ts, 0, 24))
+
+function foo(name: 'bye'): C;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks3.ts, 4, 1), Decl(overloadOnConstConstraintChecks3.ts, 5, 28), Decl(overloadOnConstConstraintChecks3.ts, 6, 29), Decl(overloadOnConstConstraintChecks3.ts, 7, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks3.ts, 6, 13))
+>C : Symbol(C, Decl(overloadOnConstConstraintChecks3.ts, 1, 20))
+
+function foo(name: string): A;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks3.ts, 4, 1), Decl(overloadOnConstConstraintChecks3.ts, 5, 28), Decl(overloadOnConstConstraintChecks3.ts, 6, 29), Decl(overloadOnConstConstraintChecks3.ts, 7, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks3.ts, 7, 13))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks3.ts, 0, 0))
+
+function foo(name: any): A {
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks3.ts, 4, 1), Decl(overloadOnConstConstraintChecks3.ts, 5, 28), Decl(overloadOnConstConstraintChecks3.ts, 6, 29), Decl(overloadOnConstConstraintChecks3.ts, 7, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks3.ts, 8, 13))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks3.ts, 0, 0))
+
+    return null;
+}
+

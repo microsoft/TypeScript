@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/bug27025.js ===
+export class Alpha { }
+>Alpha : Symbol(Alpha, Decl(bug27025.js, 0, 0))
+
+export class Beta {
+>Beta : Symbol(Beta, Decl(bug27025.js, 0, 22))
+
+  /**
+   * @constructor
+   */
+  constructor() {
+  }
+}
+
+const arr = [Alpha, Beta];
+>arr : Symbol(arr, Decl(bug27025.js, 9, 5))
+>Alpha : Symbol(Alpha, Decl(bug27025.js, 0, 0))
+>Beta : Symbol(Beta, Decl(bug27025.js, 0, 22))
+

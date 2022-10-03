@@ -1,0 +1,17 @@
+=== tests/cases/compiler/genericTypeAssertions3.ts ===
+var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find dotted symbol T' on x's annotation in the type assertion instead of no error
+>r : Symbol(r, Decl(genericTypeAssertions3.ts, 0, 3))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
+>x : Symbol(x, Decl(genericTypeAssertions3.ts, 0, 14))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
+>x : Symbol(x, Decl(genericTypeAssertions3.ts, 0, 29))
+
+var s = < <T>(x: T) => T > ((x: any) => { return null; }); // no error
+>s : Symbol(s, Decl(genericTypeAssertions3.ts, 1, 3))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
+>x : Symbol(x, Decl(genericTypeAssertions3.ts, 1, 14))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
+>T : Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
+>x : Symbol(x, Decl(genericTypeAssertions3.ts, 1, 29))
+

@@ -1,0 +1,281 @@
+=== tests/cases/conformance/salsa/a.ts ===
+var a: any;
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var t: [any, any];
+>t : Symbol(t, Decl(a.ts, 1, 3), Decl(a.js, 2, 3), Decl(a.js, 11, 3), Decl(a.js, 12, 3), Decl(a.js, 13, 3))
+
+declare function f1<T>(t: T): T
+>f1 : Symbol(f1, Decl(a.ts, 1, 18))
+>T : Symbol(T, Decl(a.ts, 2, 20))
+>t : Symbol(t, Decl(a.ts, 2, 23))
+>T : Symbol(T, Decl(a.ts, 2, 20))
+>T : Symbol(T, Decl(a.ts, 2, 20))
+
+declare function f2<T>(t: T[]): T;
+>f2 : Symbol(f2, Decl(a.ts, 2, 31))
+>T : Symbol(T, Decl(a.ts, 3, 20))
+>t : Symbol(t, Decl(a.ts, 3, 23))
+>T : Symbol(T, Decl(a.ts, 3, 20))
+>T : Symbol(T, Decl(a.ts, 3, 20))
+
+declare function f3<T, U>(t: [T, U]): [T, U];
+>f3 : Symbol(f3, Decl(a.ts, 3, 34))
+>T : Symbol(T, Decl(a.ts, 4, 20))
+>U : Symbol(U, Decl(a.ts, 4, 22))
+>t : Symbol(t, Decl(a.ts, 4, 26))
+>T : Symbol(T, Decl(a.ts, 4, 20))
+>U : Symbol(U, Decl(a.ts, 4, 22))
+>T : Symbol(T, Decl(a.ts, 4, 20))
+>U : Symbol(U, Decl(a.ts, 4, 22))
+
+declare function f4<T>(x: { bar: T; baz: T }): T;
+>f4 : Symbol(f4, Decl(a.ts, 4, 45))
+>T : Symbol(T, Decl(a.ts, 5, 20))
+>x : Symbol(x, Decl(a.ts, 5, 23))
+>bar : Symbol(bar, Decl(a.ts, 5, 27))
+>T : Symbol(T, Decl(a.ts, 5, 20))
+>baz : Symbol(baz, Decl(a.ts, 5, 35))
+>T : Symbol(T, Decl(a.ts, 5, 20))
+>T : Symbol(T, Decl(a.ts, 5, 20))
+
+declare function f5<T>(x: (a: T) => void): T;
+>f5 : Symbol(f5, Decl(a.ts, 5, 49))
+>T : Symbol(T, Decl(a.ts, 6, 20))
+>x : Symbol(x, Decl(a.ts, 6, 23))
+>a : Symbol(a, Decl(a.ts, 6, 27))
+>T : Symbol(T, Decl(a.ts, 6, 20))
+>T : Symbol(T, Decl(a.ts, 6, 20))
+
+declare function f6<T>(x: new (a: T) => {}): T;
+>f6 : Symbol(f6, Decl(a.ts, 6, 45))
+>T : Symbol(T, Decl(a.ts, 7, 20))
+>x : Symbol(x, Decl(a.ts, 7, 23))
+>a : Symbol(a, Decl(a.ts, 7, 31))
+>T : Symbol(T, Decl(a.ts, 7, 20))
+>T : Symbol(T, Decl(a.ts, 7, 20))
+
+declare function f7<T>(x: (a: any) => a is T): T;
+>f7 : Symbol(f7, Decl(a.ts, 7, 47))
+>T : Symbol(T, Decl(a.ts, 8, 20))
+>x : Symbol(x, Decl(a.ts, 8, 23))
+>a : Symbol(a, Decl(a.ts, 8, 27))
+>a : Symbol(a, Decl(a.ts, 8, 27))
+>T : Symbol(T, Decl(a.ts, 8, 20))
+>T : Symbol(T, Decl(a.ts, 8, 20))
+
+declare function f8<T>(x: () => T): T;
+>f8 : Symbol(f8, Decl(a.ts, 8, 49))
+>T : Symbol(T, Decl(a.ts, 9, 20))
+>x : Symbol(x, Decl(a.ts, 9, 23))
+>T : Symbol(T, Decl(a.ts, 9, 20))
+>T : Symbol(T, Decl(a.ts, 9, 20))
+
+declare function f9<T>(x: new () => T): T;
+>f9 : Symbol(f9, Decl(a.ts, 9, 38))
+>T : Symbol(T, Decl(a.ts, 10, 20))
+>x : Symbol(x, Decl(a.ts, 10, 23))
+>T : Symbol(T, Decl(a.ts, 10, 20))
+>T : Symbol(T, Decl(a.ts, 10, 20))
+
+declare function f10<T>(x: { [x: string]: T }): T;
+>f10 : Symbol(f10, Decl(a.ts, 10, 42))
+>T : Symbol(T, Decl(a.ts, 11, 21))
+>x : Symbol(x, Decl(a.ts, 11, 24))
+>x : Symbol(x, Decl(a.ts, 11, 30))
+>T : Symbol(T, Decl(a.ts, 11, 21))
+>T : Symbol(T, Decl(a.ts, 11, 21))
+
+declare function f11<T>(x: { [x: number]: T }): T;
+>f11 : Symbol(f11, Decl(a.ts, 11, 50))
+>T : Symbol(T, Decl(a.ts, 12, 21))
+>x : Symbol(x, Decl(a.ts, 12, 24))
+>x : Symbol(x, Decl(a.ts, 12, 30))
+>T : Symbol(T, Decl(a.ts, 12, 21))
+>T : Symbol(T, Decl(a.ts, 12, 21))
+
+declare function f12<T, U>(x: T | U): [T, U];
+>f12 : Symbol(f12, Decl(a.ts, 12, 50))
+>T : Symbol(T, Decl(a.ts, 13, 21))
+>U : Symbol(U, Decl(a.ts, 13, 23))
+>x : Symbol(x, Decl(a.ts, 13, 27))
+>T : Symbol(T, Decl(a.ts, 13, 21))
+>U : Symbol(U, Decl(a.ts, 13, 23))
+>T : Symbol(T, Decl(a.ts, 13, 21))
+>U : Symbol(U, Decl(a.ts, 13, 23))
+
+declare function f13<T, U>(x: T & U): [T, U];
+>f13 : Symbol(f13, Decl(a.ts, 13, 45))
+>T : Symbol(T, Decl(a.ts, 14, 21))
+>U : Symbol(U, Decl(a.ts, 14, 23))
+>x : Symbol(x, Decl(a.ts, 14, 27))
+>T : Symbol(T, Decl(a.ts, 14, 21))
+>U : Symbol(U, Decl(a.ts, 14, 23))
+>T : Symbol(T, Decl(a.ts, 14, 21))
+>U : Symbol(U, Decl(a.ts, 14, 23))
+
+declare function f14<T, U>(x: { a: T | U, b: U & T }): [T, U];
+>f14 : Symbol(f14, Decl(a.ts, 14, 45))
+>T : Symbol(T, Decl(a.ts, 15, 21))
+>U : Symbol(U, Decl(a.ts, 15, 23))
+>x : Symbol(x, Decl(a.ts, 15, 27))
+>a : Symbol(a, Decl(a.ts, 15, 31))
+>T : Symbol(T, Decl(a.ts, 15, 21))
+>U : Symbol(U, Decl(a.ts, 15, 23))
+>b : Symbol(b, Decl(a.ts, 15, 41))
+>U : Symbol(U, Decl(a.ts, 15, 23))
+>T : Symbol(T, Decl(a.ts, 15, 21))
+>T : Symbol(T, Decl(a.ts, 15, 21))
+>U : Symbol(U, Decl(a.ts, 15, 23))
+
+interface I<T> { }
+>I : Symbol(I, Decl(a.ts, 15, 62))
+>T : Symbol(T, Decl(a.ts, 16, 12))
+
+declare function f15<T>(x: I<T>): T;
+>f15 : Symbol(f15, Decl(a.ts, 16, 18))
+>T : Symbol(T, Decl(a.ts, 17, 21))
+>x : Symbol(x, Decl(a.ts, 17, 24))
+>I : Symbol(I, Decl(a.ts, 15, 62))
+>T : Symbol(T, Decl(a.ts, 17, 21))
+>T : Symbol(T, Decl(a.ts, 17, 21))
+
+declare function f16<T>(x: Partial<T>): T;
+>f16 : Symbol(f16, Decl(a.ts, 17, 36))
+>T : Symbol(T, Decl(a.ts, 18, 21))
+>x : Symbol(x, Decl(a.ts, 18, 24))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(a.ts, 18, 21))
+>T : Symbol(T, Decl(a.ts, 18, 21))
+
+declare function f17<T, K>(x: {[P in keyof T]: K}): T;
+>f17 : Symbol(f17, Decl(a.ts, 18, 42))
+>T : Symbol(T, Decl(a.ts, 19, 21))
+>K : Symbol(K, Decl(a.ts, 19, 23))
+>x : Symbol(x, Decl(a.ts, 19, 27))
+>P : Symbol(P, Decl(a.ts, 19, 32))
+>T : Symbol(T, Decl(a.ts, 19, 21))
+>K : Symbol(K, Decl(a.ts, 19, 23))
+>T : Symbol(T, Decl(a.ts, 19, 21))
+
+declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;
+>f18 : Symbol(f18, Decl(a.ts, 19, 54))
+>T : Symbol(T, Decl(a.ts, 20, 21))
+>K : Symbol(K, Decl(a.ts, 20, 23))
+>T : Symbol(T, Decl(a.ts, 20, 21))
+>x : Symbol(x, Decl(a.ts, 20, 43))
+>P : Symbol(P, Decl(a.ts, 20, 48))
+>K : Symbol(K, Decl(a.ts, 20, 23))
+>T : Symbol(T, Decl(a.ts, 20, 21))
+>P : Symbol(P, Decl(a.ts, 20, 48))
+>T : Symbol(T, Decl(a.ts, 20, 21))
+
+declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;
+>f19 : Symbol(f19, Decl(a.ts, 20, 67))
+>T : Symbol(T, Decl(a.ts, 21, 21))
+>K : Symbol(K, Decl(a.ts, 21, 23))
+>T : Symbol(T, Decl(a.ts, 21, 21))
+>k : Symbol(k, Decl(a.ts, 21, 43))
+>K : Symbol(K, Decl(a.ts, 21, 23))
+>x : Symbol(x, Decl(a.ts, 21, 48))
+>T : Symbol(T, Decl(a.ts, 21, 21))
+>K : Symbol(K, Decl(a.ts, 21, 23))
+>T : Symbol(T, Decl(a.ts, 21, 21))
+
+=== tests/cases/conformance/salsa/a.js ===
+var a = f1(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f1 : Symbol(f1, Decl(a.ts, 1, 18))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f2(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f2 : Symbol(f2, Decl(a.ts, 2, 31))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var t = f3(a);
+>t : Symbol(t, Decl(a.ts, 1, 3), Decl(a.js, 2, 3), Decl(a.js, 11, 3), Decl(a.js, 12, 3), Decl(a.js, 13, 3))
+>f3 : Symbol(f3, Decl(a.ts, 3, 34))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f4(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f4 : Symbol(f4, Decl(a.ts, 4, 45))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f5(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f5 : Symbol(f5, Decl(a.ts, 5, 49))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f6(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f6 : Symbol(f6, Decl(a.ts, 6, 45))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f7(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f7 : Symbol(f7, Decl(a.ts, 7, 47))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f8(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f8 : Symbol(f8, Decl(a.ts, 8, 49))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f9(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f9 : Symbol(f9, Decl(a.ts, 9, 38))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f10(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f10 : Symbol(f10, Decl(a.ts, 10, 42))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f11(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f11 : Symbol(f11, Decl(a.ts, 11, 50))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var t = f12(a);
+>t : Symbol(t, Decl(a.ts, 1, 3), Decl(a.js, 2, 3), Decl(a.js, 11, 3), Decl(a.js, 12, 3), Decl(a.js, 13, 3))
+>f12 : Symbol(f12, Decl(a.ts, 12, 50))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var t = f13(a);
+>t : Symbol(t, Decl(a.ts, 1, 3), Decl(a.js, 2, 3), Decl(a.js, 11, 3), Decl(a.js, 12, 3), Decl(a.js, 13, 3))
+>f13 : Symbol(f13, Decl(a.ts, 13, 45))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var t = f14(a);
+>t : Symbol(t, Decl(a.ts, 1, 3), Decl(a.js, 2, 3), Decl(a.js, 11, 3), Decl(a.js, 12, 3), Decl(a.js, 13, 3))
+>f14 : Symbol(f14, Decl(a.ts, 14, 45))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f15(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f15 : Symbol(f15, Decl(a.ts, 16, 18))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f16(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f16 : Symbol(f16, Decl(a.ts, 17, 36))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f17(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f17 : Symbol(f17, Decl(a.ts, 18, 42))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f18(a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f18 : Symbol(f18, Decl(a.ts, 19, 54))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+
+var a = f19(a, a);
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>f19 : Symbol(f19, Decl(a.ts, 20, 67))
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+>a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
+

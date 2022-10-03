@@ -1,0 +1,27 @@
+=== tests/cases/conformance/controlFlow/controlFlowElementAccess.ts ===
+let x: { o: boolean } = { o: false }
+>x : Symbol(x, Decl(controlFlowElementAccess.ts, 0, 3))
+>o : Symbol(o, Decl(controlFlowElementAccess.ts, 0, 8))
+>o : Symbol(o, Decl(controlFlowElementAccess.ts, 0, 25))
+
+if (x['o'] === false) {
+>x : Symbol(x, Decl(controlFlowElementAccess.ts, 0, 3))
+>'o' : Symbol(o, Decl(controlFlowElementAccess.ts, 0, 8))
+
+    x['o'] = true
+>x : Symbol(x, Decl(controlFlowElementAccess.ts, 0, 3))
+>'o' : Symbol(o, Decl(controlFlowElementAccess.ts, 0, 8))
+}
+
+const y: [number, number] = [0, 0];
+>y : Symbol(y, Decl(controlFlowElementAccess.ts, 5, 5))
+
+if (y[0] === 0) {
+>y : Symbol(y, Decl(controlFlowElementAccess.ts, 5, 5))
+>0 : Symbol(0)
+
+    y[0] = -1;
+>y : Symbol(y, Decl(controlFlowElementAccess.ts, 5, 5))
+>0 : Symbol(0)
+}
+

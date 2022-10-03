@@ -1,0 +1,52 @@
+=== tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts ===
+// In the body of a get accessor with no return type annotation,
+// if a matching set accessor exists and that set accessor has a parameter type annotation,
+// return expressions are contextually typed by the type given in the set accessor's parameter type annotation.
+
+class C {
+>C : C
+
+    set X(x: number) { }
+>X : number
+>x : number
+
+    get X() {
+>X : number
+
+        return "string";  // Error; get contextual type by set accessor parameter type annotation
+>"string" : "string"
+    }
+
+    set Y(y) { }
+>Y : boolean
+>y : boolean
+
+    get Y() {
+>Y : boolean
+
+        return true;
+>true : true
+    }
+
+    set W(w) { }
+>W : boolean
+>w : boolean
+
+    get W(): boolean {
+>W : boolean
+
+        return true;
+>true : true
+    }
+
+    set Z(z: number) { }
+>Z : number
+>z : number
+
+    get Z() {
+>Z : number
+
+        return 1;
+>1 : 1
+    }
+}

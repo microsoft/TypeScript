@@ -1,0 +1,17 @@
+=== tests/cases/compiler/fatArrowfunctionAsType.ts ===
+declare var b: <T>(x: T) => void ;
+>b : <T>(x: T) => void
+>x : T
+
+var c: <T>(x: T) => void = function <T>(x: T) { return 42; }
+>c : <T>(x: T) => void
+>x : T
+>function <T>(x: T) { return 42; } : <T>(x: T) => number
+>x : T
+>42 : 42
+
+b = c;
+>b = c : <T>(x: T) => void
+>b : <T>(x: T) => void
+>c : <T>(x: T) => void
+

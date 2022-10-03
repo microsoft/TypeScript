@@ -1,0 +1,28 @@
+=== tests/cases/conformance/es2019/globalThisUnknown.ts ===
+declare let win: Window & typeof globalThis;
+>win : Symbol(win, Decl(globalThisUnknown.ts, 0, 11))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+
+// this access should be an error
+win.hi
+>win : Symbol(win, Decl(globalThisUnknown.ts, 0, 11))
+
+// these two should be fine, with type any
+this.hi
+>this : Symbol(globalThis)
+
+globalThis.hi
+>globalThis : Symbol(globalThis)
+
+// element access is always ok without noImplicitAny
+win['hi']
+>win : Symbol(win, Decl(globalThisUnknown.ts, 0, 11))
+
+this['hi']
+>this : Symbol(globalThis)
+
+globalThis['hi']
+>globalThis : Symbol(globalThis)
+
+

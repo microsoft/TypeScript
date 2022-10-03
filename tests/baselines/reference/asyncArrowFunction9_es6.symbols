@@ -1,0 +1,7 @@
+=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts ===
+var foo = async (a = await => await): Promise<void> => {
+>foo : Symbol(foo, Decl(asyncArrowFunction9_es6.ts, 0, 3))
+>await : Symbol(await, Decl(asyncArrowFunction9_es6.ts, 0, 20))
+>await : Symbol(await, Decl(asyncArrowFunction9_es6.ts, 0, 20))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(asyncArrowFunction9_es6.ts, 0, 37))
+}

@@ -1,0 +1,101 @@
+=== tests/cases/compiler/main.ts ===
+/// <reference path="d.d.ts"/>
+import {A} from "./a";
+>A : Symbol(A, Decl(main.ts, 1, 8))
+
+import "D";
+import "e";
+
+let a: A;
+>a : Symbol(a, Decl(main.ts, 5, 3))
+>A : Symbol(A, Decl(main.ts, 1, 8))
+
+let b = a.getB().x.toFixed();
+>b : Symbol(b, Decl(main.ts, 6, 3))
+>a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.getB().x : Symbol(B.x, Decl(b.ts, 0, 16))
+>a.getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
+>a : Symbol(a, Decl(main.ts, 5, 3))
+>getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
+>x : Symbol(B.x, Decl(b.ts, 0, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+let c = a.getCls().y.toLowerCase();
+>c : Symbol(c, Decl(main.ts, 7, 3))
+>a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>a.getCls().y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
+>a.getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>a : Symbol(a, Decl(main.ts, 5, 3))
+>getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/compiler/a.ts ===
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
+
+=== tests/cases/compiler/b.ts ===
+export class B {x: number;}
+>B : Symbol(B, Decl(b.ts, 0, 0))
+>x : Symbol(B.x, Decl(b.ts, 0, 16))
+
+=== tests/cases/compiler/c.d.ts ===
+declare module "C" {
+>"C" : Symbol("C", Decl(c.d.ts, 0, 0))
+
+    class Cls {y: string; }
+>Cls : Symbol(Cls, Decl(c.d.ts, 0, 20))
+>y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
+}
+
+=== tests/cases/compiler/d.d.ts ===
+declare module "D" {
+>"D" : Symbol("D", Decl(d.d.ts, 0, 0))
+
+    import {A} from "a";
+>A : Symbol(A, Decl(d.d.ts, 1, 12))
+
+    import {B} from "b";
+>B : Symbol(B, Decl(d.d.ts, 2, 12))
+
+    module "a" {
+>"a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
+
+        interface A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
+
+            getB(): B;
+>getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
+>B : Symbol(B, Decl(d.d.ts, 2, 12))
+        }
+    }
+}
+
+=== tests/cases/compiler/e.ts ===
+/// <reference path="c.d.ts"/>
+import {A} from "./a";
+>A : Symbol(A, Decl(e.ts, 1, 8))
+
+import {Cls} from "C";
+>Cls : Symbol(Cls, Decl(e.ts, 2, 8))
+
+A.prototype.getCls = function () { return undefined; }
+>A.prototype.getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(e.ts, 1, 8))
+>prototype : Symbol(A.prototype)
+>getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>undefined : Symbol(undefined)
+
+declare module "./a" {
+>"./a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
+
+    interface A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
+
+        getCls(): Cls;
+>getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>Cls : Symbol(Cls, Decl(e.ts, 2, 8))
+    }
+}
+

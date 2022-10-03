@@ -1,0 +1,49 @@
+=== tests/cases/compiler/model/index.ts ===
+export * from "./account";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/model/account.ts ===
+export interface Account {
+>Account : Symbol(Account, Decl(account.ts, 0, 0))
+
+    myAccNum: number;
+>myAccNum : Symbol(Account.myAccNum, Decl(account.ts, 0, 26))
+}
+interface Account2 {
+>Account2 : Symbol(Account2, Decl(account.ts, 2, 1))
+
+    myAccNum: number;
+>myAccNum : Symbol(Account2.myAccNum, Decl(account.ts, 3, 20))
+}
+export { Account2 as Acc };
+>Account2 : Symbol(Account2, Decl(account.ts, 2, 1))
+>Acc : Symbol(Acc, Decl(account.ts, 6, 8))
+
+=== tests/cases/compiler/index.ts ===
+declare global {
+>global : Symbol(global, Decl(index.ts, 0, 0))
+
+    interface Account {
+>Account : Symbol(Account, Decl(index.ts, 0, 16))
+
+        someProp: number;
+>someProp : Symbol(Account.someProp, Decl(index.ts, 1, 23))
+    }
+    interface Acc {
+>Acc : Symbol(Acc, Decl(index.ts, 3, 5))
+
+        someProp: number;
+>someProp : Symbol(Acc.someProp, Decl(index.ts, 4, 19))
+    }
+}
+import * as model from "./model";
+>model : Symbol(model, Decl(index.ts, 8, 6))
+
+export const func = (account: model.Account, acc2: model.Acc) => {};
+>func : Symbol(func, Decl(index.ts, 9, 12))
+>account : Symbol(account, Decl(index.ts, 9, 21))
+>model : Symbol(model, Decl(index.ts, 8, 6))
+>Account : Symbol(model.Account, Decl(account.ts, 0, 0))
+>acc2 : Symbol(acc2, Decl(index.ts, 9, 44))
+>model : Symbol(model, Decl(index.ts, 8, 6))
+>Acc : Symbol(model.Acc, Decl(account.ts, 6, 8))
+

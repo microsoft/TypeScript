@@ -1,0 +1,117 @@
+=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts ===
+// ++ operator on number type
+var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+
+var NUMBER1: number[] = [1, 2];
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
+
+function foo(): number { return 1; }
+>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 31))
+
+class A {
+>A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+
+    public a: number;
+>a : Symbol(A.a, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 6, 9))
+
+    static foo() { return 1; }
+>foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+}
+module M {
+>M : Symbol(M, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 9, 1))
+
+    export var n: number;
+>n : Symbol(n, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 11, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 14, 3))
+>A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+
+//number type var
+var ResultIsNumber1 = ++NUMBER1;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 17, 3))
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
+
+var ResultIsNumber2 = NUMBER1++;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 18, 3))
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
+
+// number type literal
+var ResultIsNumber3 = ++1;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 21, 3))
+
+var ResultIsNumber4 = ++{ x: 1, y: 2};
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 22, 3))
+>x : Symbol(x, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 22, 25))
+>y : Symbol(y, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 22, 31))
+
+var ResultIsNumber5 = ++{ x: 1, y: (n: number) => { return n; } };
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 23, 3))
+>x : Symbol(x, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 23, 25))
+>y : Symbol(y, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 23, 31))
+>n : Symbol(n, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 23, 36))
+>n : Symbol(n, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 23, 36))
+
+var ResultIsNumber6 = 1++;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 25, 3))
+
+var ResultIsNumber7 = { x: 1, y: 2 }++;
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 26, 3))
+>x : Symbol(x, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 26, 23))
+>y : Symbol(y, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 26, 29))
+
+var ResultIsNumber8 = { x: 1, y: (n: number) => { return n; } }++;
+>ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 27, 3))
+>x : Symbol(x, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 27, 23))
+>y : Symbol(y, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 27, 29))
+>n : Symbol(n, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 27, 34))
+>n : Symbol(n, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 27, 34))
+
+// number type expressions
+var ResultIsNumber9 = ++foo();
+>ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 30, 3))
+>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 31))
+
+var ResultIsNumber10 = ++A.foo();
+>ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 31, 3))
+>A.foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+>A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+>foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+
+var ResultIsNumber11 = ++(NUMBER + NUMBER);
+>ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 32, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+
+var ResultIsNumber12 = foo()++;
+>ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 34, 3))
+>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 31))
+
+var ResultIsNumber13 = A.foo()++;
+>ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 35, 3))
+>A.foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+>A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+>foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+
+var ResultIsNumber14 = (NUMBER + NUMBER)++;
+>ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 36, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+
+// miss assignment operator
+++1;
+++NUMBER1;
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
+
+++foo();
+>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 31))
+
+1++;
+NUMBER1++;
+>NUMBER1 : Symbol(NUMBER1, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
+
+foo()++;
+>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 2, 31))
+

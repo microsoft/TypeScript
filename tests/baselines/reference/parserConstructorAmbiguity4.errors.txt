@@ -1,0 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity4.ts(1,10): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity4.ts(1,14): error TS2304: Cannot find name 'B'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity4.ts(1,18): error TS2304: Cannot find name 'C'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity4.ts (3 errors) ====
+    new Date<A ? B : C
+             ~
+!!! error TS2304: Cannot find name 'A'.
+                 ~
+!!! error TS2304: Cannot find name 'B'.
+                     ~
+!!! error TS2304: Cannot find name 'C'.

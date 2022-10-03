@@ -1,0 +1,74 @@
+tests/cases/conformance/jsdoc/foo.js(7,10): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/foo.js(16,60): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(21,20): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/foo.js(31,10): error TS2534: A function returning 'never' cannot have a reachable end point.
+tests/cases/conformance/jsdoc/foo.js(37,5): error TS2322: Type 'string' is not assignable to type 'never'.
+tests/cases/conformance/jsdoc/foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
+tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
+
+
+==== tests/cases/conformance/jsdoc/foo.js (8 errors) ====
+    /**
+     * @callback FunctionReturningPromise
+     * @returns {Promise<number>}
+     */
+    
+    /** @type {FunctionReturningPromise} */
+    function testPromise1() {
+             ~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        console.log("Nope");
+    }
+    
+    /** @type {FunctionReturningPromise} */
+    async function testPromise2() {
+        return "asd";
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    }
+    
+    var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
+                                                               ~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        console.log("test")
+    }
+    
+    /** @type {FunctionReturningPromise} */
+    var testPromise4 = function() {
+                       ~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        console.log("test")
+    }
+    
+    /**
+     * @callback FunctionReturningNever
+     * @returns {never}
+     */
+    
+    /** @type {FunctionReturningNever} */
+    function testNever1() {
+             ~~~~~~~~~~
+!!! error TS2534: A function returning 'never' cannot have a reachable end point.
+    
+    }
+    
+    /** @type {FunctionReturningNever} */
+    async function testNever2() {
+        return "asd";
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
+    }
+    
+    var testNever3 = /** @type {FunctionReturningNever} */ function() {
+                                                           ~~~~~~~~
+!!! error TS2534: A function returning 'never' cannot have a reachable end point.
+        console.log("test")
+    }
+    
+    /** @type {FunctionReturningNever} */
+    var testNever4 = function() {
+                     ~~~~~~~~
+!!! error TS2534: A function returning 'never' cannot have a reachable end point.
+        console.log("test")
+    }

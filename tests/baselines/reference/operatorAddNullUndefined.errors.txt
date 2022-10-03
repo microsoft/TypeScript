@@ -1,0 +1,56 @@
+tests/cases/compiler/operatorAddNullUndefined.ts(2,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(3,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+tests/cases/compiler/operatorAddNullUndefined.ts(4,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(5,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/compiler/operatorAddNullUndefined.ts(6,10): error TS2365: Operator '+' cannot be applied to types '1' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(7,10): error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
+tests/cases/compiler/operatorAddNullUndefined.ts(8,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1'.
+tests/cases/compiler/operatorAddNullUndefined.ts(9,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and '1'.
+tests/cases/compiler/operatorAddNullUndefined.ts(14,11): error TS2365: Operator '+' cannot be applied to types 'null' and 'E.x'.
+tests/cases/compiler/operatorAddNullUndefined.ts(15,11): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.x'.
+tests/cases/compiler/operatorAddNullUndefined.ts(16,11): error TS2365: Operator '+' cannot be applied to types 'E.x' and 'null'.
+tests/cases/compiler/operatorAddNullUndefined.ts(17,11): error TS2365: Operator '+' cannot be applied to types 'E.x' and 'undefined'.
+
+
+==== tests/cases/compiler/operatorAddNullUndefined.ts (12 errors) ====
+    enum E { x }
+    var x1 = null + null;
+             ~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+    var x2 = null + undefined;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+    var x3 = undefined + null;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'null'.
+    var x4 = undefined + undefined;
+             ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+    var x5 = 1 + null;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1' and 'null'.
+    var x6 = 1 + undefined;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
+    var x7 = null + 1;
+             ~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and '1'.
+    var x8 = undefined + 1;
+             ~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and '1'.
+    var x9 = "test" + null;
+    var x10 = "test" + undefined;
+    var x11 = null + "test";
+    var x12 = undefined + "test";
+    var x13 = null + E.x
+              ~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'E.x'.
+    var x14 = undefined + E.x
+              ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E.x'.
+    var x15 = E.x + null
+              ~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.x' and 'null'.
+    var x16 = E.x + undefined
+              ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'E.x' and 'undefined'.

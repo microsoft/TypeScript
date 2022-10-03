@@ -1,0 +1,28 @@
+=== tests/cases/compiler/genericArray1.ts ===
+/*
+var n: number[];
+
+interface Array<T> {
+map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+}
+
+interface String{
+	length: number;
+}
+*/
+
+var lengths = ["a", "b", "c"].map(x => x.length);
+>lengths : number[]
+>["a", "b", "c"].map(x => x.length) : number[]
+>["a", "b", "c"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b", "c"] : string[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+

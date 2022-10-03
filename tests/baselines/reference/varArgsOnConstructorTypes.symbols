@@ -1,0 +1,67 @@
+=== tests/cases/compiler/varArgsOnConstructorTypes.ts ===
+export class A {
+>A : Symbol(A, Decl(varArgsOnConstructorTypes.ts, 0, 0))
+
+    constructor(ctor) { }
+>ctor : Symbol(ctor, Decl(varArgsOnConstructorTypes.ts, 1, 16))
+}
+
+export class B extends A {
+>B : Symbol(B, Decl(varArgsOnConstructorTypes.ts, 2, 1))
+>A : Symbol(A, Decl(varArgsOnConstructorTypes.ts, 0, 0))
+
+    private p1: number;
+>p1 : Symbol(B.p1, Decl(varArgsOnConstructorTypes.ts, 4, 26))
+
+    private p2: string;
+>p2 : Symbol(B.p2, Decl(varArgsOnConstructorTypes.ts, 5, 23))
+
+    constructor(element: any, url: string) {
+>element : Symbol(element, Decl(varArgsOnConstructorTypes.ts, 8, 16))
+>url : Symbol(url, Decl(varArgsOnConstructorTypes.ts, 8, 29))
+
+       super(element);
+>super : Symbol(A, Decl(varArgsOnConstructorTypes.ts, 0, 0))
+>element : Symbol(element, Decl(varArgsOnConstructorTypes.ts, 8, 16))
+
+        this.p1 = element;
+>this.p1 : Symbol(B.p1, Decl(varArgsOnConstructorTypes.ts, 4, 26))
+>this : Symbol(B, Decl(varArgsOnConstructorTypes.ts, 2, 1))
+>p1 : Symbol(B.p1, Decl(varArgsOnConstructorTypes.ts, 4, 26))
+>element : Symbol(element, Decl(varArgsOnConstructorTypes.ts, 8, 16))
+
+        this.p2 = url;
+>this.p2 : Symbol(B.p2, Decl(varArgsOnConstructorTypes.ts, 5, 23))
+>this : Symbol(B, Decl(varArgsOnConstructorTypes.ts, 2, 1))
+>p2 : Symbol(B.p2, Decl(varArgsOnConstructorTypes.ts, 5, 23))
+>url : Symbol(url, Decl(varArgsOnConstructorTypes.ts, 8, 29))
+    }
+}
+
+export interface I1 {
+>I1 : Symbol(I1, Decl(varArgsOnConstructorTypes.ts, 13, 1))
+
+    register(inputClass: new(...params: any[]) => A);
+>register : Symbol(I1.register, Decl(varArgsOnConstructorTypes.ts, 15, 21), Decl(varArgsOnConstructorTypes.ts, 16, 53))
+>inputClass : Symbol(inputClass, Decl(varArgsOnConstructorTypes.ts, 16, 13))
+>params : Symbol(params, Decl(varArgsOnConstructorTypes.ts, 16, 29))
+>A : Symbol(A, Decl(varArgsOnConstructorTypes.ts, 0, 0))
+
+    register(inputClass: { new (...params: any[]): A; }[]);
+>register : Symbol(I1.register, Decl(varArgsOnConstructorTypes.ts, 15, 21), Decl(varArgsOnConstructorTypes.ts, 16, 53))
+>inputClass : Symbol(inputClass, Decl(varArgsOnConstructorTypes.ts, 17, 13))
+>params : Symbol(params, Decl(varArgsOnConstructorTypes.ts, 17, 32))
+>A : Symbol(A, Decl(varArgsOnConstructorTypes.ts, 0, 0))
+}
+
+
+var reg: I1;
+>reg : Symbol(reg, Decl(varArgsOnConstructorTypes.ts, 21, 3))
+>I1 : Symbol(I1, Decl(varArgsOnConstructorTypes.ts, 13, 1))
+
+reg.register(B);
+>reg.register : Symbol(I1.register, Decl(varArgsOnConstructorTypes.ts, 15, 21), Decl(varArgsOnConstructorTypes.ts, 16, 53))
+>reg : Symbol(reg, Decl(varArgsOnConstructorTypes.ts, 21, 3))
+>register : Symbol(I1.register, Decl(varArgsOnConstructorTypes.ts, 15, 21), Decl(varArgsOnConstructorTypes.ts, 16, 53))
+>B : Symbol(B, Decl(varArgsOnConstructorTypes.ts, 2, 1))
+

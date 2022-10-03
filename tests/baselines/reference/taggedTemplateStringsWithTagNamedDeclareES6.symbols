@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclareES6.ts ===
+function declare(x: any, ...ys: any[]) {
+>declare : Symbol(declare, Decl(taggedTemplateStringsWithTagNamedDeclareES6.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplateStringsWithTagNamedDeclareES6.ts, 0, 17))
+>ys : Symbol(ys, Decl(taggedTemplateStringsWithTagNamedDeclareES6.ts, 0, 24))
+}
+
+declare `Hello ${0} world!`;
+>declare : Symbol(declare, Decl(taggedTemplateStringsWithTagNamedDeclareES6.ts, 0, 0))
+

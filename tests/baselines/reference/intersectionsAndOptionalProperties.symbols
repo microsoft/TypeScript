@@ -1,0 +1,73 @@
+=== tests/cases/compiler/intersectionsAndOptionalProperties.ts ===
+declare let x: { a?: number, b: string };
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 0, 11))
+>a : Symbol(a, Decl(intersectionsAndOptionalProperties.ts, 0, 16))
+>b : Symbol(b, Decl(intersectionsAndOptionalProperties.ts, 0, 28))
+
+declare let y: { a: null, b: string };
+>y : Symbol(y, Decl(intersectionsAndOptionalProperties.ts, 1, 11))
+>a : Symbol(a, Decl(intersectionsAndOptionalProperties.ts, 1, 16))
+>b : Symbol(b, Decl(intersectionsAndOptionalProperties.ts, 1, 25))
+
+declare let z: { a: null } & { b: string };
+>z : Symbol(z, Decl(intersectionsAndOptionalProperties.ts, 2, 11))
+>a : Symbol(a, Decl(intersectionsAndOptionalProperties.ts, 2, 16))
+>b : Symbol(b, Decl(intersectionsAndOptionalProperties.ts, 2, 30))
+
+x = y;  // Error
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 0, 11))
+>y : Symbol(y, Decl(intersectionsAndOptionalProperties.ts, 1, 11))
+
+x = z;  // Error
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 0, 11))
+>z : Symbol(z, Decl(intersectionsAndOptionalProperties.ts, 2, 11))
+
+// Repro from #36604
+
+interface To {
+>To : Symbol(To, Decl(intersectionsAndOptionalProperties.ts, 5, 6))
+
+    field?: number;
+>field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+
+    anotherField: string;
+>anotherField : Symbol(To.anotherField, Decl(intersectionsAndOptionalProperties.ts, 10, 19))
+}
+
+type From =  { field: null } & Omit<To, 'field'>;
+>From : Symbol(From, Decl(intersectionsAndOptionalProperties.ts, 12, 1))
+>field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>To : Symbol(To, Decl(intersectionsAndOptionalProperties.ts, 5, 6))
+
+function foo(v: From) {
+>foo : Symbol(foo, Decl(intersectionsAndOptionalProperties.ts, 14, 49))
+>v : Symbol(v, Decl(intersectionsAndOptionalProperties.ts, 16, 13))
+>From : Symbol(From, Decl(intersectionsAndOptionalProperties.ts, 12, 1))
+
+    let x: To;
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 17, 7))
+>To : Symbol(To, Decl(intersectionsAndOptionalProperties.ts, 5, 6))
+
+    x = v;  // Error
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 17, 7))
+>v : Symbol(v, Decl(intersectionsAndOptionalProperties.ts, 16, 13))
+
+    x.field = v.field; // Error
+>x.field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+>x : Symbol(x, Decl(intersectionsAndOptionalProperties.ts, 17, 7))
+>field : Symbol(To.field, Decl(intersectionsAndOptionalProperties.ts, 9, 14))
+>v.field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
+>v : Symbol(v, Decl(intersectionsAndOptionalProperties.ts, 16, 13))
+>field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
+}
+
+// Repro from #38348
+
+const yy: number[] & [number, ...number[]] = [1];
+>yy : Symbol(yy, Decl(intersectionsAndOptionalProperties.ts, 24, 5))
+
+const xx: [number, ...number[]] = yy;
+>xx : Symbol(xx, Decl(intersectionsAndOptionalProperties.ts, 25, 5))
+>yy : Symbol(yy, Decl(intersectionsAndOptionalProperties.ts, 24, 5))
+

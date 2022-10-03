@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts ===
+class C {
+>C : C
+
+  M() {
+>M : () => void
+
+    super<T>(0);
+>super<T>(0) : void
+>super : any
+>0 : 0
+  }
+}

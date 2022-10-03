@@ -1,0 +1,352 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatement.js
+mapUrl: sourceMapValidationDestructuringVariableStatement.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatement.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.js
+sourceFile:sourceMapValidationDestructuringVariableStatement.ts
+-------------------------------------------------------------------
+>>>var hello = "hello";
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^^
+6 >                   ^
+7 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >interface Robot {
+  >    name: string;
+  >    skill: string;
+  >}
+  >declare var console: {
+  >    log(msg: string): void;
+  >}
+  >
+2 >var 
+3 >    hello
+4 >          = 
+5 >            "hello"
+6 >                   ;
+1 >Emitted(1, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(1, 10) Source(8, 10) + SourceIndex(0)
+4 >Emitted(1, 13) Source(8, 13) + SourceIndex(0)
+5 >Emitted(1, 20) Source(8, 20) + SourceIndex(0)
+6 >Emitted(1, 21) Source(8, 21) + SourceIndex(0)
+---
+>>>var robotA = { name: "mower", skill: "mowing" };
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^^
+6 >               ^^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^^^^^
+11>                                   ^^
+12>                                     ^^^^^^^^
+13>                                             ^^
+14>                                               ^
+15>                                                ^^^^^->
+1->
+  >
+2 >var 
+3 >    robotA
+4 >          : Robot = 
+5 >             { 
+6 >               name
+7 >                   : 
+8 >                     "mower"
+9 >                            , 
+10>                              skill
+11>                                   : 
+12>                                     "mowing"
+13>                                              }
+14>                                               ;
+1->Emitted(2, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(9, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(9, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(9, 21) + SourceIndex(0)
+5 >Emitted(2, 16) Source(9, 23) + SourceIndex(0)
+6 >Emitted(2, 20) Source(9, 27) + SourceIndex(0)
+7 >Emitted(2, 22) Source(9, 29) + SourceIndex(0)
+8 >Emitted(2, 29) Source(9, 36) + SourceIndex(0)
+9 >Emitted(2, 31) Source(9, 38) + SourceIndex(0)
+10>Emitted(2, 36) Source(9, 43) + SourceIndex(0)
+11>Emitted(2, 38) Source(9, 45) + SourceIndex(0)
+12>Emitted(2, 46) Source(9, 53) + SourceIndex(0)
+13>Emitted(2, 48) Source(9, 55) + SourceIndex(0)
+14>Emitted(2, 49) Source(9, 56) + SourceIndex(0)
+---
+>>>var robotB = { name: "trimmer", skill: "trimming" };
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^^
+6 >               ^^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^
+9 >                              ^^
+10>                                ^^^^^
+11>                                     ^^
+12>                                       ^^^^^^^^^^
+13>                                                 ^^
+14>                                                   ^
+1->
+  >
+2 >var 
+3 >    robotB
+4 >          : Robot = 
+5 >             { 
+6 >               name
+7 >                   : 
+8 >                     "trimmer"
+9 >                              , 
+10>                                skill
+11>                                     : 
+12>                                       "trimming"
+13>                                                  }
+14>                                                   ;
+1->Emitted(3, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(10, 5) + SourceIndex(0)
+3 >Emitted(3, 11) Source(10, 11) + SourceIndex(0)
+4 >Emitted(3, 14) Source(10, 21) + SourceIndex(0)
+5 >Emitted(3, 16) Source(10, 23) + SourceIndex(0)
+6 >Emitted(3, 20) Source(10, 27) + SourceIndex(0)
+7 >Emitted(3, 22) Source(10, 29) + SourceIndex(0)
+8 >Emitted(3, 31) Source(10, 38) + SourceIndex(0)
+9 >Emitted(3, 33) Source(10, 40) + SourceIndex(0)
+10>Emitted(3, 38) Source(10, 45) + SourceIndex(0)
+11>Emitted(3, 40) Source(10, 47) + SourceIndex(0)
+12>Emitted(3, 50) Source(10, 57) + SourceIndex(0)
+13>Emitted(3, 52) Source(10, 59) + SourceIndex(0)
+14>Emitted(3, 53) Source(10, 60) + SourceIndex(0)
+---
+>>>var nameA = robotA.name;
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^^^^^
+7 >                       ^
+8 >                        ^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >var { 
+2 >name: 
+3 >    nameA
+4 >          } = 
+5 >            robotA
+6 >                  
+7 >                        } = robotA;
+1 >Emitted(4, 1) Source(11, 7) + SourceIndex(0)
+2 >Emitted(4, 5) Source(11, 13) + SourceIndex(0)
+3 >Emitted(4, 10) Source(11, 18) + SourceIndex(0)
+4 >Emitted(4, 13) Source(11, 23) + SourceIndex(0)
+5 >Emitted(4, 19) Source(11, 29) + SourceIndex(0)
+6 >Emitted(4, 24) Source(11, 18) + SourceIndex(0)
+7 >Emitted(4, 25) Source(11, 30) + SourceIndex(0)
+---
+>>>var nameB = robotB.name, skillB = robotB.skill;
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^^^^^
+7 >                       ^^
+8 >                         ^^^^^^
+9 >                               ^^^
+10>                                  ^^^^^^
+11>                                        ^^^^^^
+12>                                              ^
+13>                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >var { 
+2 >name: 
+3 >    nameB
+4 >         , skill: skillB } = 
+5 >            robotB
+6 >                  
+7 >                       , skill: 
+8 >                         skillB
+9 >                                } = 
+10>                                  robotB
+11>                                        
+12>                                               } = robotB;
+1->Emitted(5, 1) Source(12, 7) + SourceIndex(0)
+2 >Emitted(5, 5) Source(12, 13) + SourceIndex(0)
+3 >Emitted(5, 10) Source(12, 18) + SourceIndex(0)
+4 >Emitted(5, 13) Source(12, 38) + SourceIndex(0)
+5 >Emitted(5, 19) Source(12, 44) + SourceIndex(0)
+6 >Emitted(5, 24) Source(12, 18) + SourceIndex(0)
+7 >Emitted(5, 26) Source(12, 27) + SourceIndex(0)
+8 >Emitted(5, 32) Source(12, 33) + SourceIndex(0)
+9 >Emitted(5, 35) Source(12, 38) + SourceIndex(0)
+10>Emitted(5, 41) Source(12, 44) + SourceIndex(0)
+11>Emitted(5, 47) Source(12, 33) + SourceIndex(0)
+12>Emitted(5, 48) Source(12, 45) + SourceIndex(0)
+---
+>>>var _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
+1->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^
+5 >           ^^^^
+6 >               ^^
+7 >                 ^^^^^^^
+8 >                        ^^
+9 >                          ^^^^^
+10>                               ^^
+11>                                 ^^^^^^^^^^^^^^^
+12>                                                ^^
+13>                                                  ^^
+14>                                                    ^^^^^
+15>                                                         ^^^^^^^^^^
+16>                                                                   ^^
+17>                                                                     ^^^^^^
+18>                                                                           ^^^^^^^^^^^
+19>                                                                                      ^
+1->
+  >var 
+2 >
+3 >    { name: nameC, skill: skillC } = 
+4 >         { 
+5 >           name
+6 >               : 
+7 >                 "Edger"
+8 >                        , 
+9 >                          skill
+10>                               : 
+11>                                 "cutting edges"
+12>                                                 }
+13>                                                  
+14>                                                    nameC
+15>                                                         
+16>                                                                   , skill: 
+17>                                                                     skillC
+18>                                                                            } = { name: "Edger", skill: "cutting edges" }
+19>                                                                                      ;
+1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
+2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
+3 >Emitted(6, 10) Source(13, 38) + SourceIndex(0)
+4 >Emitted(6, 12) Source(13, 40) + SourceIndex(0)
+5 >Emitted(6, 16) Source(13, 44) + SourceIndex(0)
+6 >Emitted(6, 18) Source(13, 46) + SourceIndex(0)
+7 >Emitted(6, 25) Source(13, 53) + SourceIndex(0)
+8 >Emitted(6, 27) Source(13, 55) + SourceIndex(0)
+9 >Emitted(6, 32) Source(13, 60) + SourceIndex(0)
+10>Emitted(6, 34) Source(13, 62) + SourceIndex(0)
+11>Emitted(6, 49) Source(13, 77) + SourceIndex(0)
+12>Emitted(6, 51) Source(13, 79) + SourceIndex(0)
+13>Emitted(6, 53) Source(13, 13) + SourceIndex(0)
+14>Emitted(6, 58) Source(13, 18) + SourceIndex(0)
+15>Emitted(6, 68) Source(13, 18) + SourceIndex(0)
+16>Emitted(6, 70) Source(13, 27) + SourceIndex(0)
+17>Emitted(6, 76) Source(13, 33) + SourceIndex(0)
+18>Emitted(6, 87) Source(13, 79) + SourceIndex(0)
+19>Emitted(6, 88) Source(13, 80) + SourceIndex(0)
+---
+>>>if (nameA == nameB) {
+1 >
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^
+5 >             ^^^^^
+6 >                  ^^
+7 >                    ^^^^^->
+1 >
+  >
+2 >if (
+3 >    nameA
+4 >          == 
+5 >             nameB
+6 >                  ) 
+1 >Emitted(7, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(14, 5) + SourceIndex(0)
+3 >Emitted(7, 10) Source(14, 10) + SourceIndex(0)
+4 >Emitted(7, 14) Source(14, 14) + SourceIndex(0)
+5 >Emitted(7, 19) Source(14, 19) + SourceIndex(0)
+6 >Emitted(7, 21) Source(14, 21) + SourceIndex(0)
+---
+>>>    console.log(skillB);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^
+7 >                      ^
+8 >                       ^
+1->{
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                skillB
+7 >                      )
+8 >                       ;
+1->Emitted(8, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(8, 12) Source(15, 12) + SourceIndex(0)
+3 >Emitted(8, 13) Source(15, 13) + SourceIndex(0)
+4 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
+5 >Emitted(8, 17) Source(15, 17) + SourceIndex(0)
+6 >Emitted(8, 23) Source(15, 23) + SourceIndex(0)
+7 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
+8 >Emitted(8, 25) Source(15, 25) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(16, 2) + SourceIndex(0)
+---
+>>>else {
+1->^^^^^
+2 >     ^^^^^^^^^^^^^^^^^^^->
+1->
+  >else 
+1->Emitted(10, 6) Source(17, 6) + SourceIndex(0)
+---
+>>>    console.log(nameC);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^
+7 >                     ^
+8 >                      ^
+1->{
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                nameC
+7 >                     )
+8 >                      ;
+1->Emitted(11, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(11, 12) Source(18, 12) + SourceIndex(0)
+3 >Emitted(11, 13) Source(18, 13) + SourceIndex(0)
+4 >Emitted(11, 16) Source(18, 16) + SourceIndex(0)
+5 >Emitted(11, 17) Source(18, 17) + SourceIndex(0)
+6 >Emitted(11, 22) Source(18, 22) + SourceIndex(0)
+7 >Emitted(11, 23) Source(18, 23) + SourceIndex(0)
+8 >Emitted(11, 24) Source(18, 24) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(12, 2) Source(19, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatement.js.map

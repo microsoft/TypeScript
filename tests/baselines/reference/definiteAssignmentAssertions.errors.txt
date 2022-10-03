@@ -1,0 +1,127 @@
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(20,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(21,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(22,13): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(23,5): error TS7008: Member 'd' implicitly has an 'any' type.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(23,6): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(29,6): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(35,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(69,10): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(70,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(71,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(77,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(80,7): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+
+
+==== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts (14 errors) ====
+    // Suppress strict property initialization check
+    
+    class C1 {
+        a!: number;
+        b: string;  // Error
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    // Suppress definite assignment check in constructor
+    
+    class C2 {
+        a!: number;
+        constructor() {
+            let x = this.a;
+        }
+    }
+    
+    // Definite assignment assertion requires type annotation, no initializer, no static modifier
+    
+    class C3 {
+        a! = 1;
+         ~
+!!! error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+        b!: number = 1;
+         ~
+!!! error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+        static c!: number;
+                ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+        d!;
+        ~
+!!! error TS7008: Member 'd' implicitly has an 'any' type.
+         ~
+!!! error TS1264: Declarations with definite assignment assertions must also have type annotations.
+    }
+    
+    // Definite assignment assertion not permitted in ambient context
+    
+    declare class C4 {
+        a!: number;
+         ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }
+    
+    // Definite assignment assertion not permitted on abstract property
+    
+    abstract class C5 {
+        abstract a!: number;
+                  ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }
+    
+    // Suppress definite assignment check for variable
+    
+    function f1() {
+        let x!: number;
+        let y = x;
+        var a!: number;
+        var b = a;
+    }
+    
+    function f2() {
+        let x!: string | number;
+        if (typeof x === "string") {
+            let s: string = x;
+        }
+        else {
+            let n: number = x;
+        }
+    }
+    
+    function f3() {
+        let x!: number;
+        const g = () => {
+            x = 1;
+        }
+        g();
+        let y = x;
+    }
+    
+    // Definite assignment assertion requires type annotation and no initializer
+    
+    function f4() {
+        let a!;
+             ~
+!!! error TS1264: Declarations with definite assignment assertions must also have type annotations.
+        let b! = 1;
+             ~
+!!! error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+        let c!: number = 1;
+             ~
+!!! error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+    }
+    
+    // Definite assignment assertion not permitted in ambient context
+    
+    declare let v1!: number;
+                  ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    declare var v2!: number;
+                  ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    
+    declare namespace foo {
+    	var v!: number;
+    	     ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }
+    

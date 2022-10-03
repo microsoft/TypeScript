@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments3_es6.ts ===
+var v = { *{ } }
+>v : Symbol(v, Decl(FunctionPropertyAssignments3_es6.ts, 0, 3))
+> : Symbol((Missing), Decl(FunctionPropertyAssignments3_es6.ts, 0, 9))
+

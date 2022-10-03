@@ -1,0 +1,63 @@
+=== /user.js ===
+const json0 = require("./json.json");
+>json0 : { a: number; }
+>require("./json.json") : { a: number; }
+>require : any
+>"./json.json" : "./json.json"
+
+json0.b; // Error (good)
+>json0.b : any
+>json0 : { a: number; }
+>b : any
+
+/** @type {{ b: number }} */
+const json1 = require("./json.json"); // No error (bad)
+>json1 : { b: number; }
+>require("./json.json") : { a: number; }
+>require : any
+>"./json.json" : "./json.json"
+
+json1.b; // No error (OK since that's the type annotation)
+>json1.b : number
+>json1 : { b: number; }
+>b : number
+
+const js0 = require("./js.js");
+>js0 : { a: number; }
+>require("./js.js") : { a: number; }
+>require : any
+>"./js.js" : "./js.js"
+
+json0.b; // Error (good)
+>json0.b : any
+>json0 : { a: number; }
+>b : any
+
+/** @type {{ b: number }} */
+const js1 = require("./js.js"); // Error (good)
+>js1 : { b: number; }
+>require("./js.js") : { a: number; }
+>require : any
+>"./js.js" : "./js.js"
+
+js1.b;
+>js1.b : number
+>js1 : { b: number; }
+>b : number
+
+=== /json.json ===
+{ "a": 0 }
+>{ "a": 0 } : { a: number; }
+>"a" : number
+>0 : 0
+
+=== /js.js ===
+module.exports = { a: 0 };
+>module.exports = { a: 0 } : { a: number; }
+>module.exports : { a: number; }
+>module : { exports: { a: number; }; }
+>exports : { a: number; }
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+

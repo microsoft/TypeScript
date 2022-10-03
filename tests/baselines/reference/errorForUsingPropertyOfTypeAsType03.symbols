@@ -1,0 +1,76 @@
+=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts ===
+namespace Test1 {
+>Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 0))
+
+    enum Color {
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+
+        Red,
+>Red : Symbol(Color.Red, Decl(errorForUsingPropertyOfTypeAsType03.ts, 1, 16))
+
+        Green,
+>Green : Symbol(Color.Green, Decl(errorForUsingPropertyOfTypeAsType03.ts, 2, 12))
+
+        Blue
+>Blue : Symbol(Color.Blue, Decl(errorForUsingPropertyOfTypeAsType03.ts, 3, 14))
+    }
+
+    type C1 = Color;
+>C1 : Symbol(C1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 5, 5))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+
+    type C2 = typeof Color;
+>C2 : Symbol(C2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 7, 20))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+
+    let a1: Color.Red.toString;
+>a1 : Symbol(a1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 10, 7))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+>Red : Symbol(Color.Red)
+>toString : Symbol(Color.Red.toString)
+
+    let a2: Color.Red["toString"];
+>a2 : Symbol(a2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 11, 7))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+>Red : Symbol(Color.Red, Decl(errorForUsingPropertyOfTypeAsType03.ts, 1, 16))
+
+    let a3: Color["Red"]["toString"];
+>a3 : Symbol(a3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 12, 7))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+
+    //let b1: (typeof Color).Red.toString;
+    //let b2: (typeof Color).Red["toString"];
+    let b3: (typeof Color)["Red"]["toString"];
+>b3 : Symbol(b3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 16, 7))
+>Color : Symbol(Color, Decl(errorForUsingPropertyOfTypeAsType03.ts, 0, 17))
+
+    let c1: C1.Red.toString;
+>c1 : Symbol(c1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 18, 7))
+>C1 : Symbol(C1)
+>Red : Symbol(C1.Red)
+>toString : Symbol(C1.Red.toString)
+
+    let c2: C1.Red["toString"];
+>c2 : Symbol(c2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 19, 7))
+>C1 : Symbol(C1)
+>Red : Symbol(C1.Red)
+
+    let c3: C1["Red"]["toString"];
+>c3 : Symbol(c3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 20, 7))
+>C1 : Symbol(C1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 5, 5))
+
+    let d1: C2.Red.toString;
+>d1 : Symbol(d1, Decl(errorForUsingPropertyOfTypeAsType03.ts, 22, 7))
+>C2 : Symbol(C2)
+>Red : Symbol(C2.Red)
+>toString : Symbol(C2.Red.toString)
+
+    let d2: C2.Red["toString"];
+>d2 : Symbol(d2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 23, 7))
+>C2 : Symbol(C2)
+>Red : Symbol(C2.Red)
+
+    let d3: C2["Red"]["toString"];
+>d3 : Symbol(d3, Decl(errorForUsingPropertyOfTypeAsType03.ts, 24, 7))
+>C2 : Symbol(C2, Decl(errorForUsingPropertyOfTypeAsType03.ts, 7, 20))
+}

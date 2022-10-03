@@ -1,0 +1,34 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts ===
+module A {
+>A : typeof A
+
+    interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+
+        fromOrigin(p: Point): number;
+>fromOrigin : (p: Point) => number
+>p : Point
+    }
+
+    export class Point2d implements Point {
+>Point2d : Point2d
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+        fromOrigin(p: Point) {
+>fromOrigin : (p: Point) => number
+>p : Point
+
+            return 1;
+>1 : 1
+        }
+    }
+}
+
+

@@ -1,0 +1,113 @@
+=== tests/cases/compiler/classTypeParametersInStatics.ts ===
+module Editor {
+>Editor : Symbol(Editor, Decl(classTypeParametersInStatics.ts, 0, 0))
+
+
+    export class List<T> {
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 3, 22))
+
+        public next: List<T>;
+>next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 3, 22))
+
+        public prev: List<T>;
+>prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 3, 22))
+
+        constructor(public isHead: boolean, public data: T) {
+>isHead : Symbol(List.isHead, Decl(classTypeParametersInStatics.ts, 7, 20))
+>data : Symbol(List.data, Decl(classTypeParametersInStatics.ts, 7, 43))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 3, 22))
+        
+        }
+
+        public static MakeHead(): List<T> { // should error
+>MakeHead : Symbol(List.MakeHead, Decl(classTypeParametersInStatics.ts, 9, 9))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
+
+            var entry: List<T> = new List<T>(true, null);
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
+
+            entry.prev = entry;
+>entry.prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+>prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+
+            entry.next = entry;
+>entry.next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+>next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+
+            return entry;
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
+        }        
+
+        public static MakeHead2<T>(): List<T> { // should not error
+>MakeHead2 : Symbol(List.MakeHead2, Decl(classTypeParametersInStatics.ts, 16, 9))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 18, 32))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 18, 32))
+
+            var entry: List<T> = new List<T>(true, null);
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 18, 32))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T, Decl(classTypeParametersInStatics.ts, 18, 32))
+
+            entry.prev = entry;
+>entry.prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+>prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+
+            entry.next = entry;
+>entry.next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+>next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+
+            return entry;
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 19, 15))
+        }  
+
+        public static MakeHead3<U>(): List<U> { // should not error
+>MakeHead3 : Symbol(List.MakeHead3, Decl(classTypeParametersInStatics.ts, 23, 9))
+>U : Symbol(U, Decl(classTypeParametersInStatics.ts, 25, 32))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>U : Symbol(U, Decl(classTypeParametersInStatics.ts, 25, 32))
+
+            var entry: List<U> = new List<U>(true, null);
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>U : Symbol(U, Decl(classTypeParametersInStatics.ts, 25, 32))
+>List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>U : Symbol(U, Decl(classTypeParametersInStatics.ts, 25, 32))
+
+            entry.prev = entry;
+>entry.prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+>prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+
+            entry.next = entry;
+>entry.next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+>next : Symbol(List.next, Decl(classTypeParametersInStatics.ts, 3, 26))
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+
+            return entry;
+>entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 26, 15))
+        }  
+    }
+}

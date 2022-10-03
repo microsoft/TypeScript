@@ -1,0 +1,22 @@
+=== tests/cases/compiler/nestedBlockScopedBindings14.ts ===
+var x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings14.ts, 0, 3))
+
+for (; false;) {
+    let x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings14.ts, 2, 7))
+
+    () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings14.ts, 2, 7))
+}
+
+var y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings14.ts, 6, 3))
+
+for (; false;) {
+    let y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings14.ts, 8, 7))
+
+    y = 1;
+>y : Symbol(y, Decl(nestedBlockScopedBindings14.ts, 8, 7))
+}

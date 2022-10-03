@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/members/typesWithProtectedConstructor.ts ===
+class C {
+>C : C
+
+    protected constructor() { }
+}
+
+var c = new C(); // error C is protected
+>c : any
+>new C() : any
+>C : typeof C
+
+var r: () => void = c.constructor;
+>r : () => void
+>c.constructor : any
+>c : any
+>constructor : any
+
+class C2 {
+>C2 : C2
+
+    protected constructor(x: number);
+>x : number
+
+    protected constructor(x: any) { }
+>x : any
+}
+
+var c2 = new C2(); // error C2 is protected
+>c2 : any
+>new C2() : any
+>C2 : typeof C2
+
+var r2: (x: number) => void = c2.constructor;
+>r2 : (x: number) => void
+>x : number
+>c2.constructor : any
+>c2 : any
+>constructor : any
+

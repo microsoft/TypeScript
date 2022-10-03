@@ -1,0 +1,20 @@
+=== tests/cases/compiler/objectLiteralFreshnessWithSpread.ts ===
+let x = { b: 1, extra: 2 }
+>x : { b: number; extra: number; }
+>{ b: 1, extra: 2 } : { b: number; extra: number; }
+>b : number
+>1 : 1
+>extra : number
+>2 : 2
+
+let xx: { a, b }  = { a: 1, ...x, z: 3 } // error for 'z', no error for 'extra'
+>xx : { a: any; b: any; }
+>a : any
+>b : any
+>{ a: 1, ...x, z: 3 } : { z: number; b: number; extra: number; a: number; }
+>a : number
+>1 : 1
+>x : { b: number; extra: number; }
+>z : number
+>3 : 3
+

@@ -1,0 +1,86 @@
+=== tests/cases/conformance/expressions/literals/literals.ts ===
+//typeof null is Null
+//typeof true is Boolean
+//typeof false is Boolean
+//typeof numeric literal is Number
+//typeof string literal is String
+//typeof regex literal is Regex
+
+var nu = null / null;
+>nu : Symbol(nu, Decl(literals.ts, 7, 3))
+
+var u = undefined / undefined;
+>u : Symbol(u, Decl(literals.ts, 8, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var b: boolean;
+>b : Symbol(b, Decl(literals.ts, 10, 3), Decl(literals.ts, 11, 3), Decl(literals.ts, 12, 3))
+
+var b = true;
+>b : Symbol(b, Decl(literals.ts, 10, 3), Decl(literals.ts, 11, 3), Decl(literals.ts, 12, 3))
+
+var b = false;
+>b : Symbol(b, Decl(literals.ts, 10, 3), Decl(literals.ts, 11, 3), Decl(literals.ts, 12, 3))
+
+var n: number;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = 1;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = 1.0;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = 1e4;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = 001; // Error in ES5
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = 0x1;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = -1;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = -1.0;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = -1e-4;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = -003; // Error in ES5
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var n = -0x1;
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
+
+var s: string;
+>s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
+
+var s = '';
+>s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
+
+var s = "";
+>s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
+
+var s = 'foo\
+>s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
+
+    bar';
+var s = "foo\
+>s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
+
+    bar";
+
+var r: RegExp;
+>r : Symbol(r, Decl(literals.ts, 34, 3), Decl(literals.ts, 35, 3), Decl(literals.ts, 36, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var r = /what/;
+>r : Symbol(r, Decl(literals.ts, 34, 3), Decl(literals.ts, 35, 3), Decl(literals.ts, 36, 3))
+
+var r = /\\\\/;
+>r : Symbol(r, Decl(literals.ts, 34, 3), Decl(literals.ts, 35, 3), Decl(literals.ts, 36, 3))
+

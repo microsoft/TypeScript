@@ -1,0 +1,15 @@
+=== tests/cases/compiler/genericConstructSignatureInInterface.ts ===
+interface C {
+    new <T>(x: T);
+>x : T
+}
+
+var v: C;
+>v : C
+
+var r = new v<number>(1);
+>r : any
+>new v<number>(1) : any
+>v : C
+>1 : 1
+

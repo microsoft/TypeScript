@@ -1,0 +1,15 @@
+=== tests/cases/compiler/contextualTypeAny.ts ===
+var x: any;
+>x : Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
+
+var obj: { [s: string]: number } = { p: "", q: x };
+>obj : Symbol(obj, Decl(contextualTypeAny.ts, 2, 3))
+>s : Symbol(s, Decl(contextualTypeAny.ts, 2, 12))
+>p : Symbol(p, Decl(contextualTypeAny.ts, 2, 36))
+>q : Symbol(q, Decl(contextualTypeAny.ts, 2, 43))
+>x : Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
+
+var arr: number[] = ["", x];
+>arr : Symbol(arr, Decl(contextualTypeAny.ts, 4, 3))
+>x : Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
+

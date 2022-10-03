@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts ===
+class Base {
+>Base : Base
+
+    x: {
+>x : { foo: string; }
+
+        foo: string;
+>foo : string
+    }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    x: {
+>x : { foo: any; }
+
+        foo: any;
+>foo : any
+    }
+}
+
+class Base2 {
+>Base2 : Base2
+
+    static y: {
+>y : { foo: string; }
+
+        foo: string;
+>foo : string
+    }
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Derived2
+>Base2 : Base2
+
+    static y: {
+>y : { foo: any; }
+
+        foo: any;
+>foo : any
+    }
+}

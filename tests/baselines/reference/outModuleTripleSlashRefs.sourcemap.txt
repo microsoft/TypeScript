@@ -1,0 +1,236 @@
+===================================================================
+JsFile: all.js
+mapUrl: all.js.map
+sourceRoot: 
+sources: tests/cases/compiler/ref/b.ts,tests/cases/compiler/ref/a.ts,tests/cases/compiler/b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/ref/b.ts
+-------------------------------------------------------------------
+>>>var __extends = (this && this.__extends) || (function () {
+>>>    var extendStatics = function (d, b) {
+>>>        extendStatics = Object.setPrototypeOf ||
+>>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+>>>            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+>>>        return extendStatics(d, b);
+>>>    };
+>>>    return function (d, b) {
+>>>        if (typeof b !== "function" && b !== null)
+>>>            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+>>>        extendStatics(d, b);
+>>>        function __() { this.constructor = d; }
+>>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+>>>    };
+>>>})();
+>>>/// <reference path="./c.d.ts" />
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                 ^^^^^^->
+1 >
+2 >/// <reference path="./c.d.ts" />
+1 >Emitted(16, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(16, 34) Source(1, 34) + SourceIndex(0)
+---
+>>>var Foo = /** @class */ (function () {
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(17, 1) Source(2, 1) + SourceIndex(0)
+---
+>>>    function Foo() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(18, 5) Source(2, 1) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1->class Foo {
+  >	member: Bar;
+  >
+2 >    }
+1->Emitted(19, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(19, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>    return Foo;
+1->^^^^
+2 >    ^^^^^^^^^^
+1->
+2 >    }
+1->Emitted(20, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(20, 15) Source(4, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class Foo {
+  > 	member: Bar;
+  > }
+1 >Emitted(21, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(21, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(21, 2) Source(2, 1) + SourceIndex(0)
+4 >Emitted(21, 6) Source(4, 2) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/ref/a.ts
+-------------------------------------------------------------------
+>>>define("ref/a", ["require", "exports"], function (require, exports) {
+>>>    "use strict";
+>>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.A = void 0;
+>>>    /// <reference path="./b.ts" />
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                   ^^^^^^->
+1->
+2 >    /// <reference path="./b.ts" />
+1->Emitted(26, 5) Source(1, 1) + SourceIndex(1)
+2 >Emitted(26, 36) Source(1, 32) + SourceIndex(1)
+---
+>>>    var A = /** @class */ (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(27, 5) Source(2, 1) + SourceIndex(1)
+---
+>>>        function A() {
+1->^^^^^^^^
+2 >        ^^->
+1->
+1->Emitted(28, 9) Source(2, 1) + SourceIndex(1)
+---
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1->export class A {
+  >	member: typeof GlobalFoo;
+  >
+2 >        }
+1->Emitted(29, 9) Source(4, 1) + SourceIndex(1)
+2 >Emitted(29, 10) Source(4, 2) + SourceIndex(1)
+---
+>>>        return A;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(30, 9) Source(4, 1) + SourceIndex(1)
+2 >Emitted(30, 17) Source(4, 2) + SourceIndex(1)
+---
+>>>    }());
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^^^
+5 >         ^^^^^^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class A {
+  >     	member: typeof GlobalFoo;
+  >     }
+1 >Emitted(31, 5) Source(4, 1) + SourceIndex(1)
+2 >Emitted(31, 6) Source(4, 2) + SourceIndex(1)
+3 >Emitted(31, 6) Source(2, 1) + SourceIndex(1)
+4 >Emitted(31, 10) Source(4, 2) + SourceIndex(1)
+---
+>>>    exports.A = A;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+2 >    A
+1->Emitted(32, 5) Source(2, 14) + SourceIndex(1)
+2 >Emitted(32, 19) Source(2, 15) + SourceIndex(1)
+---
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/b.ts
+-------------------------------------------------------------------
+>>>});
+>>>define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
+>>>    "use strict";
+>>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.B = void 0;
+>>>    var B = /** @class */ (function (_super) {
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >import {A} from "./ref/a";
+  >
+1 >Emitted(38, 5) Source(2, 1) + SourceIndex(2)
+---
+>>>        __extends(B, _super);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+1->export class B extends 
+2 >        A
+1->Emitted(39, 9) Source(2, 24) + SourceIndex(2)
+2 >Emitted(39, 30) Source(2, 25) + SourceIndex(2)
+---
+>>>        function B() {
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(40, 9) Source(2, 1) + SourceIndex(2)
+---
+>>>            return _super !== null && _super.apply(this, arguments) || this;
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1->export class B extends A { 
+2 >        }
+1->Emitted(42, 9) Source(2, 28) + SourceIndex(2)
+2 >Emitted(42, 10) Source(2, 29) + SourceIndex(2)
+---
+>>>        return B;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(43, 9) Source(2, 28) + SourceIndex(2)
+2 >Emitted(43, 17) Source(2, 29) + SourceIndex(2)
+---
+>>>    }(a_1.A));
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^
+5 >      ^^^^^
+6 >           ^^^
+7 >              ^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class B extends 
+5 >      A
+6 >            { }
+1 >Emitted(44, 5) Source(2, 28) + SourceIndex(2)
+2 >Emitted(44, 6) Source(2, 29) + SourceIndex(2)
+3 >Emitted(44, 6) Source(2, 1) + SourceIndex(2)
+4 >Emitted(44, 7) Source(2, 24) + SourceIndex(2)
+5 >Emitted(44, 12) Source(2, 25) + SourceIndex(2)
+6 >Emitted(44, 15) Source(2, 29) + SourceIndex(2)
+---
+>>>    exports.B = B;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+2 >    B
+1->Emitted(45, 5) Source(2, 14) + SourceIndex(2)
+2 >Emitted(45, 19) Source(2, 15) + SourceIndex(2)
+---
+>>>});
+>>>//# sourceMappingURL=all.js.map

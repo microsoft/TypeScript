@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames32_ES6.ts ===
+function foo<T>() { return '' }
+>foo : Symbol(foo, Decl(computedPropertyNames32_ES6.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNames32_ES6.ts, 0, 13))
+
+class C<T> {
+>C : Symbol(C, Decl(computedPropertyNames32_ES6.ts, 0, 31))
+>T : Symbol(T, Decl(computedPropertyNames32_ES6.ts, 1, 8))
+
+    bar() {
+>bar : Symbol(C.bar, Decl(computedPropertyNames32_ES6.ts, 1, 12))
+
+        return 0;
+    }
+    [foo<T>()]() { }
+>[foo<T>()] : Symbol(C[foo<T>()], Decl(computedPropertyNames32_ES6.ts, 4, 5))
+>foo : Symbol(foo, Decl(computedPropertyNames32_ES6.ts, 0, 0))
+>T : Symbol(T)
+}

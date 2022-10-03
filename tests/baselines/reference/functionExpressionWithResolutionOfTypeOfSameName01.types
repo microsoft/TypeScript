@@ -1,0 +1,13 @@
+=== tests/cases/compiler/functionExpressionWithResolutionOfTypeOfSameName01.ts ===
+interface f {
+}
+
+var x = function f() {
+>x : () => void
+>function f() {    <f>f;} : () => void
+>f : () => void
+
+    <f>f;
+><f>f : f
+>f : () => void
+}

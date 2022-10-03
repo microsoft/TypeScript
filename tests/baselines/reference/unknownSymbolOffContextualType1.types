@@ -1,0 +1,88 @@
+=== tests/cases/compiler/unknownSymbolOffContextualType1.ts ===
+declare var document: Document;
+>document : Document
+
+interface Document {
+    getElementById(elementId: string): HTMLElement;
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>elementId : string
+}
+interface HTMLElement {
+    isDisabled: boolean;
+>isDisabled : boolean
+}
+function getMaxWidth(elementNames: string[]) {
+>getMaxWidth : (elementNames: string[]) => any
+>elementNames : string[]
+
+    var elements = elementNames.map(function (name) {
+>elements : HTMLElement[]
+>elementNames.map(function (name) {        return document.getElementById(name);    }) : HTMLElement[]
+>elementNames.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>elementNames : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>function (name) {        return document.getElementById(name);    } : (name: string) => HTMLElement
+>name : string
+
+        return document.getElementById(name);
+>document.getElementById(name) : HTMLElement
+>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>document : Document
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+>name : string
+
+    });
+    var enabled = elements.filter(function (e) {
+>enabled : HTMLElement[]
+>elements.filter(function (e) {        return !e.isDisabled;    }) : HTMLElement[]
+>elements.filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
+>elements : HTMLElement[]
+>filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
+>function (e) {        return !e.isDisabled;    } : (e: HTMLElement) => boolean
+>e : HTMLElement
+
+        return !e.isDisabled;
+>!e.isDisabled : boolean
+>e.isDisabled : boolean
+>e : HTMLElement
+>isDisabled : boolean
+
+    });
+    var widths = enabled.map(function (e) {
+>widths : any[]
+>enabled.map(function (e) {        return e.xyxyxyx;  // error expected here    }) : any[]
+>enabled.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>enabled : HTMLElement[]
+>map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>function (e) {        return e.xyxyxyx;  // error expected here    } : (e: HTMLElement) => any
+>e : HTMLElement
+
+        return e.xyxyxyx;  // error expected here
+>e.xyxyxyx : any
+>e : HTMLElement
+>xyxyxyx : any
+
+    });
+    var maxWidth = widths.reduce(function (a, b) {
+>maxWidth : any
+>widths.reduce(function (a, b) {        return a > b ? a : b;    }) : any
+>widths.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>widths : any[]
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>function (a, b) {        return a > b ? a : b;    } : (a: any, b: any) => any
+>a : any
+>b : any
+
+        return a > b ? a : b;
+>a > b ? a : b : any
+>a > b : boolean
+>a : any
+>b : any
+>a : any
+>b : any
+
+    });
+    return maxWidth;
+>maxWidth : any
+}
+

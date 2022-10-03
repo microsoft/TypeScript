@@ -1,0 +1,10 @@
+{
+    "scenario": "[Sourcemap]: outputdir_mixed_subfolder: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_mixed_subfolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true
+}

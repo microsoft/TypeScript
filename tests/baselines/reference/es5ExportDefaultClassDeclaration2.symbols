@@ -1,0 +1,6 @@
+=== tests/cases/compiler/es5ExportDefaultClassDeclaration2.ts ===
+export default class {
+    method() { }
+>method : Symbol(default.method, Decl(es5ExportDefaultClassDeclaration2.ts, 0, 22))
+}
+

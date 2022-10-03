@@ -1,0 +1,43 @@
+=== /index.ts ===
+import { use } from "foo/use";
+>use : (o: import("/node_modules/foo/index").C) => void
+
+import { o } from "a";
+>o : import("/node_modules/foo/index").C
+
+use(o);
+>use(o) : void
+>use : (o: import("/node_modules/foo/index").C) => void
+>o : import("/node_modules/foo/index").C
+
+=== /node_modules/a/node_modules/foo/index.d.ts ===
+export class C {
+>C : C
+
+    private x: number;
+>x : number
+}
+
+=== /node_modules/a/index.d.ts ===
+import { C } from "foo";
+>C : typeof C
+
+export const o: C;
+>o : C
+
+=== /node_modules/foo/use.d.ts ===
+import { C } from "./index";
+>C : typeof C
+
+export function use(o: C): void;
+>use : (o: C) => void
+>o : C
+
+=== /node_modules/foo/index.d.ts ===
+export class C {
+>C : C
+
+    private x: number;
+>x : number
+}
+

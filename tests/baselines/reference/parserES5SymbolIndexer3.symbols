@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts ===
+var x: {
+>x : Symbol(x, Decl(parserES5SymbolIndexer3.ts, 0, 3))
+
+    [s: symbol]: string;
+>s : Symbol(s, Decl(parserES5SymbolIndexer3.ts, 1, 5))
+}

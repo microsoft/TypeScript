@@ -1,0 +1,26 @@
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target11.ts ===
+declare function foo(...args: any[]): any;
+>foo : Symbol(foo, Decl(es6modulekindWithES5Target11.ts, 0, 0))
+>args : Symbol(args, Decl(es6modulekindWithES5Target11.ts, 0, 21))
+
+@foo
+>foo : Symbol(foo, Decl(es6modulekindWithES5Target11.ts, 0, 0))
+
+export default class C {
+>C : Symbol(C, Decl(es6modulekindWithES5Target11.ts, 0, 42))
+
+    static x() { return C.y; }
+>x : Symbol(C.x, Decl(es6modulekindWithES5Target11.ts, 2, 24))
+>C.y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+>C : Symbol(C, Decl(es6modulekindWithES5Target11.ts, 0, 42))
+>y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+
+    static y = 1
+>y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+
+    p = 1;
+>p : Symbol(C.p, Decl(es6modulekindWithES5Target11.ts, 4, 16))
+
+    method() { }
+>method : Symbol(C.method, Decl(es6modulekindWithES5Target11.ts, 5, 10))
+}

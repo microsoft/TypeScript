@@ -1,0 +1,67 @@
+=== tests/cases/compiler/higherOrderMappedIndexLookupInference.ts ===
+// @strict
+
+function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
+>f1 : (a: <T>() => keyof T, b: <U>() => keyof U) => void
+>a : <T>() => keyof T
+>b : <U>() => keyof U
+
+    a = b;
+>a = b : <U>() => keyof U
+>a : <T>() => keyof T
+>b : <U>() => keyof U
+
+    b = a;
+>b = a : <T>() => keyof T
+>b : <U>() => keyof U
+>a : <T>() => keyof T
+}
+
+function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) {
+>f2 : (a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) => void
+>a : <T, K extends keyof T>() => T[K]
+>b : <U, L extends keyof U>() => U[L]
+
+    a = b;
+>a = b : <U, L extends keyof U>() => U[L]
+>a : <T, K extends keyof T>() => T[K]
+>b : <U, L extends keyof U>() => U[L]
+
+    b = a;
+>b = a : <T, K extends keyof T>() => T[K]
+>b : <U, L extends keyof U>() => U[L]
+>a : <T, K extends keyof T>() => T[K]
+}
+
+function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) {
+>f3 : (a: <T>() => { [K in keyof T]: T[K]; }, b: <U>() => { [K in keyof U]: U[K]; }) => void
+>a : <T>() => { [K in keyof T]: T[K]; }
+>b : <U>() => { [K in keyof U]: U[K]; }
+
+    a = b;
+>a = b : <U>() => { [K in keyof U]: U[K]; }
+>a : <T>() => { [K in keyof T]: T[K]; }
+>b : <U>() => { [K in keyof U]: U[K]; }
+
+    b = a;
+>b = a : <T>() => { [K in keyof T]: T[K]; }
+>b : <U>() => { [K in keyof U]: U[K]; }
+>a : <T>() => { [K in keyof T]: T[K]; }
+}
+
+// Repro from #18338
+
+type IdMapped<T> = { [K in keyof T]: T[K] }
+>IdMapped : IdMapped<T>
+
+declare const f: <T>() => IdMapped<T>;
+>f : <T>() => IdMapped<T>
+
+declare const g: <U>() => { [K in keyof U]: U[K] };
+>g : <U>() => { [K in keyof U]: U[K]; }
+
+const h: typeof g = f;
+>h : <U>() => { [K in keyof U]: U[K]; }
+>g : <U>() => { [K in keyof U]: U[K]; }
+>f : <T>() => IdMapped<T>
+

@@ -1,0 +1,884 @@
+
+1  >function f() {
+
+    ~~~~~~~~~                                     => Pos: (0 to 8)  SpanInfo: undefined
+1  >function f() {
+
+             ~~                                   => Pos: (9 to 10)  SpanInfo: {"start":9,"length":1}
+    >f
+    >:=> (line 1, col 9) to (line 1, col 10)
+1  >function f() {
+
+               ~~~~                               => Pos: (11 to 14)  SpanInfo: undefined
+--------------------------------
+2  >    var y;
+
+    ~~~~~~~~                                      => Pos: (15 to 22)  SpanInfo: undefined
+2  >    var y;
+
+            ~~                                    => Pos: (23 to 24)  SpanInfo: {"start":23,"length":1}
+    >y
+    >:=> (line 2, col 8) to (line 2, col 9)
+2  >    var y;
+
+              ~                                   => Pos: (25 to 25)  SpanInfo: undefined
+--------------------------------
+3  >    var x = 0;
+
+    ~~~~~~~~                                      => Pos: (26 to 33)  SpanInfo: undefined
+3  >    var x = 0;
+
+            ~~                                    => Pos: (34 to 35)  SpanInfo: {"start":34,"length":1}
+    >x
+    >:=> (line 3, col 8) to (line 3, col 9)
+3  >    var x = 0;
+
+              ~~~~~                               => Pos: (36 to 40)  SpanInfo: undefined
+--------------------------------
+4  >    for (var i = 0; i < 10; i++) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (41 to 53)  SpanInfo: undefined
+4  >    for (var i = 0; i < 10; i++) {
+
+                 ~~                               => Pos: (54 to 55)  SpanInfo: {"start":54,"length":1}
+    >i
+    >:=> (line 4, col 13) to (line 4, col 14)
+4  >    for (var i = 0; i < 10; i++) {
+
+                   ~~~~~                          => Pos: (56 to 60)  SpanInfo: undefined
+4  >    for (var i = 0; i < 10; i++) {
+
+                        ~~                        => Pos: (61 to 62)  SpanInfo: {"start":61,"length":1}
+    >i
+    >:=> (line 4, col 20) to (line 4, col 21)
+4  >    for (var i = 0; i < 10; i++) {
+
+                          ~~~~~~                  => Pos: (63 to 68)  SpanInfo: undefined
+4  >    for (var i = 0; i < 10; i++) {
+
+                                ~~                => Pos: (69 to 70)  SpanInfo: {"start":69,"length":1}
+    >i
+    >:=> (line 4, col 28) to (line 4, col 29)
+4  >    for (var i = 0; i < 10; i++) {
+
+                                  ~~~~~           => Pos: (71 to 75)  SpanInfo: undefined
+--------------------------------
+5  >        x += i;
+
+    ~~~~~~~~                                      => Pos: (76 to 83)  SpanInfo: undefined
+5  >        x += i;
+
+            ~~                                    => Pos: (84 to 85)  SpanInfo: {"start":84,"length":1}
+    >x
+    >:=> (line 5, col 8) to (line 5, col 9)
+5  >        x += i;
+
+              ~~~                                 => Pos: (86 to 88)  SpanInfo: undefined
+5  >        x += i;
+
+                 ~~                               => Pos: (89 to 90)  SpanInfo: {"start":89,"length":1}
+    >i
+    >:=> (line 5, col 13) to (line 5, col 14)
+5  >        x += i;
+
+                   ~                              => Pos: (91 to 91)  SpanInfo: undefined
+--------------------------------
+6  >        x *= 0;
+
+    ~~~~~~~~                                      => Pos: (92 to 99)  SpanInfo: undefined
+6  >        x *= 0;
+
+            ~~                                    => Pos: (100 to 101)  SpanInfo: {"start":100,"length":1}
+    >x
+    >:=> (line 6, col 8) to (line 6, col 9)
+6  >        x *= 0;
+
+              ~~~~~~                              => Pos: (102 to 107)  SpanInfo: undefined
+--------------------------------
+7  >    }
+
+    ~~~~~~                                        => Pos: (108 to 113)  SpanInfo: undefined
+--------------------------------
+8  >    if (x > 17) {
+
+    ~~~~~~~~                                      => Pos: (114 to 121)  SpanInfo: undefined
+8  >    if (x > 17) {
+
+            ~~                                    => Pos: (122 to 123)  SpanInfo: {"start":122,"length":1}
+    >x
+    >:=> (line 8, col 8) to (line 8, col 9)
+8  >    if (x > 17) {
+
+              ~~~~~~~~                            => Pos: (124 to 131)  SpanInfo: undefined
+--------------------------------
+9  >        x /= 9;
+
+    ~~~~~~~~                                      => Pos: (132 to 139)  SpanInfo: undefined
+9  >        x /= 9;
+
+            ~~                                    => Pos: (140 to 141)  SpanInfo: {"start":140,"length":1}
+    >x
+    >:=> (line 9, col 8) to (line 9, col 9)
+9  >        x /= 9;
+
+              ~~~~~~                              => Pos: (142 to 147)  SpanInfo: undefined
+--------------------------------
+10 >    } else {
+
+    ~~~~~~~~~~~~~                                 => Pos: (148 to 160)  SpanInfo: undefined
+--------------------------------
+11 >        x += 10;
+
+    ~~~~~~~~                                      => Pos: (161 to 168)  SpanInfo: undefined
+11 >        x += 10;
+
+            ~~                                    => Pos: (169 to 170)  SpanInfo: {"start":169,"length":1}
+    >x
+    >:=> (line 11, col 8) to (line 11, col 9)
+11 >        x += 10;
+
+              ~~~~~~~                             => Pos: (171 to 177)  SpanInfo: undefined
+--------------------------------
+12 >        x++;
+
+    ~~~~~~~~                                      => Pos: (178 to 185)  SpanInfo: undefined
+12 >        x++;
+
+            ~~                                    => Pos: (186 to 187)  SpanInfo: {"start":186,"length":1}
+    >x
+    >:=> (line 12, col 8) to (line 12, col 9)
+12 >        x++;
+
+              ~~~                                 => Pos: (188 to 190)  SpanInfo: undefined
+--------------------------------
+13 >    }
+
+    ~~~~~~                                        => Pos: (191 to 196)  SpanInfo: undefined
+--------------------------------
+14 >    var a = [
+
+    ~~~~~~~~                                      => Pos: (197 to 204)  SpanInfo: undefined
+14 >    var a = [
+
+            ~~                                    => Pos: (205 to 206)  SpanInfo: {"start":205,"length":1}
+    >a
+    >:=> (line 14, col 8) to (line 14, col 9)
+14 >    var a = [
+
+              ~~~~                                => Pos: (207 to 210)  SpanInfo: undefined
+--------------------------------
+15 >        1,
+
+    ~~~~~~~~~~~                                   => Pos: (211 to 221)  SpanInfo: undefined
+--------------------------------
+16 >        2,
+
+    ~~~~~~~~~~~                                   => Pos: (222 to 232)  SpanInfo: undefined
+--------------------------------
+17 >        3
+
+    ~~~~~~~~~~                                    => Pos: (233 to 242)  SpanInfo: undefined
+--------------------------------
+18 >    ];
+
+    ~~~~~~~                                       => Pos: (243 to 249)  SpanInfo: undefined
+--------------------------------
+19 >    var obj = {
+
+    ~~~~~~~~                                      => Pos: (250 to 257)  SpanInfo: undefined
+19 >    var obj = {
+
+            ~~~~                                  => Pos: (258 to 261)  SpanInfo: {"start":258,"length":3}
+    >obj
+    >:=> (line 19, col 8) to (line 19, col 11)
+19 >    var obj = {
+
+                ~~~~                              => Pos: (262 to 265)  SpanInfo: undefined
+--------------------------------
+20 >        z: 1,
+
+    ~~~~~~~~                                      => Pos: (266 to 273)  SpanInfo: undefined
+20 >        z: 1,
+
+            ~~                                    => Pos: (274 to 275)  SpanInfo: {"start":274,"length":1}
+    >z
+    >:=> (line 20, col 8) to (line 20, col 9)
+20 >        z: 1,
+
+              ~~~~                                => Pos: (276 to 279)  SpanInfo: undefined
+--------------------------------
+21 >        q: "hello"
+
+    ~~~~~~~~                                      => Pos: (280 to 287)  SpanInfo: undefined
+21 >        q: "hello"
+
+            ~~                                    => Pos: (288 to 289)  SpanInfo: {"start":288,"length":1}
+    >q
+    >:=> (line 21, col 8) to (line 21, col 9)
+21 >        q: "hello"
+
+              ~                                   => Pos: (290 to 290)  SpanInfo: undefined
+21 >        q: "hello"
+
+               ~~~~~~~~                           => Pos: (291 to 298)  SpanInfo: {"start":291,"length":7}
+    >"hello"
+    >:=> (line 21, col 11) to (line 21, col 18)
+--------------------------------
+22 >    };
+
+    ~~~~~~~                                       => Pos: (299 to 305)  SpanInfo: undefined
+--------------------------------
+23 >    for (var j in a) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (306 to 318)  SpanInfo: undefined
+23 >    for (var j in a) {
+
+                 ~~                               => Pos: (319 to 320)  SpanInfo: {"start":319,"length":1}
+    >j
+    >:=> (line 23, col 13) to (line 23, col 14)
+23 >    for (var j in a) {
+
+                   ~~~                            => Pos: (321 to 323)  SpanInfo: undefined
+23 >    for (var j in a) {
+
+                      ~~                          => Pos: (324 to 325)  SpanInfo: {"start":324,"length":1}
+    >a
+    >:=> (line 23, col 18) to (line 23, col 19)
+23 >    for (var j in a) {
+
+                        ~~~                       => Pos: (326 to 328)  SpanInfo: undefined
+--------------------------------
+24 >        obj.z = a[j];
+
+    ~~~~~~~~                                      => Pos: (329 to 336)  SpanInfo: undefined
+24 >        obj.z = a[j];
+
+            ~~~~                                  => Pos: (337 to 340)  SpanInfo: {"start":337,"length":3}
+    >obj
+    >:=> (line 24, col 8) to (line 24, col 11)
+24 >        obj.z = a[j];
+
+                ~~                                => Pos: (341 to 342)  SpanInfo: {"start":337,"length":5}
+    >obj.z
+    >:=> (line 24, col 8) to (line 24, col 13)
+24 >        obj.z = a[j];
+
+                  ~~                              => Pos: (343 to 344)  SpanInfo: undefined
+24 >        obj.z = a[j];
+
+                    ~~                            => Pos: (345 to 346)  SpanInfo: {"start":345,"length":1}
+    >a
+    >:=> (line 24, col 16) to (line 24, col 17)
+24 >        obj.z = a[j];
+
+                      ~~                          => Pos: (347 to 348)  SpanInfo: {"start":347,"length":1}
+    >j
+    >:=> (line 24, col 18) to (line 24, col 19)
+24 >        obj.z = a[j];
+
+                        ~~                        => Pos: (349 to 350)  SpanInfo: undefined
+--------------------------------
+25 >        var v = 10;
+
+    ~~~~~~~~~~~~                                  => Pos: (351 to 362)  SpanInfo: undefined
+25 >        var v = 10;
+
+                ~~                                => Pos: (363 to 364)  SpanInfo: {"start":363,"length":1}
+    >v
+    >:=> (line 25, col 12) to (line 25, col 13)
+25 >        var v = 10;
+
+                  ~~~~~~                          => Pos: (365 to 370)  SpanInfo: undefined
+--------------------------------
+26 >    }
+
+    ~~~~~~                                        => Pos: (371 to 376)  SpanInfo: undefined
+--------------------------------
+27 >    try {
+
+    ~~~~~~~~~~                                    => Pos: (377 to 386)  SpanInfo: undefined
+--------------------------------
+28 >        obj.q = "ohhh";
+
+    ~~~~~~~~                                      => Pos: (387 to 394)  SpanInfo: undefined
+28 >        obj.q = "ohhh";
+
+            ~~~~                                  => Pos: (395 to 398)  SpanInfo: {"start":395,"length":3}
+    >obj
+    >:=> (line 28, col 8) to (line 28, col 11)
+28 >        obj.q = "ohhh";
+
+                ~~                                => Pos: (399 to 400)  SpanInfo: {"start":395,"length":5}
+    >obj.q
+    >:=> (line 28, col 8) to (line 28, col 13)
+28 >        obj.q = "ohhh";
+
+                  ~~                              => Pos: (401 to 402)  SpanInfo: undefined
+28 >        obj.q = "ohhh";
+
+                    ~~~~~~~                       => Pos: (403 to 409)  SpanInfo: {"start":403,"length":6}
+    >"ohhh"
+    >:=> (line 28, col 16) to (line 28, col 22)
+28 >        obj.q = "ohhh";
+
+                           ~                      => Pos: (410 to 410)  SpanInfo: undefined
+--------------------------------
+29 >    } catch (e) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (411 to 423)  SpanInfo: undefined
+29 >    } catch (e) {
+
+                 ~~                               => Pos: (424 to 425)  SpanInfo: {"start":424,"length":1}
+    >e
+    >:=> (line 29, col 13) to (line 29, col 14)
+29 >    } catch (e) {
+
+                   ~~~                            => Pos: (426 to 428)  SpanInfo: undefined
+--------------------------------
+30 >        if (obj.z < 10) {
+
+    ~~~~~~~~~~~~                                  => Pos: (429 to 440)  SpanInfo: undefined
+30 >        if (obj.z < 10) {
+
+                ~~~~                              => Pos: (441 to 444)  SpanInfo: {"start":441,"length":3}
+    >obj
+    >:=> (line 30, col 12) to (line 30, col 15)
+30 >        if (obj.z < 10) {
+
+                    ~~                            => Pos: (445 to 446)  SpanInfo: {"start":441,"length":5}
+    >obj.z
+    >:=> (line 30, col 12) to (line 30, col 17)
+30 >        if (obj.z < 10) {
+
+                      ~~~~~~~~                    => Pos: (447 to 454)  SpanInfo: undefined
+--------------------------------
+31 >            obj.z = 12;
+
+    ~~~~~~~~~~~~                                  => Pos: (455 to 466)  SpanInfo: undefined
+31 >            obj.z = 12;
+
+                ~~~~                              => Pos: (467 to 470)  SpanInfo: {"start":467,"length":3}
+    >obj
+    >:=> (line 31, col 12) to (line 31, col 15)
+31 >            obj.z = 12;
+
+                    ~~                            => Pos: (471 to 472)  SpanInfo: {"start":467,"length":5}
+    >obj.z
+    >:=> (line 31, col 12) to (line 31, col 17)
+31 >            obj.z = 12;
+
+                      ~~~~~~                      => Pos: (473 to 478)  SpanInfo: undefined
+--------------------------------
+32 >        } else {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (479 to 495)  SpanInfo: undefined
+--------------------------------
+33 >            obj.q = "hmm";
+
+    ~~~~~~~~~~~~                                  => Pos: (496 to 507)  SpanInfo: undefined
+33 >            obj.q = "hmm";
+
+                ~~~~                              => Pos: (508 to 511)  SpanInfo: {"start":508,"length":3}
+    >obj
+    >:=> (line 33, col 12) to (line 33, col 15)
+33 >            obj.q = "hmm";
+
+                    ~~                            => Pos: (512 to 513)  SpanInfo: {"start":508,"length":5}
+    >obj.q
+    >:=> (line 33, col 12) to (line 33, col 17)
+33 >            obj.q = "hmm";
+
+                      ~~                          => Pos: (514 to 515)  SpanInfo: undefined
+33 >            obj.q = "hmm";
+
+                        ~~~~~~                    => Pos: (516 to 521)  SpanInfo: {"start":516,"length":5}
+    >"hmm"
+    >:=> (line 33, col 20) to (line 33, col 25)
+33 >            obj.q = "hmm";
+
+                              ~                   => Pos: (522 to 522)  SpanInfo: undefined
+--------------------------------
+34 >        }
+
+    ~~~~~~~~~~                                    => Pos: (523 to 532)  SpanInfo: undefined
+--------------------------------
+35 >    }
+
+    ~~~~~~                                        => Pos: (533 to 538)  SpanInfo: undefined
+--------------------------------
+36 >    try {
+
+    ~~~~~~~~~~                                    => Pos: (539 to 548)  SpanInfo: undefined
+--------------------------------
+37 >        throw new Error();
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (549 to 566)  SpanInfo: undefined
+37 >        throw new Error();
+
+                      ~~~~~~                      => Pos: (567 to 572)  SpanInfo: {"start":567,"length":5}
+    >Error
+    >:=> (line 37, col 18) to (line 37, col 23)
+37 >        throw new Error();
+
+                            ~~~                   => Pos: (573 to 575)  SpanInfo: undefined
+--------------------------------
+38 >    } catch (e1) {
+
+    ~~~~~~~~~~~~~                                 => Pos: (576 to 588)  SpanInfo: undefined
+38 >    } catch (e1) {
+
+                 ~~~                              => Pos: (589 to 591)  SpanInfo: {"start":589,"length":2}
+    >e1
+    >:=> (line 38, col 13) to (line 38, col 15)
+38 >    } catch (e1) {
+
+                    ~~~                           => Pos: (592 to 594)  SpanInfo: undefined
+--------------------------------
+39 >        var b = e1;
+
+    ~~~~~~~~~~~~                                  => Pos: (595 to 606)  SpanInfo: undefined
+39 >        var b = e1;
+
+                ~~                                => Pos: (607 to 608)  SpanInfo: {"start":607,"length":1}
+    >b
+    >:=> (line 39, col 12) to (line 39, col 13)
+39 >        var b = e1;
+
+                  ~~                              => Pos: (609 to 610)  SpanInfo: undefined
+39 >        var b = e1;
+
+                    ~~~                           => Pos: (611 to 613)  SpanInfo: {"start":611,"length":2}
+    >e1
+    >:=> (line 39, col 16) to (line 39, col 18)
+39 >        var b = e1;
+
+                       ~                          => Pos: (614 to 614)  SpanInfo: undefined
+--------------------------------
+40 >    } finally {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (615 to 630)  SpanInfo: undefined
+--------------------------------
+41 >        y = 70;
+
+    ~~~~~~~~                                      => Pos: (631 to 638)  SpanInfo: undefined
+41 >        y = 70;
+
+            ~~                                    => Pos: (639 to 640)  SpanInfo: {"start":639,"length":1}
+    >y
+    >:=> (line 41, col 8) to (line 41, col 9)
+41 >        y = 70;
+
+              ~~~~~~                              => Pos: (641 to 646)  SpanInfo: undefined
+--------------------------------
+42 >    }
+
+    ~~~~~~                                        => Pos: (647 to 652)  SpanInfo: undefined
+--------------------------------
+43 >    with (obj) {
+
+    ~~~~~~~~~~                                    => Pos: (653 to 662)  SpanInfo: undefined
+43 >    with (obj) {
+
+              ~~~~                                => Pos: (663 to 666)  SpanInfo: {"start":663,"length":3}
+    >obj
+    >:=> (line 43, col 10) to (line 43, col 13)
+43 >    with (obj) {
+
+                  ~~~                             => Pos: (667 to 669)  SpanInfo: undefined
+--------------------------------
+44 >        i = 2;
+
+    ~~~~~~~~                                      => Pos: (670 to 677)  SpanInfo: undefined
+44 >        i = 2;
+
+            ~~                                    => Pos: (678 to 679)  SpanInfo: {"start":678,"length":1}
+    >i
+    >:=> (line 44, col 8) to (line 44, col 9)
+44 >        i = 2;
+
+              ~~~~~                               => Pos: (680 to 684)  SpanInfo: undefined
+--------------------------------
+45 >        z = 10;
+
+    ~~~~~~~~                                      => Pos: (685 to 692)  SpanInfo: undefined
+45 >        z = 10;
+
+            ~~                                    => Pos: (693 to 694)  SpanInfo: {"start":693,"length":1}
+    >z
+    >:=> (line 45, col 8) to (line 45, col 9)
+45 >        z = 10;
+
+              ~~~~~~                              => Pos: (695 to 700)  SpanInfo: undefined
+--------------------------------
+46 >    }
+
+    ~~~~~~                                        => Pos: (701 to 706)  SpanInfo: undefined
+--------------------------------
+47 >    switch (obj.z) {
+
+    ~~~~~~~~~~~~                                  => Pos: (707 to 718)  SpanInfo: undefined
+47 >    switch (obj.z) {
+
+                ~~~~                              => Pos: (719 to 722)  SpanInfo: {"start":719,"length":3}
+    >obj
+    >:=> (line 47, col 12) to (line 47, col 15)
+47 >    switch (obj.z) {
+
+                    ~~                            => Pos: (723 to 724)  SpanInfo: {"start":719,"length":5}
+    >obj.z
+    >:=> (line 47, col 12) to (line 47, col 17)
+47 >    switch (obj.z) {
+
+                      ~~~                         => Pos: (725 to 727)  SpanInfo: undefined
+--------------------------------
+48 >        case 0: {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (728 to 745)  SpanInfo: undefined
+--------------------------------
+49 >            x++;
+
+    ~~~~~~~~~~~~                                  => Pos: (746 to 757)  SpanInfo: undefined
+49 >            x++;
+
+                ~~                                => Pos: (758 to 759)  SpanInfo: {"start":758,"length":1}
+    >x
+    >:=> (line 49, col 12) to (line 49, col 13)
+49 >            x++;
+
+                  ~~~                             => Pos: (760 to 762)  SpanInfo: undefined
+--------------------------------
+50 >            break;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (763 to 781)  SpanInfo: undefined
+--------------------------------
+51 >
+
+    ~                                             => Pos: (782 to 782)  SpanInfo: undefined
+--------------------------------
+52 >        }
+
+    ~~~~~~~~~~                                    => Pos: (783 to 792)  SpanInfo: undefined
+--------------------------------
+53 >        case 1: {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (793 to 810)  SpanInfo: undefined
+--------------------------------
+54 >            x--;
+
+    ~~~~~~~~~~~~                                  => Pos: (811 to 822)  SpanInfo: undefined
+54 >            x--;
+
+                ~~                                => Pos: (823 to 824)  SpanInfo: {"start":823,"length":1}
+    >x
+    >:=> (line 54, col 12) to (line 54, col 13)
+54 >            x--;
+
+                  ~~~                             => Pos: (825 to 827)  SpanInfo: undefined
+--------------------------------
+55 >            break;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (828 to 846)  SpanInfo: undefined
+--------------------------------
+56 >
+
+    ~                                             => Pos: (847 to 847)  SpanInfo: undefined
+--------------------------------
+57 >        }
+
+    ~~~~~~~~~~                                    => Pos: (848 to 857)  SpanInfo: undefined
+--------------------------------
+58 >        default: {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (858 to 876)  SpanInfo: undefined
+--------------------------------
+59 >            x *= 2;
+
+    ~~~~~~~~~~~~                                  => Pos: (877 to 888)  SpanInfo: undefined
+59 >            x *= 2;
+
+                ~~                                => Pos: (889 to 890)  SpanInfo: {"start":889,"length":1}
+    >x
+    >:=> (line 59, col 12) to (line 59, col 13)
+59 >            x *= 2;
+
+                  ~~~~~~                          => Pos: (891 to 896)  SpanInfo: undefined
+--------------------------------
+60 >            x = 50;
+
+    ~~~~~~~~~~~~                                  => Pos: (897 to 908)  SpanInfo: undefined
+60 >            x = 50;
+
+                ~~                                => Pos: (909 to 910)  SpanInfo: {"start":909,"length":1}
+    >x
+    >:=> (line 60, col 12) to (line 60, col 13)
+60 >            x = 50;
+
+                  ~~~~~~                          => Pos: (911 to 916)  SpanInfo: undefined
+--------------------------------
+61 >            break;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (917 to 935)  SpanInfo: undefined
+--------------------------------
+62 >
+
+    ~                                             => Pos: (936 to 936)  SpanInfo: undefined
+--------------------------------
+63 >        }
+
+    ~~~~~~~~~~                                    => Pos: (937 to 946)  SpanInfo: undefined
+--------------------------------
+64 >    }
+
+    ~~~~~~                                        => Pos: (947 to 952)  SpanInfo: undefined
+--------------------------------
+65 >    while (x < 10) {
+
+    ~~~~~~~~~~~                                   => Pos: (953 to 963)  SpanInfo: undefined
+65 >    while (x < 10) {
+
+               ~~                                 => Pos: (964 to 965)  SpanInfo: {"start":964,"length":1}
+    >x
+    >:=> (line 65, col 11) to (line 65, col 12)
+65 >    while (x < 10) {
+
+                 ~~~~~~~~                         => Pos: (966 to 973)  SpanInfo: undefined
+--------------------------------
+66 >        x++;
+
+    ~~~~~~~~                                      => Pos: (974 to 981)  SpanInfo: undefined
+66 >        x++;
+
+            ~~                                    => Pos: (982 to 983)  SpanInfo: {"start":982,"length":1}
+    >x
+    >:=> (line 66, col 8) to (line 66, col 9)
+66 >        x++;
+
+              ~~~                                 => Pos: (984 to 986)  SpanInfo: undefined
+--------------------------------
+67 >    }
+
+    ~~~~~~                                        => Pos: (987 to 992)  SpanInfo: undefined
+--------------------------------
+68 >    do {
+
+    ~~~~~~~~~                                     => Pos: (993 to 1001)  SpanInfo: undefined
+--------------------------------
+69 >        x--;
+
+    ~~~~~~~~                                      => Pos: (1002 to 1009)  SpanInfo: undefined
+69 >        x--;
+
+            ~~                                    => Pos: (1010 to 1011)  SpanInfo: {"start":1010,"length":1}
+    >x
+    >:=> (line 69, col 8) to (line 69, col 9)
+69 >        x--;
+
+              ~~~                                 => Pos: (1012 to 1014)  SpanInfo: undefined
+--------------------------------
+70 >    } while (x > 4)
+
+    ~~~~~~~~~~~~~                                 => Pos: (1015 to 1027)  SpanInfo: undefined
+70 >    } while (x > 4)
+
+                 ~~                               => Pos: (1028 to 1029)  SpanInfo: {"start":1028,"length":1}
+    >x
+    >:=> (line 70, col 13) to (line 70, col 14)
+70 >    } while (x > 4)
+
+                   ~~~~~                          => Pos: (1030 to 1034)  SpanInfo: undefined
+--------------------------------
+71 >    x = y;
+
+    ~~~~                                          => Pos: (1035 to 1038)  SpanInfo: undefined
+71 >    x = y;
+
+        ~~                                        => Pos: (1039 to 1040)  SpanInfo: {"start":1039,"length":1}
+    >x
+    >:=> (line 71, col 4) to (line 71, col 5)
+71 >    x = y;
+
+          ~~                                      => Pos: (1041 to 1042)  SpanInfo: undefined
+71 >    x = y;
+
+            ~~                                    => Pos: (1043 to 1044)  SpanInfo: {"start":1043,"length":1}
+    >y
+    >:=> (line 71, col 8) to (line 71, col 9)
+71 >    x = y;
+
+              ~                                   => Pos: (1045 to 1045)  SpanInfo: undefined
+--------------------------------
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+    ~~~~~~~~                                      => Pos: (1046 to 1053)  SpanInfo: undefined
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+            ~~                                    => Pos: (1054 to 1055)  SpanInfo: {"start":1054,"length":1}
+    >z
+    >:=> (line 72, col 8) to (line 72, col 9)
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+              ~~~                                 => Pos: (1056 to 1058)  SpanInfo: undefined
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                 ~~                               => Pos: (1059 to 1060)  SpanInfo: {"start":1059,"length":1}
+    >x
+    >:=> (line 72, col 13) to (line 72, col 14)
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                   ~~~~~~~~                       => Pos: (1061 to 1068)  SpanInfo: undefined
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                           ~~                     => Pos: (1069 to 1070)  SpanInfo: {"start":1069,"length":1}
+    >x
+    >:=> (line 72, col 23) to (line 72, col 24)
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                             ~~~~~~               => Pos: (1071 to 1076)  SpanInfo: undefined
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                                   ~~             => Pos: (1077 to 1078)  SpanInfo: {"start":1077,"length":1}
+    >x
+    >:=> (line 72, col 31) to (line 72, col 32)
+72 >    var z = (x == 1) ? x + 1 : x - 1;
+
+                                     ~~~~~        => Pos: (1079 to 1083)  SpanInfo: undefined
+--------------------------------
+73 >    (x == 1) ? x + 1 : x - 1;
+
+    ~~~~~                                         => Pos: (1084 to 1088)  SpanInfo: undefined
+73 >    (x == 1) ? x + 1 : x - 1;
+
+         ~~                                       => Pos: (1089 to 1090)  SpanInfo: {"start":1089,"length":1}
+    >x
+    >:=> (line 73, col 5) to (line 73, col 6)
+73 >    (x == 1) ? x + 1 : x - 1;
+
+           ~~~~~~~~                               => Pos: (1091 to 1098)  SpanInfo: undefined
+73 >    (x == 1) ? x + 1 : x - 1;
+
+                   ~~                             => Pos: (1099 to 1100)  SpanInfo: {"start":1099,"length":1}
+    >x
+    >:=> (line 73, col 15) to (line 73, col 16)
+73 >    (x == 1) ? x + 1 : x - 1;
+
+                     ~~~~~~                       => Pos: (1101 to 1106)  SpanInfo: undefined
+73 >    (x == 1) ? x + 1 : x - 1;
+
+                           ~~                     => Pos: (1107 to 1108)  SpanInfo: {"start":1107,"length":1}
+    >x
+    >:=> (line 73, col 23) to (line 73, col 24)
+73 >    (x == 1) ? x + 1 : x - 1;
+
+                             ~~~~~                => Pos: (1109 to 1113)  SpanInfo: undefined
+--------------------------------
+74 >    x === 1;
+
+    ~~~~                                          => Pos: (1114 to 1117)  SpanInfo: undefined
+74 >    x === 1;
+
+        ~~                                        => Pos: (1118 to 1119)  SpanInfo: {"start":1118,"length":1}
+    >x
+    >:=> (line 74, col 4) to (line 74, col 5)
+74 >    x === 1;
+
+          ~~~~~~~                                 => Pos: (1120 to 1126)  SpanInfo: undefined
+--------------------------------
+75 >    x = z = 40;
+
+    ~~~~                                          => Pos: (1127 to 1130)  SpanInfo: undefined
+75 >    x = z = 40;
+
+        ~~                                        => Pos: (1131 to 1132)  SpanInfo: {"start":1131,"length":1}
+    >x
+    >:=> (line 75, col 4) to (line 75, col 5)
+75 >    x = z = 40;
+
+          ~~                                      => Pos: (1133 to 1134)  SpanInfo: undefined
+75 >    x = z = 40;
+
+            ~~                                    => Pos: (1135 to 1136)  SpanInfo: {"start":1135,"length":1}
+    >z
+    >:=> (line 75, col 8) to (line 75, col 9)
+75 >    x = z = 40;
+
+              ~~~~~~                              => Pos: (1137 to 1142)  SpanInfo: undefined
+--------------------------------
+76 >    eval("y");
+
+    ~~~~                                          => Pos: (1143 to 1146)  SpanInfo: undefined
+76 >    eval("y");
+
+        ~~~~~                                     => Pos: (1147 to 1151)  SpanInfo: {"start":1147,"length":4}
+    >eval
+    >:=> (line 76, col 4) to (line 76, col 8)
+76 >    eval("y");
+
+             ~~~~                                 => Pos: (1152 to 1155)  SpanInfo: {"start":1152,"length":3}
+    >"y"
+    >:=> (line 76, col 9) to (line 76, col 12)
+76 >    eval("y");
+
+                 ~~                               => Pos: (1156 to 1157)  SpanInfo: undefined
+--------------------------------
+77 >    return;
+
+    ~~~~~~~~~~~~                                  => Pos: (1158 to 1169)  SpanInfo: undefined
+--------------------------------
+78 >}
+
+    ~~                                            => Pos: (1170 to 1171)  SpanInfo: undefined
+--------------------------------
+79 >var b = function () {
+
+    ~~~~                                          => Pos: (1172 to 1175)  SpanInfo: undefined
+79 >var b = function () {
+
+        ~~                                        => Pos: (1176 to 1177)  SpanInfo: {"start":1176,"length":1}
+    >b
+    >:=> (line 79, col 4) to (line 79, col 5)
+79 >var b = function () {
+
+          ~~~~~~~~~~~~~~~~                        => Pos: (1178 to 1193)  SpanInfo: undefined
+--------------------------------
+80 >    var x = 10;
+
+    ~~~~~~~~                                      => Pos: (1194 to 1201)  SpanInfo: undefined
+80 >    var x = 10;
+
+            ~~                                    => Pos: (1202 to 1203)  SpanInfo: {"start":1202,"length":1}
+    >x
+    >:=> (line 80, col 8) to (line 80, col 9)
+80 >    var x = 10;
+
+              ~~~~~~                              => Pos: (1204 to 1209)  SpanInfo: undefined
+--------------------------------
+81 >    x = x + 1;
+
+    ~~~~                                          => Pos: (1210 to 1213)  SpanInfo: undefined
+81 >    x = x + 1;
+
+        ~~                                        => Pos: (1214 to 1215)  SpanInfo: {"start":1214,"length":1}
+    >x
+    >:=> (line 81, col 4) to (line 81, col 5)
+81 >    x = x + 1;
+
+          ~~                                      => Pos: (1216 to 1217)  SpanInfo: undefined
+81 >    x = x + 1;
+
+            ~~                                    => Pos: (1218 to 1219)  SpanInfo: {"start":1218,"length":1}
+    >x
+    >:=> (line 81, col 8) to (line 81, col 9)
+81 >    x = x + 1;
+
+              ~~~~~                               => Pos: (1220 to 1224)  SpanInfo: undefined
+--------------------------------
+82 >};
+
+    ~~~                                           => Pos: (1225 to 1227)  SpanInfo: undefined
+--------------------------------
+83 >f();
+    ~~                                            => Pos: (1228 to 1229)  SpanInfo: {"start":1228,"length":1}
+    >f
+    >:=> (line 83, col 0) to (line 83, col 1)
+83 >f();
+      ~~                                          => Pos: (1230 to 1231)  SpanInfo: undefined

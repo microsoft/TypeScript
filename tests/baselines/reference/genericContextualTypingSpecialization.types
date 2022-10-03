@@ -1,0 +1,17 @@
+=== tests/cases/compiler/genericContextualTypingSpecialization.ts ===
+var b: number[];
+>b : number[]
+
+b.reduce<number>((c, d) => c + d, 0); // should not error on '+'
+>b.reduce<number>((c, d) => c + d, 0) : number
+>b.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>b : number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>(c, d) => c + d : (c: number, d: number) => number
+>c : number
+>d : number
+>c + d : number
+>c : number
+>d : number
+>0 : 0
+

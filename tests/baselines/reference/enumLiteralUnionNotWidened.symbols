@@ -1,0 +1,61 @@
+=== tests/cases/compiler/enumLiteralUnionNotWidened.ts ===
+// repro from #22093
+enum A { one = "one", two = "two" };
+>A : Symbol(A, Decl(enumLiteralUnionNotWidened.ts, 0, 0))
+>one : Symbol(A.one, Decl(enumLiteralUnionNotWidened.ts, 1, 8))
+>two : Symbol(A.two, Decl(enumLiteralUnionNotWidened.ts, 1, 21))
+
+enum B { foo = "foo", bar = "bar" };
+>B : Symbol(B, Decl(enumLiteralUnionNotWidened.ts, 1, 36))
+>foo : Symbol(B.foo, Decl(enumLiteralUnionNotWidened.ts, 2, 8))
+>bar : Symbol(B.bar, Decl(enumLiteralUnionNotWidened.ts, 2, 21))
+
+type C = A | B.foo;
+>C : Symbol(C, Decl(enumLiteralUnionNotWidened.ts, 2, 36))
+>A : Symbol(A, Decl(enumLiteralUnionNotWidened.ts, 0, 0))
+>B : Symbol(B, Decl(enumLiteralUnionNotWidened.ts, 1, 36))
+>foo : Symbol(B.foo, Decl(enumLiteralUnionNotWidened.ts, 2, 8))
+
+type D = A | "foo";
+>D : Symbol(D, Decl(enumLiteralUnionNotWidened.ts, 4, 19))
+>A : Symbol(A, Decl(enumLiteralUnionNotWidened.ts, 0, 0))
+
+class List<T>
+>List : Symbol(List, Decl(enumLiteralUnionNotWidened.ts, 5, 19))
+>T : Symbol(T, Decl(enumLiteralUnionNotWidened.ts, 7, 11))
+{
+	private readonly items: T[] = [];
+>items : Symbol(List.items, Decl(enumLiteralUnionNotWidened.ts, 8, 1))
+>T : Symbol(T, Decl(enumLiteralUnionNotWidened.ts, 7, 11))
+}
+
+function asList<T>(arg: T): List<T> { return new List(); }
+>asList : Symbol(asList, Decl(enumLiteralUnionNotWidened.ts, 10, 1))
+>T : Symbol(T, Decl(enumLiteralUnionNotWidened.ts, 12, 16))
+>arg : Symbol(arg, Decl(enumLiteralUnionNotWidened.ts, 12, 19))
+>T : Symbol(T, Decl(enumLiteralUnionNotWidened.ts, 12, 16))
+>List : Symbol(List, Decl(enumLiteralUnionNotWidened.ts, 5, 19))
+>T : Symbol(T, Decl(enumLiteralUnionNotWidened.ts, 12, 16))
+>List : Symbol(List, Decl(enumLiteralUnionNotWidened.ts, 5, 19))
+
+// TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
+// The correct type is "List<A | B.foo>"
+function fn1(x: C): List<C> { return asList(x); }
+>fn1 : Symbol(fn1, Decl(enumLiteralUnionNotWidened.ts, 12, 58))
+>x : Symbol(x, Decl(enumLiteralUnionNotWidened.ts, 16, 13))
+>C : Symbol(C, Decl(enumLiteralUnionNotWidened.ts, 2, 36))
+>List : Symbol(List, Decl(enumLiteralUnionNotWidened.ts, 5, 19))
+>C : Symbol(C, Decl(enumLiteralUnionNotWidened.ts, 2, 36))
+>asList : Symbol(asList, Decl(enumLiteralUnionNotWidened.ts, 10, 1))
+>x : Symbol(x, Decl(enumLiteralUnionNotWidened.ts, 16, 13))
+
+// If we use the literal "foo" instead of B.foo, the correct type is inferred
+function fn2(x: D): List<D> { return asList(x); }
+>fn2 : Symbol(fn2, Decl(enumLiteralUnionNotWidened.ts, 16, 49))
+>x : Symbol(x, Decl(enumLiteralUnionNotWidened.ts, 19, 13))
+>D : Symbol(D, Decl(enumLiteralUnionNotWidened.ts, 4, 19))
+>List : Symbol(List, Decl(enumLiteralUnionNotWidened.ts, 5, 19))
+>D : Symbol(D, Decl(enumLiteralUnionNotWidened.ts, 4, 19))
+>asList : Symbol(asList, Decl(enumLiteralUnionNotWidened.ts, 10, 1))
+>x : Symbol(x, Decl(enumLiteralUnionNotWidened.ts, 19, 13))
+

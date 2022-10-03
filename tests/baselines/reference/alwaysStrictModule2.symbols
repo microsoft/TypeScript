@@ -1,0 +1,23 @@
+=== tests/cases/compiler/a.ts ===
+module M {
+>M : Symbol(M, Decl(a.ts, 0, 0), Decl(b.ts, 0, 0))
+
+    export function f() {
+>f : Symbol(f, Decl(a.ts, 0, 10))
+
+        var arguments = [];
+>arguments : Symbol(arguments, Decl(a.ts, 2, 11))
+    }
+}
+
+=== tests/cases/compiler/b.ts ===
+module M {
+>M : Symbol(M, Decl(a.ts, 0, 0), Decl(b.ts, 0, 0))
+
+    export function f2() {
+>f2 : Symbol(f2, Decl(b.ts, 0, 10))
+
+        var arguments = [];
+>arguments : Symbol(arguments, Decl(b.ts, 2, 11))
+    }
+}

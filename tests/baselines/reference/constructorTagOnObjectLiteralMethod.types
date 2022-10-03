@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsdoc/example.js ===
+const obj = {
+>obj : { Foo(): void; }
+>{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo(): void; }
+
+  /** @constructor */
+  Foo() { this.bar = "bar" }
+>Foo : () => void
+>this.bar = "bar" : "bar"
+>this.bar : any
+>this : { Foo(): void; }
+>bar : any
+>"bar" : "bar"
+
+};
+(new obj.Foo()).bar
+>(new obj.Foo()).bar : any
+>(new obj.Foo()) : any
+>new obj.Foo() : any
+>obj.Foo : () => void
+>obj : { Foo(): void; }
+>Foo : () => void
+>bar : any
+

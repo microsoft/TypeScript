@@ -1,0 +1,186 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts ===
+// type parameter lists must exactly match type argument lists
+// all of these invocations are errors
+
+function f<T, U>(x: T, y: U): T { return null; }
+>f : <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+>null : null
+
+var r1 = f<number>(1, '');
+>r1 : number
+>f<number>(1, '') : number
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var r1b = f<number, string, number>(1, '');
+>r1b : number
+>f<number, string, number>(1, '') : number
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var f2 = <T, U>(x: T, y: U): T => { return null; }
+>f2 : <T, U>(x: T, y: U) => T
+><T, U>(x: T, y: U): T => { return null; } : <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+>null : null
+
+var r2 = f2<number>(1, '');
+>r2 : number
+>f2<number>(1, '') : number
+>f2 : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var r2b = f2<number, string, number>(1, '');
+>r2b : number
+>f2<number, string, number>(1, '') : number
+>f2 : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var f3: { <T, U>(x: T, y: U): T; }
+>f3 : <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+
+var r3 = f3<number>(1, '');
+>r3 : number
+>f3<number>(1, '') : number
+>f3 : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var r3b = f3<number, string, number>(1, '');
+>r3b : number
+>f3<number, string, number>(1, '') : number
+>f3 : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+class C {
+>C : C
+
+    f<T, U>(x: T, y: U): T {
+>f : <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+
+        return null;
+>null : null
+    }
+}
+var r4 = (new C()).f<number>(1, '');
+>r4 : number
+>(new C()).f<number>(1, '') : number
+>(new C()).f : <T, U>(x: T, y: U) => T
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var r4b = (new C()).f<number, string, number>(1, '');
+>r4b : number
+>(new C()).f<number, string, number>(1, '') : number
+>(new C()).f : <T, U>(x: T, y: U) => T
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+interface I {
+    f<T, U>(x: T, y: U): T;
+>f : <T, U>(x: T, y: U) => T
+>x : T
+>y : U
+}
+var i: I;
+>i : I
+
+var r5 = i.f<number>(1, '');
+>r5 : number
+>i.f<number>(1, '') : number
+>i.f : <T, U>(x: T, y: U) => T
+>i : I
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+var r5b = i.f<number, string, number>(1, '');
+>r5b : number
+>i.f<number, string, number>(1, '') : number
+>i.f : <T, U>(x: T, y: U) => T
+>i : I
+>f : <T, U>(x: T, y: U) => T
+>1 : 1
+>'' : ""
+
+class C2<T, U> {
+>C2 : C2<T, U>
+
+    f(x: T, y: U): T {
+>f : (x: T, y: U) => T
+>x : T
+>y : U
+
+        return null;
+>null : null
+    }
+}
+var r6 = (new C2()).f<number>(1, '');
+>r6 : unknown
+>(new C2()).f<number>(1, '') : unknown
+>(new C2()).f : (x: unknown, y: unknown) => unknown
+>(new C2()) : C2<unknown, unknown>
+>new C2() : C2<unknown, unknown>
+>C2 : typeof C2
+>f : (x: unknown, y: unknown) => unknown
+>1 : 1
+>'' : ""
+
+var r6b = (new C2()).f<number, string, number>(1, '');
+>r6b : unknown
+>(new C2()).f<number, string, number>(1, '') : unknown
+>(new C2()).f : (x: unknown, y: unknown) => unknown
+>(new C2()) : C2<unknown, unknown>
+>new C2() : C2<unknown, unknown>
+>C2 : typeof C2
+>f : (x: unknown, y: unknown) => unknown
+>1 : 1
+>'' : ""
+
+interface I2<T, U> {
+    f(x: T, y: U): T;
+>f : (x: T, y: U) => T
+>x : T
+>y : U
+}
+var i2: I2<number, string>;
+>i2 : I2<number, string>
+
+var r7 = i2.f<number>(1, '');
+>r7 : number
+>i2.f<number>(1, '') : number
+>i2.f : (x: number, y: string) => number
+>i2 : I2<number, string>
+>f : (x: number, y: string) => number
+>1 : 1
+>'' : ""
+
+var r7b = i2.f<number, string, number>(1, '');
+>r7b : number
+>i2.f<number, string, number>(1, '') : number
+>i2.f : (x: number, y: string) => number
+>i2 : I2<number, string>
+>f : (x: number, y: string) => number
+>1 : 1
+>'' : ""
+

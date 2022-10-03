@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/spread/spreadTypeVariable.ts ===
+function f1<T extends number>(arg: T) {
+>f1 : Symbol(f1, Decl(spreadTypeVariable.ts, 0, 0))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 0, 12))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 0, 30))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 0, 12))
+
+  return { ...arg };
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 0, 30))
+}
+
+function f2<T extends string[]>(arg: T) {
+>f2 : Symbol(f2, Decl(spreadTypeVariable.ts, 2, 1))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 4, 12))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 4, 32))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 4, 12))
+
+  return { ...arg }
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 4, 32))
+}
+
+function f3<T extends number | string[]>(arg: T) {
+>f3 : Symbol(f3, Decl(spreadTypeVariable.ts, 6, 1))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 8, 12))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 8, 41))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 8, 12))
+
+  return { ...arg }
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 8, 41))
+}
+
+function f4<T extends number | { [key: string]: any }>(arg: T) {
+>f4 : Symbol(f4, Decl(spreadTypeVariable.ts, 10, 1))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 12, 12))
+>key : Symbol(key, Decl(spreadTypeVariable.ts, 12, 34))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 12, 55))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 12, 12))
+
+  return { ...arg }
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 12, 55))
+}
+
+function f5<T extends string[] | { [key: string]: any }>(arg: T) {
+>f5 : Symbol(f5, Decl(spreadTypeVariable.ts, 14, 1))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 16, 12))
+>key : Symbol(key, Decl(spreadTypeVariable.ts, 16, 36))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 16, 57))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 16, 12))
+
+  return { ...arg }
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 16, 57))
+}
+
+function f6<T>(arg: T) {
+>f6 : Symbol(f6, Decl(spreadTypeVariable.ts, 18, 1))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 20, 12))
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 20, 15))
+>T : Symbol(T, Decl(spreadTypeVariable.ts, 20, 12))
+
+  return { ...arg }
+>arg : Symbol(arg, Decl(spreadTypeVariable.ts, 20, 15))
+}
+
+

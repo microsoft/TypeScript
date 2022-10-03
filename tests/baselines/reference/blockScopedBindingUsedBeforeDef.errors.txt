@@ -1,0 +1,32 @@
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(2,12): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(2,12): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(5,12): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(5,12): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(8,7): error TS2448: Block-scoped variable 'b' used before its declaration.
+tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts(8,7): error TS2538: Type 'any' cannot be used as an index type.
+
+
+==== tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts (6 errors) ====
+    // 1:
+    for (let {[a]: a} of [{ }]) continue;
+               ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:2:16: 'a' is declared here.
+               ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    
+    // 2:
+    for (let {[a]: a} = { }; false; ) continue;
+               ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:5:16: 'a' is declared here.
+               ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    
+    // 3:
+    let {[b]: b} = { };
+          ~
+!!! error TS2448: Block-scoped variable 'b' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts:8:11: 'b' is declared here.
+          ~
+!!! error TS2538: Type 'any' cannot be used as an index type.

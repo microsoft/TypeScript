@@ -1,0 +1,12 @@
+tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge.ts(1,13): error TS2395: Individual declarations in merged declaration 'A' must be all exported or all local.
+tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge.ts(2,6): error TS2395: Individual declarations in merged declaration 'A' must be all exported or all local.
+
+
+==== tests/cases/conformance/types/typeAliases/typeAliasesDoNotMerge.ts (2 errors) ====
+    export type A = {}
+                ~
+!!! error TS2395: Individual declarations in merged declaration 'A' must be all exported or all local.
+    type A = {}
+         ~
+!!! error TS2395: Individual declarations in merged declaration 'A' must be all exported or all local.
+    

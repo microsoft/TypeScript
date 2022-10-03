@@ -1,0 +1,19 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+No type information for this code.module ElidedModule3 {
+No type information for this code.}
+No type information for this code.=== tests/cases/compiler/a.ts ===
+/*!=================
+No type information for this code.    Keep this pinned
+No type information for this code.   =================
+No type information for this code.*/
+No type information for this code.
+No type information for this code./*! Don't keep this pinned comment */
+No type information for this code.module ElidedModule {
+No type information for this code.}
+No type information for this code.
+No type information for this code.// Don't keep this comment.
+No type information for this code.module ElidedModule2 {
+No type information for this code.}
+No type information for this code.
+No type information for this code.

@@ -1,0 +1,117 @@
+=== tests/cases/compiler/ipromise4.ts ===
+declare module Windows.Foundation {
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(ipromise4.ts, 0, 23))
+
+    export interface IPromise<T> {
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+
+        then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
+>then : Symbol(IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>U : Symbol(U, Decl(ipromise4.ts, 2, 13))
+>success : Symbol(success, Decl(ipromise4.ts, 2, 16))
+>value : Symbol(value, Decl(ipromise4.ts, 2, 27))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 2, 13))
+>error : Symbol(error, Decl(ipromise4.ts, 2, 52))
+>error : Symbol(error, Decl(ipromise4.ts, 2, 62))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 2, 13))
+>progress : Symbol(progress, Decl(ipromise4.ts, 2, 89))
+>progress : Symbol(progress, Decl(ipromise4.ts, 2, 102))
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(ipromise4.ts, 0, 23))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 2, 13))
+
+        then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
+>then : Symbol(IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>U : Symbol(U, Decl(ipromise4.ts, 3, 13))
+>success : Symbol(success, Decl(ipromise4.ts, 3, 16))
+>value : Symbol(value, Decl(ipromise4.ts, 3, 27))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 3, 13))
+>error : Symbol(error, Decl(ipromise4.ts, 3, 52))
+>error : Symbol(error, Decl(ipromise4.ts, 3, 62))
+>U : Symbol(U, Decl(ipromise4.ts, 3, 13))
+>progress : Symbol(progress, Decl(ipromise4.ts, 3, 79))
+>progress : Symbol(progress, Decl(ipromise4.ts, 3, 92))
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(ipromise4.ts, 0, 23))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 3, 13))
+
+        then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
+>then : Symbol(IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>U : Symbol(U, Decl(ipromise4.ts, 4, 13))
+>success : Symbol(success, Decl(ipromise4.ts, 4, 16))
+>value : Symbol(value, Decl(ipromise4.ts, 4, 27))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+>U : Symbol(U, Decl(ipromise4.ts, 4, 13))
+>error : Symbol(error, Decl(ipromise4.ts, 4, 42))
+>error : Symbol(error, Decl(ipromise4.ts, 4, 52))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 4, 13))
+>progress : Symbol(progress, Decl(ipromise4.ts, 4, 79))
+>progress : Symbol(progress, Decl(ipromise4.ts, 4, 92))
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(ipromise4.ts, 0, 23))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 4, 13))
+
+        then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
+>then : Symbol(IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>U : Symbol(U, Decl(ipromise4.ts, 5, 13))
+>success : Symbol(success, Decl(ipromise4.ts, 5, 16))
+>value : Symbol(value, Decl(ipromise4.ts, 5, 27))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+>U : Symbol(U, Decl(ipromise4.ts, 5, 13))
+>error : Symbol(error, Decl(ipromise4.ts, 5, 42))
+>error : Symbol(error, Decl(ipromise4.ts, 5, 52))
+>U : Symbol(U, Decl(ipromise4.ts, 5, 13))
+>progress : Symbol(progress, Decl(ipromise4.ts, 5, 69))
+>progress : Symbol(progress, Decl(ipromise4.ts, 5, 82))
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Foundation, Decl(ipromise4.ts, 0, 23))
+>IPromise : Symbol(IPromise, Decl(ipromise4.ts, 0, 35))
+>U : Symbol(U, Decl(ipromise4.ts, 5, 13))
+
+        done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
+>done : Symbol(IPromise.done, Decl(ipromise4.ts, 5, 139))
+>U : Symbol(U, Decl(ipromise4.ts, 6, 15))
+>success : Symbol(success, Decl(ipromise4.ts, 6, 18))
+>value : Symbol(value, Decl(ipromise4.ts, 6, 29))
+>T : Symbol(T, Decl(ipromise4.ts, 1, 30))
+>error : Symbol(error, Decl(ipromise4.ts, 6, 46))
+>error : Symbol(error, Decl(ipromise4.ts, 6, 56))
+>progress : Symbol(progress, Decl(ipromise4.ts, 6, 75))
+>progress : Symbol(progress, Decl(ipromise4.ts, 6, 88))
+    }
+}
+ 
+var p: Windows.Foundation.IPromise<number> = null;
+>p : Symbol(p, Decl(ipromise4.ts, 10, 3))
+>Windows : Symbol(Windows, Decl(ipromise4.ts, 0, 0))
+>Foundation : Symbol(Windows.Foundation, Decl(ipromise4.ts, 0, 23))
+>IPromise : Symbol(Windows.Foundation.IPromise, Decl(ipromise4.ts, 0, 35))
+ 
+p.then(function (x) { } ); // should not error
+>p.then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>p : Symbol(p, Decl(ipromise4.ts, 10, 3))
+>then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>x : Symbol(x, Decl(ipromise4.ts, 12, 17))
+
+p.then(function (x) { return "hello"; } ).then(function (x) { return x } ); // should not error
+>p.then(function (x) { return "hello"; } ).then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>p.then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>p : Symbol(p, Decl(ipromise4.ts, 10, 3))
+>then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>x : Symbol(x, Decl(ipromise4.ts, 13, 17))
+>then : Symbol(Windows.Foundation.IPromise.then, Decl(ipromise4.ts, 1, 34), Decl(ipromise4.ts, 2, 159), Decl(ipromise4.ts, 3, 149), Decl(ipromise4.ts, 4, 149))
+>x : Symbol(x, Decl(ipromise4.ts, 13, 57))
+>x : Symbol(x, Decl(ipromise4.ts, 13, 57))
+ 
+

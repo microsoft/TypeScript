@@ -1,0 +1,25 @@
+=== tests/cases/compiler/declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 0))
+
+    item: Bar;
+>item : Symbol(Foo.item, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 22))
+>Bar : Symbol(Bar, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 2, 1), Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 6, 1))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 2, 1), Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 6, 1))
+
+    baz(): void;
+>baz : Symbol(Bar.baz, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 4, 15))
+}
+
+namespace Bar {
+>Bar : Symbol(Bar, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 2, 1), Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 6, 1))
+
+    export function biz() {
+>biz : Symbol(biz, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 8, 15))
+
+        return 0;
+    }
+}

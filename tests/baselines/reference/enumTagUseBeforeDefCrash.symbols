@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/bug27134.js ===
+/**
+ * @enum {number}
+ */
+var foo = { };
+>foo : Symbol(foo, Decl(bug27134.js, 3, 3), Decl(bug27134.js, 1, 3))
+
+/**
+ * @type {foo}
+ */
+var s;
+>s : Symbol(s, Decl(bug27134.js, 8, 3))
+

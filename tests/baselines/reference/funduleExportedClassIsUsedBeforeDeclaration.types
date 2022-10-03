@@ -1,0 +1,22 @@
+=== tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts ===
+interface A {   // interface before module declaration
+    (): B.C;    // uses defined below class in module
+>B : any
+}
+declare function B(): B.C;  // function merged with module
+>B : typeof B
+>B : any
+
+declare module B {
+>B : typeof B
+
+    export class C {    // class defined in module 
+>C : C
+    }
+}
+new B.C(); 
+>new B.C() : B.C
+>B.C : typeof B.C
+>B : typeof B
+>C : typeof B.C
+

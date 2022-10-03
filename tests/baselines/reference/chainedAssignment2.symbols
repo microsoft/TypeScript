@@ -1,0 +1,26 @@
+=== tests/cases/compiler/chainedAssignment2.ts ===
+var a: string;
+>a : Symbol(a, Decl(chainedAssignment2.ts, 0, 3))
+
+var b: number;
+>b : Symbol(b, Decl(chainedAssignment2.ts, 1, 3))
+
+var c: boolean;
+>c : Symbol(c, Decl(chainedAssignment2.ts, 2, 3))
+
+var d: Date;
+>d : Symbol(d, Decl(chainedAssignment2.ts, 3, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var e: RegExp;
+>e : Symbol(e, Decl(chainedAssignment2.ts, 4, 3))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+a = b = c = d = e = null;
+>a : Symbol(a, Decl(chainedAssignment2.ts, 0, 3))
+>b : Symbol(b, Decl(chainedAssignment2.ts, 1, 3))
+>c : Symbol(c, Decl(chainedAssignment2.ts, 2, 3))
+>d : Symbol(d, Decl(chainedAssignment2.ts, 3, 3))
+>e : Symbol(e, Decl(chainedAssignment2.ts, 4, 3))
+
+

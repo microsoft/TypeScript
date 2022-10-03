@@ -1,0 +1,72 @@
+=== tests/cases/compiler/genericMethodOverspecialization.ts ===
+var names = ["list", "table1", "table2", "table3", "summary"];
+>names : Symbol(names, Decl(genericMethodOverspecialization.ts, 0, 3))
+
+interface HTMLElement {
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 0, 62))
+
+    clientWidth: number;
+>clientWidth : Symbol(HTMLElement.clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
+
+    isDisabled: boolean;
+>isDisabled : Symbol(HTMLElement.isDisabled, Decl(genericMethodOverspecialization.ts, 3, 24))
+}
+
+declare var document: Document;
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 11))
+>Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 31))
+
+interface Document {
+>Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 31))
+
+    getElementById(elementId: string): HTMLElement;
+>getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
+>elementId : Symbol(elementId, Decl(genericMethodOverspecialization.ts, 9, 19))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 0, 62))
+}
+
+var elements = names.map(function (name) {
+>elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
+>names.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>names : Symbol(names, Decl(genericMethodOverspecialization.ts, 0, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
+
+    return document.getElementById(name);
+>document.getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 11))
+>getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
+>name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
+
+});
+
+
+var xxx = elements.filter(function (e) {
+>xxx : Symbol(xxx, Decl(genericMethodOverspecialization.ts, 17, 3))
+>elements.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(genericMethodOverspecialization.ts, 17, 36))
+
+    return !e.isDisabled;
+>e.isDisabled : Symbol(HTMLElement.isDisabled, Decl(genericMethodOverspecialization.ts, 3, 24))
+>e : Symbol(e, Decl(genericMethodOverspecialization.ts, 17, 36))
+>isDisabled : Symbol(HTMLElement.isDisabled, Decl(genericMethodOverspecialization.ts, 3, 24))
+
+});
+
+var widths:number[] = elements.map(function (e) { // should not error
+>widths : Symbol(widths, Decl(genericMethodOverspecialization.ts, 21, 3))
+>elements.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(genericMethodOverspecialization.ts, 21, 45))
+
+    return e.clientWidth;
+>e.clientWidth : Symbol(HTMLElement.clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
+>e : Symbol(e, Decl(genericMethodOverspecialization.ts, 21, 45))
+>clientWidth : Symbol(HTMLElement.clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
+
+});
+
+

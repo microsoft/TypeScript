@@ -1,0 +1,144 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVarWithStringTypes01.ts",
+      "position": 4,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "hello",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVarWithStringTypes01.ts",
+      "position": 44,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 44,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "world",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"world\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsVarWithStringTypes01.ts",
+      "position": 74,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "let",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 74,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "helloOrWorld",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"world\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

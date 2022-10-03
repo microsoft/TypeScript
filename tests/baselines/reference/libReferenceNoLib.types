@@ -1,0 +1,24 @@
+=== tests/cases/conformance/declarationEmit/fakelib.ts ===
+// Test that passing noLib disables <reference lib> resolution.
+No type information for this code.
+No type information for this code.interface Object { }
+No type information for this code.interface Array<T> { }
+No type information for this code.interface String { }
+No type information for this code.interface Boolean { }
+No type information for this code.interface Number { }
+No type information for this code.interface Function { }
+No type information for this code.interface RegExp { }
+No type information for this code.interface IArguments { }
+No type information for this code.
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/declarationEmit/file1.ts ===
+/// <reference lib="dom" />
+export declare interface HTMLElement { field: string; }
+>field : string
+
+export const elem: HTMLElement = { field: 'a' };
+>elem : HTMLElement
+>{ field: 'a' } : { field: string; }
+>field : string
+>'a' : "a"
+

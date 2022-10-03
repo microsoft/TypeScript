@@ -1,0 +1,20 @@
+tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts(10,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts(11,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts (2 errors) ====
+    function foo(a: string): string;
+    function foo<T>(a: T): number;
+    function foo(a: any): any {
+        return "hi";
+    }
+    
+    var x: number = foo<string>("hi"); // return type should be 'number'
+    var y: string = foo("hi"); // return type should be 'string'
+    
+    var w: string = foo<string>("hi"); // should error
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    var z: number = foo("hi"); // should error
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

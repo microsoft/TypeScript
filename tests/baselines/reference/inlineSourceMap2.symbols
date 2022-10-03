@@ -1,0 +1,12 @@
+=== tests/cases/compiler/inlineSourceMap2.ts ===
+// configuration errors
+
+var x = 0;
+>x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+
+console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+

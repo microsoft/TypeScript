@@ -1,0 +1,21 @@
+=== tests/cases/compiler/i3.ts ===
+interface I3 { one?: number; }; 
+>one : number
+
+var x: {one: number};
+>x : { one: number; }
+>one : number
+
+var i: I3;
+>i : I3
+
+i = x;
+>i = x : { one: number; }
+>i : I3
+>x : { one: number; }
+
+x = i;
+>x = i : I3
+>x : { one: number; }
+>i : I3
+

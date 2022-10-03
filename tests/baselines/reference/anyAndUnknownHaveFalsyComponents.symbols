@@ -1,0 +1,57 @@
+=== tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts ===
+declare let x1: any;
+>x1 : Symbol(x1, Decl(anyAndUnknownHaveFalsyComponents.ts, 0, 11))
+
+const y1 = x1 && 3;
+>y1 : Symbol(y1, Decl(anyAndUnknownHaveFalsyComponents.ts, 1, 5))
+>x1 : Symbol(x1, Decl(anyAndUnknownHaveFalsyComponents.ts, 0, 11))
+
+// #39113
+declare let isTreeHeader1: any;
+>isTreeHeader1 : Symbol(isTreeHeader1, Decl(anyAndUnknownHaveFalsyComponents.ts, 4, 11))
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(anyAndUnknownHaveFalsyComponents.ts, 4, 31))
+
+  return {
+    display: "block",
+>display : Symbol(display, Decl(anyAndUnknownHaveFalsyComponents.ts, 6, 10))
+
+    ...(isTreeHeader1 && {
+>isTreeHeader1 : Symbol(isTreeHeader1, Decl(anyAndUnknownHaveFalsyComponents.ts, 4, 11))
+
+      display: "flex",
+>display : Symbol(display, Decl(anyAndUnknownHaveFalsyComponents.ts, 8, 26))
+
+    })
+  };
+}
+
+declare let x2: unknown;
+>x2 : Symbol(x2, Decl(anyAndUnknownHaveFalsyComponents.ts, 14, 11))
+
+const y2 = x2 && 3;
+>y2 : Symbol(y2, Decl(anyAndUnknownHaveFalsyComponents.ts, 15, 5))
+>x2 : Symbol(x2, Decl(anyAndUnknownHaveFalsyComponents.ts, 14, 11))
+
+// #39113
+declare let isTreeHeader2: unknown;
+>isTreeHeader2 : Symbol(isTreeHeader2, Decl(anyAndUnknownHaveFalsyComponents.ts, 18, 11))
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(anyAndUnknownHaveFalsyComponents.ts, 18, 35))
+
+  return {
+    display: "block",
+>display : Symbol(display, Decl(anyAndUnknownHaveFalsyComponents.ts, 20, 10))
+
+    ...(isTreeHeader1 && {
+>isTreeHeader1 : Symbol(isTreeHeader1, Decl(anyAndUnknownHaveFalsyComponents.ts, 4, 11))
+
+      display: "flex",
+>display : Symbol(display, Decl(anyAndUnknownHaveFalsyComponents.ts, 22, 26))
+
+    })
+  };
+}
+

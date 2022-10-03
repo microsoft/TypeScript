@@ -1,0 +1,23 @@
+=== tests/cases/compiler/consumer.tsx ===
+/// <reference path="component.d.ts" />
+import Test from 'Test';
+>Test : typeof Test
+
+let x = Test; // emit test_1.default
+>x : typeof Test
+>Test : typeof Test
+
+<anything attr={Test} />; // ?
+><anything attr={Test} /> : error
+>anything : any
+>attr : typeof Test
+>Test : typeof Test
+
+=== tests/cases/compiler/component.d.ts ===
+declare module "Test" {
+>"Test" : typeof import("Test")
+
+	export default class Text { }
+>Text : Text
+}
+

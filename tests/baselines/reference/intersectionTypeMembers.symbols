@@ -1,0 +1,203 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeMembers.ts ===
+// An intersection type has those members that are present in any of its constituent types,
+// with types that are intersections of the respective members in the constituent types
+
+interface A { a: string }
+>A : Symbol(A, Decl(intersectionTypeMembers.ts, 0, 0))
+>a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
+
+interface B { b: string }
+>B : Symbol(B, Decl(intersectionTypeMembers.ts, 3, 25))
+>b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
+
+interface C { c: string }
+>C : Symbol(C, Decl(intersectionTypeMembers.ts, 4, 25))
+>c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
+
+var abc: A & B & C;
+>abc : Symbol(abc, Decl(intersectionTypeMembers.ts, 7, 3))
+>A : Symbol(A, Decl(intersectionTypeMembers.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionTypeMembers.ts, 3, 25))
+>C : Symbol(C, Decl(intersectionTypeMembers.ts, 4, 25))
+
+abc.a = "hello";
+>abc.a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
+>abc : Symbol(abc, Decl(intersectionTypeMembers.ts, 7, 3))
+>a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
+
+abc.b = "hello";
+>abc.b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
+>abc : Symbol(abc, Decl(intersectionTypeMembers.ts, 7, 3))
+>b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
+
+abc.c = "hello";
+>abc.c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
+>abc : Symbol(abc, Decl(intersectionTypeMembers.ts, 7, 3))
+>c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
+
+interface X { x: A }
+>X : Symbol(X, Decl(intersectionTypeMembers.ts, 10, 16))
+>x : Symbol(X.x, Decl(intersectionTypeMembers.ts, 12, 13))
+>A : Symbol(A, Decl(intersectionTypeMembers.ts, 0, 0))
+
+interface Y { x: B }
+>Y : Symbol(Y, Decl(intersectionTypeMembers.ts, 12, 20))
+>x : Symbol(Y.x, Decl(intersectionTypeMembers.ts, 13, 13))
+>B : Symbol(B, Decl(intersectionTypeMembers.ts, 3, 25))
+
+interface Z { x: C }
+>Z : Symbol(Z, Decl(intersectionTypeMembers.ts, 13, 20))
+>x : Symbol(Z.x, Decl(intersectionTypeMembers.ts, 14, 13))
+>C : Symbol(C, Decl(intersectionTypeMembers.ts, 4, 25))
+
+var xyz: X & Y & Z;
+>xyz : Symbol(xyz, Decl(intersectionTypeMembers.ts, 16, 3))
+>X : Symbol(X, Decl(intersectionTypeMembers.ts, 10, 16))
+>Y : Symbol(Y, Decl(intersectionTypeMembers.ts, 12, 20))
+>Z : Symbol(Z, Decl(intersectionTypeMembers.ts, 13, 20))
+
+xyz.x.a = "hello";
+>xyz.x.a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
+>xyz.x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>xyz : Symbol(xyz, Decl(intersectionTypeMembers.ts, 16, 3))
+>x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
+
+xyz.x.b = "hello";
+>xyz.x.b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
+>xyz.x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>xyz : Symbol(xyz, Decl(intersectionTypeMembers.ts, 16, 3))
+>x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
+
+xyz.x.c = "hello";
+>xyz.x.c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
+>xyz.x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>xyz : Symbol(xyz, Decl(intersectionTypeMembers.ts, 16, 3))
+>x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13), Decl(intersectionTypeMembers.ts, 13, 13), Decl(intersectionTypeMembers.ts, 14, 13))
+>c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
+
+type F1 = (x: string) => string;
+>F1 : Symbol(F1, Decl(intersectionTypeMembers.ts, 19, 18))
+>x : Symbol(x, Decl(intersectionTypeMembers.ts, 21, 11))
+
+type F2 = (x: number) => number;
+>F2 : Symbol(F2, Decl(intersectionTypeMembers.ts, 21, 32))
+>x : Symbol(x, Decl(intersectionTypeMembers.ts, 22, 11))
+
+var f: F1 & F2;
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 24, 3))
+>F1 : Symbol(F1, Decl(intersectionTypeMembers.ts, 19, 18))
+>F2 : Symbol(F2, Decl(intersectionTypeMembers.ts, 21, 32))
+
+var s = f("hello");
+>s : Symbol(s, Decl(intersectionTypeMembers.ts, 25, 3))
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 24, 3))
+
+var n = f(42);
+>n : Symbol(n, Decl(intersectionTypeMembers.ts, 26, 3))
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 24, 3))
+
+interface D {
+>D : Symbol(D, Decl(intersectionTypeMembers.ts, 26, 14))
+
+    nested: { doublyNested: { d: string; }, different: { e: number } };
+>nested : Symbol(D.nested, Decl(intersectionTypeMembers.ts, 28, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 29, 13))
+>d : Symbol(d, Decl(intersectionTypeMembers.ts, 29, 29))
+>different : Symbol(different, Decl(intersectionTypeMembers.ts, 29, 43))
+>e : Symbol(e, Decl(intersectionTypeMembers.ts, 29, 56))
+}
+interface E {
+>E : Symbol(E, Decl(intersectionTypeMembers.ts, 30, 1))
+
+    nested: { doublyNested: { f: string; }, other: {g: number } };
+>nested : Symbol(E.nested, Decl(intersectionTypeMembers.ts, 31, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 32, 13))
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 32, 29))
+>other : Symbol(other, Decl(intersectionTypeMembers.ts, 32, 43))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 32, 52))
+}
+const de: D & E = {
+>de : Symbol(de, Decl(intersectionTypeMembers.ts, 34, 5))
+>D : Symbol(D, Decl(intersectionTypeMembers.ts, 26, 14))
+>E : Symbol(E, Decl(intersectionTypeMembers.ts, 30, 1))
+
+    nested: {
+>nested : Symbol(nested, Decl(intersectionTypeMembers.ts, 34, 19))
+
+        doublyNested: {
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 35, 13))
+
+            d: 'yes',
+>d : Symbol(d, Decl(intersectionTypeMembers.ts, 36, 23))
+
+            f: 'no'
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 37, 21))
+
+        },
+        different: { e: 12 },
+>different : Symbol(different, Decl(intersectionTypeMembers.ts, 39, 10))
+>e : Symbol(e, Decl(intersectionTypeMembers.ts, 40, 20))
+
+        other: { g: 101 }
+>other : Symbol(other, Decl(intersectionTypeMembers.ts, 40, 29))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 41, 16))
+    }
+}
+
+// Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
+interface F {
+>F : Symbol(F, Decl(intersectionTypeMembers.ts, 43, 1))
+
+    nested: { doublyNested: { g: string; } }
+>nested : Symbol(F.nested, Decl(intersectionTypeMembers.ts, 46, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 47, 13))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 47, 29))
+}
+
+interface G {
+>G : Symbol(G, Decl(intersectionTypeMembers.ts, 48, 1))
+
+    nested: { doublyNested: { h: string; } }
+>nested : Symbol(G.nested, Decl(intersectionTypeMembers.ts, 50, 13))
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 51, 13))
+>h : Symbol(h, Decl(intersectionTypeMembers.ts, 51, 29))
+}
+
+const defg: D & E & F & G = {
+>defg : Symbol(defg, Decl(intersectionTypeMembers.ts, 54, 5))
+>D : Symbol(D, Decl(intersectionTypeMembers.ts, 26, 14))
+>E : Symbol(E, Decl(intersectionTypeMembers.ts, 30, 1))
+>F : Symbol(F, Decl(intersectionTypeMembers.ts, 43, 1))
+>G : Symbol(G, Decl(intersectionTypeMembers.ts, 48, 1))
+
+    nested: {
+>nested : Symbol(nested, Decl(intersectionTypeMembers.ts, 54, 29))
+
+        doublyNested: {
+>doublyNested : Symbol(doublyNested, Decl(intersectionTypeMembers.ts, 55, 13))
+
+            d: 'yes',
+>d : Symbol(d, Decl(intersectionTypeMembers.ts, 56, 23))
+
+            f: 'no',
+>f : Symbol(f, Decl(intersectionTypeMembers.ts, 57, 21))
+
+            g: 'ok',
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 58, 20))
+
+            h: 'affirmative'
+>h : Symbol(h, Decl(intersectionTypeMembers.ts, 59, 20))
+
+        },
+        different: { e: 12 },
+>different : Symbol(different, Decl(intersectionTypeMembers.ts, 61, 10))
+>e : Symbol(e, Decl(intersectionTypeMembers.ts, 62, 20))
+
+        other: { g: 101 }
+>other : Symbol(other, Decl(intersectionTypeMembers.ts, 62, 29))
+>g : Symbol(g, Decl(intersectionTypeMembers.ts, 63, 16))
+    }
+}
+

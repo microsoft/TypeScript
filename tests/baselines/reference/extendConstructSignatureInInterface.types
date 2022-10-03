@@ -1,0 +1,20 @@
+=== tests/cases/compiler/extendConstructSignatureInInterface.ts ===
+interface C {
+    new(x: number): C;
+>x : number
+}
+
+var CStatic: C;
+>CStatic : C
+
+class E extends CStatic {
+>E : E
+>CStatic : C
+}
+
+var e: E = new E(1);
+>e : E
+>new E(1) : E
+>E : typeof E
+>1 : 1
+

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/collisionExportsRequireAndAmbientFunctionInGlobalFile.ts ===
+declare function exports(): number;
+>exports : () => number
+
+declare function require(): string;
+>require : () => string
+
+declare module m3 {
+>m3 : typeof m3
+
+    function exports(): string[];
+>exports : () => string[]
+
+    function require(): number[];
+>require : () => number[]
+}
+module m4 {
+>m4 : typeof m4
+
+    export declare function exports(): string;
+>exports : () => string
+
+    export declare function require(): string;
+>require : () => string
+
+    var a = 10;
+>a : number
+>10 : 10
+}

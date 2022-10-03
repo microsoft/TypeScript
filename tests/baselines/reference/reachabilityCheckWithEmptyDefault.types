@@ -1,0 +1,22 @@
+=== tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts ===
+declare function print(s: string): void;
+>print : { (): void; (s: string): void; }
+>s : string
+
+function foo(x: any) {
+>foo : (x: any) => void
+>x : any
+
+	switch(x) {
+>x : any
+
+		case 1: return;
+>1 : 1
+
+		default:
+	}
+	print('1');
+>print('1') : void
+>print : { (): void; (s: string): void; }
+>'1' : "1"
+}

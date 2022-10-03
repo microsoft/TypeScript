@@ -1,0 +1,9 @@
+=== tests/cases/compiler/c.ts ===
+let foo: typeof C;
+>foo : Symbol(foo, Decl(c.ts, 0, 3))
+>C : Symbol(C, Decl(b.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+class C { }
+>C : Symbol(C, Decl(b.ts, 0, 0))
+

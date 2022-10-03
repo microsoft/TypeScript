@@ -1,0 +1,506 @@
+=== tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts ===
+class A {
+>A : A
+
+    x() {
+>x : () => void
+    }
+    y() {
+>y : () => void
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    // async method with only call/get on 'super' does not require a binding
+    async simple() {
+>simple : () => Promise<void>
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // call additional property.
+        super.y();
+>super.y() : void
+>super.y : () => void
+>super : A
+>y : () => void
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access (read)
+        const b = super["x"];
+>b : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+    }
+
+    // async method with assignment/destructuring on 'super' requires a binding
+    async advanced() {
+>advanced : () => Promise<void>
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access (read)
+        const b = super["x"];
+>b : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access (assign)
+        super.x = f;
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // element access (assign)
+        super["x"] = f;
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>({ f: super.x } = { f }) : { f: () => void; }
+>{ f: super.x } = { f } : { f: () => void; }
+>{ f: super.x } : { f: () => void; }
+>f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>({ f: super["x"] } = { f }) : { f: () => void; }
+>{ f: super["x"] } = { f } : { f: () => void; }
+>{ f: super["x"] } : { f: () => void; }
+>f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // property access in arrow
+        (() => super.x());
+>(() => super.x()) : () => void
+>() => super.x() : () => void
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access in arrow
+        (() => super["x"]());
+>(() => super["x"]()) : () => void
+>() => super["x"]() : () => void
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // property access in async arrow
+        (async () => super.x());
+>(async () => super.x()) : () => Promise<void>
+>async () => super.x() : () => Promise<void>
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // element access in async arrow
+        (async () => super["x"]());
+>(async () => super["x"]()) : () => Promise<void>
+>async () => super["x"]() : () => Promise<void>
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+    }
+
+    async property_access_only_read_only() {
+>property_access_only_read_only : () => Promise<void>
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access in arrow
+        (() => super.x());
+>(() => super.x()) : () => void
+>() => super.x() : () => void
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access in async arrow
+        (async () => super.x());
+>(async () => super.x()) : () => Promise<void>
+>async () => super.x() : () => Promise<void>
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+    }
+
+    async property_access_only_write_only() {
+>property_access_only_write_only : () => Promise<void>
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // property access (assign)
+        super.x = f;
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>({ f: super.x } = { f }) : { f: () => void; }
+>{ f: super.x } = { f } : { f: () => void; }
+>{ f: super.x } : { f: () => void; }
+>f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // property access (assign) in arrow
+        (() => super.x = f);
+>(() => super.x = f) : () => () => void
+>() => super.x = f : () => () => void
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // property access (assign) in async arrow
+        (async () => super.x = f);
+>(async () => super.x = f) : () => Promise<() => void>
+>async () => super.x = f : () => Promise<() => void>
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+    }
+
+    async element_access_only_read_only() {
+>element_access_only_read_only : () => Promise<void>
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access (read)
+        const a = super["x"];
+>a : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access in arrow
+        (() => super["x"]());
+>(() => super["x"]()) : () => void
+>() => super["x"]() : () => void
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access in async arrow
+        (async () => super["x"]());
+>(async () => super["x"]()) : () => Promise<void>
+>async () => super["x"]() : () => Promise<void>
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+    }
+
+    async element_access_only_write_only() {
+>element_access_only_write_only : () => Promise<void>
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // element access (assign)
+        super["x"] = f;
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>({ f: super["x"] } = { f }) : { f: () => void; }
+>{ f: super["x"] } = { f } : { f: () => void; }
+>{ f: super["x"] } : { f: () => void; }
+>f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // element access (assign) in arrow
+        (() => super["x"] = f);
+>(() => super["x"] = f) : () => () => void
+>() => super["x"] = f : () => () => void
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // element access (assign) in async arrow
+        (async () => super["x"] = f);
+>(async () => super["x"] = f) : () => Promise<() => void>
+>async () => super["x"] = f : () => Promise<() => void>
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+    }
+
+    async * property_access_only_read_only_in_generator() {
+>property_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
+
+        // call with property access
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access (read)
+        const a = super.x;
+>a : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access in arrow
+        (() => super.x());
+>(() => super.x()) : () => void
+>() => super.x() : () => void
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        // property access in async arrow
+        (async () => super.x());
+>(async () => super.x()) : () => Promise<void>
+>async () => super.x() : () => Promise<void>
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+    }
+
+    async * property_access_only_write_only_in_generator() {
+>property_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // property access (assign)
+        super.x = f;
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>({ f: super.x } = { f }) : { f: () => void; }
+>{ f: super.x } = { f } : { f: () => void; }
+>{ f: super.x } : { f: () => void; }
+>f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // property access (assign) in arrow
+        (() => super.x = f);
+>(() => super.x = f) : () => () => void
+>() => super.x = f : () => () => void
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+
+        // property access (assign) in async arrow
+        (async () => super.x = f);
+>(async () => super.x = f) : () => Promise<() => void>
+>async () => super.x = f : () => Promise<() => void>
+>super.x = f : () => void
+>super.x : () => void
+>super : A
+>x : () => void
+>f : () => void
+    }
+
+    async * element_access_only_read_only_in_generator() {
+>element_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
+
+        // call with element access
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access (read)
+        const a = super["x"];
+>a : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access in arrow
+        (() => super["x"]());
+>(() => super["x"]()) : () => void
+>() => super["x"]() : () => void
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+        // element access in async arrow
+        (async () => super["x"]());
+>(async () => super["x"]()) : () => Promise<void>
+>async () => super["x"]() : () => Promise<void>
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+    }
+
+    async * element_access_only_write_only_in_generator() {
+>element_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
+
+        const f = () => {};
+>f : () => void
+>() => {} : () => void
+
+        // element access (assign)
+        super["x"] = f;
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>({ f: super["x"] } = { f }) : { f: () => void; }
+>{ f: super["x"] } = { f } : { f: () => void; }
+>{ f: super["x"] } : { f: () => void; }
+>f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>{ f } : { f: () => void; }
+>f : () => void
+
+        // element access (assign) in arrow
+        (() => super["x"] = f);
+>(() => super["x"] = f) : () => () => void
+>() => super["x"] = f : () => () => void
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+
+        // element access (assign) in async arrow
+        (async () => super["x"] = f);
+>(async () => super["x"] = f) : () => Promise<() => void>
+>async () => super["x"] = f : () => Promise<() => void>
+>super["x"] = f : () => void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+>f : () => void
+    }
+}
+

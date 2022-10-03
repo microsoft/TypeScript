@@ -1,0 +1,49 @@
+===================================================================
+JsFile: templateLiteralsSourceMap.js
+mapUrl: templateLiteralsSourceMap.js.map
+sourceRoot: 
+sources: templateLiteralsSourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/templateLiteralsSourceMap.js
+sourceFile:templateLiteralsSourceMap.ts
+-------------------------------------------------------------------
+>>>var s = "a".concat(0, "b").concat(1, "c").concat(2);
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^^^^^^^^^^
+6 >                   ^
+7 >                    ^^^^^^^^^^^^^^
+8 >                                  ^
+9 >                                   ^^^^^^^^^^^^^^
+10>                                                 ^
+11>                                                  ^
+12>                                                   ^
+1 >
+2 >const 
+3 >    s
+4 >      = 
+5 >        `a${
+6 >                   0
+7 >                    }b${
+8 >                                  1
+9 >                                   }c${
+10>                                                 2
+11>                                                  }`
+12>                                                   ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 20) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 16) + SourceIndex(0)
+7 >Emitted(1, 35) Source(1, 20) + SourceIndex(0)
+8 >Emitted(1, 36) Source(1, 21) + SourceIndex(0)
+9 >Emitted(1, 50) Source(1, 25) + SourceIndex(0)
+10>Emitted(1, 51) Source(1, 26) + SourceIndex(0)
+11>Emitted(1, 52) Source(1, 28) + SourceIndex(0)
+12>Emitted(1, 53) Source(1, 29) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=templateLiteralsSourceMap.js.map

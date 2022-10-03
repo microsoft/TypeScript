@@ -1,0 +1,32 @@
+=== tests/cases/compiler/infinitelyExpandingBaseTypes1.ts ===
+interface A<T>
+>A : Symbol(A, Decl(infinitelyExpandingBaseTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 0, 12))
+{
+    x : A<A<T>>
+>x : Symbol(A.x, Decl(infinitelyExpandingBaseTypes1.ts, 1, 1))
+>A : Symbol(A, Decl(infinitelyExpandingBaseTypes1.ts, 0, 0))
+>A : Symbol(A, Decl(infinitelyExpandingBaseTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 0, 12))
+}
+ 
+interface B<T>
+>B : Symbol(B, Decl(infinitelyExpandingBaseTypes1.ts, 3, 1))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 5, 12))
+{
+    x : B<T>
+>x : Symbol(B.x, Decl(infinitelyExpandingBaseTypes1.ts, 6, 1))
+>B : Symbol(B, Decl(infinitelyExpandingBaseTypes1.ts, 3, 1))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 5, 12))
+}
+ 
+interface C<T> extends A<T>, B<T> { }
+>C : Symbol(C, Decl(infinitelyExpandingBaseTypes1.ts, 8, 1))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 10, 12))
+>A : Symbol(A, Decl(infinitelyExpandingBaseTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 10, 12))
+>B : Symbol(B, Decl(infinitelyExpandingBaseTypes1.ts, 3, 1))
+>T : Symbol(T, Decl(infinitelyExpandingBaseTypes1.ts, 10, 12))
+
+ 
+

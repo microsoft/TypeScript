@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsdoc/dummyType.d.ts ===
+declare class C<T> { t: T }
+>C : C<T>
+>t : T
+
+=== tests/cases/conformance/jsdoc/badTypeArguments.js ===
+/** @param {C.<>} x */
+/** @param {C.<number,>} y */
+// @ts-ignore
+/** @param {C.<number,>} skipped */
+function f(x, y, skipped) {
+>f : (x: any, y: any, skipped: C<number>) => any
+>x : any
+>y : any
+>skipped : C<number>
+
+    return x.t + y.t;
+>x.t + y.t : any
+>x.t : any
+>x : any
+>t : any
+>y.t : any
+>y : any
+>t : any
+}
+var x = f({ t: 1000 }, { t: 3000 }, { t: 5000 });
+>x : any
+>f({ t: 1000 }, { t: 3000 }, { t: 5000 }) : any
+>f : (x: any, y: any, skipped: C<number>) => any
+>{ t: 1000 } : { t: number; }
+>t : number
+>1000 : 1000
+>{ t: 3000 } : { t: number; }
+>t : number
+>3000 : 3000
+>{ t: 5000 } : { t: number; }
+>t : number
+>5000 : 5000
+

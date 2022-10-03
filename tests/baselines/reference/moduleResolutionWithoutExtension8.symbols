@@ -1,0 +1,8 @@
+=== /src/bar.cts ===
+// Extensionless relative path dynamic import in a cjs module
+import("./foo").then(x => x); // should error, ask for extension
+>import("./foo").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(bar.cts, 1, 21))
+>x : Symbol(x, Decl(bar.cts, 1, 21))
+

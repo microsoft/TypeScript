@@ -1,0 +1,48 @@
+=== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx ===
+interface F<P> {
+>F : Symbol(F, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 0))
+>P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
+
+    (props: P & { children?: boolean }): void;
+>props : Symbol(props, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 5))
+>P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
+>children : Symbol(children, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 17))
+
+    propTypes: { [K in keyof P]: null extends P ? K : K };
+>propTypes : Symbol(F.propTypes, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 1, 46))
+>K : Symbol(K, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 2, 18))
+>P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
+>P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))
+>K : Symbol(K, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 2, 18))
+>K : Symbol(K, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 2, 18))
+}
+declare function g(C: F<unknown>): string;
+>g : Symbol(g, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 3, 1))
+>C : Symbol(C, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 4, 19))
+>F : Symbol(F, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 0))
+
+export function wu<CP extends { o: object }>(CC: F<CP>) {
+>wu : Symbol(wu, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 4, 42))
+>CP : Symbol(CP, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 19))
+>o : Symbol(o, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 31))
+>CC : Symbol(CC, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 45))
+>F : Symbol(F, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 0))
+>CP : Symbol(CP, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 19))
+
+    class WU {
+>WU : Symbol(WU, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 57))
+
+        m() {
+>m : Symbol(WU.m, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 6, 14))
+
+            g(CC)
+>g : Symbol(g, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 3, 1))
+>CC : Symbol(CC, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 45))
+
+            return <CC {...(null as unknown as CP)} />;
+>CC : Symbol(CC, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 45))
+>CP : Symbol(CP, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 5, 19))
+        }
+    }
+}
+

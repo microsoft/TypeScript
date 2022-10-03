@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts ===
+class C<T> {
+>C : C<T>
+
+    data: T;
+>data : T
+
+    x = <U>(a: U) => {
+>x : <U>(a: U) => T
+><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
+>a : U
+
+        var y: T;
+>y : T
+
+        return y;
+>y : T
+    }
+
+    foo() {
+>foo : () => T
+
+        function temp<U>(a: U) {
+>temp : <U>(a: U) => T
+>a : U
+
+            var y: T;
+>y : T
+
+            return y;
+>y : T
+        }
+        return temp(<T>null);
+>temp(<T>null) : T
+>temp : <U>(a: U) => T
+><T>null : T
+>null : null
+    }
+}
+
+var c = new C<number>();
+>c : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+c.data = c.x(null);
+>c.data = c.x(null) : number
+>c.data : number
+>c : C<number>
+>data : number
+>c.x(null) : number
+>c.x : <U>(a: U) => number
+>c : C<number>
+>x : <U>(a: U) => number
+>null : null
+
+c.data = c.foo();
+>c.data = c.foo() : number
+>c.data : number
+>c : C<number>
+>data : number
+>c.foo() : number
+>c.foo : () => number
+>c : C<number>
+>foo : () => number
+

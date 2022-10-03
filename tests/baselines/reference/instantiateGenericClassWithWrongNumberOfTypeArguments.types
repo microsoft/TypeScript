@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts ===
+// it is always an error to provide a type argument list whose count does not match the type parameter list
+// both of these attempts to construct a type is an error
+
+class C<T> {
+>C : C<T>
+
+    x: T;
+>x : T
+}
+
+var c = new C<number, number>();
+>c : C<number>
+>new C<number, number>() : C<number>
+>C : typeof C
+
+class D<T, U> {
+>D : D<T, U>
+
+    x: T
+>x : T
+
+    y: U
+>y : U
+}
+
+// BUG 794238
+var d = new D<number>();
+>d : D<number, unknown>
+>new D<number>() : D<number, unknown>
+>D : typeof D
+

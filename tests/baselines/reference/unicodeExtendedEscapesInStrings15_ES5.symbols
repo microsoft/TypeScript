@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings15_ES5.ts ===
+var x = "\u{abcd}\u{ef12}\u{3456}\u{7890}";
+>x : Symbol(x, Decl(unicodeExtendedEscapesInStrings15_ES5.ts, 0, 3))
+

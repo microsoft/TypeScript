@@ -1,0 +1,11 @@
+=== tests/cases/compiler/contextualTyping35.ts ===
+var foo = <{ id: number;}> {id:4, name: "as"};
+>foo : { id: number; }
+><{ id: number;}> {id:4, name: "as"} : { id: number; }
+>id : number
+>{id:4, name: "as"} : { id: number; name: string; }
+>id : number
+>4 : 4
+>name : string
+>"as" : "as"
+

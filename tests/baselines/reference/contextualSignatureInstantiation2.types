@@ -1,0 +1,40 @@
+=== tests/cases/compiler/contextualSignatureInstantiation2.ts ===
+// dot f g x = f(g(x))
+var dot: <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S;
+>dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
+>f : (_: T) => S
+>_ : T
+>g : (_: U) => T
+>_ : U
+>_ : U
+
+dot = <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x));
+>dot = <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (r: U) => S
+>dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
+><T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (r: U) => S
+>f : (_: T) => S
+>_ : T
+><U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <U>(g: (_: U) => T) => (r: U) => S
+>g : (_: U) => T
+>_ : U
+>r : U
+>(x) => f(g(x)) : (x: U) => S
+>x : U
+>f(g(x)) : S
+>f : (_: T) => S
+>g(x) : T
+>g : (_: U) => T
+>x : U
+
+var id: <T>(x:T) => T;
+>id : <T>(x: T) => T
+>x : T
+
+var r23 = dot(id)(id);
+>r23 : <T>(_: T) => unknown
+>dot(id)(id) : <T>(_: T) => unknown
+>dot(id) : <U>(g: (_: U) => unknown) => (_: U) => unknown
+>dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
+>id : <T>(x: T) => T
+>id : <T>(x: T) => T
+

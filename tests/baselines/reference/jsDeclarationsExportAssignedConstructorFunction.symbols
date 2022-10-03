@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js ===
+/** @constructor */
+module.exports.MyClass = function() {
+>module.exports.MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
+>module.exports : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
+>module : Symbol(module, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
+>exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
+
+    this.x = 1
+>this.x : Symbol(MyClass.x, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 1, 37))
+>this : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 1, 24))
+>x : Symbol(MyClass.x, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 1, 37))
+}
+module.exports.MyClass.prototype = {
+>module.exports.MyClass.prototype : Symbol(MyClass.prototype, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 3, 1))
+>module.exports.MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
+>module.exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
+>module : Symbol(module, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
+>exports : Symbol(module.exports, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 15))
+>prototype : Symbol(MyClass.prototype, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 3, 1))
+
+    a: function() {
+>a : Symbol(a, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 36))
+    }
+}
+

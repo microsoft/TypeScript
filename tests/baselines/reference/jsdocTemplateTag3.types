@@ -1,0 +1,95 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @template {{ a: number, b: string }} T,U A Comment
+ * @template {{ c: boolean }} V uh ... are comments even supported??
+ * @template W
+ * @template X That last one had no comment
+ * @param {T} t
+ * @param {U} u
+ * @param {V} v
+ * @param {W} w
+ * @param {X} x
+ * @return {W | X}
+ */
+function f(t, u, v, w, x) {
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>t : T
+>u : U
+>v : V
+>w : W
+>x : X
+
+    if(t.a + t.b.length > u.a - u.b.length && v.c) {
+>t.a + t.b.length > u.a - u.b.length && v.c : boolean
+>t.a + t.b.length > u.a - u.b.length : boolean
+>t.a + t.b.length : number
+>t.a : number
+>t : T
+>a : number
+>t.b.length : number
+>t.b : string
+>t : T
+>b : string
+>length : number
+>u.a - u.b.length : number
+>u.a : any
+>u : U
+>a : any
+>u.b.length : any
+>u.b : any
+>u : U
+>b : any
+>length : any
+>v.c : boolean
+>v : V
+>c : boolean
+
+        return w;
+>w : W
+    }
+    return x;
+>x : X
+}
+
+f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
+>f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : 101 | "nope"
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>{ a: 12, b: 'hi', c: null } : { a: number; b: string; c: null; }
+>a : number
+>12 : 12
+>b : string
+>'hi' : "hi"
+>c : null
+>null : null
+>undefined : undefined
+>{ c: false, d: 12, b: undefined } : { c: false; d: number; b: undefined; }
+>c : false
+>false : false
+>d : number
+>12 : 12
+>b : undefined
+>undefined : undefined
+>101 : 101
+>'nope' : "nope"
+
+f({ a: 12  }, undefined, undefined, 101, 'nope');
+>f({ a: 12  }, undefined, undefined, 101, 'nope') : 101 | "nope"
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>{ a: 12  } : { a: number; }
+>a : number
+>12 : 12
+>undefined : undefined
+>undefined : undefined
+>101 : 101
+>'nope' : "nope"
+
+/**
+ * @template {NoLongerAllowed}
+ * @template T preceding line's syntax is no longer allowed
+ * @param {T} x
+ */
+function g(x) { }
+>g : <T>(x: T) => void
+>x : T
+
+

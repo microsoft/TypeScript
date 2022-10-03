@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of35.ts ===
+class StringIterator {
+>StringIterator : StringIterator
+
+    next() {
+>next : () => any
+
+        return {
+>{            done: true,            value: v        } : { done: boolean; value: any; }
+
+            done: true,
+>done : boolean
+>true : true
+
+            value: v
+>value : any
+>v : any
+        }
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+for (var v of new StringIterator) { }
+>v : any
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

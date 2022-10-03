@@ -1,0 +1,192 @@
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+"\u{10_ffff}"
+>"\u{10_ffff}" : "_ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+'\u{10_ffff}'
+>'\u{10_ffff}' : "_ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+`\u{10_ffff}`
+>`\u{10_ffff}` : "_ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+/\u{10_ffff}/u
+>/\u{10_ffff}/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+"\uff_ff"
+>"\uff_ff" : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+'\uff_ff'
+>'\uff_ff' : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts ===
+`\uff_ff`
+>`\uff_ff` : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/8.ts ===
+/\uff_ff/u
+>/\uff_ff/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts ===
+"\xf_f"
+>"\xf_f" : "_f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts ===
+'\xf_f'
+>'\xf_f' : "_f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts ===
+`\xf_f`
+>`\xf_f` : "_f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts ===
+/\xf_f/u
+>/\xf_f/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts ===
+"\u{_10ffff}"
+>"\u{_10ffff}" : "_10ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts ===
+'\u{_10ffff}'
+>'\u{_10ffff}' : "_10ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts ===
+`\u{_10ffff}`
+>`\u{_10ffff}` : "_10ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts ===
+/\u{_10ffff}/u
+>/\u{_10ffff}/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts ===
+"\u_ffff"
+>"\u_ffff" : "_ffff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts ===
+'\u_ffff'
+>'\u_ffff' : "_ffff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts ===
+`\u_ffff`
+>`\u_ffff` : "_ffff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/20.ts ===
+/\u_ffff/u
+>/\u_ffff/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts ===
+"\x_ff"
+>"\x_ff" : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts ===
+'\x_ff'
+>'\x_ff' : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts ===
+`\x_ff`
+>`\x_ff` : "_ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/24.ts ===
+/\x_ff/u
+>/\x_ff/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts ===
+"\u{10ffff_}"
+>"\u{10ffff_}" : "_}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts ===
+'\u{10ffff_}'
+>'\u{10ffff_}' : "_}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts ===
+`\u{10ffff_}`
+>`\u{10ffff_}` : "_}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts ===
+/\u{10ffff_}/u
+>/\u{10ffff_}/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts ===
+"\uffff_"
+>"\uffff_" : "￿_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts ===
+'\uffff_'
+>'\uffff_' : "￿_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts ===
+`\uffff_`
+>`\uffff_` : "￿_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/32.ts ===
+/\uffff_/u
+>/\uffff_/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/33.ts ===
+"\xff_"
+>"\xff_" : "ÿ_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/34.ts ===
+'\xff_'
+>'\xff_' : "ÿ_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/35.ts ===
+`\xff_`
+>`\xff_` : "ÿ_"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/36.ts ===
+/\xff_/u
+>/\xff_/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts ===
+"\u{10__ffff}"
+>"\u{10__ffff}" : "__ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts ===
+'\u{10__ffff}'
+>'\u{10__ffff}' : "__ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts ===
+`\u{10__ffff}`
+>`\u{10__ffff}` : "__ffff}"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts ===
+/\u{10__ffff}/u
+>/\u{10__ffff}/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts ===
+"\uff__ff"
+>"\uff__ff" : "__ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts ===
+'\uff__ff'
+>'\uff__ff' : "__ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts ===
+`\uff__ff`
+>`\uff__ff` : "__ff"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts ===
+/\uff__ff/u
+>/\uff__ff/u : RegExp
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts ===
+"\xf__f"
+>"\xf__f" : "__f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts ===
+'\xf__f'
+>'\xf__f' : "__f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts ===
+`\xf__f`
+>`\xf__f` : "__f"
+
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/48.ts ===
+/\xf__f/u
+>/\xf__f/u : RegExp
+

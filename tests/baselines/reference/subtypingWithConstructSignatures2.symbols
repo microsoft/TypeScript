@@ -1,0 +1,840 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures2.ts ===
+// checking subtype relations for function types as it relates to contextual signature instantiation
+
+class Base { foo: string; }
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(subtypingWithConstructSignatures2.ts, 2, 12))
+
+class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(subtypingWithConstructSignatures2.ts, 3, 28))
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures2.ts, 3, 43))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>baz : Symbol(Derived2.baz, Decl(subtypingWithConstructSignatures2.ts, 4, 32))
+
+class OtherDerived extends Base { bing: string; }
+>OtherDerived : Symbol(OtherDerived, Decl(subtypingWithConstructSignatures2.ts, 4, 47))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>bing : Symbol(OtherDerived.bing, Decl(subtypingWithConstructSignatures2.ts, 5, 33))
+
+declare function foo1(a: new (x: number) => number[]): typeof a;
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures2.ts, 5, 49), Decl(subtypingWithConstructSignatures2.ts, 7, 64))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 7, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 7, 30))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 7, 22))
+
+declare function foo1(a: any): any;
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures2.ts, 5, 49), Decl(subtypingWithConstructSignatures2.ts, 7, 64))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 8, 22))
+
+declare function foo2(a: new (x: number) => string[]): typeof a;
+>foo2 : Symbol(foo2, Decl(subtypingWithConstructSignatures2.ts, 8, 35), Decl(subtypingWithConstructSignatures2.ts, 10, 64))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 10, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 10, 30))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 10, 22))
+
+declare function foo2(a: any): any;
+>foo2 : Symbol(foo2, Decl(subtypingWithConstructSignatures2.ts, 8, 35), Decl(subtypingWithConstructSignatures2.ts, 10, 64))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 11, 22))
+
+declare function foo3(a: new (x: number) => void): typeof a;
+>foo3 : Symbol(foo3, Decl(subtypingWithConstructSignatures2.ts, 11, 35), Decl(subtypingWithConstructSignatures2.ts, 13, 60))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 13, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 13, 30))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 13, 22))
+
+declare function foo3(a: any): any;
+>foo3 : Symbol(foo3, Decl(subtypingWithConstructSignatures2.ts, 11, 35), Decl(subtypingWithConstructSignatures2.ts, 13, 60))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 14, 22))
+
+declare function foo4(a: new (x: string, y: number) => string): typeof a;
+>foo4 : Symbol(foo4, Decl(subtypingWithConstructSignatures2.ts, 14, 35), Decl(subtypingWithConstructSignatures2.ts, 16, 73))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 16, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 16, 30))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 16, 40))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 16, 22))
+
+declare function foo4(a: any): any;
+>foo4 : Symbol(foo4, Decl(subtypingWithConstructSignatures2.ts, 14, 35), Decl(subtypingWithConstructSignatures2.ts, 16, 73))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 17, 22))
+
+declare function foo5(a: new (x: new (arg: string) => number) => string): typeof a;
+>foo5 : Symbol(foo5, Decl(subtypingWithConstructSignatures2.ts, 17, 35), Decl(subtypingWithConstructSignatures2.ts, 19, 83))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 19, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 19, 30))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 19, 38))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 19, 22))
+
+declare function foo5(a: any): any;
+>foo5 : Symbol(foo5, Decl(subtypingWithConstructSignatures2.ts, 17, 35), Decl(subtypingWithConstructSignatures2.ts, 19, 83))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 20, 22))
+
+declare function foo6(a: new (x: new (arg: Base) => Derived) => Base): typeof a;
+>foo6 : Symbol(foo6, Decl(subtypingWithConstructSignatures2.ts, 20, 35), Decl(subtypingWithConstructSignatures2.ts, 22, 80))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 22, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 22, 30))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 22, 38))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 22, 22))
+
+declare function foo6(a: any): any;
+>foo6 : Symbol(foo6, Decl(subtypingWithConstructSignatures2.ts, 20, 35), Decl(subtypingWithConstructSignatures2.ts, 22, 80))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 23, 22))
+
+declare function foo7(a: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived): typeof a;
+>foo7 : Symbol(foo7, Decl(subtypingWithConstructSignatures2.ts, 23, 35), Decl(subtypingWithConstructSignatures2.ts, 25, 100))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 25, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 25, 30))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 25, 38))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 25, 69))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 25, 22))
+
+declare function foo7(a: any): any;
+>foo7 : Symbol(foo7, Decl(subtypingWithConstructSignatures2.ts, 23, 35), Decl(subtypingWithConstructSignatures2.ts, 25, 100))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 26, 22))
+
+declare function foo8(a: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a;
+>foo8 : Symbol(foo8, Decl(subtypingWithConstructSignatures2.ts, 26, 35), Decl(subtypingWithConstructSignatures2.ts, 28, 132))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 28, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 28, 30))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 28, 38))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 28, 60))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 28, 69))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 28, 101))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 28, 22))
+
+declare function foo8(a: any): any;
+>foo8 : Symbol(foo8, Decl(subtypingWithConstructSignatures2.ts, 26, 35), Decl(subtypingWithConstructSignatures2.ts, 28, 132))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 29, 22))
+
+declare function foo9(a: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a;
+>foo9 : Symbol(foo9, Decl(subtypingWithConstructSignatures2.ts, 29, 35), Decl(subtypingWithConstructSignatures2.ts, 31, 132))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 31, 22))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 31, 30))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 31, 38))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 31, 60))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 31, 69))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 31, 101))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 31, 22))
+
+declare function foo9(a: any): any;
+>foo9 : Symbol(foo9, Decl(subtypingWithConstructSignatures2.ts, 29, 35), Decl(subtypingWithConstructSignatures2.ts, 31, 132))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 32, 22))
+
+declare function foo10(a: new (...x: Derived[]) => Derived): typeof a;
+>foo10 : Symbol(foo10, Decl(subtypingWithConstructSignatures2.ts, 32, 35), Decl(subtypingWithConstructSignatures2.ts, 34, 70))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 34, 23))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 34, 31))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 34, 23))
+
+declare function foo10(a: any): any;
+>foo10 : Symbol(foo10, Decl(subtypingWithConstructSignatures2.ts, 32, 35), Decl(subtypingWithConstructSignatures2.ts, 34, 70))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 35, 23))
+
+declare function foo11(a: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a;
+>foo11 : Symbol(foo11, Decl(subtypingWithConstructSignatures2.ts, 35, 36), Decl(subtypingWithConstructSignatures2.ts, 37, 103))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 37, 23))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 37, 31))
+>foo : Symbol(foo, Decl(subtypingWithConstructSignatures2.ts, 37, 35))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 37, 50))
+>foo : Symbol(foo, Decl(subtypingWithConstructSignatures2.ts, 37, 55))
+>bar : Symbol(bar, Decl(subtypingWithConstructSignatures2.ts, 37, 68))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 37, 23))
+
+declare function foo11(a: any): any;
+>foo11 : Symbol(foo11, Decl(subtypingWithConstructSignatures2.ts, 35, 36), Decl(subtypingWithConstructSignatures2.ts, 37, 103))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 38, 23))
+
+declare function foo12(a: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a;
+>foo12 : Symbol(foo12, Decl(subtypingWithConstructSignatures2.ts, 38, 36), Decl(subtypingWithConstructSignatures2.ts, 40, 96))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 40, 23))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 40, 31))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 40, 46))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures2.ts, 3, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 40, 23))
+
+declare function foo12(a: any): any;
+>foo12 : Symbol(foo12, Decl(subtypingWithConstructSignatures2.ts, 38, 36), Decl(subtypingWithConstructSignatures2.ts, 40, 96))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 41, 23))
+
+declare function foo13(a: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>): typeof a;
+>foo13 : Symbol(foo13, Decl(subtypingWithConstructSignatures2.ts, 41, 36), Decl(subtypingWithConstructSignatures2.ts, 43, 95))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 43, 23))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 43, 31))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 43, 46))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 43, 23))
+
+declare function foo13(a: any): any;
+>foo13 : Symbol(foo13, Decl(subtypingWithConstructSignatures2.ts, 41, 36), Decl(subtypingWithConstructSignatures2.ts, 43, 95))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 44, 23))
+
+declare function foo14(a: new (x: { a: string; b: number }) => Object): typeof a;
+>foo14 : Symbol(foo14, Decl(subtypingWithConstructSignatures2.ts, 44, 36), Decl(subtypingWithConstructSignatures2.ts, 46, 81))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 46, 23))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 46, 31))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 46, 35))
+>b : Symbol(b, Decl(subtypingWithConstructSignatures2.ts, 46, 46))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 46, 23))
+
+declare function foo14(a: any): any;
+>foo14 : Symbol(foo14, Decl(subtypingWithConstructSignatures2.ts, 44, 36), Decl(subtypingWithConstructSignatures2.ts, 46, 81))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 47, 23))
+
+declare function foo15(a: { 
+>foo15 : Symbol(foo15, Decl(subtypingWithConstructSignatures2.ts, 47, 36), Decl(subtypingWithConstructSignatures2.ts, 52, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 49, 23))
+
+    new (x: number): number[];
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 50, 9))
+
+    new (x: string): string[]; 
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 51, 9))
+
+}): typeof a;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 49, 23))
+
+declare function foo15(a: any): any;
+>foo15 : Symbol(foo15, Decl(subtypingWithConstructSignatures2.ts, 47, 36), Decl(subtypingWithConstructSignatures2.ts, 52, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 53, 23))
+
+declare function foo16(a: {
+>foo16 : Symbol(foo16, Decl(subtypingWithConstructSignatures2.ts, 53, 36), Decl(subtypingWithConstructSignatures2.ts, 58, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 55, 23))
+
+    new <T extends Derived>(x: T): number[];
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 56, 9))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 56, 28))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 56, 9))
+
+    new <U extends Base>(x: U): number[];
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 57, 9))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 57, 25))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 57, 9))
+
+}): typeof a;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 55, 23))
+
+declare function foo16(a: any): any;
+>foo16 : Symbol(foo16, Decl(subtypingWithConstructSignatures2.ts, 53, 36), Decl(subtypingWithConstructSignatures2.ts, 58, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 59, 23))
+
+declare function foo17(a: {
+>foo17 : Symbol(foo17, Decl(subtypingWithConstructSignatures2.ts, 59, 36), Decl(subtypingWithConstructSignatures2.ts, 64, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 61, 23))
+
+    new (x: (a: number) => number): number[];
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 62, 9))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 62, 13))
+
+    new (x: (a: string) => string): string[];
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 63, 9))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 63, 13))
+
+}): typeof a;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 61, 23))
+
+declare function foo17(a: any): any;
+>foo17 : Symbol(foo17, Decl(subtypingWithConstructSignatures2.ts, 59, 36), Decl(subtypingWithConstructSignatures2.ts, 64, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 65, 23))
+
+declare function foo18(a: {
+>foo18 : Symbol(foo18, Decl(subtypingWithConstructSignatures2.ts, 65, 36), Decl(subtypingWithConstructSignatures2.ts, 76, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 67, 23))
+
+    new (x: {
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 68, 9))
+
+        new (a: number): number;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 69, 13))
+
+        new (a: string): string;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 70, 13))
+
+    }): any[];
+    new (x: {
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 72, 9))
+
+        new (a: boolean): boolean;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 73, 13))
+
+        new (a: Date): Date;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 74, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    }): any[];
+}): typeof a;
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 67, 23))
+
+declare function foo18(a: any): any;
+>foo18 : Symbol(foo18, Decl(subtypingWithConstructSignatures2.ts, 65, 36), Decl(subtypingWithConstructSignatures2.ts, 76, 13))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 77, 23))
+
+var r1arg1: new <T>(x: T) => T[];
+>r1arg1 : Symbol(r1arg1, Decl(subtypingWithConstructSignatures2.ts, 79, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 79, 17))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 79, 20))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 79, 17))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 79, 17))
+
+var r1arg2: new (x: number) => number[];
+>r1arg2 : Symbol(r1arg2, Decl(subtypingWithConstructSignatures2.ts, 80, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 80, 17))
+
+var r1 = foo1(r1arg1); // any, return types are not subtype of first overload
+>r1 : Symbol(r1, Decl(subtypingWithConstructSignatures2.ts, 81, 3))
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures2.ts, 5, 49), Decl(subtypingWithConstructSignatures2.ts, 7, 64))
+>r1arg1 : Symbol(r1arg1, Decl(subtypingWithConstructSignatures2.ts, 79, 3))
+
+var r1a = [r1arg2, r1arg1]; // generic signature, subtype in both directions
+>r1a : Symbol(r1a, Decl(subtypingWithConstructSignatures2.ts, 82, 3))
+>r1arg2 : Symbol(r1arg2, Decl(subtypingWithConstructSignatures2.ts, 80, 3))
+>r1arg1 : Symbol(r1arg1, Decl(subtypingWithConstructSignatures2.ts, 79, 3))
+
+var r1b = [r1arg1, r1arg2]; // generic signature, subtype in both directions
+>r1b : Symbol(r1b, Decl(subtypingWithConstructSignatures2.ts, 83, 3))
+>r1arg1 : Symbol(r1arg1, Decl(subtypingWithConstructSignatures2.ts, 79, 3))
+>r1arg2 : Symbol(r1arg2, Decl(subtypingWithConstructSignatures2.ts, 80, 3))
+
+var r2arg1: new <T>(x: T) => string[];
+>r2arg1 : Symbol(r2arg1, Decl(subtypingWithConstructSignatures2.ts, 85, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 85, 17))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 85, 20))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 85, 17))
+
+var r2arg2: new (x: number) => string[];
+>r2arg2 : Symbol(r2arg2, Decl(subtypingWithConstructSignatures2.ts, 86, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 86, 17))
+
+var r2 = foo2(r2arg1);
+>r2 : Symbol(r2, Decl(subtypingWithConstructSignatures2.ts, 87, 3))
+>foo2 : Symbol(foo2, Decl(subtypingWithConstructSignatures2.ts, 8, 35), Decl(subtypingWithConstructSignatures2.ts, 10, 64))
+>r2arg1 : Symbol(r2arg1, Decl(subtypingWithConstructSignatures2.ts, 85, 3))
+
+var r2a = [r2arg1, r2arg2];
+>r2a : Symbol(r2a, Decl(subtypingWithConstructSignatures2.ts, 88, 3))
+>r2arg1 : Symbol(r2arg1, Decl(subtypingWithConstructSignatures2.ts, 85, 3))
+>r2arg2 : Symbol(r2arg2, Decl(subtypingWithConstructSignatures2.ts, 86, 3))
+
+var r2b = [r2arg2, r2arg1];
+>r2b : Symbol(r2b, Decl(subtypingWithConstructSignatures2.ts, 89, 3))
+>r2arg2 : Symbol(r2arg2, Decl(subtypingWithConstructSignatures2.ts, 86, 3))
+>r2arg1 : Symbol(r2arg1, Decl(subtypingWithConstructSignatures2.ts, 85, 3))
+
+var r3arg1: new <T>(x: T) => T;
+>r3arg1 : Symbol(r3arg1, Decl(subtypingWithConstructSignatures2.ts, 91, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 91, 17))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 91, 20))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 91, 17))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 91, 17))
+
+var r3arg2: new (x: number) => void;
+>r3arg2 : Symbol(r3arg2, Decl(subtypingWithConstructSignatures2.ts, 92, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 92, 17))
+
+var r3 = foo3(r3arg1);
+>r3 : Symbol(r3, Decl(subtypingWithConstructSignatures2.ts, 93, 3))
+>foo3 : Symbol(foo3, Decl(subtypingWithConstructSignatures2.ts, 11, 35), Decl(subtypingWithConstructSignatures2.ts, 13, 60))
+>r3arg1 : Symbol(r3arg1, Decl(subtypingWithConstructSignatures2.ts, 91, 3))
+
+var r3a = [r3arg1, r3arg2];
+>r3a : Symbol(r3a, Decl(subtypingWithConstructSignatures2.ts, 94, 3))
+>r3arg1 : Symbol(r3arg1, Decl(subtypingWithConstructSignatures2.ts, 91, 3))
+>r3arg2 : Symbol(r3arg2, Decl(subtypingWithConstructSignatures2.ts, 92, 3))
+
+var r3b = [r3arg2, r3arg1];
+>r3b : Symbol(r3b, Decl(subtypingWithConstructSignatures2.ts, 95, 3))
+>r3arg2 : Symbol(r3arg2, Decl(subtypingWithConstructSignatures2.ts, 92, 3))
+>r3arg1 : Symbol(r3arg1, Decl(subtypingWithConstructSignatures2.ts, 91, 3))
+
+var r4arg1: new <T, U>(x: T, y: U) => T;
+>r4arg1 : Symbol(r4arg1, Decl(subtypingWithConstructSignatures2.ts, 97, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 97, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 97, 19))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 97, 23))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 97, 17))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 97, 28))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 97, 19))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 97, 17))
+
+var r4arg2: new (x: string, y: number) => string;
+>r4arg2 : Symbol(r4arg2, Decl(subtypingWithConstructSignatures2.ts, 98, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 98, 17))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 98, 27))
+
+var r4 = foo4(r4arg1); // any
+>r4 : Symbol(r4, Decl(subtypingWithConstructSignatures2.ts, 99, 3))
+>foo4 : Symbol(foo4, Decl(subtypingWithConstructSignatures2.ts, 14, 35), Decl(subtypingWithConstructSignatures2.ts, 16, 73))
+>r4arg1 : Symbol(r4arg1, Decl(subtypingWithConstructSignatures2.ts, 97, 3))
+
+var r4a = [r4arg1, r4arg2];
+>r4a : Symbol(r4a, Decl(subtypingWithConstructSignatures2.ts, 100, 3))
+>r4arg1 : Symbol(r4arg1, Decl(subtypingWithConstructSignatures2.ts, 97, 3))
+>r4arg2 : Symbol(r4arg2, Decl(subtypingWithConstructSignatures2.ts, 98, 3))
+
+var r4b = [r4arg2, r4arg1];
+>r4b : Symbol(r4b, Decl(subtypingWithConstructSignatures2.ts, 101, 3))
+>r4arg2 : Symbol(r4arg2, Decl(subtypingWithConstructSignatures2.ts, 98, 3))
+>r4arg1 : Symbol(r4arg1, Decl(subtypingWithConstructSignatures2.ts, 97, 3))
+
+var r5arg1: new <T, U>(x: new (arg: T) => U) => T;
+>r5arg1 : Symbol(r5arg1, Decl(subtypingWithConstructSignatures2.ts, 103, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 103, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 103, 19))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 103, 23))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 103, 31))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 103, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 103, 19))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 103, 17))
+
+var r5arg2: new (x: new (arg: string) => number) => string;
+>r5arg2 : Symbol(r5arg2, Decl(subtypingWithConstructSignatures2.ts, 104, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 104, 17))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 104, 25))
+
+var r5 = foo5(r5arg1); // any
+>r5 : Symbol(r5, Decl(subtypingWithConstructSignatures2.ts, 105, 3))
+>foo5 : Symbol(foo5, Decl(subtypingWithConstructSignatures2.ts, 17, 35), Decl(subtypingWithConstructSignatures2.ts, 19, 83))
+>r5arg1 : Symbol(r5arg1, Decl(subtypingWithConstructSignatures2.ts, 103, 3))
+
+var r5a = [r5arg1, r5arg2];
+>r5a : Symbol(r5a, Decl(subtypingWithConstructSignatures2.ts, 106, 3))
+>r5arg1 : Symbol(r5arg1, Decl(subtypingWithConstructSignatures2.ts, 103, 3))
+>r5arg2 : Symbol(r5arg2, Decl(subtypingWithConstructSignatures2.ts, 104, 3))
+
+var r5b = [r5arg2, r5arg1];
+>r5b : Symbol(r5b, Decl(subtypingWithConstructSignatures2.ts, 107, 3))
+>r5arg2 : Symbol(r5arg2, Decl(subtypingWithConstructSignatures2.ts, 104, 3))
+>r5arg1 : Symbol(r5arg1, Decl(subtypingWithConstructSignatures2.ts, 103, 3))
+
+var r6arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T;
+>r6arg1 : Symbol(r6arg1, Decl(subtypingWithConstructSignatures2.ts, 109, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 109, 17))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 109, 32))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 109, 52))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 109, 60))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 109, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 109, 32))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 109, 17))
+
+var r6arg2: new (x: new (arg: Base) => Derived) => Base;
+>r6arg2 : Symbol(r6arg2, Decl(subtypingWithConstructSignatures2.ts, 110, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 110, 17))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 110, 25))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+
+var r6 = foo6(r6arg1); // any
+>r6 : Symbol(r6, Decl(subtypingWithConstructSignatures2.ts, 111, 3))
+>foo6 : Symbol(foo6, Decl(subtypingWithConstructSignatures2.ts, 20, 35), Decl(subtypingWithConstructSignatures2.ts, 22, 80))
+>r6arg1 : Symbol(r6arg1, Decl(subtypingWithConstructSignatures2.ts, 109, 3))
+
+var r6a = [r6arg1, r6arg2];
+>r6a : Symbol(r6a, Decl(subtypingWithConstructSignatures2.ts, 112, 3))
+>r6arg1 : Symbol(r6arg1, Decl(subtypingWithConstructSignatures2.ts, 109, 3))
+>r6arg2 : Symbol(r6arg2, Decl(subtypingWithConstructSignatures2.ts, 110, 3))
+
+var r6b = [r6arg2, r6arg1];
+>r6b : Symbol(r6b, Decl(subtypingWithConstructSignatures2.ts, 113, 3))
+>r6arg2 : Symbol(r6arg2, Decl(subtypingWithConstructSignatures2.ts, 110, 3))
+>r6arg1 : Symbol(r6arg1, Decl(subtypingWithConstructSignatures2.ts, 109, 3))
+
+var r7arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => new (r: T) => U;
+>r7arg1 : Symbol(r7arg1, Decl(subtypingWithConstructSignatures2.ts, 115, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 115, 17))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 115, 32))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 115, 52))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 115, 60))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 115, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 115, 32))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 115, 82))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 115, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 115, 32))
+
+var r7arg2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived;
+>r7arg2 : Symbol(r7arg2, Decl(subtypingWithConstructSignatures2.ts, 116, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 116, 17))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 116, 25))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 116, 56))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r7 = foo7(r7arg1); // any
+>r7 : Symbol(r7, Decl(subtypingWithConstructSignatures2.ts, 117, 3))
+>foo7 : Symbol(foo7, Decl(subtypingWithConstructSignatures2.ts, 23, 35), Decl(subtypingWithConstructSignatures2.ts, 25, 100))
+>r7arg1 : Symbol(r7arg1, Decl(subtypingWithConstructSignatures2.ts, 115, 3))
+
+var r7a = [r7arg1, r7arg2];
+>r7a : Symbol(r7a, Decl(subtypingWithConstructSignatures2.ts, 118, 3))
+>r7arg1 : Symbol(r7arg1, Decl(subtypingWithConstructSignatures2.ts, 115, 3))
+>r7arg2 : Symbol(r7arg2, Decl(subtypingWithConstructSignatures2.ts, 116, 3))
+
+var r7b = [r7arg2, r7arg1];
+>r7b : Symbol(r7b, Decl(subtypingWithConstructSignatures2.ts, 119, 3))
+>r7arg2 : Symbol(r7arg2, Decl(subtypingWithConstructSignatures2.ts, 116, 3))
+>r7arg1 : Symbol(r7arg1, Decl(subtypingWithConstructSignatures2.ts, 115, 3))
+
+var r8arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: new (arg2: T) => U) => new (r: T) => U;
+>r8arg1 : Symbol(r8arg1, Decl(subtypingWithConstructSignatures2.ts, 121, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 121, 17))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 121, 32))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 121, 52))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 121, 60))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 121, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 121, 32))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 121, 73))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 121, 82))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 121, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 121, 32))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 121, 105))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 121, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 121, 32))
+
+var r8arg2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived;
+>r8arg2 : Symbol(r8arg2, Decl(subtypingWithConstructSignatures2.ts, 122, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 122, 17))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 122, 25))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 122, 47))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 122, 56))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 122, 88))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r8 = foo8(r8arg1); // any
+>r8 : Symbol(r8, Decl(subtypingWithConstructSignatures2.ts, 123, 3))
+>foo8 : Symbol(foo8, Decl(subtypingWithConstructSignatures2.ts, 26, 35), Decl(subtypingWithConstructSignatures2.ts, 28, 132))
+>r8arg1 : Symbol(r8arg1, Decl(subtypingWithConstructSignatures2.ts, 121, 3))
+
+var r8a = [r8arg1, r8arg2];
+>r8a : Symbol(r8a, Decl(subtypingWithConstructSignatures2.ts, 124, 3))
+>r8arg1 : Symbol(r8arg1, Decl(subtypingWithConstructSignatures2.ts, 121, 3))
+>r8arg2 : Symbol(r8arg2, Decl(subtypingWithConstructSignatures2.ts, 122, 3))
+
+var r8b = [r8arg2, r8arg1];
+>r8b : Symbol(r8b, Decl(subtypingWithConstructSignatures2.ts, 125, 3))
+>r8arg2 : Symbol(r8arg2, Decl(subtypingWithConstructSignatures2.ts, 122, 3))
+>r8arg1 : Symbol(r8arg1, Decl(subtypingWithConstructSignatures2.ts, 121, 3))
+
+var r9arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => new (r: T) => U;
+>r9arg1 : Symbol(r9arg1, Decl(subtypingWithConstructSignatures2.ts, 127, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 127, 17))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 127, 32))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 127, 52))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 127, 60))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 127, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 127, 32))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 127, 73))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 127, 78))
+>foo : Symbol(foo, Decl(subtypingWithConstructSignatures2.ts, 127, 85))
+>bing : Symbol(bing, Decl(subtypingWithConstructSignatures2.ts, 127, 98))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 127, 32))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 127, 129))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 127, 17))
+>U : Symbol(U, Decl(subtypingWithConstructSignatures2.ts, 127, 32))
+
+var r9arg2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived;
+>r9arg2 : Symbol(r9arg2, Decl(subtypingWithConstructSignatures2.ts, 128, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 128, 17))
+>arg : Symbol(arg, Decl(subtypingWithConstructSignatures2.ts, 128, 25))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 128, 47))
+>arg2 : Symbol(arg2, Decl(subtypingWithConstructSignatures2.ts, 128, 56))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>r : Symbol(r, Decl(subtypingWithConstructSignatures2.ts, 128, 88))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r9 = foo9(r9arg1); // any
+>r9 : Symbol(r9, Decl(subtypingWithConstructSignatures2.ts, 129, 3))
+>foo9 : Symbol(foo9, Decl(subtypingWithConstructSignatures2.ts, 29, 35), Decl(subtypingWithConstructSignatures2.ts, 31, 132))
+>r9arg1 : Symbol(r9arg1, Decl(subtypingWithConstructSignatures2.ts, 127, 3))
+
+var r9a = [r9arg1, r9arg2];
+>r9a : Symbol(r9a, Decl(subtypingWithConstructSignatures2.ts, 130, 3))
+>r9arg1 : Symbol(r9arg1, Decl(subtypingWithConstructSignatures2.ts, 127, 3))
+>r9arg2 : Symbol(r9arg2, Decl(subtypingWithConstructSignatures2.ts, 128, 3))
+
+var r9b = [r9arg2, r9arg1];
+>r9b : Symbol(r9b, Decl(subtypingWithConstructSignatures2.ts, 131, 3))
+>r9arg2 : Symbol(r9arg2, Decl(subtypingWithConstructSignatures2.ts, 128, 3))
+>r9arg1 : Symbol(r9arg1, Decl(subtypingWithConstructSignatures2.ts, 127, 3))
+
+var r10arg1: new <T extends Derived>(...x: T[]) => T;
+>r10arg1 : Symbol(r10arg1, Decl(subtypingWithConstructSignatures2.ts, 133, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 133, 18))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 133, 37))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 133, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 133, 18))
+
+var r10arg2: new (...x: Derived[]) => Derived;
+>r10arg2 : Symbol(r10arg2, Decl(subtypingWithConstructSignatures2.ts, 134, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 134, 18))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r10 = foo10(r10arg1); // any
+>r10 : Symbol(r10, Decl(subtypingWithConstructSignatures2.ts, 135, 3))
+>foo10 : Symbol(foo10, Decl(subtypingWithConstructSignatures2.ts, 32, 35), Decl(subtypingWithConstructSignatures2.ts, 34, 70))
+>r10arg1 : Symbol(r10arg1, Decl(subtypingWithConstructSignatures2.ts, 133, 3))
+
+var r10a = [r10arg1, r10arg2];
+>r10a : Symbol(r10a, Decl(subtypingWithConstructSignatures2.ts, 136, 3))
+>r10arg1 : Symbol(r10arg1, Decl(subtypingWithConstructSignatures2.ts, 133, 3))
+>r10arg2 : Symbol(r10arg2, Decl(subtypingWithConstructSignatures2.ts, 134, 3))
+
+var r10b = [r10arg2, r10arg1];
+>r10b : Symbol(r10b, Decl(subtypingWithConstructSignatures2.ts, 137, 3))
+>r10arg2 : Symbol(r10arg2, Decl(subtypingWithConstructSignatures2.ts, 134, 3))
+>r10arg1 : Symbol(r10arg1, Decl(subtypingWithConstructSignatures2.ts, 133, 3))
+
+var r11arg1: new <T extends Base>(x: T, y: T) => T;
+>r11arg1 : Symbol(r11arg1, Decl(subtypingWithConstructSignatures2.ts, 139, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 139, 18))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 139, 34))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 139, 18))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 139, 39))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 139, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 139, 18))
+
+var r11arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+>r11arg2 : Symbol(r11arg2, Decl(subtypingWithConstructSignatures2.ts, 140, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 140, 18))
+>foo : Symbol(foo, Decl(subtypingWithConstructSignatures2.ts, 140, 22))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 140, 37))
+>foo : Symbol(foo, Decl(subtypingWithConstructSignatures2.ts, 140, 42))
+>bar : Symbol(bar, Decl(subtypingWithConstructSignatures2.ts, 140, 55))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+
+var r11 = foo11(r11arg1); // any
+>r11 : Symbol(r11, Decl(subtypingWithConstructSignatures2.ts, 141, 3))
+>foo11 : Symbol(foo11, Decl(subtypingWithConstructSignatures2.ts, 35, 36), Decl(subtypingWithConstructSignatures2.ts, 37, 103))
+>r11arg1 : Symbol(r11arg1, Decl(subtypingWithConstructSignatures2.ts, 139, 3))
+
+var r11a = [r11arg1, r11arg2];
+>r11a : Symbol(r11a, Decl(subtypingWithConstructSignatures2.ts, 142, 3))
+>r11arg1 : Symbol(r11arg1, Decl(subtypingWithConstructSignatures2.ts, 139, 3))
+>r11arg2 : Symbol(r11arg2, Decl(subtypingWithConstructSignatures2.ts, 140, 3))
+
+var r11b = [r11arg2, r11arg1];
+>r11b : Symbol(r11b, Decl(subtypingWithConstructSignatures2.ts, 143, 3))
+>r11arg2 : Symbol(r11arg2, Decl(subtypingWithConstructSignatures2.ts, 140, 3))
+>r11arg1 : Symbol(r11arg1, Decl(subtypingWithConstructSignatures2.ts, 139, 3))
+
+var r12arg1: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>;
+>r12arg1 : Symbol(r12arg1, Decl(subtypingWithConstructSignatures2.ts, 145, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 145, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 145, 41))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 145, 56))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 145, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r12arg2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+>r12arg2 : Symbol(r12arg2, Decl(subtypingWithConstructSignatures2.ts, 146, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 146, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 146, 33))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures2.ts, 3, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r12 = foo12(r12arg1); // any
+>r12 : Symbol(r12, Decl(subtypingWithConstructSignatures2.ts, 147, 3))
+>foo12 : Symbol(foo12, Decl(subtypingWithConstructSignatures2.ts, 38, 36), Decl(subtypingWithConstructSignatures2.ts, 40, 96))
+>r12arg1 : Symbol(r12arg1, Decl(subtypingWithConstructSignatures2.ts, 145, 3))
+
+var r12a = [r12arg1, r12arg2];
+>r12a : Symbol(r12a, Decl(subtypingWithConstructSignatures2.ts, 148, 3))
+>r12arg1 : Symbol(r12arg1, Decl(subtypingWithConstructSignatures2.ts, 145, 3))
+>r12arg2 : Symbol(r12arg2, Decl(subtypingWithConstructSignatures2.ts, 146, 3))
+
+var r12b = [r12arg2, r12arg1];
+>r12b : Symbol(r12b, Decl(subtypingWithConstructSignatures2.ts, 149, 3))
+>r12arg2 : Symbol(r12arg2, Decl(subtypingWithConstructSignatures2.ts, 146, 3))
+>r12arg1 : Symbol(r12arg1, Decl(subtypingWithConstructSignatures2.ts, 145, 3))
+
+var r13arg1: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T;
+>r13arg1 : Symbol(r13arg1, Decl(subtypingWithConstructSignatures2.ts, 151, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 151, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 151, 44))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 151, 59))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 151, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 151, 18))
+
+var r13arg2: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
+>r13arg2 : Symbol(r13arg2, Decl(subtypingWithConstructSignatures2.ts, 152, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 152, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>y : Symbol(y, Decl(subtypingWithConstructSignatures2.ts, 152, 33))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures2.ts, 2, 27))
+
+var r13 = foo13(r13arg1); // any
+>r13 : Symbol(r13, Decl(subtypingWithConstructSignatures2.ts, 153, 3))
+>foo13 : Symbol(foo13, Decl(subtypingWithConstructSignatures2.ts, 41, 36), Decl(subtypingWithConstructSignatures2.ts, 43, 95))
+>r13arg1 : Symbol(r13arg1, Decl(subtypingWithConstructSignatures2.ts, 151, 3))
+
+var r13a = [r13arg1, r13arg2];
+>r13a : Symbol(r13a, Decl(subtypingWithConstructSignatures2.ts, 154, 3))
+>r13arg1 : Symbol(r13arg1, Decl(subtypingWithConstructSignatures2.ts, 151, 3))
+>r13arg2 : Symbol(r13arg2, Decl(subtypingWithConstructSignatures2.ts, 152, 3))
+
+var r13b = [r13arg2, r13arg1];
+>r13b : Symbol(r13b, Decl(subtypingWithConstructSignatures2.ts, 155, 3))
+>r13arg2 : Symbol(r13arg2, Decl(subtypingWithConstructSignatures2.ts, 152, 3))
+>r13arg1 : Symbol(r13arg1, Decl(subtypingWithConstructSignatures2.ts, 151, 3))
+
+var r14arg1: new <T>(x: { a: T; b: T }) => T;
+>r14arg1 : Symbol(r14arg1, Decl(subtypingWithConstructSignatures2.ts, 157, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 157, 18))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 157, 21))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 157, 25))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 157, 18))
+>b : Symbol(b, Decl(subtypingWithConstructSignatures2.ts, 157, 31))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 157, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 157, 18))
+
+var r14arg2: new (x: { a: string; b: number }) => Object;
+>r14arg2 : Symbol(r14arg2, Decl(subtypingWithConstructSignatures2.ts, 158, 3))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 158, 18))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 158, 22))
+>b : Symbol(b, Decl(subtypingWithConstructSignatures2.ts, 158, 33))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var r14 = foo14(r14arg1); // any
+>r14 : Symbol(r14, Decl(subtypingWithConstructSignatures2.ts, 159, 3))
+>foo14 : Symbol(foo14, Decl(subtypingWithConstructSignatures2.ts, 44, 36), Decl(subtypingWithConstructSignatures2.ts, 46, 81))
+>r14arg1 : Symbol(r14arg1, Decl(subtypingWithConstructSignatures2.ts, 157, 3))
+
+var r14a = [r14arg1, r14arg2];
+>r14a : Symbol(r14a, Decl(subtypingWithConstructSignatures2.ts, 160, 3))
+>r14arg1 : Symbol(r14arg1, Decl(subtypingWithConstructSignatures2.ts, 157, 3))
+>r14arg2 : Symbol(r14arg2, Decl(subtypingWithConstructSignatures2.ts, 158, 3))
+
+var r14b = [r14arg2, r14arg1];
+>r14b : Symbol(r14b, Decl(subtypingWithConstructSignatures2.ts, 161, 3))
+>r14arg2 : Symbol(r14arg2, Decl(subtypingWithConstructSignatures2.ts, 158, 3))
+>r14arg1 : Symbol(r14arg1, Decl(subtypingWithConstructSignatures2.ts, 157, 3))
+
+var r15arg1: new <T>(x: T) => T[];
+>r15arg1 : Symbol(r15arg1, Decl(subtypingWithConstructSignatures2.ts, 163, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 163, 18))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 163, 21))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 163, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 163, 18))
+
+var r15 = foo15(r15arg1); // any
+>r15 : Symbol(r15, Decl(subtypingWithConstructSignatures2.ts, 164, 3))
+>foo15 : Symbol(foo15, Decl(subtypingWithConstructSignatures2.ts, 47, 36), Decl(subtypingWithConstructSignatures2.ts, 52, 13))
+>r15arg1 : Symbol(r15arg1, Decl(subtypingWithConstructSignatures2.ts, 163, 3))
+
+var r16arg1: new <T extends Base>(x: T) => number[];
+>r16arg1 : Symbol(r16arg1, Decl(subtypingWithConstructSignatures2.ts, 165, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 165, 18))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignatures2.ts, 0, 0))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 165, 34))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 165, 18))
+
+var r16 = foo16(r16arg1);
+>r16 : Symbol(r16, Decl(subtypingWithConstructSignatures2.ts, 166, 3))
+>foo16 : Symbol(foo16, Decl(subtypingWithConstructSignatures2.ts, 53, 36), Decl(subtypingWithConstructSignatures2.ts, 58, 13))
+>r16arg1 : Symbol(r16arg1, Decl(subtypingWithConstructSignatures2.ts, 165, 3))
+
+var r17arg1: new <T>(x: (a: T) => T) => T[];
+>r17arg1 : Symbol(r17arg1, Decl(subtypingWithConstructSignatures2.ts, 167, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 167, 18))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 167, 21))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 167, 25))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 167, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 167, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 167, 18))
+
+var r17 = foo17(r17arg1); // any
+>r17 : Symbol(r17, Decl(subtypingWithConstructSignatures2.ts, 168, 3))
+>foo17 : Symbol(foo17, Decl(subtypingWithConstructSignatures2.ts, 59, 36), Decl(subtypingWithConstructSignatures2.ts, 64, 13))
+>r17arg1 : Symbol(r17arg1, Decl(subtypingWithConstructSignatures2.ts, 167, 3))
+
+var r18arg1: new <T>(x: (a: T) => T) => T[];
+>r18arg1 : Symbol(r18arg1, Decl(subtypingWithConstructSignatures2.ts, 169, 3))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 169, 18))
+>x : Symbol(x, Decl(subtypingWithConstructSignatures2.ts, 169, 21))
+>a : Symbol(a, Decl(subtypingWithConstructSignatures2.ts, 169, 25))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 169, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 169, 18))
+>T : Symbol(T, Decl(subtypingWithConstructSignatures2.ts, 169, 18))
+
+var r18 = foo18(r18arg1); 
+>r18 : Symbol(r18, Decl(subtypingWithConstructSignatures2.ts, 170, 3))
+>foo18 : Symbol(foo18, Decl(subtypingWithConstructSignatures2.ts, 65, 36), Decl(subtypingWithConstructSignatures2.ts, 76, 13))
+>r18arg1 : Symbol(r18arg1, Decl(subtypingWithConstructSignatures2.ts, 169, 3))
+

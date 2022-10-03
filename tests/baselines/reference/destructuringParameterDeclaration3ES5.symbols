@@ -1,0 +1,144 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts ===
+// If the parameter is a rest parameter, the parameter type is any[]
+// A type annotation for a rest parameter must denote an array type.
+
+// RestParameter:
+//     ...   Identifier   TypeAnnotation(opt)
+
+type arrayString = Array<String>
+>arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration3ES5.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+type someArray = Array<String> | number[];
+>someArray : Symbol(someArray, Decl(destructuringParameterDeclaration3ES5.ts, 6, 32))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+type stringOrNumArray = Array<String|Number>;
+>stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration3ES5.ts, 7, 42))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function a1(...x: (number|string)[]) { }
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration3ES5.ts, 8, 45))
+>x : Symbol(x, Decl(destructuringParameterDeclaration3ES5.ts, 10, 12))
+
+function a2(...a) { }
+>a2 : Symbol(a2, Decl(destructuringParameterDeclaration3ES5.ts, 10, 40))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 11, 12))
+
+function a3(...a: Array<String>) { }
+>a3 : Symbol(a3, Decl(destructuringParameterDeclaration3ES5.ts, 11, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 12, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+function a4(...a: arrayString) { }
+>a4 : Symbol(a4, Decl(destructuringParameterDeclaration3ES5.ts, 12, 36))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 13, 12))
+>arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration3ES5.ts, 0, 0))
+
+function a5(...a: stringOrNumArray) { }
+>a5 : Symbol(a5, Decl(destructuringParameterDeclaration3ES5.ts, 13, 34))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 14, 12))
+>stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration3ES5.ts, 7, 42))
+
+function a9([a, b, [[c]]]) { }
+>a9 : Symbol(a9, Decl(destructuringParameterDeclaration3ES5.ts, 14, 39))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 15, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 15, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration3ES5.ts, 15, 21))
+
+function a10([a, b, [[c]], ...x]) { }
+>a10 : Symbol(a10, Decl(destructuringParameterDeclaration3ES5.ts, 15, 30))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 16, 14))
+>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 16, 16))
+>c : Symbol(c, Decl(destructuringParameterDeclaration3ES5.ts, 16, 22))
+>x : Symbol(x, Decl(destructuringParameterDeclaration3ES5.ts, 16, 26))
+
+function a11([a, b, c, ...x]: number[]) { }
+>a11 : Symbol(a11, Decl(destructuringParameterDeclaration3ES5.ts, 16, 37))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 17, 14))
+>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 17, 16))
+>c : Symbol(c, Decl(destructuringParameterDeclaration3ES5.ts, 17, 19))
+>x : Symbol(x, Decl(destructuringParameterDeclaration3ES5.ts, 17, 22))
+
+
+var array = [1, 2, 3];
+>array : Symbol(array, Decl(destructuringParameterDeclaration3ES5.ts, 20, 3))
+
+var array2 = [true, false, "hello"];
+>array2 : Symbol(array2, Decl(destructuringParameterDeclaration3ES5.ts, 21, 3))
+
+a2([...array]);
+>a2 : Symbol(a2, Decl(destructuringParameterDeclaration3ES5.ts, 10, 40))
+>array : Symbol(array, Decl(destructuringParameterDeclaration3ES5.ts, 20, 3))
+
+a1(...array);
+>a1 : Symbol(a1, Decl(destructuringParameterDeclaration3ES5.ts, 8, 45))
+>array : Symbol(array, Decl(destructuringParameterDeclaration3ES5.ts, 20, 3))
+
+a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
+>a9 : Symbol(a9, Decl(destructuringParameterDeclaration3ES5.ts, 14, 39))
+
+a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
+>a10 : Symbol(a10, Decl(destructuringParameterDeclaration3ES5.ts, 15, 30))
+
+a10([1, 2, 3, false, true]);              // Parameter type is any[]
+>a10 : Symbol(a10, Decl(destructuringParameterDeclaration3ES5.ts, 15, 30))
+
+a10([1, 2]);                              // Parameter type is any[]
+>a10 : Symbol(a10, Decl(destructuringParameterDeclaration3ES5.ts, 15, 30))
+
+a11([1, 2]);                              // Parameter type is number[]
+>a11 : Symbol(a11, Decl(destructuringParameterDeclaration3ES5.ts, 16, 37))
+
+// Rest parameter with generic
+function foo<T>(...a: T[]) { }
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration3ES5.ts, 30, 12))
+>T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 33, 13))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 33, 16))
+>T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 33, 13))
+
+foo<number|string>("hello", 1, 2);
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration3ES5.ts, 30, 12))
+
+foo("hello", "world");
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration3ES5.ts, 30, 12))
+
+enum E { a, b }
+>E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+>a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+>b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+
+const enum E1 { a, b }
+>E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES5.ts, 37, 15))
+>a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+>b : Symbol(E1.b, Decl(destructuringParameterDeclaration3ES5.ts, 38, 18))
+
+function foo1<T extends Number>(...a: T[]) { }
+>foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+>T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 39, 14))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 39, 32))
+>T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 39, 14))
+
+foo1(1, 2, 3, E.a);
+>foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+>E.a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+>E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+>a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+
+foo1(1, 2, 3, E1.a, E.b);
+>foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+>E1.a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+>E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES5.ts, 37, 15))
+>a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+>E.b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+>E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+>b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+
+
+

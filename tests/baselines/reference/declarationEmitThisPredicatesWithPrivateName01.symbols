@@ -1,0 +1,18 @@
+=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName01.ts ===
+export class C {
+>C : Symbol(C, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 0, 0))
+
+    m(): this is D {
+>m : Symbol(C.m, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 0, 16))
+>D : Symbol(D, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 4, 1))
+
+        return this instanceof D;
+>this : Symbol(C, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 0, 0))
+>D : Symbol(D, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 4, 1))
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 4, 1))
+>C : Symbol(C, Decl(declarationEmitThisPredicatesWithPrivateName01.ts, 0, 0))
+}

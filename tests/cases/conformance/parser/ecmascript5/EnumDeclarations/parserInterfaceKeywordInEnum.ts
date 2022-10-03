@@ -1,0 +1,3 @@
+enum Bar {
+    interface,
+}

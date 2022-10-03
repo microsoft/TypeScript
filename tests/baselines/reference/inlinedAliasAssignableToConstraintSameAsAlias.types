@@ -1,0 +1,45 @@
+=== tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts ===
+interface RelationFields {
+  x: A;
+>x : A
+
+  y: A[];
+>y : A[]
+
+  z: A[];
+>z : A[]
+}
+type Name = keyof RelationFields;
+>Name : keyof RelationFields
+
+type ShouldA<RF extends RelationFields, N extends Name> = RF[N] extends A[]
+>ShouldA : ShouldA<RF, N>
+
+  ? RF[N][0]
+  : never;
+
+class A {
+>A : A
+
+  x: A;
+>x : A
+
+  y: A[];
+>y : A[]
+
+  z: A[];
+>z : A[]
+
+  whereRelated< // Works // Type is same as A1, but is not assignable to type A
+>whereRelated : <RF extends RelationFields = RelationFields, N extends keyof RelationFields = keyof RelationFields, A1 extends A = RF[N] extends A[] ? RF[N][0] : never, A2 extends A = ShouldA<RF, N>>() => number
+
+    RF extends RelationFields = RelationFields,
+    N extends Name = Name,
+    A1 extends A = RF[N] extends A[] ? RF[N][0] : never,
+    A2 extends A = ShouldA<RF, N>
+  >(): number {
+    return 1;
+>1 : 1
+  }
+}
+

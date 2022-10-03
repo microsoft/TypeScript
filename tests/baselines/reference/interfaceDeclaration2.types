@@ -1,0 +1,17 @@
+=== tests/cases/compiler/interfaceDeclaration2.ts ===
+interface I1 { }
+module I1 { }
+
+interface I2 { }
+class I2 { }
+>I2 : I2
+
+interface I3 { }
+function I3() { }
+>I3 : () => void
+
+interface I4 { }
+var I4:number;
+>I4 : number
+
+

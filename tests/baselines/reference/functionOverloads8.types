@@ -1,0 +1,13 @@
+=== tests/cases/compiler/functionOverloads8.ts ===
+function foo();
+>foo : { (): any; (foo: string): any; }
+
+function foo(foo:string);
+>foo : { (): any; (foo: string): any; }
+>foo : string
+
+function foo(foo?:any){ return '' }
+>foo : { (): any; (foo: string): any; }
+>foo : any
+>'' : ""
+

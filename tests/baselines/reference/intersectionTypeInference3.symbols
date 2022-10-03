@@ -1,0 +1,58 @@
+=== tests/cases/conformance/types/intersection/intersectionTypeInference3.ts ===
+// Repro from #19682
+
+type Nominal<Kind extends string, Type> = Type & {
+>Nominal : Symbol(Nominal, Decl(intersectionTypeInference3.ts, 0, 0))
+>Kind : Symbol(Kind, Decl(intersectionTypeInference3.ts, 2, 13))
+>Type : Symbol(Type, Decl(intersectionTypeInference3.ts, 2, 33))
+>Type : Symbol(Type, Decl(intersectionTypeInference3.ts, 2, 33))
+
+    [Symbol.species]: Kind;
+>[Symbol.species] : Symbol([Symbol.species], Decl(intersectionTypeInference3.ts, 2, 50))
+>Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Kind : Symbol(Kind, Decl(intersectionTypeInference3.ts, 2, 13))
+
+};
+
+type A = Nominal<'A', string>;
+>A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
+>Nominal : Symbol(Nominal, Decl(intersectionTypeInference3.ts, 0, 0))
+
+declare const a: Set<A>;
+>a : Symbol(a, Decl(intersectionTypeInference3.ts, 8, 13))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
+
+declare const b: Set<A>;
+>b : Symbol(b, Decl(intersectionTypeInference3.ts, 9, 13))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
+
+const c1 = Array.from(a).concat(Array.from(b));
+>c1 : Symbol(c1, Decl(intersectionTypeInference3.ts, 11, 5))
+>Array.from(a).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>a : Symbol(a, Decl(intersectionTypeInference3.ts, 8, 13))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(intersectionTypeInference3.ts, 9, 13))
+
+// Simpler repro
+
+declare function from<T>(): T[];
+>from : Symbol(from, Decl(intersectionTypeInference3.ts, 11, 47))
+>T : Symbol(T, Decl(intersectionTypeInference3.ts, 15, 22))
+>T : Symbol(T, Decl(intersectionTypeInference3.ts, 15, 22))
+
+const c2: ReadonlyArray<A> = from();
+>c2 : Symbol(c2, Decl(intersectionTypeInference3.ts, 16, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
+>from : Symbol(from, Decl(intersectionTypeInference3.ts, 11, 47))
+

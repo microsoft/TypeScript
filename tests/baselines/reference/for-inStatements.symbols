@@ -1,0 +1,231 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts ===
+var aString: string;
+>aString : Symbol(aString, Decl(for-inStatements.ts, 0, 3))
+
+for (aString in {}) { }
+>aString : Symbol(aString, Decl(for-inStatements.ts, 0, 3))
+
+var anAny: any;
+>anAny : Symbol(anAny, Decl(for-inStatements.ts, 3, 3))
+
+for (anAny in {}) { }
+>anAny : Symbol(anAny, Decl(for-inStatements.ts, 3, 3))
+
+for (var x in {}) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+
+for (var x in []) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+
+for (var x in [1, 2, 3, 4, 5]) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+
+function fn(): any { }
+>fn : Symbol(fn, Decl(for-inStatements.ts, 8, 34))
+
+for (var x in fn()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>fn : Symbol(fn, Decl(for-inStatements.ts, 8, 34))
+
+for (var x in /[a-z]/) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+
+for (var x in new Date()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var c: any, d: any, e: any;
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+>e : Symbol(e, Decl(for-inStatements.ts, 16, 19))
+
+for (var x in c || d) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+
+for (var x in e ? c : d) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>e : Symbol(e, Decl(for-inStatements.ts, 16, 19))
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+
+for (var x in 42 ? c : d) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+
+for (var x in '' ? c : d) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+
+for (var x in 42 ? d[x] : c[x]) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+
+for (var x in c[d]) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
+>d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
+
+for (var x in (<T>(x: T) => x)) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>T : Symbol(T, Decl(for-inStatements.ts, 25, 16))
+>x : Symbol(x, Decl(for-inStatements.ts, 25, 19))
+>T : Symbol(T, Decl(for-inStatements.ts, 25, 16))
+>x : Symbol(x, Decl(for-inStatements.ts, 25, 19))
+
+for (var x in function (x: string, y: number) { return x + y }) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>x : Symbol(x, Decl(for-inStatements.ts, 26, 24))
+>y : Symbol(y, Decl(for-inStatements.ts, 26, 34))
+>x : Symbol(x, Decl(for-inStatements.ts, 26, 24))
+>y : Symbol(y, Decl(for-inStatements.ts, 26, 34))
+
+class A {
+>A : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+
+    biz() {
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in this.biz()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 30, 16), Decl(for-inStatements.ts, 31, 16), Decl(for-inStatements.ts, 32, 16))
+>this.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in this.biz) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 30, 16), Decl(for-inStatements.ts, 31, 16), Decl(for-inStatements.ts, 32, 16))
+>this.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in this) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 30, 16), Decl(for-inStatements.ts, 31, 16), Decl(for-inStatements.ts, 32, 16))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+
+        return null;
+    }
+
+    static baz() {
+>baz : Symbol(A.baz, Decl(for-inStatements.ts, 34, 5))
+
+        for (var x in this) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 37, 16), Decl(for-inStatements.ts, 38, 16), Decl(for-inStatements.ts, 39, 16))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+
+        for (var x in this.baz) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 37, 16), Decl(for-inStatements.ts, 38, 16), Decl(for-inStatements.ts, 39, 16))
+>this.baz : Symbol(A.baz, Decl(for-inStatements.ts, 34, 5))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>baz : Symbol(A.baz, Decl(for-inStatements.ts, 34, 5))
+
+        for (var x in this.baz()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 37, 16), Decl(for-inStatements.ts, 38, 16), Decl(for-inStatements.ts, 39, 16))
+>this.baz : Symbol(A.baz, Decl(for-inStatements.ts, 34, 5))
+>this : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>baz : Symbol(A.baz, Decl(for-inStatements.ts, 34, 5))
+
+        return null;
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(for-inStatements.ts, 43, 1))
+>A : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+
+    boz() {
+>boz : Symbol(B.boz, Decl(for-inStatements.ts, 45, 19))
+
+        for (var x in this.biz()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 47, 16), Decl(for-inStatements.ts, 48, 16), Decl(for-inStatements.ts, 49, 16), Decl(for-inStatements.ts, 51, 16), Decl(for-inStatements.ts, 52, 16))
+>this.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>this : Symbol(B, Decl(for-inStatements.ts, 43, 1))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in this.biz) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 47, 16), Decl(for-inStatements.ts, 48, 16), Decl(for-inStatements.ts, 49, 16), Decl(for-inStatements.ts, 51, 16), Decl(for-inStatements.ts, 52, 16))
+>this.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>this : Symbol(B, Decl(for-inStatements.ts, 43, 1))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in this) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 47, 16), Decl(for-inStatements.ts, 48, 16), Decl(for-inStatements.ts, 49, 16), Decl(for-inStatements.ts, 51, 16), Decl(for-inStatements.ts, 52, 16))
+>this : Symbol(B, Decl(for-inStatements.ts, 43, 1))
+
+        for (var x in super.biz) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 47, 16), Decl(for-inStatements.ts, 48, 16), Decl(for-inStatements.ts, 49, 16), Decl(for-inStatements.ts, 51, 16), Decl(for-inStatements.ts, 52, 16))
+>super.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>super : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        for (var x in super.biz()) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 47, 16), Decl(for-inStatements.ts, 48, 16), Decl(for-inStatements.ts, 49, 16), Decl(for-inStatements.ts, 51, 16), Decl(for-inStatements.ts, 52, 16))
+>super.biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+>super : Symbol(A, Decl(for-inStatements.ts, 26, 67))
+>biz : Symbol(A.biz, Decl(for-inStatements.ts, 28, 9))
+
+        return null;
+    }
+}
+
+interface I {
+>I : Symbol(I, Decl(for-inStatements.ts, 55, 1))
+
+    id: number;
+>id : Symbol(I.id, Decl(for-inStatements.ts, 57, 13))
+
+    [idx: number]: I;
+>idx : Symbol(idx, Decl(for-inStatements.ts, 59, 5))
+>I : Symbol(I, Decl(for-inStatements.ts, 55, 1))
+}
+var i: I;
+>i : Symbol(i, Decl(for-inStatements.ts, 61, 3))
+>I : Symbol(I, Decl(for-inStatements.ts, 55, 1))
+
+for (var x in i[42]) { } 
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>i : Symbol(i, Decl(for-inStatements.ts, 61, 3))
+
+
+module M {
+>M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
+
+    export class X<T> {
+>X : Symbol(X, Decl(for-inStatements.ts, 66, 10))
+>T : Symbol(T, Decl(for-inStatements.ts, 67, 19))
+
+        name:string
+>name : Symbol(X.name, Decl(for-inStatements.ts, 67, 23))
+    }
+}
+
+for (var x in M) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
+
+for (var x in M.X) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>M.X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
+>M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
+>X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
+
+enum Color { Red, Blue }
+>Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))
+>Red : Symbol(Color.Red, Decl(for-inStatements.ts, 75, 12))
+>Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))
+
+for (var x in Color) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))
+
+for (var x in Color.Blue) { }
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
+>Color.Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))
+>Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))
+>Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))
+

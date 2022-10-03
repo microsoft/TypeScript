@@ -1,0 +1,19 @@
+=== tests/cases/compiler/emptyArgumentsListComment.ts ===
+declare var a;
+>a : any
+
+a(/*1*/);
+>a(/*1*/) : any
+>a : any
+
+a(
+>a(    /*first*/    // foo    /*middle*/    // bar    /*last*/) : any
+>a : any
+
+    /*first*/
+    // foo
+    /*middle*/
+    // bar
+    /*last*/
+);
+

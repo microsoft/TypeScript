@@ -1,0 +1,20 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallSignaturesThatHidesBaseSignature.ts ===
+interface Foo {
+    (): { a: number };
+>a : number
+}
+
+interface Derived extends Foo {
+    (): { a: number; b: number };
+>a : number
+>b : number
+}
+
+var d: Derived;
+>d : Derived
+
+var r = d();
+>r : { a: number; b: number; }
+>d() : { a: number; b: number; }
+>d : Derived
+

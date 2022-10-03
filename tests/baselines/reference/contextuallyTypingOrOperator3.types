@@ -1,0 +1,11 @@
+=== tests/cases/compiler/contextuallyTypingOrOperator3.ts ===
+function foo<T, U extends T>(u: U) {
+>foo : <T, U extends T>(u: U) => void
+>u : U
+
+    var x3: U = u || u;
+>x3 : U
+>u || u : U
+>u : U
+>u : U
+}

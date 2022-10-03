@@ -1,0 +1,552 @@
+=== tests/cases/compiler/unspecializedConstraints.ts ===
+module ts {
+>ts : Symbol(ts, Decl(unspecializedConstraints.ts, 0, 0))
+
+    interface Map<T> {
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 1, 18))
+
+        [index: string]: T;
+>index : Symbol(index, Decl(unspecializedConstraints.ts, 2, 9))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 1, 18))
+    }
+
+    interface Equals<T> {
+>Equals : Symbol(Equals, Decl(unspecializedConstraints.ts, 3, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 5, 21))
+
+        equals(other: T): boolean;
+>equals : Symbol(Equals.equals, Decl(unspecializedConstraints.ts, 5, 25))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 6, 15))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 5, 21))
+    }
+
+    class Symbol {
+>Symbol : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+    }
+
+    class Type extends Symbol {
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>Symbol : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+
+        equals(that: Type): boolean {
+>equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+
+            if (this === that) return true;
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+
+            if (!(this.isObjectType() && that.isObjectType())) return false;
+>this.isObjectType : Symbol(Type.isObjectType, Decl(unspecializedConstraints.ts, 55, 9))
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>isObjectType : Symbol(Type.isObjectType, Decl(unspecializedConstraints.ts, 55, 9))
+>that.isObjectType : Symbol(Type.isObjectType, Decl(unspecializedConstraints.ts, 55, 9))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>isObjectType : Symbol(Type.isObjectType, Decl(unspecializedConstraints.ts, 55, 9))
+
+            var propCount = that.getPropertyCount();
+>propCount : Symbol(propCount, Decl(unspecializedConstraints.ts, 16, 15))
+>that.getPropertyCount : Symbol(Type.getPropertyCount, Decl(unspecializedConstraints.ts, 40, 9))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>getPropertyCount : Symbol(Type.getPropertyCount, Decl(unspecializedConstraints.ts, 40, 9))
+
+            if (propCount !== this.getPropertyCount()) return false;
+>propCount : Symbol(propCount, Decl(unspecializedConstraints.ts, 16, 15))
+>this.getPropertyCount : Symbol(Type.getPropertyCount, Decl(unspecializedConstraints.ts, 40, 9))
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>getPropertyCount : Symbol(Type.getPropertyCount, Decl(unspecializedConstraints.ts, 40, 9))
+
+            var sigCount = that.getSignatureCount();
+>sigCount : Symbol(sigCount, Decl(unspecializedConstraints.ts, 18, 15))
+>that.getSignatureCount : Symbol(Type.getSignatureCount, Decl(unspecializedConstraints.ts, 46, 9))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>getSignatureCount : Symbol(Type.getSignatureCount, Decl(unspecializedConstraints.ts, 46, 9))
+
+            if (sigCount !== this.getSignatureCount()) return false;
+>sigCount : Symbol(sigCount, Decl(unspecializedConstraints.ts, 18, 15))
+>this.getSignatureCount : Symbol(Type.getSignatureCount, Decl(unspecializedConstraints.ts, 46, 9))
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>getSignatureCount : Symbol(Type.getSignatureCount, Decl(unspecializedConstraints.ts, 46, 9))
+
+            if (propCount) {
+>propCount : Symbol(propCount, Decl(unspecializedConstraints.ts, 16, 15))
+
+                for (var i = 0; i < propCount; i++) {
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 21, 24))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 21, 24))
+>propCount : Symbol(propCount, Decl(unspecializedConstraints.ts, 16, 15))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 21, 24))
+
+                    var thisProp = this.getProperty(i);
+>thisProp : Symbol(thisProp, Decl(unspecializedConstraints.ts, 22, 23))
+>this.getProperty : Symbol(Type.getProperty, Decl(unspecializedConstraints.ts, 34, 9))
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>getProperty : Symbol(Type.getProperty, Decl(unspecializedConstraints.ts, 34, 9))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 21, 24))
+
+                    var thatProp = that.getPropertyByName(thisProp.name);
+>thatProp : Symbol(thatProp, Decl(unspecializedConstraints.ts, 23, 23))
+>that.getPropertyByName : Symbol(Type.getPropertyByName, Decl(unspecializedConstraints.ts, 37, 9))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>getPropertyByName : Symbol(Type.getPropertyByName, Decl(unspecializedConstraints.ts, 37, 9))
+>thisProp.name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+>thisProp : Symbol(thisProp, Decl(unspecializedConstraints.ts, 22, 23))
+>name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+
+                    if (!(thatProp && thisProp.flags === thatProp.flags && thisProp.type.equals(thatProp.type))) return false;
+>thatProp : Symbol(thatProp, Decl(unspecializedConstraints.ts, 23, 23))
+>thisProp.flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>thisProp : Symbol(thisProp, Decl(unspecializedConstraints.ts, 22, 23))
+>flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>thatProp.flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>thatProp : Symbol(thatProp, Decl(unspecializedConstraints.ts, 23, 23))
+>flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>thisProp.type.equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>thisProp.type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>thisProp : Symbol(thisProp, Decl(unspecializedConstraints.ts, 22, 23))
+>type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>thatProp.type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>thatProp : Symbol(thatProp, Decl(unspecializedConstraints.ts, 23, 23))
+>type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+                }
+            }
+            if (sigCount) {
+>sigCount : Symbol(sigCount, Decl(unspecializedConstraints.ts, 18, 15))
+
+                if (!setEquals(this.getSignatures(), that.getSignatures())) return false;
+>setEquals : Symbol(setEquals, Decl(unspecializedConstraints.ts, 141, 5))
+>this.getSignatures : Symbol(Type.getSignatures, Decl(unspecializedConstraints.ts, 49, 9))
+>this : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>getSignatures : Symbol(Type.getSignatures, Decl(unspecializedConstraints.ts, 49, 9))
+>that.getSignatures : Symbol(Type.getSignatures, Decl(unspecializedConstraints.ts, 49, 9))
+>that : Symbol(that, Decl(unspecializedConstraints.ts, 13, 15))
+>getSignatures : Symbol(Type.getSignatures, Decl(unspecializedConstraints.ts, 49, 9))
+            }
+            return true;
+        }
+        getProperties(): Property[] {
+>getProperties : Symbol(Type.getProperties, Decl(unspecializedConstraints.ts, 31, 9))
+>Property : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+
+            return [];
+        }
+        getProperty(index: number): Property {
+>getProperty : Symbol(Type.getProperty, Decl(unspecializedConstraints.ts, 34, 9))
+>index : Symbol(index, Decl(unspecializedConstraints.ts, 35, 20))
+>Property : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        getPropertyByName(name: string): Property {
+>getPropertyByName : Symbol(Type.getPropertyByName, Decl(unspecializedConstraints.ts, 37, 9))
+>name : Symbol(name, Decl(unspecializedConstraints.ts, 38, 26))
+>Property : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        getPropertyCount(): number {
+>getPropertyCount : Symbol(Type.getPropertyCount, Decl(unspecializedConstraints.ts, 40, 9))
+
+            return 0;
+        }
+        getSignature(index: number): Signature {
+>getSignature : Symbol(Type.getSignature, Decl(unspecializedConstraints.ts, 43, 9))
+>index : Symbol(index, Decl(unspecializedConstraints.ts, 44, 21))
+>Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        getSignatureCount(): number {
+>getSignatureCount : Symbol(Type.getSignatureCount, Decl(unspecializedConstraints.ts, 46, 9))
+
+            return 0;
+        }
+        getSignatures(): Signature[] {
+>getSignatures : Symbol(Type.getSignatures, Decl(unspecializedConstraints.ts, 49, 9))
+>Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+
+            return [];
+        }
+        isPrimitive(): boolean {
+>isPrimitive : Symbol(Type.isPrimitive, Decl(unspecializedConstraints.ts, 52, 9))
+
+            return false;
+        }
+        isObjectType(): boolean {
+>isObjectType : Symbol(Type.isObjectType, Decl(unspecializedConstraints.ts, 55, 9))
+
+            return false;
+        }
+        isTypeParameter(): boolean {
+>isTypeParameter : Symbol(Type.isTypeParameter, Decl(unspecializedConstraints.ts, 58, 9))
+
+            return false;
+        }
+        isSubTypeOf(type: Type) {
+>isSubTypeOf : Symbol(Type.isSubTypeOf, Decl(unspecializedConstraints.ts, 61, 9))
+>type : Symbol(type, Decl(unspecializedConstraints.ts, 62, 20))
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+        }
+    }
+
+    class Property extends Symbol {
+>Property : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+>Symbol : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+
+        constructor(public name: string, public type: Type, public flags: PropertyFlags) {
+>name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+>type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>PropertyFlags : Symbol(PropertyFlags, Decl(unspecializedConstraints.ts, 75, 5))
+
+            super();
+>super : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+        }
+        equals(other: Property): boolean {
+>equals : Symbol(Property.equals, Decl(unspecializedConstraints.ts, 69, 9))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 70, 15))
+>Property : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+
+            return this.name === other.name &&
+>this.name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+>this : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+>name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+>other.name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 70, 15))
+>name : Symbol(Property.name, Decl(unspecializedConstraints.ts, 67, 20))
+
+                this.flags === other.flags &&
+>this.flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>this : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+>flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>other.flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 70, 15))
+>flags : Symbol(Property.flags, Decl(unspecializedConstraints.ts, 67, 59))
+
+                this.type.equals(other.type);
+>this.type.equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>this.type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>this : Symbol(Property, Decl(unspecializedConstraints.ts, 64, 5))
+>type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>other.type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 70, 15))
+>type : Symbol(Property.type, Decl(unspecializedConstraints.ts, 67, 40))
+        }
+    }
+
+    enum PropertyFlags {
+>PropertyFlags : Symbol(PropertyFlags, Decl(unspecializedConstraints.ts, 75, 5))
+
+        Optional = 1,
+>Optional : Symbol(PropertyFlags.Optional, Decl(unspecializedConstraints.ts, 77, 24))
+
+        Private = 2
+>Private : Symbol(PropertyFlags.Private, Decl(unspecializedConstraints.ts, 78, 21))
+    }
+
+    class Signature extends Symbol {
+>Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>Symbol : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+
+        constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
+>typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>TypeParameter : Symbol(TypeParameter)
+>parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>Parameter : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+>returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+
+            super();
+>super : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+        }
+        equalsNoReturn(other: Signature): boolean {
+>equalsNoReturn : Symbol(Signature.equalsNoReturn, Decl(unspecializedConstraints.ts, 85, 9))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
+>Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+
+            return this.parameters.length === other.parameters.length &&
+>this.parameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.parameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
+>parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+                this.typeParameters.length === other.typeParameters.length &&
+>this.typeParameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.typeParameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
+>typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+                arrayEquals(this.parameters, other.parameters) &&
+>arrayEquals : Symbol(arrayEquals, Decl(unspecializedConstraints.ts, 132, 5))
+>this.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>other.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
+>parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
+
+                arrayEquals(this.typeParameters, other.typeParameters);
+>arrayEquals : Symbol(arrayEquals, Decl(unspecializedConstraints.ts, 132, 5))
+>this.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>other.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
+>typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
+        }
+        equals(other: Signature): boolean {
+>equals : Symbol(Signature.equals, Decl(unspecializedConstraints.ts, 91, 9))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 92, 15))
+>Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+
+            return this.equalsNoReturn(other) &&
+>this.equalsNoReturn : Symbol(Signature.equalsNoReturn, Decl(unspecializedConstraints.ts, 85, 9))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>equalsNoReturn : Symbol(Signature.equalsNoReturn, Decl(unspecializedConstraints.ts, 85, 9))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 92, 15))
+
+                this.returnType.equals(other.returnType);
+>this.returnType.equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>this.returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))
+>this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
+>returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))
+>equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>other.returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 92, 15))
+>returnType : Symbol(Signature.returnType, Decl(unspecializedConstraints.ts, 83, 91))
+        }
+    }
+
+    class Parameter extends Symbol {
+>Parameter : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+>Symbol : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+
+        constructor(public name: string, public type: Type, public flags: ParameterFlags) {
+>name : Symbol(Parameter.name, Decl(unspecializedConstraints.ts, 99, 20))
+>type : Symbol(Parameter.type, Decl(unspecializedConstraints.ts, 99, 40))
+>Type : Symbol(Type, Decl(unspecializedConstraints.ts, 10, 5))
+>flags : Symbol(Parameter.flags, Decl(unspecializedConstraints.ts, 99, 59))
+>ParameterFlags : Symbol(ParameterFlags, Decl(unspecializedConstraints.ts, 107, 5))
+
+            super();
+>super : Symbol(Symbol, Decl(unspecializedConstraints.ts, 7, 5))
+        }
+        equals(other: Parameter) {
+>equals : Symbol(Parameter.equals, Decl(unspecializedConstraints.ts, 101, 9))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 102, 15))
+>Parameter : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+
+            return this.name === other.name &&
+>this.name : Symbol(Parameter.name, Decl(unspecializedConstraints.ts, 99, 20))
+>this : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+>name : Symbol(Parameter.name, Decl(unspecializedConstraints.ts, 99, 20))
+>other.name : Symbol(Parameter.name, Decl(unspecializedConstraints.ts, 99, 20))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 102, 15))
+>name : Symbol(Parameter.name, Decl(unspecializedConstraints.ts, 99, 20))
+
+                this.flags === other.flags &&
+>this.flags : Symbol(Parameter.flags, Decl(unspecializedConstraints.ts, 99, 59))
+>this : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+>flags : Symbol(Parameter.flags, Decl(unspecializedConstraints.ts, 99, 59))
+>other.flags : Symbol(Parameter.flags, Decl(unspecializedConstraints.ts, 99, 59))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 102, 15))
+>flags : Symbol(Parameter.flags, Decl(unspecializedConstraints.ts, 99, 59))
+
+                this.type.equals(other.type);
+>this.type.equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>this.type : Symbol(Parameter.type, Decl(unspecializedConstraints.ts, 99, 40))
+>this : Symbol(Parameter, Decl(unspecializedConstraints.ts, 96, 5))
+>type : Symbol(Parameter.type, Decl(unspecializedConstraints.ts, 99, 40))
+>equals : Symbol(Type.equals, Decl(unspecializedConstraints.ts, 12, 31))
+>other.type : Symbol(Parameter.type, Decl(unspecializedConstraints.ts, 99, 40))
+>other : Symbol(other, Decl(unspecializedConstraints.ts, 102, 15))
+>type : Symbol(Parameter.type, Decl(unspecializedConstraints.ts, 99, 40))
+        }
+    }
+
+    enum ParameterFlags {
+>ParameterFlags : Symbol(ParameterFlags, Decl(unspecializedConstraints.ts, 107, 5))
+
+        Optional = 1,
+>Optional : Symbol(ParameterFlags.Optional, Decl(unspecializedConstraints.ts, 109, 25))
+
+        Rest = 2
+>Rest : Symbol(ParameterFlags.Rest, Decl(unspecializedConstraints.ts, 110, 21))
+    }
+
+   
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
+>Object.prototype.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+    function getProperty<T>(map: Map<T>, key: string): T {
+>getProperty : Symbol(getProperty, Decl(unspecializedConstraints.ts, 115, 57))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
+>map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
+>key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
+
+        if (!hasOwnProperty.call(map, key)) return undefined;
+>hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
+>key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
+>undefined : Symbol(undefined)
+
+        return map[key];
+>map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
+>key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
+    }
+
+    function hasProperty<T>(map: Map<T>, key: string): boolean {
+>hasProperty : Symbol(hasProperty, Decl(unspecializedConstraints.ts, 120, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 122, 25))
+>map : Symbol(map, Decl(unspecializedConstraints.ts, 122, 28))
+>Map : Symbol(Map, Decl(unspecializedConstraints.ts, 0, 11))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 122, 25))
+>key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
+
+        return hasOwnProperty.call(map, key);
+>hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(map, Decl(unspecializedConstraints.ts, 122, 28))
+>key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
+    }
+
+    function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
+>arrayContains : Symbol(arrayContains, Decl(unspecializedConstraints.ts, 124, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 126, 27))
+>Equals : Symbol(Equals, Decl(unspecializedConstraints.ts, 3, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 126, 27))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 126, 48))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 126, 27))
+>item : Symbol(item, Decl(unspecializedConstraints.ts, 126, 55))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 126, 27))
+
+        var len = a.length;
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 127, 11))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 126, 48))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        for (var i = 0; i < len; i++) {
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 128, 16))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 128, 16))
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 127, 11))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 128, 16))
+
+            if (item.equals(a[i])) return true;
+>item.equals : Symbol(Equals.equals, Decl(unspecializedConstraints.ts, 5, 25))
+>item : Symbol(item, Decl(unspecializedConstraints.ts, 126, 55))
+>equals : Symbol(Equals.equals, Decl(unspecializedConstraints.ts, 5, 25))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 126, 48))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 128, 16))
+        }
+        return false;
+    }
+
+    function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+>arrayEquals : Symbol(arrayEquals, Decl(unspecializedConstraints.ts, 132, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 134, 25))
+>Equals : Symbol(Equals, Decl(unspecializedConstraints.ts, 3, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 134, 25))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 134, 46))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 134, 25))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 134, 53))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 134, 25))
+
+        var len = a.length;
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 135, 11))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 134, 46))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        if (b.length !== len) return false;
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 134, 53))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 135, 11))
+
+        for (var i = 0; i < len; i++) {
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 137, 16))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 137, 16))
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 135, 11))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 137, 16))
+
+            if (!a[i].equals(b[i])) return false;
+>a[i].equals : Symbol(Equals.equals, Decl(unspecializedConstraints.ts, 5, 25))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 134, 46))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 137, 16))
+>equals : Symbol(Equals.equals, Decl(unspecializedConstraints.ts, 5, 25))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 134, 53))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 137, 16))
+        }
+        return true;
+    }
+
+    function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+>setEquals : Symbol(setEquals, Decl(unspecializedConstraints.ts, 141, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 143, 23))
+>Equals : Symbol(Equals, Decl(unspecializedConstraints.ts, 3, 5))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 143, 23))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 143, 44))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 143, 23))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 143, 51))
+>T : Symbol(T, Decl(unspecializedConstraints.ts, 143, 23))
+
+        var len = a.length;
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 144, 11))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 143, 44))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        if (b.length !== len) return false;
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 143, 51))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 144, 11))
+
+        for (var i = 0; i < len; i++) {
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 146, 16))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 146, 16))
+>len : Symbol(len, Decl(unspecializedConstraints.ts, 144, 11))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 146, 16))
+
+            if (!arrayContains(b, a[i])) return false;
+>arrayContains : Symbol(arrayContains, Decl(unspecializedConstraints.ts, 124, 5))
+>b : Symbol(b, Decl(unspecializedConstraints.ts, 143, 51))
+>a : Symbol(a, Decl(unspecializedConstraints.ts, 143, 44))
+>i : Symbol(i, Decl(unspecializedConstraints.ts, 146, 16))
+        }
+        return true;
+    }
+}
+

@@ -1,0 +1,76 @@
+===================================================================
+JsFile: sourceMapValidationExportAssignmentCommonjs.js
+mapUrl: sourceMapValidationExportAssignmentCommonjs.js.map
+sourceRoot: 
+sources: sourceMapValidationExportAssignmentCommonjs.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationExportAssignmentCommonjs.js
+sourceFile:sourceMapValidationExportAssignmentCommonjs.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var a = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function a() {
+1->^^^^
+2 >    ^^->
+1->
+1->Emitted(3, 5) Source(1, 1) + SourceIndex(0)
+---
+>>>    }
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
+1->class a {
+  >    public c;
+  >
+2 >    }
+1->Emitted(4, 5) Source(3, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(3, 2) + SourceIndex(0)
+---
+>>>    return a;
+1->^^^^
+2 >    ^^^^^^^^
+1->
+2 >    }
+1->Emitted(5, 5) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 13) Source(3, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class a {
+  >     public c;
+  > }
+1 >Emitted(6, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(3, 2) + SourceIndex(0)
+3 >Emitted(6, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(6, 6) Source(3, 2) + SourceIndex(0)
+---
+>>>module.exports = a;
+1->
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^
+4 >                  ^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >export = 
+3 >                 a
+4 >                  ;
+1->Emitted(7, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(7, 18) Source(4, 10) + SourceIndex(0)
+3 >Emitted(7, 19) Source(4, 11) + SourceIndex(0)
+4 >Emitted(7, 20) Source(4, 12) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationExportAssignmentCommonjs.js.map

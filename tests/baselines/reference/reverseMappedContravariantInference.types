@@ -1,0 +1,22 @@
+=== tests/cases/compiler/reverseMappedContravariantInference.ts ===
+// Repro from #21273
+
+declare function conforms<T>(source: { [K in keyof T]: (val: T[K]) => boolean }): (value: T) => boolean;
+>conforms : <T>(source: { [K in keyof T]: (val: T[K]) => boolean; }) => (value: T) => boolean
+>source : { [K in keyof T]: (val: T[K]) => boolean; }
+>val : T[K]
+>value : T
+
+conforms({ foo: (v: string) => false })({ foo: "hello" });
+>conforms({ foo: (v: string) => false })({ foo: "hello" }) : boolean
+>conforms({ foo: (v: string) => false }) : (value: { foo: string; }) => boolean
+>conforms : <T>(source: { [K in keyof T]: (val: T[K]) => boolean; }) => (value: T) => boolean
+>{ foo: (v: string) => false } : { foo: (v: string) => false; }
+>foo : (v: string) => false
+>(v: string) => false : (v: string) => false
+>v : string
+>false : false
+>{ foo: "hello" } : { foo: string; }
+>foo : string
+>"hello" : "hello"
+

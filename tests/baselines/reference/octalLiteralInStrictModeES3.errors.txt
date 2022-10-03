@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/StrictMode/octalLiteralInStrictModeES3.ts(2,1): error TS1121: Octal literals are not allowed in strict mode.
+
+
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/octalLiteralInStrictModeES3.ts (1 errors) ====
+    "use strict";
+    03;
+    ~~
+!!! error TS1121: Octal literals are not allowed in strict mode.

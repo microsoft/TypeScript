@@ -1,0 +1,7 @@
+tests/cases/compiler/constraintErrors1.ts(1,25): error TS2304: Cannot find name 'hm'.
+
+
+==== tests/cases/compiler/constraintErrors1.ts (1 errors) ====
+    function foo5<T extends hm>(test: T) { }
+                            ~~
+!!! error TS2304: Cannot find name 'hm'.

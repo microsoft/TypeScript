@@ -1,0 +1,50 @@
+tests/cases/compiler/gettersAndSettersErrors.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
+tests/cases/compiler/gettersAndSettersErrors.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
+
+
+==== tests/cases/compiler/gettersAndSettersErrors.ts (10 errors) ====
+    class C {
+        public get Foo() { return "foo";} // ok
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        public set Foo(foo:string) {} // ok
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    
+        public Foo = 0; // error - duplicate identifier Foo - confirmed
+               ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+               ~~~
+!!! error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/gettersAndSettersErrors.ts:2:16: 'Foo' was also declared here.
+        public get Goo(v:string):string {return null;} // error - getters must not have a parameter
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        public set Goo(v:string):string {} // error - setters must not specify a return type
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class E {
+        private get Baz():number { return 0; }
+                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+        public set Baz(n:number) {} // error - accessors do not agree in visibility
+                   ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+    }
+    
+    
+    

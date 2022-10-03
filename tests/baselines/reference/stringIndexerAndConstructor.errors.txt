@@ -1,0 +1,22 @@
+tests/cases/compiler/stringIndexerAndConstructor.ts(11,5): error TS2411: Property '""' of type 'string' is not assignable to 'string' index type 'number'.
+tests/cases/compiler/stringIndexerAndConstructor.ts(12,5): error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'number'.
+
+
+==== tests/cases/compiler/stringIndexerAndConstructor.ts (2 errors) ====
+    class C {
+        [s: string]: number;
+        constructor() { }
+        static v() { }
+    }
+    
+    interface I {
+        [s: string]: number;
+        (): boolean;
+        new (): boolean;
+        "": string;
+        ~~
+!!! error TS2411: Property '""' of type 'string' is not assignable to 'string' index type 'number'.
+        d: string;
+        ~
+!!! error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'number'.
+    }

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/primitives/string/validStringAssignments.ts ===
+var x = '';
+>x : string
+>'' : ""
+
+var a: any = x;
+>a : any
+>x : string
+
+var b: Object = x;
+>b : Object
+>x : string
+
+var c: string = x;
+>c : string
+>x : string
+
+var d: String = x;
+>d : String
+>x : string
+

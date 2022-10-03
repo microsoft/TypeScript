@@ -1,0 +1,21 @@
+=== tests/cases/compiler/exportDeclarationsInAmbientNamespaces.ts ===
+declare namespace Q {
+>Q : Symbol(Q, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 0))
+
+    function _try(method: Function, ...args: any[]): any;
+>_try : Symbol(_try, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 21))
+>method : Symbol(method, Decl(exportDeclarationsInAmbientNamespaces.ts, 1, 18))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(exportDeclarationsInAmbientNamespaces.ts, 1, 35))
+
+    export { _try as try };
+>_try : Symbol(_try, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 21))
+>try : Symbol(try, Decl(exportDeclarationsInAmbientNamespaces.ts, 2, 12))
+}
+
+Q.try(() => { });
+>Q.try : Symbol(Q.try, Decl(exportDeclarationsInAmbientNamespaces.ts, 2, 12))
+>Q : Symbol(Q, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 0))
+>try : Symbol(Q.try, Decl(exportDeclarationsInAmbientNamespaces.ts, 2, 12))
+
+

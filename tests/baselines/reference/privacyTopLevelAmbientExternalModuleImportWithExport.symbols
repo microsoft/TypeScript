@@ -1,0 +1,109 @@
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_core.ts ===
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
+// Privacy errors - importing private elements
+export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
+>im_public_mi_private : Symbol(im_public_mi_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 0, 0))
+
+export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
+>im_public_mu_private : Symbol(im_public_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 3, 111))
+
+export import im_public_mi_public = require("m");
+>im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
+
+export import im_public_mu_public = require("m2");
+>im_public_mu_public : Symbol(im_public_mu_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 5, 49))
+
+// Usage of privacy error imports
+var privateUse_im_public_mi_private = new im_public_mi_private.c_public();
+>privateUse_im_public_mi_private : Symbol(privateUse_im_public_mi_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 9, 3))
+>im_public_mi_private.c_public : Symbol(im_public_mi_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
+>im_public_mi_private : Symbol(im_public_mi_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 0, 0))
+>c_public : Symbol(im_public_mi_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
+
+export var publicUse_im_public_mi_private = new im_public_mi_private.c_public();
+>publicUse_im_public_mi_private : Symbol(publicUse_im_public_mi_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 10, 10))
+>im_public_mi_private.c_public : Symbol(im_public_mi_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
+>im_public_mi_private : Symbol(im_public_mi_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 0, 0))
+>c_public : Symbol(im_public_mi_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
+
+var privateUse_im_public_mu_private = new im_public_mu_private.c_public();
+>privateUse_im_public_mu_private : Symbol(privateUse_im_public_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 11, 3))
+>im_public_mu_private.c_public : Symbol(im_public_mu_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
+>im_public_mu_private : Symbol(im_public_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 3, 111))
+>c_public : Symbol(im_public_mu_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
+
+export var publicUse_im_public_mu_private = new im_public_mu_private.c_public();
+>publicUse_im_public_mu_private : Symbol(publicUse_im_public_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 12, 10))
+>im_public_mu_private.c_public : Symbol(im_public_mu_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
+>im_public_mu_private : Symbol(im_public_mu_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 3, 111))
+>c_public : Symbol(im_public_mu_private.c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
+
+var privateUse_im_public_mi_public = new im_public_mi_public.c_private();
+>privateUse_im_public_mi_public : Symbol(privateUse_im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 13, 3), Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 15, 3))
+>im_public_mi_public.c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+>im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
+>c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+
+export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
+>publicUse_im_public_mi_public : Symbol(publicUse_im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 14, 10), Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 16, 10))
+>im_public_mi_public.c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+>im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
+>c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+
+var privateUse_im_public_mi_public = new im_public_mi_public.c_private();
+>privateUse_im_public_mi_public : Symbol(privateUse_im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 13, 3), Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 15, 3))
+>im_public_mi_public.c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+>im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
+>c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+
+export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
+>publicUse_im_public_mi_public : Symbol(publicUse_im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 14, 10), Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 16, 10))
+>im_public_mi_public.c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+>im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
+>c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require.ts ===
+// Public elements
+export class c_public {
+>c_public : Symbol(c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(c_public.foo, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 1, 23))
+}
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts ===
+export class c_public {
+>c_public : Symbol(c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(c_public.bar, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 23))
+}
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts ===
+// private elements
+// Export - Error ambient modules allowed only in global
+declare module 'm' {
+>'m' : Symbol("m", Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 0, 0))
+
+    export class c_private {
+>c_private : Symbol(c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
+
+        baz: string;
+>baz : Symbol(c_private.baz, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 3, 28))
+    }
+}
+
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
+declare module 'm2' {
+>'m2' : Symbol("m2", Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts, 0, 0))
+
+    export class c_private {
+>c_private : Symbol(c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts, 0, 21))
+
+        bing: string;
+>bing : Symbol(c_private.bing, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts, 1, 28))
+    }
+}
+

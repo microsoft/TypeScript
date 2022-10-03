@@ -1,0 +1,16 @@
+=== tests/cases/compiler/parseObjectLiteralsWithoutTypes.ts ===
+let x: { foo, bar }
+>x : { foo: any; bar: any; }
+>foo : any
+>bar : any
+
+let y: { foo: number, bar }
+>y : { foo: number; bar: any; }
+>foo : number
+>bar : any
+
+let z: { foo, bar: number }
+>z : { foo: any; bar: number; }
+>foo : any
+>bar : number
+

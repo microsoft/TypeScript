@@ -1,0 +1,10 @@
+=== tests/cases/compiler/partiallyAmbientClodule.ts ===
+declare module foo {
+>foo : Symbol(foo, Decl(partiallyAmbientClodule.ts, 0, 0), Decl(partiallyAmbientClodule.ts, 2, 1))
+
+    export function x(): any;
+>x : Symbol(x, Decl(partiallyAmbientClodule.ts, 0, 20))
+}
+class foo { } // Legal, because module is ambient
+>foo : Symbol(foo, Decl(partiallyAmbientClodule.ts, 0, 0), Decl(partiallyAmbientClodule.ts, 2, 1))
+

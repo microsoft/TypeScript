@@ -1,0 +1,126 @@
+=== tests/cases/conformance/types/rest/genericObjectRest.ts ===
+const a = 'a';
+>a : Symbol(a, Decl(genericObjectRest.ts, 0, 5))
+
+function f1<T extends { a: string, b: number }>(obj: T) {
+>f1 : Symbol(f1, Decl(genericObjectRest.ts, 0, 14))
+>T : Symbol(T, Decl(genericObjectRest.ts, 2, 12))
+>a : Symbol(a, Decl(genericObjectRest.ts, 2, 23))
+>b : Symbol(b, Decl(genericObjectRest.ts, 2, 34))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+>T : Symbol(T, Decl(genericObjectRest.ts, 2, 12))
+
+    let { ...r0 } = obj;
+>r0 : Symbol(r0, Decl(genericObjectRest.ts, 3, 9))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+
+    let { a: a1, ...r1 } = obj;
+>a : Symbol(a, Decl(genericObjectRest.ts, 2, 23))
+>a1 : Symbol(a1, Decl(genericObjectRest.ts, 4, 9))
+>r1 : Symbol(r1, Decl(genericObjectRest.ts, 4, 16))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+
+    let { a: a2, b: b2, ...r2 } = obj;
+>a : Symbol(a, Decl(genericObjectRest.ts, 2, 23))
+>a2 : Symbol(a2, Decl(genericObjectRest.ts, 5, 9))
+>b : Symbol(b, Decl(genericObjectRest.ts, 2, 34))
+>b2 : Symbol(b2, Decl(genericObjectRest.ts, 5, 16))
+>r2 : Symbol(r2, Decl(genericObjectRest.ts, 5, 23))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+
+    let { 'a': a3, ...r3 } = obj;
+>a3 : Symbol(a3, Decl(genericObjectRest.ts, 6, 9))
+>r3 : Symbol(r3, Decl(genericObjectRest.ts, 6, 18))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+
+    let { ['a']: a4, ...r4 } = obj;
+>'a' : Symbol(a4, Decl(genericObjectRest.ts, 7, 9))
+>a4 : Symbol(a4, Decl(genericObjectRest.ts, 7, 9))
+>r4 : Symbol(r4, Decl(genericObjectRest.ts, 7, 20))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+
+    let { [a]: a5, ...r5 } = obj;
+>a : Symbol(a, Decl(genericObjectRest.ts, 0, 5))
+>a5 : Symbol(a5, Decl(genericObjectRest.ts, 8, 9))
+>r5 : Symbol(r5, Decl(genericObjectRest.ts, 8, 18))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 2, 48))
+}
+
+const sa = Symbol();
+>sa : Symbol(sa, Decl(genericObjectRest.ts, 11, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const sb = Symbol();
+>sb : Symbol(sb, Decl(genericObjectRest.ts, 12, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
+>f2 : Symbol(f2, Decl(genericObjectRest.ts, 12, 20))
+>T : Symbol(T, Decl(genericObjectRest.ts, 14, 12))
+>[sa] : Symbol([sa], Decl(genericObjectRest.ts, 14, 23))
+>sa : Symbol(sa, Decl(genericObjectRest.ts, 11, 5))
+>[sb] : Symbol([sb], Decl(genericObjectRest.ts, 14, 37))
+>sb : Symbol(sb, Decl(genericObjectRest.ts, 12, 5))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 14, 54))
+>T : Symbol(T, Decl(genericObjectRest.ts, 14, 12))
+
+    let { [sa]: a1, [sb]: b1, ...r1 } = obj;
+>sa : Symbol(sa, Decl(genericObjectRest.ts, 11, 5))
+>a1 : Symbol(a1, Decl(genericObjectRest.ts, 15, 9))
+>sb : Symbol(sb, Decl(genericObjectRest.ts, 12, 5))
+>b1 : Symbol(b1, Decl(genericObjectRest.ts, 15, 19))
+>r1 : Symbol(r1, Decl(genericObjectRest.ts, 15, 29))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 14, 54))
+}
+
+function f3<T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) {
+>f3 : Symbol(f3, Decl(genericObjectRest.ts, 16, 1))
+>T : Symbol(T, Decl(genericObjectRest.ts, 18, 12))
+>K1 : Symbol(K1, Decl(genericObjectRest.ts, 18, 14))
+>T : Symbol(T, Decl(genericObjectRest.ts, 18, 12))
+>K2 : Symbol(K2, Decl(genericObjectRest.ts, 18, 34))
+>T : Symbol(T, Decl(genericObjectRest.ts, 18, 12))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 18, 55))
+>T : Symbol(T, Decl(genericObjectRest.ts, 18, 12))
+>k1 : Symbol(k1, Decl(genericObjectRest.ts, 18, 62))
+>K1 : Symbol(K1, Decl(genericObjectRest.ts, 18, 14))
+>k2 : Symbol(k2, Decl(genericObjectRest.ts, 18, 70))
+>K2 : Symbol(K2, Decl(genericObjectRest.ts, 18, 34))
+
+    let { [k1]: a1, [k2]: a2, ...r1 } = obj;
+>k1 : Symbol(k1, Decl(genericObjectRest.ts, 18, 62))
+>a1 : Symbol(a1, Decl(genericObjectRest.ts, 19, 9))
+>k2 : Symbol(k2, Decl(genericObjectRest.ts, 18, 70))
+>a2 : Symbol(a2, Decl(genericObjectRest.ts, 19, 19))
+>r1 : Symbol(r1, Decl(genericObjectRest.ts, 19, 29))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 18, 55))
+}
+
+type Item = { a: string, b: number, c: boolean };
+>Item : Symbol(Item, Decl(genericObjectRest.ts, 20, 1))
+>a : Symbol(a, Decl(genericObjectRest.ts, 22, 13))
+>b : Symbol(b, Decl(genericObjectRest.ts, 22, 24))
+>c : Symbol(c, Decl(genericObjectRest.ts, 22, 35))
+
+function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
+>f4 : Symbol(f4, Decl(genericObjectRest.ts, 22, 49))
+>K1 : Symbol(K1, Decl(genericObjectRest.ts, 24, 12))
+>Item : Symbol(Item, Decl(genericObjectRest.ts, 20, 1))
+>K2 : Symbol(K2, Decl(genericObjectRest.ts, 24, 34))
+>Item : Symbol(Item, Decl(genericObjectRest.ts, 20, 1))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 24, 58))
+>Item : Symbol(Item, Decl(genericObjectRest.ts, 20, 1))
+>k1 : Symbol(k1, Decl(genericObjectRest.ts, 24, 68))
+>K1 : Symbol(K1, Decl(genericObjectRest.ts, 24, 12))
+>k2 : Symbol(k2, Decl(genericObjectRest.ts, 24, 76))
+>K2 : Symbol(K2, Decl(genericObjectRest.ts, 24, 34))
+
+    let { [k1]: a1, [k2]: a2, ...r1 } = obj;
+>k1 : Symbol(k1, Decl(genericObjectRest.ts, 24, 68))
+>a1 : Symbol(a1, Decl(genericObjectRest.ts, 25, 9))
+>k2 : Symbol(k2, Decl(genericObjectRest.ts, 24, 76))
+>a2 : Symbol(a2, Decl(genericObjectRest.ts, 25, 19))
+>r1 : Symbol(r1, Decl(genericObjectRest.ts, 25, 29))
+>obj : Symbol(obj, Decl(genericObjectRest.ts, 24, 58))
+}
+

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/module_augmentUninstantiatedModule.ts ===
+declare module "foo" {
+>"foo" : Symbol("foo", Decl(module_augmentUninstantiatedModule.ts, 0, 0))
+
+   namespace M {}
+>M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
+
+   var M;
+>M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
+
+   export = M;
+>M : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
+}
+
+declare module "bar" {
+>"bar" : Symbol("bar", Decl(module_augmentUninstantiatedModule.ts, 4, 1))
+
+    module "foo" {}
+>"foo" : Symbol(M, Decl(module_augmentUninstantiatedModule.ts, 0, 22), Decl(module_augmentUninstantiatedModule.ts, 2, 6), Decl(module_augmentUninstantiatedModule.ts, 6, 22))
+}

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/noSuperInJSDocExtends.js ===
+class Based { }
+>Based : Based
+
+/** @extends {Based} */
+class Derived {
+>Derived : Derived
+
+    constructor() {
+        this;
+>this : this
+
+        this.x = 10;
+>this.x = 10 : 10
+>this.x : any
+>this : this
+>x : any
+>10 : 10
+
+        var that = this;
+>that : this
+>this : this
+    }
+}
+
+/** @extends {Based} */
+class Derived2 {
+>Derived2 : Derived2
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+    }
+}
