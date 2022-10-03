@@ -642,6 +642,11 @@ namespace ts {
             getOptionalType: () => optionalType,
             getPromiseType: () => getGlobalPromiseType(/*reportErrors*/ false),
             getPromiseLikeType: () => getGlobalPromiseLikeType(/*reportErrors*/ false),
+            getAsyncIterableType: () => {
+                const type = getGlobalAsyncIterableType(/*reportErrors*/ false);
+                if (type === emptyGenericType) return undefined;
+                return type;
+            },
             isSymbolAccessible,
             isArrayType,
             isTupleType,
@@ -1537,9 +1542,9 @@ namespace ts {
                         return symbol;
                     }
                     if (symbol.flags & SymbolFlags.Alias) {
-                        const target = resolveAlias(symbol);
-                        // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
-                        if (target === unknownSymbol || target.flags & meaning) {
+                        const targetFlags = getAllSymbolFlags(symbol);
+                        // `targetFlags` will be `SymbolFlags.All` if an error occurred in alias resolution; this avoids cascading errors
+                        if (targetFlags & meaning) {
                             return symbol;
                         }
                     }
@@ -2226,8 +2231,8 @@ namespace ts {
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
+                            !checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
-                            !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                             let suggestion: Symbol | undefined;
                             let suggestedLib: string | undefined;
@@ -2320,7 +2325,7 @@ namespace ts {
                         }
                     }
                     if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
-                        const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
+                        const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result, SymbolFlags.Value);
                         if (typeOnlyDeclaration) {
                             const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                                 ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
@@ -2515,7 +2520,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+            if (meaning & SymbolFlags.Value) {
                 if (isPrimitiveTypeName(name)) {
                     if (isExtendedByInterface(errorLocation)) {
                         error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
@@ -2526,7 +2531,8 @@ namespace ts {
                     return true;
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
+                const allFlags = symbol && getAllSymbolFlags(symbol);
+                if (symbol && allFlags !== undefined && !(allFlags & SymbolFlags.Value)) {
                     const rawName = unescapeLeadingUnderscores(name);
                     if (isES2015OrLaterConstructorName(name)) {
                         error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, rawName);
@@ -2577,9 +2583,9 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+        function checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+            if (meaning & (SymbolFlags.Value & ~SymbolFlags.Type)) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(
                         errorLocation,
@@ -2588,8 +2594,8 @@ namespace ts {
                     return true;
                 }
             }
-            else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+            else if (meaning & (SymbolFlags.Type & ~SymbolFlags.Value)) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Module, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
@@ -3238,6 +3244,54 @@ namespace ts {
         }
 
         /**
+         * Gets combined flags of a `symbol` and all alias targets it resolves to. `resolveAlias`
+         * is typically recursive over chains of aliases, but stops mid-chain if an alias is merged
+         * with another exported symbol, e.g.
+         * ```ts
+         * // a.ts
+         * export const a = 0;
+         * // b.ts
+         * export { a } from "./a";
+         * export type a = number;
+         * // c.ts
+         * import { a } from "./b";
+         * ```
+         * Calling `resolveAlias` on the `a` in c.ts would stop at the merged symbol exported
+         * from b.ts, even though there is still more alias to resolve. Consequently, if we were
+         * trying to determine if the `a` in c.ts has a value meaning, looking at the flags on
+         * the local symbol and on the symbol returned by `resolveAlias` is not enough.
+         * @returns SymbolFlags.All if `symbol` is an alias that ultimately resolves to `unknown`;
+         * combined flags of all alias targets otherwise.
+         */
+        function getAllSymbolFlags(symbol: Symbol): SymbolFlags {
+          let flags = symbol.flags;
+          let seenSymbols;
+          while (symbol.flags & SymbolFlags.Alias) {
+              const target = resolveAlias(symbol);
+              if (target === unknownSymbol) {
+                  return SymbolFlags.All;
+              }
+
+              // Optimizations - try to avoid creating or adding to
+              // `seenSymbols` if possible
+              if (target === symbol || seenSymbols?.has(target)) {
+                  break;
+              }
+              if (target.flags & SymbolFlags.Alias) {
+                  if (seenSymbols) {
+                      seenSymbols.add(target);
+                  }
+                  else {
+                      seenSymbols = new Set([symbol, target]);
+                  }
+              }
+              flags |= target.flags;
+              symbol = target;
+          }
+          return flags;
+        }
+
+        /**
          * Marks a symbol as type-only if its declaration is syntactically type-only.
          * If it is not itself marked type-only, but resolves to a type-only alias
          * somewhere in its resolution chain, save a reference to the type-only alias declaration
@@ -3289,12 +3343,18 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol, include?: SymbolFlags): TypeOnlyAliasDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
             const links = getSymbolLinks(symbol);
-            return links.typeOnlyDeclaration || undefined;
+            if (include === undefined) {
+                return links.typeOnlyDeclaration || undefined;
+            }
+            if (links.typeOnlyDeclaration) {
+                return getAllSymbolFlags(resolveAlias(links.typeOnlyDeclaration.symbol)) & include ? links.typeOnlyDeclaration : undefined;
+            }
+            return undefined;
         }
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
@@ -3302,7 +3362,7 @@ namespace ts {
             const target = resolveAlias(symbol);
             if (target) {
                 const markAlias = target === unknownSymbol ||
-                    ((target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol));
+                    ((getAllSymbolFlags(target) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
 
                 if (markAlias) {
                     markAliasSymbolAsReferenced(symbol);
@@ -3323,8 +3383,7 @@ namespace ts {
                 // This way a chain of imports can be elided if ultimately the final input is only used in a type
                 // position.
                 if (isInternalModuleImportEqualsDeclaration(node)) {
-                    const target = resolveSymbol(symbol);
-                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    if (getAllSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
                         // import foo = <symbol>
                         checkExpressionCached(node.moduleReference as Expression);
                     }
@@ -4250,7 +4309,7 @@ namespace ts {
         function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
             return !!(
                 symbol.flags & SymbolFlags.Value ||
-                symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
+                symbol.flags & SymbolFlags.Alias && getAllSymbolFlags(symbol) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -4544,8 +4603,10 @@ namespace ts {
                 }
 
                 // Qualify if the symbol from symbol table has same meaning as expected
-                symbolFromSymbolTable = (symbolFromSymbolTable.flags & SymbolFlags.Alias && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
-                if (symbolFromSymbolTable.flags & meaning) {
+                const shouldResolveAlias = (symbolFromSymbolTable.flags & SymbolFlags.Alias && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier));
+                symbolFromSymbolTable = shouldResolveAlias ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
+                const flags = shouldResolveAlias ? getAllSymbolFlags(symbolFromSymbolTable) : symbolFromSymbolTable.flags;
+                if (flags & meaning) {
                     qualify = true;
                     return true;
                 }
@@ -7519,7 +7580,7 @@ namespace ts {
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
-                    return every(getNamespaceMembersForSerialization(symbol), m => !(resolveSymbol(m).flags & SymbolFlags.Value));
+                    return every(getNamespaceMembersForSerialization(symbol), m => !(getAllSymbolFlags(resolveSymbol(m)) & SymbolFlags.Value));
                 }
 
                 function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -10017,7 +10078,7 @@ namespace ts {
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
                     : declaredType ? declaredType
-                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
+                    : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -12510,7 +12571,7 @@ namespace ts {
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             // Flags we want to propagate to the result if they exist in all source symbols
-            let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+            let optionalFlag: SymbolFlags | undefined;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = isUnion ? 0 : CheckFlags.Readonly;
             let mergedInstantiations = false;
@@ -12520,11 +12581,14 @@ namespace ts {
                     const prop = getPropertyOfType(type, name, skipObjectFunctionPropertyAugment);
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop) {
-                        if (isUnion) {
-                            optionalFlag |= (prop.flags & SymbolFlags.Optional);
-                        }
-                        else {
-                            optionalFlag &= prop.flags;
+                        if (prop.flags & SymbolFlags.ClassMember) {
+                            optionalFlag ??= isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+                            if (isUnion) {
+                                optionalFlag |= (prop.flags & SymbolFlags.Optional);
+                            }
+                            else {
+                                optionalFlag &= prop.flags;
+                            }
                         }
                         if (!singleProp) {
                             singleProp = prop;
@@ -12643,7 +12707,7 @@ namespace ts {
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
-            const result = createSymbol(SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
+            const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
@@ -19734,7 +19798,7 @@ namespace ts {
                         // with another type parameter unless one extends the other. (Remember: comparability is mostly bidirectional!)
                         let constraint = getConstraintOfTypeParameter(source);
                         if (constraint && hasNonCircularBaseConstraint(source)) {
-                            while (constraint && constraint.flags & TypeFlags.TypeParameter) {
+                            while (constraint && someType(constraint, c => !!(c.flags & TypeFlags.TypeParameter))) {
                                 if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false)) {
                                     return result;
                                 }
@@ -20399,7 +20463,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 // When checking for comparability, be more lenient with optional properties.
-                if (!skipOptional && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
+                if (!skipOptional && sourceProp.flags & SymbolFlags.Optional && targetProp.flags & SymbolFlags.ClassMember && !(targetProp.flags & SymbolFlags.Optional)) {
                     // TypeScript 1.0 spec (April 2014): 3.8.3
                     // S is a subtype of a type T, and T is a supertype of S if ...
                     // S' and T are object types and, for each member M in T..
@@ -25965,9 +26029,9 @@ namespace ts {
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                 const target = resolveAlias(symbol);
-                if (target.flags & SymbolFlags.Value) {
+                if (getAllSymbolFlags(target) & SymbolFlags.Value) {
                     // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                     // (because the const enum value will not be inlined), or if (2) the alias is an export
                     // of a const enum declaration that will be preserved.
@@ -27532,9 +27596,10 @@ namespace ts {
         function instantiateContextualType(contextualType: Type | undefined, node: Node, contextFlags: ContextFlags | undefined): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
                 const inferenceContext = getInferenceContext(node);
-                // If no inferences have been made, nothing is gained from instantiating as type parameters
-                // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidates)) {
+                // If no inferences have been made, and none of the type parameters for which we are inferring
+                // specify default types, nothing is gained from instantiating as type parameters would just be
+                // replaced with their constraints similar to the apparent type.
+                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
                     return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
@@ -32514,7 +32579,7 @@ namespace ts {
                     if (symbol && symbol.flags & SymbolFlags.Alias) {
                         symbol = resolveAlias(symbol);
                     }
-                    return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                    return !!(symbol && (getAllSymbolFlags(symbol) & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
             }
             return false;
         }
@@ -35143,6 +35208,10 @@ namespace ts {
 
         function hasInferenceCandidates(info: InferenceInfo) {
             return !!(info.candidates || info.contraCandidates);
+        }
+
+        function hasInferenceCandidatesOrDefault(info: InferenceInfo) {
+            return !!(info.candidates || info.contraCandidates || hasTypeParameterDefault(info.typeParameter));
         }
 
         function hasOverlappingInferences(a: InferenceInfo[], b: InferenceInfo[]) {
@@ -39370,7 +39439,18 @@ namespace ts {
             const message = allowAsyncIterables
                 ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
                 : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator;
-            return errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), message, typeToString(type));
+            const suggestAwait =
+                // for (const x of Promise<...>) or [...Promise<...>]
+                !!getAwaitedTypeOfPromise(type)
+                // for (const x of AsyncIterable<...>)
+                || (
+                    !allowAsyncIterables &&
+                    isForOfStatement(errorNode.parent) &&
+                    errorNode.parent.expression === errorNode &&
+                    getGlobalAsyncIterableType(/** reportErrors */ false) !== emptyGenericType &&
+                    isTypeAssignableTo(type, getGlobalAsyncIterableType(/** reportErrors */ false)
+                ));
+            return errorAndMaybeSuggestAwait(errorNode, suggestAwait, message, typeToString(type));
         }
 
         /**
@@ -41444,11 +41524,12 @@ namespace ts {
                     return;
                 }
 
+                const targetFlags = getAllSymbolFlags(target);
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
                     (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
-                if (target.flags & excludedMeanings) {
+                if (targetFlags & excludedMeanings) {
                     const message = node.kind === SyntaxKind.ExportSpecifier ?
                         Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
                         Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
@@ -41459,7 +41540,7 @@ namespace ts {
                     && !isTypeOnlyImportOrExportDeclaration(node)
                     && !(node.flags & NodeFlags.Ambient)) {
                     const typeOnlyAlias = getTypeOnlyAliasDeclaration(symbol);
-                    const isType = !(target.flags & SymbolFlags.Value);
+                    const isType = !(targetFlags & SymbolFlags.Value);
                     if (isType || typeOnlyAlias) {
                         switch (node.kind) {
                             case SyntaxKind.ImportClause:
@@ -41637,14 +41718,15 @@ namespace ts {
                 if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                     const target = resolveAlias(getSymbolOfNode(node));
                     if (target !== unknownSymbol) {
-                        if (target.flags & SymbolFlags.Value) {
+                        const targetFlags = getAllSymbolFlags(target);
+                        if (targetFlags & SymbolFlags.Value) {
                             // Target is a value symbol, check that it is not hidden by a local declaration with the same name
                             const moduleName = getFirstIdentifier(node.moduleReference);
                             if (!(resolveEntityName(moduleName, SymbolFlags.Value | SymbolFlags.Namespace)!.flags & SymbolFlags.Namespace)) {
                                 error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
                             }
                         }
-                        if (target.flags & SymbolFlags.Type) {
+                        if (targetFlags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
                     }
@@ -41795,7 +41877,7 @@ namespace ts {
                         markExportAsReferenced(node);
                     }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                    if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    if (!target || getAllSymbolFlags(target) & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
                     }
                 }
@@ -41847,7 +41929,7 @@ namespace ts {
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
-                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    if (getAllSymbolFlags(target) & SymbolFlags.Value) {
                         // However if it is a value, we need to check it's being used correctly
                         checkExpressionCached(node.expression);
                     }
@@ -43305,7 +43387,7 @@ namespace ts {
 
             function isValue(s: Symbol): boolean {
                 s = resolveSymbol(s);
-                return s && !!(s.flags & SymbolFlags.Value);
+                return s && !!(getAllSymbolFlags(s) & SymbolFlags.Value);
             }
         }
 
@@ -43361,7 +43443,7 @@ namespace ts {
 
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
-                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
+                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                     return getDeclarationOfAliasSymbol(symbol);
                 }
             }
@@ -43458,7 +43540,7 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     const symbol = getSymbolOfNode(node);
-                    return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol);
+                    return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (node as ExportDeclaration).exportClause;
                     return !!exportClause && (
@@ -43494,7 +43576,7 @@ namespace ts {
             }
             // const enums and modules that contain only const enums are not considered values from the emit perspective
             // unless 'preserveConstEnums' option is set to true
-            return !!(target.flags & SymbolFlags.Value) &&
+            return !!((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) &&
                 (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
@@ -43511,7 +43593,7 @@ namespace ts {
                 }
                 const target = getSymbolLinks(symbol!).aliasTarget; // TODO: GH#18217
                 if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
-                    target.flags & SymbolFlags.Value &&
+                    getAllSymbolFlags(target) & SymbolFlags.Value &&
                     (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
                     // An `export import ... =` of a value symbol is always considered referenced
                     return true;

@@ -529,8 +529,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyOrganizeImports(newContent: string) {
-            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
+        public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
+            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
             this.applyChanges(changes);
             this.verifyFileContent(this.activeFile.fileName, newContent);
         }
