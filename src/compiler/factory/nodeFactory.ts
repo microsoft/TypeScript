@@ -48,7 +48,7 @@ import {
     JsxAttributeValue, JsxChild, JsxClosingElement, JsxClosingFragment, JsxElement, JsxExpression, JsxFragment,
     JsxOpeningElement, JsxOpeningFragment, JsxSelfClosingElement, JsxSpreadAttribute, JsxTagNameExpression, JsxText,
     KeywordSyntaxKind, KeywordToken, KeywordTypeNode, KeywordTypeSyntaxKind, LabeledStatement, LanguageVariant,
-    lastOrUndefined, LeftHandSideExpression, LiteralToken, LiteralTypeNode, map, Map, MappedTypeNode, MemberName,
+    lastOrUndefined, LeftHandSideExpression, LiteralToken, LiteralTypeNode, map, Map, MappedTypeNode,
     memoize, memoizeOne, MergeDeclarationMarker, MetaProperty, MethodDeclaration, MethodSignature, MinusToken,
     MissingDeclaration, Modifier, ModifierFlags, ModifierLike, modifiersToFlags, ModifierSyntaxKind, ModifierToken,
     ModuleBlock, ModuleBody, ModuleDeclaration, ModuleKind, ModuleName, ModuleReference, Mutable, MutableNodeArray,
@@ -249,11 +249,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createObjectLiteralExpression,
         updateObjectLiteralExpression,
         createPropertyAccessExpression: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
-            (expression: Expression, name: string | MemberName) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
+            (expression, name) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
             createPropertyAccessExpression,
         updatePropertyAccessExpression,
         createPropertyAccessChain: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
-        (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName) => setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), EmitFlags.NoIndentation) :
+            (expression, questionDotToken, name: string) => setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), EmitFlags.NoIndentation) :
             createPropertyAccessChain,
         updatePropertyAccessChain,
         createElementAccessExpression,
@@ -622,7 +622,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         liftToBlock,
         mergeLexicalEnvironment,
         updateModifiers,
-    } as any;
+    };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
 
