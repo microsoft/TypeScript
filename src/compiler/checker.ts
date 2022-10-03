@@ -9072,8 +9072,9 @@ namespace ts {
                     // If the parent is a tuple type, the rest element has a tuple type of the
                     // remaining tuple element types. Otherwise, the rest element has an array type with same
                     // element type as the parent type.
-                    type = everyType(parentType, isTupleType) ?
-                        mapType(parentType, t => sliceTupleType(t as TupleTypeReference, index)) :
+                    const resolvedParentType = getBaseConstraintOrType(parentType)
+                    type = everyType(resolvedParentType, isTupleType) ?
+                        mapType(resolvedParentType, t => sliceTupleType(t as TupleTypeReference, index)) :
                         createArrayType(elementType);
                 }
                 else if (isArrayLikeType(parentType)) {
