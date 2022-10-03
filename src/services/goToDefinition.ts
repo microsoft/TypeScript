@@ -172,7 +172,8 @@ namespace ts.GoToDefinition {
 
         const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
         if (!baseTypeNode) return;
-        const base = typeChecker.getSymbolAtLocation(baseTypeNode.expression);
+        const expression = skipParentheses(baseTypeNode.expression);
+        const base = isClassExpression(expression) ? expression.symbol : typeChecker.getSymbolAtLocation(expression);
         if (!base) return;
 
         const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
