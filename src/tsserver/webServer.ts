@@ -1,3 +1,5 @@
+/// <reference lib="webworker" />
+
 import * as ts from "./_namespaces/ts";
 import * as server from "./_namespaces/ts.server";
 import {
@@ -8,12 +10,6 @@ import {
     Debug, LanguageServiceMode, LogLevel, noop, returnFalse, returnUndefined, setSys, sys, validateLocaleAndSetLanguage,
 } from "./_namespaces/ts";
 
-declare const addEventListener: any;
-declare const postMessage: any;
-declare const close: any;
-declare const location: any;
-declare const XMLHttpRequest: any;
-declare const self: any;
 
 const nullLogger: Logger = {
     close: noop,
