@@ -41,7 +41,6 @@
         "compilerRunner.ts",
         "projectsRunner.ts",
         "rwcRunner.ts",
-        "externalCompileRunner.ts",
         "test262Runner.ts",
 
         "parallel/host.ts",

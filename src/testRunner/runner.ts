@@ -58,12 +58,6 @@ ${JSON.stringify(dupes, undefined, 2)}`);
                 return new RWC.RWCRunner();
             case "test262":
                 return new Test262BaselineRunner();
-            case "user":
-                return new UserCodeRunner();
-            case "dt":
-                return new DefinitelyTypedRunner();
-            case "docker":
-                return new DockerfileRunner();
         }
         return ts.Debug.fail(`Unknown runner kind ${kind}`);
     }
@@ -201,15 +195,6 @@ ${JSON.stringify(dupes, undefined, 2)}`);
                         case "test262":
                             runners.push(new Test262BaselineRunner());
                             break;
-                        case "user":
-                            runners.push(new UserCodeRunner());
-                            break;
-                        case "dt":
-                            runners.push(new DefinitelyTypedRunner());
-                            break;
-                        case "docker":
-                            runners.push(new DockerfileRunner());
-                            break;
                     }
                 }
             }
@@ -228,12 +213,6 @@ ${JSON.stringify(dupes, undefined, 2)}`);
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
             // runners.push(new GeneratedFourslashRunner());
-
-            // CRON-only tests
-            if (process.env.TRAVIS_EVENT_TYPE === "cron") {
-                runners.push(new UserCodeRunner());
-                runners.push(new DockerfileRunner());
-            }
         }
         if (runUnitTests === undefined) {
             runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
