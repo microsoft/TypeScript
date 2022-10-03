@@ -35,6 +35,7 @@ Outer.app.Inner = class {
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(someview.js, 5, 5), Decl(someview.js, 13, 10) ... and 1 more)
 >app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
 >Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
+>class {    constructor() {        /** @type {number} */        this.y = 12;    }} : Symbol(Inner, Decl(someview.js, 6, 17))
 
     constructor() {
         /** @type {number} */

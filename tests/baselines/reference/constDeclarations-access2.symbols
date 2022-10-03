@@ -52,6 +52,8 @@ x--;
 >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 
 ++((x));
+>((x)) : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+>(x) : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 
 // OK
@@ -74,6 +76,7 @@ x;
 >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 
 (x);
+>(x) : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 
 -x;

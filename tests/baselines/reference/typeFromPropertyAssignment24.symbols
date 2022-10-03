@@ -37,6 +37,7 @@ Outer.Inner = class {
 >Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
 >Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
 >Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
+>class {  name() {    return 'hi'  }} : Symbol(Inner, Decl(def.js, 1, 13))
 
   name() {
 >name : Symbol(Inner.name, Decl(def.js, 1, 21))

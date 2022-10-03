@@ -1,6 +1,7 @@
 === tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts ===
 export var noPrivates = class {
 >noPrivates : Symbol(noPrivates, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 10))
+>class {    static getTags() { }    tags() { }    private static ps = -1    private p = 12} : Symbol(noPrivates, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 23))
 
     static getTags() { }
 >getTags : Symbol(noPrivates.getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 31))
@@ -44,6 +45,7 @@ export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 >T : Symbol(T, Decl(emitClassExpressionInDeclarationFile2.ts, 15, 25))
 
     return class extends Base {
+>class extends Base {        static getTags(): void { }        tags(): void { }    } : Symbol((Anonymous class), Decl(emitClassExpressionInDeclarationFile2.ts, 16, 10))
 >Base : Symbol(Base, Decl(emitClassExpressionInDeclarationFile2.ts, 15, 57))
 
         static getTags(): void { }

@@ -9,6 +9,7 @@ var s = <string>(null);
 
 var b = <boolean>(n);
 >b : Symbol(b, Decl(literals-negative.ts, 4, 3))
+>(n) : Symbol(n, Decl(literals-negative.ts, 2, 3))
 >n : Symbol(n, Decl(literals-negative.ts, 2, 3))
 
 function isVoid() : void { }

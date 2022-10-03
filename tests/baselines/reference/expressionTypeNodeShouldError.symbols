@@ -23,6 +23,7 @@ class C {
 
         const x: "".typeof(this.foo);
 >x : Symbol(x, Decl(string.ts, 6, 13))
+>(this.foo) : Symbol(C.foo, Decl(string.ts, 4, 9))
 >this.foo : Symbol(C.foo, Decl(string.ts, 4, 9))
 >this : Symbol(C, Decl(string.ts, 2, 1))
 >foo : Symbol(C.foo, Decl(string.ts, 4, 9))
@@ -61,6 +62,7 @@ class C2 {
 
         const x: 3.141592.typeof(this.foo);
 >x : Symbol(x, Decl(number.ts, 6, 13))
+>(this.foo) : Symbol(C2.foo, Decl(number.ts, 4, 10))
 >this.foo : Symbol(C2.foo, Decl(number.ts, 4, 10))
 >this : Symbol(C2, Decl(number.ts, 2, 1))
 >foo : Symbol(C2.foo, Decl(number.ts, 4, 10))
@@ -99,6 +101,7 @@ class C3 {
 
         const x: false.typeof(this.foo);
 >x : Symbol(x, Decl(boolean.ts, 6, 13))
+>(this.foo) : Symbol(C3.foo, Decl(boolean.ts, 4, 10))
 >this.foo : Symbol(C3.foo, Decl(boolean.ts, 4, 10))
 >this : Symbol(C3, Decl(boolean.ts, 2, 1))
 >foo : Symbol(C3.foo, Decl(boolean.ts, 4, 10))

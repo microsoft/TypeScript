@@ -3,12 +3,14 @@ First.Item = class I {}
 >First.Item : Symbol(First.Item, Decl(index.js, 0, 0))
 >First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
 >Item : Symbol(First.Item, Decl(index.js, 0, 0))
+>class I {} : Symbol(I, Decl(index.js, 0, 12))
 >I : Symbol(I, Decl(index.js, 0, 12))
 
 Common.Object = class extends First.Item {}
 >Common.Object : Symbol(Common.Object, Decl(index.js, 0, 23))
 >Common : Symbol(Common, Decl(index.js, 0, 23), Decl(roots.js, 1, 3))
 >Object : Symbol(Common.Object, Decl(index.js, 0, 23))
+>class extends First.Item {} : Symbol(Object, Decl(index.js, 1, 15))
 >First.Item : Symbol(First.Item, Decl(index.js, 0, 0))
 >First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
 >Item : Symbol(First.Item, Decl(index.js, 0, 0))
@@ -17,6 +19,7 @@ Workspace.Object = class extends Common.Object {}
 >Workspace.Object : Symbol(Workspace.Object, Decl(index.js, 1, 43))
 >Workspace : Symbol(Workspace, Decl(index.js, 1, 43), Decl(roots.js, 2, 3))
 >Object : Symbol(Workspace.Object, Decl(index.js, 1, 43))
+>class extends Common.Object {} : Symbol(Object, Decl(index.js, 3, 18))
 >Common.Object : Symbol(Common.Object, Decl(index.js, 0, 23))
 >Common : Symbol(Common, Decl(index.js, 0, 23), Decl(roots.js, 1, 3))
 >Object : Symbol(Common.Object, Decl(index.js, 0, 23))

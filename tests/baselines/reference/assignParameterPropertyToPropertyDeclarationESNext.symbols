@@ -109,6 +109,7 @@ class F {
 
     Inner = class extends F {
 >Inner : Symbol(F.Inner, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 29, 9))
+>class extends F {        p2 = this.p1    } : Symbol((Anonymous class), Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 30, 11))
 >F : Symbol(F, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 27, 1))
 
         p2 = this.p1
@@ -125,6 +126,7 @@ class G {
 
     Inner = class extends G {
 >Inner : Symbol(G.Inner, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 35, 9))
+>class extends G {        p2 = this.p1    } : Symbol((Anonymous class), Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 36, 11))
 >G : Symbol(G, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 34, 1))
 
         p2 = this.p1

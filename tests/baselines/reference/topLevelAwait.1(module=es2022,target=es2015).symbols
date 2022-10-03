@@ -18,6 +18,7 @@ declare function f(): number;
 >f : Symbol(f, Decl(index.ts, 5, 13))
 
 await (x);
+>(x) : Symbol(x, Decl(index.ts, 0, 12))
 >x : Symbol(x, Decl(index.ts, 0, 12))
 
 await (f(), x);
@@ -25,6 +26,7 @@ await (f(), x);
 >x : Symbol(x, Decl(index.ts, 0, 12))
 
 await <number>(x);
+>(x) : Symbol(x, Decl(index.ts, 0, 12))
 >x : Symbol(x, Decl(index.ts, 0, 12))
 
 await <number>(f(), x);

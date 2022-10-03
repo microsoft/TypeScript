@@ -97,6 +97,7 @@ var c5_v2;
 
 c5_v2 = class { };
 >c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+>class { } : Symbol(c5_v2, Decl(index.js, 37, 7))
 
 new c5_v2();
 >c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))

@@ -138,6 +138,7 @@ function inParenthesizedExpression(x: A | B) {
 >B : Symbol(B, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 22))
 
     if ("a" in (x)) {
+>(x) : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 42, 35))
 >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 42, 35))
 
         let y: string = x.a;

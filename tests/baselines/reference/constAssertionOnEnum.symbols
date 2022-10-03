@@ -60,6 +60,7 @@ export enum Foo { X }
 
 (Foo).X as const;
 >(Foo).X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+>(Foo) : Symbol(Foo, Decl(more.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(more.ts, 0, 0))
 >X : Symbol(Foo.X, Decl(more.ts, 0, 17))
 >const : Symbol(const)

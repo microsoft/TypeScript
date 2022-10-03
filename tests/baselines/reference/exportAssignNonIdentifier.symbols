@@ -10,6 +10,7 @@ export = "sausages"; // Ok
 No type information for this code.
 No type information for this code.=== tests/cases/conformance/externalModules/foo3.ts ===
 export = class Foo3 {}; // Error, not an expression
+>class Foo3 {} : Symbol(Foo3, Decl(foo3.ts, 0, 8))
 >Foo3 : Symbol(Foo3, Decl(foo3.ts, 0, 8))
 
 === tests/cases/conformance/externalModules/foo4.ts ===

@@ -15,6 +15,7 @@ class B extends A {
 
         var D = class extends C {
 >D : Symbol(D, Decl(superCallInsideClassExpression.ts, 9, 11))
+>class extends C {            constructor() {                super();            }        } : Symbol(D, Decl(superCallInsideClassExpression.ts, 9, 15))
 >C : Symbol(C, Decl(superCallInsideClassExpression.ts, 1, 1))
 
             constructor() {

@@ -28,6 +28,7 @@ export function Configurable<T extends Constructor<{}>>(base: T): T {
 >T : Symbol(T, Decl(Configurable.ts, 3, 29))
 
     return class extends base {
+>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : Symbol((Anonymous class), Decl(Configurable.ts, 4, 10))
 >base : Symbol(base, Decl(Configurable.ts, 3, 56))
 
         constructor(...args: any[]) {

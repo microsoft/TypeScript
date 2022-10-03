@@ -36,6 +36,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T) => class extends 
 >Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 0, 47))
 >superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 12, 48))
 >T : Symbol(T, Decl(mixinClassesAnonymous.ts, 12, 19))
+>class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : Symbol((Anonymous class), Decl(mixinClassesAnonymous.ts, 12, 65))
 >superClass : Symbol(superClass, Decl(mixinClassesAnonymous.ts, 12, 48))
 
     static message = "hello";
@@ -177,6 +178,7 @@ const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
 >CT : Symbol(CT, Decl(mixinClassesAnonymous.ts, 59, 21))
 
     return class extends Base {
+>class extends Base {        timestamp = new Date();    } : Symbol((Anonymous class), Decl(mixinClassesAnonymous.ts, 60, 10))
 >Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 59, 53))
 
         timestamp = new Date();

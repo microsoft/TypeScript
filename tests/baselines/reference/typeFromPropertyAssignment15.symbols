@@ -6,6 +6,7 @@ Outer.Inner = class {
 >Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
 >Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
+>class {    constructor() {        this.x = 1    }    m() { }} : Symbol(Inner, Decl(a.js, 2, 13))
 
     constructor() {
         this.x = 1

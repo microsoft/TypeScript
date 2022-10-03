@@ -47,15 +47,21 @@ x--;
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 
 (x)++;
+>(x) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 
 --(x);
+>(x) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 
 ((x))++;
+>((x)) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>(x) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 
 ((x))--;
+>((x)) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
+>(x) : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 
 x[x++]++;

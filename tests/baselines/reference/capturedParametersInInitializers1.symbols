@@ -3,6 +3,7 @@
 function foo1(y = class {c = x}, x = 1) {
 >foo1 : Symbol(foo1, Decl(capturedParametersInInitializers1.ts, 0, 0))
 >y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 1, 14))
+>class {c = x} : Symbol((Anonymous class), Decl(capturedParametersInInitializers1.ts, 1, 17))
 >c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
 >x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
 >x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))

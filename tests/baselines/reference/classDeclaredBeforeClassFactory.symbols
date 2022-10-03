@@ -8,6 +8,7 @@ function makeBaseClass() {
 >makeBaseClass : Symbol(makeBaseClass, Decl(classDeclaredBeforeClassFactory.ts, 1, 40))
 
     return class Base {};
+>class Base {} : Symbol(Base, Decl(classDeclaredBeforeClassFactory.ts, 4, 10))
 >Base : Symbol(Base, Decl(classDeclaredBeforeClassFactory.ts, 4, 10))
 }
 

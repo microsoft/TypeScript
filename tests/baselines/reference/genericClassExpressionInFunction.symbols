@@ -13,6 +13,7 @@ function B1<U>() {
 
     // class expression can use T
     return class extends A<U> { }
+>class extends A<U> { } : Symbol((Anonymous class), Decl(genericClassExpressionInFunction.ts, 5, 10))
 >A : Symbol(A, Decl(genericClassExpressionInFunction.ts, 0, 0))
 >U : Symbol(U, Decl(genericClassExpressionInFunction.ts, 3, 12))
 }
@@ -22,6 +23,7 @@ class B2<V> {
 
     anon = class extends A<V> { }
 >anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
+>class extends A<V> { } : Symbol((Anonymous class), Decl(genericClassExpressionInFunction.ts, 8, 10))
 >A : Symbol(A, Decl(genericClassExpressionInFunction.ts, 0, 0))
 >V : Symbol(V, Decl(genericClassExpressionInFunction.ts, 7, 9))
 }
@@ -30,6 +32,7 @@ function B3<W>() {
 >W : Symbol(W, Decl(genericClassExpressionInFunction.ts, 10, 12))
 
     return class Inner<TInner> extends A<W> { }
+>class Inner<TInner> extends A<W> { } : Symbol(Inner, Decl(genericClassExpressionInFunction.ts, 11, 10))
 >Inner : Symbol(Inner, Decl(genericClassExpressionInFunction.ts, 11, 10))
 >TInner : Symbol(TInner, Decl(genericClassExpressionInFunction.ts, 11, 23))
 >A : Symbol(A, Decl(genericClassExpressionInFunction.ts, 0, 0))
@@ -45,6 +48,7 @@ class K extends B1<number>() {
 }
 class C extends (new B2<number>().anon) {
 >C : Symbol(C, Decl(genericClassExpressionInFunction.ts, 16, 1))
+>(new B2<number>().anon) : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
 >new B2<number>().anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
 >B2 : Symbol(B2, Decl(genericClassExpressionInFunction.ts, 6, 1))
 >anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))

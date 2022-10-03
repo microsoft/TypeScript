@@ -39,6 +39,8 @@ class E {
 }
 
 new class {
+>class {    "constructor"() {        console.log(this);    }} : Symbol((Anonymous class), Decl(quotedConstructors.ts, 18, 3))
+
     "constructor"() {
         console.log(this);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

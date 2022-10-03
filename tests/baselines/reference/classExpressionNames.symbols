@@ -4,6 +4,7 @@ var o = {
 
     C: class {
 >C : Symbol(C, Decl(ts.ts, 0, 9))
+>class {    } : Symbol(C, Decl(ts.ts, 1, 6))
     }
 }
 var oc = new o.C()
@@ -14,6 +15,7 @@ var oc = new o.C()
 
 var V = class {
 >V : Symbol(V, Decl(ts.ts, 6, 3))
+>class {} : Symbol(V, Decl(ts.ts, 6, 7))
 }
 var v = new V()
 >v : Symbol(v, Decl(ts.ts, 8, 3))
@@ -24,6 +26,7 @@ var A;
 
 A = class {
 >A : Symbol(A, Decl(ts.ts, 10, 3))
+>class {} : Symbol(A, Decl(ts.ts, 11, 3))
 }
 var a = new A()
 >a : Symbol(a, Decl(ts.ts, 13, 3))
@@ -32,6 +35,7 @@ var a = new A()
 const {
     B = class { }
 >B : Symbol(B, Decl(ts.ts, 15, 7))
+>class { } : Symbol(B, Decl(ts.ts, 16, 7))
 
 } = ({ B: undefined });
 >B : Symbol(B, Decl(ts.ts, 17, 6))

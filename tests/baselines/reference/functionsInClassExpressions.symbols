@@ -1,6 +1,7 @@
 === tests/cases/compiler/functionsInClassExpressions.ts ===
 let Foo = class {
 >Foo : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 3))
+>class {    constructor() {        this.bar++;    }    bar = 0;    inc = () => {        this.bar++;    }    m() { return this.bar; }} : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 9))
 
     constructor() {
         this.bar++;

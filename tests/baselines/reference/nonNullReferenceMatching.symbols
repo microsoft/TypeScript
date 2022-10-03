@@ -54,6 +54,7 @@ class Component {
 >ref : Symbol(ref, Decl(nonNullReferenceMatching.ts, 13, 31))
 
         typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);
+>(this.props.thumbYProps!.elementRef) : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >this.props.thumbYProps!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >this.props.thumbYProps : Symbol(thumbYProps, Decl(nonNullReferenceMatching.ts, 6, 23))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
@@ -71,8 +72,10 @@ class Component {
 >ref : Symbol(ref, Decl(nonNullReferenceMatching.ts, 13, 31))
 
         typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);
+>((this.props).thumbYProps!.elementRef) : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >(this.props).thumbYProps!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >(this.props).thumbYProps : Symbol(thumbYProps, Decl(nonNullReferenceMatching.ts, 6, 23))
+>(this.props) : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
 >props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
@@ -114,6 +117,7 @@ class Component {
 >elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >(this.props).thumbXProps.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >(this.props).thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
+>(this.props) : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
 >props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
@@ -130,6 +134,7 @@ class Component {
 >thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >(this.props.thumbXProps).elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
+>(this.props.thumbXProps) : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >this.props.thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
@@ -147,7 +152,9 @@ class Component {
 >thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >((this.props)!.thumbXProps)!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
+>((this.props)!.thumbXProps) : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >(this.props)!.thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
+>(this.props) : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
 >props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
@@ -157,6 +164,7 @@ class Component {
 
         typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
 >(this.props.thumbXProps).elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
+>(this.props.thumbXProps) : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >this.props.thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
@@ -164,7 +172,9 @@ class Component {
 >thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >((this.props)!.thumbXProps)!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
+>((this.props)!.thumbXProps) : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >(this.props)!.thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
+>(this.props) : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
 >props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
@@ -181,7 +191,9 @@ class Component {
 >thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
 >((this.props)!.thumbXProps)!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
+>((this.props)!.thumbXProps) : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
 >(this.props)!.thumbXProps : Symbol(thumbXProps, Decl(nonNullReferenceMatching.ts, 7, 29))
+>(this.props) : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this.props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 >this : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
 >props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))

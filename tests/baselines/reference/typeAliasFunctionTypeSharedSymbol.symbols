@@ -9,6 +9,7 @@ function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {
 >TBase : Symbol(TBase, Decl(typeAliasFunctionTypeSharedSymbol.ts, 2, 15))
 
     return class extends Base {
+>class extends Base {    } : Symbol((Anonymous class), Decl(typeAliasFunctionTypeSharedSymbol.ts, 3, 10))
 >Base : Symbol(Base, Decl(typeAliasFunctionTypeSharedSymbol.ts, 2, 57))
 
     };

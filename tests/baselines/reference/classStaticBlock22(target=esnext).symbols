@@ -49,6 +49,8 @@ class C {
   }
   static {
     (class await { }); // legal, 'await' in class expression name not bound inside of static block
+>(class await { }) : Symbol(await, Decl(classStaticBlock22.ts, 31, 5))
+>class await { } : Symbol(await, Decl(classStaticBlock22.ts, 31, 5))
 >await : Symbol(await, Decl(classStaticBlock22.ts, 31, 5))
   }
   static {

@@ -8,6 +8,7 @@ abstract class A {
 
 var C = class extends A {     // no error reported!
 >C : Symbol(C, Decl(classExpressionExtendingAbstractClass.ts, 4, 3))
+>class extends A {     // no error reported!} : Symbol(C, Decl(classExpressionExtendingAbstractClass.ts, 4, 7))
 >A : Symbol(A, Decl(classExpressionExtendingAbstractClass.ts, 0, 0))
 
 };

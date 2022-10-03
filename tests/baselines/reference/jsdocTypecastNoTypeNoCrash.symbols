@@ -4,5 +4,6 @@ function Foo() {}
 
 const a = /* @type string */(Foo);
 >a : Symbol(a, Decl(index.js, 1, 5))
+>(Foo) : Symbol(Foo, Decl(index.js, 0, 0))
 >Foo : Symbol(Foo, Decl(index.js, 0, 0))
 

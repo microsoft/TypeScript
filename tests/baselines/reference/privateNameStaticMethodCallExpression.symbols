@@ -69,6 +69,7 @@ class AA {
 
         const b2 = new (AA.getClass().#method2)(0, ...arr, 3); //Error 
 >b2 : Symbol(b2, Decl(privateNameStaticMethodCallExpression.ts, 18, 13))
+>(AA.getClass().#method2) : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
 >AA.getClass().#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
 >AA.getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
 >AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))

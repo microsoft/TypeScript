@@ -86,24 +86,29 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
 
 (obj.foo)(1, 2, "abc");
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 
 (obj.foo)(1, 2, ...a);
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
 
 (obj.foo)(1, 2, ...a, "abc");
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
+>((obj.foo)(1, 2, ...a).foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
@@ -111,7 +116,9 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
+>((obj.foo)(1, 2, ...a).foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
@@ -120,7 +127,9 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc");
+>((obj.foo)(1, 2, ...a).foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >(obj.foo)(1, 2, ...a).foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpread.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))

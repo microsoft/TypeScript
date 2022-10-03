@@ -11,6 +11,7 @@ function f(b: boolean) {
 
     Foo = class Foo {
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 1, 5))
+>class Foo {      static y = new Foo();      static x() {        new Foo();      }      m() {        new Foo();      }    } : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
 >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
 
       static y = new Foo();

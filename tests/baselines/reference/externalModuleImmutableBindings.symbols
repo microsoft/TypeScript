@@ -43,6 +43,7 @@ stuff[n]++;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 (stuff.x) = 0;
+>(stuff.x) : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
 >x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
@@ -59,6 +60,7 @@ stuff[n]++;
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 (stuff.x)++;
+>(stuff.x) : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
 >x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
@@ -107,11 +109,13 @@ for (stuff[n] of []) {}
 >n : Symbol(n, Decl(f2.ts, 3, 3))
 
 for ((stuff.x) in []) {}
+>(stuff.x) : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
 >x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 
 for ((stuff.x) of []) {}
+>(stuff.x) : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
 >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
 >x : Symbol(stuff.x, Decl(f1.ts, 0, 10))

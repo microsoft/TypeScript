@@ -23,6 +23,7 @@ declare const c: A;
 >A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
 
 (a.baz) &&= result.baz;
+>(a.baz) : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >a.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >a : Symbol(a, Decl(logicalAssignment3.ts, 5, 13))
 >baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
@@ -31,6 +32,7 @@ declare const c: A;
 >baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 
 (b.baz) ||= result.baz;
+>(b.baz) : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >b.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >b : Symbol(b, Decl(logicalAssignment3.ts, 6, 13))
 >baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
@@ -39,6 +41,7 @@ declare const c: A;
 >baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 
 (c.baz) ??= result.baz;
+>(c.baz) : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >c.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 >c : Symbol(c, Decl(logicalAssignment3.ts, 7, 13))
 >baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))

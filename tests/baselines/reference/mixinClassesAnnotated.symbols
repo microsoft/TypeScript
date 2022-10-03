@@ -49,6 +49,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
 >T : Symbol(T, Decl(mixinClassesAnnotated.ts, 16, 19))
 
     class extends superClass {
+>class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : Symbol((Anonymous class), Decl(mixinClassesAnnotated.ts, 16, 115))
 >superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 16, 48))
 
         static message = "hello";

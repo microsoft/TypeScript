@@ -11,6 +11,7 @@ for (let i = 0; i < 10; ++i) {
 >arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionLoop.ts, 0, 3))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>class C {        prop = i;    } : Symbol(C, Decl(classExpressionLoop.ts, 2, 13))
 >C : Symbol(C, Decl(classExpressionLoop.ts, 2, 13))
 
         prop = i;

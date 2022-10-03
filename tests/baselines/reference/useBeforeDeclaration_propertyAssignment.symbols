@@ -35,6 +35,7 @@ class D {
 
     static A = class extends D.B {
 >A : Symbol(D.A, Decl(useBeforeDeclaration_propertyAssignment.ts, 6, 9))
+>class extends D.B {        [D.D]() {} // should be an error    } : Symbol((Anonymous class), Decl(useBeforeDeclaration_propertyAssignment.ts, 7, 14))
 >D.B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
 >D : Symbol(D, Decl(useBeforeDeclaration_propertyAssignment.ts, 4, 1))
 >B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
@@ -47,6 +48,7 @@ class D {
     }
     static B = class {}
 >B : Symbol(D.B, Decl(useBeforeDeclaration_propertyAssignment.ts, 9, 5))
+>class {} : Symbol((Anonymous class), Decl(useBeforeDeclaration_propertyAssignment.ts, 10, 14))
 
     static C = {
 >C : Symbol(D.C, Decl(useBeforeDeclaration_propertyAssignment.ts, 10, 23))

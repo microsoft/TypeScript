@@ -6,6 +6,7 @@ Common.I = class {
 >Common.I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
 >Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
+>class {    constructor() {        this.i = 1    }} : Symbol(I, Decl(bug24703.js, 1, 10))
 
     constructor() {
         this.i = 1
@@ -18,6 +19,7 @@ Common.O = class extends Common.I {
 >Common.O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
 >Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
+>class extends Common.I {    constructor() {        super()        this.o = 2    }} : Symbol(O, Decl(bug24703.js, 6, 10))
 >Common.I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
 >Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >I : Symbol(Common.I, Decl(bug24703.js, 0, 16))

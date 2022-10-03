@@ -40,6 +40,7 @@ export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & C
 >MyMixin : Symbol(MyMixin, Decl(MixinClass.ts, 4, 1), Decl(MixinClass.ts, 0, 55))
 
     return class extends base {
+>class extends base {        mixinProperty: string;    } : Symbol((Anonymous class), Decl(MixinClass.ts, 7, 10))
 >base : Symbol(base, Decl(MixinClass.ts, 6, 65))
 
         mixinProperty: string;

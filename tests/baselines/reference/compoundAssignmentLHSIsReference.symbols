@@ -56,10 +56,12 @@ x3['a'] += value;
 
 // parentheses, the contained expression is reference
 (x1) *= value;
+>(x1) : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
 >x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 
 (x1) += value;
+>(x1) : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
 >x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 
@@ -68,21 +70,25 @@ function fn2(x4: number) {
 >x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
 
     (x4) *= value;
+>(x4) : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
 >x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 
     (x4) += value;
+>(x4) : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
 >x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 }
 
 (x3.a) *= value;
+>(x3.a) : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
 >x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
 >x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
 >a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 
 (x3.a) += value;
+>(x3.a) : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
 >x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
 >x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
 >a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))

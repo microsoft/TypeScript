@@ -43,6 +43,8 @@ export = MyClass;
 
 let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
 >a : Symbol(a, Decl(index.js, 4, 3))
+>(/** @type {*} */(undefined)) : Symbol(undefined)
+>(undefined) : Symbol(undefined)
 >undefined : Symbol(undefined)
 
 a = new Foo({doer: Foo.Bar});

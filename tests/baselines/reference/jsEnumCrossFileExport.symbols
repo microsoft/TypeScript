@@ -52,6 +52,7 @@ Other.Cls = class {
 >Other.Cls : Symbol(Other.Cls, Decl(index.js, 0, 15))
 >Other : Symbol(Other, Decl(index.js, 0, 3), Decl(index.js, 0, 15))
 >Cls : Symbol(Other.Cls, Decl(index.js, 0, 15))
+>class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : Symbol(Cls, Decl(index.js, 1, 11))
 
     /**
      * @param {!Host.UserMetrics.Action} p

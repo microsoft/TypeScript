@@ -28,6 +28,7 @@ exports.Bar = class { }
 >exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 >exports : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 >Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+>class { } : Symbol(Bar, Decl(mod1.js, 6, 13))
 
 /** @typedef {number} Baz */
 module.exports = {
@@ -37,6 +38,7 @@ module.exports = {
 
     Baz: class { }
 >Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
+>class { } : Symbol(Baz, Decl(mod1.js, 10, 8))
 }
 
 // ok

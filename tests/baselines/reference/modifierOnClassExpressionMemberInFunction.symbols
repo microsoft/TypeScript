@@ -4,6 +4,7 @@ function g() {
 
     var x = class C {
 >x : Symbol(x, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 7))
+>class C {        public prop1 = 1;        private foo() { }        static prop2 = 43;    } : Symbol(C, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 11))
 >C : Symbol(C, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 11))
 
         public prop1 = 1;

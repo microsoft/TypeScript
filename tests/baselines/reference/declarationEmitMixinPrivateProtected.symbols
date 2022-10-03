@@ -8,6 +8,7 @@ declare function mix<TMix>(mixin: TMix): TMix;
 
 const DisposableMixin = class {
 >DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+>class {    protected _onDispose() {        this._assertIsStripped()    }    private _assertIsStripped() {    }} : Symbol(DisposableMixin, Decl(first.ts, 2, 23))
 
     protected _onDispose() {
 >_onDispose : Symbol(DisposableMixin._onDispose, Decl(first.ts, 2, 31))
@@ -47,6 +48,7 @@ declare function mix<TMix>(mixin: TMix): TMix;
 
 const DisposableMixin = class {
 >DisposableMixin : Symbol(DisposableMixin, Decl(another.ts, 2, 5))
+>class {    protected _onDispose() {        this._assertIsStripped()    }    private _assertIsStripped() {    }} : Symbol(DisposableMixin, Decl(another.ts, 2, 23))
 
     protected _onDispose() {
 >_onDispose : Symbol(DisposableMixin._onDispose, Decl(another.ts, 2, 31))

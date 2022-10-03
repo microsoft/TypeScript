@@ -40,6 +40,7 @@ module.exports.c.Cls = class {}
 >exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >c : Symbol(c, Decl(index.js, 3, 29), Decl(index.js, 6, 15))
 >Cls : Symbol(c.Cls, Decl(index.js, 5, 34))
+>class {} : Symbol(Cls, Decl(index.js, 6, 22))
 
 /**
  * @param {number} a

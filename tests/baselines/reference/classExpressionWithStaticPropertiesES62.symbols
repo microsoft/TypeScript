@@ -1,6 +1,7 @@
 === tests/cases/compiler/classExpressionWithStaticPropertiesES62.ts ===
 var v = class C {
 >v : Symbol(v, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 3))
+>class C {    static a = 1;    static b    static c = {        x: "hi"    }    static d = C.c.x + " world"; } : Symbol(C, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 7))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 7))
 
     static a = 1;

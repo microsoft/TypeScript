@@ -79,6 +79,7 @@ new (<any>A());
 
 // nested parenthesized expression, should keep one pair of parenthese
 (<any>(A)) 
+>(A) : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 >A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 

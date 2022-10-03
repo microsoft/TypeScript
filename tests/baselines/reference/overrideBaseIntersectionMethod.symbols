@@ -14,6 +14,7 @@ const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Ba
 >Point : Symbol(Point, Decl(overrideBaseIntersectionMethod.ts, 9, 1))
 >Base : Symbol(Base, Decl(overrideBaseIntersectionMethod.ts, 4, 52))
 >T : Symbol(T, Decl(overrideBaseIntersectionMethod.ts, 4, 22))
+>class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : Symbol((Anonymous class), Decl(overrideBaseIntersectionMethod.ts, 4, 63))
 >Base : Symbol(Base, Decl(overrideBaseIntersectionMethod.ts, 4, 52))
 
   getLocation(): [number, number] {

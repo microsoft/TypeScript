@@ -1,5 +1,6 @@
 === tests/cases/compiler/a.js ===
 const Bar = class<T> {};
 >Bar : Symbol(Bar, Decl(a.js, 0, 5))
+>class<T> {} : Symbol(Bar, Decl(a.js, 0, 11))
 >T : Symbol(T, Decl(a.js, 0, 18))
 

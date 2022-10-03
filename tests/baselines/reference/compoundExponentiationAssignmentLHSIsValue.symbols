@@ -136,22 +136,27 @@ foo() **= value;
 
 // parentheses, the containted expression is value
 (this) **= value;
+>(this) : Symbol(globalThis)
 >this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 
 (M) **= value;
+>(M) : Symbol(M, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 20, 15))
 >M : Symbol(M, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 20, 15))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 
 (C) **= value;
+>(C) : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
 >C : Symbol(C, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 15))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 
 (E) **= value;
+>(E) : Symbol(E, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 26, 12))
 >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 26, 12))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 
 (foo) **= value;
+>(foo) : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
 >foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 

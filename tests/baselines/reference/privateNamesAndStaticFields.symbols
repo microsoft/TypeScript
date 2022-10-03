@@ -43,4 +43,5 @@ class B extends A {
 const willErrorSomeDay: typeof A = class {}; // OK for now
 >willErrorSomeDay : Symbol(willErrorSomeDay, Decl(privateNamesAndStaticFields.ts, 20, 5))
 >A : Symbol(A, Decl(privateNamesAndStaticFields.ts, 0, 0))
+>class {} : Symbol(willErrorSomeDay, Decl(privateNamesAndStaticFields.ts, 20, 34))
 

@@ -4,6 +4,7 @@ function* g() {
 
     var x = class C {
 >x : Symbol(x, Decl(generatorTypeCheck56.ts, 1, 7))
+>class C {        *[yield 0]() {            yield 0;        }    } : Symbol(C, Decl(generatorTypeCheck56.ts, 1, 11))
 >C : Symbol(C, Decl(generatorTypeCheck56.ts, 1, 11))
 
         *[yield 0]() {

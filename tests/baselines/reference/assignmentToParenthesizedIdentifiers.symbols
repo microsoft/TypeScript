@@ -6,12 +6,14 @@ x = 3; // OK
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 
 (x) = 3; // OK
+>(x) : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 
 x = ''; // Error
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 
 (x) = ''; // Error
+>(x) : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 0, 3))
 
 module M {
@@ -27,10 +29,12 @@ M.y = 3; // OK
 
 (M).y = 3; // OK
 >(M).y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
+>(M) : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >M : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 
 (M.y) = 3; // OK
+>(M.y) : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 >M.y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 >M : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
@@ -42,10 +46,12 @@ M.y = ''; // Error
 
 (M).y = ''; // Error
 >(M).y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
+>(M) : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >M : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 
 (M.y) = ''; // Error
+>(M.y) : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 >M.y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
 >M : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >y : Symbol(M.y, Decl(assignmentToParenthesizedIdentifiers.ts, 7, 14))
@@ -55,6 +61,7 @@ M = { y: 3 }; // Error
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 16, 5))
 
 (M) = { y: 3 }; // Error
+>(M) : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >M : Symbol(M, Decl(assignmentToParenthesizedIdentifiers.ts, 4, 9))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 7))
 
@@ -80,11 +87,13 @@ M2.M3 = { x: 3 }; // OK
 
 (M2).M3 = { x: 3 }; // OK
 >(M2).M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
+>(M2) : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M2 : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 27, 11))
 
 (M2.M3) = { x: 3 }; // OK
+>(M2.M3) : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >M2.M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >M2 : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
@@ -98,11 +107,13 @@ M2.M3 = { x: '' }; // Error
 
 (M2).M3 = { x: '' }; // Error
 >(M2).M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
+>(M2) : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M2 : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 31, 11))
 
 (M2.M3) = { x: '' }; // Error
+>(M2.M3) : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >M2.M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
 >M2 : Symbol(M2, Decl(assignmentToParenthesizedIdentifiers.ts, 17, 15))
 >M3 : Symbol(M2.M3, Decl(assignmentToParenthesizedIdentifiers.ts, 19, 11))
@@ -116,6 +127,7 @@ fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
 >fn : Symbol(fn, Decl(assignmentToParenthesizedIdentifiers.ts, 32, 20))
 
 (fn) = () => 3; // Should be error
+>(fn) : Symbol(fn, Decl(assignmentToParenthesizedIdentifiers.ts, 32, 20))
 >fn : Symbol(fn, Decl(assignmentToParenthesizedIdentifiers.ts, 32, 20))
 
 function fn2(x: number, y: { t: number }) {
@@ -128,30 +140,36 @@ function fn2(x: number, y: { t: number }) {
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 
     (x) = 3; // OK
+>(x) : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 
     x = ''; // Error
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 
     (x) = ''; // Error
+>(x) : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 >x : Symbol(x, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 13))
 
     (y).t = 3; // OK
 >(y).t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
+>(y) : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
     (y.t) = 3; // OK
+>(y.t) : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 >y.t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
     (y).t = ''; // Error
 >(y).t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
+>(y) : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
     (y.t) = ''; // Error
+>(y.t) : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 >y.t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >t : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
@@ -161,6 +179,7 @@ function fn2(x: number, y: { t: number }) {
 >'t' : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
     (y)['t'] = 3; // OK
+>(y) : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >'t' : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
@@ -173,6 +192,7 @@ function fn2(x: number, y: { t: number }) {
 >'t' : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
     (y)['t'] = ''; // Error
+>(y) : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >y : Symbol(y, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 23))
 >'t' : Symbol(t, Decl(assignmentToParenthesizedIdentifiers.ts, 39, 28))
 
@@ -192,6 +212,7 @@ E = undefined; // Error
 >undefined : Symbol(undefined)
 
 (E) = undefined; // Error
+>(E) : Symbol(E, Decl(assignmentToParenthesizedIdentifiers.ts, 56, 1))
 >E : Symbol(E, Decl(assignmentToParenthesizedIdentifiers.ts, 56, 1))
 >undefined : Symbol(undefined)
 
@@ -205,6 +226,7 @@ C = undefined; // Error
 >undefined : Symbol(undefined)
 
 (C) = undefined; // Error
+>(C) : Symbol(C, Decl(assignmentToParenthesizedIdentifiers.ts, 62, 16))
 >C : Symbol(C, Decl(assignmentToParenthesizedIdentifiers.ts, 62, 16))
 >undefined : Symbol(undefined)
 

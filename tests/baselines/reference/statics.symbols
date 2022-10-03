@@ -96,10 +96,12 @@ module M {
 
         result+=(c);
 >result : Symbol(result, Decl(statics.ts, 18, 11))
+>(c) : Symbol(c, Decl(statics.ts, 16, 7))
 >c : Symbol(c, Decl(statics.ts, 16, 7))
 
         result+=(new C(0,1,2).x);
 >result : Symbol(result, Decl(statics.ts, 18, 11))
+>(new C(0,1,2).x) : Symbol(C.x, Decl(statics.ts, 1, 20))
 >new C(0,1,2).x : Symbol(C.x, Decl(statics.ts, 1, 20))
 >C : Symbol(C, Decl(statics.ts, 0, 10))
 >x : Symbol(C.x, Decl(statics.ts, 1, 20))

@@ -98,6 +98,7 @@ class A {
 }
 
 void class B {
+>class B {    @x ["property"]: any;    @x [Symbol.toStringTag]: any;    @x ["property2"]: any = 2;    @x [Symbol.iterator]: any = null;    ["property3"]: any;    [Symbol.isConcatSpreadable]: any;    ["property4"]: any = 2;    [Symbol.match]: any = null;    [foo()]: any;    @x [foo()]: any;    @x [foo()]: any = null;    [fieldNameA]: any;    @x [fieldNameB]: any;    @x [fieldNameC]: any = null;} : Symbol(B, Decl(decoratorsOnComputedProperties.ts, 25, 4))
 >B : Symbol(B, Decl(decoratorsOnComputedProperties.ts, 25, 4))
 
     @x ["property"]: any;
@@ -254,6 +255,7 @@ class C {
 }
 
 void class D {
+>class D {    @x ["property"]: any;    @x [Symbol.toStringTag]: any;    @x ["property2"]: any = 2;    @x [Symbol.iterator]: any = null;    ["property3"]: any;    [Symbol.isConcatSpreadable]: any;    ["property4"]: any = 2;    [Symbol.match]: any = null;    [foo()]: any;    @x [foo()]: any;    @x [foo()]: any = null;    [fieldNameA]: any;    @x [fieldNameB]: any;    @x [fieldNameC]: any = null;    ["some" + "method"]() {}} : Symbol(D, Decl(decoratorsOnComputedProperties.ts, 60, 4))
 >D : Symbol(D, Decl(decoratorsOnComputedProperties.ts, 60, 4))
 
     @x ["property"]: any;
@@ -413,6 +415,7 @@ class E {
 }
 
 void class F {
+>class F {    @x ["property"]: any;    @x [Symbol.toStringTag]: any;    @x ["property2"]: any = 2;    @x [Symbol.iterator]: any = null;    ["property3"]: any;    [Symbol.isConcatSpreadable]: any;    ["property4"]: any = 2;    [Symbol.match]: any = null;    [foo()]: any;    @x [foo()]: any;    @x [foo()]: any = null;    ["some" + "method"]() {}    [fieldNameA]: any;    @x [fieldNameB]: any;    @x [fieldNameC]: any = null;} : Symbol(F, Decl(decoratorsOnComputedProperties.ts, 96, 4))
 >F : Symbol(F, Decl(decoratorsOnComputedProperties.ts, 96, 4))
 
     @x ["property"]: any;
@@ -575,6 +578,7 @@ class G {
 }
 
 void class H {
+>class H {    @x ["property"]: any;    @x [Symbol.toStringTag]: any;    @x ["property2"]: any = 2;    @x [Symbol.iterator]: any = null;    ["property3"]: any;    [Symbol.isConcatSpreadable]: any;    ["property4"]: any = 2;    [Symbol.match]: any = null;    [foo()]: any;    @x [foo()]: any;    @x [foo()]: any = null;    ["some" + "method"]() {}    [fieldNameA]: any;    @x [fieldNameB]: any;    ["some" + "method2"]() {}    @x [fieldNameC]: any = null;} : Symbol(H, Decl(decoratorsOnComputedProperties.ts, 133, 4))
 >H : Symbol(H, Decl(decoratorsOnComputedProperties.ts, 133, 4))
 
     @x ["property"]: any;
@@ -741,6 +745,7 @@ class I {
 }
 
 void class J {
+>class J {    @x ["property"]: any;    @x [Symbol.toStringTag]: any;    @x ["property2"]: any = 2;    @x [Symbol.iterator]: any = null;    ["property3"]: any;    [Symbol.isConcatSpreadable]: any;    ["property4"]: any = 2;    [Symbol.match]: any = null;    [foo()]: any;    @x [foo()]: any;    @x [foo()]: any = null;    @x ["some" + "method"]() {}    [fieldNameA]: any;    @x [fieldNameB]: any;    ["some" + "method2"]() {}    @x [fieldNameC]: any = null;} : Symbol(J, Decl(decoratorsOnComputedProperties.ts, 171, 4))
 >J : Symbol(J, Decl(decoratorsOnComputedProperties.ts, 171, 4))
 
     @x ["property"]: any;

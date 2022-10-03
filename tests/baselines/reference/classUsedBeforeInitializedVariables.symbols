@@ -93,6 +93,8 @@ class Test {
 
     withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
 >withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))
+>(class extends this.withinClassDeclarationExtension { }) : Symbol((Anonymous class), Decl(classUsedBeforeInitializedVariables.ts, 34, 44))
+>class extends this.withinClassDeclarationExtension { } : Symbol((Anonymous class), Decl(classUsedBeforeInitializedVariables.ts, 34, 44))
 >this.withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))
 >this : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
 >withinClassDeclarationExtension : Symbol(Test.withinClassDeclarationExtension, Decl(classUsedBeforeInitializedVariables.ts, 32, 6))

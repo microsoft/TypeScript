@@ -13,6 +13,8 @@ c.chunk;
 
 === tests/cases/compiler/mod1.ts ===
 export = class {
+>class {    chunk = 1} : Symbol((Anonymous class), Decl(mod1.ts, 0, 8))
+
     chunk = 1
 >chunk : Symbol((Anonymous class).chunk, Decl(mod1.ts, 0, 16))
 }

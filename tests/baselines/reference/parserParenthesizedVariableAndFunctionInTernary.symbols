@@ -4,5 +4,6 @@ let a: any;
 
 const c = true ? (a) : function() {};
 >c : Symbol(c, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 1, 5))
+>(a) : Symbol(a, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 0, 3))
 >a : Symbol(a, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 0, 3))
 

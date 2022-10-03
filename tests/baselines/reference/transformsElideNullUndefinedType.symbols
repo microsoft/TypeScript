@@ -114,10 +114,12 @@ class C5 {
 
 var C6 = class { constructor(p12: null) { } }
 >C6 : Symbol(C6, Decl(transformsElideNullUndefinedType.ts, 48, 3))
+>class { constructor(p12: null) { } } : Symbol(C6, Decl(transformsElideNullUndefinedType.ts, 48, 8))
 >p12 : Symbol(p12, Decl(transformsElideNullUndefinedType.ts, 48, 29))
 
 var C7 = class { constructor(p13: undefined) { } }
 >C7 : Symbol(C7, Decl(transformsElideNullUndefinedType.ts, 49, 3))
+>class { constructor(p13: undefined) { } } : Symbol(C7, Decl(transformsElideNullUndefinedType.ts, 49, 8))
 >p13 : Symbol(p13, Decl(transformsElideNullUndefinedType.ts, 49, 29))
 
 declare function fn<T>();

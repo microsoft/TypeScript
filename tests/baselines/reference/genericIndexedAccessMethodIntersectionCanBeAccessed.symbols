@@ -54,6 +54,7 @@ export const createService = <T>(
 
         const method = (ServiceCtr)[key as keyof T];
 >method : Symbol(method, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 15, 13))
+>(ServiceCtr) : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
 >ServiceCtr : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
 >key : Symbol(key, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 14, 36))
 >T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 30))

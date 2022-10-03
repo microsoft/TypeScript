@@ -3,6 +3,7 @@ function foo<T>(x = class { static prop: T }): T {
 >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 0))
 >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
 >x : Symbol(x, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 16))
+>class { static prop: T } : Symbol((Anonymous class), Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 19))
 >prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 27))
 >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
 >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
@@ -14,6 +15,7 @@ function foo<T>(x = class { static prop: T }): T {
 foo(class { static prop = "hello" }).length;
 >foo(class { static prop = "hello" }).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 0))
+>class { static prop = "hello" } : Symbol((Anonymous class), Decl(typeArgumentInferenceWithClassExpression1.ts, 4, 4))
 >prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 4, 11))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 

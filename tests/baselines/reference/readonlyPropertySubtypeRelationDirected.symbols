@@ -19,6 +19,7 @@ function doSomething(condition: boolean) {
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : Symbol(three, Decl(one.ts, 8, 9))
+>(condition) : Symbol(condition, Decl(one.ts, 5, 21))
 >condition : Symbol(condition, Decl(one.ts, 5, 21))
 >one : Symbol(one, Decl(one.ts, 3, 5))
 >two : Symbol(two, Decl(one.ts, 2, 5))
@@ -59,6 +60,7 @@ function doSomething(condition: boolean) {
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : Symbol(three, Decl(two.ts, 8, 9))
+>(condition) : Symbol(condition, Decl(two.ts, 5, 21))
 >condition : Symbol(condition, Decl(two.ts, 5, 21))
 >two : Symbol(two, Decl(two.ts, 2, 5))
 >one : Symbol(one, Decl(two.ts, 3, 5))
@@ -100,6 +102,7 @@ function doSomething(condition: boolean) {
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : Symbol(three, Decl(three.ts, 8, 9))
+>(condition) : Symbol(condition, Decl(three.ts, 5, 21))
 >condition : Symbol(condition, Decl(three.ts, 5, 21))
 >one : Symbol(one, Decl(three.ts, 2, 5))
 >two : Symbol(two, Decl(three.ts, 3, 5))
@@ -141,6 +144,7 @@ function doSomething(condition: boolean) {
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : Symbol(three, Decl(four.ts, 8, 9))
+>(condition) : Symbol(condition, Decl(four.ts, 5, 21))
 >condition : Symbol(condition, Decl(four.ts, 5, 21))
 >two : Symbol(two, Decl(four.ts, 3, 5))
 >one : Symbol(one, Decl(four.ts, 2, 5))

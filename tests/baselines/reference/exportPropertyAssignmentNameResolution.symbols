@@ -5,6 +5,7 @@ module.exports.D = class { }
 >module : Symbol(module, Decl(bug24492.js, 0, 0))
 >exports : Symbol(module.exports, Decl(bug24492.js, 0, 0))
 >D : Symbol(D, Decl(bug24492.js, 0, 0))
+>class { } : Symbol(D, Decl(bug24492.js, 0, 18))
 
 new D()
 

@@ -117,22 +117,27 @@ foo() = value;
 
 // parentheses, the containted expression is value
 (this) = value;
+>(this) : Symbol(globalThis)
 >this : Symbol(globalThis)
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 
 (M) = value;
+>(M) : Symbol(M, Decl(assignmentLHSIsValue.ts, 12, 13))
 >M : Symbol(M, Decl(assignmentLHSIsValue.ts, 12, 13))
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 
 (C) = value;
+>(C) : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
 >C : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 
 (E) = value;
+>(E) : Symbol(E, Decl(assignmentLHSIsValue.ts, 18, 10))
 >E : Symbol(E, Decl(assignmentLHSIsValue.ts, 18, 10))
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 
 (foo) = value;
+>(foo) : Symbol(foo, Decl(assignmentLHSIsValue.ts, 8, 1))
 >foo : Symbol(foo, Decl(assignmentLHSIsValue.ts, 8, 1))
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 

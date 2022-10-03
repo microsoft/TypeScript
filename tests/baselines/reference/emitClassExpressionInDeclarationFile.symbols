@@ -1,6 +1,7 @@
 === tests/cases/compiler/emitClassExpressionInDeclarationFile.ts ===
 export var simpleExample = class {
 >simpleExample : Symbol(simpleExample, Decl(emitClassExpressionInDeclarationFile.ts, 0, 10))
+>class {    static getTags() { }    tags() { }} : Symbol(simpleExample, Decl(emitClassExpressionInDeclarationFile.ts, 0, 26))
 
     static getTags() { }
 >getTags : Symbol(simpleExample.getTags, Decl(emitClassExpressionInDeclarationFile.ts, 0, 34))
@@ -10,6 +11,7 @@ export var simpleExample = class {
 }
 export var circularReference = class C {
 >circularReference : Symbol(circularReference, Decl(emitClassExpressionInDeclarationFile.ts, 4, 10))
+>class C {    static getTags(c: C): C { return c }    tags(c: C): C { return c }} : Symbol(C, Decl(emitClassExpressionInDeclarationFile.ts, 4, 30))
 >C : Symbol(C, Decl(emitClassExpressionInDeclarationFile.ts, 4, 30))
 
     static getTags(c: C): C { return c }
@@ -53,6 +55,7 @@ export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 >T : Symbol(T, Decl(emitClassExpressionInDeclarationFile.ts, 16, 25))
 
     return class extends Base {
+>class extends Base {        static getTags(): void { }        tags(): void { }    } : Symbol((Anonymous class), Decl(emitClassExpressionInDeclarationFile.ts, 17, 10))
 >Base : Symbol(Base, Decl(emitClassExpressionInDeclarationFile.ts, 16, 57))
 
         static getTags(): void { }

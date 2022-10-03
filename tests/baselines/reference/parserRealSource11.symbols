@@ -4216,6 +4216,7 @@ module TypeScript {
 
         public hasExplicitTarget() { return (this.target); }
 >hasExplicitTarget : Symbol(Jump.hasExplicitTarget, Decl(parserRealSource11.ts, 1400, 37))
+>(this.target) : Symbol(Jump.target, Decl(parserRealSource11.ts, 1399, 41))
 >this.target : Symbol(Jump.target, Decl(parserRealSource11.ts, 1399, 41))
 >this : Symbol(Jump, Decl(parserRealSource11.ts, 1397, 5))
 >target : Symbol(Jump.target, Decl(parserRealSource11.ts, 1399, 41))
@@ -5307,6 +5308,7 @@ module TypeScript {
 >nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
 
                                                 if (((<Identifier>this.lval).actualText) == (<Identifier>arg).actualText) {
+>((<Identifier>this.lval).actualText) : Symbol(Identifier.actualText, Decl(parserRealSource11.ts, 266, 21))
 >(<Identifier>this.lval).actualText : Symbol(Identifier.actualText, Decl(parserRealSource11.ts, 266, 21))
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >this.lval : Symbol(ForInStatement.lval, Decl(parserRealSource11.ts, 1686, 21))

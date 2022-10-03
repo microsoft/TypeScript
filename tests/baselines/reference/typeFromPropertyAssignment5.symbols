@@ -6,6 +6,7 @@ MyClass.bar = class C {
 >MyClass.bar : Symbol(MyClass.bar, Decl(a.js, 1, 1))
 >MyClass : Symbol(MyClass, Decl(a.js, 0, 0), Decl(a.js, 1, 1))
 >bar : Symbol(MyClass.bar, Decl(a.js, 1, 1))
+>class C {} : Symbol(C, Decl(a.js, 2, 13))
 >C : Symbol(C, Decl(a.js, 2, 13))
 }
 MyClass.bar

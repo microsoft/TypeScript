@@ -10,6 +10,7 @@ module.exports = class MC {
 >module.exports : Symbol(module.exports, Decl(MC.js, 0, 0))
 >module : Symbol(export=, Decl(MC.js, 0, 27))
 >exports : Symbol(export=, Decl(MC.js, 0, 27))
+>class MC {  watch() {    return new MW(this);  }} : Symbol(MC, Decl(MC.js, 4, 16))
 >MC : Symbol(MC, Decl(MC.js, 4, 16))
 
   watch() {

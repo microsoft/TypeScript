@@ -42,6 +42,7 @@ module.exports = class Chunk {
 >module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 0, 0))
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
+>class Chunk {    constructor() {        this.chunk = 1;    }} : Symbol(Chunk, Decl(mod1.js, 1, 16))
 >Chunk : Symbol(Chunk, Decl(mod1.js, 1, 16))
 
     constructor() {

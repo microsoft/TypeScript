@@ -25,6 +25,7 @@ function Mixin<TBase extends Constructor>(Base: TBase) {
 >TBase : Symbol(TBase, Decl(noCrashOnMixin.ts, 10, 15))
 
     return class extends Base {
+>class extends Base {    } : Symbol((Anonymous class), Decl(noCrashOnMixin.ts, 11, 10))
 >Base : Symbol(Base, Decl(noCrashOnMixin.ts, 10, 42))
 
     };

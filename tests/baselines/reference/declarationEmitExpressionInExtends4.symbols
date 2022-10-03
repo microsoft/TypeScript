@@ -3,6 +3,7 @@ function getSomething() {
 >getSomething : Symbol(getSomething, Decl(declarationEmitExpressionInExtends4.ts, 0, 0))
 
     return class D { }
+>class D { } : Symbol(D, Decl(declarationEmitExpressionInExtends4.ts, 1, 10))
 >D : Symbol(D, Decl(declarationEmitExpressionInExtends4.ts, 1, 10))
 }
 

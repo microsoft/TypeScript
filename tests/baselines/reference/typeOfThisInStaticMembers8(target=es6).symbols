@@ -16,6 +16,7 @@ class C {
 
     static classExprBoundary = class { a = this.f + 3 };
 >classExprBoundary : Symbol(C.classExprBoundary, Decl(typeOfThisInStaticMembers8.ts, 3, 68))
+>class { a = this.f + 3 } : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers8.ts, 4, 30))
 >a : Symbol((Anonymous class).a, Decl(typeOfThisInStaticMembers8.ts, 4, 38))
 >this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers8.ts, 4, 30))
 

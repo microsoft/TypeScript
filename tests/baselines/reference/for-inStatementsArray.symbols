@@ -18,6 +18,7 @@ for (let x in a) {
     let a2 = a[(x)];
 >a2 : Symbol(a2, Decl(for-inStatementsArray.ts, 5, 7))
 >a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>(x) : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
 >x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
 
     let a3 = a[+x];
@@ -33,6 +34,7 @@ for (let x in a) {
     let b2 = b[(x)];
 >b2 : Symbol(b2, Decl(for-inStatementsArray.ts, 8, 7))
 >b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>(x) : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
 >x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
 
     let b3 = b[+x];

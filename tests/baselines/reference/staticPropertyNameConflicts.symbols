@@ -111,6 +111,7 @@ class StaticArgumentsFn {
 // name
 var StaticName_Anonymous = class {
 >StaticName_Anonymous : Symbol(StaticName_Anonymous, Decl(staticPropertyNameConflicts.ts, 60, 3))
+>class {    static name: number; // error    name: string; // ok} : Symbol(StaticName_Anonymous, Decl(staticPropertyNameConflicts.ts, 60, 26))
 
     static name: number; // error
 >name : Symbol(StaticName_Anonymous.name, Decl(staticPropertyNameConflicts.ts, 60, 34))
@@ -121,6 +122,7 @@ var StaticName_Anonymous = class {
 
 var StaticNameFn_Anonymous = class {
 >StaticNameFn_Anonymous : Symbol(StaticNameFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 65, 3))
+>class {    static name() {} // error    name() {} // ok} : Symbol(StaticNameFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 65, 28))
 
     static name() {} // error
 >name : Symbol(StaticNameFn_Anonymous.name, Decl(staticPropertyNameConflicts.ts, 65, 36))
@@ -132,6 +134,7 @@ var StaticNameFn_Anonymous = class {
 // length
 var StaticLength_Anonymous = class {
 >StaticLength_Anonymous : Symbol(StaticLength_Anonymous, Decl(staticPropertyNameConflicts.ts, 71, 3))
+>class {    static length: number; // error    length: string; // ok} : Symbol(StaticLength_Anonymous, Decl(staticPropertyNameConflicts.ts, 71, 28))
 
     static length: number; // error
 >length : Symbol(StaticLength_Anonymous.length, Decl(staticPropertyNameConflicts.ts, 71, 36))
@@ -142,6 +145,7 @@ var StaticLength_Anonymous = class {
 
 var StaticLengthFn_Anonymous = class {
 >StaticLengthFn_Anonymous : Symbol(StaticLengthFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 76, 3))
+>class {    static length() {} // error    length() {} // ok} : Symbol(StaticLengthFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 76, 30))
 
     static length() {} // error
 >length : Symbol(StaticLengthFn_Anonymous.length, Decl(staticPropertyNameConflicts.ts, 76, 38))
@@ -153,6 +157,7 @@ var StaticLengthFn_Anonymous = class {
 // prototype
 var StaticPrototype_Anonymous = class {
 >StaticPrototype_Anonymous : Symbol(StaticPrototype_Anonymous, Decl(staticPropertyNameConflicts.ts, 82, 3))
+>class {    static prototype: number; // error    prototype: string; // ok} : Symbol(StaticPrototype_Anonymous, Decl(staticPropertyNameConflicts.ts, 82, 31))
 
     static prototype: number; // error
 >prototype : Symbol(StaticPrototype_Anonymous.prototype, Decl(staticPropertyNameConflicts.ts, 82, 39))
@@ -163,6 +168,7 @@ var StaticPrototype_Anonymous = class {
 
 var StaticPrototypeFn_Anonymous = class {
 >StaticPrototypeFn_Anonymous : Symbol(StaticPrototypeFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 87, 3))
+>class {    static prototype() {} // error    prototype() {} // ok} : Symbol(StaticPrototypeFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 87, 33))
 
     static prototype() {} // error
 >prototype : Symbol(StaticPrototypeFn_Anonymous.prototype, Decl(staticPropertyNameConflicts.ts, 87, 41))
@@ -174,6 +180,7 @@ var StaticPrototypeFn_Anonymous = class {
 // caller
 var StaticCaller_Anonymous = class {
 >StaticCaller_Anonymous : Symbol(StaticCaller_Anonymous, Decl(staticPropertyNameConflicts.ts, 93, 3))
+>class {    static caller: number; // error    caller: string; // ok} : Symbol(StaticCaller_Anonymous, Decl(staticPropertyNameConflicts.ts, 93, 28))
 
     static caller: number; // error
 >caller : Symbol(StaticCaller_Anonymous.caller, Decl(staticPropertyNameConflicts.ts, 93, 36))
@@ -184,6 +191,7 @@ var StaticCaller_Anonymous = class {
 
 var StaticCallerFn_Anonymous = class {
 >StaticCallerFn_Anonymous : Symbol(StaticCallerFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 98, 3))
+>class {    static caller() {} // error    caller() {} // ok} : Symbol(StaticCallerFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 98, 30))
 
     static caller() {} // error
 >caller : Symbol(StaticCallerFn_Anonymous.caller, Decl(staticPropertyNameConflicts.ts, 98, 38))
@@ -195,6 +203,7 @@ var StaticCallerFn_Anonymous = class {
 // arguments
 var StaticArguments_Anonymous = class {
 >StaticArguments_Anonymous : Symbol(StaticArguments_Anonymous, Decl(staticPropertyNameConflicts.ts, 104, 3))
+>class {    static arguments: number; // error    arguments: string; // ok} : Symbol(StaticArguments_Anonymous, Decl(staticPropertyNameConflicts.ts, 104, 31))
 
     static arguments: number; // error
 >arguments : Symbol(StaticArguments_Anonymous.arguments, Decl(staticPropertyNameConflicts.ts, 104, 39))
@@ -205,6 +214,7 @@ var StaticArguments_Anonymous = class {
 
 var StaticArgumentsFn_Anonymous = class {
 >StaticArgumentsFn_Anonymous : Symbol(StaticArgumentsFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 109, 3))
+>class {    static arguments() {} // error    arguments() {} // ok} : Symbol(StaticArgumentsFn_Anonymous, Decl(staticPropertyNameConflicts.ts, 109, 33))
 
     static arguments() {} // error
 >arguments : Symbol(StaticArgumentsFn_Anonymous.arguments, Decl(staticPropertyNameConflicts.ts, 109, 41))

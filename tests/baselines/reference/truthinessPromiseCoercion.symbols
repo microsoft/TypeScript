@@ -84,6 +84,13 @@ async function g() {
 >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
 
                 !!await (((((((p)))))));
+>(((((((p))))))) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>((((((p)))))) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>(((((p))))) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>((((p)))) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>(((p))) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>((p)) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+>(p) : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
 >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
             }
         }

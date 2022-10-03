@@ -889,6 +889,7 @@ module TypeScript {
 >key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
 
                     return (current.data);
+>(current.data) : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
 >current.data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
 >current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
 >data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))

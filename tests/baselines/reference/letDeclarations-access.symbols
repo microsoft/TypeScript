@@ -71,6 +71,7 @@ x;
 >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
 
 (x);
+>(x) : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
 >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
 
 -x;

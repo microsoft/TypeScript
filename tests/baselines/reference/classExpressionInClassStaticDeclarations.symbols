@@ -4,5 +4,6 @@ class C {
 
     static D = class extends C {};
 >D : Symbol(C.D, Decl(classExpressionInClassStaticDeclarations.ts, 0, 9))
+>class extends C {} : Symbol((Anonymous class), Decl(classExpressionInClassStaticDeclarations.ts, 1, 14))
 >C : Symbol(C, Decl(classExpressionInClassStaticDeclarations.ts, 0, 0))
 }

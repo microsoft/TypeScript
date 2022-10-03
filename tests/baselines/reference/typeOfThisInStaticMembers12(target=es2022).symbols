@@ -7,6 +7,7 @@ class C {
 
     static bar =  class Inner {
 >bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers12.ts, 1, 36))
+>class Inner {        static [this.c] = 123;        [this.c] = 123;    } : Symbol(Inner, Decl(typeOfThisInStaticMembers12.ts, 2, 16))
 >Inner : Symbol(Inner, Decl(typeOfThisInStaticMembers12.ts, 2, 16))
 
         static [this.c] = 123;

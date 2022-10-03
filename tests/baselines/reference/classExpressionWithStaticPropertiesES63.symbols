@@ -15,6 +15,7 @@ for (let i = 0; i < 3; i++) {
 >arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 5))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>class C {        static x = i;        static y = () => C.x * 2;    } : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 13))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 13))
 
         static x = i;

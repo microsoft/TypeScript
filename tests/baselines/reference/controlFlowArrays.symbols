@@ -413,6 +413,8 @@ function f16() {
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     ((x))[3] = { a: 1 };
+>((x)) : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
+>(x) : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
 >x : Symbol(x, Decl(controlFlowArrays.ts, 155, 7))
 >a : Symbol(a, Decl(controlFlowArrays.ts, 159, 16))
 

@@ -452,6 +452,7 @@ createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Erro
 
 let Anon = class <out T> {
 >Anon : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 3))
+>class <out T> {    foo(): InstanceType<(typeof Anon<T>)> {        return this;    }} : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 10))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 163, 18))
 
     foo(): InstanceType<(typeof Anon<T>)> {
@@ -467,6 +468,7 @@ let Anon = class <out T> {
 
 let OuterC = class C<out T> {
 >OuterC : Symbol(OuterC, Decl(varianceAnnotations.ts, 169, 3))
+>class C<out T> {    foo(): C<T> {        return this;    }} : Symbol(C, Decl(varianceAnnotations.ts, 169, 12))
 >C : Symbol(C, Decl(varianceAnnotations.ts, 169, 12))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 169, 21))
 

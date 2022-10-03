@@ -168,7 +168,9 @@ function f24(x: string) {
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 59, 13))
 
     ((Debug).fail)();
+>((Debug).fail) : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
 >(Debug).fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
+>(Debug) : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
 >Debug : Symbol(Debug, Decl(neverReturningFunctions1.ts, 36, 1))
 >fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
 

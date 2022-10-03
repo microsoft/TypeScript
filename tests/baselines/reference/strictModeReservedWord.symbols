@@ -47,6 +47,7 @@ function foo() {
 
     var myClass = class package extends public {}
 >myClass : Symbol(myClass, Decl(strictModeReservedWord.ts, 14, 7))
+>class package extends public {} : Symbol(package, Decl(strictModeReservedWord.ts, 14, 17))
 >package : Symbol(package, Decl(strictModeReservedWord.ts, 14, 17))
 >public : Symbol(public, Decl(strictModeReservedWord.ts, 4, 7))
 

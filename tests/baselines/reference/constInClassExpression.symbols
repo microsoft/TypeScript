@@ -1,6 +1,7 @@
 === tests/cases/compiler/constInClassExpression.ts ===
 let C = class {
 >C : Symbol(C, Decl(constInClassExpression.ts, 0, 3))
+>class {    const a = 4;} : Symbol(C, Decl(constInClassExpression.ts, 0, 7))
 
     const a = 4;
 >a : Symbol(C.a, Decl(constInClassExpression.ts, 0, 15))

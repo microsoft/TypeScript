@@ -111,6 +111,7 @@ let prop2;
 
 var E = class {
 >E : Symbol(E, Decl(unusedLocalsAndParametersDeferred.ts, 55, 3))
+>class {    // Method declaration paramter    method(a) {        defered(() => {            a;        });    }    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    }    // in a property initalizer    p = defered(() => {        prop2;    });} : Symbol(E, Decl(unusedLocalsAndParametersDeferred.ts, 55, 7))
 
     // Method declaration paramter
     method(a) {

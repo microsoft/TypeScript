@@ -13,6 +13,7 @@ class TestWithStatics {
     static ["X_ z_ zz"] = class Inner {
 >["X_ z_ zz"] : Symbol(TestWithStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 2, 44))
 >"X_ z_ zz" : Symbol(TestWithStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 2, 44))
+>class Inner {        #foo  = 10        m() {            new TestWithStatics().#prop // OK        }        static C = class InnerInner {            m() {                new TestWithStatics().#prop // OK                new Inner().#foo; // OK            }        }        static M(){            return class {                m() {                    new TestWithStatics().#prop // OK                    new Inner().#foo; // OK                }            }        }    } : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
 >Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
 
         #foo  = 10
@@ -27,6 +28,7 @@ class TestWithStatics {
         }
         static C = class InnerInner {
 >C : Symbol(Inner.C, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 7, 9))
+>class InnerInner {            m() {                new TestWithStatics().#prop // OK                new Inner().#foo; // OK            }        } : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 8, 18))
 >InnerInner : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 8, 18))
 
             m() {
@@ -46,6 +48,8 @@ class TestWithStatics {
 >M : Symbol(Inner.M, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 13, 9))
 
             return class {
+>class {                m() {                    new TestWithStatics().#prop // OK                    new Inner().#foo; // OK                }            } : Symbol((Anonymous class), Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 16, 18))
+
                 m() {
 >m : Symbol((Anonymous class).m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 16, 26))
 
@@ -76,6 +80,7 @@ class TestNonStatics {
     ["X_ z_ zz"] = class Inner {
 >["X_ z_ zz"] : Symbol(TestNonStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 28, 36))
 >"X_ z_ zz" : Symbol(TestNonStatics["X_ z_ zz"], Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 28, 36))
+>class Inner {        #foo  = 10        m() {            new TestNonStatics().#prop // Ok        }        C = class InnerInner {            m() {                new TestNonStatics().#prop // Ok                new Inner().#foo; // Ok            }        }        static M(){            return class {                m() {                    new TestNonStatics().#prop // OK                    new Inner().#foo; // OK                }            }        }    } : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 18))
 >Inner : Symbol(Inner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 29, 18))
 
         #foo  = 10
@@ -90,6 +95,7 @@ class TestNonStatics {
         }
         C = class InnerInner {
 >C : Symbol(Inner.C, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 33, 9))
+>class InnerInner {            m() {                new TestNonStatics().#prop // Ok                new Inner().#foo; // Ok            }        } : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 34, 11))
 >InnerInner : Symbol(InnerInner, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 34, 11))
 
             m() {
@@ -109,6 +115,8 @@ class TestNonStatics {
 >M : Symbol(Inner.M, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 39, 9))
 
             return class {
+>class {                m() {                    new TestNonStatics().#prop // OK                    new Inner().#foo; // OK                }            } : Symbol((Anonymous class), Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 42, 18))
+
                 m() {
 >m : Symbol((Anonymous class).m, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 42, 26))
 

@@ -7,6 +7,7 @@ try {
 >xx : Symbol(\u0078x, Decl(parserUnicode1.ts, 1, 5))
 
     $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+>(xx) : Symbol(\u0078x, Decl(parserUnicode1.ts, 1, 5))
 >xx : Symbol(\u0078x, Decl(parserUnicode1.ts, 1, 5))
   }
 }
@@ -14,6 +15,7 @@ catch (e) {
 >e : Symbol(e, Decl(parserUnicode1.ts, 8, 7))
 
     $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+>(xx) : Symbol(\u0078x, Decl(parserUnicode1.ts, 1, 5))
 >xx : Symbol(\u0078x, Decl(parserUnicode1.ts, 1, 5))
 
 }

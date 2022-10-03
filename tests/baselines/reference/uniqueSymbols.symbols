@@ -829,6 +829,7 @@ const o4 = {
 
 const ce0 = class {
 >ce0 : Symbol(ce0, Decl(uniqueSymbols.ts, 254, 5))
+>class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : Symbol(ce0, Decl(uniqueSymbols.ts, 254, 11))
 
     method1(p: typeof s): typeof s {
 >method1 : Symbol(ce0.method1, Decl(uniqueSymbols.ts, 254, 19))

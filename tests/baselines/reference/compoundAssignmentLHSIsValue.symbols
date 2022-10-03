@@ -218,42 +218,52 @@ foo() += value;
 
 // parentheses, the containted expression is value
 (this) *= value;
+>(this) : Symbol(globalThis)
 >this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (this) += value;
+>(this) : Symbol(globalThis)
 >this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (M) *= value;
+>(M) : Symbol(M, Decl(compoundAssignmentLHSIsValue.ts, 25, 14))
 >M : Symbol(M, Decl(compoundAssignmentLHSIsValue.ts, 25, 14))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (M) += value;
+>(M) : Symbol(M, Decl(compoundAssignmentLHSIsValue.ts, 25, 14))
 >M : Symbol(M, Decl(compoundAssignmentLHSIsValue.ts, 25, 14))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (C) *= value;
+>(C) : Symbol(C, Decl(compoundAssignmentLHSIsValue.ts, 1, 15))
 >C : Symbol(C, Decl(compoundAssignmentLHSIsValue.ts, 1, 15))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (C) += value;
+>(C) : Symbol(C, Decl(compoundAssignmentLHSIsValue.ts, 1, 15))
 >C : Symbol(C, Decl(compoundAssignmentLHSIsValue.ts, 1, 15))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (E) *= value;
+>(E) : Symbol(E, Decl(compoundAssignmentLHSIsValue.ts, 33, 11))
 >E : Symbol(E, Decl(compoundAssignmentLHSIsValue.ts, 33, 11))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (E) += value;
+>(E) : Symbol(E, Decl(compoundAssignmentLHSIsValue.ts, 33, 11))
 >E : Symbol(E, Decl(compoundAssignmentLHSIsValue.ts, 33, 11))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (foo) *= value;
+>(foo) : Symbol(foo, Decl(compoundAssignmentLHSIsValue.ts, 17, 1))
 >foo : Symbol(foo, Decl(compoundAssignmentLHSIsValue.ts, 17, 1))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 
 (foo) += value;
+>(foo) : Symbol(foo, Decl(compoundAssignmentLHSIsValue.ts, 17, 1))
 >foo : Symbol(foo, Decl(compoundAssignmentLHSIsValue.ts, 17, 1))
 >value : Symbol(value, Decl(compoundAssignmentLHSIsValue.ts, 1, 3))
 

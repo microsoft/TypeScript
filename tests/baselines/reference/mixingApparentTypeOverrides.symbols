@@ -13,6 +13,7 @@ function Tagged<T extends Constructor<{}>>(Base: T) {
 >T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 1, 16))
 
   return class extends Base {
+>class extends Base {    _tag: string;    constructor(...args: any[]) {      super(...args);      this._tag = "";    }  } : Symbol((Anonymous class), Decl(mixingApparentTypeOverrides.ts, 2, 8))
 >Base : Symbol(Base, Decl(mixingApparentTypeOverrides.ts, 1, 43))
 
     _tag: string;

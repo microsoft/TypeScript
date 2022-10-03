@@ -1349,6 +1349,7 @@ module TypeScript {
                 }
                 if ((preAst.operand1) && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
@@ -1377,6 +1378,7 @@ module TypeScript {
                 }
                 if ((preAst.operand2) && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
@@ -1442,6 +1444,7 @@ module TypeScript {
             }
             if (preAst.arguments && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
@@ -1458,11 +1461,13 @@ module TypeScript {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
             }
             if ((walker.options.reverseSiblings) && (walker.options.goNextSibling)) {
+>(walker.options.reverseSiblings) : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
 >walker.options.reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
 >options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >reverseSiblings : Symbol(AstWalkOptions.reverseSiblings, Decl(parserRealSource12.ts, 14, 36))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
@@ -1501,6 +1506,7 @@ module TypeScript {
             }
             if (preAst.operand2 && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
@@ -1517,6 +1523,7 @@ module TypeScript {
             }
             if (preAst.operand3 && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
@@ -1557,6 +1564,7 @@ module TypeScript {
             if (preAst.arguments && (preAst.arguments.members.length > 0) && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
@@ -1574,6 +1582,7 @@ module TypeScript {
             }
             if (preAst.returnTypeAnnotation && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
@@ -1591,6 +1600,7 @@ module TypeScript {
             if (preAst.bod && (preAst.bod.members.length > 0) && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
@@ -1642,6 +1652,7 @@ module TypeScript {
             }
             if ((preAst.typeExpr) && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
@@ -1787,6 +1798,7 @@ module TypeScript {
             }
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
@@ -1822,6 +1834,7 @@ module TypeScript {
 
             if (preAst.thenBod && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
@@ -1838,6 +1851,7 @@ module TypeScript {
             }
             if (preAst.elseBod && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
@@ -1873,6 +1887,7 @@ module TypeScript {
 
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
@@ -1908,6 +1923,7 @@ module TypeScript {
 
             if (preAst.body && (walker.options.goNextSibling)) {
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>(walker.options.goNextSibling) : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options.goNextSibling : Symbol(AstWalkOptions.goNextSibling, Decl(parserRealSource12.ts, 13, 33))
 >walker.options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))

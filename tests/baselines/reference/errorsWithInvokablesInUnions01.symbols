@@ -42,6 +42,7 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 >IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
 >ConstructableA : Symbol(ConstructableA, Decl(errorsWithInvokablesInUnions01.ts, 0, 0))
 >IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
+>class {    someUnaccountedProp: any;} : Symbol(ctor, Decl(errorsWithInvokablesInUnions01.ts, 15, 88))
 
     someUnaccountedProp: any;
 >someUnaccountedProp : Symbol(ctor.someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))

@@ -2,6 +2,7 @@
 // https://github.com/microsoft/TypeScript/issues/44872
 
 void class Foo {
+>class Foo {    static prop = 1    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }} : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
 >Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
 
     static prop = 1

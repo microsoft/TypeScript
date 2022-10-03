@@ -88,38 +88,47 @@ var someFakeClass = new SomeFakeClass();
 
 someBase = /** @type {SomeBase} */(someDerived);
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>(someDerived) : Symbol(someDerived, Decl(b.js, 38, 3))
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
 
 someBase = /** @type {SomeBase} */(someBase);
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>(someBase) : Symbol(someBase, Decl(b.js, 37, 3))
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
 
 someBase = /** @type {SomeBase} */(someOther); // Error
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>(someOther) : Symbol(someOther, Decl(b.js, 39, 3))
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
 
 someDerived = /** @type {SomeDerived} */(someDerived);
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>(someDerived) : Symbol(someDerived, Decl(b.js, 38, 3))
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
 
 someDerived = /** @type {SomeDerived} */(someBase);
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>(someBase) : Symbol(someBase, Decl(b.js, 37, 3))
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
 
 someDerived = /** @type {SomeDerived} */(someOther); // Error
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
+>(someOther) : Symbol(someOther, Decl(b.js, 39, 3))
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
 
 someOther = /** @type {SomeOther} */(someDerived); // Error
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>(someDerived) : Symbol(someDerived, Decl(b.js, 38, 3))
 >someDerived : Symbol(someDerived, Decl(b.js, 38, 3))
 
 someOther = /** @type {SomeOther} */(someBase); // Error
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>(someBase) : Symbol(someBase, Decl(b.js, 37, 3))
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
 
 someOther = /** @type {SomeOther} */(someOther);
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
+>(someOther) : Symbol(someOther, Decl(b.js, 39, 3))
 >someOther : Symbol(someOther, Decl(b.js, 39, 3))
 
 someFakeClass = someBase;
@@ -136,6 +145,7 @@ someBase = someFakeClass; // Error
 
 someBase = /** @type {SomeBase} */(someFakeClass);
 >someBase : Symbol(someBase, Decl(b.js, 37, 3))
+>(someFakeClass) : Symbol(someFakeClass, Decl(b.js, 40, 3))
 >someFakeClass : Symbol(someFakeClass, Decl(b.js, 40, 3))
 
 // Type assertion cannot be a type-predicate type

@@ -30,6 +30,8 @@ function f2() {
 >x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
 
         return class {
+>class {            bar() { return x.length; }  // ok        } : Symbol((Anonymous class), Decl(narrowedConstInMethod.ts, 13, 14))
+
             bar() { return x.length; }  // ok
 >bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 13, 22))
 >x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))

@@ -6,5 +6,6 @@ function* foo() {
 >foo : Symbol(foo, Decl(YieldExpression8_es6.ts, 0, 11))
 
   yield(foo);
+>(foo) : Symbol(foo, Decl(YieldExpression8_es6.ts, 0, 11))
 >foo : Symbol(foo, Decl(YieldExpression8_es6.ts, 0, 11))
 }

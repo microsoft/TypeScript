@@ -17,6 +17,7 @@ F1.staticProp = 0;
 
 export var C2 = class { };
 >C2 : Symbol(C2, Decl(a.js, 6, 10), Decl(a.js, 6, 26))
+>class { } : Symbol(C2, Decl(a.js, 6, 15))
 
 C2.staticProp = 0;
 >C2.staticProp : Symbol(C2.staticProp, Decl(a.js, 6, 26))
@@ -50,6 +51,7 @@ F3.staticProp = 0;
 
 var C4 = class { };
 >C4 : Symbol(C4, Decl(global.js, 6, 3), Decl(global.js, 6, 19))
+>class { } : Symbol(C4, Decl(global.js, 6, 8))
 
 C4.staticProp = 0;
 >C4.staticProp : Symbol(C4.staticProp, Decl(global.js, 6, 19))

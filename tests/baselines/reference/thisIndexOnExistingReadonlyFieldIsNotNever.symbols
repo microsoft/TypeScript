@@ -41,6 +41,7 @@ class CoachMarkAnchorDecorator {
 >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
 
         return class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {
+>class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {            private _onAnchorRef = (anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            }        } : Symbol(CoachMarkAnchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 14))
 >CoachMarkAnchor : Symbol(CoachMarkAnchor, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 14))
 >Component : Symbol(Component, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 0))
 >CoachMarkAnchorProps : Symbol(CoachMarkAnchorProps, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 3, 1))

@@ -9,6 +9,7 @@ const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private 
 >Constructor : Symbol(Constructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 0, 0))
 >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
 >C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 16))
+>class extends Base { private _fooPrivate: {}; } : Symbol((Anonymous class), Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 50))
 >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
 >_fooPrivate : Symbol((Anonymous class)._fooPrivate, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 71))
 
@@ -26,6 +27,7 @@ const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
 >FooConstructor : Symbol(FooConstructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 98))
 >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 42))
 >C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 16))
+>class extends Base {} : Symbol((Anonymous class), Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 53))
 >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 5, 42))
 
 class C extends Mixin2(Mixin1(Object)) {}

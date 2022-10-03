@@ -9,6 +9,7 @@ export namespace TypeGuards {
 >index : Symbol(index, Decl(typeGuardOnContainerTypeNoHang.ts, 1, 54))
 
         return typeof(value) === 'object'
+>(value) : Symbol(value, Decl(typeGuardOnContainerTypeNoHang.ts, 1, 29))
 >value : Symbol(value, Decl(typeGuardOnContainerTypeNoHang.ts, 1, 29))
     }
 

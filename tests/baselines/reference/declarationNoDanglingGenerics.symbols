@@ -31,6 +31,8 @@ function ClassFactory<TKind extends string>(kind: TKind) {
 >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
 
   return class {
+>class {    static readonly THE_KIND: TKind = kind;    readonly kind: TKind = kind;  } : Symbol((Anonymous class), Decl(declarationNoDanglingGenerics.ts, 12, 8))
+
     static readonly THE_KIND: TKind = kind;
 >THE_KIND : Symbol((Anonymous class).THE_KIND, Decl(declarationNoDanglingGenerics.ts, 12, 16))
 >TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))

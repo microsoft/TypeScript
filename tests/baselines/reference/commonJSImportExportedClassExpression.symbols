@@ -20,6 +20,7 @@ exports.K = class K {
 >exports.K : Symbol(K, Decl(mod1.js, 0, 0))
 >exports : Symbol(K, Decl(mod1.js, 0, 0))
 >K : Symbol(K, Decl(mod1.js, 0, 0))
+>class K {    values() {    }} : Symbol(K, Decl(mod1.js, 0, 11))
 >K : Symbol(K, Decl(mod1.js, 0, 11))
 
     values() {

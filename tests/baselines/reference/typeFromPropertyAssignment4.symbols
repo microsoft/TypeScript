@@ -7,6 +7,7 @@ Outer.Inner = class {
 >Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 0))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(a.js, 0, 0))
 >Inner : Symbol(Outer.Inner, Decl(a.js, 0, 0))
+>class {    constructor() {        /** @type {number} */        this.y = 12    }} : Symbol(Inner, Decl(a.js, 0, 13))
 
     constructor() {
         /** @type {number} */

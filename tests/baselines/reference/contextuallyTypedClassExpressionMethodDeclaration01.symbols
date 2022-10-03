@@ -32,6 +32,8 @@ function getFoo1(): Foo {
 >Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
 
     return class {
+>class {        static method1(arg) {            arg.numProp = 10;        }        static method2(arg) {            arg.strProp = "hello";        }    } : Symbol((Anonymous class), Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 14, 10))
+
         static method1(arg) {
 >method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 14, 18))
 >arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 15, 23))
@@ -54,6 +56,8 @@ function getFoo2(): Foo {
 >Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
 
     return class {
+>class {        static method1 = (arg) => {            arg.numProp = 10;        }        static method2 = (arg) => {            arg.strProp = "hello";        }    } : Symbol((Anonymous class), Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 25, 10))
+
         static method1 = (arg) => {
 >method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 25, 18))
 >arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 26, 26))
@@ -80,6 +84,8 @@ function getFoo3(): Foo {
 >Foo : Symbol(Foo, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 6, 1))
 
     return class {
+>class {        static method1 = function (arg) {            arg.numProp = 10;        }        static method2 = function (arg) {            arg.strProp = "hello";        }    } : Symbol((Anonymous class), Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 36, 10))
+
         static method1 = function (arg) {
 >method1 : Symbol((Anonymous class).method1, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 36, 18))
 >arg : Symbol(arg, Decl(contextuallyTypedClassExpressionMethodDeclaration01.ts, 37, 35))

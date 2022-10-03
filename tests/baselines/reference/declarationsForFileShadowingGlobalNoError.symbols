@@ -24,6 +24,7 @@ export const mixin = (Base: Constructor) => {
 >Constructor : Symbol(Constructor, Decl(index.ts, 1, 31))
 
   return class extends Base {
+>class extends Base {    get(domNode: DOMNode) {}  } : Symbol((Anonymous class), Decl(index.ts, 6, 8))
 >Base : Symbol(Base, Decl(index.ts, 5, 22))
 
     get(domNode: DOMNode) {}

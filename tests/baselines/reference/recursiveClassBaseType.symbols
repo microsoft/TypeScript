@@ -34,6 +34,7 @@ abstract class Base1 {
 
 class Derived1 extends class extends Base1 {
 >Derived1 : Symbol(Derived1, Decl(recursiveClassBaseType.ts, 12, 1))
+>class extends Base1 {    root() {        return undefined as any;    }} : Symbol((Anonymous class), Decl(recursiveClassBaseType.ts, 14, 22))
 >Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
 
     root() {

@@ -102,6 +102,7 @@ module Editor {
 
             for (i = 0; !(entry.isHead); i++) {
 >i : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
+>(entry.isHead) : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 >entry.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
 >isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
@@ -115,6 +116,7 @@ module Editor {
             }
 
             return (i);
+>(i) : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
 >i : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
         }
 

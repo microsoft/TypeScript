@@ -14,6 +14,7 @@ export class C {
 
     static Cls = class {}
 >Cls : Symbol(C.Cls, Decl(index.js, 6, 16))
+>class {} : Symbol((Anonymous class), Decl(index.js, 7, 16))
 }
 
 export class D {

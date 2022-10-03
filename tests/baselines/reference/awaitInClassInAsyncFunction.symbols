@@ -11,6 +11,8 @@ async function foo() {
 >foo : Symbol(foo, Decl(awaitInClassInAsyncFunction.ts, 4, 1))
 
     return new class {
+>class {        baz = await bar();    } : Symbol((Anonymous class), Decl(awaitInClassInAsyncFunction.ts, 7, 14))
+
         baz = await bar();
 >baz : Symbol((Anonymous class).baz, Decl(awaitInClassInAsyncFunction.ts, 7, 22))
 >bar : Symbol(bar, Decl(awaitInClassInAsyncFunction.ts, 0, 0))

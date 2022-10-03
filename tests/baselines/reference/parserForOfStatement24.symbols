@@ -3,5 +3,6 @@ var async;
 >async : Symbol(async, Decl(parserForOfStatement24.ts, 0, 3))
 
 for ((async) of [1, 2]);
+>(async) : Symbol(async, Decl(parserForOfStatement24.ts, 0, 3))
 >async : Symbol(async, Decl(parserForOfStatement24.ts, 0, 3))
 

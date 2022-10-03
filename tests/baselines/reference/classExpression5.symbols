@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/classExpressions/classExpression5.ts ===
 new class {
 >new class {    hi() {        return "Hi!";    }}().hi : Symbol((Anonymous class).hi, Decl(classExpression5.ts, 0, 11))
+>class {    hi() {        return "Hi!";    }} : Symbol((Anonymous class), Decl(classExpression5.ts, 0, 3))
 
     hi() {
 >hi : Symbol((Anonymous class).hi, Decl(classExpression5.ts, 0, 11))

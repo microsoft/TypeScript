@@ -27,6 +27,7 @@ module.exports = class Obj {
 >module.exports : Symbol(module.exports, Decl(obj.js, 0, 0))
 >module : Symbol(export=, Decl(obj.js, 0, 0))
 >exports : Symbol(export=, Decl(obj.js, 0, 0))
+>class Obj {    constructor() {        this.x = 12;    }} : Symbol(Obj, Decl(obj.js, 0, 16))
 >Obj : Symbol(Obj, Decl(obj.js, 0, 16))
 
     constructor() {

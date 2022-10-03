@@ -25,6 +25,7 @@ A.bar = class Q {}
 >A.bar : Symbol(A.bar, Decl(namespacey.js, 0, 12))
 >A : Symbol(A, Decl(namespacey.js, 0, 5), Decl(namespacey.js, 0, 12))
 >bar : Symbol(A.bar, Decl(namespacey.js, 0, 12))
+>class Q {} : Symbol(Q, Decl(namespacey.js, 1, 7))
 >Q : Symbol(Q, Decl(namespacey.js, 1, 7))
 
 module.exports = A;

@@ -5,6 +5,8 @@ const Foo: C1 & C2 =
 >C2 : Symbol(C2, Decl(override20.ts, 17, 1))
 
     class {
+>class {        m1() { }        m2() { }    } : Symbol(Foo, Decl(override20.ts, 0, 20))
+
         m1() { }
 >m1 : Symbol(Foo.m1, Decl(override20.ts, 1, 11))
 

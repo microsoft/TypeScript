@@ -33,6 +33,7 @@ export function baz2(func = function () { return foo }) {
 export function baz3(func = class { x = foo }) {
 >baz3 : Symbol(baz3, Decl(functionLikeInParameterInitializer.ts, 12, 1))
 >func : Symbol(func, Decl(functionLikeInParameterInitializer.ts, 15, 21))
+>class { x = foo } : Symbol((Anonymous class), Decl(functionLikeInParameterInitializer.ts, 15, 27))
 >x : Symbol((Anonymous class).x, Decl(functionLikeInParameterInitializer.ts, 15, 35))
 >foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 16, 7))
 

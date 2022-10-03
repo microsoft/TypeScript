@@ -27,6 +27,7 @@ Emu.D = class {
 >Emu.D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
 >Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
 >D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>class {    constructor() {        this._model = 1    }} : Symbol(D, Decl(bug26877.js, 6, 7))
 
     constructor() {
         this._model = 1

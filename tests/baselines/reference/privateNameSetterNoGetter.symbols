@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts ===
 const C = class {
 >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
+>class {    set #x(x) {}    m() {        this.#x += 2; // Error    }} : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 9))
 
     set #x(x) {}
 >#x : Symbol(C.#x, Decl(privateNameSetterNoGetter.ts, 0, 17))

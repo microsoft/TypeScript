@@ -36,17 +36,25 @@ if (NaN != x) {}
 
 if (x === ((NaN))) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
+>((NaN)) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>(NaN) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
 if (((NaN)) === x) {}
+>((NaN)) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>(NaN) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x !== ((NaN))) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
+>((NaN)) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>(NaN) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
 if (((NaN)) !== x) {}
+>((NaN)) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>(NaN) : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 

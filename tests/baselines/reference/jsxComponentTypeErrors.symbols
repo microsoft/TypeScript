@@ -80,6 +80,7 @@ const obj = {
   },
   MemberClassComponent: class {},
 >MemberClassComponent : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 32, 4))
+>class {} : Symbol(MemberClassComponent, Decl(jsxComponentTypeErrors.tsx, 33, 23))
 
 };
 

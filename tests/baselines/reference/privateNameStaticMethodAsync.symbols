@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAsync.ts ===
 const C = class {
 >C : Symbol(C, Decl(privateNameStaticMethodAsync.ts, 0, 5))
+>class {    static async #bar() { return await Promise.resolve(42); }    static async foo() {        const b = await this.#bar();        return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);    }    static *#baz() { yield 42; }    static async *#qux() {        yield (await Promise.resolve(42));    }    async static *#bazBad() { yield 42; }} : Symbol(C, Decl(privateNameStaticMethodAsync.ts, 0, 9))
 
     static async #bar() { return await Promise.resolve(42); }
 >#bar : Symbol(C.#bar, Decl(privateNameStaticMethodAsync.ts, 0, 17))

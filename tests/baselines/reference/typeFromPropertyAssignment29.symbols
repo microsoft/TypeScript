@@ -240,6 +240,7 @@ var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
 // Class expressions shouldn't work in typescript either
 var ExpandoExpr3 = class {
 >ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 76, 3))
+>class {    n = 10001;} : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 76, 18))
 
     n = 10001;
 >n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 76, 26))

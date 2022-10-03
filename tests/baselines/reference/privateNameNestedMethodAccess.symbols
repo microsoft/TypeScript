@@ -17,6 +17,7 @@ class C {
 >m : Symbol(C.m, Decl(privateNameNestedMethodAccess.ts, 3, 29))
 
         return class D {
+>class D {            #bar() {}            constructor() {                new C().#foo;                new C().#bar; // Error                new C().#baz;                new D().#bar;            }            n(x: any) {                x.#foo;                x.#bar;                x.#unknown; // Error            }        } : Symbol(D, Decl(privateNameNestedMethodAccess.ts, 6, 14))
 >D : Symbol(D, Decl(privateNameNestedMethodAccess.ts, 6, 14))
 
             #bar() {}

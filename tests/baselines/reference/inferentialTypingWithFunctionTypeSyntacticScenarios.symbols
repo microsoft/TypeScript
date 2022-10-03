@@ -84,6 +84,7 @@ s = map("", <typeof identity>identity);
 s = map("", (identity));
 >s : Symbol(s, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 2, 3))
 >map : Symbol(map, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 0))
+>(identity) : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
 >identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeSyntacticScenarios.ts, 0, 59))
 
 // comma

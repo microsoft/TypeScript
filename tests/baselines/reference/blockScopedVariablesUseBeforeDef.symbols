@@ -51,6 +51,7 @@ function foo4() {
 
     let y = class {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 7))
+>class {        m() { return x; }    } : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 11))
 
         m() { return x; }
 >m : Symbol(y.m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
@@ -105,6 +106,7 @@ function foo8() {
 
     let y = class {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 7))
+>class {        a = x;    } : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 11))
 
         a = x;
 >a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
@@ -119,6 +121,7 @@ function foo9() {
 
     let y = class {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 7))
+>class {        static a = x;    } : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 11))
 
         static a = x;
 >a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
@@ -150,6 +153,7 @@ function foo11() {
 
         let y = class {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 11))
+>class {            static a = x;        } : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 15))
 
             static a = x;
 >a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
@@ -168,6 +172,7 @@ function foo12() {
 
         let y = class {
 >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 11))
+>class {            a;            constructor() {                this.a = x;            }        } : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 15))
 
             a;
 >a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))

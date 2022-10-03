@@ -34,6 +34,7 @@ export const Serializable = <K extends Constructor<Initable> & Initable>(
 >K : Symbol(K, Decl(mixinIntersectionIsValidbaseType.ts, 9, 29))
 
         return class SerializableLocal extends InnerSuperClass {
+>class SerializableLocal extends InnerSuperClass {        } : Symbol(SerializableLocal, Decl(mixinIntersectionIsValidbaseType.ts, 13, 14))
 >SerializableLocal : Symbol(SerializableLocal, Decl(mixinIntersectionIsValidbaseType.ts, 13, 14))
 >InnerSuperClass : Symbol(InnerSuperClass, Decl(mixinIntersectionIsValidbaseType.ts, 12, 24))
         }
@@ -59,6 +60,7 @@ const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
 
     let SomeHowOkay = class A extends SuperClass {
 >SomeHowOkay : Symbol(SomeHowOkay, Decl(mixinIntersectionIsValidbaseType.ts, 21, 7))
+>class A extends SuperClass {    } : Symbol(A, Decl(mixinIntersectionIsValidbaseType.ts, 21, 21))
 >A : Symbol(A, Decl(mixinIntersectionIsValidbaseType.ts, 21, 21))
 >SuperClass : Symbol(SuperClass, Decl(mixinIntersectionIsValidbaseType.ts, 20, 60))
 
@@ -66,6 +68,7 @@ const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
 
     let SomeHowNotOkay = class A extends Serializable(SuperClass) {
 >SomeHowNotOkay : Symbol(SomeHowNotOkay, Decl(mixinIntersectionIsValidbaseType.ts, 24, 7))
+>class A extends Serializable(SuperClass) {    } : Symbol(A, Decl(mixinIntersectionIsValidbaseType.ts, 24, 24))
 >A : Symbol(A, Decl(mixinIntersectionIsValidbaseType.ts, 24, 24))
 >Serializable : Symbol(Serializable, Decl(mixinIntersectionIsValidbaseType.ts, 9, 12))
 >SuperClass : Symbol(SuperClass, Decl(mixinIntersectionIsValidbaseType.ts, 20, 60))

@@ -21,6 +21,7 @@ class D extends C {
 
     static classExprBoundary = class { a = super.f + 3 };
 >classExprBoundary : Symbol(D.classExprBoundary, Decl(typeOfThisInStaticMembers9.ts, 6, 69))
+>class { a = super.f + 3 } : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers9.ts, 7, 30))
 >a : Symbol((Anonymous class).a, Decl(typeOfThisInStaticMembers9.ts, 7, 38))
 
     static functionAndClassDeclBoundary = (() => {

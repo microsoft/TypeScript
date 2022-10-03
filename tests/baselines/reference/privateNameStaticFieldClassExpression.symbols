@@ -4,6 +4,7 @@ class B {
 
     static #foo = class {
 >#foo : Symbol(B.#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
+>class {        constructor() {            console.log("hello");            new B.#foo2();        }        static test = 123;        field = 10;    } : Symbol((Anonymous class), Decl(privateNameStaticFieldClassExpression.ts, 1, 17))
 
         constructor() {
             console.log("hello");
@@ -24,6 +25,7 @@ class B {
     };
     static #foo2 = class Foo {
 >#foo2 : Symbol(B.#foo2, Decl(privateNameStaticFieldClassExpression.ts, 8, 6))
+>class Foo {        static otherClass = 123;    } : Symbol(Foo, Decl(privateNameStaticFieldClassExpression.ts, 9, 18))
 >Foo : Symbol(Foo, Decl(privateNameStaticFieldClassExpression.ts, 9, 18))
 
         static otherClass = 123;

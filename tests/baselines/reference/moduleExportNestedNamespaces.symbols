@@ -27,6 +27,7 @@ module.exports.Classic = class {
 >module : Symbol(module, Decl(mod.js, 0, 0))
 >exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+>class {    constructor() {        this.p = 1    }} : Symbol(Classic, Decl(mod.js, 4, 24))
 
     constructor() {
         this.p = 1

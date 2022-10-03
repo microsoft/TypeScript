@@ -43,6 +43,7 @@ class C {
 
 var E = class {
 >E : Symbol(E, Decl(unusedLocalsAndParameters.ts, 26, 3))
+>class {    // Method declaration paramter    method(a) {    }    // Accessor declaration paramter    set x(v: number) {    }} : Symbol(E, Decl(unusedLocalsAndParameters.ts, 26, 7))
 
     // Method declaration paramter
     method(a) {
@@ -137,6 +138,7 @@ for (let x: y) {
 
     z(x);
 >z : Symbol(z, Decl(unusedLocalsAndParameters.ts, 82, 16))
+>(x) : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
 >x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
 }
 

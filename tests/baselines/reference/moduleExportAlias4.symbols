@@ -9,6 +9,7 @@ module.exports = class C {}
 >module.exports : Symbol(module.exports, Decl(bug24024.js, 0, 0))
 >module : Symbol(export=, Decl(bug24024.js, 1, 31))
 >exports : Symbol(export=, Decl(bug24024.js, 1, 31))
+>class C {} : Symbol(wat, Decl(bug24024.js, 2, 16))
 >C : Symbol(wat, Decl(bug24024.js, 2, 16))
 
 module.exports.D = class D { }
@@ -17,5 +18,6 @@ module.exports.D = class D { }
 >module : Symbol(module, Decl(bug24024.js, 1, 31))
 >exports : Symbol(module.exports, Decl(bug24024.js, 0, 0))
 >D : Symbol(wat.D, Decl(bug24024.js, 2, 27))
+>class D { } : Symbol(wat.D, Decl(bug24024.js, 3, 18))
 >D : Symbol(wat.D, Decl(bug24024.js, 3, 18))
 

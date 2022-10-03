@@ -4,6 +4,7 @@ export function wrapClass(param: any) {
 >param : Symbol(param, Decl(wrapClass.ts, 0, 26))
 
     return class Wrapped {
+>class Wrapped {        foo() {            return param;        }    } : Symbol(Wrapped, Decl(wrapClass.ts, 1, 10))
 >Wrapped : Symbol(Wrapped, Decl(wrapClass.ts, 1, 10))
 
         foo() {
@@ -29,6 +30,7 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 >TBase : Symbol(TBase, Decl(wrapClass.ts, 10, 28))
 
     return class extends Base {
+>class extends Base {        timestamp = Date.now();    } : Symbol((Anonymous class), Decl(wrapClass.ts, 11, 10))
 >Base : Symbol(Base, Decl(wrapClass.ts, 10, 55))
 
         timestamp = Date.now();

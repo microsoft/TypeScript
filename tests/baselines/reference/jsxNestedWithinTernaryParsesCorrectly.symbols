@@ -7,6 +7,8 @@ const a = (
 
     <div>
       {0 ? (
+>(        emptyMessage // must be identifier?      ) : Symbol(emptyMessage, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 0, 5))
+
         emptyMessage // must be identifier?
 >emptyMessage : Symbol(emptyMessage, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 0, 5))
 

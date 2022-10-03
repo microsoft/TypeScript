@@ -4050,6 +4050,7 @@ module Harness {
 >uName : Symbol(uName, Decl(parserharness.ts, 1354, 15))
 >context : Symbol(context, Decl(parserharness.ts, 1343, 120))
 >unitName : Symbol(unitName, Decl(parserharness.ts, 1343, 51))
+>(isDeclareFile) : Symbol(isDeclareFile, Decl(parserharness.ts, 1352, 15))
 >isDeclareFile : Symbol(isDeclareFile, Decl(parserharness.ts, 1352, 15))
 
             scripts.push(addUnit(code, uName, false, isDeclareFile, references));

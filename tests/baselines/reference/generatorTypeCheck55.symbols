@@ -4,5 +4,6 @@ function* g() {
 
     var x = class C extends (yield) {};
 >x : Symbol(x, Decl(generatorTypeCheck55.ts, 1, 7))
+>class C extends (yield) {} : Symbol(C, Decl(generatorTypeCheck55.ts, 1, 11))
 >C : Symbol(C, Decl(generatorTypeCheck55.ts, 1, 11))
 }

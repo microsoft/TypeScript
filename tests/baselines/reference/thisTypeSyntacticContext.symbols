@@ -45,6 +45,7 @@ o.test!!!();
 >test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
 
 (o.test)();
+>(o.test) : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
 >o.test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))
 >o : Symbol(o, Decl(thisTypeSyntacticContext.ts, 3, 5))
 >test : Symbol(test, Decl(thisTypeSyntacticContext.ts, 3, 21))

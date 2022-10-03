@@ -4,6 +4,7 @@ function foo(
 
     y = class {
 >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 0, 13))
+>class {        static c = x;        get [x]() {return x;}        constructor() { x; }        [z]() { return z; }    } : Symbol((Anonymous class), Decl(capturedParametersInInitializers2.ts, 1, 7))
 
         static c = x;
 >c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 1, 15))
@@ -38,6 +39,7 @@ function foo(
 function foo2(y = class {[x] = x}, x = 1) {
 >foo2 : Symbol(foo2, Decl(capturedParametersInInitializers2.ts, 11, 1))
 >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 12, 14))
+>class {[x] = x} : Symbol((Anonymous class), Decl(capturedParametersInInitializers2.ts, 12, 17))
 >[x] : Symbol((Anonymous class)[x], Decl(capturedParametersInInitializers2.ts, 12, 25))
 >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 12, 34))
 >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 12, 34))

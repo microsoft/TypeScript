@@ -1,4 +1,5 @@
 === tests/cases/compiler/classexpr.ts ===
 export default (class Foo {} as any);
+>class Foo {} : Symbol(Foo, Decl(classexpr.ts, 0, 16))
 >Foo : Symbol(Foo, Decl(classexpr.ts, 0, 16))
 

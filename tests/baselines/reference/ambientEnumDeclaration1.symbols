@@ -16,6 +16,7 @@ declare enum E {
 
     d = (c) + 1,
 >d : Symbol(E.d, Decl(ambientEnumDeclaration1.ts, 5, 10))
+>(c) : Symbol(E.c, Decl(ambientEnumDeclaration1.ts, 4, 15))
 >c : Symbol(E.c, Decl(ambientEnumDeclaration1.ts, 4, 15))
 
     e = 10 << 2 * 8,

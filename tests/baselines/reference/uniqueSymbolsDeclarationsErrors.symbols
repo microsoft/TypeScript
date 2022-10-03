@@ -34,6 +34,7 @@ export const obj = {
 
 export const classExpression = class {
 >classExpression : Symbol(classExpression, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 12))
+>class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : Symbol(classExpression, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 30))
 
     method1(p: typeof s): typeof s {
 >method1 : Symbol(classExpression.method1, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 38))

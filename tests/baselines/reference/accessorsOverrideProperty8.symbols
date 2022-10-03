@@ -60,6 +60,7 @@ const Base = classWithProperties({
 >y : Symbol(y, Decl(accessorsOverrideProperty8.ts, 14, 42))
 
 }, class Base {
+>class Base {} : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 16, 2))
 >Base : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 16, 2))
 
 });

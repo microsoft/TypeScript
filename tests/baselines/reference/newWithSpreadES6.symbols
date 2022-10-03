@@ -137,17 +137,20 @@ new b.f(1, 2, ...a, "string");
 
 // Parenthesised expression
 new (b.f)(1, 2, "string");
+>(b.f) : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b.f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b : Symbol(b, Decl(newWithSpreadES6.ts, 25, 3))
 >f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 
 new (b.f)(1, 2, ...a);
+>(b.f) : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b.f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b : Symbol(b, Decl(newWithSpreadES6.ts, 25, 3))
 >f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 24, 3))
 
 new (b.f)(1, 2, ...a, "string"); 
+>(b.f) : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b.f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))
 >b : Symbol(b, Decl(newWithSpreadES6.ts, 25, 3))
 >f : Symbol(A.f, Decl(newWithSpreadES6.ts, 6, 13))

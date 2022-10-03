@@ -43099,6 +43099,8 @@ namespace ts {
                 case SyntaxKind.EqualsGreaterThanToken:
                 case SyntaxKind.ClassKeyword:
                     return getSymbolOfNode(node.parent);
+                case SyntaxKind.ClassExpression:
+                    return node.symbol;
                 case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal, ignoreErrors) : undefined;
 
@@ -43110,6 +43112,8 @@ namespace ts {
                     return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
                 case SyntaxKind.MetaProperty:
                     return checkExpression(node as Expression).symbol;
+                case SyntaxKind.ParenthesizedExpression:
+                    return getSymbolAtLocation((node as ParenthesizedExpression).expression, ignoreErrors);
 
                 default:
                     return undefined;

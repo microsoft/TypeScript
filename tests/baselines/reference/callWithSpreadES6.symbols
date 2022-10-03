@@ -59,17 +59,20 @@ obj.foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
 
 (obj.foo)(1, 2, "abc");
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 
 (obj.foo)(1, 2, ...a);
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
 
 (obj.foo)(1, 2, ...a, "abc");
+>(obj.foo) : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))

@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts ===
 const C = class D {
 >C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
+>class D {    static #field = D.#method();    static #method() { return 42; }    static getClass() { return D; }    static getField() { return C.#field };} : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))
 >D : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))
 
     static #field = D.#method();

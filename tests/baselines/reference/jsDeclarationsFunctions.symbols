@@ -17,6 +17,7 @@ c.Cls = class {}
 >c.Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
 >c : Symbol(c, Decl(index.js, 3, 14), Decl(index.js, 5, 22))
 >Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
+>class {} : Symbol(Cls, Decl(index.js, 6, 7))
 
 /**
  * @param {number} a

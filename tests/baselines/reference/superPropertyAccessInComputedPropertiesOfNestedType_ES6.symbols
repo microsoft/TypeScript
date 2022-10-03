@@ -17,6 +17,8 @@ class B extends A {
 >bar : Symbol(B.bar, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 5, 23))
 
         return class {
+>class {            [super.foo()]() {                return 100;            }        } : Symbol((Anonymous class), Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 7, 14))
+
             [super.foo()]() {
 >[super.foo()] : Symbol((Anonymous class)[super.foo()], Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 7, 22))
 >super.foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))

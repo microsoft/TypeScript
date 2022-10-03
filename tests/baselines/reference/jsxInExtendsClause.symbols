@@ -28,6 +28,7 @@ declare function createComponentClass<P>(factory: () => React.ComponentClass<P>)
 class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
 >Foo : Symbol(Foo, Decl(jsxInExtendsClause.tsx, 5, 106))
 >createComponentClass : Symbol(createComponentClass, Decl(jsxInExtendsClause.tsx, 4, 1))
+>class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : Symbol((Anonymous class), Decl(jsxInExtendsClause.tsx, 6, 44))
 >React.Component : Symbol(React.Component, Decl(jsxInExtendsClause.tsx, 2, 59))
 >React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
 >Component : Symbol(React.Component, Decl(jsxInExtendsClause.tsx, 2, 59))

@@ -3,6 +3,7 @@ function A() {
 >A : Symbol(A, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 0, 0))
 
   return class T {
+>class T {     a = arguments  } : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 1, 8))
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 1, 8))
 
      a = arguments
@@ -15,6 +16,7 @@ function A1() {
 >A1 : Symbol(A1, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 4, 1))
 
   return new class T {
+>class T {     a = arguments  } : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 7, 12))
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 7, 12))
 
      a = arguments
@@ -27,6 +29,7 @@ function B() {
 >B : Symbol(B, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 10, 1))
 
   return class T {
+>class T {     a = { b: arguments }  } : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 13, 8))
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 13, 8))
 
      a = { b: arguments }
@@ -40,6 +43,7 @@ function B1() {
 >B1 : Symbol(B1, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 16, 1))
 
   return new class T {
+>class T {     a = { b: arguments }  } : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 19, 12))
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 19, 12))
 
      a = { b: arguments }
@@ -53,6 +57,7 @@ function C() {
 >C : Symbol(C, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 22, 1))
 
   return class T {
+>class T {     a = function () { arguments }  } : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 25, 8))
 >T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 25, 8))
 
      a = function () { arguments }
