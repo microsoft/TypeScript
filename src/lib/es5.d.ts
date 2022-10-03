@@ -911,6 +911,7 @@ interface DateConstructor {
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
     UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    /** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). */
     now(): number;
 }
 
