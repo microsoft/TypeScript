@@ -7237,16 +7237,6 @@ namespace ts {
                     return statements;
                 }
 
-                function canHaveExportModifier(node: Statement): node is Extract<HasModifiers, Statement> {
-                    return isEnumDeclaration(node) ||
-                            isVariableStatement(node) ||
-                            isFunctionDeclaration(node) ||
-                            isClassDeclaration(node) ||
-                            (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node)) ||
-                            isInterfaceDeclaration(node) ||
-                            isTypeDeclaration(node);
-                }
-
                 function addExportModifier(node: Extract<HasModifiers, Statement>) {
                     const flags = (getEffectiveModifierFlags(node) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
                     return factory.updateModifiers(node, flags);
@@ -42663,27 +42653,6 @@ namespace ts {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
                 getNameOfDeclaration(name.parent) === name;
-        }
-
-        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
-            switch (node.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocEnumTag:
-                    return true;
-                case SyntaxKind.ImportClause:
-                    return (node as ImportClause).isTypeOnly;
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.ExportSpecifier:
-                    return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
-                default:
-                    return false;
-            }
         }
 
         // True if the given identifier is part of a type reference
