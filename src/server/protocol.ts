@@ -681,9 +681,17 @@ namespace ts.server.protocol {
 
     export type OrganizeImportsScope = GetCombinedCodeFixScope;
 
+    export const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused",
+    }
+
     export interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
 
     export interface OrganizeImportsResponse extends Response {

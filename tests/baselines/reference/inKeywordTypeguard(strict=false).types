@@ -446,9 +446,9 @@ function negativeIntersectionTest() {
 
     } else {
         window.ontouchstart
->window.ontouchstart : any
->window : never
->ontouchstart : any
+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+>window : Window & typeof globalThis
+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
     }
 }
 
@@ -887,6 +887,133 @@ function f9(x: object) {
     }
 }
 
+function f10(x: { a: unknown }) {
+>f10 : (x: {    a: unknown;}) => void
+>x : { a: unknown; }
+>a : unknown
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: unknown; }
+
+        x;
+>x : { a: unknown; }
+    }
+    else {
+        x;
+>x : never
+    }
+}
+
+function f11(x: { a: any }) {
+>f11 : (x: {    a: any;}) => void
+>x : { a: any; }
+>a : any
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: any; }
+
+        x;
+>x : { a: any; }
+    }
+    else {
+        x;
+>x : never
+    }
+}
+
+function f12(x: { a: string }) {
+>f12 : (x: {    a: string;}) => void
+>x : { a: string; }
+>a : string
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: string; }
+
+        x;
+>x : { a: string; }
+    }
+    else {
+        x;
+>x : never
+    }
+}
+
+function f13(x: { a?: string }) {
+>f13 : (x: {    a?: string;}) => void
+>x : { a?: string; }
+>a : string
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a?: string; }
+
+        x;
+>x : { a?: string; }
+    }
+    else {
+        x;
+>x : { a?: string; }
+    }
+}
+
+function f14(x: { a: string | undefined }) {
+>f14 : (x: {    a: string | undefined;}) => void
+>x : { a: string | undefined; }
+>a : string
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a: string; }
+
+        x;
+>x : { a: string; }
+    }
+    else {
+        x;
+>x : never
+    }
+}
+
+function f15(x: { a?: string | undefined }) {
+>f15 : (x: {    a?: string | undefined;}) => void
+>x : { a?: string | undefined; }
+>a : string
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : { a?: string; }
+
+        x;
+>x : { a?: string; }
+    }
+    else {
+        x;
+>x : { a?: string; }
+    }
+}
+
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+>f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
+>x : typeof globalThis
+>globalThis : typeof globalThis
+>y : Window & typeof globalThis
+>globalThis : typeof globalThis
+
+    x = y;
+>x = y : Window & typeof globalThis
+>x : typeof globalThis
+>y : Window & typeof globalThis
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
@@ -911,4 +1038,21 @@ function foo<A>(value: A) {
 >value : A & object & Record<"prop", unknown>
     }
 }
+
+// Repro from #50954
+
+const checkIsTouchDevice = () =>
+>checkIsTouchDevice : () => boolean
+>() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
+
+    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+>"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
+>"ontouchstart" in window : boolean
+>"ontouchstart" : "ontouchstart"
+>window : Window & typeof globalThis
+>"msMaxTouchPoints" in window.navigator : boolean
+>"msMaxTouchPoints" : "msMaxTouchPoints"
+>window.navigator : Navigator
+>window : Window & typeof globalThis
+>navigator : Navigator
 

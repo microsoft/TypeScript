@@ -1,4 +1,21 @@
-// @target: es5,es2015
+// @target: es5,es2015,esnext
+// @sourcemap: true
+
+// @filename: identifierVariableWithEscape1.ts
+export let \u0078 = 10;
+x++;
+
+// @filename: identifierVariableWithEscape2.ts
+export let x\u0078 = 10;
+xx++;
+
+// @filename: identifierVariableWithExtendedEscape1.ts
+export let \u{78} = 10;
+x++;
+
+// @filename: identifierVariableWithExtendedEscape2.ts
+export let x\u{78} = 10;
+xx++;
 
 // @filename: IdentifierNameWithEscape1.ts
 export class IdentifierNameWithEscape1 {
