@@ -2456,11 +2456,21 @@ namespace ts {
                 }
                 else {
                     for (const j of node.jsDoc!) {
-                        setParent(j, node);
-                        setParentRecursive(j, /*incremental*/ false);
+                        setParentsAndBindAnonymousJSDocTypes(j);
                     }
                 }
             }
+        }
+
+        function setParentsAndBindAnonymousJSDocTypes(node: Node) {
+            setParent(node, parent);
+            const saveParent = parent;
+            parent = node;
+            if (node.kind === SyntaxKind.TypeLiteral) {
+                bindWorker(node);
+            }
+            forEachChild(node, setParentsAndBindAnonymousJSDocTypes);
+            parent = saveParent;
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
