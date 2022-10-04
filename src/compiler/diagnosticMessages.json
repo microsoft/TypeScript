@@ -7368,6 +7368,10 @@
         "category": "Message",
         "code": 95175
     },
+    "Cannot extract range.": {
+        "category": "Message",
+        "code": 95176
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
