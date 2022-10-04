@@ -177,8 +177,6 @@ namespace Harness {
     }
 
     export const libFolder = "built/local/";
-    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
-    export const tcServicesFile = IO.readFile(tcServicesFileName) + IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`;
 
     export type SourceMapEmitterCallback = (
         emittedFile: string,
