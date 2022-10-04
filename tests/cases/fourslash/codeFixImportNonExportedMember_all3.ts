@@ -12,7 +12,7 @@
 goTo.file("/b.ts");
 verify.codeFixAll({
     fixId: "fixImportNonExportedMember",
-    fixAllDescription: ts.Diagnostics.Export_all_missing_members.message,
+    fixAllDescription: ts.Diagnostics.Export_all_referenced_locals.message,
     newFileContent: {
         "/a.ts":
 `let a = 1, b = 1;

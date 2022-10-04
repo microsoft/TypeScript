@@ -6691,7 +6691,7 @@
         "category": "Message",
         "code": 90059
     },
-    "Export all missing members": {
+    "Export all referenced locals": {
         "category": "Message",
         "code": 90060
     },

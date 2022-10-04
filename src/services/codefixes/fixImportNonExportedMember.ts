@@ -14,7 +14,7 @@ namespace ts.codefix {
             if (info === undefined) return undefined;
 
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, info));
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier], fixId, Diagnostics.Export_all_missing_members)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier], fixId, Diagnostics.Export_all_referenced_locals)];
         },
         getAllCodeActions(context) {
             const { program } = context;

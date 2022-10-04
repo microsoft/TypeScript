@@ -16,7 +16,7 @@
 goTo.file("/c.ts");
 verify.codeFixAll({
     fixId: "fixImportNonExportedMember",
-    fixAllDescription: ts.Diagnostics.Export_all_missing_members.message,
+    fixAllDescription: ts.Diagnostics.Export_all_referenced_locals.message,
     newFileContent: {
         "/a.ts":
 `export const a = 1;
