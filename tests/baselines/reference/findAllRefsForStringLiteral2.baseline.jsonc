@@ -1,6 +1,6 @@
 // === /a.ts ===
 // /**
-//  * @type {"foo" | "bar"}
+//  * @type {"[|foo|]" | "bar"}
 //  */
 // let x = "[|foo|]"/*FIND ALL REFS*/
 
@@ -24,6 +24,15 @@
       ]
     },
     "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isInString": true
+      },
       {
         "textSpan": {
           "start": 42,
