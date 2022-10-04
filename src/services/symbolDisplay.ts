@@ -311,17 +311,21 @@ namespace ts.SymbolDisplay {
         }
         if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo && !isThisExpression) {
             addAliasPrefixIfNecessary();
-            if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
-                // Special case for class expressions because we would like to indicate that
+            if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) && !alias) {
+                // Special case for named class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
                 //      (local class) class <className>
-                pushSymbolKind(ScriptElementKind.localClassElement);
+                // anonymous class expressions should only print as "(Anonymous class)"
+                if (symbol.name !== InternalSymbolName.Class) {
+                    pushSymbolKind(ScriptElementKind.localClassElement);
+                    displayParts.push(spacePart());
+                }
             }
             else {
                 // Class declaration has name which is not local.
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                displayParts.push(spacePart());
             }
-            displayParts.push(spacePart());
             addFullSymbolName(symbol);
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }

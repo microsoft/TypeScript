@@ -66,7 +66,7 @@
       "containerName": "",
       "fileName": "/b.js",
       "kind": "alias",
-      "name": "(alias) (local class) A\nimport A = require(\"./a\")",
+      "name": "(alias) class A\nimport A = require(\"./a\")",
       "textSpan": {
         "start": 7,
         "length": 1
@@ -89,16 +89,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",
@@ -199,7 +191,7 @@
       "containerName": "",
       "fileName": "/b.js",
       "kind": "alias",
-      "name": "(alias) (local class) A\nimport A = require(\"./a\")",
+      "name": "(alias) class A\nimport A = require(\"./a\")",
       "textSpan": {
         "start": 7,
         "length": 1
@@ -222,16 +214,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",
@@ -386,7 +370,7 @@
       "containerName": "",
       "fileName": "/b.js",
       "kind": "alias",
-      "name": "(alias) (local class) A\nimport A = require(\"./a\")",
+      "name": "(alias) class A\nimport A = require(\"./a\")",
       "textSpan": {
         "start": 7,
         "length": 1
@@ -409,16 +393,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",

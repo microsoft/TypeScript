@@ -19,7 +19,7 @@
 //// let x7: (new() => Foo) = [|class { hello ()    { /**constructorType*/} }|];
 //// let x8: Foo[]          = [|[{ hello ()         { /**arrayType*/} }]|];
 //// let x9: { y: Foo }     = [|{ y: { hello ()     { /**typeLiteral*/} } }|];
-//// let x10 = [ [|{|"parts": ["(","local class",")"," ", "(Anonymous class)"], "kind": "local class"|}class implements Foo { hello() {} }|] ]
+//// let x10 = [ [|{|"parts": ["(Anonymous class)"], "kind": "local class"|}class implements Foo { hello() {} }|] ]
 //// let x11 = class [|{|"parts": ["(","local class",")"," ","C"], "kind": "local class"|}C|] implements Foo { hello() {} }
 ////
 //// // Should not do anything for type predicates

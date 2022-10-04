@@ -15,7 +15,7 @@
       "containerName": "",
       "fileName": "/a.js",
       "kind": "alias",
-      "name": "(alias) (local class) D\nimport D",
+      "name": "(alias) class D\nimport D",
       "textSpan": {
         "start": 44,
         "length": 1
@@ -38,16 +38,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",

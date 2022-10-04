@@ -65,7 +65,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/b.js",
       "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
+      "name": "(alias) class A\nimport A",
       "textSpan": {
         "start": 6,
         "length": 1
@@ -88,16 +88,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",
@@ -157,7 +149,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/b.js",
       "kind": "alias",
-      "name": "(alias) (local class) A\nimport A",
+      "name": "(alias) class A\nimport A",
       "textSpan": {
         "start": 6,
         "length": 1
@@ -180,16 +172,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "local class",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "class",
+          "kind": "keyword"
         },
         {
           "text": " ",
