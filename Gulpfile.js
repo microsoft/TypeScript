@@ -486,21 +486,6 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
 
-const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json");
-const cleanLoggedIO = () => del("built/local/loggedIO.js");
-cleanTasks.push(cleanLoggedIO);
-
-const buildInstrumenter = () => buildProject("src/instrumenter");
-const cleanInstrumenter = () => cleanProject("src/instrumenter");
-cleanTasks.push(cleanInstrumenter);
-
-const tscInstrumented = () => exec(process.execPath, ["built/local/instrumenter.js", "record", cmdLineOptions.tests || "iocapture", "built/local/tsc.js"]);
-task("tsc-instrumented", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildLoggedIO, buildInstrumenter), tscInstrumented));
-task("tsc-instrumented").description = "Builds an instrumented tsc.js";
-task("tsc-instrumented").flags = {
-    "-t --tests=<testname>": "The test to run."
-};
-
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
 //                 path here seems like a bad idea.
 const updateSublime = () => src(["built/local/tsserver.js", "built/local/tsserver.js.map"])
@@ -576,10 +561,6 @@ task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to
 const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
-
-const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
-task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
-task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));
