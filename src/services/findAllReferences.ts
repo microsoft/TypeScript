@@ -2090,6 +2090,9 @@ namespace ts.FindAllReferences {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
                     if (isStringLiteralLike(ref) && ref.text === node.text) {
+                        if (ref.flags & (NodeFlags.JSDoc & ~NodeFlags.JavaScriptFile)) {
+                            return undefined;
+                        }
                         if (type) {
                             const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
                             if (type !== checker.getStringType() && type === refType) {

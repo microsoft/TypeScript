@@ -1,0 +1,38 @@
+// === /a.ts ===
+// /**
+//  * @type {"foo" | "bar"}
+//  */
+// let x = "[|foo|]"/*FIND ALL REFS*/
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "foo",
+      "textSpan": {
+        "start": 42,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "\"foo\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 42,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isInString": true
+      }
+    ]
+  }
+]
