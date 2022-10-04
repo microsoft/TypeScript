@@ -159,18 +159,6 @@ namespace ts {
             {
                 json: { watchOptions: { excludeFiles: ["**/../*"] } },
             },
-            {
-                json: { watchOptions: { watchFactory: "somefactory" } },
-            },
-            {
-                json: { watchOptions: { watchFactory: { name: "somefactory", myconfig: "somethingelse" } } },
-            },
-            {
-                json: { watchOptions: { watchFactory: "somefactory/../malicious" } },
-            },
-            {
-                json: { watchOptions: { watchFactory: { name: "somefactory/../malicious" } } },
-            },
         ]);
 
         verifyWatchOptions("watch options extending passed in watch options", () => [
