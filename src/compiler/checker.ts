@@ -12078,7 +12078,7 @@ namespace ts {
                 if (isGenericIndexType(constraint)) {
                     return true;
                 }
-                // A mapped type is generic if the as clause references other generic types than the iteration type.
+                // A mapped type is generic if the 'as' clause references generic types other than the iteration type.
                 // To determine this, we substitute the constraint type (that we now know isn't generic) for the iteration
                 // type and check whether the resulting type is generic.
                 const nameType = getNameTypeFromMappedType(type as MappedType);
