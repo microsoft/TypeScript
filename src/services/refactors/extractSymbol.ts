@@ -69,7 +69,6 @@ namespace ts.refactor.extractSymbol {
 
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
-            // const description = functionExtraction.description;
             if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
                 const description = functionExtraction.description;
                 if (functionExtraction.errors.length === 0) {

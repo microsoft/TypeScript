@@ -1,4 +1,3 @@
-
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -3483,14 +3482,13 @@ namespace FourSlash {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
             refactors = refactors.filter(r => r.name === name);
 
-            refactors = actionName === undefined ? refactors : refactors.map(r => {
-                                r.actions = r.actions.filter(a => a.name === actionName);
-                                return r;
-                            });
-            refactors = actionDescription === undefined ? refactors : refactors.map(r => {
-                                r.actions = r.actions.filter(a => a.description === actionDescription);
-                                return r;
-                            });
+            if (actionName !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.name === actionName));
+            }
+
+            if (actionDescription !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.description === actionDescription));
+            }
 
             refactors = refactors.filter(r => r.actions.length > 0);
 
