@@ -55,17 +55,17 @@ declare type MyNominal<T, Name extends string> = T & {
 };`,
         };
     }
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash",
-        fs: () => loadProjectFromFiles(getFiles()),
+        fs: () => ts.loadProjectFromFiles(getFiles()),
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"]
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash but uses no references",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             ...getFiles(),
             "/src/solution/tsconfig.json": JSON.stringify({
                 extends: "./tsconfig.base.json",
@@ -76,10 +76,10 @@ declare type MyNominal<T, Name extends string> = T & {
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"]
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file used inferred type from referenced project",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     composite: true,

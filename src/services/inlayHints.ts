@@ -7,82 +7,82 @@ const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
 };
 
-function shouldShowParameterNameHints(preferences: UserPreferences) {
+function shouldShowParameterNameHints(preferences: ts.UserPreferences) {
     return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
 }
 
-function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
+function shouldShowLiteralParameterNameHintsOnly(preferences: ts.UserPreferences) {
     return preferences.includeInlayParameterNameHints === "literals";
 }
 
-export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
+export function provideInlayHints(context: ts.InlayHintsContext): ts.InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
     const compilerOptions = program.getCompilerOptions();
 
     const checker = program.getTypeChecker();
-    const result: InlayHint[] = [];
+    const result: ts.InlayHint[] = [];
 
     visitor(file);
     return result;
 
-    function visitor(node: Node): true | undefined {
+    function visitor(node: ts.Node): true | undefined {
         if (!node || node.getFullWidth() === 0) {
             return;
         }
 
         switch (node.kind) {
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.ArrowFunction:
+            case ts.SyntaxKind.ModuleDeclaration:
+            case ts.SyntaxKind.ClassDeclaration:
+            case ts.SyntaxKind.InterfaceDeclaration:
+            case ts.SyntaxKind.FunctionDeclaration:
+            case ts.SyntaxKind.ClassExpression:
+            case ts.SyntaxKind.FunctionExpression:
+            case ts.SyntaxKind.MethodDeclaration:
+            case ts.SyntaxKind.ArrowFunction:
                 cancellationToken.throwIfCancellationRequested();
         }
 
-        if (!textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
+        if (!ts.textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
             return;
         }
 
-        if (isTypeNode(node) && !isExpressionWithTypeArguments(node)) {
+        if (ts.isTypeNode(node) && !ts.isExpressionWithTypeArguments(node)) {
             return;
         }
 
-        if (preferences.includeInlayVariableTypeHints && isVariableDeclaration(node)) {
+        if (preferences.includeInlayVariableTypeHints && ts.isVariableDeclaration(node)) {
             visitVariableLikeDeclaration(node);
         }
-        else if (preferences.includeInlayPropertyDeclarationTypeHints && isPropertyDeclaration(node)) {
+        else if (preferences.includeInlayPropertyDeclarationTypeHints && ts.isPropertyDeclaration(node)) {
             visitVariableLikeDeclaration(node);
         }
-        else if (preferences.includeInlayEnumMemberValueHints && isEnumMember(node)) {
+        else if (preferences.includeInlayEnumMemberValueHints && ts.isEnumMember(node)) {
             visitEnumMember(node);
         }
-        else if (shouldShowParameterNameHints(preferences) && (isCallExpression(node) || isNewExpression(node))) {
+        else if (shouldShowParameterNameHints(preferences) && (ts.isCallExpression(node) || ts.isNewExpression(node))) {
             visitCallOrNewExpression(node);
         }
         else {
-            if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
+            if (preferences.includeInlayFunctionParameterTypeHints && ts.isFunctionLikeDeclaration(node) && ts.hasContextSensitiveParameters(node)) {
                 visitFunctionLikeForParameterType(node);
             }
             if (preferences.includeInlayFunctionLikeReturnTypeHints && isSignatureSupportingReturnAnnotation(node)) {
                 visitFunctionDeclarationLikeForReturnType(node);
             }
         }
-        return forEachChild(node, visitor);
+        return ts.forEachChild(node, visitor);
     }
 
-    function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
-        return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
+    function isSignatureSupportingReturnAnnotation(node: ts.Node): node is ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression | ts.MethodDeclaration | ts.GetAccessorDeclaration {
+        return ts.isArrowFunction(node) || ts.isFunctionExpression(node) || ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || ts.isGetAccessorDeclaration(node);
     }
 
     function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
         result.push({
             text: `${isFirstVariadicArgument ? "..." : ""}${truncation(text, maxHintsLength)}:`,
             position,
-            kind: InlayHintKind.Parameter,
+            kind: ts.InlayHintKind.Parameter,
             whitespaceAfter: true,
         });
     }
@@ -91,7 +91,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         result.push({
             text: `: ${truncation(text, maxHintsLength)}`,
             position,
-            kind: InlayHintKind.Type,
+            kind: ts.InlayHintKind.Type,
             whitespaceBefore: true,
         });
     }
@@ -100,12 +100,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         result.push({
             text: `= ${truncation(text, maxHintsLength)}`,
             position,
-            kind: InlayHintKind.Enum,
+            kind: ts.InlayHintKind.Enum,
             whitespaceBefore: true,
         });
     }
 
-    function visitEnumMember(member: EnumMember) {
+    function visitEnumMember(member: ts.EnumMember) {
         if (member.initializer) {
             return;
         }
@@ -116,16 +116,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
     }
 
-    function isModuleReferenceType(type: Type) {
-        return type.symbol && (type.symbol.flags & SymbolFlags.Module);
+    function isModuleReferenceType(type: ts.Type) {
+        return type.symbol && (type.symbol.flags & ts.SymbolFlags.Module);
     }
 
-    function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+    function visitVariableLikeDeclaration(decl: ts.VariableDeclaration | ts.PropertyDeclaration) {
+        if (!decl.initializer || ts.isBindingPattern(decl.name) || ts.isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
             return;
         }
 
-        const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(decl);
+        const effectiveTypeAnnotation = ts.getEffectiveTypeAnnotationNode(decl);
         if (effectiveTypeAnnotation) {
             return;
         }
@@ -137,7 +137,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const typeDisplayString = printTypeInSingleLine(declarationType);
         if (typeDisplayString) {
-            const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), typeDisplayString);
+            const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && ts.equateStringsCaseInsensitive(decl.name.getText(), typeDisplayString);
             if (isVariableNameMatchesType) {
                 return;
             }
@@ -145,13 +145,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
     }
 
-    function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
+    function visitCallOrNewExpression(expr: ts.CallExpression | ts.NewExpression) {
         const args = expr.arguments;
         if (!args || !args.length) {
             return;
         }
 
-        const candidates: Signature[] = [];
+        const candidates: ts.Signature[] = [];
         const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
         if (!signature || !candidates.length) {
             return;
@@ -159,7 +159,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         for (let i = 0; i < args.length; ++i) {
             const originalArg = args[i];
-            const arg = skipParentheses(originalArg);
+            const arg = ts.skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                 continue;
             }
@@ -172,7 +172,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     continue;
                 }
 
-                const name = unescapeLeadingUnderscores(parameterName);
+                const name = ts.unescapeLeadingUnderscores(parameterName);
                 if (leadingCommentsContainsParameterName(arg, name)) {
                     continue;
                 }
@@ -182,58 +182,58 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
     }
 
-    function identifierOrAccessExpressionPostfixMatchesParameterName(expr: Expression, parameterName: __String) {
-        if (isIdentifier(expr)) {
+    function identifierOrAccessExpressionPostfixMatchesParameterName(expr: ts.Expression, parameterName: ts.__String) {
+        if (ts.isIdentifier(expr)) {
             return expr.text === parameterName;
         }
-        if (isPropertyAccessExpression(expr)) {
+        if (ts.isPropertyAccessExpression(expr)) {
             return expr.name.text === parameterName;
         }
         return false;
     }
 
-    function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+    function leadingCommentsContainsParameterName(node: ts.Node, name: string) {
+        if (!ts.isIdentifierText(name, compilerOptions.target, ts.getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
-        const ranges = getLeadingCommentRanges(sourceFileText, node.pos);
+        const ranges = ts.getLeadingCommentRanges(sourceFileText, node.pos);
         if (!ranges?.length) {
             return false;
         }
 
         const regex = leadingParameterNameCommentRegexFactory(name);
-        return some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
+        return ts.some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
     }
 
-    function isHintableLiteral(node: Node) {
+    function isHintableLiteral(node: ts.Node) {
         switch (node.kind) {
-            case SyntaxKind.PrefixUnaryExpression: {
-                const operand = (node as PrefixUnaryExpression).operand;
-                return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
+            case ts.SyntaxKind.PrefixUnaryExpression: {
+                const operand = (node as ts.PrefixUnaryExpression).operand;
+                return ts.isLiteralExpression(operand) || ts.isIdentifier(operand) && ts.isInfinityOrNaNString(operand.escapedText);
             }
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.TemplateExpression:
+            case ts.SyntaxKind.TrueKeyword:
+            case ts.SyntaxKind.FalseKeyword:
+            case ts.SyntaxKind.NullKeyword:
+            case ts.SyntaxKind.NoSubstitutionTemplateLiteral:
+            case ts.SyntaxKind.TemplateExpression:
                 return true;
-            case SyntaxKind.Identifier: {
-                const name = (node as Identifier).escapedText;
-                return isUndefined(name) || isInfinityOrNaNString(name);
+            case ts.SyntaxKind.Identifier: {
+                const name = (node as ts.Identifier).escapedText;
+                return isUndefined(name) || ts.isInfinityOrNaNString(name);
             }
         }
-        return isLiteralExpression(node);
+        return ts.isLiteralExpression(node);
     }
 
-    function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
-        if (isArrowFunction(decl)) {
-            if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
+    function visitFunctionDeclarationLikeForReturnType(decl: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression | ts.MethodDeclaration | ts.GetAccessorDeclaration) {
+        if (ts.isArrowFunction(decl)) {
+            if (!ts.findChildOfKind(decl, ts.SyntaxKind.OpenParenToken, file)) {
                 return;
             }
         }
 
-        const effectiveTypeAnnotation = getEffectiveReturnTypeNode(decl);
+        const effectiveTypeAnnotation = ts.getEffectiveReturnTypeNode(decl);
         if (effectiveTypeAnnotation || !decl.body) {
             return;
         }
@@ -256,15 +256,15 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
     }
 
-    function getTypeAnnotationPosition(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
-        const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
+    function getTypeAnnotationPosition(decl: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression | ts.MethodDeclaration | ts.GetAccessorDeclaration) {
+        const closeParenToken = ts.findChildOfKind(decl, ts.SyntaxKind.CloseParenToken, file);
         if (closeParenToken) {
             return closeParenToken.end;
         }
         return decl.parameters.end;
     }
 
-    function visitFunctionLikeForParameterType(node: FunctionLikeDeclaration) {
+    function visitFunctionLikeForParameterType(node: ts.FunctionLikeDeclaration) {
         const signature = checker.getSignatureFromDeclaration(node);
         if (!signature) {
             return;
@@ -276,7 +276,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 continue;
             }
 
-            const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
+            const effectiveTypeAnnotation = ts.getEffectiveTypeAnnotationNode(param);
             if (effectiveTypeAnnotation) {
                 continue;
             }
@@ -290,9 +290,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
     }
 
-    function getParameterDeclarationTypeDisplayString(symbol: Symbol) {
+    function getParameterDeclarationTypeDisplayString(symbol: ts.Symbol) {
         const valueDeclaration = symbol.valueDeclaration;
-        if (!valueDeclaration || !isParameter(valueDeclaration)) {
+        if (!valueDeclaration || !ts.isParameter(valueDeclaration)) {
             return undefined;
         }
 
@@ -311,26 +311,26 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return text;
     }
 
-    function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-        const options: PrinterOptions = { removeComments: true };
-        const printer = createPrinter(options);
+    function printTypeInSingleLine(type: ts.Type) {
+        const flags = ts.NodeBuilderFlags.IgnoreErrors | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        const options: ts.PrinterOptions = { removeComments: true };
+        const printer = ts.createPrinter(options);
 
-        return usingSingleLineStringWriter(writer => {
+        return ts.usingSingleLineStringWriter(writer => {
             const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, writer);
-            Debug.assertIsDefined(typeNode, "should always get typenode");
-            printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
+            ts.Debug.assertIsDefined(typeNode, "should always get typenode");
+            printer.writeNode(ts.EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
         });
     }
 
-    function isUndefined(name: __String) {
+    function isUndefined(name: ts.__String) {
         return name === "undefined";
     }
 
-    function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
-            const initializer = skipParentheses(node.initializer);
-            return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
+    function isHintableDeclaration(node: ts.VariableDeclaration | ts.ParameterDeclaration) {
+        if ((ts.isParameterDeclaration(node) || ts.isVariableDeclaration(node) && ts.isVarConst(node)) && node.initializer) {
+            const initializer = ts.skipParentheses(node.initializer);
+            return !(isHintableLiteral(initializer) || ts.isNewExpression(initializer) || ts.isObjectLiteralExpression(initializer) || ts.isAssertionExpression(initializer));
         }
         return true;
     }

@@ -4,44 +4,44 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ false, "when using state");
     function verifyCancellation(useBuildInfo: boolean, scenario: string) {
         it(scenario, () => {
-            const aFile: File = {
-                path: `${projectRoot}/a.ts`,
+            const aFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/a.ts`,
                 content: Utils.dedent`
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
                     console.log(b.c.d);`
             };
-            const bFile: File = {
-                path: `${projectRoot}/b.ts`,
+            const bFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/b.ts`,
                 content: Utils.dedent`
                     import {C} from './c';
                     export class B {
                         c = new C();
                     }`
             };
-            const cFile: File = {
-                path: `${projectRoot}/c.ts`,
+            const cFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/c.ts`,
                 content: Utils.dedent`
                     export class C {
                         d = 1;
                     }`
             };
-            const dFile: File = {
-                path: `${projectRoot}/d.ts`,
+            const dFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/d.ts`,
                 content: "export class D { }"
             };
-            const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
+            const config: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
             };
-            const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
-                [aFile, bFile, cFile, dFile, config, libFile],
-                { currentDirectory: projectRoot }
+            const { sys, baseline, oldSnap: originalSnap } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem(
+                [aFile, bFile, cFile, dFile, config, ts.tscWatch.libFile],
+                { currentDirectory: ts.tscWatch.projectRoot }
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
-            const reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
-            const parsedConfig = parseConfigFileWithSystem(
+            const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
+            const parsedConfig = ts.parseConfigFileWithSystem(
                 "tsconfig.json",
                 {},
              /*extendedConfigCache*/ undefined,
@@ -49,18 +49,18 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 sys,
                 reportDiagnostic
             )!;
-            const host = createIncrementalCompilerHost(parsedConfig.options, sys);
-            let programs: CommandLineProgram[] = emptyArray;
-            let oldPrograms: CommandLineProgram[] = emptyArray;
-            let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
+            const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
+            let programs: ts.CommandLineProgram[] = ts.emptyArray;
+            let oldPrograms: ts.CommandLineProgram[] = ts.emptyArray;
+            let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
             let oldSnap = originalSnap;
             let cancel = false;
-            const cancellationToken: CancellationToken = {
+            const cancellationToken: ts.CancellationToken = {
                 isCancellationRequested: () => cancel,
                 throwIfCancellationRequested: () => {
                     if (cancel) {
                         sys.write(`Cancelled!!\r\n`);
-                        throw new OperationCanceledException();
+                        throw new ts.OperationCanceledException();
                     }
                 },
             };
@@ -70,7 +70,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyChange(
+            oldSnap = ts.tscWatch.applyChange(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -84,12 +84,12 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 builderProgram.getSemanticDiagnosticsOfNextAffectedFile(cancellationToken);
             }
             catch (e) {
-                sys.write(`Operation ws cancelled:: ${e instanceof OperationCanceledException}\r\n`);
+                sys.write(`Operation ws cancelled:: ${e instanceof ts.OperationCanceledException}\r\n`);
             }
             cancel = false;
             builderProgram.emitBuildInfo();
-            baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
-            watchBaseline({
+            ts.baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
+            ts.tscWatch.watchBaseline({
                 baseline,
                 getPrograms: () => programs,
                 oldPrograms,
@@ -108,7 +108,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyChange(sys, baseline, noop, caption);
+                oldSnap = ts.tscWatch.applyChange(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
@@ -123,7 +123,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         options: parsedConfig.options,
                         host,
                     }) :
-                    builderProgram = builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
+                    builderProgram = builderProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(
                         parsedConfig.fileNames,
                         parsedConfig.options,
                         host,
@@ -135,9 +135,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             }
 
             function emitAndBaseline() {
-                emitFilesAndReportErrorsAndGetExitStatus(builderProgram, reportDiagnostic);
-                baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
-                watchBaseline({
+                ts.emitFilesAndReportErrorsAndGetExitStatus(builderProgram, reportDiagnostic);
+                ts.baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
+                ts.tscWatch.watchBaseline({
                     baseline,
                     getPrograms: () => programs,
                     oldPrograms,
@@ -152,7 +152,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             }
 
             function baselineCleanBuild() {
-                builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
+                builderProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(
                     parsedConfig.fileNames,
                     parsedConfig.options,
                     host,

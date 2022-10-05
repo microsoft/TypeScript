@@ -1,32 +1,32 @@
 namespace ts.tscWatch {
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolutionCache",
         subScenario: "handles the cache correctly when two projects use different module resolution settings",
-        sys: () => createWatchedSystem(
+        sys: () => ts.tscWatch.createWatchedSystem(
             [
-                { path: `${projectRoot}/project1/index.ts`, content: `import { foo } from "file";` },
-                { path: `${projectRoot}/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
+                { path: `${ts.tscWatch.projectRoot}/project1/index.ts`, content: `import { foo } from "file";` },
+                { path: `${ts.tscWatch.projectRoot}/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
                 {
-                    path: `${projectRoot}/project1/tsconfig.json`,
+                    path: `${ts.tscWatch.projectRoot}/project1/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: { composite: true, types: ["foo", "bar"] },
                         files: ["index.ts"]
                     })
                 },
-                { path: `${projectRoot}/project2/index.ts`, content: `import { foo } from "file";` },
-                { path: `${projectRoot}/project2/file.d.ts`, content: "export const foo = 10;" },
+                { path: `${ts.tscWatch.projectRoot}/project2/index.ts`, content: `import { foo } from "file";` },
+                { path: `${ts.tscWatch.projectRoot}/project2/file.d.ts`, content: "export const foo = 10;" },
                 {
-                    path: `${projectRoot}/project2/tsconfig.json`,
+                    path: `${ts.tscWatch.projectRoot}/project2/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: { composite: true, types: ["foo"], moduleResolution: "classic" },
                         files: ["index.ts"]
                     })
                 },
-                { path: `${projectRoot}/node_modules/@types/foo/index.d.ts`, content: "export const foo = 10;" },
-                { path: `${projectRoot}/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
+                { path: `${ts.tscWatch.projectRoot}/node_modules/@types/foo/index.d.ts`, content: "export const foo = 10;" },
+                { path: `${ts.tscWatch.projectRoot}/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
                 {
-                    path: `${projectRoot}/tsconfig.json`,
+                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
                     content: JSON.stringify({
                         files: [],
                         references: [
@@ -35,15 +35,15 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                         ]
                     })
                 },
-                libFile
+                ts.tscWatch.libFile
             ],
-            { currentDirectory: projectRoot }
+            { currentDirectory: ts.tscWatch.projectRoot }
         ),
         commandLineArgs: ["--b", "-w", "-v"],
         changes: [
             {
                 caption: "Append text",
-                change: sys => sys.appendFile(`${projectRoot}/project1/index.ts`, "const bar = 10;"),
+                change: sys => sys.appendFile(`${ts.tscWatch.projectRoot}/project1/index.ts`, "const bar = 10;"),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1); // build project1 and solution
                     sys.checkTimeoutQueueLength(0);
@@ -52,12 +52,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
-        sys: () => createWatchedSystem([
+        sys: () => ts.tscWatch.createWatchedSystem([
             {
-                path: `${projectRoot}/packages/pkg1/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`,
                 content: JSON.stringify({
                     name: "pkg1",
                     version: "1.0.0",
@@ -66,13 +66,13 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg1/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/index.ts`,
                 content: Utils.dedent`
                 import type { TheNum } from 'pkg2'
                 export const theNum: TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg1/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "build",
@@ -82,15 +82,15 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg2/const.cts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/const.cts`,
                 content: `export type TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg2/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/index.ts`,
                 content: `export type { TheNum } from './const.cjs';`
             },
             {
-                path: `${projectRoot}/packages/pkg2/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -100,7 +100,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg2/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`,
                 content: JSON.stringify({
                     name: "pkg2",
                     version: "1.0.0",
@@ -109,33 +109,33 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/node_modules/pkg2`,
-                symLink: `${projectRoot}/packages/pkg2`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg2`,
+                symLink: `${ts.tscWatch.projectRoot}/packages/pkg2`,
             },
-            { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
-        ], { currentDirectory: projectRoot }),
+            { ...ts.tscWatch.libFile, path: `/a/lib/lib.es2022.full.d.ts` }
+        ], { currentDirectory: ts.tscWatch.projectRoot }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
         changes: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
-                timeouts: runQueuedTimeoutCallbacks
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
-                timeouts: runQueuedTimeoutCallbacks,
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
             },
             {
                 caption: "reports import errors after change to package file",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
-                timeouts: runQueuedTimeoutCallbacks
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks
             },
             {
                 caption: "removes those errors when a package file is changed to cjs extensions",
                 change: sys => {
-                    replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
-                    sys.renameFile(`${projectRoot}/packages/pkg2/index.ts`, `${projectRoot}/packages/pkg2/index.cts`);
+                    ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
+                    sys.renameFile(`${ts.tscWatch.projectRoot}/packages/pkg2/index.ts`, `${ts.tscWatch.projectRoot}/packages/pkg2/index.cts`);
                 },
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // building pkg2
@@ -145,12 +145,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `build mode watches for changes to package-json main fields`,
-        sys: () => createWatchedSystem([
+        sys: () => ts.tscWatch.createWatchedSystem([
             {
-                path: `${projectRoot}/packages/pkg1/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`,
                 content: JSON.stringify({
                     name: "pkg1",
                     version: "1.0.0",
@@ -158,13 +158,13 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg1/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/index.ts`,
                 content: Utils.dedent`
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg1/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "build",
@@ -173,7 +173,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg2/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -183,19 +183,19 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg2/const.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/const.ts`,
                 content: `export type TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg2/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/index.ts`,
                 content: `export type { TheNum } from './const.js';`
             },
             {
-                path: `${projectRoot}/packages/pkg2/other.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/other.ts`,
                 content: `export type TheStr = string;`
             },
             {
-                path: `${projectRoot}/packages/pkg2/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`,
                 content: JSON.stringify({
                     name: "pkg2",
                     version: "1.0.0",
@@ -203,22 +203,22 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/node_modules/pkg2`,
-                symLink: `${projectRoot}/packages/pkg2`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg2`,
+                symLink: `${ts.tscWatch.projectRoot}/packages/pkg2`,
             },
-            libFile
-        ], { currentDirectory: projectRoot }),
+            ts.tscWatch.libFile
+        ], { currentDirectory: ts.tscWatch.projectRoot }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
         changes: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
-                timeouts: runQueuedTimeoutCallbacks,
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
-                timeouts: runQueuedTimeoutCallbacks,
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
             },
         ]
     });

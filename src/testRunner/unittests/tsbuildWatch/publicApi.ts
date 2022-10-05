@@ -1,7 +1,7 @@
 namespace ts.tscWatch {
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
-    const solution: File = {
-        path: `${projectRoot}/tsconfig.json`,
+    const solution: ts.tscWatch.File = {
+        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
         content: JSON.stringify({
             references: [
                 { path: "./shared/tsconfig.json" },
@@ -10,29 +10,29 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
             files: []
         })
     };
-    const sharedConfig: File = {
-        path: `${projectRoot}/shared/tsconfig.json`,
+    const sharedConfig: ts.tscWatch.File = {
+        path: `${ts.tscWatch.projectRoot}/shared/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true },
         })
     };
-    const sharedIndex: File = {
-        path: `${projectRoot}/shared/index.ts`,
+    const sharedIndex: ts.tscWatch.File = {
+        path: `${ts.tscWatch.projectRoot}/shared/index.ts`,
         content: `export function f1() { }
 export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`
     };
-    const webpackConfig: File = {
-        path: `${projectRoot}/webpack/tsconfig.json`,
+    const webpackConfig: ts.tscWatch.File = {
+        path: `${ts.tscWatch.projectRoot}/webpack/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true, },
             references: [{ path: "../shared/tsconfig.json" }]
         })
     };
-    const webpackIndex: File = {
-        path: `${projectRoot}/webpack/index.ts`,
+    const webpackIndex: ts.tscWatch.File = {
+        path: `${ts.tscWatch.projectRoot}/webpack/index.ts`,
         content: `export function f2() { }
 export class c2 { }
 export enum e2 { }
@@ -40,12 +40,12 @@ export enum e2 { }
 export function f22() { } // trailing`
     };
     const commandLineArgs = ["--b", "--w"];
-    const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
-    const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
+    const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: ts.tscWatch.projectRoot }));
+    const buildHost = ts.tscWatch.createSolutionBuilderWithWatchHostForBaseline(sys, cb);
     buildHost.getCustomTransformers = getCustomTransformers;
-    const builder = createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
+    const builder = ts.createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
     builder.build();
-    runWatchBaseline({
+    ts.tscWatch.runWatchBaseline({
         scenario: "publicApi",
         subScenario: "with custom transformers",
         commandLineArgs,
@@ -67,35 +67,35 @@ export function f22() { } // trailing`
         watchOrSolution: builder
     });
 
-    function getCustomTransformers(project: string): CustomTransformers {
-        const before: TransformerFactory<SourceFile> = context => {
-            return file => visitEachChild(file, visit, context);
-            function visit(node: Node): VisitResult<Node> {
+    function getCustomTransformers(project: string): ts.CustomTransformers {
+        const before: ts.TransformerFactory<ts.SourceFile> = context => {
+            return file => ts.visitEachChild(file, visit, context);
+            function visit(node: ts.Node): ts.VisitResult<ts.Node> {
                 switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                        return visitFunction(node as FunctionDeclaration);
+                    case ts.SyntaxKind.FunctionDeclaration:
+                        return visitFunction(node as ts.FunctionDeclaration);
                     default:
-                        return visitEachChild(node, visit, context);
+                        return ts.visitEachChild(node, visit, context);
                 }
             }
-            function visitFunction(node: FunctionDeclaration) {
-                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
+            function visitFunction(node: ts.FunctionDeclaration) {
+                ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
                 return node;
             }
         };
 
-        const after: TransformerFactory<SourceFile> = context => {
-            return file => visitEachChild(file, visit, context);
-            function visit(node: Node): VisitResult<Node> {
+        const after: ts.TransformerFactory<ts.SourceFile> = context => {
+            return file => ts.visitEachChild(file, visit, context);
+            function visit(node: ts.Node): ts.VisitResult<ts.Node> {
                 switch (node.kind) {
-                    case SyntaxKind.VariableStatement:
-                        return visitVariableStatement(node as VariableStatement);
+                    case ts.SyntaxKind.VariableStatement:
+                        return visitVariableStatement(node as ts.VariableStatement);
                     default:
-                        return visitEachChild(node, visit, context);
+                        return ts.visitEachChild(node, visit, context);
                 }
             }
-            function visitVariableStatement(node: VariableStatement) {
-                addSyntheticLeadingComment(node, SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
+            function visitVariableStatement(node: ts.VariableStatement) {
+                ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
                 return node;
             }
         };

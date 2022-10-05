@@ -2,27 +2,27 @@ namespace ts {
 describe("unittests:: services:: Transpile", () => {
 
     interface TranspileTestSettings {
-        options?: TranspileOptions;
+        options?: ts.TranspileOptions;
         noSetFileName?: boolean;
     }
 
     function transpilesCorrectly(name: string, input: string, testSettings: TranspileTestSettings) {
         describe(name, () => {
-            let transpileResult: TranspileOutput;
+            let transpileResult: ts.TranspileOutput;
             let oldTranspileResult: string;
-            let oldTranspileDiagnostics: Diagnostic[];
+            let oldTranspileDiagnostics: ts.Diagnostic[];
 
-            const transpileOptions: TranspileOptions = testSettings.options || {};
+            const transpileOptions: ts.TranspileOptions = testSettings.options || {};
             if (!transpileOptions.compilerOptions) {
                 transpileOptions.compilerOptions = { };
             }
             if (transpileOptions.compilerOptions.target === undefined) {
-                transpileOptions.compilerOptions.target = ScriptTarget.ES3;
+                transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
             }
 
             if (transpileOptions.compilerOptions.newLine === undefined) {
                 // use \r\n as default new line
-                transpileOptions.compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
+                transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
             }
 
             transpileOptions.compilerOptions.sourceMap = true;
@@ -37,7 +37,7 @@ describe("unittests:: services:: Transpile", () => {
 
             transpileOptions.reportDiagnostics = true;
 
-            const justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
+            const justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
             const toBeCompiled = [{
                 unitName,
                 content: input
@@ -45,11 +45,11 @@ describe("unittests:: services:: Transpile", () => {
             const canUseOldTranspile = !transpileOptions.renamedDependencies;
 
             before(() => {
-                transpileResult = transpileModule(input, transpileOptions);
+                transpileResult = ts.transpileModule(input, transpileOptions);
 
                 if (canUseOldTranspile) {
                     oldTranspileDiagnostics = [];
-                    oldTranspileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, oldTranspileDiagnostics, transpileOptions.moduleName);
+                    oldTranspileResult = ts.transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, oldTranspileDiagnostics, transpileOptions.moduleName);
                 }
             });
 
@@ -74,7 +74,7 @@ describe("unittests:: services:: Transpile", () => {
             /* eslint-enable no-null/no-null */
 
             it("Correct output for " + justName, () => {
-                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);
+                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);
             });
 
             if (canUseOldTranspile) {
@@ -86,61 +86,61 @@ describe("unittests:: services:: Transpile", () => {
     }
 
     transpilesCorrectly("Generates no diagnostics with valid inputs", `var x = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Generates no diagnostics for missing file references", `/// <reference path="file2.ts" />
 var x = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Generates no diagnostics for missing module imports", `import {a} from "module2";`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Generates expected syntactic diagnostics", `a b`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Does not generate semantic diagnostics", `var x: string = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Generates module output", `var x = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.AMD } }
+        options: { compilerOptions: { module: ts.ModuleKind.AMD } }
     });
 
     transpilesCorrectly("Uses correct newLine character", `var x = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS, newLine: ts.NewLineKind.LineFeed } }
     });
 
     transpilesCorrectly("Sets module name", "var x = 1;", {
-        options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, moduleName: "NamedModule" }
+        options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, moduleName: "NamedModule" }
     });
 
     transpilesCorrectly("No extra errors for file without extension", `"use strict";\r\nvar x = 0;`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "file" }
     });
 
     transpilesCorrectly("Rename dependencies - System",
         `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
-            options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
+            options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
     transpilesCorrectly("Rename dependencies - AMD",
         `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
-            options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
+            options: { compilerOptions: { module: ts.ModuleKind.AMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
     transpilesCorrectly("Rename dependencies - UMD",
         `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
-            options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
+            options: { compilerOptions: { module: ts.ModuleKind.UMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
     transpilesCorrectly("Transpile with emit decorators and emit metadata",
@@ -159,12 +159,12 @@ var x = 0;`, {
         `export {MyClass}; \n`, {
             options: {
                 compilerOptions: {
-                    module: ModuleKind.CommonJS,
-                    newLine: NewLineKind.LineFeed,
+                    module: ts.ModuleKind.CommonJS,
+                    newLine: ts.NewLineKind.LineFeed,
                     noEmitHelpers: true,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
-                    target: ScriptTarget.ES5,
+                    target: ts.ScriptTarget.ES5,
                 }
             }
         });
@@ -174,11 +174,11 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("transpile file as 'tsx' if 'jsx' is specified", `var x = <div/>`, {
-        options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
+        options: { compilerOptions: { jsx: ts.JsxEmit.React, newLine: ts.NewLineKind.LineFeed } }
     });
 
     transpilesCorrectly("transpile .js files", "const a = 10;", {
-        options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { newLine: ts.NewLineKind.LineFeed, module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports urls in file name", "var x", {
@@ -188,27 +188,27 @@ var x = 0;`, {
     transpilesCorrectly("Accepts string as enum values for compile-options", "export const x = 0", {
         options: {
             compilerOptions: {
-                module: "es6" as any as ModuleKind,
+                module: "es6" as any as ts.ModuleKind,
                 // Capitalization and spaces ignored
-                target: " Es6 " as any as ScriptTarget
+                target: " Es6 " as any as ts.ScriptTarget
             }
         }
     });
 
     transpilesCorrectly("Report an error when compiler-options module-kind is out-of-range", "", {
-        options: { compilerOptions: { module: 123 as any as ModuleKind } }
+        options: { compilerOptions: { module: 123 as any as ts.ModuleKind } }
     });
 
     transpilesCorrectly("Report an error when compiler-options target-script is out-of-range", "", {
-        options: { compilerOptions: { module: 123 as any as ModuleKind } }
+        options: { compilerOptions: { module: 123 as any as ts.ModuleKind } }
     });
 
     transpilesCorrectly("Support options with lib values", "const a = 10;", {
-        options: { compilerOptions: { lib: ["es6", "dom"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { lib: ["es6", "dom"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Support options with types values", "const a = 10;", {
-        options: { compilerOptions: { types: ["jquery", "typescript"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { types: ["jquery", "typescript"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports setting 'allowJs'", "x;", {
@@ -280,15 +280,15 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("Supports setting 'module'", "x;", {
-        options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports setting 'moduleResolution'", "x;", {
-        options: { compilerOptions: { moduleResolution: ModuleResolutionKind.NodeJs }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.NodeJs }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports setting 'newLine'", "x;", {
-        options: { compilerOptions: { newLine: NewLineKind.CarriageReturnLineFeed }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { newLine: ts.NewLineKind.CarriageReturnLineFeed }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports setting 'noEmit'", "x;", {
@@ -436,9 +436,9 @@ var x = 0;`, {
         `}`, {
             options: {
                 compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    target: ts.ScriptTarget.ES5,
+                    module: ts.ModuleKind.CommonJS,
+                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,
@@ -456,9 +456,9 @@ var x = 0;`, {
         `}`, {
             options: {
                 compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.System,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    target: ts.ScriptTarget.ES5,
+                    module: ts.ModuleKind.System,
+                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,
@@ -468,11 +468,11 @@ var x = 0;`, {
     );
 
     transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Supports 'as const' arrays", `([] as const).forEach(k => console.log(k));`, {
-        options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
     });
 
     transpilesCorrectly("Infer correct file extension", `const fn = <T>(a: T) => a`, {
@@ -489,14 +489,14 @@ export * as alias from './file';`, {
     transpilesCorrectly("Elides import equals referenced only by export type",
         `import IFoo = Namespace.IFoo;` +
         `export type { IFoo };`, {
-            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
         }
     );
 
     transpilesCorrectly("Elides import equals referenced only by type only export specifier",
         `import IFoo = Namespace.IFoo;` +
         `export { type IFoo };`, {
-            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } }
         }
     );
 });

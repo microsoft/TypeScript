@@ -14,7 +14,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './b'; new a.A();"
         };
 
-        assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("named export -> type-only named import -> named export -> named import", () => {
@@ -31,7 +31,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { A } from './b'; new A();"
         };
 
-        assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("named export -> type-only namespace import -> export equals -> import equals", () => {
@@ -48,7 +48,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import a = require('./b'); new a.A();"
         };
 
-        assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("named export -> type-only namespace import -> export default -> import default", () => {
@@ -65,7 +65,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import a from './b'; new a.A();"
         };
 
-        assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("export default -> type-only import default -> export default -> import default", () => {
@@ -82,7 +82,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import A from './b'; new A();"
         };
 
-        assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c], c, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("named export -> type-only export from -> export star from -> named import", () => {
@@ -103,7 +103,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { A } from './c'; new A();"
         };
 
-        assertUsageError([a, b, c, d], d, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type);
+        assertUsageError([a, b, c, d], d, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type);
     });
 
     it("named export -> export namespace from -> type-only named import -> named export -> named import", () => {
@@ -124,7 +124,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './c'; new a.A();"
         };
 
-        assertUsageError([a, b, c, d], d, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        assertUsageError([a, b, c, d], d, ts.Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
     });
 
     it("named export -> type-only export from -> export namespace from -> named import", () => {
@@ -145,19 +145,19 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './c'; new a.A();"
         };
 
-        assertUsageError([a, b, c, d], d, Diagnostics.Property_0_does_not_exist_on_type_1);
+        assertUsageError([a, b, c, d], d, ts.Diagnostics.Property_0_does_not_exist_on_type_1);
     });
 });
 
-function assertUsageError(files: readonly TestFSWithWatch.File[], openFile: TestFSWithWatch.File, diagnostic: DiagnosticMessage) {
-    const host = createServerHost(files);
-    const session = createSession(host);
-    openFilesForSession([openFile], session);
-    const req = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
-        protocol.CommandTypes.SemanticDiagnosticsSync,
+function assertUsageError(files: readonly ts.TestFSWithWatch.File[], openFile: ts.TestFSWithWatch.File, diagnostic: ts.DiagnosticMessage) {
+    const host = ts.projectSystem.createServerHost(files);
+    const session = ts.projectSystem.createSession(host);
+    ts.projectSystem.openFilesForSession([openFile], session);
+    const req = ts.projectSystem.makeSessionRequest<ts.projectSystem.protocol.SemanticDiagnosticsSyncRequestArgs>(
+        ts.projectSystem.protocol.CommandTypes.SemanticDiagnosticsSync,
         { file: openFile.path }
     );
-    const diagnostics = session.executeCommand(req).response as protocol.Diagnostic[];
+    const diagnostics = session.executeCommand(req).response as ts.projectSystem.protocol.Diagnostic[];
     assert.lengthOf(diagnostics, 1);
     assert.equal(diagnostics[0].code, diagnostic.code);
 }

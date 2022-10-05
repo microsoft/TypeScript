@@ -1,14 +1,14 @@
 /*@internal*/
 namespace ts.server {
 export interface ModuleSpecifierResolutionCacheHost {
-    watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher;
+    watchNodeModulesForPackageJsonChanges(directoryPath: string): ts.FileWatcher;
 }
 
-export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
-    let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
-    let cache: ESMap<Path, ResolvedModuleSpecifierInfo> | undefined;
+export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ts.ModuleSpecifierCache {
+    let containedNodeModulesWatchers: ts.ESMap<string, ts.FileWatcher> | undefined;
+    let cache: ts.ESMap<ts.Path, ts.ResolvedModuleSpecifierInfo> | undefined;
     let currentKey: string | undefined;
-    const result: ModuleSpecifierCache = {
+    const result: ts.ModuleSpecifierCache = {
         get(fromFileName, toFileName, preferences, options) {
             if (!cache || currentKey !== key(fromFileName, preferences, options)) return undefined;
             return cache.get(toFileName);
@@ -25,9 +25,9 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 for (const p of modulePaths) {
                     if (p.isInNodeModules) {
                         // No trailing slash
-                        const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
+                        const nodeModulesPath = p.path.substring(0, p.path.indexOf(ts.nodeModulesPathPart) + ts.nodeModulesPathPart.length - 1);
                         if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
-                            (containedNodeModulesWatchers ||= new Map()).set(
+                            (containedNodeModulesWatchers ||= new ts.Map()).set(
                                 nodeModulesPath,
                                 host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
                             );
@@ -66,29 +66,29 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             return cache ? cache.size : 0;
         }
     };
-    if (Debug.isDebugging) {
+    if (ts.Debug.isDebugging) {
         Object.defineProperty(result, "__cache", { get: () => cache });
     }
     return result;
 
-    function ensureCache(fromFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions) {
+    function ensureCache(fromFileName: ts.Path, preferences: ts.UserPreferences, options: ts.ModuleSpecifierOptions) {
         const newKey = key(fromFileName, preferences, options);
         if (cache && (currentKey !== newKey)) {
             result.clear();
         }
         currentKey = newKey;
-        return cache ||= new Map();
+        return cache ||= new ts.Map();
     }
 
-    function key(fromFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions) {
+    function key(fromFileName: ts.Path, preferences: ts.UserPreferences, options: ts.ModuleSpecifierOptions) {
         return `${fromFileName},${preferences.importModuleSpecifierEnding},${preferences.importModuleSpecifierPreference},${options.overrideImportMode}`;
     }
 
     function createInfo(
-        modulePaths: readonly ModulePath[] | undefined,
+        modulePaths: readonly ts.ModulePath[] | undefined,
         moduleSpecifiers: readonly string[] | undefined,
         isBlockedByPackageJsonDependencies: boolean | undefined,
-    ): ResolvedModuleSpecifierInfo {
+    ): ts.ResolvedModuleSpecifierInfo {
         return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
     }
 }

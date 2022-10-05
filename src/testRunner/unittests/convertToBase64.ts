@@ -1,8 +1,8 @@
 namespace ts {
 describe("unittests:: convertToBase64", () => {
     function runTest(input: string): void {
-        const actual = convertToBase64(input);
-        const expected = sys.base64encode!(input);
+        const actual = ts.convertToBase64(input);
+        const expected = ts.sys.base64encode!(input);
         assert.equal(actual, expected, "Encoded string using convertToBase64 does not match buffer.toString('base64')");
     }
 

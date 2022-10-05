@@ -1,19 +1,19 @@
 namespace ts {
 describe("unittests:: tsc:: listFilesOnly::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with watch",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
         commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"]
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "loose file",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),

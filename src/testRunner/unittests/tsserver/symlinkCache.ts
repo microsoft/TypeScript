@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-const appTsconfigJson: File = {
+const appTsconfigJson: ts.projectSystem.File = {
     path: "/packages/app/tsconfig.json",
     content: `
         {
@@ -13,17 +13,17 @@ const appTsconfigJson: File = {
         }`
 };
 
-const appSrcIndexTs: File = {
+const appSrcIndexTs: ts.projectSystem.File = {
     path: "/packages/app/src/index.ts",
     content: `import "dep/does/not/exist";`
 };
 
-const depPackageJson: File = {
+const depPackageJson: ts.projectSystem.File = {
     path: "/packages/dep/package.json",
     content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`
 };
 
-const depTsconfigJson: File = {
+const depTsconfigJson: ts.projectSystem.File = {
     path: "/packages/dep/tsconfig.json",
     content: `
         {
@@ -31,18 +31,18 @@ const depTsconfigJson: File = {
         }`
 };
 
-const depSrcIndexTs: File = {
+const depSrcIndexTs: ts.projectSystem.File = {
     path: "/packages/dep/src/index.ts",
     content: `
         import "./sub/folder";`
 };
 
-const depSrcSubFolderIndexTs: File = {
+const depSrcSubFolderIndexTs: ts.projectSystem.File = {
     path: "/packages/dep/src/sub/folder/index.ts",
     content: `export const dep = 0;`
 };
 
-const link: SymLink = {
+const link: ts.projectSystem.SymLink = {
     path: "/packages/app/node_modules/dep",
     symLink: "../../dep",
 };
@@ -50,18 +50,18 @@ const link: SymLink = {
 describe("unittests:: tsserver:: symlinkCache", () => {
     it("contains symlinks discovered by project references resolution after program creation", () => {
         const { session, projectService } = setup();
-        openFilesForSession([appSrcIndexTs], session);
+        ts.projectSystem.openFilesForSession([appSrcIndexTs], session);
         const project = projectService.configuredProjects.get(appTsconfigJson.path)!;
         assert.deepEqual(
-            project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as Path),
-            { real: "/packages/dep/", realPath: "/packages/dep/" as Path }
+            project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
+            { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path }
         );
     });
 
     it("works for paths close to the root", () => {
-        const cache = createSymlinkCache("/", createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+        const cache = ts.createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
         // Used to crash, #44953
-        const map = createModeAwareCache<ResolvedTypeReferenceDirective | undefined>();
+        const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirective | undefined>();
         map.set("foo", /*mode*/ undefined, {
             primary: true,
             originalPath: "/foo",
@@ -72,7 +72,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
 });
 
 function setup() {
-    const host = createServerHost([
+    const host = ts.projectSystem.createServerHost([
         appTsconfigJson,
         appSrcIndexTs,
         depPackageJson,
@@ -81,7 +81,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host);
+    const session = ts.projectSystem.createSession(host);
     const projectService = session.getProjectService();
     return {
         host,

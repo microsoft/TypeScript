@@ -1,9 +1,9 @@
 namespace ts {
 describe("unittests:: tsc:: redirect::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "redirect",
         subScenario: "when redirecting ts file",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     outDir: "out"

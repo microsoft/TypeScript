@@ -125,7 +125,7 @@ export interface LanguageServiceAdapter {
 }
 
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
+    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: Harness.virtualFileSystemRoot }));
     public typesRegistry: ts.ESMap<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
@@ -139,7 +139,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return harnessNewLine;
+        return Harness.harnessNewLine;
     }
 
     public getFilenames(): string[] {
@@ -265,9 +265,9 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.getDirectories(path);
     }
 
-    getCurrentDirectory(): string { return virtualFileSystemRoot; }
+    getCurrentDirectory(): string { return Harness.virtualFileSystemRoot; }
 
-    getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
+    getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
 
     getScriptFileNames(): string[] {
         return this.getFilenames().filter(ts.isAnySupportedFileExtension);
@@ -761,8 +761,8 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     readFile(fileName: string): string | undefined {
-        if (ts.stringContains(fileName, Compiler.defaultLibFileName)) {
-            fileName = Compiler.defaultLibFileName;
+        if (ts.stringContains(fileName, Harness.Compiler.defaultLibFileName)) {
+            fileName = Harness.Compiler.defaultLibFileName;
         }
 
         // System FS would follow symlinks, even though snapshots are stored by original file name
@@ -873,7 +873,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     createHash(s: string) {
-        return mockHash(s);
+        return Harness.mockHash(s);
     }
 
     require(_initialDir: string, _moduleName: string): ts.RequireResult {

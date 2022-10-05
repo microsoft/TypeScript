@@ -4,34 +4,34 @@ describe("unittests:: tsserver:: duplicate packages", () => {
     it("works with import fixes", () => {
         const packageContent = "export const foo: number;";
         const packageJsonContent = JSON.stringify({ name: "foo", version: "1.2.3" });
-        const aFooIndex: File = { path: "/a/node_modules/foo/index.d.ts", content: packageContent };
-        const aFooPackage: File = { path: "/a/node_modules/foo/package.json", content: packageJsonContent };
-        const bFooIndex: File = { path: "/b/node_modules/foo/index.d.ts", content: packageContent };
-        const bFooPackage: File = { path: "/b/node_modules/foo/package.json", content: packageJsonContent };
+        const aFooIndex: ts.projectSystem.File = { path: "/a/node_modules/foo/index.d.ts", content: packageContent };
+        const aFooPackage: ts.projectSystem.File = { path: "/a/node_modules/foo/package.json", content: packageJsonContent };
+        const bFooIndex: ts.projectSystem.File = { path: "/b/node_modules/foo/index.d.ts", content: packageContent };
+        const bFooPackage: ts.projectSystem.File = { path: "/b/node_modules/foo/package.json", content: packageJsonContent };
 
         const userContent = 'import("foo");\nfoo';
-        const aUser: File = { path: "/a/user.ts", content: userContent };
-        const bUser: File = { path: "/b/user.ts", content: userContent };
-        const tsconfig: File = {
+        const aUser: ts.projectSystem.File = { path: "/a/user.ts", content: userContent };
+        const bUser: ts.projectSystem.File = { path: "/b/user.ts", content: userContent };
+        const tsconfig: ts.projectSystem.File = {
             path: "/tsconfig.json",
             content: "{}",
         };
 
-        const host = createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
-        const session = createSession(host);
+        const host = ts.projectSystem.createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
+        const session = ts.projectSystem.createSession(host);
 
-        openFilesForSession([aUser, bUser], session);
+        ts.projectSystem.openFilesForSession([aUser, bUser], session);
 
         for (const user of [aUser, bUser]) {
-            const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
+            const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CodeFixRequest, ts.projectSystem.protocol.CodeFixResponse>(session, ts.projectSystem.protocol.CommandTypes.GetCodeFixes, {
                 file: user.path,
                 startLine: 2,
                 startOffset: 1,
                 endLine: 2,
                 endOffset: 4,
-                errorCodes: [Diagnostics.Cannot_find_name_0.code],
+                errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
             });
-            assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
+            assert.deepEqual<readonly ts.projectSystem.protocol.CodeFixAction[] | undefined>(response, [
                 {
                     description: `Add import from "foo"`,
                     fixName: "import",
