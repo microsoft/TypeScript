@@ -1,27 +1,45 @@
+tests/cases/compiler/parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'string | null' is not assignable to type 'string'.
+    Type 'null' is not assignable to type 'string'.
 tests/cases/compiler/parseInvalidNullableTypes.ts(1,30): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(5,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'string | null' is not assignable to type 'string'.
+    Type 'null' is not assignable to type 'string'.
 tests/cases/compiler/parseInvalidNullableTypes.ts(5,30): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(9,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(10,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(12,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(13,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(15,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(16,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(18,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(19,10): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(21,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(22,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(23,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(15,25): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(16,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+tests/cases/compiler/parseInvalidNullableTypes.ts(19,25): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(20,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+tests/cases/compiler/parseInvalidNullableTypes.ts(23,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(26,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(27,10): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(29,8): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(30,8): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(31,8): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(32,8): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
 
 
-==== tests/cases/compiler/parseInvalidNullableTypes.ts (14 errors) ====
+==== tests/cases/compiler/parseInvalidNullableTypes.ts (20 errors) ====
     function f1(a: string): a is string? {
+                                 ~~~~~~~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
+!!! error TS2677:     Type 'null' is not assignable to type 'string'.
                                  ~~~~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
         return true;
     }
     
     function f2(a: string): a is ?string {
+                                 ~~~~~~~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
+!!! error TS2677:     Type 'null' is not assignable to type 'string'.
                                  ~~~~~~~
 !!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
         return true;
@@ -41,6 +59,22 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding 
                    ~~~~~~~
 !!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     
+    function f7(a: string): string? {
+                            ~~~~~~~
+!!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+        return true;
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    }
+    
+    function f8(a: string): ?string {
+                            ~~~~~~~
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+        return true;
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    }
+    
     const a = 1 as any?;
                    ~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
@@ -55,16 +89,16 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding 
              ~~~~~~~
 !!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     
-    const e: unknown?;
-             ~~~~~~~~
+    let e: unknown?;
+           ~~~~~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
-    const f: never?;
-             ~~~~~~
+    let f: never?;
+           ~~~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
-    const g: void?;
-             ~~~~~
+    let g: void?;
+           ~~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
-    const h: undefined?;
-             ~~~~~~~~~~
+    let h: undefined?;
+           ~~~~~~~~~~
 !!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
     

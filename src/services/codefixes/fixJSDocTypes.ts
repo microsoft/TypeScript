@@ -87,16 +87,12 @@ namespace ts.codefix {
 
     function getType(checker: TypeChecker, node: TypeNode) {
         if (isJSDocNullableType(node)) {
-            const tokens = node.getChildren();
-            if (length(tokens) === 2) {
-                const [firstToken, lastToken] = tokens;
-                if (firstToken.kind === SyntaxKind.QuestionToken && isTypeNode(lastToken)) {
-                    return checker.getUnionType([checker.getTypeFromTypeNode(lastToken), checker.getUndefinedType(), checker.getNullType()]);
-                }
-                if (lastToken.kind === SyntaxKind.QuestionToken && isTypeNode(firstToken)) {
-                    return checker.getUnionType([checker.getTypeFromTypeNode(firstToken), checker.getUndefinedType()]);
-                }
+            const type = checker.getTypeFromTypeNode(node.type);
+            if (type === checker.getNeverType() || type === checker.getVoidType()) {
+                return type;
             }
+            return checker.getUnionType(
+                append([type, checker.getUndefinedType()], node.postfix ? undefined : checker.getNullType()));
         }
         return checker.getTypeFromTypeNode(node);
     }

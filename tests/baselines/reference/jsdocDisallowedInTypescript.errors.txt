@@ -1,31 +1,33 @@
-/a.ts(2,15): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(4,21): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(7,20): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(10,18): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(11,18): error TS2554: Expected 1 arguments, but got 2.
-/a.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
-/a.ts(16,17): error TS8020: JSDoc types can only be used inside documentation comments.
-/b.ts(1,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
-/b.ts(5,11): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-/b.ts(6,17): error TS17019: Adding a postfix '!' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-/b.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
-/b.ts(7,17): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-/b.ts(9,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
-/b.ts(10,16): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(2,15): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,15): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,32): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(7,20): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(10,18): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,18): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,11): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,17): error TS17019: Adding a postfix '!' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,17): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(20,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(21,16): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== /a.ts (9 errors) ====
+==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (16 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
                   ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
     
-    function f1(y: Array.<number>) {
-                        ~
+    function f(x: ?number, y: Array.<number>) {
+                  ~~~~~~~
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+                                   ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
-        return y[0];
+        return x ? x + y[1] : y[0];
     }
     function hof(ctor: function(new: number, string)) {
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,17 +50,6 @@
     var g: function(number, number): number = (n,m) => n + m;
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
-    var anys: Array<*>;
-                    ~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
-    
-==== /b.ts (7 errors) ====
-    function f2(x: ?number) {
-                   ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
-        return x;
-    }
-    
     var most: !string = 'definite';
               ~~~~~~~
 !!! error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
@@ -77,4 +68,8 @@
     var dns: Array<!number>;
                    ~~~~~~~
 !!! error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+    var anys: Array<*>;
+                    ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
     

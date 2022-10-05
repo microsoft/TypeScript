@@ -1,6 +1,6 @@
 === tests/cases/compiler/parseInvalidNullableTypes.ts ===
 function f1(a: string): a is string? {
->f1 : (a: string) => a is string
+>f1 : (a: string) => a is string | null
 >a : string
 
     return true;
@@ -8,7 +8,7 @@ function f1(a: string): a is string? {
 }
 
 function f2(a: string): a is ?string {
->f2 : (a: string) => a is string
+>f2 : (a: string) => a is string | null
 >a : string
 
     return true;
@@ -17,19 +17,35 @@ function f2(a: string): a is ?string {
 
 function f3(a: string?) {}
 >f3 : (a: string | null) => void
->a : string
+>a : string | null
 
 function f4(a: number?) {}
 >f4 : (a: number | null) => void
->a : number
+>a : number | null
 
 function f5(a: ?string) {}
 >f5 : (a: string | null) => void
->a : string
+>a : string | null
 
 function f6(a: ?number) {}
 >f6 : (a: number | null) => void
->a : number
+>a : number | null
+
+function f7(a: string): string? {
+>f7 : (a: string) => string | null
+>a : string
+
+    return true;
+>true : true
+}
+
+function f8(a: string): ?string {
+>f8 : (a: string) => string | null
+>a : string
+
+    return true;
+>true : true
+}
 
 const a = 1 as any?;
 >a : any
@@ -37,7 +53,7 @@ const a = 1 as any?;
 >1 : 1
 
 const b: number? = 1;
->b : number
+>b : number | null
 >1 : 1
 
 const c = 1 as ?any;
@@ -46,18 +62,18 @@ const c = 1 as ?any;
 >1 : 1
 
 const d: ?number = 1;
->d : number
+>d : number | null
 >1 : 1
 
-const e: unknown?;
+let e: unknown?;
 >e : unknown
 
-const f: never?;
->f : never
+let f: never?;
+>f : null
 
-const g: void?;
->g : void
+let g: void?;
+>g : void | null
 
-const h: undefined?;
->h : undefined
+let h: undefined?;
+>h : null | undefined
 

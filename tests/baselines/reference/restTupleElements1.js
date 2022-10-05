@@ -1,6 +1,4 @@
-//// [tests/cases/conformance/types/tuple/restTupleElements1.ts] ////
-
-//// [a.ts]
+//// [restTupleElements1.ts]
 type T00 = [string?];
 type T01 = [string, string?];
 type T02 = [string?, string];  // Error
@@ -10,8 +8,9 @@ type T05 = [...[...[...string[]]]];
 type T06 = [string, ...string[]];
 type T07 = [...string[], string];  // Error
 type T08 = [...string];  // Error
-type T09 = [string, ...[...string[]]];
-type T10 = [string, ...[...[...string[]]]];
+type T09 = [...string?];  // Error
+type T10 = [string, ...[...string[]]];
+type T11 = [string, ...[...[...string[]]]];
 
 type T15 = [boolean, number, ...string[]];
 type L15 = T15["length"];  // number
@@ -69,10 +68,8 @@ declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]])
 f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 
-//// [b.ts]
-type T = [...string?];  // Error
 
-//// [a.js]
+//// [restTupleElements1.js]
 "use strict";
 assign();
 assign();
@@ -99,11 +96,9 @@ f0([1, 2, 3]);
 f0([1, "hello", true]);
 f1([function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); }]);
 f2(function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); });
-//// [b.js]
-"use strict";
 
 
-//// [a.d.ts]
+//// [restTupleElements1.d.ts]
 type T00 = [string?];
 type T01 = [string, string?];
 type T02 = [string?, string];
@@ -113,8 +108,9 @@ type T05 = [...[...[...string[]]]];
 type T06 = [string, ...string[]];
 type T07 = [...string[], string];
 type T08 = [...string];
-type T09 = [string, ...[...string[]]];
-type T10 = [string, ...[...[...string[]]]];
+type T09 = [...?string];
+type T10 = [string, ...[...string[]]];
+type T11 = [string, ...[...[...string[]]]];
 type T15 = [boolean, number, ...string[]];
 type L15 = T15["length"];
 declare function assign<T, S extends T>(): void;
@@ -137,5 +133,3 @@ declare let ex: string | number | boolean;
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
-//// [b.d.ts]
-type T = [...?string];

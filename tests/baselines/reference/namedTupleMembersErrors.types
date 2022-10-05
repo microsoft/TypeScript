@@ -1,4 +1,4 @@
-=== /a.ts ===
+=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
 export type Segment1 = [length: number, number]; // partially named, disallowed
 >Segment1 : [number, number]
 
@@ -23,6 +23,9 @@ export type Opt = [element: string?]; // question mark on element disallowed
 export type Trailing = [first: string, rest: ...string[]]; // dots on element disallowed
 >Trailing : [first: string, rest: string]
 
+export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+>OptTrailing : [first: string, rest: string[]]
+
 export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
 >OptRest : [first: string, rest?: string]
 
@@ -34,8 +37,4 @@ export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
 
 export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
 >RecusiveRest : any
-
-=== /b.ts ===
-export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
->OptTrailing : [first: string, rest: string[]]
 

@@ -31,6 +31,12 @@ function f6(a: !number) {}
 >f6 : (a: number) => void
 >a : number
 
+function f7(): string! {}
+>f7 : () => string
+
+function f8(): !string {}
+>f8 : () => string
+
 const a = 1 as any!;
 >a : any
 >1 as any! : any
