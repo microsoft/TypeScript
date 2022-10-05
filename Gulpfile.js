@@ -175,6 +175,7 @@ function esbuildTask(entrypoint, outfile, exportIsTsObject = false) {
         supported: {
             // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
             "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
+            "template-literal": false, // TODO(jakebailey): temporary workaround for bug in ts.preProcessFile with code like: `import("foo")`
         },
         // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         plugins: [
