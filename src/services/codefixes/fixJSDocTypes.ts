@@ -20,7 +20,7 @@ namespace ts.codefix {
             if (typeNode.kind === SyntaxKind.JSDocNullableType) {
                 // for nullable types, suggest the flow-compatible `T | null | undefined`
                 // in addition to the jsdoc/closure-compatible `T | null`
-                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
+                actions.push(fix(type, fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
             }
             return actions;
 
@@ -50,7 +50,7 @@ namespace ts.codefix {
     function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
         const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
         const typeNode = decl && decl.type;
-        return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
+        return typeNode && { typeNode, type: getType(checker, typeNode) };
     }
 
     // TODO: GH#19856 Node & { type: TypeNode }
@@ -83,5 +83,21 @@ namespace ts.codefix {
             default:
                 return false;
         }
+    }
+
+    function getType(checker: TypeChecker, node: TypeNode) {
+        if (isJSDocNullableType(node)) {
+            const tokens = node.getChildren();
+            if (length(tokens) === 2) {
+                const [firstToken, lastToken] = tokens;
+                if (firstToken.kind === SyntaxKind.QuestionToken && isTypeNode(lastToken)) {
+                    return checker.getUnionType([checker.getTypeFromTypeNode(lastToken), checker.getUndefinedType(), checker.getNullType()]);
+                }
+                if (lastToken.kind === SyntaxKind.QuestionToken && isTypeNode(firstToken)) {
+                    return checker.getUnionType([checker.getTypeFromTypeNode(firstToken), checker.getUndefinedType()]);
+                }
+            }
+        }
+        return checker.getTypeFromTypeNode(node);
     }
 }

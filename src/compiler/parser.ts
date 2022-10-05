@@ -4456,21 +4456,37 @@ namespace ts {
         }
 
         function parsePostfixTypeError(pos: number, end: number, token: SyntaxKind, node: TypeNode) {
-            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.AllowJSDocNullableType | NodeFlags.JSDoc)) {
-                return;
-            }
-            const isUndefinedUnion = !(node.kind === SyntaxKind.UndefinedKeyword || node.kind === SyntaxKind.AnyKeyword
-                || node.kind === SyntaxKind.UnknownKeyword || node.kind === SyntaxKind.NeverKeyword || node.kind === SyntaxKind.VoidKeyword);
-            const typeName = getTextOfNodeFromSourceText(sourceText, node);
-            const suggestion = token === SyntaxKind.QuestionToken && isUndefinedUnion ? `${typeName} | ${tokenToString(SyntaxKind.UndefinedKeyword)}` : typeName;
-            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_postfix_0_to_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), suggestion);
+            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.AllowJSDocNullableType | NodeFlags.JSDoc)) return;
+            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_postfix_0_to_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), getTypeSuggestion(token, node, /*isNullable*/ false));
         }
 
         function parsePrefixTypeError(pos: number, end: number, token: SyntaxKind, node: TypeNode) {
-            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.JSDoc)) {
-                return;
+            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.JSDoc)) return;
+            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_prefix_0_to_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), getTypeSuggestion(token, node, token === SyntaxKind.QuestionToken));
+        }
+
+        function getTypeSuggestion(token: SyntaxKind, node: TypeNode, isNullable: boolean) {
+            const typeName = getTextOfNodeFromSourceText(sourceText, node);
+            if (token === SyntaxKind.QuestionToken) {
+                switch (node.kind) {
+                    case SyntaxKind.AnyKeyword:
+                    case SyntaxKind.NeverKeyword:
+                    case SyntaxKind.UnknownKeyword:
+                        return typeName;
+                    case SyntaxKind.VoidKeyword:
+                    case SyntaxKind.UndefinedKeyword:
+                        return isNullable ? [tokenToString(SyntaxKind.NullKeyword), typeName].join(" | ") : typeName;
+                    default: {
+                        const suggestion = [typeName];
+                        if (isNullable && !(isLiteralTypeNode(node) && node.literal.kind === SyntaxKind.NullKeyword)) {
+                            suggestion.push(tokenToString(SyntaxKind.NullKeyword) as string);
+                        }
+                        suggestion.push(tokenToString(SyntaxKind.UndefinedKeyword) as string);
+                        return suggestion.join(" | ");
+                    }
+                }
             }
-            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_prefix_0_to_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), getTextOfNodeFromSourceText(sourceText, node));
+            return typeName;
         }
 
         // EXPRESSIONS

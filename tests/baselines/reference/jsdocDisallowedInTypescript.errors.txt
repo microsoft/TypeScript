@@ -7,12 +7,12 @@
 /a.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
 /a.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
 /a.ts(16,17): error TS8020: JSDoc types can only be used inside documentation comments.
-/b.ts(1,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+/b.ts(1,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 /b.ts(5,11): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 /b.ts(6,17): error TS17019: Adding a postfix '!' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 /b.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 /b.ts(7,17): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-/b.ts(9,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+/b.ts(9,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 /b.ts(10,16): error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 
 
@@ -55,7 +55,7 @@
 ==== /b.ts (7 errors) ====
     function f2(x: ?number) {
                    ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
         return x;
     }
     
@@ -73,7 +73,7 @@
     
     var nns: Array<?number>;
                    ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     var dns: Array<!number>;
                    ~~~~~~~
 !!! error TS17020: Adding a prefix '!' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?

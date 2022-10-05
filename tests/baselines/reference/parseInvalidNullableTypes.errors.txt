@@ -1,13 +1,13 @@
 tests/cases/compiler/parseInvalidNullableTypes.ts(1,30): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(5,30): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(5,30): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(9,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(10,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(12,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(13,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(12,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(13,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(15,16): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(16,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(18,16): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
-tests/cases/compiler/parseInvalidNullableTypes.ts(19,10): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+tests/cases/compiler/parseInvalidNullableTypes.ts(19,10): error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(21,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(22,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
 tests/cases/compiler/parseInvalidNullableTypes.ts(23,10): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
@@ -23,7 +23,7 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding 
     
     function f2(a: string): a is ?string {
                                  ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
         return true;
     }
     
@@ -36,10 +36,10 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding 
     
     function f5(a: ?string) {}
                    ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
     function f6(a: ?number) {}
                    ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     
     const a = 1 as any?;
                    ~~~~
@@ -53,7 +53,7 @@ tests/cases/compiler/parseInvalidNullableTypes.ts(24,10): error TS17019: Adding 
 !!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
     const d: ?number = 1;
              ~~~~~~~
-!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+!!! error TS17020: Adding a prefix '?' to the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     
     const e: unknown?;
              ~~~~~~~~
