@@ -1,28 +1,32 @@
-import * as ts from "../_namespaces/ts";
+import {
+    AccessExpression, append, appendIfUnique, Debug, EmitFlags, EmitHelper, EmitNode, getParseTreeNode,
+    getSourceFileOfNode, isParseTreeNode, Node, orderedRemoveItem, SnippetElement, some, SourceFile, SourceMapRange,
+    SyntaxKind, SynthesizedComment, TextRange, TypeNode,
+} from "../_namespaces/ts";
 
 /**
  * Associates a node with the current transformation, initializing
  * various transient transformation properties.
  * @internal
  */
-export function getOrCreateEmitNode(node: ts.Node): ts.EmitNode {
+export function getOrCreateEmitNode(node: Node): EmitNode {
     if (!node.emitNode) {
-        if (ts.isParseTreeNode(node)) {
+        if (isParseTreeNode(node)) {
             // To avoid holding onto transformation artifacts, we keep track of any
             // parse tree node we are annotating. This allows us to clean them up after
             // all transformations have completed.
-            if (node.kind === ts.SyntaxKind.SourceFile) {
-                return node.emitNode = { annotatedNodes: [node] } as ts.EmitNode;
+            if (node.kind === SyntaxKind.SourceFile) {
+                return node.emitNode = { annotatedNodes: [node] } as EmitNode;
             }
 
-            const sourceFile = ts.getSourceFileOfNode(ts.getParseTreeNode(ts.getSourceFileOfNode(node))) ?? ts.Debug.fail("Could not determine parsed source file.");
+            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
             getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
         }
 
-        node.emitNode = {} as ts.EmitNode;
+        node.emitNode = {} as EmitNode;
     }
     else {
-        ts.Debug.assert(!(node.emitNode.flags & ts.EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        Debug.assert(!(node.emitNode.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
     }
     return node.emitNode;
 }
@@ -31,14 +35,14 @@ export function getOrCreateEmitNode(node: ts.Node): ts.EmitNode {
  * Clears any `EmitNode` entries from parse-tree nodes.
  * @param sourceFile A source file.
  */
-export function disposeEmitNodes(sourceFile: ts.SourceFile | undefined) {
+export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
     // During transformation we may need to annotate a parse tree node with transient
     // transformation properties. As parse tree nodes live longer than transformation
     // nodes, we need to make sure we reclaim any memory allocated for custom ranges
     // from these nodes to ensure we do not hold onto entire subtrees just for position
     // information. We also need to reset these nodes to a pre-transformation state
     // for incremental parsing scenarios so that we do not impact later emit.
-    const annotatedNodes = ts.getSourceFileOfNode(ts.getParseTreeNode(sourceFile))?.emitNode?.annotatedNodes;
+    const annotatedNodes = getSourceFileOfNode(getParseTreeNode(sourceFile))?.emitNode?.annotatedNodes;
     if (annotatedNodes) {
         for (const node of annotatedNodes) {
             node.emitNode = undefined;
@@ -50,9 +54,9 @@ export function disposeEmitNodes(sourceFile: ts.SourceFile | undefined) {
  * Sets `EmitFlags.NoComments` on a node and removes any leading and trailing synthetic comments.
  * @internal
  */
-export function removeAllComments<T extends ts.Node>(node: T): T {
+export function removeAllComments<T extends Node>(node: T): T {
     const emitNode = getOrCreateEmitNode(node);
-    emitNode.flags |= ts.EmitFlags.NoComments;
+    emitNode.flags |= EmitFlags.NoComments;
     emitNode.leadingComments = undefined;
     emitNode.trailingComments = undefined;
     return node;
@@ -61,7 +65,7 @@ export function removeAllComments<T extends ts.Node>(node: T): T {
 /**
  * Sets flags that control emit behavior of a node.
  */
-export function setEmitFlags<T extends ts.Node>(node: T, emitFlags: ts.EmitFlags) {
+export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
     getOrCreateEmitNode(node).flags = emitFlags;
     return node;
 }
@@ -70,7 +74,7 @@ export function setEmitFlags<T extends ts.Node>(node: T, emitFlags: ts.EmitFlags
  * Sets flags that control emit behavior of a node.
  */
 /* @internal */
-export function addEmitFlags<T extends ts.Node>(node: T, emitFlags: ts.EmitFlags) {
+export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.flags = emitNode.flags | emitFlags;
     return node;
@@ -79,14 +83,14 @@ export function addEmitFlags<T extends ts.Node>(node: T, emitFlags: ts.EmitFlags
 /**
  * Gets a custom text range to use when emitting source maps.
  */
-export function getSourceMapRange(node: ts.Node): ts.SourceMapRange {
+export function getSourceMapRange(node: Node): SourceMapRange {
     return node.emitNode?.sourceMapRange ?? node;
 }
 
 /**
  * Sets a custom text range to use when emitting source maps.
  */
-export function setSourceMapRange<T extends ts.Node>(node: T, range: ts.SourceMapRange | undefined) {
+export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
     getOrCreateEmitNode(node).sourceMapRange = range;
     return node;
 }
@@ -94,14 +98,14 @@ export function setSourceMapRange<T extends ts.Node>(node: T, range: ts.SourceMa
 /**
  * Gets the TextRange to use for source maps for a token of a node.
  */
-export function getTokenSourceMapRange(node: ts.Node, token: ts.SyntaxKind): ts.SourceMapRange | undefined {
+export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
     return node.emitNode?.tokenSourceMapRanges?.[token];
 }
 
 /**
  * Sets the TextRange to use for source maps for a token of a node.
  */
-export function setTokenSourceMapRange<T extends ts.Node>(node: T, token: ts.SyntaxKind, range: ts.SourceMapRange | undefined) {
+export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
     const emitNode = getOrCreateEmitNode(node);
     const tokenSourceMapRanges = emitNode.tokenSourceMapRanges ?? (emitNode.tokenSourceMapRanges = []);
     tokenSourceMapRanges[token] = range;
@@ -112,7 +116,7 @@ export function setTokenSourceMapRange<T extends ts.Node>(node: T, token: ts.Syn
  * Gets a custom text range to use when emitting comments.
  */
 /*@internal*/
-export function getStartsOnNewLine(node: ts.Node) {
+export function getStartsOnNewLine(node: Node) {
     return node.emitNode?.startsOnNewLine;
 }
 
@@ -120,7 +124,7 @@ export function getStartsOnNewLine(node: ts.Node) {
  * Sets a custom text range to use when emitting comments.
  */
 /*@internal*/
-export function setStartsOnNewLine<T extends ts.Node>(node: T, newLine: boolean) {
+export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
     getOrCreateEmitNode(node).startsOnNewLine = newLine;
     return node;
 }
@@ -128,45 +132,45 @@ export function setStartsOnNewLine<T extends ts.Node>(node: T, newLine: boolean)
 /**
  * Gets a custom text range to use when emitting comments.
  */
-export function getCommentRange(node: ts.Node): ts.TextRange {
+export function getCommentRange(node: Node): TextRange {
     return node.emitNode?.commentRange ?? node;
 }
 
 /**
  * Sets a custom text range to use when emitting comments.
  */
-export function setCommentRange<T extends ts.Node>(node: T, range: ts.TextRange) {
+export function setCommentRange<T extends Node>(node: T, range: TextRange) {
     getOrCreateEmitNode(node).commentRange = range;
     return node;
 }
 
-export function getSyntheticLeadingComments(node: ts.Node): ts.SynthesizedComment[] | undefined {
+export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
     return node.emitNode?.leadingComments;
 }
 
-export function setSyntheticLeadingComments<T extends ts.Node>(node: T, comments: ts.SynthesizedComment[] | undefined) {
+export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
     getOrCreateEmitNode(node).leadingComments = comments;
     return node;
 }
 
-export function addSyntheticLeadingComment<T extends ts.Node>(node: T, kind: ts.SyntaxKind.SingleLineCommentTrivia | ts.SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-    return setSyntheticLeadingComments(node, ts.append<ts.SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+    return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
 }
 
-export function getSyntheticTrailingComments(node: ts.Node): ts.SynthesizedComment[] | undefined {
+export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
     return node.emitNode?.trailingComments;
 }
 
-export function setSyntheticTrailingComments<T extends ts.Node>(node: T, comments: ts.SynthesizedComment[] | undefined) {
+export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
     getOrCreateEmitNode(node).trailingComments = comments;
     return node;
 }
 
-export function addSyntheticTrailingComment<T extends ts.Node>(node: T, kind: ts.SyntaxKind.SingleLineCommentTrivia | ts.SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-    return setSyntheticTrailingComments(node, ts.append<ts.SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+    return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
 }
 
-export function moveSyntheticComments<T extends ts.Node>(node: T, original: ts.Node): T {
+export function moveSyntheticComments<T extends Node>(node: T, original: Node): T {
     setSyntheticLeadingComments(node, getSyntheticLeadingComments(original));
     setSyntheticTrailingComments(node, getSyntheticTrailingComments(original));
     const emit = getOrCreateEmitNode(original);
@@ -178,14 +182,14 @@ export function moveSyntheticComments<T extends ts.Node>(node: T, original: ts.N
 /**
  * Gets the constant value to emit for an expression representing an enum.
  */
-export function getConstantValue(node: ts.AccessExpression): string | number | undefined {
+export function getConstantValue(node: AccessExpression): string | number | undefined {
     return node.emitNode?.constantValue;
 }
 
 /**
  * Sets the constant value to emit for an expression.
  */
-export function setConstantValue(node: ts.AccessExpression, value: string | number): ts.AccessExpression {
+export function setConstantValue(node: AccessExpression, value: string | number): AccessExpression {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.constantValue = value;
     return node;
@@ -194,20 +198,20 @@ export function setConstantValue(node: ts.AccessExpression, value: string | numb
 /**
  * Adds an EmitHelper to a node.
  */
-export function addEmitHelper<T extends ts.Node>(node: T, helper: ts.EmitHelper): T {
+export function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T {
     const emitNode = getOrCreateEmitNode(node);
-    emitNode.helpers = ts.append(emitNode.helpers, helper);
+    emitNode.helpers = append(emitNode.helpers, helper);
     return node;
 }
 
 /**
  * Add EmitHelpers to a node.
  */
-export function addEmitHelpers<T extends ts.Node>(node: T, helpers: ts.EmitHelper[] | undefined): T {
-    if (ts.some(helpers)) {
+export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T {
+    if (some(helpers)) {
         const emitNode = getOrCreateEmitNode(node);
         for (const helper of helpers) {
-            emitNode.helpers = ts.appendIfUnique(emitNode.helpers, helper);
+            emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
         }
     }
     return node;
@@ -216,10 +220,10 @@ export function addEmitHelpers<T extends ts.Node>(node: T, helpers: ts.EmitHelpe
 /**
  * Removes an EmitHelper from a node.
  */
-export function removeEmitHelper(node: ts.Node, helper: ts.EmitHelper): boolean {
+export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
     const helpers = node.emitNode?.helpers;
     if (helpers) {
-        return ts.orderedRemoveItem(helpers, helper);
+        return orderedRemoveItem(helpers, helper);
     }
     return false;
 }
@@ -227,17 +231,17 @@ export function removeEmitHelper(node: ts.Node, helper: ts.EmitHelper): boolean 
 /**
  * Gets the EmitHelpers of a node.
  */
-export function getEmitHelpers(node: ts.Node): ts.EmitHelper[] | undefined {
+export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
     return node.emitNode?.helpers;
 }
 
 /**
  * Moves matching emit helpers from a source node to a target node.
  */
-export function moveEmitHelpers(source: ts.Node, target: ts.Node, predicate: (helper: ts.EmitHelper) => boolean) {
+export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
     const sourceEmitNode = source.emitNode;
     const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
-    if (!ts.some(sourceEmitHelpers)) return;
+    if (!some(sourceEmitHelpers)) return;
 
     const targetEmitNode = getOrCreateEmitNode(target);
     let helpersRemoved = 0;
@@ -245,7 +249,7 @@ export function moveEmitHelpers(source: ts.Node, target: ts.Node, predicate: (he
         const helper = sourceEmitHelpers[i];
         if (predicate(helper)) {
             helpersRemoved++;
-            targetEmitNode.helpers = ts.appendIfUnique(targetEmitNode.helpers, helper);
+            targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
         }
         else if (helpersRemoved > 0) {
             sourceEmitHelpers[i - helpersRemoved] = helper;
@@ -261,7 +265,7 @@ export function moveEmitHelpers(source: ts.Node, target: ts.Node, predicate: (he
  * Gets the SnippetElement of a node.
  */
 /* @internal */
-export function getSnippetElement(node: ts.Node): ts.SnippetElement | undefined {
+export function getSnippetElement(node: Node): SnippetElement | undefined {
     return node.emitNode?.snippetElement;
 }
 
@@ -269,26 +273,26 @@ export function getSnippetElement(node: ts.Node): ts.SnippetElement | undefined 
  * Sets the SnippetElement of a node.
  */
 /* @internal */
-export function setSnippetElement<T extends ts.Node>(node: T, snippet: ts.SnippetElement): T {
+export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.snippetElement = snippet;
     return node;
 }
 
 /* @internal */
-export function ignoreSourceNewlines<T extends ts.Node>(node: T): T {
-    getOrCreateEmitNode(node).flags |= ts.EmitFlags.IgnoreSourceNewlines;
+export function ignoreSourceNewlines<T extends Node>(node: T): T {
+    getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
     return node;
 }
 
 /* @internal */
-export function setTypeNode<T extends ts.Node>(node: T, type: ts.TypeNode): T {
+export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.typeNode = type;
     return node;
 }
 
 /* @internal */
-export function getTypeNode<T extends ts.Node>(node: T): ts.TypeNode | undefined {
+export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
     return node.emitNode?.typeNode;
 }

@@ -1,4 +1,12 @@
-import * as ts from "./_namespaces/ts";
+import * as server from "./_namespaces/ts.server";
+import {
+    indent, Logger, LogLevel, ModuleImportResult, Msg, nowString, nullTypingsInstaller, protocol,
+    ServerCancellationToken, ServerHost, Session, SessionOptions,
+} from "./_namespaces/ts.server";
+import {
+    combinePaths, Debug, directorySeparator, ensureTrailingDirectorySeparator, getDirectoryPath, identity, memoize,
+    notImplemented, perfLogger, returnFalse, returnNoopFileWatcher, startsWith,
+} from "./_namespaces/ts";
 
 declare const fetch: any;
 declare const importScripts: any;
@@ -14,11 +22,11 @@ export interface WebHost extends HostWithWriteMessage {
 }
 
 /** @internal */
-export class BaseLogger implements ts.server.Logger {
+export class BaseLogger implements Logger {
     private seq = 0;
     private inGroup = false;
     private firstInGroup = true;
-    constructor(protected readonly level: ts.server.LogLevel) {
+    constructor(protected readonly level: LogLevel) {
     }
     static padStringRight(str: string, padding: string) {
         return (str + padding).slice(0, padding.length);
@@ -29,13 +37,13 @@ export class BaseLogger implements ts.server.Logger {
         return undefined;
     }
     perftrc(s: string) {
-        this.msg(s, ts.server.Msg.Perf);
+        this.msg(s, Msg.Perf);
     }
     info(s: string) {
-        this.msg(s, ts.server.Msg.Info);
+        this.msg(s, Msg.Info);
     }
     err(s: string) {
-        this.msg(s, ts.server.Msg.Err);
+        this.msg(s, Msg.Err);
     }
     startGroup() {
         this.inGroup = true;
@@ -47,25 +55,25 @@ export class BaseLogger implements ts.server.Logger {
     loggingEnabled() {
         return true;
     }
-    hasLevel(level: ts.server.LogLevel) {
+    hasLevel(level: LogLevel) {
         return this.loggingEnabled() && this.level >= level;
     }
-    msg(s: string, type: ts.server.Msg = ts.server.Msg.Err) {
+    msg(s: string, type: Msg = Msg.Err) {
         switch (type) {
-            case ts.server.Msg.Info:
-                ts.perfLogger.logInfoEvent(s);
+            case Msg.Info:
+                perfLogger.logInfoEvent(s);
                 break;
-            case ts.server.Msg.Perf:
-                ts.perfLogger.logPerfEvent(s);
+            case Msg.Perf:
+                perfLogger.logPerfEvent(s);
                 break;
             default: // Msg.Err
-                ts.perfLogger.logErrEvent(s);
+                perfLogger.logErrEvent(s);
                 break;
         }
 
         if (!this.canWrite()) return;
 
-        s = `[${ts.server.nowString()}] ${s}\n`;
+        s = `[${nowString()}] ${s}\n`;
         if (!this.inGroup || this.firstInGroup) {
             const prefix = BaseLogger.padStringRight(type + " " + this.seq.toString(), "          ");
             s = prefix + s;
@@ -78,7 +86,7 @@ export class BaseLogger implements ts.server.Logger {
     protected canWrite() {
         return true;
     }
-    protected write(_s: string, _type: ts.server.Msg) {
+    protected write(_s: string, _type: Msg) {
     }
 }
 
@@ -92,23 +100,23 @@ export interface LoggingMessage {
 }
 /** @internal */
 export class MainProcessLogger extends BaseLogger {
-    constructor(level: ts.server.LogLevel, private host: HostWithWriteMessage) {
+    constructor(level: LogLevel, private host: HostWithWriteMessage) {
         super(level);
     }
-    protected write(body: string, type: ts.server.Msg) {
+    protected write(body: string, type: Msg) {
         let level: MessageLogLevel;
         switch (type) {
-            case ts.server.Msg.Info:
+            case Msg.Info:
                 level = "info";
                 break;
-            case ts.server.Msg.Perf:
+            case Msg.Perf:
                 level = "perf";
                 break;
-            case ts.server.Msg.Err:
+            case Msg.Err:
                 level = "error";
                 break;
             default:
-                ts.Debug.assertNever(type);
+                Debug.assertNever(type);
         }
         this.host.writeMessage({
             type: "log",
@@ -130,14 +138,14 @@ if (typeof importScripts === "function") {
 }
 
 /** @internal */
-export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ts.server.ServerHost {
+export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
     const returnEmptyString = () => "";
-    const getExecutingDirectoryPath = ts.memoize(() => ts.memoize(() => ts.ensureTrailingDirectorySeparator(ts.getDirectoryPath(getExecutingFilePath()))));
+    const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
     // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
-    const getWebPath = (path: string) => ts.startsWith(path, ts.directorySeparator) ? path.replace(ts.directorySeparator, getExecutingDirectoryPath()) : undefined;
+    const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
 
     const dynamicImport = async (id: string): Promise<any> => {
-        const serverDynamicImport: ((id: string) => Promise<any>) | undefined = (ts.server as any).dynamicImport;
+        const serverDynamicImport: ((id: string) => Promise<any>) | undefined = (server as any).dynamicImport;
         // Use syntactic dynamic import first, if available
         if (serverDynamicImport) {
             return serverDynamicImport(id);
@@ -155,10 +163,10 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
             return webPath && host.readFile(webPath);
         },
         write: host.writeMessage.bind(host),
-        watchFile: ts.returnNoopFileWatcher,
-        watchDirectory: ts.returnNoopFileWatcher,
+        watchFile: returnNoopFileWatcher,
+        watchDirectory: returnNoopFileWatcher,
 
-        getExecutingFilePath: () => ts.directorySeparator,
+        getExecutingFilePath: () => directorySeparator,
         getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
         /* eslint-disable no-restricted-globals */
@@ -168,12 +176,12 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
         clearImmediate: handle => clearTimeout(handle),
         /* eslint-enable no-restricted-globals */
 
-        importPlugin: async (initialDir: string, moduleName: string): Promise<ts.server.ModuleImportResult> => {
-            const packageRoot = ts.combinePaths(initialDir, moduleName);
+        importPlugin: async (initialDir: string, moduleName: string): Promise<ModuleImportResult> => {
+            const packageRoot = combinePaths(initialDir, moduleName);
 
             let packageJson: any | undefined;
             try {
-                const packageJsonResponse = await fetch(ts.combinePaths(packageRoot, "package.json"));
+                const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
                 packageJson = await packageJsonResponse.json();
             }
             catch (e) {
@@ -185,7 +193,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
                 return { module: undefined, error: new Error("Could not load plugin. No 'browser' field found in package.json.") };
             }
 
-            const scriptPath = ts.combinePaths(packageRoot, browser);
+            const scriptPath = combinePaths(packageRoot, browser);
             try {
                 const { default: module } = await dynamicImport(scriptPath);
                 return { module, error: undefined };
@@ -194,7 +202,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
                 return { module: undefined, error: e };
             }
         },
-        exit: ts.notImplemented,
+        exit: notImplemented,
 
         // Debugging related
         getEnvironmentVariable: returnEmptyString, // TODO:: Used to enable debugging info
@@ -206,12 +214,12 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
             const webPath = getWebPath(path);
             return !!webPath && host.fileExists(webPath);
         },
-        directoryExists: ts.returnFalse, // Module resolution
-        readDirectory: ts.notImplemented, // Configured project, typing installer
+        directoryExists: returnFalse, // Module resolution
+        readDirectory: notImplemented, // Configured project, typing installer
         getDirectories: () => [], // For automatic type reference directives
-        createDirectory: ts.notImplemented, // compile On save
-        writeFile: ts.notImplemented, // compile on save
-        resolvePath: ts.identity, // Plugins
+        createDirectory: notImplemented, // compile On save
+        writeFile: notImplemented, // compile on save
+        resolvePath: identity, // Plugins
         // realpath? // Module resolution, symlinks
         // getModifiedTime // File watching
         // createSHA256Hash // telemetry of the project
@@ -225,46 +233,46 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
 
 /** @internal */
 export interface StartSessionOptions {
-    globalPlugins: ts.server.SessionOptions["globalPlugins"];
-    pluginProbeLocations: ts.server.SessionOptions["pluginProbeLocations"];
-    allowLocalPluginLoads: ts.server.SessionOptions["allowLocalPluginLoads"];
-    useSingleInferredProject: ts.server.SessionOptions["useSingleInferredProject"];
-    useInferredProjectPerProjectRoot: ts.server.SessionOptions["useInferredProjectPerProjectRoot"];
-    suppressDiagnosticEvents: ts.server.SessionOptions["suppressDiagnosticEvents"];
-    noGetErrOnBackgroundUpdate: ts.server.SessionOptions["noGetErrOnBackgroundUpdate"];
-    syntaxOnly: ts.server.SessionOptions["syntaxOnly"];
-    serverMode: ts.server.SessionOptions["serverMode"];
+    globalPlugins: SessionOptions["globalPlugins"];
+    pluginProbeLocations: SessionOptions["pluginProbeLocations"];
+    allowLocalPluginLoads: SessionOptions["allowLocalPluginLoads"];
+    useSingleInferredProject: SessionOptions["useSingleInferredProject"];
+    useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
+    suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
+    noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
+    syntaxOnly: SessionOptions["syntaxOnly"];
+    serverMode: SessionOptions["serverMode"];
 }
 /** @internal */
-export class WorkerSession extends ts.server.Session<{}> {
-    constructor(host: ts.server.ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken, hrtime: ts.server.SessionOptions["hrtime"]) {
+export class WorkerSession extends Session<{}> {
+    constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
         super({
             host,
             cancellationToken,
             ...options,
-            typingsInstaller: ts.server.nullTypingsInstaller,
-            byteLength: ts.notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
+            typingsInstaller: nullTypingsInstaller,
+            byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
             hrtime,
             logger,
             canUseEvents: true,
         });
     }
 
-    public send(msg: ts.server.protocol.Message) {
+    public send(msg: protocol.Message) {
         if (msg.type === "event" && !this.canUseEvents) {
-            if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
             }
             return;
         }
-        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`${msg.type}:${ts.server.indent(JSON.stringify(msg))}`);
+        if (this.logger.hasLevel(LogLevel.verbose)) {
+            this.logger.info(`${msg.type}:${indent(JSON.stringify(msg))}`);
         }
         this.webHost.writeMessage(msg);
     }
 
-    protected parseMessage(message: {}): ts.server.protocol.Request {
-        return message as ts.server.protocol.Request;
+    protected parseMessage(message: {}): protocol.Request {
+        return message as protocol.Request;
     }
 
     protected toStringMessage(message: {}) {

@@ -1,27 +1,27 @@
-import * as ts from "./_namespaces/ts";
+import { noop } from "./_namespaces/ts";
 
 type PerfLogger = typeof import("@microsoft/typescript-etw");
 const nullLogger: PerfLogger = {
-    logEvent: ts.noop,
-    logErrEvent: ts.noop,
-    logPerfEvent: ts.noop,
-    logInfoEvent: ts.noop,
-    logStartCommand: ts.noop,
-    logStopCommand: ts.noop,
-    logStartUpdateProgram: ts.noop,
-    logStopUpdateProgram: ts.noop,
-    logStartUpdateGraph: ts.noop,
-    logStopUpdateGraph: ts.noop,
-    logStartResolveModule: ts.noop,
-    logStopResolveModule: ts.noop,
-    logStartParseSourceFile: ts.noop,
-    logStopParseSourceFile: ts.noop,
-    logStartReadFile: ts.noop,
-    logStopReadFile: ts.noop,
-    logStartBindFile: ts.noop,
-    logStopBindFile: ts.noop,
-    logStartScheduledOperation: ts.noop,
-    logStopScheduledOperation: ts.noop,
+    logEvent: noop,
+    logErrEvent: noop,
+    logPerfEvent: noop,
+    logInfoEvent: noop,
+    logStartCommand: noop,
+    logStopCommand: noop,
+    logStartUpdateProgram: noop,
+    logStopUpdateProgram: noop,
+    logStartUpdateGraph: noop,
+    logStopUpdateGraph: noop,
+    logStartResolveModule: noop,
+    logStopResolveModule: noop,
+    logStartParseSourceFile: noop,
+    logStopParseSourceFile: noop,
+    logStartReadFile: noop,
+    logStopReadFile: noop,
+    logStartBindFile: noop,
+    logStopBindFile: noop,
+    logStartScheduledOperation: noop,
+    logStopScheduledOperation: noop,
 };
 
 // Load optional module to enable Event Tracing for Windows
