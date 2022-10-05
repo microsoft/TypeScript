@@ -125,6 +125,8 @@ namespace ts.server {
             }
 
             listen() {
+                this.logger.info("Starting ORIGINAL web session (this should be turned off)")
+                console.log("Starting ORIGINAL web session (this should be turned off)")
                 addEventListener("message", (message: any) => {
                     this.onMessage(message.data);
                 });

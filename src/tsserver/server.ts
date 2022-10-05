@@ -80,12 +80,13 @@ namespace ts.server {
         start(initializeNodeSystem(), require("os").platform());
     }
     else {
+        console.log("NOT starting original server")
         // Get args from first message
-        const listener = (e: any) => {
-            removeEventListener("message", listener);
-            const args = e.data;
-            start(initializeWebSystem(args), "web");
-        };
-        addEventListener("message", listener);
+        // const listener = (e: any) => {
+        //     removeEventListener("message", listener);
+        //     const args = e.data;
+        //     start(initializeWebSystem(args), "web");
+        // };
+        // addEventListener("message", listener);
     }
 }
