@@ -343,38 +343,57 @@ namespace ts.projectSystem {
         }
     }
 
-    function patchHostTimeouts(host: TestFSWithWatch.TestServerHostTrackingWrittenFiles, session: TestSession | TestProjectService) {
+    export type TestSessionAndServiceHost = TestFSWithWatch.TestServerHostTrackingWrittenFiles & {
+        baselineHost(title: string): void;
+    };
+    function patchHostTimeouts(
+        inputHost: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+        session: TestSession | TestProjectService
+    ) {
+        const host = inputHost as TestSessionAndServiceHost;
         const originalCheckTimeoutQueueLength = host.checkTimeoutQueueLength;
         const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
         const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
+        let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
         host.checkTimeoutQueueLengthAndRun = checkTimeoutQueueLengthAndRun;
         host.checkTimeoutQueueLength = checkTimeoutQueueLength;
         host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
         host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
+        host.baselineHost = baselineHost;
+        return host;
 
         function checkTimeoutQueueLengthAndRun(expected: number) {
-            session.baselineHost(`Before checking timeout queue length (${expected}) and running`);
+            host.baselineHost(`Before checking timeout queue length (${expected}) and running`);
             originalCheckTimeoutQueueLength.call(host, expected);
             originalRunQueuedTimeoutCallbacks.call(host);
-            session.baselineHost(`After checking timeout queue length (${expected}) and running`);
+            host.baselineHost(`After checking timeout queue length (${expected}) and running`);
         }
 
         function checkTimeoutQueueLength(expected: number) {
-            session.baselineHost(`Checking timeout queue length: ${expected}`);
+            host.baselineHost(`Checking timeout queue length: ${expected}`);
             originalCheckTimeoutQueueLength.call(host, expected);
         }
 
         function runQueuedTimeoutCallbacks(timeoutId?: number) {
-            session.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+            host.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
             originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-            session.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+            host.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
         }
 
         function runQueuedImmediateCallbacks(checkCount?: number) {
-            session.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+            host.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
             originalRunQueuedImmediateCallbacks.call(host, checkCount);
-            session.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+            host.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+        }
+
+        function baselineHost(title: string) {
+            if (!session.logger.hasLevel(server.LogLevel.verbose)) return;
+            session.logger.logs.push(title);
+            host.diff(session.logger.logs, hostDiff);
+            host.serializeWatches(session.logger.logs);
+            hostDiff = host.snap();
+            host.writtenFiles.clear();
         }
     }
 
@@ -385,15 +404,16 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public testhost: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        public testhost: TestSessionAndServiceHost;
         public logger: Logger;
-        private hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
         constructor(opts: TestSessionOptions) {
             super(opts);
             this.logger = opts.logger;
-            this.testhost = TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost);
-            patchHostTimeouts(this.testhost, this);
+            this.testhost = patchHostTimeouts(
+                TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+                this
+            );
         }
 
         getProjectService() {
@@ -432,18 +452,9 @@ namespace ts.projectSystem {
         private baseline<T extends protocol.Request | server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
             if (!this.logger.hasLevel(server.LogLevel.verbose)) return requestOrResult;
             if (type === "request") this.logger.info(`request:${server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
-            this.baselineHost(type === "request" ? "Before request" : "After request");
+            this.testhost.baselineHost(type === "request" ? "Before request" : "After request");
             if (type === "response") this.logger.info(`response:${server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
             return requestOrResult;
-        }
-
-        baselineHost(title: string) {
-            if (!this.logger.hasLevel(server.LogLevel.verbose)) return;
-            this.logger.logs.push(title);
-            this.testhost.diff(this.logger.logs, this.hostDiff);
-            this.testhost.serializeWatches(this.logger.logs);
-            this.hostDiff = this.testhost.snap();
-            this.testhost.writtenFiles.clear();
         }
     }
 
@@ -511,8 +522,7 @@ namespace ts.projectSystem {
     }
 
     export class TestProjectService extends server.ProjectService {
-        public testhost: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
-        private hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
+        public testhost: TestSessionAndServiceHost;
         constructor(host: TestServerHost, public logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
             typingsInstaller: server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
             super({
@@ -526,22 +536,15 @@ namespace ts.projectSystem {
                 typesMapLocation: customTypesMap.path,
                 ...opts
             });
-            this.testhost = TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost);
-            patchHostTimeouts(this.testhost, this);
-            this.baselineHost("Creating project service");
+            this.testhost = patchHostTimeouts(
+                TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+                this
+            );
+            this.testhost.baselineHost("Creating project service");
         }
 
         checkNumberOfProjects(count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
             checkNumberOfProjects(this, count);
-        }
-
-        baselineHost(title: string) {
-            if (!this.logger.hasLevel(server.LogLevel.verbose)) return;
-            this.logger.logs.push(title);
-            this.testhost.diff(this.logger.logs, this.hostDiff);
-            this.testhost.serializeWatches(this.logger.logs);
-            this.hostDiff = this.testhost.snap();
-            this.testhost.writtenFiles.clear();
         }
     }
 

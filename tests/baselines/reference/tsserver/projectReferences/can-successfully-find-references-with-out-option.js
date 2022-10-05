@@ -368,9 +368,8 @@ Info 6    [00:01:16.000] Config: /user/username/projects/container/compositeExec
   }
  ]
 }
-Info 7    [00:01:17.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 8    [00:01:18.000] Starting updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json
-Info 9    [00:01:19.000] Config: /user/username/projects/container/lib/tsconfig.json : {
+Info 7    [00:01:17.000] Starting updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json
+Info 8    [00:01:18.000] Config: /user/username/projects/container/lib/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/container/lib/index.ts"
  ],
@@ -381,16 +380,16 @@ Info 9    [00:01:19.000] Config: /user/username/projects/container/lib/tsconfig.
   "configFilePath": "/user/username/projects/container/lib/tsconfig.json"
  }
 }
-Info 10   [00:01:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
-Info 11   [00:01:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:01:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:01:23.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 14   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 15   [00:01:25.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 16   [00:01:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 17   [00:01:27.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:01:28.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info 19   [00:01:29.000] 	Files (3)
+Info 9    [00:01:19.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
+Info 10   [00:01:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:01:21.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:01:22.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 13   [00:01:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 14   [00:01:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 15   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 16   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:01:27.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info 18   [00:01:28.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 	/user/username/projects/container/compositeExec/index.ts
@@ -403,24 +402,24 @@ Info 19   [00:01:29.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 20   [00:01:30.000] -----------------------------------------------
-Info 21   [00:01:31.000] Search path: /user/username/projects/container/compositeExec
-Info 22   [00:01:32.000] For info: /user/username/projects/container/compositeExec/tsconfig.json :: Config file name: /user/username/projects/container/tsconfig.json
-Info 23   [00:01:33.000] Creating configuration project /user/username/projects/container/tsconfig.json
-Info 24   [00:01:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info 25   [00:01:35.000] Search path: /user/username/projects/container
-Info 26   [00:01:36.000] For info: /user/username/projects/container/tsconfig.json :: No config files found.
-Info 27   [00:01:37.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info 27   [00:01:38.000] 	Files (3)
+Info 19   [00:01:29.000] -----------------------------------------------
+Info 20   [00:01:30.000] Search path: /user/username/projects/container/compositeExec
+Info 21   [00:01:31.000] For info: /user/username/projects/container/compositeExec/tsconfig.json :: Config file name: /user/username/projects/container/tsconfig.json
+Info 22   [00:01:32.000] Creating configuration project /user/username/projects/container/tsconfig.json
+Info 23   [00:01:33.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
+Info 24   [00:01:34.000] Search path: /user/username/projects/container
+Info 25   [00:01:35.000] For info: /user/username/projects/container/tsconfig.json :: No config files found.
+Info 26   [00:01:36.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info 26   [00:01:37.000] 	Files (3)
 
-Info 27   [00:01:39.000] -----------------------------------------------
-Info 27   [00:01:40.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
-Info 27   [00:01:41.000] 	Files (0) InitialLoadPending
+Info 26   [00:01:38.000] -----------------------------------------------
+Info 26   [00:01:39.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 26   [00:01:40.000] 	Files (0) InitialLoadPending
 
-Info 27   [00:01:42.000] -----------------------------------------------
-Info 27   [00:01:43.000] Open files: 
-Info 27   [00:01:44.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
-Info 27   [00:01:45.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
+Info 26   [00:01:41.000] -----------------------------------------------
+Info 26   [00:01:42.000] Open files: 
+Info 26   [00:01:43.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
+Info 26   [00:01:44.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 After request
 
 PolledWatches::
@@ -443,11 +442,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 27   [00:01:46.000] response:
+Info 26   [00:01:45.000] response:
     {
       "responseRequired": false
     }
-Info 28   [00:01:47.000] request:
+Info 27   [00:01:46.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -480,18 +479,17 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 29   [00:01:48.000] Search path: /user/username/projects/container/lib
-Info 30   [00:01:49.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
-Info 31   [00:01:50.000] Creating configuration project /user/username/projects/container/lib/tsconfig.json
-Info 32   [00:01:51.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 33   [00:01:52.000] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
-Info 34   [00:01:53.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 35   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 36   [00:01:55.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 37   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 38   [00:01:57.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 39   [00:01:58.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
-Info 40   [00:01:59.000] 	Files (2)
+Info 28   [00:01:47.000] Search path: /user/username/projects/container/lib
+Info 29   [00:01:48.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info 30   [00:01:49.000] Creating configuration project /user/username/projects/container/lib/tsconfig.json
+Info 31   [00:01:50.000] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
+Info 32   [00:01:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 33   [00:01:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 34   [00:01:53.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 35   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 36   [00:01:55.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 37   [00:01:56.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
+Info 38   [00:01:57.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 
@@ -501,9 +499,9 @@ Info 40   [00:01:59.000] 	Files (2)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 41   [00:02:00.000] -----------------------------------------------
-Info 42   [00:02:01.000] Loading configured project /user/username/projects/container/tsconfig.json
-Info 43   [00:02:02.000] Config: /user/username/projects/container/tsconfig.json : {
+Info 39   [00:01:58.000] -----------------------------------------------
+Info 40   [00:01:59.000] Loading configured project /user/username/projects/container/tsconfig.json
+Info 41   [00:02:00.000] Config: /user/username/projects/container/tsconfig.json : {
  "rootNames": [],
  "options": {
   "configFilePath": "/user/username/projects/container/tsconfig.json"
@@ -519,9 +517,8 @@ Info 43   [00:02:02.000] Config: /user/username/projects/container/tsconfig.json
   }
  ]
 }
-Info 44   [00:02:03.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 45   [00:02:04.000] Starting updateGraphWorker: Project: /user/username/projects/container/tsconfig.json
-Info 46   [00:02:05.000] Config: /user/username/projects/container/exec/tsconfig.json : {
+Info 42   [00:02:01.000] Starting updateGraphWorker: Project: /user/username/projects/container/tsconfig.json
+Info 43   [00:02:02.000] Config: /user/username/projects/container/exec/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/container/exec/index.ts"
  ],
@@ -537,22 +534,21 @@ Info 46   [00:02:05.000] Config: /user/username/projects/container/exec/tsconfig
   }
  ]
 }
-Info 47   [00:02:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info 48   [00:02:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
-Info 49   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
-Info 50   [00:02:09.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 51   [00:02:10.000] Different program with same set of files
-Info 52   [00:02:11.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
-Info 53   [00:02:12.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 54   [00:02:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
-Info 55   [00:02:14.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
-Info 56   [00:02:15.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 57   [00:02:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 58   [00:02:17.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 59   [00:02:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 60   [00:02:19.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 61   [00:02:20.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 62   [00:02:21.000] 	Files (3)
+Info 44   [00:02:03.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
+Info 45   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
+Info 46   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
+Info 47   [00:02:06.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 48   [00:02:07.000] Different program with same set of files
+Info 49   [00:02:08.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
+Info 50   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
+Info 51   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
+Info 52   [00:02:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 53   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 54   [00:02:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 55   [00:02:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 56   [00:02:15.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 57   [00:02:16.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 58   [00:02:17.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 	/user/username/projects/container/exec/index.ts
@@ -565,9 +561,9 @@ Info 62   [00:02:21.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 63   [00:02:22.000] -----------------------------------------------
-Info 64   [00:02:23.000] Search path: /user/username/projects/container/lib
-Info 65   [00:02:24.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info 59   [00:02:18.000] -----------------------------------------------
+Info 60   [00:02:19.000] Search path: /user/username/projects/container/lib
+Info 61   [00:02:20.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 After request
 
 PolledWatches::
@@ -598,7 +594,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 66   [00:02:25.000] response:
+Info 62   [00:02:21.000] response:
     {
       "response": {
         "info": {

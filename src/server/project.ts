@@ -1605,6 +1605,7 @@ namespace ts.server {
         }
 
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
+            if (!this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
 
             if (!host.require && !host.importPlugin) {
@@ -1619,20 +1620,18 @@ namespace ts.server {
                 combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
             ];
 
-            if (this.projectService.globalPlugins) {
-                // Enable global plugins with synthetic configuration entries
-                for (const globalPluginName of this.projectService.globalPlugins) {
-                    // Skip empty names from odd commandline parses
-                    if (!globalPluginName) continue;
+            // Enable global plugins with synthetic configuration entries
+            for (const globalPluginName of this.projectService.globalPlugins) {
+                // Skip empty names from odd commandline parses
+                if (!globalPluginName) continue;
 
-                    // Skip already-locally-loaded plugins
-                    if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+                // Skip already-locally-loaded plugins
+                if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
 
-                    // Provide global: true so plugins can detect why they can't find their config
-                    this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
+                // Provide global: true so plugins can detect why they can't find their config
+                this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
 
-                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
-                }
+                this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
             }
         }
 
@@ -2521,6 +2520,7 @@ namespace ts.server {
 
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
+            if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
             if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
