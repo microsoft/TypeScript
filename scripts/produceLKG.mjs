@@ -1,8 +1,8 @@
-import childProcess from "child_process";
 import fs from "fs-extra";
 import path from "path";
 import glob from "glob";
 import url from "url";
+import del from "del";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -14,6 +14,8 @@ const copyright = fs.readFileSync(path.join(__dirname, "../CopyrightNotice.txt")
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
+    await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
+    await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
@@ -92,16 +94,6 @@ async function copyFilesWithGlob(pattern) {
         await copyFromBuiltLocal(f);
     }
     console.log(`Copied ${files.length} files matching pattern ${pattern}`);
-}
-
-/**
- * @param {string} path
- * @param {string[]} args
- */
-async function exec(path, args = []) {
-    const cmdLine = ["node", path, ...args].join(" ");
-    console.log(cmdLine);
-    childProcess.execSync(cmdLine);
 }
 
 process.on("unhandledRejection", err => {
