@@ -3,6 +3,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as glob from "glob";
+import * as del from "del";
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -10,6 +11,8 @@ const dest = path.join(root, "lib");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
+    await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
+    await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
