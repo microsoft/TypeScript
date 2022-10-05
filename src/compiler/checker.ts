@@ -177,7 +177,8 @@ namespace ts {
         SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
         IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
         IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-        RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+        IsForObjectLiteralArgumentCompletions = 1 << 6, // Use the constraint over inferred type for object literal argument completions
+        RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                         //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                         //   we need to preserve generic types instead of substituting them for constraints
     }
@@ -23512,7 +23513,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                    if (!inferredType || (inferredType === silentNeverType) || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
@@ -27190,10 +27191,11 @@ namespace ts {
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
-            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
+            const argCheckMode = !getNodeLinks(arg).resolvedSignature ? CheckMode.IsForObjectLiteralArgumentCompletions : undefined;
+            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex, argCheckMode);
         }
 
-        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
+        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, checkMode?: CheckMode): Type {
             if (isImportCall(callTarget)) {
                 return argIndex === 0 ? stringType :
                     argIndex === 1 ? getGlobalImportCallOptionsType(/*reportErrors*/ false) :
@@ -27202,7 +27204,7 @@ namespace ts {
 
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget, /*candidatesOutArray*/ undefined, checkMode);
 
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
@@ -31396,7 +31398,11 @@ namespace ts {
                             }
                         }
                         else {
-                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            const argFlags = isInJSFile(node) ? InferenceFlags.AnyDefault :
+                                checkMode & CheckMode.IsForObjectLiteralArgumentCompletions ? InferenceFlags.NoDefault :
+                                InferenceFlags.None;
+
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, argFlags);
                             typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
                             argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
                         }
