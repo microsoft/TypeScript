@@ -42,190 +42,132 @@ namespace ts {
 
         interface VerifyWatchOptions {
             json: object;
-            expectedOptions: WatchOptions | undefined;
             additionalFiles?: vfs.FileSet;
             existingWatchOptions?: WatchOptions | undefined;
-            expectedErrors?: (sourceFile?: SourceFile) => Diagnostic[];
         }
 
-        function verifyWatchOptions(scenario: () => VerifyWatchOptions[]) {
-            it("with json api", () => {
-                for (const { json, expectedOptions, additionalFiles, existingWatchOptions, expectedErrors } of scenario()) {
-                    const parsed = getParsedCommandJson(json, additionalFiles, existingWatchOptions);
-                    assert.deepEqual(parsed.watchOptions, expectedOptions, `With ${JSON.stringify(json)}`);
-                    if (length(parsed.errors)) {
-                        assert.deepEqual(parsed.errors, expectedErrors?.());
+        function verifyWatchOptions(subScenario: string, scenario: () => VerifyWatchOptions[]) {
+            describe(subScenario, () => {
+                it("with json api", () => {
+                    const baseline: string[] = [];
+                    for (const { json, additionalFiles, existingWatchOptions } of scenario()) {
+                        addToBaseLine(baseline, json, getParsedCommandJson(json, additionalFiles, existingWatchOptions));
                     }
-                    else {
-                        assert.equal(0, length(expectedErrors?.()), `Expected no errors`);
-                    }
-                }
-            });
+                    runBaseline(`${subScenario} with json api`, baseline);
+                });
 
-            it("with json source file api", () => {
-                for (const { json, expectedOptions, additionalFiles, existingWatchOptions, expectedErrors } of scenario()) {
-                    const parsed = getParsedCommandJsonNode(json, additionalFiles, existingWatchOptions);
-                    assert.deepEqual(parsed.watchOptions, expectedOptions);
-                    if (length(parsed.errors)) {
-                        assert.deepEqual(parsed.errors, expectedErrors?.(parsed.options.configFile));
+                it("with json source file api", () => {
+                    const baseline: string[] = [];
+                    for (const { json, additionalFiles, existingWatchOptions, } of scenario()) {
+                        addToBaseLine(baseline, json, getParsedCommandJsonNode(json, additionalFiles, existingWatchOptions));
                     }
-                    else {
-                        assert.equal(0, length(expectedErrors?.(parsed.options.configFile)), `Expected no errors`);
-                    }
-                }
+                    runBaseline(`${subScenario} with jsonSourceFile api`, baseline);
+                });
             });
+            function addToBaseLine(baseline: string[], json: object, parsed: ParsedCommandLine) {
+                baseline.push(`Input:: ${JSON.stringify(json, /*replacer*/ undefined, " ")}`);
+                baseline.push(`Result: WatchOptions::`);
+                baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
+                baseline.push(`Result: Errors::`);
+                baseline.push(formatDiagnosticsWithColorAndContext(parsed.errors, {
+                    getCurrentDirectory: () => "/",
+                    getCanonicalFileName: identity,
+                    getNewLine: () => "\n"
+                }));
+            }
+            function runBaseline(subScenario: string, baseline: readonly string[]) {
+                Harness.Baseline.runBaseline(`config/tsconfigParsingWatchOptions/${subScenario}.js`, baseline.join("\n"));
+            }
         }
 
-        describe("no watchOptions specified option", () => {
-            verifyWatchOptions(() => [{
+        verifyWatchOptions("no watchOptions specified option", () => [{
+            json: {},
+        }]);
+
+        verifyWatchOptions("empty watchOptions specified option", () => [{
+            json: { watchOptions: {} },
+        }]);
+
+        verifyWatchOptions("when extending config file without watchOptions", () => [
+            {
+                json: {
+                    extends: "./base.json",
+                    watchOptions: { watchFile: "UseFsEvents" }
+                },
+                additionalFiles: { "/base.json": "{}" }
+            },
+            {
+                json: { extends: "./base.json", },
+                additionalFiles: { "/base.json": "{}" }
+            }
+        ]);
+
+        verifyWatchOptions("when extending config file with watchOptions", () => [
+            {
+                json: {
+                    extends: "./base.json",
+                    watchOptions: {
+                        watchFile: "UseFsEvents",
+                    }
+                },
+                additionalFiles: {
+                    "/base.json": JSON.stringify({
+                        watchOptions: {
+                            watchFile: "UseFsEventsOnParentDirectory",
+                            watchDirectory: "FixedPollingInterval"
+                        }
+                    })
+                }
+            },
+            {
+                json: {
+                    extends: "./base.json",
+                },
+                additionalFiles: {
+                    "/base.json": JSON.stringify({
+                        watchOptions: {
+                            watchFile: "UseFsEventsOnParentDirectory",
+                            watchDirectory: "FixedPollingInterval"
+                        }
+                    })
+                }
+            }
+        ]);
+
+        verifyWatchOptions("different options", () => [
+            {
+                json: { watchOptions: { watchFile: "UseFsEvents" } },
+            },
+            {
+                json: { watchOptions: { watchDirectory: "UseFsEvents" } },
+            },
+            {
+                json: { watchOptions: { fallbackPolling: "DynamicPriority" } },
+            },
+            {
+                json: { watchOptions: { synchronousWatchDirectory: true } },
+            },
+            {
+                json: { watchOptions: { excludeDirectories: ["**/temp"] } },
+            },
+            {
+                json: { watchOptions: { excludeFiles: ["**/temp/*.ts"] } },
+            },
+            {
+                json: { watchOptions: { excludeDirectories: ["**/../*"] } },
+            },
+            {
+                json: { watchOptions: { excludeFiles: ["**/../*"] } },
+            },
+        ]);
+
+        verifyWatchOptions("watch options extending passed in watch options", () => [
+            {
+                json: { watchOptions: { watchFile: "UseFsEvents" } },
+            },
+            {
                 json: {},
-                expectedOptions: undefined
-            }]);
-        });
-
-        describe("empty watchOptions specified option", () => {
-            verifyWatchOptions(() => [{
-                json: { watchOptions: {} },
-                expectedOptions: undefined
-            }]);
-        });
-
-        describe("extending config file", () => {
-            describe("when extending config file without watchOptions", () => {
-                verifyWatchOptions(() => [
-                    {
-                        json: {
-                            extends: "./base.json",
-                            watchOptions: { watchFile: "UseFsEvents" }
-                        },
-                        expectedOptions: { watchFile: WatchFileKind.UseFsEvents },
-                        additionalFiles: { "/base.json": "{}" }
-                    },
-                    {
-                        json: { extends: "./base.json", },
-                        expectedOptions: undefined,
-                        additionalFiles: { "/base.json": "{}" }
-                    }
-                ]);
-            });
-
-            describe("when extending config file with watchOptions", () => {
-                verifyWatchOptions(() => [
-                    {
-                        json: {
-                            extends: "./base.json",
-                            watchOptions: {
-                                watchFile: "UseFsEvents",
-                            }
-                        },
-                        expectedOptions: {
-                            watchFile: WatchFileKind.UseFsEvents,
-                            watchDirectory: WatchDirectoryKind.FixedPollingInterval
-                        },
-                        additionalFiles: {
-                            "/base.json": JSON.stringify({
-                                watchOptions: {
-                                    watchFile: "UseFsEventsOnParentDirectory",
-                                    watchDirectory: "FixedPollingInterval"
-                                }
-                            })
-                        }
-                    },
-                    {
-                        json: {
-                            extends: "./base.json",
-                        },
-                        expectedOptions: {
-                            watchFile: WatchFileKind.UseFsEventsOnParentDirectory,
-                            watchDirectory: WatchDirectoryKind.FixedPollingInterval
-                        },
-                        additionalFiles: {
-                            "/base.json": JSON.stringify({
-                                watchOptions: {
-                                    watchFile: "UseFsEventsOnParentDirectory",
-                                    watchDirectory: "FixedPollingInterval"
-                                }
-                            })
-                        }
-                    }
-                ]);
-            });
-        });
-
-        describe("different options", () => {
-            verifyWatchOptions(() => [
-                {
-                    json: { watchOptions: { watchFile: "UseFsEvents" } },
-                    expectedOptions: { watchFile: WatchFileKind.UseFsEvents }
-                },
-                {
-                    json: { watchOptions: { watchDirectory: "UseFsEvents" } },
-                    expectedOptions: { watchDirectory: WatchDirectoryKind.UseFsEvents }
-                },
-                {
-                    json: { watchOptions: { fallbackPolling: "DynamicPriority" } },
-                    expectedOptions: { fallbackPolling: PollingWatchKind.DynamicPriority }
-                },
-                {
-                    json: { watchOptions: { synchronousWatchDirectory: true } },
-                    expectedOptions: { synchronousWatchDirectory: true }
-                },
-                {
-                    json: { watchOptions: { excludeDirectories: ["**/temp"] } },
-                    expectedOptions: { excludeDirectories: ["/**/temp"] }
-                },
-                {
-                    json: { watchOptions: { excludeFiles: ["**/temp/*.ts"] } },
-                    expectedOptions: { excludeFiles: ["/**/temp/*.ts"] }
-                },
-                {
-                    json: { watchOptions: { excludeDirectories: ["**/../*"] } },
-                    expectedOptions: { excludeDirectories: [] },
-                    expectedErrors: sourceFile => [
-                        {
-                            messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
-                            file: sourceFile,
-                            start: sourceFile && sourceFile.text.indexOf(`"**/../*"`),
-                            length: sourceFile && `"**/../*"`.length,
-                            reportsDeprecated: undefined,
-                            reportsUnnecessary: undefined
-                        }
-                    ]
-                },
-                {
-                    json: { watchOptions: { excludeFiles: ["**/../*"] } },
-                    expectedOptions: { excludeFiles: [] },
-                    expectedErrors: sourceFile => [
-                        {
-                            messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
-                            file: sourceFile,
-                            start: sourceFile && sourceFile.text.indexOf(`"**/../*"`),
-                            length: sourceFile && `"**/../*"`.length,
-                            reportsDeprecated: undefined,
-                            reportsUnnecessary: undefined
-                        }
-                    ]
-                },
-            ]);
-        });
-
-        describe("watch options extending passed in watch options", () => {
-            verifyWatchOptions(() => [
-                {
-                    json: { watchOptions: { watchFile: "UseFsEvents" } },
-                    expectedOptions: { watchFile: WatchFileKind.UseFsEvents, watchDirectory: WatchDirectoryKind.FixedPollingInterval },
-                    existingWatchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
-                },
-                {
-                    json: {},
-                    expectedOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval },
-                    existingWatchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
-                },
-            ]);
-        });
+            },
+        ]);
     });
 }
