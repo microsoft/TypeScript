@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export const importFixName = "import";
 const importFixId = "fixMissingImport";
 const errorCodes: readonly number[] = [
@@ -39,6 +40,7 @@ ts.codefix.registerCodeFix({
     },
 });
 
+/** @internal */
 /**
  * Computes multiple import additions to a file and writes them to a ChangeTracker.
  */
@@ -49,6 +51,7 @@ export interface ImportAdder {
     writeFixes: (changeTracker: ts.textChanges.ChangeTracker) => void;
 }
 
+/** @internal */
 export function createImportAdder(sourceFile: ts.SourceFile, program: ts.Program, preferences: ts.UserPreferences, host: ts.LanguageServiceHost, cancellationToken?: ts.CancellationToken): ImportAdder {
     return createImportAdderWorker(sourceFile, program, /*useAutoImportProvider*/ false, preferences, host, cancellationToken);
 }
@@ -236,6 +239,7 @@ function createImportAdderWorker(sourceFile: ts.SourceFile, program: ts.Program,
     }
 }
 
+/** @internal */
 /**
  * Computes module specifiers for multiple import additions to a file.
  */
@@ -249,6 +253,7 @@ function createImportAdderWorker(sourceFile: ts.SourceFile, program: ts.Program,
     ): { exportInfo?: ts.SymbolExportInfo, moduleSpecifier: string, computedWithoutCacheCount: number } | undefined;
 }
 
+/** @internal */
 export function createImportSpecifierResolver(importingFile: ts.SourceFile, program: ts.Program, host: ts.LanguageServiceHost, preferences: ts.UserPreferences): ImportSpecifierResolver {
     const packageJsonImportFilter = ts.createPackageJsonImportFilter(importingFile, preferences, host);
     const importMap = createExistingImportMap(program.getTypeChecker(), importingFile, program.getCompilerOptions());
@@ -334,6 +339,7 @@ interface FixAddToExistingImportInfo {
     readonly symbol: ts.Symbol;
 }
 
+/** @internal */
 export function getImportCompletionAction(
     targetSymbol: ts.Symbol,
     moduleSymbol: ts.Symbol,
@@ -369,6 +375,7 @@ export function getImportCompletionAction(
     };
 }
 
+/** @internal */
 export function getPromoteTypeOnlyCompletionAction(sourceFile: ts.SourceFile, symbolToken: ts.Identifier, program: ts.Program, host: ts.LanguageServiceHost, formatContext: ts.formatting.FormatContext, preferences: ts.UserPreferences) {
     const compilerOptions = program.getCompilerOptions();
     const symbolName = ts.single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
@@ -852,6 +859,7 @@ function getUmdSymbol(token: ts.Node, checker: ts.TypeChecker): ts.Symbol | unde
         : undefined;
 }
 
+/** @internal */
 /**
  * @param forceImportKeyword Indicates that the user has already typed `import`, so the result must start with `import`.
  * (In other words, do not allow `const x = require("...")` for JS files.)
@@ -1338,10 +1346,12 @@ function symbolHasMeaning({ declarations }: ts.Symbol, meaning: ts.SemanticMeani
     return ts.some(declarations, decl => !!(ts.getMeaningFromDeclaration(decl) & meaning));
 }
 
+/** @internal */
 export function moduleSymbolToValidIdentifier(moduleSymbol: ts.Symbol, target: ts.ScriptTarget | undefined, forceCapitalize: boolean): string {
     return moduleSpecifierToValidIdentifier(ts.removeFileExtension(ts.stripQuotes(moduleSymbol.name)), target, forceCapitalize);
 }
 
+/** @internal */
 export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ts.ScriptTarget | undefined, forceCapitalize?: boolean): string {
     const baseName = ts.getBaseFileName(ts.removeSuffix(moduleSpecifier, "/index"));
     let res = "";
@@ -1370,5 +1380,4 @@ export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target
     }
     // Need `|| "_"` to ensure result isn't empty.
     return !ts.isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
-}
 }

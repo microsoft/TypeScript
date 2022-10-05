@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
 
@@ -388,4 +390,3 @@ export const Fragment: unique symbol;
         changes: ts.emptyArray
     });
 });
-}

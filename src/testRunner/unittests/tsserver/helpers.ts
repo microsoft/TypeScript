@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+import * as Utils from "../../_namespaces/Utils";
+
 export import TI = ts.server.typingsInstaller;
 export import protocol = ts.server.protocol;
 export import CommandNames = ts.server.CommandNames;
@@ -938,5 +941,4 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingGeterr(scenario);
     verifyErrorsUsingGeterrForProject(scenario);
     verifyErrorsUsingSyncMethods(scenario);
-}
 }

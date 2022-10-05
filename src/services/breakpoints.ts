@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.BreakpointResolver {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 /**
  * Get the breakpoint span in given sourceFile
  */
@@ -730,5 +731,4 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             return spanInNode(node.parent);
         }
     }
-}
 }

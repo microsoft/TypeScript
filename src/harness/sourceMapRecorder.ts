@@ -1,4 +1,7 @@
-namespace Harness.SourceMapRecorder {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as documents from "./_namespaces/documents";
+import * as Utils from "./_namespaces/Utils";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;
@@ -363,5 +366,4 @@ export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: stri
         files.set(path, value);
         return value;
     }
-}
 }

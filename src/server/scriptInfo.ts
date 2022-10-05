@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export interface ScriptInfoVersion {
     svc: number;
     text: number;
@@ -694,5 +695,4 @@ function failIfInvalidLocation(location: ts.server.protocol.Location) {
 
     ts.Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
     ts.Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
-}
 }

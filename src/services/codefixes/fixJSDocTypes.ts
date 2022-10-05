@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";
 const errorCodes = [ts.Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
@@ -79,5 +79,4 @@ function isTypeContainer(node: ts.Node): node is TypeContainer {
         default:
             return false;
     }
-}
 }

@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformES2020(context: ts.TransformationContext) {
     const {
         factory,
@@ -218,5 +219,4 @@ export function transformES2020(context: ts.TransformationContext) {
             ? ts.setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
             : factory.updateDeleteExpression(node, ts.visitNode(node.expression, visitor, ts.isExpression));
     }
-}
 }

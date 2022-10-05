@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export enum UpToDateStatusType {
     Unbuildable,
     UpToDate,
@@ -33,6 +34,7 @@ export enum UpToDateStatusType {
     ForceBuild,
 }
 
+/** @internal */
 export type UpToDateStatus =
     | Status.Unbuildable
     | Status.UpToDate
@@ -49,6 +51,7 @@ export type UpToDateStatus =
     | Status.ContainerOnly
     | Status.ForceBuild;
 
+/** @internal */
 export namespace Status {
     /**
      * The project can't be built at all in its current state. For example,
@@ -164,11 +167,11 @@ export namespace Status {
     }
 }
 
+/** @internal */
 export function resolveConfigFileProjectName(project: string): ts.ResolvedConfigFileName {
     if (ts.fileExtensionIs(project, ts.Extension.Json)) {
         return project as ts.ResolvedConfigFileName;
     }
 
     return ts.combinePaths(project, "tsconfig.json") as ts.ResolvedConfigFileName;
-}
 }

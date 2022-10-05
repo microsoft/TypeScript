@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert import";
 
 const actions = {
@@ -156,6 +156,7 @@ function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: t
     return ts.isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
 }
 
+/** @internal */
 export function doChangeNamedToNamespaceOrDefault(sourceFile: ts.SourceFile, program: ts.Program, changes: ts.textChanges.ChangeTracker, toConvert: ts.NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
     const checker = program.getTypeChecker();
     const importDecl = toConvert.parent.parent;
@@ -228,5 +229,4 @@ function isExportEqualsModule(moduleSpecifier: ts.Expression, checker: ts.TypeCh
 function updateImport(old: ts.ImportDeclaration, defaultImportName: ts.Identifier | undefined, elements: readonly ts.ImportSpecifier[] | undefined): ts.ImportDeclaration {
     return ts.factory.createImportDeclaration(/*modifiers*/ undefined,
         ts.factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? ts.factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
-}
 }

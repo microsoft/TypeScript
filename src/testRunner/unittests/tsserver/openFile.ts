@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {
         const f = {
@@ -184,4 +185,3 @@ bar();`
         ts.projectSystem.baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
     });
 });
-}

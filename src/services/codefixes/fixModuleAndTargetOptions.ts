@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 ts.codefix.registerCodeFix({
     errorCodes: [
         ts.Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
@@ -44,4 +44,3 @@ ts.codefix.registerCodeFix({
         return codeFixes.length ? codeFixes : undefined;
     }
 });
-}

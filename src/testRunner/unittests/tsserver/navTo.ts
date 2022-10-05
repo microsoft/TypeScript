@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     function findNavToItem(items: ts.projectSystem.protocol.NavtoItem[], itemName: string, itemKind: string) {
         return ts.find(items, item => item.name === itemName && item.kind === itemKind);
@@ -136,4 +137,3 @@ export const ghijkl = a.abcdef;`
         assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"));
     });
 });
-}

@@ -1,7 +1,7 @@
+import * as Debug from "./_namespaces/Debug";
+
 /// <reference lib="es2019" />
 
-/* @internal */
-namespace Debug {
 interface Node {
     kind: number;
 }
@@ -113,6 +113,7 @@ interface FlowArrayMutation extends FlowNodeBase {
     antecedent: FlowNode;
 }
 
+/** @internal */
 export interface FlowReduceLabel extends FlowNodeBase {
     target: FlowLabel;
     antecedents: FlowNode[];
@@ -125,6 +126,7 @@ let getSourceFileOfNode: TypeScriptModule["getSourceFileOfNode"];
 let getSourceTextOfNodeFromSourceFile: TypeScriptModule["getSourceTextOfNodeFromSourceFile"];
 let isDefaultClause: TypeScriptModule["isDefaultClause"];
 
+/** @internal */
 export function init(ts: TypeScriptModule) {
     FlowFlags = ts.FlowFlags;
     getSourceFileOfNode = ts.getSourceFileOfNode;
@@ -142,6 +144,7 @@ function getDebugFlowNodeId(f: FlowNode) {
     return f.id;
 }
 
+/** @internal */
 export function formatControlFlowGraph(flowNode: FlowNode) {
     const enum BoxCharacter {
         lr = "─",
@@ -512,5 +515,4 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
 declare const module: { exports: {} };
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Debug;
-}
 }

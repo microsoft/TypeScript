@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     ts.verifyTsc({
         scenario: "configFileErrors",
@@ -60,4 +62,3 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         ]
     });
 });
-}

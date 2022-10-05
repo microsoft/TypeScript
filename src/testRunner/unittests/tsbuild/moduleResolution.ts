@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {
         return ts.tscWatch.createWatchedSystem([
@@ -86,4 +88,3 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
 });
-}

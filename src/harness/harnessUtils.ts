@@ -1,4 +1,6 @@
-namespace Utils {
+import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness";
+
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
 }
@@ -374,5 +376,4 @@ function isNode(line: string) {
 
 function isHarness(line: string) {
     return /[\\/]src[\\/]harness[\\/]|[\\/]run\.js/.test(line);
-}
 }

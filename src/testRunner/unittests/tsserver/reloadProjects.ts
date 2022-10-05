@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: reloadProjects", () => {
     const configFile: ts.projectSystem.File = {
         path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
@@ -136,4 +137,3 @@ describe("unittests:: tsserver:: reloadProjects", () => {
         verifyFileUpdates(host, service, project);
     });
 });
-}

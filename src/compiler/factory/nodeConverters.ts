@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters {
     return {
         convertToFunctionBlock,
@@ -124,6 +125,7 @@ export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters
     }
 }
 
+/** @internal */
 export const nullNodeConverters: ts.NodeConverters = {
     convertToFunctionBlock: ts.notImplemented,
     convertToFunctionExpression: ts.notImplemented,
@@ -134,4 +136,3 @@ export const nullNodeConverters: ts.NodeConverters = {
     convertToArrayAssignmentPattern: ts.notImplemented,
     convertToAssignmentElementTarget: ts.notImplemented,
 };
-}

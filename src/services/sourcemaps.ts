@@ -1,7 +1,8 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 
+/** @internal */
 export interface SourceMapper {
     toLineColumnOffset(fileName: string, position: number): ts.LineAndCharacter;
     tryGetSourcePosition(info: ts.DocumentPosition): ts.DocumentPosition | undefined;
@@ -9,6 +10,7 @@ export interface SourceMapper {
     clearCache(): void;
 }
 
+/** @internal */
 export interface SourceMapperHost {
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
@@ -20,6 +22,7 @@ export interface SourceMapperHost {
     log(s: string): void;
 }
 
+/** @internal */
 export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     const getCanonicalFileName = ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const currentDirectory = host.getCurrentDirectory();
@@ -132,12 +135,14 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     }
 }
 
+/** @internal */
 /**
  * string | undefined to contents of map file to create DocumentPositionMapper from it
  * DocumentPositionMapper | false to give back cached DocumentPositionMapper
  */
 export type ReadMapFile = (mapFileName: string, mapFileNameFromDts: string | undefined) => string | undefined | ts.DocumentPositionMapper | false;
 
+/** @internal */
 export function getDocumentPositionMapper(
     host: ts.DocumentPositionMapperHost,
     generatedFileName: string,
@@ -195,5 +200,4 @@ function createSourceFileLike(text: string, lineMap?: ts.SourceFileLike["lineMap
             return ts.computeLineAndCharacterOfPosition(ts.getLineStarts(this), pos);
         }
     };
-}
 }

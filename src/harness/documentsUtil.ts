@@ -1,7 +1,9 @@
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+
 // NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
 //       support the eventual conversion of harness into a modular system.
 
-namespace documents {
 export class TextDocument {
     public readonly meta: Map<string, string>;
     public readonly file: string;
@@ -183,5 +185,4 @@ export class SourceMap {
         }
         return vlq;
     }
-}
 }

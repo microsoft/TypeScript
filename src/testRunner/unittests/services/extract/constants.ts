@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../../_namespaces/ts";
+
 describe("unittests:: services:: extract:: extractConstants", () => {
     testExtractConstant("extractConstant_TopLevel",
         `let x = [#|1|];`);
@@ -300,5 +301,4 @@ function testExtractConstant(caption: string, text: string) {
 
 function testExtractConstantFailed(caption: string, text: string) {
     ts.testExtractSymbolFailed(caption, text, ts.Diagnostics.Extract_constant);
-}
 }

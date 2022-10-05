@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformESNext(context: ts.TransformationContext) {
   return ts.chainBundle(context, transformSourceFile);
 
@@ -20,5 +21,4 @@ export function transformESNext(context: ts.TransformationContext) {
               return ts.visitEachChild(node, visitor, context);
       }
   }
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /*@internal*/
 export const maxFileSize = 4 * 1024 * 1024;
@@ -4318,5 +4319,4 @@ export function isConfigFile(config: ScriptInfoOrConfig): config is ts.TsConfigS
 
 function printProjectWithoutFileNames(project: ts.server.Project) {
     project.print(/*writeProjectFileNames*/ false);
-}
 }

@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 /**
  * Transforms ES5 syntax into ES3 syntax.
  *
@@ -118,5 +119,4 @@ export function transformES5(context: ts.TransformationContext) {
         }
         return undefined;
     }
-}
 }

@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolutionCache",
@@ -223,4 +225,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         ]
     });
 });
-}

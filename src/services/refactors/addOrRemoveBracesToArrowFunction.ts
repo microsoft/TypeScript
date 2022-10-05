@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Add or remove braces in an arrow function";
 const refactorDescription = ts.Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
 
@@ -117,5 +117,4 @@ function getConvertibleArrowFunctionAtPosition(file: ts.SourceFile, startPositio
         }
     }
     return undefined;
-}
 }

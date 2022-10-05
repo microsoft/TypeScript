@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: BigInt literal base conversions", () => {
     describe("parsePseudoBigInt", () => {
         const testNumbers: number[] = [];
@@ -68,4 +69,3 @@ describe("unittests:: BigInt literal base conversions", () => {
         });
     });
 });
-}

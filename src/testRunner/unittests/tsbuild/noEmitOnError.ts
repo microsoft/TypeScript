@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -84,4 +86,3 @@ const a: string = "hello";`, "utf-8"),
         baselinePrograms: true,
     });
 });
-}

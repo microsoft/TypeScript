@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
     const file = `
         function foo(): void;
@@ -91,5 +93,4 @@ function assertCancelled(cb: () => void) {
     }
     assert.exists(caught, "Expected operation to be cancelled, but was not");
     assert.instanceOf(caught, ts.OperationCanceledException);
-}
 }

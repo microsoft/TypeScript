@@ -1,4 +1,7 @@
-namespace ts.server {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+import * as Utils from "../../_namespaces/Utils";
+
 const _chai: typeof import("chai") = require("chai");
 const expect: typeof _chai.expect = _chai.expect;
 let lastWrittenToHost: string;
@@ -748,4 +751,3 @@ describe("unittests:: tsserver:: Session:: helpers", () => {
         assert.deepEqual(res, { line: 4, offset: 11 });
     });
 });
-}

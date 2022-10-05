@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `${ts.TestFSWithWatch.tsbuildProjectsLocation}/demo`;
     let coreFiles: ts.tscWatch.File[];
@@ -85,4 +86,3 @@ ${coreFiles[1].content}`),
         return ts.TestFSWithWatch.getTsBuildProjectFile("demo", fileName);
     }
 });
-}

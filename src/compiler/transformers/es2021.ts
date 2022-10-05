@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformES2021(context: ts.TransformationContext) {
     const {
         hoistVariableDeclaration,
@@ -87,5 +88,4 @@ export function transformES2021(context: ts.TransformationContext) {
             )
         );
     }
-}
 }

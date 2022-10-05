@@ -1,11 +1,14 @@
-/* @internal */
-namespace ts.FindAllReferences {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export interface SymbolAndEntries {
     readonly definition: Definition | undefined;
     readonly references: readonly Entry[];
 }
 
+/** @internal */
 export const enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
+/** @internal */
 export type Definition =
     | { readonly type: DefinitionKind.Symbol; readonly symbol: ts.Symbol }
     | { readonly type: DefinitionKind.Label; readonly node: ts.Identifier }
@@ -14,24 +17,32 @@ export type Definition =
     | { readonly type: DefinitionKind.String; readonly node: ts.StringLiteralLike }
     | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: ts.FileReference, readonly file: ts.SourceFile };
 
+/** @internal */
 export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
+/** @internal */
 export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
+/** @internal */
 export type Entry = NodeEntry | SpanEntry;
+/** @internal */
 export interface ContextWithStartAndEndNode {
     start: ts.Node;
     end: ts.Node;
 }
+/** @internal */
 export type ContextNode = ts.Node | ContextWithStartAndEndNode;
+/** @internal */
 export interface NodeEntry {
     readonly kind: NodeEntryKind;
     readonly node: ts.Node;
     readonly context?: ContextNode;
 }
+/** @internal */
 export interface SpanEntry {
     readonly kind: EntryKind.Span;
     readonly fileName: string;
     readonly textSpan: ts.TextSpan;
 }
+/** @internal */
 export function nodeEntry(node: ts.Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
@@ -40,6 +51,7 @@ export function nodeEntry(node: ts.Node, kind: NodeEntryKind = EntryKind.Node): 
     };
 }
 
+/** @internal */
 export function isContextWithStartAndEndNode(node: ContextNode): node is ContextWithStartAndEndNode {
     return node && (node as ts.Node).kind === undefined;
 }
@@ -110,6 +122,7 @@ function getContextNodeForNodeEntry(node: ts.Node): ContextNode | undefined {
     return undefined;
 }
 
+/** @internal */
 export function getContextNode(node: ts.NamedDeclaration | ts.BinaryExpression | ts.ForInOrOfStatement | undefined): ContextNode | undefined {
     if (!node) return undefined;
     switch (node.kind) {
@@ -163,6 +176,7 @@ export function getContextNode(node: ts.NamedDeclaration | ts.BinaryExpression |
     }
 }
 
+/** @internal */
 export function toContextSpan(textSpan: ts.TextSpan, sourceFile: ts.SourceFile, context?: ContextNode): { contextSpan: ts.TextSpan } | undefined {
     if (!context) return undefined;
     const contextSpan = isContextWithStartAndEndNode(context) ?
@@ -173,6 +187,7 @@ export function toContextSpan(textSpan: ts.TextSpan, sourceFile: ts.SourceFile, 
         undefined;
 }
 
+/** @internal */
 export const enum FindReferencesUse {
     /**
      * When searching for references to a symbol, the location will not be adjusted (this is the default behavior when not specified).
@@ -190,6 +205,7 @@ export const enum FindReferencesUse {
     Rename,
 }
 
+/** @internal */
 export interface Options {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
@@ -204,6 +220,7 @@ export interface Options {
     readonly providePrefixAndSuffixTextForRename?: boolean;
 }
 
+/** @internal */
 export function findReferencedSymbols(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFiles: readonly ts.SourceFile[], sourceFile: ts.SourceFile, position: number): ts.ReferencedSymbol[] | undefined {
     const node = ts.getTouchingPropertyName(sourceFile, position);
     const options = { use: FindReferencesUse.References };
@@ -227,6 +244,7 @@ function isDefinitionForReference(node: ts.Node): boolean {
         || (node.kind === ts.SyntaxKind.ConstructorKeyword && ts.isConstructorDeclaration(node.parent));
 }
 
+/** @internal */
 export function getImplementationsAtPosition(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFiles: readonly ts.SourceFile[], sourceFile: ts.SourceFile, position: number): ts.ImplementationLocation[] | undefined {
     const node = ts.getTouchingPropertyName(sourceFile, position);
     let referenceEntries: Entry[] | undefined;
@@ -284,6 +302,7 @@ function getImplementationReferenceEntries(program: ts.Program, cancellationToke
     }
 }
 
+/** @internal */
 export function findReferenceOrRenameEntries<T>(
     program: ts.Program, cancellationToken: ts.CancellationToken, sourceFiles: readonly ts.SourceFile[], node: ts.Node, position: number, options: Options | undefined,
     convertEntry: ToReferenceOrRenameEntry<T>,
@@ -291,8 +310,10 @@ export function findReferenceOrRenameEntries<T>(
     return ts.map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node, program.getTypeChecker()));
 }
 
+/** @internal */
 export type ToReferenceOrRenameEntry<T> = (entry: Entry, originalNode: ts.Node, checker: ts.TypeChecker) => T;
 
+/** @internal */
 export function getReferenceEntriesForNode(
     position: number,
     node: ts.Node,
@@ -394,6 +415,7 @@ function getDefinitionKindAndDisplayParts(symbol: ts.Symbol, checker: ts.TypeChe
     return { displayParts, kind: symbolKind };
 }
 
+/** @internal */
 export function toRenameLocation(entry: Entry, originalNode: ts.Node, checker: ts.TypeChecker, providePrefixAndSuffixText: boolean): ts.RenameLocation {
     return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
 }
@@ -407,6 +429,7 @@ function toReferencedSymbolEntry(entry: Entry, symbol: ts.Symbol | undefined): t
     };
 }
 
+/** @internal */
 export function toReferenceEntry(entry: Entry): ts.ReferenceEntry {
     const documentSpan = entryToDocumentSpan(entry);
     if (entry.kind === EntryKind.Span) {
@@ -519,6 +542,7 @@ function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker):
     }
 }
 
+/** @internal */
 export function toHighlightSpan(entry: Entry): { fileName: string, span: ts.HighlightSpan } {
     const documentSpan = entryToDocumentSpan(entry);
     if (entry.kind === EntryKind.Span) {
@@ -552,6 +576,7 @@ function getTextSpan(node: ts.Node, sourceFile: ts.SourceFile, endNode?: ts.Node
     return ts.createTextSpanFromBounds(start, end);
 }
 
+/** @internal */
 export function getTextSpanOfEntry(entry: Entry) {
     return entry.kind === EntryKind.Span ? entry.textSpan :
         getTextSpan(entry.node, entry.node.getSourceFile());
@@ -563,6 +588,7 @@ function isWriteAccessForReference(node: ts.Node): boolean {
     return !!decl && declarationIsWriteAccess(decl) || node.kind === ts.SyntaxKind.DefaultKeyword || ts.isWriteAccess(node);
 }
 
+/** @internal */
 /** Whether a reference, `node`, is a definition of the `target` symbol */
 export function isDeclarationOfSymbol(node: ts.Node, target: ts.Symbol | undefined): boolean {
     if (!target) return false;
@@ -636,6 +662,7 @@ function declarationIsWriteAccess(decl: ts.Declaration): boolean {
     }
 }
 
+/** @internal */
 /** Encapsulates the core find-all-references algorithm. */
 export namespace Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
@@ -2398,5 +2425,4 @@ export namespace Core {
     function isForRenameWithPrefixAndSuffixText(options: Options) {
         return options.use === FindReferencesUse.Rename && options.providePrefixAndSuffixTextForRename;
     }
-}
 }

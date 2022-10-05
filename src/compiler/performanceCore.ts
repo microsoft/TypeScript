@@ -1,8 +1,9 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 // The following definitions provide the minimum compatible support for the Web Performance User Timings API
 // between browsers and NodeJS:
 
+/** @internal */
 export interface PerformanceHooks {
     /** Indicates whether we should write native performance events */
     shouldWriteNativeEvents: boolean;
@@ -10,6 +11,7 @@ export interface PerformanceHooks {
     PerformanceObserver: PerformanceObserverConstructor;
 }
 
+/** @internal */
 export interface Performance {
     mark(name: string): void;
     measure(name: string, startMark?: string, endMark?: string): void;
@@ -19,6 +21,7 @@ export interface Performance {
     timeOrigin: number;
 }
 
+/** @internal */
 export interface PerformanceEntry {
     name: string;
     entryType: string;
@@ -26,18 +29,22 @@ export interface PerformanceEntry {
     duration: number;
 }
 
+/** @internal */
 export interface PerformanceObserverEntryList {
     getEntries(): PerformanceEntryList;
     getEntriesByName(name: string, type?: string): PerformanceEntryList;
     getEntriesByType(type: string): PerformanceEntryList;
 }
 
+/** @internal */
 export interface PerformanceObserver {
     disconnect(): void;
     observe(options: { entryTypes: readonly ("mark" | "measure")[] }): void;
 }
 
+/** @internal */
 export type PerformanceObserverConstructor = new (callback: (list: PerformanceObserverEntryList, observer: PerformanceObserver) => void) => PerformanceObserver;
+/** @internal */
 export type PerformanceEntryList = PerformanceEntry[];
 
 // Browser globals for the Web Performance User Timings API
@@ -123,13 +130,14 @@ function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
 const nativePerformanceHooks = tryGetWebPerformanceHooks() || tryGetNodePerformanceHooks();
 const nativePerformance = nativePerformanceHooks?.performance;
 
+/** @internal */
 export function tryGetNativePerformanceHooks() {
     return nativePerformanceHooks;
 }
 
+/** @internal */
 /** Gets a timestamp with (at least) ms resolution */
 export const timestamp =
     nativePerformance ? () => nativePerformance.now() :
     Date.now ? Date.now :
     () => +(new Date());
-}

@@ -1,17 +1,19 @@
-/*@internal*/
+import * as ts from "./_namespaces/ts";
 
-namespace ts.server {
 declare const fetch: any;
 declare const importScripts: any;
 
+/** @internal */
 export interface HostWithWriteMessage {
     writeMessage(s: any): void;
 }
+/** @internal */
 export interface WebHost extends HostWithWriteMessage {
     readFile(path: string): string | undefined;
     fileExists(path: string): boolean;
 }
 
+/** @internal */
 export class BaseLogger implements ts.server.Logger {
     private seq = 0;
     private inGroup = false;
@@ -80,12 +82,15 @@ export class BaseLogger implements ts.server.Logger {
     }
 }
 
+/** @internal */
 export type MessageLogLevel = "info" | "perf" | "error";
+/** @internal */
 export interface LoggingMessage {
     readonly type: "log";
     readonly level: MessageLogLevel;
     readonly body: string
 }
+/** @internal */
 export class MainProcessLogger extends BaseLogger {
     constructor(level: ts.server.LogLevel, private host: HostWithWriteMessage) {
         super(level);
@@ -124,6 +129,7 @@ if (typeof importScripts === "function") {
     }
 }
 
+/** @internal */
 export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ts.server.ServerHost {
     const returnEmptyString = () => "";
     const getExecutingDirectoryPath = ts.memoize(() => ts.memoize(() => ts.ensureTrailingDirectorySeparator(ts.getDirectoryPath(getExecutingFilePath()))));
@@ -217,6 +223,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
     };
 }
 
+/** @internal */
 export interface StartSessionOptions {
     globalPlugins: ts.server.SessionOptions["globalPlugins"];
     pluginProbeLocations: ts.server.SessionOptions["pluginProbeLocations"];
@@ -228,6 +235,7 @@ export interface StartSessionOptions {
     syntaxOnly: ts.server.SessionOptions["syntaxOnly"];
     serverMode: ts.server.SessionOptions["serverMode"];
 }
+/** @internal */
 export class WorkerSession extends ts.server.Session<{}> {
     constructor(host: ts.server.ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken, hrtime: ts.server.SessionOptions["hrtime"]) {
         super({
@@ -262,5 +270,4 @@ export class WorkerSession extends ts.server.Session<{}> {
     protected toStringMessage(message: {}) {
         return JSON.stringify(message, undefined, 2);
     }
-}
 }

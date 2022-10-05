@@ -1,5 +1,4 @@
-/* @internal */
-namespace ts.InlayHints {
+import * as ts from "./_namespaces/ts";
 
 const maxHintsLength = 30;
 
@@ -15,6 +14,7 @@ function shouldShowLiteralParameterNameHintsOnly(preferences: ts.UserPreferences
     return preferences.includeInlayParameterNameHints === "literals";
 }
 
+/** @internal */
 export function provideInlayHints(context: ts.InlayHintsContext): ts.InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
@@ -334,5 +334,4 @@ export function provideInlayHints(context: ts.InlayHintsContext): ts.InlayHint[]
         }
         return true;
     }
-}
 }

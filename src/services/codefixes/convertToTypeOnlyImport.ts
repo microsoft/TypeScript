@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [ts.Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
 const fixId = "convertToTypeOnlyImport";
 ts.codefix.registerCodeFix({
@@ -48,5 +48,4 @@ function fixSingleImportDeclaration(changes: ts.textChanges.ChangeTracker, impor
             importDeclaration.moduleSpecifier,
             /*assertClause*/ undefined));
     }
-}
 }

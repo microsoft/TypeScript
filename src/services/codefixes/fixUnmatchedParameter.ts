@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";
 
@@ -100,5 +100,4 @@ function getInfo(sourceFile: ts.SourceFile, pos: number): Info | undefined {
         }
     }
     return undefined;
-}
 }

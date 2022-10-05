@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export class ThrottledOperations {
     private readonly pendingTimeouts = new ts.Map<string, any>();
     private readonly logger?: ts.server.Logger | undefined;
@@ -44,6 +45,7 @@ export class ThrottledOperations {
     }
 }
 
+/** @internal */
 export class GcTimer {
     private timerId: any;
     constructor(private readonly host: ts.server.ServerHost, private readonly delay: number, private readonly logger: ts.server.Logger) {
@@ -73,11 +75,13 @@ export class GcTimer {
     }
 }
 
+/** @internal */
 export function getBaseConfigFileName(configFilePath: ts.server.NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
     const base = ts.getBaseFileName(configFilePath);
     return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
 }
 
+/** @internal */
 export function removeSorted<T>(array: ts.SortedArray<T>, remove: T, compare: ts.Comparer<T>): void {
     if (!array || array.length === 0) {
         return;
@@ -96,12 +100,13 @@ export function removeSorted<T>(array: ts.SortedArray<T>, remove: T, compare: ts
 
 const indentStr = "\n    ";
 
+/** @internal */
 export function indent(str: string): string {
     return indentStr + str.replace(/\n/g, indentStr);
 }
 
+/** @internal */
 /** Put stringified JSON on the next line, indented. */
 export function stringifyIndented(json: {}): string {
     return indentStr + JSON.stringify(json);
-}
 }

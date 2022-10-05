@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 type SuperContainer = ts.ClassDeclaration | ts.MethodDeclaration | ts.GetAccessorDeclaration | ts.SetAccessorDeclaration | ts.ConstructorDeclaration;
 
 const enum ES2017SubstitutionFlags {
@@ -12,6 +12,7 @@ const enum ContextFlags {
     HasLexicalThis = 1 << 1
 }
 
+/** @internal */
 export function transformES2017(context: ts.TransformationContext) {
     const {
         factory,
@@ -724,6 +725,7 @@ export function transformES2017(context: ts.TransformationContext) {
     }
 }
 
+/** @internal */
 /** Creates a variable named `_super` with accessor properties for the given property names. */
 export function createSuperAccessVariableStatement(factory: ts.NodeFactory, resolver: ts.EmitResolver, node: ts.FunctionLikeDeclaration, names: ts.Set<ts.__String>) {
     // Create a variable declaration with a getter/setter (if binding) definition for each name:
@@ -818,5 +820,4 @@ export function createSuperAccessVariableStatement(factory: ts.NodeFactory, reso
                 )
             ],
             ts.NodeFlags.Const));
-}
 }

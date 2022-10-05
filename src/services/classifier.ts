@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): ts.Classifier {
     const scanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ false);
@@ -1103,5 +1104,4 @@ export function getEncodedSyntacticClassifications(cancellationToken: ts.Cancell
             }
         }
     }
-}
 }

@@ -1,6 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../../_namespaces/ts";
 
+/** @internal */
 export function transformModule(context: ts.TransformationContext) {
     interface AsynchronousDependencies {
         aliasedModuleNames: ts.Expression[];
@@ -1995,4 +1995,3 @@ const dynamicImportUMDHelper: ts.EmitHelper = {
     text: `
             var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
 };
-}

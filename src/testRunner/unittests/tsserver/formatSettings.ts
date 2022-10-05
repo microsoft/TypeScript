@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: format settings", () => {
     it("can be set globally", () => {
         const f1 = {
@@ -36,4 +37,3 @@ describe("unittests:: tsserver:: format settings", () => {
         assert.deepEqual(s3, newPerFileSettings, "file settings should still be the same with per-file settings");
     });
 });
-}

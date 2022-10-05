@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
     it("verify that module resolution with json extension works when returned without extension", () => {
         const configFileJson: any = {
@@ -611,4 +613,3 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
         });
     });
 });
-}

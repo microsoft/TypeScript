@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
     ts.verifyTscWithEdits({
         subScenario: "interface is merged and contains late bound member",
@@ -17,4 +18,3 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
         ]
     });
 });
-}

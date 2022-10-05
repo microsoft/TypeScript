@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: syntax operations", () => {
     function navBarFull(session: ts.projectSystem.TestSession, file: ts.projectSystem.File) {
         return JSON.stringify(session.executeCommandSeq<ts.projectSystem.protocol.FileRequest>({
@@ -95,4 +96,3 @@ export function Test2() {
         assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
     });
 });
-}

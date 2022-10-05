@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
+/** @internal */
 export function transformNodeModule(context: ts.TransformationContext) {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
@@ -80,5 +81,4 @@ export function transformNodeModule(context: ts.TransformationContext) {
     function transformBundle(node: ts.Bundle) {
         return context.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends);
     }
-}
 }

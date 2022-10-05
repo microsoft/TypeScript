@@ -1,4 +1,6 @@
-namespace ts.TestFSWithWatch {
+import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness";
+
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
@@ -1188,5 +1190,4 @@ export function getTsBuildProjectFile(project: string, file: string): File {
         path: getTsBuildProjectFilePath(project, file),
         content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
     };
-}
 }

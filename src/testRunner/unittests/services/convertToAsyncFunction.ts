@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 const libFile: ts.TestFSWithWatch.File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
@@ -1836,4 +1838,3 @@ function [#|f|](): Promise<number> {
 }
 `);
 });
-}

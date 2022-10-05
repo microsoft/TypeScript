@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/harness.js",
+        "outDir": "../../built/local",
         "types": [
             "node", "mocha", "chai"
         ],
@@ -40,6 +40,22 @@
         "virtualFileSystemWithWatch.ts",
         "fourslashImpl.ts",
         "fourslashInterfaceImpl.ts",
-        "typeWriter.ts"
+        "typeWriter.ts",
+        "_namespaces/ts.server.ts",
+        "_namespaces/ts.ts",
+        "_namespaces/collections.ts",
+        "_namespaces/compiler.ts",
+        "_namespaces/documents.ts",
+        "_namespaces/evaluator.ts",
+        "_namespaces/fakes.ts",
+        "_namespaces/Utils.ts",
+        "_namespaces/FourSlash.ts",
+        "_namespaces/FourSlashInterface.ts",
+        "_namespaces/Harness.ts",
+        "_namespaces/Harness.LanguageService.ts",
+        "_namespaces/Harness.SourceMapRecorder.ts",
+        "_namespaces/vfs.ts",
+        "_namespaces/ts.TestFSWithWatch.ts",
+        "_namespaces/vpath.ts"
     ]
 }

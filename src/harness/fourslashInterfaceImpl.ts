@@ -1,4 +1,6 @@
-namespace FourSlashInterface {
+import * as FourSlash from "./_namespaces/FourSlash";
+import * as ts from "./_namespaces/ts";
+
 export class Test {
     constructor(private state: FourSlash.TestState) {
     }
@@ -1906,5 +1908,4 @@ export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
-}
 }

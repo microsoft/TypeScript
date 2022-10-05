@@ -1,3 +1,5 @@
+import * as ts from "../_namespaces/ts";
+
 // Transforms generator functions into a compatible ES5 representation with similar runtime
 // semantics. This is accomplished by first transforming the body of each generator
 // function into an intermediate representation that is the compiled into a JavaScript
@@ -117,8 +119,6 @@
 //  .endtry                       |
 //  .mark END                     | case END:
 
-/*@internal*/
-namespace ts {
 type Label = number;
 
 const enum OpCode {
@@ -228,6 +228,7 @@ function getInstructionName(instruction: Instruction): string {
     }
 }
 
+/** @internal */
 export function transformGenerators(context: ts.TransformationContext) {
     const {
         factory,
@@ -3178,5 +3179,4 @@ export function transformGenerators(context: ts.TransformationContext) {
             )
         );
     }
-}
 }

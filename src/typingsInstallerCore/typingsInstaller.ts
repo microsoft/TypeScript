@@ -1,4 +1,5 @@
-namespace ts.server.typingsInstaller {
+import * as ts from "./_namespaces/ts";
+
 interface NpmConfig {
     devDependencies: ts.MapLike<any>;
 }
@@ -542,5 +543,4 @@ export abstract class TypingsInstaller {
 /* @internal */
 export function typingsName(packageName: string): string {
     return `@types/${packageName}@ts${ts.versionMajorMinor}`;
-}
 }

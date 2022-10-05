@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 const aTs: ts.projectSystem.File = {
     path: "/a.ts",
     content: `import { B } from "./b";`
@@ -44,4 +45,3 @@ describe("unittests:: tsserver:: auxiliaryProject", () => {
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
     });
 });
-}

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixID = "wrapJsxInFragment";
 const errorCodes = [ts.Diagnostics.JSX_expressions_must_have_one_parent_element.code];
 ts.codefix.registerCodeFix({
@@ -63,5 +63,4 @@ function flattenInvalidBinaryExpr(node: ts.Node): ts.JsxChild[] | undefined {
         // Unreachable case
         else return undefined;
     }
-}
 }
