@@ -853,7 +853,7 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 >42 : 42
 
         value;  // T & {}
->value : T & {}
+>value : T & ({} | null)
     }
     else {
         value;  // T & ({} | null)
@@ -872,7 +872,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >42 : 42
 
         value;  // T & {}
->value : T & {}
+>value : T & ({} | null)
     }
     else {
         value;  // T & ({} | null)
