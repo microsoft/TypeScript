@@ -923,3 +923,79 @@ function doSomething2(value: unknown): void {
     }
 }
 
+// Repro from #51009
+
+type TypeA = {
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+
+    A: 'A',
+>A : Symbol(A, Decl(unknownControlFlow.ts, 404, 14))
+
+    B: 'B',
+>B : Symbol(B, Decl(unknownControlFlow.ts, 405, 11))
+}
+
+type TypeB = {
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+
+    A: 'A',
+>A : Symbol(A, Decl(unknownControlFlow.ts, 409, 14))
+
+    B: 'B',
+>B : Symbol(B, Decl(unknownControlFlow.ts, 410, 11))
+
+    C: 'C',
+>C : Symbol(C, Decl(unknownControlFlow.ts, 411, 11))
+}
+
+type R<T extends keyof TypeA> =
+>R : Symbol(R, Decl(unknownControlFlow.ts, 413, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+
+type R2<T extends PropertyKey> =
+>R2 : Symbol(R2, Decl(unknownControlFlow.ts, 416, 56))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+    T extends keyof TypeA ?
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+
+    T extends keyof TypeB ?
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+
+        [TypeA[T], TypeB[T]] : never: never
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+
+// Repro from #51041
+
+type AB = "A" | "B"
+>AB : Symbol(AB, Decl(unknownControlFlow.ts, 421, 43))
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 425, 19))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 427, 11))
+>AB : Symbol(AB, Decl(unknownControlFlow.ts, 421, 43))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 427, 28))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 427, 11))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 427, 48))
+
+    let r2: never = y as T_AB & undefined;
+>r2 : Symbol(r2, Decl(unknownControlFlow.ts, 428, 7))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 427, 48))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 427, 11))
+} 
+
