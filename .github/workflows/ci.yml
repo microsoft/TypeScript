@@ -21,6 +21,11 @@ jobs:
           - "*"
           - lts/*
           - lts/-1
+        bundle:
+          - "true"
+        include:
+          - node-version: "*"
+            bundle: "false"
 
     steps:
     - uses: actions/checkout@v3
@@ -32,7 +37,7 @@ jobs:
     - run:  npm ci
 
     - name: Tests
-      run:  npm test
+      run:  npm run test -- --bundle=${{ matrix.bundle }}
 
   lint:
     runs-on: ubuntu-latest
