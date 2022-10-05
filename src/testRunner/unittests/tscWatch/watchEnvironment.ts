@@ -120,36 +120,6 @@ namespace ts.tscWatch {
             ]
         });
 
-        verifyTscWatch({
-            scenario,
-            subScenario: "watchFile/setting default as fixed chunk size watch file works",
-            commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
-            sys: () => {
-                const configFile: File = {
-                    path: "/a/b/tsconfig.json",
-                    content: "{}"
-                };
-                const files = [libFile, commonFile1, commonFile2, configFile];
-                const sys = createWatchedSystem(files);
-                sys.defaultWatchFileKind = () => WatchFileKind.FixedChunkSizePolling;
-                return sys;
-            },
-            changes: [
-                {
-                    caption: "Make change to file but should detect as changed and schedule program update",
-                    // Make a change to file
-                    change: sys => sys.writeFile(commonFile1.path, "var zz30 = 100;"),
-                    timeouts: checkSingleTimeoutQueueLengthAndRun,
-                },
-                {
-                    caption: "Callbacks: queue and scheduled program update",
-                    change: noop,
-                    // Callbacks: scheduled program update and queue for the polling
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
-                },
-            ]
-        });
-
         describe("tsc-watch when watchDirectories implementation", () => {
             function verifyRenamingFileInSubFolder(subScenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
                 const projectFolder = "/a/username/project";

@@ -10,9 +10,9 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(13,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(14,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(14,8): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(15,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(15,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(15,8): error TS18050: The value 'undefined' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(19,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(19,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -25,9 +25,9 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(24,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(24,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(25,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(25,8): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(26,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(26,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(26,8): error TS18050: The value 'undefined' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(29,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(30,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(30,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -40,9 +40,9 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(35,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(35,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(36,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(36,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(36,8): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(37,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(37,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(37,8): error TS18050: The value 'undefined' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(40,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(41,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(41,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -55,9 +55,9 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(46,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(47,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(47,8): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(47,8): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(48,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(48,8): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(48,8): error TS18050: The value 'undefined' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(51,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(52,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts(53,8): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -108,12 +108,12 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     x1 **= undefined;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     var x2: string;
     x2 **= a;
@@ -149,12 +149,12 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     x2 **= undefined;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     var x3: {};
     x3 **= a;
@@ -190,12 +190,12 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     x3 **= undefined;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     var x4: void;
     x4 **= a;
@@ -231,12 +231,12 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     x4 **= undefined;
     ~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     var x5: number;
     x5 **= b;

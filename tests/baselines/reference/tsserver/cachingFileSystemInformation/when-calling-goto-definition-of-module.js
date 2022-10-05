@@ -59,16 +59,15 @@ Info 6    [00:00:29.000] Config: /a/b/tsconfig.json : {
 }
 Info 7    [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 8    [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:32.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 10   [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:35.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 13   [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 14   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 15   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 16   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
-Info 18   [00:00:41.000] 	Files (3)
+Info 9    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:34.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 12   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info 13   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 14   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 15   [00:00:38.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [00:00:39.000] Project '/a/b/tsconfig.json' (Configured)
+Info 17   [00:00:40.000] 	Files (3)
 	/a/b/utils/db.ts
 	/a/b/models/vessel.ts
 	/a/b/controllers/vessels/client.ts
@@ -83,14 +82,14 @@ Info 18   [00:00:41.000] 	Files (3)
 	controllers/vessels/client.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:42.000] -----------------------------------------------
-Info 20   [00:00:43.000] Project '/a/b/tsconfig.json' (Configured)
-Info 20   [00:00:44.000] 	Files (3)
+Info 18   [00:00:41.000] -----------------------------------------------
+Info 19   [00:00:42.000] Project '/a/b/tsconfig.json' (Configured)
+Info 19   [00:00:43.000] 	Files (3)
 
-Info 20   [00:00:45.000] -----------------------------------------------
-Info 20   [00:00:46.000] Open files: 
-Info 20   [00:00:47.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
-Info 20   [00:00:48.000] 		Projects: /a/b/tsconfig.json
+Info 19   [00:00:44.000] -----------------------------------------------
+Info 19   [00:00:45.000] Open files: 
+Info 19   [00:00:46.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
+Info 19   [00:00:47.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -111,11 +110,11 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 20   [00:00:49.000] response:
+Info 19   [00:00:48.000] response:
     {
       "responseRequired": false
     }
-Info 21   [00:00:50.000] request:
+Info 20   [00:00:49.000] request:
     {
       "seq": 0,
       "type": "request",
@@ -165,7 +164,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 22   [00:00:51.000] response:
+Info 21   [00:00:50.000] response:
     {
       "response": [
         {
@@ -182,12 +181,12 @@ Info 22   [00:00:51.000] response:
       ],
       "responseRequired": true
     }
-Info 23   [00:00:52.000] fileExists:: []
-Info 24   [00:00:53.000] directoryExists:: []
-Info 25   [00:00:54.000] getDirectories:: []
-Info 26   [00:00:55.000] readFile:: []
-Info 27   [00:00:56.000] readDirectory:: []
-Info 28   [00:00:57.000] request:
+Info 22   [00:00:51.000] fileExists:: []
+Info 23   [00:00:52.000] directoryExists:: []
+Info 24   [00:00:53.000] getDirectories:: []
+Info 25   [00:00:54.000] readFile:: []
+Info 26   [00:00:55.000] readDirectory:: []
+Info 27   [00:00:56.000] request:
     {
       "seq": 0,
       "type": "request",
@@ -216,18 +215,18 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 29   [00:00:58.000] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
-Info 30   [00:00:59.000] Search path: /a/b/models
-Info 31   [00:01:00.000] For info: /a/b/models/vessel.ts :: Config file name: /a/b/tsconfig.json
-Info 32   [00:01:01.000] Project '/a/b/tsconfig.json' (Configured)
-Info 32   [00:01:02.000] 	Files (3)
+Info 28   [00:00:57.000] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
+Info 29   [00:00:58.000] Search path: /a/b/models
+Info 30   [00:00:59.000] For info: /a/b/models/vessel.ts :: Config file name: /a/b/tsconfig.json
+Info 31   [00:01:00.000] Project '/a/b/tsconfig.json' (Configured)
+Info 31   [00:01:01.000] 	Files (3)
 
-Info 32   [00:01:03.000] -----------------------------------------------
-Info 32   [00:01:04.000] Open files: 
-Info 32   [00:01:05.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
-Info 32   [00:01:06.000] 		Projects: /a/b/tsconfig.json
-Info 32   [00:01:07.000] 	FileName: /a/b/models/vessel.ts ProjectRootPath: undefined
-Info 32   [00:01:08.000] 		Projects: /a/b/tsconfig.json
+Info 31   [00:01:02.000] -----------------------------------------------
+Info 31   [00:01:03.000] Open files: 
+Info 31   [00:01:04.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
+Info 31   [00:01:05.000] 		Projects: /a/b/tsconfig.json
+Info 31   [00:01:06.000] 	FileName: /a/b/models/vessel.ts ProjectRootPath: undefined
+Info 31   [00:01:07.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -246,12 +245,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 32   [00:01:09.000] response:
+Info 31   [00:01:08.000] response:
     {
       "responseRequired": false
     }
-Info 33   [00:01:10.000] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
-Info 34   [00:01:11.000] directoryExists:: []
-Info 35   [00:01:12.000] getDirectories:: []
-Info 36   [00:01:13.000] readFile:: []
-Info 37   [00:01:14.000] readDirectory:: []
+Info 32   [00:01:09.000] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
+Info 33   [00:01:10.000] directoryExists:: []
+Info 34   [00:01:11.000] getDirectories:: []
+Info 35   [00:01:12.000] readFile:: []
+Info 36   [00:01:13.000] readDirectory:: []

@@ -563,7 +563,7 @@ namespace ts {
 
     interface ScriptTargetFeatures {
         [key: string]: { [key: string]: string[] | undefined };
-    };
+    }
 
     export function getScriptTargetFeatures(): ScriptTargetFeatures {
         return {
@@ -5558,7 +5558,7 @@ namespace ts {
 
     export function isWatchSet(options: CompilerOptions) {
         // Firefox has Object.prototype.watch
-        return options.watch && options.hasOwnProperty("watch");
+        return options.watch && hasProperty(options, "watch");
     }
 
     export function closeFileWatcher(watcher: FileWatcher) {

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
     - name: npm install and test
       run: |
@@ -27,7 +27,7 @@ jobs:
         npm pack ./
         mv typescript-*.tgz typescript.tgz
     - name: Upload built tarfile
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: tgz
         path: typescript.tgz

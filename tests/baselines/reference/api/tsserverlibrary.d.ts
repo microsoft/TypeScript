@@ -3320,6 +3320,8 @@ declare namespace ts {
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
@@ -5442,6 +5444,8 @@ declare namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -6028,8 +6032,15 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
+    enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused"
+    }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
     enum CompletionTriggerKind {
@@ -7612,9 +7623,16 @@ declare namespace ts.server.protocol {
         arguments: OrganizeImportsRequestArgs;
     }
     type OrganizeImportsScope = GetCombinedCodeFixScope;
+    enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused"
+    }
     interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
