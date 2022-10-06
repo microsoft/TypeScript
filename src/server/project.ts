@@ -143,7 +143,8 @@ namespace ts.server {
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
 
-        private plugins: PluginModuleWithName[] = [];
+        /*@internal*/
+        protected readonly plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
         /**
@@ -845,6 +846,7 @@ namespace ts.server {
             this.directoryStructureHost = undefined!;
             this.exportMapCache = undefined;
             this.projectErrors = undefined;
+            this.plugins.length = 0;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -2520,6 +2522,7 @@ namespace ts.server {
 
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
+            this.plugins.length = 0;
             if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
             if (!host.require && !host.importPlugin) {
