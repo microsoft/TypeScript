@@ -10084,7 +10084,6 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private generatedFilesMap;
-        private plugins;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
         readonly trace?: (s: string) => void;
