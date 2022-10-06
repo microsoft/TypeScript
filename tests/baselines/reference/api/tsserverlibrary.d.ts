@@ -7987,7 +7987,7 @@ declare namespace ts.server.protocol {
          * to show text of reference line (the server already has
          * loaded the referencing files).
          */
-        lineText: string;
+        lineText?: string;
         /**
          * True if reference is a write location, false otherwise.
          */
@@ -9833,6 +9833,7 @@ declare namespace ts.server.protocol {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly disableLineTextInReferences?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;

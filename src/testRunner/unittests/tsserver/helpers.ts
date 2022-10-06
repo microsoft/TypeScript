@@ -810,7 +810,7 @@ namespace ts.projectSystem {
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition?: boolean;
         isWriteAccess?: boolean;
-        lineText: string;
+        lineText?: string;
     }
 
     export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
