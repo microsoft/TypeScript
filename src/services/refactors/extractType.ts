@@ -102,7 +102,7 @@ namespace ts.refactor {
 
         const checker = context.program.getTypeChecker();
         const enclosingNode = getEnclosingNode(selection, isJS);
-        if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.Cannot_extract_range) };
+        if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
 
         const typeParameters = collectTypeParameters(checker, selection, enclosingNode, file);
         if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
