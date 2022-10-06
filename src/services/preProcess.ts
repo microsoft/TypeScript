@@ -376,7 +376,9 @@ namespace ts {
                                 }
                                 break;
                         }
-                        token = scanner.scan();
+                        if (length(stack)) {
+                            token = scanner.scan();
+                        }
                     }
                     nextToken();
                 }
