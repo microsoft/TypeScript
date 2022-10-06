@@ -82,7 +82,7 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a.ts :: Con
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 CustomRequire:: Resolving myplugin from /a/pluginprobe1/node_modules
-Require:: Module myplugin created with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Require:: Module myplugin created with config: {"init":"initialConfig","name":"myplugin"} and options: {"watchFactory":"myplugin"}
 Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"}
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [

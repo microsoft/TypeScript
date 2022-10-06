@@ -75,7 +75,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Local plugin loading enabled; adding /user/username/projects/myproject to search paths
 CustomRequire:: Resolving myplugin from /user/username/projects/myproject/node_modules
-Require:: Module myplugin created with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Require:: Module myplugin created with config: {"init":"initialConfig","name":"myplugin"} and options: {"watchFactory":"myplugin"}
 Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}

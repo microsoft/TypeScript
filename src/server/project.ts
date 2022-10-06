@@ -1821,15 +1821,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     endEnablePlugin({ pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
         if (resolvedModule) {
-            const configurationOverride = this.projectService.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
-            if (configurationOverride) {
-                // Preserve the name property since it's immutable
-                const pluginName = pluginConfigEntry.name;
-                pluginConfigEntry = configurationOverride;
-                pluginConfigEntry.name = pluginName;
-            }
-
-            this.enableProxy(resolvedModule, pluginConfigEntry);
+            this.enableProxy(resolvedModule, this.projectService.getPluginWithConfigOverride(pluginConfigEntry));
         }
         else {
             forEach(errorLogs, message => this.projectService.logger.info(message));
