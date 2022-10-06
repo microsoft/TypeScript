@@ -1711,7 +1711,7 @@ namespace ts {
         }
 
         function bindJSDocClassTag(node: JSDocClassTag) {
-            bindEachChild(node);
+            // bindEachChild(node);
             const host = getHostSignatureFromJSDoc(node);
             if (host && host.kind !== SyntaxKind.MethodDeclaration) {
                 addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
