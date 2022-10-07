@@ -12073,7 +12073,20 @@ namespace ts {
         }
 
         function isGenericMappedType(type: Type): type is MappedType {
-            return !!(getObjectFlags(type) & ObjectFlags.Mapped) && isGenericIndexType(getConstraintTypeFromMappedType(type as MappedType));
+            if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                const constraint = getConstraintTypeFromMappedType(type as MappedType);
+                if (isGenericIndexType(constraint)) {
+                    return true;
+                }
+                // A mapped type is generic if the 'as' clause references generic types other than the iteration type.
+                // To determine this, we substitute the constraint type (that we now know isn't generic) for the iteration
+                // type and check whether the resulting type is generic.
+                const nameType = getNameTypeFromMappedType(type as MappedType);
+                if (nameType && isGenericIndexType(instantiateType(nameType, makeUnaryTypeMapper(getTypeParameterFromMappedType(type as MappedType), constraint)))) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -15638,8 +15651,14 @@ namespace ts {
                 return getStringLiteralType(text);
             }
             newTexts.push(text);
-            if (every(newTexts, t => t === "") && every(newTypes, t => !!(t.flags & TypeFlags.String))) {
-                return stringType;
+            if (every(newTexts, t => t === "")) {
+                if (every(newTypes, t => !!(t.flags & TypeFlags.String))) {
+                    return stringType;
+                }
+                // Normalize `${Mapping<xxx>}` into Mapping<xxx>
+                if (newTypes.length === 1 && isPatternLiteralType(newTypes[0])) {
+                    return newTypes[0];
+                }
             }
             const id = `${getTypeListId(newTypes)}|${map(newTexts, t => t.length).join(",")}|${newTexts.join("")}`;
             let type = templateLiteralTypes.get(id);
@@ -15698,11 +15717,13 @@ namespace ts {
 
         function getStringMappingType(symbol: Symbol, type: Type): Type {
             return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
-                // Mapping<Mapping<T>> === Mapping<T>
-                type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-                isGenericIndexType(type) || isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, isPatternLiteralPlaceholderType(type) && !(type.flags & TypeFlags.StringMapping) ? getTemplateLiteralType(["", ""], [type]) : type) :
                 type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
                 type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
+                // Mapping<Mapping<T>> === Mapping<T>
+                type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
+                type.flags & (TypeFlags.Any | TypeFlags.String || type.flags & TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+                // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
+                isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
                 type;
         }
 
@@ -16000,11 +16021,12 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || !!(type.flags & TypeFlags.StringMapping && isPatternLiteralPlaceholderType((type as StringMappingType).type));
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
         }
 
         function isPatternLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
+            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
+                !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
         }
 
         function isGenericType(type: Type): boolean {
@@ -22559,7 +22581,7 @@ namespace ts {
         }
 
         function isMemberOfStringMapping(source: Type, target: Type): boolean {
-            if (target.flags & (TypeFlags.String | TypeFlags.AnyOrUnknown)) {
+            if (target.flags & (TypeFlags.String | TypeFlags.Any)) {
                 return true;
             }
             if (target.flags & TypeFlags.TemplateLiteral) {
