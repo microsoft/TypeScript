@@ -1158,10 +1158,12 @@ namespace ts.server.protocol {
     }
 
     export interface ReferencesResponseItem extends FileSpanWithContext {
-        /** Text of line containing the reference.  Including this
-         *  with the response avoids latency of editor loading files
-         * to show text of reference line (the server already has
-         * loaded the referencing files).
+        /**
+         * Text of line containing the reference. Including this
+         * with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has loaded the referencing files).
+         *
+         * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
          */
         lineText?: string;
 
@@ -3479,6 +3481,9 @@ namespace ts.server.protocol {
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
 
+        /**
+         * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
+         */
         readonly disableLineTextInReferences?: boolean;
     }
 
