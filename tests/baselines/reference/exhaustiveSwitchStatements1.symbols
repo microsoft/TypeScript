@@ -623,6 +623,8 @@ function f35431(a: A) {
     case "def": return;
     default:
       a!.kind; // Error expected
+>a!.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
 >a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
   }
 }

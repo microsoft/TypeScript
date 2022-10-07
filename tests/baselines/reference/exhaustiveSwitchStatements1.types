@@ -727,9 +727,9 @@ function f35431(a: A) {
 
     default:
       a!.kind; // Error expected
->a!.kind : any
->a! : never
+>a!.kind : never
+>a! : A
 >a : never
->kind : any
+>kind : never
   }
 }
