@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 let playwright;
 try {
     // @ts-ignore-error
-    playwright = await import("playwright"); // eslint-line import/no-extraneous-dependencies
+    playwright = await import("playwright");
 }
 catch (error) {
     throw new Error("Playwright is expected to be installed manually before running this script");
