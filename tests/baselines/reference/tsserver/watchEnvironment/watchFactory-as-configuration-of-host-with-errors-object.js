@@ -29,14 +29,17 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "configure",
       "arguments": {
         "watchOptions": {
-          "watchFactory": "myplugin/../malicious"
+          "watchFactory": {
+            "name": "myplugin/../malicious",
+            "myconfig": "somethingelse"
+          }
         }
       },
       "seq": 1,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Host watch options changed to {}, it will be take effect for next watches.
-Info seq  [hh:mm:ss:mss] Watch options supplied had errors: Supplied options: {"watchFactory":"myplugin/../malicious"}
+Info seq  [hh:mm:ss:mss] Watch options supplied had errors: Supplied options: {"watchFactory":{"name":"myplugin/../malicious","myconfig":"somethingelse"}}
 Info seq  [hh:mm:ss:mss] Diagnostics:: error TS5109: 'watchFactory' name can only be a package name.
 
 Info seq  [hh:mm:ss:mss] response:

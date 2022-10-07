@@ -6946,7 +6946,7 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
 export type DiagnosticArguments = (string | number)[];
 
 /** @internal */
-export type DiagnosticAndArguments = [message: DiagnosticMessage, ...args: DiagnosticArguments];
+export type DiagnosticAndArguments = readonly [message: DiagnosticMessage, ...args: DiagnosticArguments];
 
 export interface DiagnosticRelatedInformation {
     category: DiagnosticCategory;
@@ -7372,10 +7372,16 @@ export interface CreateProgramOptions {
     typeScriptVersion?: string;
 }
 
+ /** @internal */
+export type CommandLineOptionExtraValidation = (value: CompilerOptionsValue, valueExpression?: Expression) =>
+    DiagnosticAndArguments |
+    { diagnostics: DiagnosticAndArguments; errorNode: Expression; } |
+    undefined;
+
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
-    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | "string | object" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -7395,8 +7401,8 @@ export interface CommandLineOptionBase {
     affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
     affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
-    extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
-    disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
+    extraValidation?: CommandLineOptionExtraValidation;     // Additional validation to be performed for the value to be valid
+    disallowNullOrUndefined?: true;                         // If set option does not allow setting null
 }
 
 /** @internal */
@@ -7439,8 +7445,8 @@ export interface DidYouMeanOptionsDiagnostics {
 }
 
 /** @internal */
-export interface TsConfigOnlyOption extends CommandLineOptionBase {
-    type: "object";
+export interface CommandLineOptionOfObjectType extends CommandLineOptionBase {
+    type: "object" | "string | object";
     elementOptions?: Map<string, CommandLineOption>;
     extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
 }
@@ -7448,12 +7454,12 @@ export interface TsConfigOnlyOption extends CommandLineOptionBase {
 /** @internal */
 export interface CommandLineOptionOfListType extends CommandLineOptionBase {
     type: "list" | "listOrElement";
-    element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
+    element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | CommandLineOptionOfObjectType;
     listPreserveFalsyValues?: boolean;
 }
 
 /** @internal */
-export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
+export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | CommandLineOptionOfObjectType | CommandLineOptionOfListType;
 
 /** @internal */
 export const enum CharacterCodes {

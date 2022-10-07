@@ -7,7 +7,7 @@ export class a { prop = "hello"; foo() { return this.prop; } }
 export class b { prop = "hello"; foo() { return this.prop; } }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"watchOptions":{"watchFactory":"myplugin"}}
+{"watchOptions":{"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,15 +29,15 @@ Output::
 
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
-Enabling watchFactory myplugin from candidate paths: /a/lib/tsc.js/../../..
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Config file /user/username/projects/myproject/tsconfig.json
+Enabling watchFactory {"name":"myplugin","myconfig":"somethingelse"} from candidate paths: /a/lib/tsc.js/../../..
 Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
 Require:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
 Skipped loading plugin myplugin because it did not expose a proper factory function
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -112,8 +112,8 @@ Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.

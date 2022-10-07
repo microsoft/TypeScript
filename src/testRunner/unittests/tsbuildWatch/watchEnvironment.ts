@@ -300,8 +300,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 scenario: "watchEnvironment",
                 ...input,
                 subScenario: `${input.subScenario} object`,
-                sys: () => input.sys({ watchFactory }),
-                // sys: () => input.sys({ watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
+                sys: () => input.sys({ watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
             });
         }
 
@@ -318,8 +317,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 scenario: "watchEnvironment",
                 ...input,
                 subScenario: `${input.subScenario} object`,
-                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", watchFactory],
-                // commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
+                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
             });
         }
     });

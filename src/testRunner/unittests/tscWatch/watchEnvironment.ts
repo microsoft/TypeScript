@@ -890,8 +890,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 scenario,
                 ...input,
                 subScenario: `${input.subScenario} object`,
-                sys: () => input.sys({ watchFactory }),
-                // sys: () => input.sys({ watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
+                sys: () => input.sys({ watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
             });
         }
 
@@ -908,8 +907,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 scenario,
                 ...input,
                 subScenario: `${input.subScenario} object`,
-                commandLineArgs: ["-w", "--extendedDiagnostics", "--watchFactory", watchFactory],
-                // commandLineArgs: ["-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
+                commandLineArgs: ["-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
             });
         }
     });

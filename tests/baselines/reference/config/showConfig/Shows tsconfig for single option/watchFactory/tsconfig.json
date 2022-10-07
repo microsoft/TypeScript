@@ -1,6 +1,4 @@
 {
     "compilerOptions": {},
-    "watchOptions": {
-        "watchFactory": "someString"
-    }
+    "watchOptions": {}
 }

@@ -23,25 +23,25 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -b -w --extendedDiagnostics --watchFactory myplugin
+/a/lib/tsc.js -b -w --extendedDiagnostics --watchFactory {"name":"myplugin","myconfig":"somethingelse"}
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
-Enabling watchFactory myplugin from candidate paths: /a/lib/tsc.js/../../..
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Config file /user/username/projects/myproject/tsconfig.json
+Enabling watchFactory {"name":"myplugin","myconfig":"somethingelse"} from candidate paths: /a/lib/tsc.js/../../..
 Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
 Require:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
-Require:: Module myplugin created with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
-Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"}
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-Custom watchFile: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"}
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-Custom watchFile: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"}
+Require:: Module myplugin created with config: {"name":"myplugin","myconfig":"somethingelse"} and options: {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}
+Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+Custom watchFile: /user/username/projects/myproject/a.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+Custom watchFile: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -64,15 +64,15 @@ Shape signatures in builder refreshed for::
 
 Plugin WatchedFiles::
 /user/username/projects/myproject/tsconfig.json: *new*
-  {"pollingInterval":2000,"options":{"watchFactory":"myplugin"}}
+  {"pollingInterval":2000,"options":{"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}}
 /user/username/projects/myproject/a.ts: *new*
-  {"pollingInterval":250,"options":{"watchFactory":"myplugin"}}
+  {"pollingInterval":250,"options":{"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}}
 /user/username/projects/myproject/b.ts: *new*
-  {"pollingInterval":250,"options":{"watchFactory":"myplugin"}}
+  {"pollingInterval":250,"options":{"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}}
 
 Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject: *new*
-  {"options":{"watchFactory":"myplugin"}}
+  {"options":{"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}}}
 
 exitCode:: ExitStatus.undefined
 
@@ -127,8 +127,8 @@ Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
