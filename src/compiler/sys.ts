@@ -903,7 +903,7 @@ export interface ImportPluginResult<T> {
 /** @internal */
 export function resolveModule<T = {}>(
     pluginConfigEntry: PluginImport,
-    searchPaths: string[],
+    searchPaths: readonly string[],
     host: Pick<System, "require" | "resolvePath">,
     log: (message: string) => void,
 ): ImportPluginResult<T> {
@@ -1002,9 +1002,12 @@ export function createSystemWatchFunctions({
             sysLog(`Skipped loading watchFactory ${isString(options.watchFactory) ? options.watchFactory : JSON.stringify(options.watchFactory)} because it can be named with only package name`);
             return setUserWatchFactory(options, /*userWatchFactory*/ undefined);
         }
-        const searchPaths = [
-            combinePaths(system.getExecutingFilePath(), "../../..")
-        ];
+        const host = options.getHost?.();
+        const searchPaths = host ?
+            host.searchPaths :
+            [
+                combinePaths(system.getExecutingFilePath(), "../../..")
+            ];
         sysLog(`Enabling watchFactory ${isString(options.watchFactory) ? options.watchFactory : JSON.stringify(options.watchFactory)} from candidate paths: ${searchPaths.join(",")}`);
         const { resolvedModule, errorLogs, pluginConfigEntry } = resolveModule<UserWatchFactoryModule>(
             isString(options.watchFactory) ? { name: options.watchFactory } : options.watchFactory,
