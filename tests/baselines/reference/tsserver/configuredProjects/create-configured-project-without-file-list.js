@@ -53,15 +53,14 @@ Info 5    [00:00:30.000] Config: /a/b/tsconfig.json : {
 }
 Info 6    [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 7    [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:33.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 9    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/b/d/f2.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:35.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 11   [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 13   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 14   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
-Info 16   [00:00:41.000] 	Files (3)
+Info 8    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/b/d/f2.ts 500 undefined WatchType: Closed Script info
+Info 9    [00:00:34.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 10   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 12   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 13   [00:00:38.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 14   [00:00:39.000] Project '/a/b/tsconfig.json' (Configured)
+Info 15   [00:00:40.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/a/b/c/f1.ts
 	/a/b/d/f2.ts
@@ -74,11 +73,11 @@ Info 16   [00:00:41.000] 	Files (3)
 	d/f2.ts
 	  Matched by default include pattern '**/*'
 
-Info 17   [00:00:42.000] -----------------------------------------------
-Info 18   [00:00:43.000] Project '/a/b/tsconfig.json' (Configured)
-Info 18   [00:00:44.000] 	Files (3)
+Info 16   [00:00:41.000] -----------------------------------------------
+Info 17   [00:00:42.000] Project '/a/b/tsconfig.json' (Configured)
+Info 17   [00:00:43.000] 	Files (3)
 
-Info 18   [00:00:45.000] -----------------------------------------------
-Info 18   [00:00:46.000] Open files: 
-Info 18   [00:00:47.000] 	FileName: /a/b/c/f1.ts ProjectRootPath: undefined
-Info 18   [00:00:48.000] 		Projects: /a/b/tsconfig.json
+Info 17   [00:00:44.000] -----------------------------------------------
+Info 17   [00:00:45.000] Open files: 
+Info 17   [00:00:46.000] 	FileName: /a/b/c/f1.ts ProjectRootPath: undefined
+Info 17   [00:00:47.000] 		Projects: /a/b/tsconfig.json
