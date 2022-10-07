@@ -177,7 +177,7 @@ namespace ts {
         SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
         IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
         IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-        IsForObjectLiteralArgumentCompletions = 1 << 6, // Use the constraint instead of the default type for object literal argument completions
+        IsForObjectKeysArgumentCompletions = 1 << 6,    // Use the constraint instead of the default type for object keys argument completions
         RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                         //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                         //   we need to preserve generic types instead of substituting them for constraints
@@ -27191,7 +27191,7 @@ namespace ts {
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
-            const argCheckMode = hasSkipDirectInferenceFlag(arg) ? CheckMode.IsForObjectLiteralArgumentCompletions : undefined;
+            const argCheckMode = hasSkipDirectInferenceFlag(arg) ? CheckMode.IsForObjectKeysArgumentCompletions : undefined;
             return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex, argCheckMode);
         }
 
@@ -31399,7 +31399,7 @@ namespace ts {
                         }
                         else {
                             const argFlags = isInJSFile(node) ? InferenceFlags.AnyDefault :
-                                checkMode & CheckMode.IsForObjectLiteralArgumentCompletions ? InferenceFlags.NoDefault :
+                                checkMode & CheckMode.IsForObjectKeysArgumentCompletions ? InferenceFlags.NoDefault :
                                 InferenceFlags.None;
 
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, argFlags);
