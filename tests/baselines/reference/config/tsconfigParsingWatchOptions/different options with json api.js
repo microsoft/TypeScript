@@ -210,3 +210,50 @@ Result: WatchOptions::
 Errors::
 [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
+
+Fs::
+//// [/a.ts]
+
+
+//// [/tsconfig.json]
+{
+ "watchOptions": {
+  "watchFactory": {
+   "name": "somefactory",
+   "myconfig": "somethingelse"
+  }
+ }
+}
+
+
+configFileName:: tsconfig.json
+Result: WatchOptions::
+{
+ "watchFactory": {
+  "name": "somefactory",
+  "myconfig": "somethingelse"
+ }
+}
+Errors::
+
+
+Fs::
+//// [/a.ts]
+
+
+//// [/tsconfig.json]
+{
+ "watchOptions": {
+  "watchFactory": {
+   "name": "somefactory/../malicious"
+  }
+ }
+}
+
+
+configFileName:: tsconfig.json
+Result: WatchOptions::
+{}
+Errors::
+[91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+

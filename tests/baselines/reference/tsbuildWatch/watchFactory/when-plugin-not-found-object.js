@@ -3,7 +3,10 @@ Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
  "watchOptions": {
-  "watchFactory": "myplugin"
+  "watchFactory": {
+   "name": "myplugin",
+   "myconfig": "somethingelse"
+  }
  }
 }
 
@@ -33,7 +36,7 @@ Output::
 
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Config file /user/username/projects/myproject/tsconfig.json
 Enabling watchFactory 'myplugin' from candidate paths: /user/username/projects/myproject,/a/lib/../..
 Loading myplugin from /user/username/projects/myproject (resolved to /user/username/projects/myproject/node_modules)
 Require:: Resolving myplugin from /user/username/projects/myproject/node_modules
@@ -42,10 +45,10 @@ Require:: Resolving myplugin from /a/lib/../../node_modules
 Failed to load module 'myplugin' from /user/username/projects/myproject/node_modules: Cannot find module myPlugin at /user/username/projects/myproject/node_modules
 Failed to load module 'myplugin' from /a/lib/../../node_modules: Cannot find module myPlugin at /a/lib/../../node_modules
 Couldn't find 'myplugin'
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -120,8 +123,8 @@ Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file /user/username/projects/myproject/tsconfig.json
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.

@@ -3,7 +3,10 @@ Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
  "watchOptions": {
-  "watchFactory": "myplugin/../malicious"
+  "watchFactory": {
+   "name": "myplugin/../malicious",
+   "myconfig": "somethingelse"
+  }
  }
 }
 
@@ -44,10 +47,10 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_mod
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {} Type roots
-[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m4[0m:[93m12[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
-[7m3[0m   "watchFactory": "myplugin/../malicious"
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m4[0m    "name": "myplugin/../malicious",
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
@@ -144,10 +147,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m4[0m:[93m12[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
-[7m3[0m   "watchFactory": "myplugin/../malicious"
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m4[0m    "name": "myplugin/../malicious",
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 

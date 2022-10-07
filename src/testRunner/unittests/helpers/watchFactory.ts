@@ -167,8 +167,7 @@ export function verifyWatchFactory(
         scenario: "watchFactory",
         ...input,
         subScenario: `${input.subScenario} object`,
-        // sys: () => input.sys(expect, { watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
-        sys: () => input.sys(expect, { watchFactory }),
+        sys: () => input.sys(expect, { watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
     });
 }
 
@@ -186,8 +185,7 @@ export function verifyWatchFactoryCommandLine(
         scenario: "watchFactory",
         ...input,
         subScenario: `${input.subScenario} object`,
-        // commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" }), "--allowPlugins"],
-        commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", watchFactory, "--allowPlugins"],
+        commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" }), "--allowPlugins"],
     });
 }
 

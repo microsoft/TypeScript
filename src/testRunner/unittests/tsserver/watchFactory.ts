@@ -347,9 +347,8 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
     interface PluginImport extends ts.PluginImport {
         myconfig: "somethingelse";
     }
-    function getWatchFactory(watchFactory: string, _useObject: boolean): PluginImport | string {
-        // return useObject ? { name: watchFactory, myconfig: "somethingelse" } : watchFactory;
-        return watchFactory;
+    function getWatchFactory(watchFactory: string, useObject: boolean): PluginImport | string {
+        return useObject ? { name: watchFactory, myconfig: "somethingelse" } : watchFactory;
     }
 
     function updateFileOnHost(session: TestSession, file: string, log?: string) {

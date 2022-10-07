@@ -126,6 +126,24 @@ describe("unittests:: config:: showConfig", () => {
         if (option.name === "project") return;
         let args: string[];
         let optionValue: object | undefined;
+        if (option.type === "string | object") {
+            if (option.isTSConfigOnly) {
+                showTSConfigCorrectly(
+                    `Shows tsconfig for single option/${option.name}WithStringValue`,
+                    ["-p", "tsconfig.json"],
+                    isCompilerOptions ?
+                        { compilerOptions: { [option.name]: "someString" } } :
+                        { watchOptions: { [option.name]: "someString" } }
+                );
+            }
+            else {
+                showTSConfigCorrectly(
+                    `Shows tsconfig for single option/${option.name}WithStringValue`,
+                    [`--${option.name}`, "someString"],
+                        /*configJson*/ undefined,
+                );
+            }
+        }
         switch (option.type) {
             case "boolean": {
                 if (option.isTSConfigOnly) {
@@ -171,6 +189,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 break;
             }
+            case "string | object":
             case "object": {
                 args = ["-p", "tsconfig.json"];
                 optionValue = { [option.name]: {} };

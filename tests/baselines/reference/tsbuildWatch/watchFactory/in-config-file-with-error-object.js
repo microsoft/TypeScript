@@ -3,7 +3,10 @@ Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
  "watchOptions": {
-  "watchFactory": "myplugin/../malicious"
+  "watchFactory": {
+   "name": "myplugin/../malicious",
+   "myconfig": "somethingelse"
+  }
  }
 }
 
@@ -31,10 +34,10 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m4[0m:[93m12[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
-[7m3[0m   "watchFactory": "myplugin/../malicious"
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m4[0m    "name": "myplugin/../malicious",
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
@@ -87,10 +90,10 @@ FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInf
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {} Source file /user/username/projects/myproject/tsconfig.json
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+[96mtsconfig.json[0m:[93m4[0m:[93m12[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
 
-[7m3[0m   "watchFactory": "myplugin/../malicious"
-[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m4[0m    "name": "myplugin/../malicious",
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 

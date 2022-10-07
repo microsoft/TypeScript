@@ -3,7 +3,10 @@ Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
  "watchOptions": {
-  "watchFactory": "myplugin"
+  "watchFactory": {
+   "name": "myplugin",
+   "myconfig": "somethingelse"
+  }
  },
  "compilerOptions": {
   "allowPlugins": true
@@ -35,28 +38,28 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file
-Skipped loading watchFactory "myplugin" because it was invoked without specifying --allowPlugins
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Config file
+Skipped loading watchFactory {"name":"myplugin","myconfig":"somethingelse"} because it was invoked without specifying --allowPlugins
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFactory":"myplugin"} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
-[96mtsconfig.json[0m:[93m6[0m:[93m3[0m - [91merror[0m[90m TS6266: [0mOption 'allowPlugins' can only be specified on command line.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Type roots
+[96mtsconfig.json[0m:[93m9[0m:[93m3[0m - [91merror[0m[90m TS6266: [0mOption 'allowPlugins' can only be specified on command line.
 
-[7m6[0m   "allowPlugins": true
+[7m9[0m   "allowPlugins": true
 [7m [0m [91m  ~~~~~~~~~~~~~~[0m
 
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Wild card directory
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -139,18 +142,18 @@ Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file
+FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file
 Scheduling update
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":{"name":"myplugin","myconfig":"somethingelse"}} Source file
 Synchronizing program
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[96mtsconfig.json[0m:[93m6[0m:[93m3[0m - [91merror[0m[90m TS6266: [0mOption 'allowPlugins' can only be specified on command line.
+[96mtsconfig.json[0m:[93m9[0m:[93m3[0m - [91merror[0m[90m TS6266: [0mOption 'allowPlugins' can only be specified on command line.
 
-[7m6[0m   "allowPlugins": true
+[7m9[0m   "allowPlugins": true
 [7m [0m [91m  ~~~~~~~~~~~~~~[0m
 
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.

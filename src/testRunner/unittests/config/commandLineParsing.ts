@@ -191,6 +191,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*", "0.ts"]);
         assertParseResult("parse --watchFactory", ["--watchFactory", "somefactory", "0.ts"]);
         assertParseResult("errors on invalid watchFactory", ["--watchFactory", "somefactory/../malicious", "0.ts"]);
+        assertParseResult("parse --watchFactory object", ["--watchFactory", "{\"name\":\"somefactory\",\"myconfig\":\"somethingelse\"}", "0.ts"]);
+        assertParseResult("errors on invalid watchFactory name", ["--watchFactory", "{\"name\":\"somefactory/../malicious\"}", "0.ts"]);
+        assertParseResult("errors on invalid watchFactory object", ["--watchFactory", "{\"name\":\"myplugin\"", "0.ts"]);
     });
 });
 
@@ -247,6 +250,9 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*"]);
         assertParseResult("parse --watchFactory", ["--watchFactory", "somefactory"]);
         assertParseResult("errors on invalid watchFactory", ["--watchFactory", "somefactory/../malicious"]);
+        assertParseResult("parse --watchFactory object", ["--watchFactory", `{"name":"somefactory","myconfig":"somethingelse"}`]);
+        assertParseResult("errors on invalid watchFactory name", ["--watchFactory", "{\"name\":\"somefactory/../malicious\"}"]);
+        assertParseResult("errors on invalid watchFactory object", ["--watchFactory", "{\"name\":\"myplugin\""]);
     });
 });
 
