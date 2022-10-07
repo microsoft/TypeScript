@@ -32499,8 +32499,26 @@ namespace ts {
         }
 
         function checkNonNullAssertion(node: NonNullExpression) {
-            return node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) :
-                getNonNullableType(checkExpression(node.expression));
+            if (node.flags & NodeFlags.OptionalChain) {
+                return checkNonNullChain(node as NonNullChain);
+            }
+            const exprType = checkExpression(node.expression);
+            const nonNullType = getNonNullableType(exprType);
+
+            // If we narrowed (presumably) to a never type, try to resolve the
+            // expression's declared type and return that instead
+            if (nonNullType.flags & TypeFlags.Never) {
+                const symbol = getNodeLinks(node.expression).resolvedSymbol;
+                // Some expressions won't have a resolved symbol (e.g. function calls); do nothing special in that case
+                if (symbol) {
+                    // Call getNonNullableType again because you shouldn't ever have to write "x!!",
+                    // e.g. if the declared type was string | null, since narrowings away from null
+                    // and undefined can be presumed to be ironclad
+                    return getNonNullableType(getTypeOfSymbol(symbol));
+                }
+            }
+
+            return nonNullType;
         }
 
         function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
