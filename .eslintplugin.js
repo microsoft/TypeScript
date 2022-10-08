@@ -7,6 +7,6 @@ const ruleFiles = fs.readdirSync(rulesDir).filter((p) => p.endsWith(ext));
 
 module.exports = {
     rules: Object.fromEntries(ruleFiles.map((p) => {
-        return [p.slice(0, -ext.length), require(path.join(rulesDir, p))];
+        return [p.slice(0, -ext.length),  require(path.join(rulesDir, p))];
     })),
 }
