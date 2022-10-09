@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "gulp",
-            "label": "gulp: local",
-            "task": "local",
+            "label": "npm: build:compiler",
+            "type": "npm",
+            "script": "build:compiler",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -16,30 +16,22 @@
             ]
         },
         {
-            "type": "gulp",
-            "label": "gulp: tsc",
-            "task": "tsc",
+            "label": "npm: build:tests",
+            "type": "npm",
+            "script": "build:tests",
             "group": "build",
             "problemMatcher": [
                 "$tsc"
             ]
         },
         {
-            "type": "gulp",
-            "label": "gulp: tests",
-            "task": "tests",
+            "label": "gulp: tests", // Kept for backwards compat for old launch.json files.
+            "type": "npm",
+            "script": "build:tests",
             "group": "build",
             "problemMatcher": [
                 "$tsc"
             ]
         },
-        {
-            "type": "gulp",
-            "task": "services",
-            "label": "gulp: services",
-            "problemMatcher": [
-                "$tsc"
-            ],
-        }
     ]
 }
