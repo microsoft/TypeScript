@@ -1,0 +1,34 @@
+=== tests/cases/compiler/index.mts ===
+import * as exportAny from "./exportAny.cjs";
+>exportAny : any
+
+import * as exportUnknown from "./exportUnknown.cjs";
+>exportUnknown : unknown
+
+import * as exportSymbol from "./exportSymbol.cjs";
+>exportSymbol : symbol
+
+
+=== tests/cases/compiler/exportAny.d.cts ===
+declare const __: any;
+>__ : any
+
+export = __;
+>__ : any
+
+
+=== tests/cases/compiler/exportUnknown.d.cts ===
+declare const __: unknown;
+>__ : unknown
+
+export = __;
+>__ : unknown
+
+
+=== tests/cases/compiler/exportSymbol.d.cts ===
+declare const __: symbol;
+>__ : symbol
+
+export = __;
+>__ : symbol
+
