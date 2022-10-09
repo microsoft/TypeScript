@@ -83,6 +83,7 @@
         "gulp-newer": "latest",
         "gulp-rename": "latest",
         "gulp-sourcemaps": "latest",
+        "jsonc-parser": "^3.2.0",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",
