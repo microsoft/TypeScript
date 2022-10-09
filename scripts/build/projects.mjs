@@ -49,7 +49,7 @@ const projectCleaner = new ProjectQueue((projects) => execTsc("--clean", ...proj
  */
  export const cleanProject = (project) => projectCleaner.enqueue(project);
 
-const projectWatcher = new ProjectQueue((projects) => execTsc("--watch", ...projects));
+const projectWatcher = new ProjectQueue((projects) => execTsc("--watch", "--preserveWatchOutput", ...projects));
 
 /**
  * @param {string} project

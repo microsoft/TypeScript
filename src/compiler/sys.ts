@@ -1567,10 +1567,7 @@ export let sys: System = (() => {
             debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
             tryEnableSourceMapsForHost() {
                 try {
-                    // Trick esbuild into not eagerly resolving a path to a JS file.
-                    // See: https://github.com/evanw/esbuild/issues/1958
-                    const moduleName = "source-map-support" as const;
-                    (require(moduleName) as typeof import("source-map-support")).install();
+                    (require("source-map-support") as typeof import("source-map-support")).install();
                 }
                 catch {
                     // Could not enable source maps.

@@ -125,11 +125,14 @@ export class MainProcessLogger extends BaseLogger {
     }
 }
 
-/** @internal */
-// eslint-disable-next-line prefer-const
-export let dynamicImport = async (_id: string): Promise<any> => {
+let dynamicImport = async (_id: string): Promise<any> => {
     throw new Error("Dynamic import not implemented");
 };
+
+/** @internal */
+export function setDynamicImport(fn: (id: string) => Promise<any>) {
+    dynamicImport = fn;
+}
 
 /** @internal */
 export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {

@@ -1406,7 +1406,7 @@ export namespace Baseline {
     }
 
     function getBaselineFileChangedErrorMessage(relativeFileName: string): string {
-        return `The baseline file ${relativeFileName} has changed. (Run "gulp baseline-accept" if the new baseline is correct.)`;
+        return `The baseline file ${relativeFileName} has changed. (Run "hereby baseline-accept" if the new baseline is correct.)`;
     }
 
     export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {

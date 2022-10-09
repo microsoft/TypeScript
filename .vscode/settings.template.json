@@ -12,4 +12,12 @@
     //     "--ignore-revs-file",
     //     ".git-blame-ignore-revs"
     // ]
+
+    // These options search the repo recursively and slow down
+    // the build task menu. We define our own in tasks.json.
+    "typescript.tsc.autoDetect": "off",
+    "npm.autoDetect": "off",
+    "grunt.autoDetect": "off",
+    "jake.autoDetect": "off",
+    "gulp.autoDetect": "off"
 }
