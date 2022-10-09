@@ -2,11 +2,11 @@
 
 import fs from "fs";
 import path from "path";
-import ts from "../../lib/typescript.js";
 import chalk from "chalk";
 import which from "which";
 import { spawn } from "child_process";
 import assert from "assert";
+import JSONC from "jsonc-parser";
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -47,47 +47,12 @@ export async function exec(cmd, args, options = {}) {
 }
 
 /**
- * @param {ts.Diagnostic[]} diagnostics
- * @param {{ cwd?: string, pretty?: boolean }} [options]
- */
-function formatDiagnostics(diagnostics, options) {
-    return options && options.pretty
-        ? ts.formatDiagnosticsWithColorAndContext(diagnostics, getFormatDiagnosticsHost(options && options.cwd))
-        : ts.formatDiagnostics(diagnostics, getFormatDiagnosticsHost(options && options.cwd));
-}
-
-/**
- * @param {ts.Diagnostic[]} diagnostics
- * @param {{ cwd?: string }} [options]
- */
-function reportDiagnostics(diagnostics, options) {
-    console.log(formatDiagnostics(diagnostics, { cwd: options && options.cwd, pretty: process.stdout.isTTY }));
-}
-
-/**
- * @param {string | undefined} cwd
- * @returns {ts.FormatDiagnosticsHost}
- */
-function getFormatDiagnosticsHost(cwd) {
-    return {
-        getCanonicalFileName: fileName => fileName,
-        getCurrentDirectory: () => cwd ?? process.cwd(),
-        getNewLine: () => ts.sys.newLine,
-    };
-}
-
-/**
  * Reads JSON data with optional comments using the LKG TypeScript compiler
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
-    if (result.error) {
-        reportDiagnostics([result.error]);
-        throw new Error("An error occurred during parse.");
-    }
-    return result.config;
+    return JSONC.parse(jsonText);
 }
 
 /**
