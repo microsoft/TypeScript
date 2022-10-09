@@ -70,10 +70,10 @@ jobs:
       run: npm install --no-save --no-package-lock playwright
 
     - name: Build local
-      run: gulp local
+      run: npx hereby local
 
     - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+      run: npx hereby test-browser-integration
 
   typecheck:
     runs-on: ubuntu-latest
@@ -102,7 +102,7 @@ jobs:
     - run:  npm ci
 
     - name: Build scripts
-      run: gulp scripts
+      run: npx hereby scripts
 
     - name: ESLint tests
-      run: gulp run-eslint-rules-tests
+      run: npx hereby run-eslint-rules-tests

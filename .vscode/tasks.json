@@ -4,42 +4,42 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "gulp",
-            "label": "gulp: local",
-            "task": "local",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "label": "tsc --build ./src --watch",
+            "type": "shell",
+            "command": "node",
+            "args": ["${workspaceFolder}/lib/tsc.js", "--build", "${workspaceFolder}/src", "--watch"],
+            "group": "build",
+            "isBackground": true,
             "problemMatcher": [
-                "$tsc"
+                "$tsc-watch"
             ]
         },
         {
-            "type": "gulp",
-            "label": "gulp: tsc",
-            "task": "tsc",
+            "label": "npm: build:compiler",
+            "type": "npm",
+            "script": "build:compiler",
             "group": "build",
             "problemMatcher": [
                 "$tsc"
             ]
         },
         {
-            "type": "gulp",
-            "label": "gulp: tests",
-            "task": "tests",
+            "label": "npm: build:tests",
+            "type": "npm",
+            "script": "build:tests",
             "group": "build",
             "problemMatcher": [
                 "$tsc"
             ]
         },
         {
-            "type": "gulp",
-            "task": "services",
-            "label": "gulp: services",
+            "label": "gulp: tests", // Kept for backwards compat for old launch.json files.
+            "type": "npm",
+            "script": "build:tests",
+            "group": "build",
             "problemMatcher": [
                 "$tsc"
-            ],
-        }
+            ]
+        },
     ]
 }
