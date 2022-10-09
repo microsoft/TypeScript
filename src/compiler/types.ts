@@ -1427,6 +1427,7 @@ namespace ts {
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
+        /*@internal*/ hasExtendedUnicodeEscape?: boolean;
     }
 
     // Transient identifier node (marked by id === -1)
@@ -4760,6 +4761,7 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
         /* @internal */ getPromiseType(): Type;
         /* @internal */ getPromiseLikeType(): Type;
+        /* @internal */ getAsyncIterableType(): Type | undefined;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
@@ -7179,7 +7181,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+    export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
@@ -7215,7 +7217,8 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
-        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
@@ -7651,7 +7654,7 @@ namespace ts {
         //
 
         createIdentifier(text: string): Identifier;
-        /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
 
         /**

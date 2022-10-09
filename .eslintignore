@@ -4,7 +4,8 @@
 /lib/**
 /src/lib/*.generated.d.ts
 # Ignore all compiled script outputs
-/scripts/*.js
+/scripts/**/*.js
+/scripts/**/*.d.*
 # But, not the ones that are hand-written.
 # TODO: remove once scripts are pure JS
 !/scripts/browserIntegrationTest.js

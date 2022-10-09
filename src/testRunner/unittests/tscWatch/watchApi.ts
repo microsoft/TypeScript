@@ -1,23 +1,22 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
-        const configFileJson: any = {
-            compilerOptions: { module: "commonjs", resolveJsonModule: true },
-            files: ["index.ts"]
-        };
-        const mainFile: File = {
-            path: `${projectRoot}/index.ts`,
-            content: "import settings from './settings.json';"
-        };
-        const config: File = {
-            path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify(configFileJson)
-        };
-        const settingsJson: File = {
-            path: `${projectRoot}/settings.json`,
-            content: JSON.stringify({ content: "Print this" })
-        };
-
         it("verify that module resolution with json extension works when returned without extension", () => {
+            const configFileJson: any = {
+                compilerOptions: { module: "commonjs", resolveJsonModule: true },
+                files: ["index.ts"]
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/index.ts`,
+                content: "import settings from './settings.json';"
+            };
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify(configFileJson)
+            };
+            const settingsJson: File = {
+                path: `${projectRoot}/settings.json`,
+                content: JSON.stringify({ content: "Print this" })
+            };
             const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
                 [libFile, mainFile, config, settingsJson],
                 { currentDirectory: projectRoot }),
@@ -49,6 +48,64 @@ namespace ts.tscWatch {
                 changes: emptyArray,
                 watchOrSolution: watch
             });
+        });
+
+        describe("hasInvalidatedResolutions", () => {
+            function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
+                it(subScenario, () => {
+                    const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
+                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({
+                            compilerOptions: { traceResolution: true, extendedDiagnostics: true },
+                            files: ["main.ts"]
+                        }),
+                        [`${projectRoot}/main.ts`]: `import { foo } from "./other";`,
+                        [`${projectRoot}/other.d.ts`]: "export function foo(): void;",
+                        [libFile.path]: libFile.content,
+                    }, { currentDirectory: projectRoot }));
+                    const host = createWatchCompilerHostOfConfigFileForBaseline({
+                        configFileName: `${projectRoot}/tsconfig.json`,
+                        system: sys,
+                        cb,
+                    });
+                    host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
+                        moduleNames.map(m => resolveModuleName(m, containingFile, options, host).resolvedModule);
+                    // Invalidate resolutions only when ts file is created
+                    if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`${projectRoot}/other.ts`);
+                    const watch = createWatchProgram(host);
+                    runWatchBaseline({
+                        scenario: "watchApi",
+                        subScenario,
+                        commandLineArgs: ["--w"],
+                        sys,
+                        baseline,
+                        oldSnap,
+                        getPrograms,
+                        changes: [
+                            {
+                                caption: "write other with same contents",
+                                change: sys => sys.appendFile(`${projectRoot}/other.d.ts`, ""),
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                            {
+                                caption: "change other file",
+                                change: sys => sys.appendFile(`${projectRoot}/other.d.ts`, "export function bar(): void;"),
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                            {
+                                caption: "write other with same contents but write ts file",
+                                change: sys => {
+                                    sys.appendFile(`${projectRoot}/other.d.ts`, "");
+                                    sys.writeFile(`${projectRoot}/other.ts`, "export function foo() {}");
+                                },
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                        ],
+                        watchOrSolution: watch
+                    });
+                });
+            }
+            verifyWatch("host implements does not implement hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ false);
+            verifyWatch("host implements hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ true);
         });
     });
 

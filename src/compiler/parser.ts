@@ -2187,8 +2187,9 @@ namespace ts {
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
+                const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
                 nextTokenWithoutCheck();
-                return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind), pos);
+                return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind, hasExtendedUnicodeEscape), pos);
             }
 
             if (token() === SyntaxKind.PrivateIdentifier) {
@@ -2281,7 +2282,7 @@ namespace ts {
 
         function parsePrivateIdentifier(): PrivateIdentifier {
             const pos = getNodePos();
-            const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenText()));
+            const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenValue()));
             nextToken();
             return finishNode(node, pos);
         }
