@@ -70,6 +70,7 @@
         "fs-extra": "^9.1.0",
         "glob": "latest",
         "hereby": "^1.6.4",
+        "jsonc-parser": "^3.2.0",
         "minimist": "latest",
         "mkdirp": "latest",
         "mocha": "latest",
