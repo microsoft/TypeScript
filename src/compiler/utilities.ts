@@ -76,6 +76,8 @@ namespace ts {
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
+            getIndentString,
+            getIndentSize
         };
     }
 
@@ -4111,7 +4113,9 @@ namespace ts {
         return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
+    /** @deprecated @internal*/
     const indentStrings: string[] = ["", "    "];
+    /** @deprecated Use <writerInstance>.getIndentString*/
     export function getIndentString(level: number) {
         // prepopulate cache
         const singleLevel = indentStrings[1];
@@ -4121,31 +4125,7 @@ namespace ts {
         return indentStrings[level];
     }
 
-    export function setIndentString(indentation?: string | number | boolean) {
-        let singleLevel;
-        if (typeof indentation === "string") {
-            singleLevel = indentation;
-        }
-        else if (typeof indentation === "number") {
-            if (indentation < 0 || indentation > 9) {
-                indentation = 4;
-            }
-            singleLevel = "".padStart(indentation, " ");
-        }
-        else if (indentation === false) {
-            singleLevel = "";
-        }
-        else {
-            singleLevel = "    ";
-        }
-        if (indentStrings[1] !== singleLevel) {
-            const cacheLength = indentStrings.length;
-            //... clear current cache and repopulate with new indentation
-            indentStrings.splice(1, cacheLength - 1, singleLevel);
-            getIndentString(cacheLength);
-        }
-    }
-
+    /** @deprecated Use <createTextWriter>.getIndentSize()*/
     export function getIndentSize() {
         return indentStrings[1].length;
     }
@@ -4154,15 +4134,48 @@ namespace ts {
         return stringContains(version, "-dev") || stringContains(version, "-insiders");
     }
 
-    export function createTextWriter(newLine: string, indentation?: string | number | boolean): EmitTextWriter {
+    export function createTextWriter(newLine: string, indentation?: number | "\t"): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
         let lineCount: number;
         let linePos: number;
         let hasTrailingComment = false;
+        const indentStrings: string[] = ["", "    "];
         if (indentation !== undefined) {
             setIndentString(indentation);
+        }
+
+        function getIndentString(level: number) {
+            // prepopulate cache
+            const singleLevel = indentStrings[1];
+            for (let current = indentStrings.length; current <= level; current++) {
+                indentStrings.push(indentStrings[current - 1] + singleLevel);
+            }
+            return indentStrings[level];
+        }
+
+        function getIndentSize() {
+            return indentStrings[1].length;
+        }
+
+        function setIndentString(indentation?: number | "\t") {
+            let singleLevel;
+            if (indentation === "\t") {
+                singleLevel = indentation;
+            }
+            else if (indentation !== undefined && indentation >= 0 && indentation <= 9) {
+                singleLevel = "".padStart(indentation, " ");
+            }
+            else {
+                singleLevel = "    ";
+            }
+            if (indentStrings[1] !== singleLevel) {
+                const cacheLength = indentStrings.length;
+                //... clear current cache and repopulate with new indentation
+                indentStrings.splice(1, cacheLength - 1, singleLevel);
+                getIndentString(cacheLength);
+            }
         }
 
         function updateLineCountAndPosFor(s: string) {
@@ -4267,7 +4280,9 @@ namespace ts {
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
             writeComment,
-            getTextPosWithWriteLine
+            getTextPosWithWriteLine,
+            getIndentString,
+            getIndentSize
         };
     }
 
@@ -4833,11 +4848,11 @@ namespace ts {
                 if (pos !== commentPos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], commentPos);
+                        firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], commentPos, writer.getIndentSize());
                     }
 
                     // These are number of spaces writer is going to write at current indent
-                    const currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+                    const currentWriterIndentSpacing = writer.getIndent() * writer.getIndentSize();
 
                     // Number of spaces we want to be writing
                     // eg: Assume writer indent
@@ -4853,10 +4868,10 @@ namespace ts {
                     //            More right indented comment */                  --4 = 8 - 4 + 11
                     //     class c { }
                     // }
-                    const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text, pos, nextLineStart);
+                    const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text, pos, nextLineStart, writer.getIndentSize());
                     if (spacesToEmit > 0) {
-                        let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
-                        const indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+                        let numberOfSingleSpacesToEmit = spacesToEmit % writer.getIndentSize();
+                        const indentSizeSpaceString = writer.getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / writer.getIndentSize());
 
                         // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
                         writer.rawWrite(indentSizeSpaceString);
@@ -4901,12 +4916,12 @@ namespace ts {
         }
     }
 
-    function calculateIndent(text: string, pos: number, end: number) {
+    function calculateIndent(text: string, pos: number, end: number, indentSize: number) {
         let currentLineIndent = 0;
         for (; pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++) {
             if (text.charCodeAt(pos) === CharacterCodes.tab) {
                 // Tabs = TabSize = indent size and go to next tabStop
-                currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                currentLineIndent += indentSize - (currentLineIndent % indentSize);
             }
             else {
                 // Single space

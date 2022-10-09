@@ -1149,7 +1149,7 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    export function createWriter(newLine: string, indentation?: string | number | boolean): TextChangesWriter {
+    export function createWriter(newLine: string, indentation?: number | "\t"): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine, indentation);
@@ -1278,6 +1278,12 @@ namespace ts.textChanges {
             writer.clear();
             lastNonTriviaPosition = 0;
         }
+        function getIndentString(level: number): string {
+            return writer.getIndentString(level);
+        }
+        function getIndentSize(): number {
+            return writer.getIndentSize();
+        }
 
         return {
             onBeforeEmitNode,
@@ -1310,7 +1316,9 @@ namespace ts.textChanges {
             isAtStartOfLine,
             hasTrailingComment: () => writer.hasTrailingComment(),
             hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
-            clear
+            clear,
+            getIndentString,
+            getIndentSize
         };
     }
 

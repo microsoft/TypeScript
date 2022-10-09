@@ -2230,6 +2230,8 @@ namespace ts {
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
+            getIndentString,
+            getIndentSize
         };
 
         function writeIndent() {

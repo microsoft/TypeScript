@@ -4051,7 +4051,7 @@ declare namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
-        indentation?: string | number | boolean;
+        indentation?: number | "\t"; /** number of spaces per indentation level or single tab per level */
     }
     export interface GetEffectiveTypeRootsHost {
         directoryExists?(directoryName: string): boolean;

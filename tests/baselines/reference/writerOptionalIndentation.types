@@ -1,10 +1,13 @@
 === tests/cases/compiler/node_modules/typescript/index.d.ts ===
 declare module "typescript" {
->"typescript" : typeof import("typescript")
+>"typescript" : typeof import("tests/cases/compiler/node_modules/typescript/index")
 
     export = ts;
 >ts : typeof ts
 }
+
+import { writer } from "repl";
+>writer : any
 
 === tests/cases/compiler/writerOptionalIndentation.ts ===
 import * as ts from "typescript";
@@ -19,106 +22,135 @@ const nl = ts.sys.newLine;
 >newLine : string
 
 type ExpectedResults = {
->ExpectedResults : { [indentation: string]: string; [indentation: number]: string; }
+>ExpectedResults : { [indentation: string]: { expected: string; writer?: ts.Printer | undefined; }; [indentation: number]: { expected: string; writer?: ts.Printer | undefined; }; }
 
-    [indentation: string | number]: string;
+    [indentation: string | number]: {
 >indentation : string | number
+
+        expected: string;
+>expected : string
+
+        writer?: ts.Printer;
+>writer : ts.Printer | undefined
+>ts : any
+    }
 }
 
 const expectedResults: ExpectedResults = {
 >expectedResults : ExpectedResults
->{    0: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`,    1: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`,    2: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`,    3: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`,    4: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,    6: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`,    10: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,    "a": `export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}`,    ".": `export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}`,    "\t": `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`,    "\t\t": `export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}`} : { 0: string; 1: string; 2: string; 3: string; 4: string; 6: string; 10: string; a: string; ".": string; "\t": string; "\t\t": string; }
+>{    0: {expected: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`},    1: {expected: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`},    2: {expected: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`},    3: {expected: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`},    4: {expected: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`},    5: {expected: `export function abc(): string {${nl}     let abc: string = \"abc\";${nl}     return abc;${nl}}${nl}`},    6: {expected: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`},    7: {expected: `export function abc(): string {${nl}       let abc: string = \"abc\";${nl}       return abc;${nl}}${nl}`},    8: {expected: `export function abc(): string {${nl}        let abc: string = \"abc\";${nl}        return abc;${nl}}${nl}`},    9: {expected: `export function abc(): string {${nl}         let abc: string = \"abc\";${nl}         return abc;${nl}}${nl}`},    "\t": {expected: `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`}} : { 0: { expected: string; }; 1: { expected: string; }; 2: { expected: string; }; 3: { expected: string; }; 4: { expected: string; }; 5: { expected: string; }; 6: { expected: string; }; 7: { expected: string; }; 8: { expected: string; }; 9: { expected: string; }; "\t": { expected: string; }; }
 
-    0: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`,
->0 : string
+    0: {expected: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`},
+>0 : { expected: string; }
+>{expected: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    1: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`,
->1 : string
+    1: {expected: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`},
+>1 : { expected: string; }
+>{expected: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    2: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`,
->2 : string
+    2: {expected: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`},
+>2 : { expected: string; }
+>{expected: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    3: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`,
->3 : string
+    3: {expected: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`},
+>3 : { expected: string; }
+>{expected: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    4: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,
->4 : string
+    4: {expected: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`},
+>4 : { expected: string; }
+>{expected: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    6: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`,
->6 : string
+    5: {expected: `export function abc(): string {${nl}     let abc: string = \"abc\";${nl}     return abc;${nl}}${nl}`},
+>5 : { expected: string; }
+>{expected: `export function abc(): string {${nl}     let abc: string = \"abc\";${nl}     return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
+>`export function abc(): string {${nl}     let abc: string = \"abc\";${nl}     return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    6: {expected: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`},
+>6 : { expected: string; }
+>{expected: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    10: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,
->10 : string
->`export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}` : string
+    7: {expected: `export function abc(): string {${nl}       let abc: string = \"abc\";${nl}       return abc;${nl}}${nl}`},
+>7 : { expected: string; }
+>{expected: `export function abc(): string {${nl}       let abc: string = \"abc\";${nl}       return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
+>`export function abc(): string {${nl}       let abc: string = \"abc\";${nl}       return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    "a": `export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}`,
->"a" : string
->`export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}` : string
+    8: {expected: `export function abc(): string {${nl}        let abc: string = \"abc\";${nl}        return abc;${nl}}${nl}`},
+>8 : { expected: string; }
+>{expected: `export function abc(): string {${nl}        let abc: string = \"abc\";${nl}        return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
+>`export function abc(): string {${nl}        let abc: string = \"abc\";${nl}        return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    ".": `export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}`,
->"." : string
->`export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}` : string
+    9: {expected: `export function abc(): string {${nl}         let abc: string = \"abc\";${nl}         return abc;${nl}}${nl}`},
+>9 : { expected: string; }
+>{expected: `export function abc(): string {${nl}         let abc: string = \"abc\";${nl}         return abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
+>`export function abc(): string {${nl}         let abc: string = \"abc\";${nl}         return abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    "\t": `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`,
->"\t" : string
+    "\t": {expected: `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`}
+>"\t" : { expected: string; }
+>{expected: `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`} : { expected: string; }
+>expected : string
 >`export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}` : string
 >nl : string
 >nl : string
 >nl : string
 >nl : string
 
-    "\t\t": `export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}`
->"\t\t" : string
->`export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}` : string
->nl : string
->nl : string
->nl : string
->nl : string
-
 };
-
 
 let sourceFile = ts.createSourceFile(
 >sourceFile : ts.SourceFile
@@ -150,41 +182,151 @@ let sourceFile = ts.createSourceFile(
 
 );
 
-function testIndentation(indentation?: string | number): void {
->testIndentation : (indentation?: string | number) => void
->indentation : string | number | undefined
+for (let indentation in expectedResults) {
+>indentation : string
+>expectedResults : ExpectedResults
 
-    let printer;
->printer : any
+    let test = parseInt(indentation + 1);
+>test : number
+>parseInt(indentation + 1) : number
+>parseInt : (string: string, radix?: number | undefined) => number
+>indentation + 1 : string
+>indentation : string
+>1 : 1
 
-    if (indentation !== undefined) {
->indentation !== undefined : boolean
->indentation : string | number | undefined
+    if (test > 0) {
+>test > 0 : boolean
+>test : number
+>0 : 0
+
+        createPrinterInstance(test - 1);
+>createPrinterInstance(test - 1) : void
+>createPrinterInstance : (indentation: number | "\t") => void
+>test - 1 : number
+>test : number
+>1 : 1
+    }
+    else if (indentation === "\t") {
+>indentation === "\t" : boolean
+>indentation : string
+>"\t" : "\t"
+
+        createPrinterInstance(indentation);
+>createPrinterInstance(indentation) : void
+>createPrinterInstance : (indentation: number | "\t") => void
+>indentation : "\t"
+    }
+}
+
+function createPrinterInstance(indentation: number | "\t"): void {
+>createPrinterInstance : (indentation: number | "\t") => void
+>indentation : number | "\t"
+
+    expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
+>expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions) : ts.Printer
+>expectedResults[indentation].writer : ts.Printer | undefined
+>expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
+>expectedResults : ExpectedResults
+>indentation : number | "\t"
+>writer : ts.Printer | undefined
+>ts.createPrinter({ indentation } as ts.PrinterOptions) : ts.Printer
+>ts.createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+>ts : typeof ts
+>createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+>{ indentation } as ts.PrinterOptions : ts.PrinterOptions
+>{ indentation } : { indentation: number | "\t"; }
+>indentation : number | "\t"
+>ts : any
+}
+
+testIndentation(); //... testing with no indentation set - should use default of 4 spaces
+>testIndentation() : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+
+for (let indentation in expectedResults) {
+>indentation : string
+>expectedResults : ExpectedResults
+
+    let test = parseInt(indentation + 1);
+>test : number
+>parseInt(indentation + 1) : number
+>parseInt : (string: string, radix?: number | undefined) => number
+>indentation + 1 : string
+>indentation : string
+>1 : 1
+
+    if (test > 0) {
+>test > 0 : boolean
+>test : number
+>0 : 0
+
+        testIndentation(test - 1);
+>testIndentation(test - 1) : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+>test - 1 : number
+>test : number
+>1 : 1
+    }
+    else if (indentation === "\t") {
+>indentation === "\t" : boolean
+>indentation : string
+>"\t" : "\t"
+
+        testIndentation(indentation);
+>testIndentation(indentation) : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+>indentation : "\t"
+    }
+}
+
+function testIndentation(indentation?: number | "\t"): void {
+>testIndentation : (indentation?: number | "\t") => void
+>indentation : number | "\t" | undefined
+
+    let workIndentationSize: string = "" + indentation;
+>workIndentationSize : string
+>"" + indentation : string
+>"" : ""
+>indentation : number | "\t" | undefined
+
+    if (indentation === undefined) {
+>indentation === undefined : boolean
+>indentation : number | "\t" | undefined
 >undefined : undefined
-
-        printer = ts.createPrinter({indentation});
->printer = ts.createPrinter({indentation}) : ts.Printer
->printer : any
->ts.createPrinter({indentation}) : ts.Printer
->ts.createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
->ts : typeof ts
->createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
->{indentation} : { indentation: string | number; }
->indentation : string | number
-
-    } else {
-        printer = ts.createPrinter();
->printer = ts.createPrinter() : ts.Printer
->printer : any
->ts.createPrinter() : ts.Printer
->ts.createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
->ts : typeof ts
->createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
 
         indentation = 4;
 >indentation = 4 : 4
->indentation : string | number | undefined
+>indentation : number | "\t" | undefined
 >4 : 4
+
+        workIndentationSize = "<default>";
+>workIndentationSize = "<default>" : "<default>"
+>workIndentationSize : string
+>"<default>" : "<default>"
+    }
+    let printer = expectedResults[indentation].writer;
+>printer : ts.Printer | undefined
+>expectedResults[indentation].writer : ts.Printer | undefined
+>expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
+>expectedResults : ExpectedResults
+>indentation : number | "\t"
+>writer : ts.Printer | undefined
+
+    if (!printer) {
+>!printer : boolean
+>printer : ts.Printer | undefined
+
+        throw new Error("Unable to find a writer for:" + typeof indentation + " " + indentation);
+>new Error("Unable to find a writer for:" + typeof indentation + " " + indentation) : Error
+>Error : ErrorConstructor
+>"Unable to find a writer for:" + typeof indentation + " " + indentation : string
+>"Unable to find a writer for:" + typeof indentation + " " : string
+>"Unable to find a writer for:" + typeof indentation : string
+>"Unable to find a writer for:" : "Unable to find a writer for:"
+>typeof indentation : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>indentation : number | "\t"
+>" " : " "
+>indentation : number | "\t"
     }
     let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
 >result : string
@@ -200,71 +342,39 @@ function testIndentation(indentation?: string | number): void {
 >sourceFile : ts.SourceFile
 >sourceFile : ts.SourceFile
 
-    if (result !== expectedResults[indentation]) {
->result !== expectedResults[indentation] : boolean
+    if (result !== expectedResults[indentation].expected) {
+>result !== expectedResults[indentation].expected : boolean
 >result : string
->expectedResults[indentation] : string
+>expectedResults[indentation].expected : string
+>expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
 >expectedResults : ExpectedResults
->indentation : string | number
+>indentation : number | "\t"
+>expected : string
 
         let workIndentationSize = indentation === undefined ? "<default>" : indentation;
 >workIndentationSize : string | number
->indentation === undefined ? "<default>" : indentation : string | number
+>indentation === undefined ? "<default>" : indentation : number | "\t" | "<default>"
 >indentation === undefined : boolean
->indentation : string | number
+>indentation : number | "\t"
 >undefined : undefined
 >"<default>" : "<default>"
->indentation : string | number
+>indentation : number | "\t"
 
-        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}`);
->new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}`) : Error
+        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
+>new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`) : Error
 >Error : ErrorConstructor
->`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}` : string
+>`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}` : string
 >workIndentationSize : string | number
 >nl : string
 >nl : string
->expectedResults[indentation] : string
+>expectedResults[indentation].expected : string
+>expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
 >expectedResults : ExpectedResults
->indentation : string | number
+>indentation : number | "\t"
+>expected : string
 >nl : string
 >nl : string
 >result : string
-    }
-}
-
-testIndentation(); //... testing with no indentationSize - uses default of 4 spaces
->testIndentation() : void
->testIndentation : (indentation?: string | number | undefined) => void
-
-for (let indentation in expectedResults) {
->indentation : string
->expectedResults : ExpectedResults
-
-    let test = parseInt(indentation);
->test : number
->parseInt(indentation) : number
->parseInt : (string: string, radix?: number | undefined) => number
->indentation : string
-
-    if (indentation === "0" || test > 0) {
->indentation === "0" || test > 0 : boolean
->indentation === "0" : boolean
->indentation : string
->"0" : "0"
->test > 0 : boolean
->test : number
->0 : 0
-
-        testIndentation(test);
->testIndentation(test) : void
->testIndentation : (indentation?: string | number | undefined) => void
->test : number
-    }
-    else {
-      testIndentation(indentation);
->testIndentation(indentation) : void
->testIndentation : (indentation?: string | number | undefined) => void
->indentation : string
     }
 }
 
