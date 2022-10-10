@@ -6,7 +6,7 @@ import esbuild from "esbuild";
 import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
-import { exec, readJson, needsUpdate, getDiffTool, getDirSize } from "./scripts/build/utils.mjs";
+import { exec, readJson, getDiffTool, getDirSize } from "./scripts/build/utils.mjs";
 import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
@@ -84,23 +84,19 @@ export const generateLibs = task({
     description: "Builds the library targets",
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
-        const allSources = libs.flatMap((lib) => lib.sources);
-        const allTargets = libs.flatMap((lib) => lib.target);
-        if (needsUpdate([copyright, ...allSources], allTargets)) {
-            for (const lib of libs) {
-                let output = getCopyrightHeader();
+        for (const lib of libs) {
+            let output = getCopyrightHeader();
 
-                await fs.promises.writeFile(lib.target, getCopyrightHeader());
-                for (const source of lib.sources) {
-                    const contents = await fs.promises.readFile(source, "utf-8");
-                    // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                    // are sensitive to the positions of things in the lib files. Eventually remove this,
-                    // or remove lib.d.ts line numbers from our baselines.
-                    output += "\n\n" + contents.replace(/\r\n/g, "\n");
-                }
-
-                await fs.promises.writeFile(lib.target, output);
+            await fs.promises.writeFile(lib.target, getCopyrightHeader());
+            for (const source of lib.sources) {
+                const contents = await fs.promises.readFile(source, "utf-8");
+                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
+                // are sensitive to the positions of things in the lib files. Eventually remove this,
+                // or remove lib.d.ts line numbers from our baselines.
+                output += "\n\n" + contents.replace(/\r\n/g, "\n");
             }
+
+            await fs.promises.writeFile(lib.target, output);
         }
     },
 });
@@ -121,9 +117,7 @@ export const generateDiagnostics = task({
     name: "generate-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     run: async () => {
-        if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-            await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
-        }
+        await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
     }
 });
 
@@ -157,11 +151,7 @@ const localizationTargets = localizationDirectories
 const localize = task({
     name: "localize",
     dependencies: [generateDiagnostics],
-    run: async () => {
-        if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
-        }
-    }
+    run: () => exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true }),
 });
 
 export const buildSrc = task({
@@ -534,11 +524,9 @@ export const generateTypesMap = task({
     run: async () => {
         const source = "src/server/typesMap.json";
         const target = "built/local/typesMap.json";
-        if (needsUpdate(source, target)) {
-            const contents = await fs.promises.readFile(source, "utf-8");
-            JSON.parse(contents);
-            await fs.promises.writeFile(target, contents);
-        }
+        const contents = await fs.promises.readFile(source, "utf-8");
+        JSON.parse(contents); // Validates that the JSON parses.
+        await fs.promises.writeFile(target, contents);
     }
 });
 
@@ -557,11 +545,9 @@ const copyBuiltLocalDiagnosticMessages = task({
     name: "copy-built-local-diagnostic-messages",
     dependencies: [generateDiagnostics],
     run: async () => {
-        if (needsUpdate(diagnosticMessagesGeneratedJson, builtLocalDiagnosticMessagesGeneratedJson)) {
-            const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
-            JSON.parse(contents);
-            await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
-        }
+        const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
+        JSON.parse(contents); // Validates that the JSON parses.
+        await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
     }
 });
 
