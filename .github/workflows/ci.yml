@@ -67,3 +67,20 @@ jobs:
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
+
+  misc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build scripts
+      run: gulp scripts
+
+    - name: ESLint tests
+      run: gulp run-eslint-rules-tests

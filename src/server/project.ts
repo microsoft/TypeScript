@@ -143,7 +143,8 @@ namespace ts.server {
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
 
-        private plugins: PluginModuleWithName[] = [];
+        /*@internal*/
+        protected readonly plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
         /**
@@ -845,6 +846,7 @@ namespace ts.server {
             this.directoryStructureHost = undefined!;
             this.exportMapCache = undefined;
             this.projectErrors = undefined;
+            this.plugins.length = 0;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -1604,6 +1606,16 @@ namespace ts.server {
             return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
+        /*@internal*/
+        protected getGlobalPluginSearchPaths() {
+            // Search any globally-specified probe paths, then our peer node_modules
+            return [
+                ...this.projectService.pluginProbeLocations,
+                // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+                combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+            ];
+        }
+
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
             if (!this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
@@ -1613,14 +1625,8 @@ namespace ts.server {
                 return;
             }
 
-            // Search any globally-specified probe paths, then our peer node_modules
-            const searchPaths = [
-                ...this.projectService.pluginProbeLocations,
-                // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-                combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
-            ];
-
             // Enable global plugins with synthetic configuration entries
+            const searchPaths = this.getGlobalPluginSearchPaths();
             for (const globalPluginName of this.projectService.globalPlugins) {
                 // Skip empty names from odd commandline parses
                 if (!globalPluginName) continue;
@@ -2520,6 +2526,7 @@ namespace ts.server {
 
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
+            this.plugins.length = 0;
             if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
             if (!host.require && !host.importPlugin) {
@@ -2527,10 +2534,7 @@ namespace ts.server {
                 return;
             }
 
-            // Search our peer node_modules, then any globally-specified probe paths
-            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
-
+            const searchPaths = this.getGlobalPluginSearchPaths();
             if (this.projectService.allowLocalPluginLoads) {
                 const local = getDirectoryPath(this.canonicalConfigFilePath);
                 this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);

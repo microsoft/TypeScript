@@ -14,7 +14,7 @@ namespace Harness.Parallel.Host {
         const { statSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-        const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
+        const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
         const perfdataFileNameFragment = ".parallelperf";
         const perfData = readSavedPerfData(configOption);
@@ -534,7 +534,7 @@ namespace Harness.Parallel.Host {
                 patchStats(consoleReporter.stats);
 
                 let xunitReporter: import("mocha").reporters.XUnit | undefined;
-                let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
+                let failedTestReporter: import("../../../scripts/failed-tests.cjs") | undefined;
                 if (process.env.CI === "true") {
                     xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                         reporterOptions: {
