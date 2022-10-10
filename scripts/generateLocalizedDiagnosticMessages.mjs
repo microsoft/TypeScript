@@ -1,8 +1,11 @@
 import fs from "fs";
 import path from "path";
 import xml2js from "xml2js";
+import util from "util";
 
-function main() {
+const parseString = util.promisify(xml2js.parseString);
+
+async function main() {
     const args = process.argv.slice(2);
     if (args.length !== 3) {
         console.log("Usage:");
@@ -15,38 +18,31 @@ function main() {
     const diagnosticsMapFilePath = args[2];
 
     // generate the lcg file for enu
-    generateLCGFile();
+    await generateLCGFile();
 
     // generate other langs
-    fs.readdir(inputPath, (err, files) => {
-        handleError(err);
-        files.forEach(visitDirectory);
-    });
+    const files = await fs.promises.readdir(inputPath);
+    await Promise.all(files.map(visitDirectory));
 
     return;
 
     /**
      * @param {string} name
      */
-    function visitDirectory(name) {
+    async function visitDirectory(name) {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
-
-        fs.readFile(inputFilePath, (err, data) => {
-            handleError(err);
-            xml2js.parseString(data.toString(), (err, result) => {
-                handleError(err);
-                if (!result || !result.LCX || !result.LCX.$ || !result.LCX.$.TgtCul) {
-                    console.error("Unexpected XML file structure. Expected to find result.LCX.$.TgtCul.");
-                    process.exit(1);
-                }
-                const outputDirectoryName = getPreferredLocaleName(result.LCX.$.TgtCul).toLowerCase();
-                if (!outputDirectoryName) {
-                    console.error(`Invalid output locale name for '${result.LCX.$.TgtCul}'.`);
-                    process.exit(1);
-                }
-                writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
-            });
-        });
+        const contents = await fs.promises.readFile(inputFilePath, "utf-8");
+        const result = await parseString(contents);
+        if (!result || !result.LCX || !result.LCX.$ || !result.LCX.$.TgtCul) {
+            console.error("Unexpected XML file structure. Expected to find result.LCX.$.TgtCul.");
+            process.exit(1);
+        }
+        const outputDirectoryName = getPreferredLocaleName(result.LCX.$.TgtCul).toLowerCase();
+        if (!outputDirectoryName) {
+            console.error(`Invalid output locale name for '${result.LCX.$.TgtCul}'.`);
+            process.exit(1);
+        }
+        await writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
     }
 
     /**
@@ -81,16 +77,6 @@ function main() {
     }
 
     /**
-     * @param {null | object} err
-     */
-    function handleError(err) {
-        if (err) {
-            console.error(err);
-            process.exit(1);
-        }
-    }
-
-    /**
      * @param {any} o
      */
     function xmlObjectToString(o) {
@@ -115,55 +101,26 @@ function main() {
         return JSON.stringify(out, undefined, 2);
     }
 
-
-    /**
-     * @param {string} directoryPath
-     * @param {() => void} action
-     */
-    function ensureDirectoryExists(directoryPath, action) {
-        fs.exists(directoryPath, exists => {
-            if (!exists) {
-                const basePath = path.dirname(directoryPath);
-                if (basePath !== directoryPath) {
-                    return ensureDirectoryExists(basePath, () => fs.mkdir(directoryPath, action));
-                }
-            }
-            action();
-        });
-    }
-
     /**
      * @param {string} fileName
      * @param {string} contents
      */
-    function writeFile(fileName, contents) {
-        ensureDirectoryExists(path.dirname(fileName), () => {
-            fs.writeFile(fileName, contents, handleError);
-        });
+    async function writeFile(fileName, contents) {
+        await fs.promises.mkdir(path.dirname(fileName), { recursive: true });
+        await fs.promises.writeFile(fileName, contents);
     }
 
-    /**
-     * @param {Record<string, string>} o
-     */
-    function objectToList(o) {
-        const list = [];
-        for (const key in o) {
-            list.push({ key, value: o[key] });
-        }
-        return list;
-    }
-
-    function generateLCGFile() {
-        return fs.readFile(diagnosticsMapFilePath, (err, data) => {
-            handleError(err);
-            writeFile(
-                path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
-                getLCGFileXML(
-                    objectToList(JSON.parse(data.toString()))
-                        .sort((a, b) => a.key > b.key ? 1 : -1)  // lcg sorted by property keys
-                        .reduce((s, { key, value }) => s + getItemXML(key, value), "")
-                ));
-        });
+    async function generateLCGFile() {
+        const contents = await fs.promises.readFile(diagnosticsMapFilePath, "utf-8");
+        await writeFile(
+            path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
+            getLCGFileXML(
+                Object.entries(JSON.parse(contents))
+                    .sort((a, b) => a[0] > b[0] ? 1 : -1)  // lcg sorted by property keys
+                    .reduce((s, [key, value]) => s + getItemXML(key, value), "")
+            ),
+        );
+        return;
 
         /**
          * @param {string} key
@@ -204,4 +161,4 @@ function main() {
     }
 }
 
-main();
+await main();
