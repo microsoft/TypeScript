@@ -35339,7 +35339,7 @@ namespace ts {
             return type;
         }
 
-        function getQuickTypeOfExpression(node: Expression) {
+        function getQuickTypeOfExpression(node: Expression): Type | undefined {
             let expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
             if (isJSDocTypeAssertion(expr)) {
                 const type = getJSDocTypeAssertionType(expr);
@@ -35348,20 +35348,20 @@ namespace ts {
                 }
             }
             expr = skipParentheses(node);
+            if (isAwaitExpression(expr)) {
+                const type = getQuickTypeOfExpression(expr.expression);
+                return type ? getAwaitedType(type) : undefined;
+            }
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-                const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
+            else if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
+                return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                     getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
-                if (type) {
-                    return type;
-                }
             }
             else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
                 return getTypeFromTypeNode((expr as TypeAssertion).type);
             }
-            else if (node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) {
+            else if (isLiteralExpression(node)) {
                 return checkExpression(node);
             }
             return undefined;
