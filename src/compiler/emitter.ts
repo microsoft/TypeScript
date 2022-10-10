@@ -2160,8 +2160,9 @@ namespace ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
-            emitDecoratorsAndModifiers(node, node.modifiers);
-            writeKeyword(node.kind === SyntaxKind.GetAccessor ? "get" : "set");
+            const pos = emitDecoratorsAndModifiers(node, node.modifiers);
+            const token = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.GetKeyword : SyntaxKind.SetKeyword;
+            emitTokenWithComment(token, pos, writeKeyword, node);
             writeSpace();
             emit(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
@@ -3325,7 +3326,7 @@ namespace ts {
             forEach(node.members, generateMemberNames);
 
             emitDecoratorsAndModifiers(node, node.modifiers);
-            writeKeyword("class");
+            emitTokenWithComment(SyntaxKind.ClassKeyword, moveRangePastModifiers(node).pos, writeKeyword, node);
             if (node.name) {
                 writeSpace();
                 emitIdentifierName(node.name);
@@ -4252,10 +4253,11 @@ namespace ts {
                 let mode: "modifiers" | "decorators" | undefined;
                 let start = 0;
                 let pos = 0;
+                let lastModifier: ModifierLike | undefined;
                 while (start < modifiers.length) {
                     while (pos < modifiers.length) {
-                        const modifier = modifiers[pos];
-                        mode = isDecorator(modifier) ? "decorators" : "modifiers";
+                        lastModifier = modifiers[pos];
+                        mode = isDecorator(lastModifier) ? "decorators" : "modifiers";
                         if (lastMode === undefined) {
                             lastMode = mode;
                         }
@@ -4285,11 +4287,19 @@ namespace ts {
                 }
 
                 onAfterEmitNodeArray?.(modifiers);
+
+                if (lastModifier && !positionIsSynthesized(lastModifier.end)) {
+                    return lastModifier.end;
+                }
             }
+
+            return node.pos;
         }
 
-        function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined): void {
+        function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined): number {
             emitList(node, modifiers, ListFormat.Modifiers);
+            const lastModifier = lastOrUndefined(modifiers);
+            return lastModifier && !positionIsSynthesized(lastModifier.end) ? lastModifier.end : node.pos;
         }
 
         function emitTypeAnnotation(node: TypeNode | undefined) {
@@ -4355,8 +4365,10 @@ namespace ts {
             }
         }
 
-        function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator> | undefined): void {
+        function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator> | undefined): number {
             emitList(parentNode, decorators, ListFormat.Decorators);
+            const lastDecorator = lastOrUndefined(decorators);
+            return lastDecorator && !positionIsSynthesized(lastDecorator.end) ? lastDecorator.end : parentNode.pos;
         }
 
         function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode> | undefined) {
@@ -4507,6 +4519,7 @@ namespace ts {
 
             // Emit each child.
             let previousSibling: Node | undefined;
+            let previousSiblingEmitFlags: EmitFlags | undefined;
             let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
             let shouldDecreaseIndentAfterEmit = false;
             for (let i = 0; i < count; i++) {
@@ -4526,8 +4539,12 @@ namespace ts {
                     //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                     //          ,
                     if (format & ListFormat.DelimitersMask && previousSibling.end !== (parentNode ? parentNode.end : -1)) {
-                        emitLeadingCommentsOfPosition(previousSibling.end);
+                        previousSiblingEmitFlags = getEmitFlags(previousSibling);
+                        if (!(previousSiblingEmitFlags & EmitFlags.NoTrailingComments)) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
+                        }
                     }
+
                     writeDelimiter(format);
                     recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
@@ -4568,10 +4585,11 @@ namespace ts {
                 }
 
                 previousSibling = child;
+                previousSiblingEmitFlags = undefined;
             }
 
             // Write a trailing comma, if requested.
-            const emitFlags = previousSibling ? getEmitFlags(previousSibling) : 0;
+            const emitFlags = previousSibling ? previousSiblingEmitFlags ?? getEmitFlags(previousSibling) : 0;
             const skipTrailingComments = commentsDisabled || !!(emitFlags & EmitFlags.NoTrailingComments);
             const emitTrailingComma = hasTrailingComma && (format & ListFormat.AllowTrailingComma) && (format & ListFormat.CommaDelimited);
             if (emitTrailingComma) {

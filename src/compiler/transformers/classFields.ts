@@ -2050,6 +2050,12 @@ namespace ts {
             setSyntheticLeadingComments(expression, undefined);
             setSyntheticTrailingComments(expression, undefined);
 
+            // If the property was originally an auto-accessor, don't emit comments here since they will be attached to
+            // the synthezized getter.
+            if (hasAccessorModifier(getOriginalNode(property))) {
+                addEmitFlags(statement, EmitFlags.NoComments);
+            }
+
             return statement;
         }
 
@@ -2169,6 +2175,7 @@ namespace ts {
 
             if (emitAssignment || isPrivateIdentifier(propertyName)) {
                 const memberAccess = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ propertyName);
+                addEmitFlags(memberAccess, EmitFlags.NoLeadingComments);
                 return factory.createAssignment(memberAccess, initializer);
             }
             else {

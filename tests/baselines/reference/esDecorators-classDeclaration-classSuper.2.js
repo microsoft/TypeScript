@@ -27,6 +27,7 @@ class C3 extends ((() => {}) as any) {
 
 
 //// [esDecorators-classDeclaration-classSuper.2.js]
+// class expression in extends should not get an assigned name
 let C1 = (() => {
     let _classDecorators = [dec];
     let _classDescriptor;
@@ -48,6 +49,7 @@ let C1 = (() => {
     };
     return C1 = _classThis;
 })();
+// function expression in extends should not get an assigned name
 let C2 = (() => {
     let _classDecorators_1 = [dec];
     let _classDescriptor_1;
@@ -68,6 +70,7 @@ let C2 = (() => {
     };
     return C2 = _classThis_1;
 })();
+// arrow function in extends should not get an assigned name
 let C3 = (() => {
     let _classDecorators_2 = [dec];
     let _classDescriptor_2;

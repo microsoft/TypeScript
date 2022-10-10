@@ -18,7 +18,7 @@ namespace ts {
                     : factory.createElementAccessExpression(target, memberName),
                 memberName
             );
-            getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
+            addEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             return expression;
         }
     }

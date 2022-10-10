@@ -761,12 +761,13 @@ namespace ts {
                 if (hasSyntacticModifier(node, ModifierFlags.Export) &&
                     hasSyntacticModifier(node, ModifierFlags.Default)) {
                     //  export default (() => { ... })();
-                    // TODO(rbuckton): Why do we end up with a `default_1` class name for an `export default class {}` after the TS transform?
                     const originalClass = getOriginalNode(node, isClassLike) ?? node;
                     const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name) : factory.createStringLiteral("default");
                     const iife = transformClassLike(node, className);
                     const statement = factory.createExportDefault(iife);
                     setOriginalNode(statement, node);
+                    setCommentRange(statement, getCommentRange(node));
+                    setSourceMapRange(statement, moveRangePastDecorators(node));
                     return statement;
                 }
                 else {
@@ -778,6 +779,7 @@ namespace ts {
                     const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
                     const statement = factory.createVariableStatement(modifiers, varDecls);
                     setOriginalNode(statement, node);
+                    setCommentRange(statement, getCommentRange(node));
                     return statement;
                 }
             }
@@ -1062,6 +1064,10 @@ namespace ts {
                     name = visitPropertyName(member.name);
                 }
                 exitName();
+            }
+
+            if (!some(modifiers) && (isMethodDeclaration(member) || isPropertyDeclaration(member))) {
+                setEmitFlags(name, EmitFlags.NoLeadingComments);
             }
 
             return { modifiers, referencedName, name, initializersName, descriptorName, thisArg };
@@ -1825,7 +1831,6 @@ namespace ts {
 
             const decoratorExpressions: Expression[] = [];
             addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
-            addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
             return decoratorExpressions;
         }
 
@@ -1835,30 +1840,9 @@ namespace ts {
          * @param decorator The decorator node.
          */
         function transformDecorator(decorator: Decorator) {
-            return visitNode(decorator.expression, visitor, isExpression);
-        }
-
-        /**
-         * Transforms the decorators of a parameter.
-         *
-         * @param decorators The decorators for the parameter at the provided offset.
-         * @param parameterOffset The offset of the parameter.
-         */
-        function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
-            let expressions: Expression[] | undefined;
-            if (decorators) {
-                expressions = [];
-                for (const decorator of decorators) {
-                    const helper = emitHelpers().createParamHelper(
-                        transformDecorator(decorator),
-                        parameterOffset);
-                    setTextRange(helper, decorator.expression);
-                    setEmitFlags(helper, EmitFlags.NoComments);
-                    expressions.push(helper);
-                }
-            }
-
-            return expressions;
+            const expression = visitNode(decorator.expression, visitor, isExpression);
+            setEmitFlags(expression, EmitFlags.NoComments);
+            return expression;
         }
 
         /**

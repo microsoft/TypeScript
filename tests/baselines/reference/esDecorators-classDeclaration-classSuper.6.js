@@ -26,6 +26,7 @@ class C extends Base {
 
 
 //// [esDecorators-classDeclaration-classSuper.6.js]
+// none of the following should result in caching `super`
 let C = (() => {
     let _classDecorators = [dec];
     let _classDescriptor;
