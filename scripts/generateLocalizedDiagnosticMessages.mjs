@@ -1,9 +1,26 @@
 import fs from "fs";
 import path from "path";
-import xml2js from "xml2js";
-import util from "util";
+import { XMLParser } from "fast-xml-parser";
 
-const parseString = util.promisify(xml2js.parseString);
+/** @typedef {{
+    LCX: {
+        $_TgtCul: string;
+        Item: {
+            Item: {
+                Item: {
+                    $_ItemId: string;
+                    Str: {
+                        Val: string;
+                        Tgt: {
+                            Val: string;
+                        };
+                    };
+                }[];
+            };
+        };
+    }
+}} ParsedLCL */
+void 0;
 
 async function main() {
     const args = process.argv.slice(2);
@@ -31,15 +48,17 @@ async function main() {
      */
     async function visitDirectory(name) {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
-        const contents = await fs.promises.readFile(inputFilePath, "utf-8");
-        const result = await parseString(contents);
-        if (!result || !result.LCX || !result.LCX.$ || !result.LCX.$.TgtCul) {
-            console.error("Unexpected XML file structure. Expected to find result.LCX.$.TgtCul.");
+        const contents = await fs.promises.readFile(inputFilePath);
+        /** @type {ParsedLCL} */
+        // eslint-disable-next-line local/object-literal-surrounding-space
+        const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_"}).parse(contents);
+        if (!result || !result.LCX || !result.LCX.$_TgtCul) {
+            console.error("Unexpected XML file structure. Expected to find result.LCX.$_TgtCul.");
             process.exit(1);
         }
-        const outputDirectoryName = getPreferredLocaleName(result.LCX.$.TgtCul).toLowerCase();
+        const outputDirectoryName = getPreferredLocaleName(result.LCX.$_TgtCul).toLowerCase();
         if (!outputDirectoryName) {
-            console.error(`Invalid output locale name for '${result.LCX.$.TgtCul}'.`);
+            console.error(`Invalid output locale name for '${result.LCX.$_TgtCul}'.`);
             process.exit(1);
         }
         await writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
@@ -77,14 +96,14 @@ async function main() {
     }
 
     /**
-     * @param {any} o
+     * @param {ParsedLCL} o
      */
     function xmlObjectToString(o) {
         /** @type {any} */
         const out = {};
-        for (const item of o.LCX.Item[0].Item[0].Item) {
-            let ItemId = item.$.ItemId;
-            let val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];
+        for (const item of o.LCX.Item.Item.Item) {
+            let ItemId = item.$_ItemId;
+            let val = item.Str.Tgt ? item.Str.Tgt.Val : item.Str.Val;
 
             if (typeof ItemId !== "string" || typeof val !== "string") {
                 console.error("Unexpected XML file structure");

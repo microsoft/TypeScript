@@ -51,7 +51,6 @@
         "@types/node": "latest",
         "@types/source-map-support": "latest",
         "@types/which": "^2.0.1",
-        "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",
         "@typescript-eslint/utils": "^5.33.1",
@@ -67,6 +66,7 @@
         "eslint-plugin-jsdoc": "^39.3.6",
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
+        "fast-xml-parser": "^4.0.11",
         "fs-extra": "^9.1.0",
         "glob": "latest",
         "hereby": "^1.6.0",
@@ -79,8 +79,7 @@
         "node-fetch": "^3.2.10",
         "source-map-support": "latest",
         "typescript": "^4.8.4",
-        "which": "^2.0.2",
-        "xml2js": "^0.4.23"
+        "which": "^2.0.2"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",
