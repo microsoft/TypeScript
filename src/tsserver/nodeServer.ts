@@ -779,13 +779,6 @@ namespace ts.server {
                 return JSON.stringify(message, undefined, 2);
             }
 
-            public exit() {
-                this.logger.info("Exiting...");
-                this.projectService.closeLog();
-                tracing?.stopTracing();
-                process.exit(0);
-            }
-
             public listen() {
                 process.on("message", (e: any) => {
                     this.onMessage(e);
