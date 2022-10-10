@@ -13,7 +13,7 @@ void 0;
 
 /** @typedef {Map<string, DiagnosticDetails>} InputDiagnosticMessageTable */
 
-function main() {
+async function main() {
     if (process.argv.length < 3) {
         console.log("Usage:");
         console.log("\tnode processDiagnosticMessages.mjs <diagnostic-json-input-file>");
@@ -24,15 +24,24 @@ function main() {
      * @param {string} fileName
      * @param {string} contents
      */
-    function writeFile(fileName, contents) {
-        fs.writeFile(path.join(path.dirname(inputFilePath), fileName), contents, { encoding: "utf-8" }, err => {
-            if (err) throw err;
-        });
+     async function writeFile(fileName, contents) {
+        const filePath = path.join(path.dirname(inputFilePath), fileName);
+        try {
+            const existingContents = await fs.promises.readFile(filePath, "utf-8");
+            if (existingContents === contents) {
+                return;
+            }
+        }
+        catch {
+            // Just write the file.
+        }
+
+        await fs.promises.writeFile(filePath, contents, { encoding: "utf-8" });
     }
 
     const inputFilePath = process.argv[2].replace(/\\/g, "/");
     console.log(`Reading diagnostics from ${inputFilePath}`);
-    const inputStr = fs.readFileSync(inputFilePath, { encoding: "utf-8" });
+    const inputStr = await fs.promises.readFile(inputFilePath, { encoding: "utf-8" });
 
     /** @type {{ [key: string]: DiagnosticDetails }} */
     const diagnosticMessagesJson = JSON.parse(inputStr);
@@ -47,10 +56,10 @@ function main() {
 
     const infoFileOutput = buildInfoFileOutput(diagnosticMessages, inputFilePath);
     checkForUniqueCodes(diagnosticMessages);
-    writeFile("diagnosticInformationMap.generated.ts", infoFileOutput);
+    await writeFile("diagnosticInformationMap.generated.ts", infoFileOutput);
 
     const messageOutput = buildDiagnosticMessageOutput(diagnosticMessages);
-    writeFile("diagnosticMessages.generated.json", messageOutput);
+    await writeFile("diagnosticMessages.generated.json", messageOutput);
 }
 
 /**

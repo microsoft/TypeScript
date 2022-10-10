@@ -6,7 +6,7 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
-import { exec, readJson, needsUpdate, getDiffTool, getDirSize, memoize } from "./scripts/build/utils.mjs";
+import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate } from "./scripts/build/utils.mjs";
 import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
@@ -81,22 +81,18 @@ export const generateLibs = task({
     description: "Builds the library targets",
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
-        const allSources = libs().flatMap((lib) => lib.sources);
-        const allTargets = libs().flatMap((lib) => lib.target);
-        if (needsUpdate([copyrightFilename, ...allSources], allTargets)) {
-            for (const lib of libs()) {
-                let output = await copyright();
+        for (const lib of libs()) {
+            let output = await copyright();
 
-                for (const source of lib.sources) {
-                    const contents = await fs.promises.readFile(source, "utf-8");
-                    // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                    // are sensitive to the positions of things in the lib files. Eventually remove this,
-                    // or remove lib.d.ts line numbers from our baselines.
-                    output += "\n\n" + contents.replace(/\r\n/g, "\n");
-                }
-
-                await fs.promises.writeFile(lib.target, output);
+            for (const source of lib.sources) {
+                const contents = await fs.promises.readFile(source, "utf-8");
+                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
+                // are sensitive to the positions of things in the lib files. Eventually remove this,
+                // or remove lib.d.ts line numbers from our baselines.
+                output += "\n\n" + contents.replace(/\r\n/g, "\n");
             }
+
+            await fs.promises.writeFile(lib.target, output);
         }
     },
 });
@@ -110,9 +106,7 @@ export const generateDiagnostics = task({
     name: "generate-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     run: async () => {
-        if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-            await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
-        }
+        await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
     }
 });
 
@@ -410,7 +404,11 @@ export const dtsServices = task({
     name: "dts-services",
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
-    run: () => runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts"),
+    run: async () => {
+        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+            runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
+        }
+    },
 });
 
 
@@ -464,7 +462,11 @@ export const dtsLssl = task({
     name: "dts-lssl",
     description: "Bundles tsserverlibrary.d.ts",
     dependencies: [buildLssl],
-    run: () => runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts")
+    run: async () => {
+        if (needsUpdate("./built/local/tsserverlibrary/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
+            await runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
+        }
+    }
 });
 
 export const dts = task({
@@ -560,11 +562,9 @@ export const generateTypesMap = task({
     run: async () => {
         const source = "src/server/typesMap.json";
         const target = "built/local/typesMap.json";
-        if (needsUpdate(source, target)) {
-            const contents = await fs.promises.readFile(source, "utf-8");
-            JSON.parse(contents);
-            await fs.promises.writeFile(target, contents);
-        }
+        const contents = await fs.promises.readFile(source, "utf-8");
+        JSON.parse(contents); // Validates that the JSON parses.
+        await fs.promises.writeFile(target, contents);
     }
 });
 
@@ -577,11 +577,9 @@ const copyBuiltLocalDiagnosticMessages = task({
     name: "copy-built-local-diagnostic-messages",
     dependencies: [generateDiagnostics],
     run: async () => {
-        if (needsUpdate(diagnosticMessagesGeneratedJson, builtLocalDiagnosticMessagesGeneratedJson)) {
-            const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
-            JSON.parse(contents);
-            await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
-        }
+        const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
+        JSON.parse(contents); // Validates that the JSON parses.
+        await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
     }
 });
 
