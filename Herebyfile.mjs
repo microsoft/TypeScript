@@ -6,7 +6,7 @@ import esbuild from "esbuild";
 import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
-import { exec, readJson, needsUpdate, getDiffTool, getDirSize } from "./scripts/build/utils.mjs";
+import { exec, readJson, getDiffTool, getDirSize } from "./scripts/build/utils.mjs";
 import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
@@ -148,15 +148,10 @@ const localizationTargets = localizationDirectories
     .map(f => `built/local/${f}/diagnosticMessages.generated.json`)
     .concat(generatedLCGFile);
 
-const localize = task({
+export const localize = task({
     name: "localize",
     dependencies: [generateDiagnostics],
-    run: async () => {
-        if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            // TODO(jakebailey): slow; need needsUpdate to not block the builds
-            return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
-        }
-    }
+    run: () => exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true }),
 });
 
 export const buildSrc = task({
