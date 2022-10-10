@@ -35,6 +35,7 @@ import {
     orderedRemoveItem,
     Path,
     perfLogger,
+    PluginImport,
     PollingWatchKind,
     resolveJSModule,
     some,
@@ -883,16 +884,33 @@ function createFsWatchCallbackForDirectoryWatcherCallback(
 }
 
 /** @internal */
-export function resolveModule(moduleName: string, initialDir: string, host: Pick<System, "require" | "resolvePath">, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-    const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
-    log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-    const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
-    if (result.error) {
+export interface ImportPluginResult<T> {
+    pluginConfigEntry: PluginImport;
+    resolvedModule: T | undefined;
+    errorLogs: string[] | undefined;
+}
+/** @internal */
+export function resolveModule<T = {}>(
+    pluginConfigEntry: PluginImport,
+    searchPaths: string[],
+    host: Pick<System, "require" | "resolvePath">,
+    log: (message: string) => void,
+): ImportPluginResult<T> {
+    Debug.assertIsDefined(host.require);
+    let errorLogs: string[] | undefined;
+    let resolvedModule: T | undefined;
+    for (const initialDir of searchPaths) {
+        const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+        log(`Loading ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+        const result = host.require(resolvedPath, pluginConfigEntry.name); // TODO: GH#18217
+        if (!result.error) {
+            resolvedModule = result.module as T;
+            break;
+        }
         const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-        (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
-        return undefined;
+        (errorLogs ??= []).push(`Failed to load module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
     }
-    return result.module;
+    return { pluginConfigEntry, resolvedModule, errorLogs };
 }
 
 /** @internal */

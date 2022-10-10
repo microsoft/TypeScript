@@ -100,6 +100,7 @@ import {
     removeIgnoredPath,
     removeMinAndVersionNumbers,
     ResolvedProjectReference,
+    resolveModule,
     resolveProjectReferencePath,
     returnNoopFileWatcher,
     returnTrue,
@@ -4257,7 +4258,12 @@ export class ProjectService {
 
         // If the host supports dynamic import, begin enabling the plugin asynchronously.
         if (this.host.importPlugin) {
-            const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths);
+            const importPromise: Promise<BeginEnablePluginResult> = Project.importServicePluginAsync(
+                pluginConfigEntry,
+                searchPaths,
+                this.host,
+                s => this.logger.info(s),
+            );
             this.pendingPluginEnablements ??= new Map();
             let promises = this.pendingPluginEnablements.get(project);
             if (!promises) this.pendingPluginEnablements.set(project, promises = []);
@@ -4266,7 +4272,12 @@ export class ProjectService {
         }
 
         // Otherwise, load the plugin using `require`
-        project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths));
+        project.endEnablePlugin(resolveModule(
+            pluginConfigEntry,
+            searchPaths,
+            this.host,
+            s => this.logger.info(s),
+        ));
     }
 
     /** @internal */
