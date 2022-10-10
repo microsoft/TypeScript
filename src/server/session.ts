@@ -3522,7 +3522,26 @@ namespace ts.server {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
         const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
-        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+        if (lineSpan.length > 1024) {
+            var start = (span.start.offset > 500) ? (span.start.offset - 501 + lineSpan.start) : lineSpan.start;
+            var end = (lineSpan.length -2 - span.end.offset > 500) ? (span.end.offset + 499 + lineSpan.start) : ts.textSpanEnd(lineSpan)-2; // need to ask why length is 2 more
+            var lineText;
+            const sourceFile = scriptInfo.getDefaultProject().getLanguageService().getProgram()!.getSourceFile(fileName)!;
+            let tokenAtPosition = getTokenAtPosition(sourceFile, start);
+            let tokenAtPositionEnd = getTokenAtPosition(sourceFile, end - 1);
+            if (tokenAtPosition.getStart() < start) {
+                const nextToken = findNextToken(tokenAtPosition, tokenAtPosition.parent, sourceFile)?.getStart()!;
+                start = (nextToken - start) > 10 ? start : nextToken;
+            }
+            if (tokenAtPositionEnd.getEnd() > end) {
+                const precedingToken = findPrecedingToken(end, sourceFile, tokenAtPositionEnd)?.getStart()!;
+                end = (end - precedingToken) > 10 ? end: precedingToken;
+            }               
+            lineText = scriptInfo.getSnapshot().getText(start, end).replace(/\r|\n/g, "")!;              
+        }
+        else {
+            lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+        }
         return {
             file: fileName,
             ...span,
