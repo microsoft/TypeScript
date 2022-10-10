@@ -2,7 +2,6 @@ import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import mkdirP from "mkdirp";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
 import { findUpFile, findUpRoot } from "./findUpDir.mjs";
@@ -140,8 +139,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
 
 export async function cleanTestDirs() {
     await del([localBaseline, localRwcBaseline]);
-    mkdirP.sync(localRwcBaseline);
-    mkdirP.sync(localBaseline);
+    await fs.promises.mkdir(localRwcBaseline, { recursive: true });
+    await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 
 /**
