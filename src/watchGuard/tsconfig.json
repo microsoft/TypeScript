@@ -1,9 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
-        "tsBuildInfoFile": "../../built/local/watchGuard.tsbuildinfo",
-        "rootDir": ".",
         "types": [
             "node"
         ],

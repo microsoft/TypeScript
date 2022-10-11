@@ -1,7 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local/testRunner",
         "types": [
             "node", "mocha", "chai"
         ],
