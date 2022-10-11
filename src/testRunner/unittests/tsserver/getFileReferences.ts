@@ -54,5 +54,28 @@ namespace ts.projectSystem {
 
             assert.deepEqual(response, expectResponse);
         });
+
+        it("should skip lineText from file references", () => {
+            const session = makeSampleSession();
+            session.getProjectService().setHostConfiguration({ preferences: { disableLineTextInReferences: true } });
+
+            const response = executeSessionRequest<protocol.FileReferencesRequest, protocol.FileReferencesResponse>(
+                session,
+                protocol.CommandTypes.FileReferences,
+                { file: aTs.path },
+            );
+
+            const expectResponse: protocol.FileReferencesResponseBody = {
+                refs: [
+                    makeReferenceItem({ file: bTs, text: "./a", lineText: undefined, contextText: importA, isWriteAccess: false }),
+                    makeReferenceItem({ file: cTs, text: "./a", lineText: undefined, contextText: importCurlyFromA, isWriteAccess: false }),
+                    makeReferenceItem({ file: dTs, text: "/project/a", lineText: undefined, contextText: importAFromA, isWriteAccess: false }),
+                    makeReferenceItem({ file: dTs, text: "./a", lineText: undefined, contextText: typeofImportA, isWriteAccess: false }),
+                ],
+                symbolName: `"${aTs.path}"`,
+            };
+
+            assert.deepEqual(response, expectResponse);
+        });
     });
 }

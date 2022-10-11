@@ -737,4 +737,13 @@ namespace ts.codefix {
     export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
         symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
     }
+
+    export function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {
+        const end = textSpanEnd(span);
+        let token = getTokenAtPosition(sourceFile, span.start);
+        while (token.end < end) {
+            token = token.parent;
+        }
+        return token;
+    }
 }

@@ -425,16 +425,20 @@ interface String {
 
     /**
      * Replaces one or more occurrences of substrings that match a search string or a regular expression.
-     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
-     * @param searchValue A string or RegExp search value.
+     * When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` (global) flag is set
+     * (or only those matches at the beginning, if the `y` (sticky) flag is also present).
+     * Otherwise, only the first match of {@linkcode searchValue} is replaced.
+     * @param searchValue A string or regular expression to search for.
      * @param replaceValue The replacement text.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
      * Replaces one or more occurrences of substrings that match a search string or a regular expression.
-     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
-     * @param searchValue A string or RegExp search value.
+     * When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` (global) flag is set
+     * (or only those matches at the beginning, if the `y` (sticky) flag is also present).
+     * Otherwise, only the first match of {@linkcode searchValue} is replaced.
+     * @param searchValue A string or regular expression to search for.
      * @param replacer A function that returns the replacement text.
      */
     replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
@@ -916,6 +920,7 @@ interface DateConstructor {
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
     UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    /** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). */
     now(): number;
 }
 

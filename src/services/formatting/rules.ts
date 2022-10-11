@@ -411,23 +411,23 @@ namespace ts.formatting {
     }
 
     function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !!context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
     }
 
     function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
     }
 
     function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !!context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
     }
 
     function isForContext(context: FormattingContext): boolean {
