@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 interface Statistic {
     name: string;
     value: number;
@@ -1187,5 +1188,4 @@ function writeConfigFile(
     }
 
     return;
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.generateGetAccessorAndSetAccessor {
+import * as ts from "../_namespaces/ts";
+
 const actionName = "Generate 'get' and 'set' accessors";
 const actionDescription = ts.Diagnostics.Generate_get_and_set_accessors.message;
 
@@ -48,4 +48,3 @@ ts.refactor.registerRefactor(actionName, {
         return ts.emptyArray;
     }
 });
-}

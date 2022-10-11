@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     it("watchFile on same file multiple times because file is part of multiple projects", () => {
         const project = `${ts.TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
@@ -108,4 +109,3 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         }
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {
         const result: T[] = [];
@@ -182,4 +183,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
         ]
     });
 });
-}

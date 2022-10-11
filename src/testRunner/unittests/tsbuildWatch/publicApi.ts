@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: ts.tscWatch.File = {
         path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
@@ -102,4 +103,3 @@ export function f22() { } // trailing`
         return { before: [before], after: [after] };
     }
 });
-}

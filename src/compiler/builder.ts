@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
     /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
     reportsUnnecessary?: {};
@@ -9,6 +10,7 @@ export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation
     skippedOn?: keyof ts.CompilerOptions;
 }
 
+/** @internal */
 export interface ReusableDiagnosticRelatedInformation {
     category: ts.DiagnosticCategory;
     code: number;
@@ -18,8 +20,10 @@ export interface ReusableDiagnosticRelatedInformation {
     messageText: string | ReusableDiagnosticMessageChain;
 }
 
+/** @internal */
 export type ReusableDiagnosticMessageChain = ts.DiagnosticMessageChain;
 
+/** @internal */
 export interface ReusableBuilderProgramState extends ts.BuilderState {
     /**
      * Cache of bind and check diagnostics for files with their Path being the key
@@ -67,11 +71,13 @@ export interface ReusableBuilderProgramState extends ts.BuilderState {
     latestChangedDtsFile: string | undefined;
 }
 
+/** @internal */
 export const enum BuilderFileEmit {
     DtsOnly,
     Full
 }
 
+/** @internal */
 /**
  * State to store the changed files, affected files and cache semantic diagnostics
  */
@@ -133,6 +139,7 @@ export interface BuilderProgramState extends ts.BuilderState, ReusableBuilderPro
     filesChangingSignature?: ts.Set<ts.Path>;
 }
 
+/** @internal */
 export type SavedBuildProgramEmitState = Pick<BuilderProgramState,
     "affectedFilesPendingEmit" |
     "affectedFilesPendingEmitIndex" |
@@ -767,11 +774,17 @@ function getBinderAndCheckerDiagnosticsOfFile(state: BuilderProgramState, source
     return ts.filterSemanticDiagnostics(diagnostics, state.compilerOptions);
 }
 
+/** @internal */
 export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
+/** @internal */
 export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
+/** @internal */
 export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
+/** @internal */
 export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+/** @internal */
 export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
+/** @internal */
 export type ProgramBuildInfoBuilderStateFileInfo = Omit<ts.BuilderState.FileInfo, "signature"> & {
     /**
      * Signature is
@@ -781,15 +794,18 @@ export type ProgramBuildInfoBuilderStateFileInfo = Omit<ts.BuilderState.FileInfo
      */
     signature: string | false | undefined;
 };
+/** @internal */
 /**
  * [fileId, signature] if different from file's signature
  * fileId if file wasnt emitted
  */
 export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: string];
+/** @internal */
 /**
  * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
  */
 export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
+/** @internal */
 export interface ProgramMultiFileEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramBuildInfoFileInfo[];
@@ -805,6 +821,7 @@ export interface ProgramMultiFileEmitBuildInfo {
     latestChangedDtsFile?: string;
 }
 
+/** @internal */
 export interface ProgramBundleEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly string[];
@@ -813,8 +830,10 @@ export interface ProgramBundleEmitBuildInfo {
     latestChangedDtsFile?: string;
 }
 
+/** @internal */
 export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
 
+/** @internal */
 export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is ProgramBundleEmitBuildInfo {
     return !!ts.outFile(info.options || {});
 }
@@ -1039,11 +1058,13 @@ function convertToReusableDiagnosticRelatedInformation(diagnostic: ts.Diagnostic
     };
 }
 
+/** @internal */
 export enum BuilderProgramKind {
     SemanticDiagnosticsBuilderProgram,
     EmitAndSemanticDiagnosticsBuilderProgram
 }
 
+/** @internal */
 export interface BuilderCreationParameters {
     newProgram: ts.Program;
     host: ts.BuilderProgramHost;
@@ -1051,6 +1072,7 @@ export interface BuilderCreationParameters {
     configFileParsingDiagnostics: readonly ts.Diagnostic[];
 }
 
+/** @internal */
 export function getBuilderCreationParameters(newProgramOrRootNames: ts.Program | readonly string[] | undefined, hostOrOptions: ts.BuilderProgramHost | ts.CompilerOptions | undefined, oldProgramOrHost?: ts.BuilderProgram | ts.CompilerHost, configFileParsingDiagnosticsOrOldProgram?: readonly ts.Diagnostic[] | ts.BuilderProgram, configFileParsingDiagnostics?: readonly ts.Diagnostic[], projectReferences?: readonly ts.ProjectReference[]): BuilderCreationParameters {
     let host: ts.BuilderProgramHost;
     let newProgram: ts.Program;
@@ -1087,6 +1109,7 @@ function getTextHandlingSourceMapForSignature(text: string, data: ts.WriteFileCa
     return data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text;
 }
 
+/** @internal */
 export function computeSignatureWithDiagnostics(
     sourceFile: ts.SourceFile,
     text: string,
@@ -1120,12 +1143,16 @@ export function computeSignatureWithDiagnostics(
     }
 }
 
+/** @internal */
 export function computeSignature(text: string, computeHash: ts.BuilderState.ComputeHash | undefined, data?: ts.WriteFileCallbackData) {
     return (computeHash ?? ts.generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
 }
 
+/** @internal */
 export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): ts.SemanticDiagnosticsBuilderProgram;
+/** @internal */
 export function createBuilderProgram(kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): ts.EmitAndSemanticDiagnosticsBuilderProgram;
+/** @internal */
 export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters) {
     // Return same program if underlying program doesnt change
     let oldState = oldProgram && oldProgram.getState();
@@ -1467,6 +1494,7 @@ function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFileP
     }
 }
 
+/** @internal */
 export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): ts.BuilderState.FileInfo {
     return ts.isString(fileInfo) ?
         { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
@@ -1475,6 +1503,7 @@ export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): ts.B
             { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
 }
 
+/** @internal */
 export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ts.ReadBuildProgramHost): ts.EmitAndSemanticDiagnosticsBuilderProgram {
     const buildInfoDirectory = ts.getDirectoryPath(ts.getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -1577,6 +1606,7 @@ export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildI
     }
 }
 
+/** @internal */
 export function getBuildInfoFileVersionMap(
     program: ProgramBuildInfo,
     buildInfoPath: string,
@@ -1593,6 +1623,7 @@ export function getBuildInfoFileVersionMap(
     return fileInfos;
 }
 
+/** @internal */
 export function createRedirectedBuilderProgram(getState: () => { program?: ts.Program | undefined; compilerOptions: ts.CompilerOptions; }, configFileParsingDiagnostics: readonly ts.Diagnostic[]): ts.BuilderProgram {
     return {
         getState: ts.notImplemented,
@@ -1620,5 +1651,4 @@ export function createRedirectedBuilderProgram(getState: () => { program?: ts.Pr
     function getProgram() {
         return ts.Debug.checkDefined(getState().program);
     }
-}
 }

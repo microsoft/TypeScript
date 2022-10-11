@@ -1,4 +1,7 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
     verifyCancellation(/*useBuildInfo*/ false, "when using state");
@@ -166,4 +169,3 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
         });
     }
 });
-}

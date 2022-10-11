@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformLegacyDecorators(context: ts.TransformationContext) {
     const {
         factory,
@@ -706,5 +707,4 @@ export function transformLegacyDecorators(context: ts.TransformationContext) {
 
         return undefined;
     }
-}
 }

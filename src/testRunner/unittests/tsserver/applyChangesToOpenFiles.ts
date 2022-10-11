@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
     const configFile: ts.projectSystem.File = {
         path: "/a/b/tsconfig.json",
@@ -178,4 +179,3 @@ ${file.content}`;
         });
     });
 });
-}

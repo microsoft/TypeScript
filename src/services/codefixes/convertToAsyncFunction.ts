@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "convertToAsyncFunction";
 const errorCodes = [ts.Diagnostics.This_may_be_converted_to_an_async_function.code];
 let codeActionSucceeded = true;
@@ -841,5 +841,4 @@ function isSynthBindingPattern(bindingName: SynthBindingName): bindingName is Sy
 
 function shouldReturn(expression: ts.Expression, transformer: Transformer): boolean {
     return !!expression.original && transformer.setOfExpressionsToReturn.has(ts.getNodeId(expression.original));
-}
 }

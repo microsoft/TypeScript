@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: symLinks", () => {
     it("rename in common file renames all project", () => {
         const projects = "/users/username/projects";
@@ -183,4 +184,3 @@ new C();`
         verifyModuleResolution(/*withPathMapping*/ true);
     });
 });
-}

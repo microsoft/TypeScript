@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /* @internal */
 export function trace(host: ts.ModuleResolutionHost, message: ts.DiagnosticMessage, ...args: any[]): void;
 export function trace(host: ts.ModuleResolutionHost): void {
@@ -2684,5 +2685,4 @@ type SearchResult<T> = { value: T | undefined } | undefined;
  */
 function toSearchResult<T>(value: T | undefined): SearchResult<T> {
     return value !== undefined ? { value } : undefined;
-}
 }

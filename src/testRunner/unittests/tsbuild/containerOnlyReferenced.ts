@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     ts.verifyTscWithEdits({
         scenario: "containerOnlyReferenced",
@@ -39,4 +40,3 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         }],
     });
 });
-}

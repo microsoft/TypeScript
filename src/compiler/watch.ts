@@ -1,11 +1,12 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const sysFormatDiagnosticsHost: ts.FormatDiagnosticsHost | undefined = ts.sys ? {
     getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
     getNewLine: () => ts.sys.newLine,
     getCanonicalFileName: ts.createGetCanonicalFileName(ts.sys.useCaseSensitiveFileNames)
 } : undefined;
 
+/** @internal */
 /**
  * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
  */
@@ -43,6 +44,7 @@ function clearScreenIfNotWatchingForFileChanges(system: ts.System, diagnostic: t
     return false;
 }
 
+/** @internal */
 export const screenStartingMessageCodes: number[] = [
     ts.Diagnostics.Starting_compilation_in_watch_mode.code,
     ts.Diagnostics.File_change_detected_Starting_incremental_compilation.code,
@@ -54,6 +56,7 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: ts.Diagnostic, newLine:
         : newLine;
 }
 
+/** @internal */
 /**
  * Get locale specific time based on whether we are in test mode
  */
@@ -63,6 +66,7 @@ export function getLocaleTimeString(system: ts.System) {
         system.now().toLocaleTimeString("en-US", { timeZone: "UTC" });
 }
 
+/** @internal */
 /**
  * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
  */
@@ -88,6 +92,7 @@ export function createWatchStatusReporter(system: ts.System, pretty?: boolean): 
         };
 }
 
+/** @internal */
 /** Parses config file using System interface */
 export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: ts.CompilerOptions, extendedConfigCache: ts.Map<ts.ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: ts.WatchOptions | undefined, system: ts.System, reportDiagnostic: ts.DiagnosticReporter) {
     const host: ts.ParseConfigFileHost = system as any;
@@ -97,10 +102,12 @@ export function parseConfigFileWithSystem(configFileName: string, optionsToExten
     return result;
 }
 
+/** @internal */
 export function getErrorCountForSummary(diagnostics: readonly ts.Diagnostic[]) {
     return ts.countWhere(diagnostics, diagnostic => diagnostic.category === ts.DiagnosticCategory.Error);
 }
 
+/** @internal */
 export function getFilesInErrorForSummary(diagnostics: readonly ts.Diagnostic[]): (ts.ReportFileInError | undefined)[] {
     const filesInError =
         ts.filter(diagnostics, diagnostic => diagnostic.category === ts.DiagnosticCategory.Error)
@@ -124,6 +131,7 @@ export function getFilesInErrorForSummary(diagnostics: readonly ts.Diagnostic[])
     });
 }
 
+/** @internal */
 export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
     return errorCount === 1 ?
         ts.Diagnostics.Found_1_error_Watching_for_file_changes :
@@ -139,6 +147,7 @@ function prettyPathForFileError(error: ts.ReportFileInError, cwd: string) {
     return error.fileName + line;
 }
 
+/** @internal */
 export function getErrorSummaryText(
     errorCount: number,
     filesInError: readonly (ts.ReportFileInError | undefined)[],
@@ -201,10 +210,12 @@ function createTabularErrorsDisplay(filesInError: (ts.ReportFileInError | undefi
     return tabularData;
 }
 
+/** @internal */
 export function isBuilderProgram(program: ts.Program | ts.BuilderProgram): program is ts.BuilderProgram {
     return !!(program as ts.BuilderProgram).getState;
 }
 
+/** @internal */
 export function listFiles<T extends ts.BuilderProgram>(program: ts.Program | T, write: (s: string) => void) {
     const options = program.getCompilerOptions();
     if (options.explainFiles) {
@@ -217,6 +228,7 @@ export function listFiles<T extends ts.BuilderProgram>(program: ts.Program | T, 
     }
 }
 
+/** @internal */
 export function explainFiles(program: ts.Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
     const getCanonicalFileName = ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames());
@@ -228,6 +240,7 @@ export function explainFiles(program: ts.Program, write: (s: string) => void) {
     }
 }
 
+/** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: ts.SourceFile,
     fileNameConvertor?: (fileName: string) => string,
@@ -280,6 +293,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
     return result;
 }
 
+/** @internal */
 export function getMatchedFileSpec(program: ts.Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
@@ -290,6 +304,7 @@ export function getMatchedFileSpec(program: ts.Program, fileName: string) {
     return ts.find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(ts.getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
+/** @internal */
 export function getMatchedIncludeSpec(program: ts.Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
@@ -307,6 +322,7 @@ export function getMatchedIncludeSpec(program: ts.Program, fileName: string) {
     });
 }
 
+/** @internal */
 export function fileIncludeReasonToDiagnostics(program: ts.Program, reason: ts.FileIncludeReason, fileNameConvertor?: (fileName: string) => string,): ts.DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (ts.isReferencedFile(reason)) {
@@ -424,6 +440,7 @@ function toFileName(file: ts.SourceFile | string, fileNameConvertor?: (fileName:
     return fileNameConvertor ? fileNameConvertor(fileName) : fileName;
 }
 
+/** @internal */
 /**
  * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
  */
@@ -486,6 +503,7 @@ export function emitFilesAndReportErrors<T extends ts.BuilderProgram>(
     };
 }
 
+/** @internal */
 export function emitFilesAndReportErrorsAndGetExitStatus<T extends ts.BuilderProgram>(
     program: ts.Program | T,
     reportDiagnostic: ts.DiagnosticReporter,
@@ -519,9 +537,12 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends ts.BuilderPro
     return ts.ExitStatus.Success;
 }
 
+/** @internal */
 export const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
+/** @internal */
 export const returnNoopFileWatcher = () => noopFileWatcher;
 
+/** @internal */
 export function createWatchHost(system = ts.sys, reportWatchStatus?: ts.WatchStatusReporter): ts.WatchHost {
     const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
     return {
@@ -533,7 +554,9 @@ export function createWatchHost(system = ts.sys, reportWatchStatus?: ts.WatchSta
     };
 }
 
+/** @internal */
 export type WatchType = WatchTypeRegistry[keyof WatchTypeRegistry];
+/** @internal */
 export const WatchType: WatchTypeRegistry = {
     ConfigFile: "Config file",
     ExtendedConfigFile: "Extended config file",
@@ -556,6 +579,7 @@ export const WatchType: WatchTypeRegistry = {
     NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
 };
 
+/** @internal */
 export interface WatchTypeRegistry {
     ConfigFile: "Config file",
     ExtendedConfigFile: "Extended config file",
@@ -584,6 +608,7 @@ interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
     writeLog: (s: string) => void;
 }
 
+/** @internal */
 export function createWatchFactory<Y = undefined>(host: ts.WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? ts.WatchLogLevel.Verbose : options.diagnostics ? ts.WatchLogLevel.TriggerOnly : ts.WatchLogLevel.None : ts.WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== ts.WatchLogLevel.None ? (s => host.trace!(s)) : ts.noop;
@@ -592,6 +617,7 @@ export function createWatchFactory<Y = undefined>(host: ts.WatchFactoryHost & { 
     return result;
 }
 
+/** @internal */
 export function createCompilerHostFromProgramHost(host: ts.ProgramHost<any>, getCompilerOptions: () => ts.CompilerOptions, directoryStructureHost: ts.DirectoryStructureHost = host): ts.CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = ts.memoize(() => host.getNewLine());
@@ -659,6 +685,7 @@ export function createCompilerHostFromProgramHost(host: ts.ProgramHost<any>, get
     }
 }
 
+/** @internal */
 export function setGetSourceFileAsHashVersioned(compilerHost: ts.CompilerHost, host: { createHash?(data: string): string; }) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     const computeHash = ts.maybeBind(host, host.createHash) || ts.generateDjb2Hash;
@@ -671,6 +698,7 @@ export function setGetSourceFileAsHashVersioned(compilerHost: ts.CompilerHost, h
     };
 }
 
+/** @internal */
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
@@ -734,6 +762,7 @@ function reportUnrecoverableDiagnostic(system: ts.System, reportDiagnostic: ts.D
     system.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
 }
 
+/** @internal */
 export interface CreateWatchCompilerHostInput<T extends ts.BuilderProgram> {
     system: ts.System;
     createProgram?: ts.CreateProgram<T>;
@@ -741,12 +770,14 @@ export interface CreateWatchCompilerHostInput<T extends ts.BuilderProgram> {
     reportWatchStatus?: ts.WatchStatusReporter;
 }
 
+/** @internal */
 export interface CreateWatchCompilerHostOfConfigFileInput<T extends ts.BuilderProgram> extends CreateWatchCompilerHostInput<T> {
     configFileName: string;
     optionsToExtend?: ts.CompilerOptions;
     watchOptionsToExtend?: ts.WatchOptions;
     extraFileExtensions?: readonly ts.FileExtensionInfo[];
 }
+/** @internal */
 /**
  * Creates the watch compiler host from system for config file in watch mode
  */
@@ -764,12 +795,14 @@ export function createWatchCompilerHostOfConfigFile<T extends ts.BuilderProgram 
     return host;
 }
 
+/** @internal */
 export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends ts.BuilderProgram> extends CreateWatchCompilerHostInput<T> {
     rootFiles: string[];
     options: ts.CompilerOptions;
     watchOptions: ts.WatchOptions | undefined;
     projectReferences?: readonly ts.ProjectReference[];
 }
+/** @internal */
 /**
  * Creates the watch compiler host from system for compiling root files and options in watch mode
  */
@@ -785,6 +818,7 @@ export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends ts.Bu
     return host;
 }
 
+/** @internal */
 export interface IncrementalCompilationOptions {
     rootNames: readonly string[];
     options: ts.CompilerOptions;
@@ -796,6 +830,7 @@ export interface IncrementalCompilationOptions {
     afterProgramEmitAndDiagnostics?(program: ts.EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: ts.System;
 }
+/** @internal */
 export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
     const system = input.system || ts.sys;
     const host = input.host || (input.host = ts.createIncrementalCompilerHost(input.options, system));
@@ -808,5 +843,4 @@ export function performIncrementalCompilation(input: IncrementalCompilationOptio
     );
     if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
     return exitStatus;
-}
 }

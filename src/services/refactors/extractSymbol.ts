@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.extractSymbol {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Extract Symbol";
 
 const extractConstantAction = {
@@ -21,6 +21,7 @@ ts.refactor.registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToExtractSymbol,
 });
 
+/** @internal */
 /**
  * Compute the associated code actions
  * Exported for tests.
@@ -168,6 +169,7 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
 }
 
 /* Exported for tests */
+/** @internal */
 export function getRefactorEditsToExtractSymbol(context: ts.RefactorContext, actionName: string): ts.RefactorEditInfo | undefined {
     const rangeToExtract = getRangeToExtract(context.file, ts.getRefactorContextSpan(context));
     const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
@@ -190,6 +192,7 @@ export function getRefactorEditsToExtractSymbol(context: ts.RefactorContext, act
 }
 
 // Move these into diagnostic messages if they become user-facing
+/** @internal */
 export namespace Messages {
     function createMessage(message: string): ts.DiagnosticMessage {
         return { message, code: 0, category: ts.DiagnosticCategory.Message, key: message };
@@ -261,6 +264,7 @@ type RangeToExtract = {
  */
 type Scope = ts.FunctionLikeDeclaration | ts.SourceFile | ts.ModuleBlock | ts.ClassLikeDeclaration;
 
+/** @internal */
 /**
  * getRangeToExtract takes a span inside a text file and returns either an expression or an array
  * of statements representing the minimum set of nodes needed to extract the entire span. This
@@ -2047,5 +2051,4 @@ function isInJSXContent(node: ts.Node) {
 
 function isStringLiteralJsxAttribute(node: ts.Node): node is ts.StringLiteral {
     return ts.isStringLiteral(node) && node.parent && ts.isJsxAttribute(node.parent);
-}
 }

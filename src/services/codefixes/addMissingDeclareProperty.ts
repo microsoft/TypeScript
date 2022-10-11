@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addMissingDeclareProperty";
 const errorCodes = [
     ts.Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration.code,
@@ -30,5 +30,4 @@ function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.
         (!fixedNodes || ts.tryAddToSet(fixedNodes, declaration))) {
         changeTracker.insertModifierBefore(sourceFile, ts.SyntaxKind.DeclareKeyword, declaration);
     }
-}
 }

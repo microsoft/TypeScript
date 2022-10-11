@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild - clean", () => {
     ts.verifyTsc({
         scenario: "clean",
@@ -13,4 +14,3 @@ describe("unittests:: tsbuild - clean", () => {
         }),
     });
 });
-}

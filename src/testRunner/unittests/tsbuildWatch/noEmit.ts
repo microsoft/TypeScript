@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "noEmit",
@@ -30,4 +31,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
         baselineIncremental: true
     });
 });
-}

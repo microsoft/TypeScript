@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes";
+
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
     function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: ts.Diagnostic[] }) {
         const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
@@ -431,4 +434,3 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo": ts.WatchDirectoryFlags.Recursive });
     });
 });
-}

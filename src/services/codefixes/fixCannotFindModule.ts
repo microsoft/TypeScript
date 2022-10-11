@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";
 
@@ -55,5 +55,4 @@ function getTypesPackageNameToInstall(packageName: string, host: ts.LanguageServ
     return diagCode === errorCodeCannotFindModule
         ? (ts.JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
         : (host.isKnownTypesPackageName?.(packageName) ? ts.getTypesPackageName(packageName) : undefined);
-}
 }

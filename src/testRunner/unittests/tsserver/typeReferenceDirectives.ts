@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
         const libProjectLocation = `${ts.tscWatch.projectRoot}/lib`;
@@ -82,4 +83,3 @@ declare class TestLib {
         service.openClientFile(file.path);
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
         const f1 = {
@@ -133,4 +134,3 @@ describe("unittests:: tsserver:: searching for config file", () => {
         verifyConfigFileWatch("when projectRootPath is present but file is not from project root", "/a/b");
     });
 });
-}

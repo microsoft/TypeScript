@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     const formatDiagnosticHost: ts.FormatDiagnosticsHost = {
         getCurrentDirectory: () => "/apath/",
@@ -776,4 +779,3 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         });
     });
 });
-}

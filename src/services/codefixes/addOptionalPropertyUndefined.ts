@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
 const errorCodes = [
@@ -92,5 +92,4 @@ function addUndefinedToOptionalProperty(changes: ts.textChanges.ChangeTracker, t
             changes.replaceNode(d.getSourceFile(), d.type, t);
         }
     }
-}
 }

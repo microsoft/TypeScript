@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixConvertToMappedObjectType";
 const errorCodes = [ts.Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
 
@@ -56,5 +56,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
         ...(otherMembers.length ? [ts.factory.createTypeLiteralNode(otherMembers)] : ts.emptyArray),
     ]);
     changes.replaceNode(sourceFile, container, createTypeAliasFromInterface(container, intersectionType));
-}
 }

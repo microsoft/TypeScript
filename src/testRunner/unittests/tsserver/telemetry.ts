@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {
         const file = makeFile("/a.js");
@@ -290,5 +291,4 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
 function makeFile(path: string, content: {} = ""): ts.projectSystem.File {
     return { path, content: ts.isString(content) ? content : JSON.stringify(content) };
-}
 }

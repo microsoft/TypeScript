@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 /** This is the cache of module/typedirectives resolution that can be retained across program */
 export interface ResolutionCache {
     startRecordingFilesWithChangedResolutions(): void;
@@ -50,6 +51,7 @@ interface CachedResolvedModuleWithFailedLookupLocations extends ts.ResolvedModul
 interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
+/** @internal */
 export interface ResolutionCacheHost extends ts.MinimalResolutionCacheHost {
     toPath(fileName: string): ts.Path;
     getCanonicalFileName: ts.GetCanonicalFileName;
@@ -93,6 +95,7 @@ interface DirectoryOfFailedLookupWatch {
     nonRecursive?: boolean;
 }
 
+/** @internal */
 export function removeIgnoredPath(path: ts.Path): ts.Path | undefined {
     // Consider whole staging folder as if node_modules changed.
     if (ts.endsWith(path, "/node_modules/.staging")) {
@@ -104,6 +107,7 @@ export function removeIgnoredPath(path: ts.Path): ts.Path | undefined {
         path;
 }
 
+/** @internal */
 /**
  * Filter out paths like
  * "/", "/user", "/user/username", "/user/username/folderAtRoot",
@@ -156,6 +160,7 @@ export function canWatchDirectoryOrFile(dirPath: ts.Path) {
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
+/** @internal */
 export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
     let filesWithChangedSetOfUnresolvedImports: ts.Path[] | undefined;
     let filesWithInvalidatedResolutions: ts.Set<ts.Path> | undefined;
@@ -1129,5 +1134,4 @@ function resolutionIsSymlink(resolution: ResolutionWithFailedLookupLocations) {
         (resolution as ts.ResolvedModuleWithFailedLookupLocations).resolvedModule?.originalPath ||
         (resolution as ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.originalPath
     );
-}
 }

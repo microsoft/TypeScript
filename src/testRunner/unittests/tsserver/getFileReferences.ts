@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: getFileReferences", () => {
     const importA = `import "./a";`;
     const importCurlyFromA = `import {} from "./a";`;
@@ -78,4 +79,3 @@ describe("unittests:: tsserver:: getFileReferences", () => {
         assert.deepEqual(response, expectResponse);
     });
 });
-}

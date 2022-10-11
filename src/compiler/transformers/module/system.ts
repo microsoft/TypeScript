@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
+/** @internal */
 export function transformSystemModule(context: ts.TransformationContext) {
     interface DependencyGroup {
         name: ts.StringLiteral;
@@ -1941,5 +1942,4 @@ export function transformSystemModule(context: ts.TransformationContext) {
     function isSubstitutionPrevented(node: ts.Node) {
         return noSubstitution && node.id && noSubstitution[node.id];
     }
-}
 }

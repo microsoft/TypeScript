@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
@@ -10,5 +11,4 @@ export interface OutputFile {
     writeByteOrderMark: boolean;
     text: string;
     /* @internal */ buildInfo?: ts.BuildInfo
-}
 }

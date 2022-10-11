@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixNaNEquality";
 const errorCodes = [
     ts.Diagnostics.This_condition_will_always_return_0.code,
@@ -61,5 +61,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
 function getSuggestion(messageText: string | ts.DiagnosticMessageChain) {
     const [_, suggestion] = ts.flattenDiagnosticMessageText(messageText, "\n", 0).match(/\'(.*)\'/) || [];
     return suggestion;
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: completions", () => {
     it("works", () => {
         const aTs: ts.projectSystem.File = {
@@ -264,4 +265,3 @@ export interface BrowserRouterProps {
         });
     });
 });
-}

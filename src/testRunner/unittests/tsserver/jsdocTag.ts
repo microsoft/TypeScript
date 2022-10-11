@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: jsdoc @link ", () => {
     const config: ts.projectSystem.File = {
         path: "/a/tsconfig.json",
@@ -691,4 +692,3 @@ foo`
         });
     });
 });
-}

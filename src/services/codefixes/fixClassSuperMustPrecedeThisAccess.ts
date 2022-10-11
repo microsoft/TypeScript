@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [ts.Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
 ts.codefix.registerCodeFix({
@@ -48,5 +48,4 @@ function findSuperCall(n: ts.Node): ts.ExpressionStatement & { expression: ts.Ca
         : ts.isFunctionLike(n)
             ? undefined
             : ts.forEachChild(n, findSuperCall);
-}
 }

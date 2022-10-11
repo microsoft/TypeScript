@@ -1,4 +1,8 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
     let projFs: vfs.FileSystem;
     let projFsWithBuild: vfs.FileSystem;
@@ -570,4 +574,3 @@ class someClass2 { }`),
         });
     });
 });
-}

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addMissingInvocationForDecorator";
 const errorCodes = [ts.Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0.code];
 ts.codefix.registerCodeFix({
@@ -18,5 +18,4 @@ function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.
     ts.Debug.assert(!!decorator, "Expected position to be owned by a decorator.");
     const replacement = ts.factory.createCallExpression(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
     changeTracker.replaceNode(sourceFile, decorator.expression, replacement);
-}
 }

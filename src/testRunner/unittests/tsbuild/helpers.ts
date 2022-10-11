@@ -1,4 +1,9 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+import * as Harness from "../../_namespaces/Harness";
+import * as vpath from "../../_namespaces/vpath";
+
 export function errorDiagnostic(message: fakes.ExpectedDiagnosticMessage): fakes.ExpectedErrorDiagnostic {
     return { message };
 }
@@ -720,5 +725,4 @@ export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: str
     prependText(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
 const ${file}Const = new ${project}${file}();
 `);
-}
 }

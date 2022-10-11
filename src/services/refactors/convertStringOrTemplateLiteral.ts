@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.convertStringOrTemplateLiteral {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert to template string";
 const refactorDescription = ts.getLocaleSpecificMessage(ts.Diagnostics.Convert_to_template_string);
 
@@ -247,5 +247,4 @@ function getExpressionFromParenthesesOrExpression(node: ts.Expression) {
         node = node.expression;
     }
     return node;
-}
 }

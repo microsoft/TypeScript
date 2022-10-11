@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [
     ts.Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,
     ts.Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code,
@@ -53,5 +53,4 @@ function doChange(file: ts.SourceFile, start: number, length: number, code: numb
         ts.Debug.fail("fixPropertyOverrideAccessor codefix got unexpected error code " + code);
     }
     return ts.codefix.generateAccessorFromProperty(file, context.program, startPosition, endPosition, context, ts.Diagnostics.Generate_get_and_set_accessors.message);
-}
 }

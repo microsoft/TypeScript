@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1
     // An external module name is "relative" if the first term is "." or "..".
@@ -2088,7 +2089,4 @@ export function hasRestParameter(s: ts.SignatureDeclaration | ts.JSDocSignature)
 export function isRestParameter(node: ts.ParameterDeclaration | ts.JSDocParameterTag): boolean {
     const type = ts.isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
     return (node as ts.ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === ts.SyntaxKind.JSDocVariadicType;
-}
-
-// #endregion
 }

@@ -1,6 +1,7 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
+/** @internal */
 export enum PatternMatchKind {
     exact,
     prefix,
@@ -10,6 +11,7 @@ export enum PatternMatchKind {
 
 // Information about a match made by the pattern matcher between a candidate and the
 // search pattern.
+/** @internal */
 export interface PatternMatch {
     // What kind of match this was.  Exact matches are better than prefix matches which are
     // better than substring matches which are better than CamelCase matches.
@@ -24,6 +26,7 @@ export interface PatternMatch {
 // The pattern matcher maintains an internal cache of information as it is used.  Therefore,
 // you should not keep it around forever and should get and release the matcher appropriately
 // once you no longer need it.
+/** @internal */
 export interface PatternMatcher {
     // Used to match a candidate against the last segment of a possibly dotted pattern.  This
     // is useful as a quick check to prevent having to compute a container before calling
@@ -97,6 +100,7 @@ function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): P
     };
 }
 
+/** @internal */
 export function createPatternMatcher(pattern: string): PatternMatcher | undefined {
     // We'll often see the same candidate string many times when searching (For example, when
     // we see the name of a module that is used everywhere, or the name of an overload).  As
@@ -461,10 +465,12 @@ function createTextChunk(text: string): TextChunk {
     };
 }
 
+/** @internal */
 export function breakIntoCharacterSpans(identifier: string): ts.TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ false);
 }
 
+/** @internal */
 export function breakIntoWordSpans(identifier: string): ts.TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ true);
 }
@@ -589,5 +595,4 @@ function everyInRange(start: number, end: number, pred: (n: number) => boolean):
 
 function every(s: string, pred: (ch: number, index: number) => boolean, start = 0, end = s.length): boolean {
     return everyInRange(start, end, i => pred(s.charCodeAt(i), i));
-}
 }

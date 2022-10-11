@@ -1,4 +1,3 @@
-namespace Utils {
 const { join, resolve, dirname } = require("path") as typeof import("path");
 const { existsSync } = require("fs") as typeof import("fs");
 
@@ -18,4 +17,3 @@ export function findUpFile(name: string): string {
 
 export const findUpRoot: { (): string; cached?: string; } = () =>
     findUpRoot.cached ||= dirname(findUpFile("Gulpfile.mjs"));
-}

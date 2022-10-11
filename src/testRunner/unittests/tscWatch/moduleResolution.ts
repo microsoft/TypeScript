@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc-watch:: moduleResolution", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
@@ -257,4 +259,3 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         });
     });
 });
-}

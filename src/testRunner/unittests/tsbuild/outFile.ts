@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes";
+
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
     let outFileWithBuildFs: vfs.FileSystem;
@@ -654,4 +657,3 @@ ${internal} enum internalEnum { a, b, c }`);
         },
     });
 });
-}

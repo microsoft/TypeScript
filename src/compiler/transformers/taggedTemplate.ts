@@ -1,10 +1,12 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export enum ProcessLevel {
     LiftRestriction,
     All
 }
 
+/** @internal */
 export function processTaggedTemplateExpression(
     context: ts.TransformationContext,
     node: ts.TaggedTemplateExpression,
@@ -98,5 +100,4 @@ function getRawLiteral(node: ts.TemplateLiteralLikeNode, currentSourceFile: ts.S
     // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
     text = text.replace(/\r\n?/g, "\n");
     return ts.setTextRange(ts.factory.createStringLiteral(text), node);
-}
 }

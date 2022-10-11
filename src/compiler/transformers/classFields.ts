@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 const enum ClassPropertySubstitutionFlags {
     /**
      * Enables substitutions for class expressions with static fields
@@ -13,6 +13,7 @@ const enum ClassPropertySubstitutionFlags {
     ClassStaticThisOrSuperReference = 1 << 1,
 }
 
+/** @internal */
 export const enum PrivateIdentifierKind {
     Field = "f",
     Method = "m",
@@ -122,6 +123,7 @@ const enum ClassFacts {
     NeedsSubstitutionForThisInClassStaticField = 1 << 3,
 }
 
+/** @internal */
 /**
  * Transforms ECMAScript Class Syntax.
  * TypeScript parameter property syntax is transformed in the TypeScript transformer.
@@ -2545,5 +2547,4 @@ function getPrivateIdentifierInfo(privateEnv: PrivateIdentifierEnvironment, key:
 
 function getGeneratedPrivateIdentifierInfo(privateEnv: PrivateIdentifierEnvironment, key: ts.Node) {
     return privateEnv.generatedIdentifiers?.get(key);
-}
 }
