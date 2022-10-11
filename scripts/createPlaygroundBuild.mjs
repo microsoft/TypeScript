@@ -6,7 +6,7 @@
 
 // This script does two things: 
 //  
-//  - Listens to changes to the built version of TypeScript (via a filewatcher on `built/local/typescriptServices.js`)
+//  - Listens to changes to the built version of TypeScript (via a filewatcher on `built/local/typescript.js`)
 //    these trigger creating monaco-typescript compatible builds of TypeScript at `internal/lib/typescriptServices.js§
 //
 //  - Creates a HTTP server which the playground uses. The webserver almost exclusively re-directs requests to 
@@ -27,10 +27,13 @@ import url from 'url';
 import nodeFetch from "node-fetch";
 import assert from 'assert';
 
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
+
 function updateTSDist() {
   // This code is a direct port of a script from monaco-typescript
-  // https://github.com/microsoft/monaco-typescript/blob/master/scripts/importTypescript.js
-  // Currently based on cc8da6b on June 6 2021
+  // https://github.com/microsoft/monaco-editor/blob/main/build/importTypescript.ts
+  // Currently based on https://github.com/microsoft/monaco-editor/pull/3356
 
   const generatedNote = `//
   // **NOTE**: Do not edit directly! This file is generated using \`npm run import-typescript\`
@@ -59,109 +62,58 @@ function updateTSDist() {
   export const typescriptVersion = "${typeScriptDependencyVersion}";\n`
     );
   
-    let tsServices = fs
-      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescriptServices.js'))
-      .toString();
-  
-    // Ensure we never run into the node system...
-    // (this also removes require calls that trick webpack into shimming those modules...)
-    tsServices = tsServices.replace(
-      /\n    ts\.sys =([^]*)\n    \}\)\(\);/m,
-      `\n    // MONACOCHANGE\n    ts.sys = undefined;\n    // END MONACOCHANGE`
-    );
-  
-    // Eliminate more require() calls...
-    tsServices = tsServices.replace(
-      /^( +)etwModule = require\(.*$/m,
-      '$1// MONACOCHANGE\n$1etwModule = undefined;\n$1// END MONACOCHANGE'
-    );
-    tsServices = tsServices.replace(
-      /^( +)var result = ts\.sys\.require\(.*$/m,
-      '$1// MONACOCHANGE\n$1var result = undefined;\n$1// END MONACOCHANGE'
-    );
-    tsServices = tsServices.replace(
-      /^( +)fs = require\("fs"\);$/m,
-      '$1// MONACOCHANGE\n$1fs = undefined;\n$1// END MONACOCHANGE'
-    );
-    tsServices = tsServices.replace(
-      /^( +)debugger;$/m,
-      '$1// MONACOCHANGE\n$1// debugger;\n$1// END MONACOCHANGE'
-    );
-    tsServices = tsServices.replace(
-      /= require\("perf_hooks"\)/m,
-      '/* MONACOCHANGE */= {}/* END MONACOCHANGE */'
-    );
-  
-    // Flag any new require calls (outside comments) so they can be corrected preemptively.
-    // To avoid missing cases (or using an even more complex regex), temporarily remove comments
-    // about require() and then check for lines actually calling require().
-    // \/[*/] matches the start of a comment (single or multi-line).
-    // ^\s+\*[^/] matches (presumably) a later line of a multi-line comment.
-    const tsServicesNoCommentedRequire = tsServices.replace(
-      /(\/[*/]|^\s+\*[^/]).*\brequire\(.*/gm,
-      ''
-    );
-    const linesWithRequire = tsServicesNoCommentedRequire.match(/^.*?\brequire\(.*$/gm);
-  
-    // Allow error messages to include references to require() in their strings
-    const runtimeRequires =
-      linesWithRequire &&
-      linesWithRequire.filter((l) => !l.includes(': diag(') && !l.includes('ts.DiagnosticCategory'));
-  
-    if (runtimeRequires && runtimeRequires.length && linesWithRequire) {
-      console.error(
-        'Found new require() calls on the following lines. These should be removed to avoid breaking webpack builds.\n'
-      );
-      console.error(
-        runtimeRequires.map((r) => `${r} (${tsServicesNoCommentedRequire.indexOf(r)})`).join('\n')
-      );
-      process.exit(1);
-    }
-  
+    let tsServices = fs.readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescript.js')).toString();
+
+    // The output from this build will only be accessible via AMD or ESM; rather than removing
+    // references to require/module, define them as dummy variables that bundlers will ignore.
+    // The TS code can figure out that it's not running under Node even with these defined.
+    tsServices =
+    `
+/* MONACOCHANGE */
+var require = undefined;
+var module = { exports: {} };
+/* END MONACOCHANGE */
+` + tsServices;
+
     const tsServices_amd =
       generatedNote +
       tsServices +
       `
-  // MONACOCHANGE
-  // Defining the entire module name because r.js has an issue and cannot bundle this file
-  // correctly with an anonymous define call
-  define("vs/language/typescript/lib/typescriptServices", [], function() { return ts; });
-  // END MONACOCHANGE
-  `;
+// MONACOCHANGE
+// Defining the entire module name because r.js has an issue and cannot bundle this file
+// correctly with an anonymous define call
+define("vs/language/typescript/lib/typescriptServices", [], function() { return ts; });
+// END MONACOCHANGE
+`;
     fs.writeFileSync(
       path.join(TYPESCRIPT_LIB_DESTINATION, 'typescriptServices-amd.js'),
       stripSourceMaps(tsServices_amd)
     );
-  
+
     const tsServices_esm =
       generatedNote +
       tsServices +
       `
-  // MONACOCHANGE
-  export var createClassifier = ts.createClassifier;
-  export var createLanguageService = ts.createLanguageService;
-  export var displayPartsToString = ts.displayPartsToString;
-  export var EndOfLineState = ts.EndOfLineState;
-  export var flattenDiagnosticMessageText = ts.flattenDiagnosticMessageText;
-  export var IndentStyle = ts.IndentStyle;
-  export var ScriptKind = ts.ScriptKind;
-  export var ScriptTarget = ts.ScriptTarget;
-  export var TokenClass = ts.TokenClass;
-  // END MONACOCHANGE
-  `;
+// MONACOCHANGE
+export var createClassifier = ts.createClassifier;
+export var createLanguageService = ts.createLanguageService;
+export var displayPartsToString = ts.displayPartsToString;
+export var EndOfLineState = ts.EndOfLineState;
+export var flattenDiagnosticMessageText = ts.flattenDiagnosticMessageText;
+export var IndentStyle = ts.IndentStyle;
+export var ScriptKind = ts.ScriptKind;
+export var ScriptTarget = ts.ScriptTarget;
+export var TokenClass = ts.TokenClass;
+export var typescript = ts;
+// END MONACOCHANGE
+`;
     fs.writeFileSync(
       path.join(TYPESCRIPT_LIB_DESTINATION, 'typescriptServices.js'),
       stripSourceMaps(tsServices_esm)
     );
-  
-    let dtsServices = fs
-      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescriptServices.d.ts'))
-      .toString();
-    dtsServices += `
-  // MONACOCHANGE
-  export = ts;
-  // END MONACOCHANGE
-  `;
+
+    let dtsServices = fs.readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescript.d.ts')).toString();
+
     fs.writeFileSync(
       path.join(TYPESCRIPT_LIB_DESTINATION, 'typescriptServices.d.ts'),
       generatedNote + dtsServices
@@ -279,7 +231,7 @@ function updateTSDist() {
   /// End of import
 }
 
-const services = path.join(__dirname, '../built/local/typescriptServices.js');
+const services = path.join(__dirname, '../built/local/typescript.js');
 fs.watchFile(services, () =>{
   console.log("Updating the monaco build")
   updateTSDist()
