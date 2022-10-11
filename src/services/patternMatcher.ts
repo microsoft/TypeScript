@@ -87,7 +87,7 @@ interface TextChunk {
     // independently.  For example, if the chunk is for "UIElement" the the spans of interest
     // correspond to "U", "I" and "Element".  If "UIElement" isn't found as an exact, prefix.
     // or substring match, then the character spans will be used to attempt a camel case match.
-    characterSpans: TextSpan[];
+    characterSpans: ts.TextSpan[];
 }
 
 function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): PatternMatch {
@@ -102,7 +102,7 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     // we see the name of a module that is used everywhere, or the name of an overload).  As
     // such, we cache the information we compute about the candidate for the life of this
     // pattern matcher so we don't have to compute it multiple times.
-    const stringToWordSpans = new Map<string, TextSpan[]>();
+    const stringToWordSpans = new ts.Map<string, ts.TextSpan[]>();
 
     const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
     // A segment is considered invalid if we couldn't find any words in it.
@@ -110,16 +110,16 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
 
     return {
         getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
-        getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
+        getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, ts.last(dotSeparatedSegments), stringToWordSpans),
         patternContainsDots: dotSeparatedSegments.length > 1
     };
 }
 
-function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: ts.ESMap<string, ts.TextSpan[]>): PatternMatch | undefined {
     // First, check that the last part of the dot separated pattern matches the name of the
     // candidate.  If not, then there's no point in proceeding and doing the more
     // expensive work.
-    const candidateMatch = matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans);
+    const candidateMatch = matchSegment(candidate, ts.last(dotSeparatedSegments), stringToWordSpans);
     if (!candidateMatch) {
         return undefined;
     }
@@ -141,7 +141,7 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
     return bestMatch;
 }
 
-function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>): TextSpan[] {
+function getWordSpans(word: string, stringToWordSpans: ts.ESMap<string, ts.TextSpan[]>): ts.TextSpan[] {
     let spans = stringToWordSpans.get(word);
     if (!spans) {
         stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
@@ -149,12 +149,12 @@ function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>
     return spans;
 }
 
-function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: ts.ESMap<string, ts.TextSpan[]>): PatternMatch | undefined {
     const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
     if (index === 0) {
         // a) Check if the word is a prefix of the candidate, in a case insensitive or
         //    sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
-        return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+        return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ ts.startsWith(candidate, chunk.text));
     }
 
     if (chunk.isLowerCase) {
@@ -201,7 +201,7 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     }
 }
 
-function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ts.ESMap<string, ts.TextSpan[]>): PatternMatch | undefined {
     // First check if the segment matches as is.  This is also useful if the segment contains
     // characters we would normally strip when splitting into parts that we also may want to
     // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -209,7 +209,7 @@ function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ES
     //
     // Note: if the segment contains a space or an asterisk then we must assume that it's a
     // multi-word segment.
-    if (every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
+    if (every(segment.totalTextChunk.text, ch => ch !== ts.CharacterCodes.space && ch !== ts.CharacterCodes.asterisk)) {
         const match = matchTextChunk(candidate, segment.totalTextChunk, stringToWordSpans);
         if (match) return match;
     }
@@ -259,14 +259,14 @@ function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ES
 }
 
 function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch | undefined {
-    return min(a, b, compareMatches);
+    return ts.min(a, b, compareMatches);
 }
-function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): Comparison {
-    return a === undefined ? Comparison.GreaterThan : b === undefined ? Comparison.LessThan
-        : compareValues(a.kind, b.kind) || compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
+function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): ts.Comparison {
+    return a === undefined ? ts.Comparison.GreaterThan : b === undefined ? ts.Comparison.LessThan
+        : ts.compareValues(a.kind, b.kind) || ts.compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
 }
 
-function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
+function partStartsWith(candidate: string, candidateSpan: ts.TextSpan, pattern: string, ignoreCase: boolean, patternSpan: ts.TextSpan = { start: 0, length: pattern.length }): boolean {
     return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
         && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
 }
@@ -275,7 +275,7 @@ function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {
     return ignoreCase ? toLowerCase(ch1) === toLowerCase(ch2) : ch1 === ch2;
 }
 
-function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
+function tryCamelCaseMatch(candidate: string, candidateParts: ts.TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
     const chunkCharacterSpans = chunk.characterSpans;
 
     // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -331,7 +331,7 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
             // obviously contiguous.
             contiguous = contiguous === undefined ? true : contiguous;
 
-            candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
+            candidatePart = ts.createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
         }
 
         // Check if we matched anything at all.  If we didn't, then we need to unset the
@@ -356,11 +356,11 @@ function createSegment(text: string): Segment {
 
 function isUpperCaseLetter(ch: number) {
     // Fast check for the ascii range.
-    if (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) {
+    if (ch >= ts.CharacterCodes.A && ch <= ts.CharacterCodes.Z) {
         return true;
     }
 
-    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
+    if (ch < ts.CharacterCodes.maxAsciiCharacter || !ts.isUnicodeIdentifierStart(ch, ts.ScriptTarget.Latest)) {
         return false;
     }
 
@@ -372,11 +372,11 @@ function isUpperCaseLetter(ch: number) {
 
 function isLowerCaseLetter(ch: number) {
     // Fast check for the ascii range.
-    if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+    if (ch >= ts.CharacterCodes.a && ch <= ts.CharacterCodes.z) {
         return true;
     }
 
-    if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
+    if (ch < ts.CharacterCodes.maxAsciiCharacter || !ts.isUnicodeIdentifierStart(ch, ts.ScriptTarget.Latest)) {
         return false;
     }
 
@@ -401,11 +401,11 @@ function indexOfIgnoringCase(str: string, value: string): number {
 
 function toLowerCase(ch: number): number {
     // Fast convert for the ascii range.
-    if (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) {
-        return CharacterCodes.a + (ch - CharacterCodes.A);
+    if (ch >= ts.CharacterCodes.A && ch <= ts.CharacterCodes.Z) {
+        return ts.CharacterCodes.a + (ch - ts.CharacterCodes.A);
     }
 
-    if (ch < CharacterCodes.maxAsciiCharacter) {
+    if (ch < ts.CharacterCodes.maxAsciiCharacter) {
         return ch;
     }
 
@@ -416,11 +416,11 @@ function toLowerCase(ch: number): number {
 
 function isDigit(ch: number) {
     // TODO(cyrusn): Find a way to support this for unicode digits.
-    return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
+    return ch >= ts.CharacterCodes._0 && ch <= ts.CharacterCodes._9;
 }
 
 function isWordChar(ch: number) {
-    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
+    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === ts.CharacterCodes._ || ch === ts.CharacterCodes.$;
 }
 
 function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
@@ -461,16 +461,16 @@ function createTextChunk(text: string): TextChunk {
     };
 }
 
-export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
+export function breakIntoCharacterSpans(identifier: string): ts.TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ false);
 }
 
-export function breakIntoWordSpans(identifier: string): TextSpan[] {
+export function breakIntoWordSpans(identifier: string): ts.TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ true);
 }
 
-function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
-    const result: TextSpan[] = [];
+function breakIntoSpans(identifier: string, word: boolean): ts.TextSpan[] {
+    const result: ts.TextSpan[] = [];
 
     let wordStart = 0;
     for (let i = 1; i < identifier.length; i++) {
@@ -487,7 +487,7 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
             hasTransitionFromUpperToLower) {
 
             if (!isAllPunctuation(identifier, wordStart, i)) {
-                result.push(createTextSpan(wordStart, i - wordStart));
+                result.push(ts.createTextSpan(wordStart, i - wordStart));
             }
 
             wordStart = i;
@@ -495,7 +495,7 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
     }
 
     if (!isAllPunctuation(identifier, wordStart, identifier.length)) {
-        result.push(createTextSpan(wordStart, identifier.length - wordStart));
+        result.push(ts.createTextSpan(wordStart, identifier.length - wordStart));
     }
 
     return result;
@@ -503,29 +503,29 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
 
 function charIsPunctuation(ch: number) {
     switch (ch) {
-        case CharacterCodes.exclamation:
-        case CharacterCodes.doubleQuote:
-        case CharacterCodes.hash:
-        case CharacterCodes.percent:
-        case CharacterCodes.ampersand:
-        case CharacterCodes.singleQuote:
-        case CharacterCodes.openParen:
-        case CharacterCodes.closeParen:
-        case CharacterCodes.asterisk:
-        case CharacterCodes.comma:
-        case CharacterCodes.minus:
-        case CharacterCodes.dot:
-        case CharacterCodes.slash:
-        case CharacterCodes.colon:
-        case CharacterCodes.semicolon:
-        case CharacterCodes.question:
-        case CharacterCodes.at:
-        case CharacterCodes.openBracket:
-        case CharacterCodes.backslash:
-        case CharacterCodes.closeBracket:
-        case CharacterCodes._:
-        case CharacterCodes.openBrace:
-        case CharacterCodes.closeBrace:
+        case ts.CharacterCodes.exclamation:
+        case ts.CharacterCodes.doubleQuote:
+        case ts.CharacterCodes.hash:
+        case ts.CharacterCodes.percent:
+        case ts.CharacterCodes.ampersand:
+        case ts.CharacterCodes.singleQuote:
+        case ts.CharacterCodes.openParen:
+        case ts.CharacterCodes.closeParen:
+        case ts.CharacterCodes.asterisk:
+        case ts.CharacterCodes.comma:
+        case ts.CharacterCodes.minus:
+        case ts.CharacterCodes.dot:
+        case ts.CharacterCodes.slash:
+        case ts.CharacterCodes.colon:
+        case ts.CharacterCodes.semicolon:
+        case ts.CharacterCodes.question:
+        case ts.CharacterCodes.at:
+        case ts.CharacterCodes.openBracket:
+        case ts.CharacterCodes.backslash:
+        case ts.CharacterCodes.closeBracket:
+        case ts.CharacterCodes._:
+        case ts.CharacterCodes.openBrace:
+        case ts.CharacterCodes.closeBrace:
             return true;
     }
 
@@ -533,7 +533,7 @@ function charIsPunctuation(ch: number) {
 }
 
 function isAllPunctuation(identifier: string, start: number, end: number): boolean {
-    return every(identifier, ch => charIsPunctuation(ch) && ch !== CharacterCodes._, start, end);
+    return every(identifier, ch => charIsPunctuation(ch) && ch !== ts.CharacterCodes._, start, end);
 }
 
 function transitionFromUpperToLower(identifier: string, index: number, wordStart: number): boolean {

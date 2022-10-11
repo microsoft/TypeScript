@@ -17,7 +17,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 
     let mode: Mode;
 
-    const typeCatalog: Type[] = []; // NB: id is index + 1
+    const typeCatalog: ts.Type[] = []; // NB: id is index + 1
 
     let legendPath: string | undefined;
     const legend: TraceRecord[] = [];
@@ -29,7 +29,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 
     /** Starts tracing for the given project. */
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
-        Debug.assert(!tracing, "Tracing already started");
+        ts.Debug.assert(!tracing, "Tracing already started");
 
         if (fs === undefined) {
             try {
@@ -44,7 +44,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         typeCatalog.length = 0;
 
         if (legendPath === undefined) {
-            legendPath = combinePaths(traceDir, "legend.json");
+            legendPath = ts.combinePaths(traceDir, "legend.json");
         }
 
         // Note that writing will fail later on if it exists and is not a directory
@@ -56,8 +56,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             mode === "build" ? `.${process.pid}-${++traceCount}`
             : mode === "server" ? `.${process.pid}`
             : ``;
-        const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
-        const typesPath = combinePaths(traceDir, `types${countPart}.json`);
+        const tracePath = ts.combinePaths(traceDir, `trace${countPart}.json`);
+        const typesPath = ts.combinePaths(traceDir, `types${countPart}.json`);
 
         legend.push({
             configFilePath,
@@ -69,7 +69,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         tracing = tracingEnabled; // only when traceFd is properly set
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
-        const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
+        const meta = { cat: "__metadata", ph: "M", ts: 1000 * ts.timestamp(), pid: 1, tid: 1 };
         fs.writeSync(traceFd,
             "[\n"
             + [{ name: "process_name", args: { name: "tsc" }, ...meta },
@@ -80,8 +80,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 
     /** Stops tracing for the in-progress project and dumps the type catalog. */
     export function stopTracing() {
-        Debug.assert(tracing, "Tracing is not in progress");
-        Debug.assert(!!typeCatalog.length === (mode !== "server")); // Have a type catalog iff not in server mode
+        ts.Debug.assert(tracing, "Tracing is not in progress");
+        ts.Debug.assert(!!typeCatalog.length === (mode !== "server")); // Have a type catalog iff not in server mode
 
         fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
@@ -97,7 +97,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         }
     }
 
-    export function recordType(type: Type): void {
+    export function recordType(type: ts.Type): void {
         if (mode !== "server") {
             typeCatalog.push(type);
         }
@@ -129,15 +129,15 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
         }
-        eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
+        eventStack.push({ phase, name, args, time: 1000 * ts.timestamp(), separateBeginAndEnd });
     }
     export function pop(results?: Args) {
-        Debug.assert(eventStack.length > 0);
-        writeStackEvent(eventStack.length - 1, 1000 * timestamp(), results);
+        ts.Debug.assert(eventStack.length > 0);
+        writeStackEvent(eventStack.length - 1, 1000 * ts.timestamp(), results);
         eventStack.length--;
     }
     export function popAll() {
-        const endTime = 1000 * timestamp();
+        const endTime = 1000 * ts.timestamp();
         for (let i = eventStack.length - 1; i >= 0; i--) {
             writeStackEvent(i, endTime);
         }
@@ -148,7 +148,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
     function writeStackEvent(index: number, endTime: number, results?: Args) {
         const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
         if (separateBeginAndEnd) {
-            Debug.assert(!results, "`results` are not supported for events with `separateBeginAndEnd`");
+            ts.Debug.assert(!results, "`results` are not supported for events with `separateBeginAndEnd`");
             writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
         }
         // test if [time,endTime) straddles a sampling point
@@ -158,31 +158,31 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
-                        time: number = 1000 * timestamp()) {
+                        time: number = 1000 * ts.timestamp()) {
 
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 
-        performance.mark("beginTracing");
+        ts.performance.mark("beginTracing");
         fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
         if (extras) fs.writeSync(traceFd, `,${extras}`);
         if (args) fs.writeSync(traceFd, `,"args":${JSON.stringify(args)}`);
         fs.writeSync(traceFd, `}`);
-        performance.mark("endTracing");
-        performance.measure("Tracing", "beginTracing", "endTracing");
+        ts.performance.mark("endTracing");
+        ts.performance.measure("Tracing", "beginTracing", "endTracing");
     }
 
-    function getLocation(node: Node | undefined) {
-        const file = getSourceFileOfNode(node);
+    function getLocation(node: ts.Node | undefined) {
+        const file = ts.getSourceFileOfNode(node);
         return !file
             ? undefined
             : {
                 path: file.path,
-                start: indexFromOne(getLineAndCharacterOfPosition(file, node!.pos)),
-                end: indexFromOne(getLineAndCharacterOfPosition(file, node!.end)),
+                start: indexFromOne(ts.getLineAndCharacterOfPosition(file, node!.pos)),
+                end: indexFromOne(ts.getLineAndCharacterOfPosition(file, node!.end)),
             };
 
-        function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
+        function indexFromOne(lc: ts.LineAndCharacter): ts.LineAndCharacter {
             return {
                 line: lc.line + 1,
                 character: lc.character + 1,
@@ -190,13 +190,13 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         }
     }
 
-    function dumpTypes(types: readonly Type[]) {
-        performance.mark("beginDumpTypes");
+    function dumpTypes(types: readonly ts.Type[]) {
+        ts.performance.mark("beginDumpTypes");
 
         const typesPath = legend[legend.length - 1].typesPath!;
         const typesFd = fs.openSync(typesPath, "w");
 
-        const recursionIdentityMap = new Map<object, number>();
+        const recursionIdentityMap = new ts.Map<object, number>();
 
         // Cleverness: no line break here so that the type ID will match the line number
         fs.writeSync(typesFd, "[");
@@ -209,7 +209,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 
             // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
             let display: string | undefined;
-            if ((objectFlags & ObjectFlags.Anonymous) | (type.flags & TypeFlags.Literal)) {
+            if ((objectFlags & ts.ObjectFlags.Anonymous) | (type.flags & ts.TypeFlags.Literal)) {
                 try {
                     display = type.checker?.typeToString(type);
                 }
@@ -219,8 +219,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let indexedAccessProperties: object = {};
-            if (type.flags & TypeFlags.IndexedAccess) {
-                const indexedAccessType = type as IndexedAccessType;
+            if (type.flags & ts.TypeFlags.IndexedAccess) {
+                const indexedAccessType = type as ts.IndexedAccessType;
                 indexedAccessProperties = {
                     indexedAccessObjectType: indexedAccessType.objectType?.id,
                     indexedAccessIndexType: indexedAccessType.indexType?.id,
@@ -228,8 +228,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let referenceProperties: object = {};
-            if (objectFlags & ObjectFlags.Reference) {
-                const referenceType = type as TypeReference;
+            if (objectFlags & ts.ObjectFlags.Reference) {
+                const referenceType = type as ts.TypeReference;
                 referenceProperties = {
                     instantiatedType: referenceType.target?.id,
                     typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
@@ -238,8 +238,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let conditionalProperties: object = {};
-            if (type.flags & TypeFlags.Conditional) {
-                const conditionalType = type as ConditionalType;
+            if (type.flags & ts.TypeFlags.Conditional) {
+                const conditionalType = type as ts.ConditionalType;
                 conditionalProperties = {
                     conditionalCheckType: conditionalType.checkType?.id,
                     conditionalExtendsType: conditionalType.extendsType?.id,
@@ -249,8 +249,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let substitutionProperties: object = {};
-            if (type.flags & TypeFlags.Substitution) {
-                const substitutionType = type as SubstitutionType;
+            if (type.flags & ts.TypeFlags.Substitution) {
+                const substitutionType = type as ts.SubstitutionType;
                 substitutionProperties = {
                     substitutionBaseType: substitutionType.baseType?.id,
                     constraintType: substitutionType.constraint?.id,
@@ -258,8 +258,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let reverseMappedProperties: object = {};
-            if (objectFlags & ObjectFlags.ReverseMapped) {
-                const reverseMappedType = type as ReverseMappedType;
+            if (objectFlags & ts.ObjectFlags.ReverseMapped) {
+                const reverseMappedType = type as ts.ReverseMappedType;
                 reverseMappedProperties = {
                     reverseMappedSourceType: reverseMappedType.source?.id,
                     reverseMappedMappedType: reverseMappedType.mappedType?.id,
@@ -268,8 +268,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             }
 
             let evolvingArrayProperties: object = {};
-            if (objectFlags & ObjectFlags.EvolvingArray) {
-                const evolvingArrayType = type as EvolvingArrayType;
+            if (objectFlags & ts.ObjectFlags.EvolvingArray) {
+                const evolvingArrayType = type as ts.EvolvingArrayType;
                 evolvingArrayProperties = {
                     evolvingArrayElementType: evolvingArrayType.elementType.id,
                     evolvingArrayFinalType: evolvingArrayType.finalArrayType?.id,
@@ -291,13 +291,13 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
             const descriptor = {
                 id: type.id,
                 intrinsicName: (type as any).intrinsicName,
-                symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
+                symbolName: symbol?.escapedName && ts.unescapeLeadingUnderscores(symbol.escapedName),
                 recursionId: recursionToken,
-                isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
-                unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
-                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
+                isTuple: objectFlags & ts.ObjectFlags.Tuple ? true : undefined,
+                unionTypes: (type.flags & ts.TypeFlags.Union) ? (type as ts.UnionType).types?.map(t => t.id) : undefined,
+                intersectionTypes: (type.flags & ts.TypeFlags.Intersection) ? (type as ts.IntersectionType).types.map(t => t.id) : undefined,
                 aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
-                keyofType: (type.flags & TypeFlags.Index) ? (type as IndexType).type?.id : undefined,
+                keyofType: (type.flags & ts.TypeFlags.Index) ? (type as ts.IndexType).type?.id : undefined,
                 ...indexedAccessProperties,
                 ...referenceProperties,
                 ...conditionalProperties,
@@ -306,7 +306,7 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
                 ...evolvingArrayProperties,
                 destructuringPattern: getLocation(type.pattern),
                 firstDeclaration: getLocation(symbol?.declarations?.[0]),
-                flags: Debug.formatTypeFlags(type.flags).split("|"),
+                flags: ts.Debug.formatTypeFlags(type.flags).split("|"),
                 display,
             };
 
@@ -320,8 +320,8 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 
         fs.closeSync(typesFd);
 
-        performance.mark("endDumpTypes");
-        performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
+        ts.performance.mark("endDumpTypes");
+        ts.performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
     }
 
     export function dumpLegend() {
@@ -344,6 +344,6 @@ export const startTracing = tracingEnabled.startTracing;
 export const dumpTracingLegend = tracingEnabled.dumpLegend;
 
 export interface TracingNode {
-    tracingPath?: Path;
+    tracingPath?: ts.Path;
 }
 }

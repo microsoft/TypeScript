@@ -1,33 +1,33 @@
 namespace ts.projectSystem {
-const packageJson: File = {
+const packageJson: ts.projectSystem.File = {
     path: "/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`
 };
-const aTs: File = {
+const aTs: ts.projectSystem.File = {
     path: "/a.ts",
     content: "export const foo = 0;",
 };
-const bTs: File = {
+const bTs: ts.projectSystem.File = {
     path: "/b.ts",
     content: "foo",
 };
-const tsconfig: File = {
+const tsconfig: ts.projectSystem.File = {
     path: "/tsconfig.json",
     content: "{}",
 };
-const ambientDeclaration: File = {
+const ambientDeclaration: ts.projectSystem.File = {
     path: "/ambient.d.ts",
     content: "declare module 'ambient' {}"
 };
-const mobxPackageJson: File = {
+const mobxPackageJson: ts.projectSystem.File = {
     path: "/node_modules/mobx/package.json",
     content: `{ "name": "mobx", "version": "1.0.0" }`
 };
-const mobxDts: File = {
+const mobxDts: ts.projectSystem.File = {
     path: "/node_modules/mobx/index.d.ts",
     content: "export declare function observable(): unknown;"
 };
-const exportEqualsMappedType: File = {
+const exportEqualsMappedType: ts.projectSystem.File = {
     path: "/lib/foo/constants.d.ts",
     content: `
             type Signals = "SIGINT" | "SIGABRT";
@@ -38,7 +38,7 @@ const exportEqualsMappedType: File = {
 describe("unittests:: tsserver:: exportMapCache", () => {
     it("caches auto-imports in the same file", () => {
         const { exportMapCache } = setup();
-        assert.ok(exportMapCache.isUsableByFile(bTs.path as Path));
+        assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
     });
 
@@ -46,7 +46,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         const { host, exportMapCache } = setup();
         host.writeFile("/src/a2.ts", aTs.content);
         host.runQueuedTimeoutCallbacks();
-        assert.ok(!exportMapCache.isUsableByFile(bTs.path as Path));
+        assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
     });
 
@@ -55,7 +55,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         projectService.closeClientFile(aTs.path);
         host.deleteFile(aTs.path);
         host.runQueuedTimeoutCallbacks();
-        assert.ok(!exportMapCache.isUsableByFile(bTs.path as Path));
+        assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
     });
 
@@ -64,7 +64,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         host.writeFile("/package.json", `{ "name": "blah", "dependencies": { "mobx": "*" } }`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
-        assert.ok(exportMapCache.isUsableByFile(bTs.path as Path));
+        assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
     });
 
@@ -73,7 +73,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         host.writeFile("/package.json", `{}`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
-        assert.ok(!exportMapCache.isUsableByFile(bTs.path as Path));
+        assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
     });
 
@@ -86,17 +86,17 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         // accessing a transient symbol with two different checkers results in different symbol identities, since
         // transient symbols are recreated with every new checker.
         const programBefore = project.getCurrentProgram()!;
-        let sigintPropBefore: readonly SymbolExportInfo[] | undefined;
-        exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+        let sigintPropBefore: readonly ts.SymbolExportInfo[] | undefined;
+        exportMapCache.search(bTs.path as ts.Path, /*preferCapitalized*/ false, ts.returnTrue, (info, symbolName) => {
             if (symbolName === "SIGINT") sigintPropBefore = info;
         });
         assert.ok(sigintPropBefore);
-        assert.ok(sigintPropBefore![0].symbol.flags & SymbolFlags.Transient);
-        const symbolIdBefore = getSymbolId(sigintPropBefore![0].symbol);
+        assert.ok(sigintPropBefore![0].symbol.flags & ts.SymbolFlags.Transient);
+        const symbolIdBefore = ts.getSymbolId(sigintPropBefore![0].symbol);
 
         // Update program without clearing cache
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
+            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: bTs.path,
@@ -112,32 +112,32 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         assert.notEqual(programBefore, project.getCurrentProgram()!);
 
         // Get same info from cache again
-        let sigintPropAfter: readonly SymbolExportInfo[] | undefined;
-        exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+        let sigintPropAfter: readonly ts.SymbolExportInfo[] | undefined;
+        exportMapCache.search(bTs.path as ts.Path, /*preferCapitalized*/ false, ts.returnTrue, (info, symbolName) => {
             if (symbolName === "SIGINT") sigintPropAfter = info;
         });
         assert.ok(sigintPropAfter);
-        assert.notEqual(symbolIdBefore, getSymbolId(sigintPropAfter![0].symbol));
+        assert.notEqual(symbolIdBefore, ts.getSymbolId(sigintPropAfter![0].symbol));
     });
 });
 
 function setup() {
-    const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = createSession(host);
-    openFilesForSession([aTs, bTs], session);
+    const host = ts.projectSystem.createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
+    const session = ts.projectSystem.createSession(host);
+    ts.projectSystem.openFilesForSession([aTs, bTs], session);
     const projectService = session.getProjectService();
-    const project = configuredProjectAt(projectService, 0);
+    const project = ts.projectSystem.configuredProjectAt(projectService, 0);
     triggerCompletions();
     const checker = project.getLanguageService().getProgram()!.getTypeChecker();
     return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
     function triggerCompletions() {
-        const requestLocation: protocol.FileLocationRequestArgs = {
+        const requestLocation: ts.projectSystem.protocol.FileLocationRequestArgs = {
             file: bTs.path,
             line: 1,
             offset: 3,
         };
-        executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+        ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CompletionsRequest, ts.projectSystem.protocol.CompletionInfoResponse>(session, ts.projectSystem.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
             includeExternalModuleExports: true,
             prefix: "foo",

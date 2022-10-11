@@ -6,7 +6,7 @@ export enum LogLevel {
     verbose
 }
 
-export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
+export const emptyArray: ts.SortedReadonlyArray<never> = createSortedArray<never>();
 
 export interface Logger {
     close(): void;
@@ -31,7 +31,7 @@ export namespace Msg {
     export type Types = Msg;
 }
 
-export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
+export function createInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>, cachePath?: string): ts.server.DiscoverTypings {
     return {
         projectName: project.getProjectName(),
         fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
@@ -39,7 +39,7 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         watchOptions: project.projectService.getWatchOptions(project),
         typeAcquisition,
         unresolvedImports,
-        projectRootPath: project.getCurrentDirectory() as Path,
+        projectRootPath: project.getCurrentDirectory() as ts.Path,
         cachePath,
         kind: "discover"
     };
@@ -52,7 +52,7 @@ export namespace Errors {
     export function ThrowProjectLanguageServiceDisabled(): never {
         throw new Error("The project's language service is disabled.");
     }
-    export function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never {
+    export function ThrowProjectDoesNotContainDocument(fileName: string, project: ts.server.Project): never {
         throw new Error(`Project '${project.getProjectName()}' does not contain document '${fileName}'`);
     }
 }
@@ -60,12 +60,12 @@ export namespace Errors {
 export type NormalizedPath = string & { __normalizedPathTag: any };
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
-    return normalizePath(fileName) as NormalizedPath;
+    return ts.normalizePath(fileName) as NormalizedPath;
 }
 
-export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
-    const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
-    return getCanonicalFileName(f) as Path;
+export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): ts.Path {
+    const f = ts.isRootedDiskPath(normalizedPath) ? normalizedPath : ts.getNormalizedAbsolutePath(normalizedPath, currentDirectory);
+    return getCanonicalFileName(f) as ts.Path;
 }
 
 export function asNormalizedPath(fileName: string): NormalizedPath {
@@ -80,7 +80,7 @@ export interface NormalizedPathMap<T> {
 }
 
 export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-    const map = new Map<string, T>();
+    const map = new ts.Map<string, T>();
     return {
         get(path) {
             return map.get(path);
@@ -127,7 +127,7 @@ export function makeAuxiliaryProjectName(counter: number): string {
     return `/dev/null/auxiliaryProject${counter}*`;
 }
 
-export function createSortedArray<T>(): SortedArray<T> {
-    return [] as any as SortedArray<T>; // TODO: GH#19873
+export function createSortedArray<T>(): ts.SortedArray<T> {
+    return [] as any as ts.SortedArray<T>; // TODO: GH#19873
 }
 }

@@ -1,8 +1,8 @@
 namespace ts {
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
-    let sys: TscCompileSystem;
+    let sys: ts.TscCompileSystem;
     before(() => {
-        const inputFs = loadProjectFromFiles({
+        const inputFs = ts.loadProjectFromFiles({
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
@@ -33,35 +33,35 @@ export function f22() { } // trailing`,
         const fs = inputFs.shadow();
 
         // Create system
-        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as ts.TscCompileSystem;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        const writtenFiles = sys.writtenFiles = new Set();
+        const writtenFiles = sys.writtenFiles = new ts.Set();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
-            const path = toPathWithSystem(sys, fileName);
+            const path = ts.toPathWithSystem(sys, fileName);
             assert.isFalse(writtenFiles.has(path));
             writtenFiles.add(path);
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
-        const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
-        const buildHost = createSolutionBuilderHost(
+        const { cb, getPrograms } = ts.commandLineCallbacks(sys, /*originalReadCall*/ undefined);
+        const buildHost = ts.createSolutionBuilderHost(
             sys,
                 /*createProgram*/ undefined,
-            createDiagnosticReporter(sys, /*pretty*/ true),
-            createBuilderStatusReporter(sys, /*pretty*/ true),
-            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+            ts.createDiagnosticReporter(sys, /*pretty*/ true),
+            ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
         buildHost.afterEmitBundle = cb;
-        const builder = createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
+        const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);
-        sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
+        sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
-        tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, /*baselineDependencies*/ false);
+        ts.tscWatch.baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {
@@ -79,35 +79,35 @@ ${patch ? vfs.formatPatch(patch) : ""}`
             };
         };
 
-        function getCustomTransformers(project: string): CustomTransformers {
-            const before: TransformerFactory<SourceFile> = context => {
-                return file => visitEachChild(file, visit, context);
-                function visit(node: Node): VisitResult<Node> {
+        function getCustomTransformers(project: string): ts.CustomTransformers {
+            const before: ts.TransformerFactory<ts.SourceFile> = context => {
+                return file => ts.visitEachChild(file, visit, context);
+                function visit(node: ts.Node): ts.VisitResult<ts.Node> {
                     switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                            return visitFunction(node as FunctionDeclaration);
+                        case ts.SyntaxKind.FunctionDeclaration:
+                            return visitFunction(node as ts.FunctionDeclaration);
                         default:
-                            return visitEachChild(node, visit, context);
+                            return ts.visitEachChild(node, visit, context);
                     }
                 }
-                function visitFunction(node: FunctionDeclaration) {
-                    addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
+                function visitFunction(node: ts.FunctionDeclaration) {
+                    ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
                     return node;
                 }
             };
 
-            const after: TransformerFactory<SourceFile> = context => {
-                return file => visitEachChild(file, visit, context);
-                function visit(node: Node): VisitResult<Node> {
+            const after: ts.TransformerFactory<ts.SourceFile> = context => {
+                return file => ts.visitEachChild(file, visit, context);
+                function visit(node: ts.Node): ts.VisitResult<ts.Node> {
                     switch (node.kind) {
-                        case SyntaxKind.VariableStatement:
-                            return visitVariableStatement(node as VariableStatement);
+                        case ts.SyntaxKind.VariableStatement:
+                            return visitVariableStatement(node as ts.VariableStatement);
                         default:
-                            return visitEachChild(node, visit, context);
+                            return ts.visitEachChild(node, visit, context);
                     }
                 }
-                function visitVariableStatement(node: VariableStatement) {
-                    addSyntheticLeadingComment(node, SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
+                function visitVariableStatement(node: ts.VariableStatement) {
+                    ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
                     return node;
                 }
             };
@@ -117,6 +117,6 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     after(() => {
         sys = undefined!;
     });
-    verifyTscBaseline(() => sys);
+    ts.verifyTscBaseline(() => sys);
 });
 }

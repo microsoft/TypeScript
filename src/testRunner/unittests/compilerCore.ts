@@ -2,36 +2,36 @@ namespace ts {
 describe("unittests:: compilerCore", () => {
     describe("equalOwnProperties", () => {
         it("correctly equates objects", () => {
-            assert.isTrue(equalOwnProperties({}, {}));
-            assert.isTrue(equalOwnProperties({ a: 1 }, { a: 1 }));
-            assert.isTrue(equalOwnProperties({ a: 1, b: 2 }, { b: 2, a: 1 }));
+            assert.isTrue(ts.equalOwnProperties({}, {}));
+            assert.isTrue(ts.equalOwnProperties({ a: 1 }, { a: 1 }));
+            assert.isTrue(ts.equalOwnProperties({ a: 1, b: 2 }, { b: 2, a: 1 }));
         });
         it("correctly identifies unmatched objects", () => {
-            assert.isFalse(equalOwnProperties({}, { a: 1 }), "missing left property");
-            assert.isFalse(equalOwnProperties({ a: 1 }, {}), "missing right property");
-            assert.isFalse(equalOwnProperties({ a: 1 }, { a: 2 }), "differing property");
+            assert.isFalse(ts.equalOwnProperties({}, { a: 1 }), "missing left property");
+            assert.isFalse(ts.equalOwnProperties({ a: 1 }, {}), "missing right property");
+            assert.isFalse(ts.equalOwnProperties({ a: 1 }, { a: 2 }), "differing property");
         });
         it("correctly identifies undefined vs hasOwnProperty", () => {
-            assert.isFalse(equalOwnProperties({}, { a: undefined }), "missing left property");
-            assert.isFalse(equalOwnProperties({ a: undefined }, {}), "missing right property");
+            assert.isFalse(ts.equalOwnProperties({}, { a: undefined }), "missing left property");
+            assert.isFalse(ts.equalOwnProperties({ a: undefined }, {}), "missing right property");
         });
         it("truthiness", () => {
             const trythyTest = (l: any, r: any) => !!l === !!r;
-            assert.isFalse(equalOwnProperties({}, { a: 1 }, trythyTest), "missing left truthy property");
-            assert.isFalse(equalOwnProperties({}, { a: 0 }, trythyTest), "missing left falsey property");
-            assert.isFalse(equalOwnProperties({ a: 1 }, {}, trythyTest), "missing right truthy property");
-            assert.isFalse(equalOwnProperties({ a: 0 }, {}, trythyTest), "missing right falsey property");
-            assert.isTrue(equalOwnProperties({ a: 1 }, { a: "foo" }, trythyTest), "valid equality");
+            assert.isFalse(ts.equalOwnProperties({}, { a: 1 }, trythyTest), "missing left truthy property");
+            assert.isFalse(ts.equalOwnProperties({}, { a: 0 }, trythyTest), "missing left falsey property");
+            assert.isFalse(ts.equalOwnProperties({ a: 1 }, {}, trythyTest), "missing right truthy property");
+            assert.isFalse(ts.equalOwnProperties({ a: 0 }, {}, trythyTest), "missing right falsey property");
+            assert.isTrue(ts.equalOwnProperties({ a: 1 }, { a: "foo" }, trythyTest), "valid equality");
         });
         it("all equal", () => {
-            assert.isFalse(equalOwnProperties({}, { a: 1 }, () => true), "missing left property");
-            assert.isFalse(equalOwnProperties({ a: 1 }, {}, () => true), "missing right property");
-            assert.isTrue(equalOwnProperties({ a: 1 }, { a: 2 }, () => true), "valid equality");
+            assert.isFalse(ts.equalOwnProperties({}, { a: 1 }, () => true), "missing left property");
+            assert.isFalse(ts.equalOwnProperties({ a: 1 }, {}, () => true), "missing right property");
+            assert.isTrue(ts.equalOwnProperties({ a: 1 }, { a: 2 }, () => true), "valid equality");
         });
     });
     describe("customSet", () => {
         it("mutation", () => {
-            const set = createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
+            const set = ts.createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
             assert.equal(set.size, 0);
 
             const newSet = set.add(0);
@@ -71,7 +71,7 @@ describe("unittests:: compilerCore", () => {
             assert.equal(set.size, 0);
         });
         it("resizing", () => {
-            const set = createSet<number, number>(x => x % 2, (x, y) => x === y);
+            const set = ts.createSet<number, number>(x => x % 2, (x, y) => x === y);
             const elementCount = 100;
 
             for (let i = 0; i < elementCount; i++) {
@@ -89,7 +89,7 @@ describe("unittests:: compilerCore", () => {
             }
         });
         it("clear", () => {
-            const set = createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
+            const set = ts.createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
             for (let j = 0; j < 2; j++) {
                 for (let i = 0; i < 100; i++) {
                     set.add(i);
@@ -102,7 +102,7 @@ describe("unittests:: compilerCore", () => {
             }
         });
         it("forEach", () => {
-            const set = createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
+            const set = ts.createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
             for (let i = 0; i < 100; i++) {
                 set.add(i);
             }
@@ -125,7 +125,7 @@ describe("unittests:: compilerCore", () => {
             assert.deepEqual(keys, expected);
         });
         it("iteration", () => {
-            const set = createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
+            const set = ts.createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
             for (let i = 0; i < 4; i++) {
                 set.add(i);
             }
@@ -133,15 +133,15 @@ describe("unittests:: compilerCore", () => {
             const expected = [0, 1, 2, 3];
             let actual: number[];
 
-            actual = arrayFrom(set.keys());
+            actual = ts.arrayFrom(set.keys());
             actual.sort();
             assert.deepEqual(actual, expected);
 
-            actual = arrayFrom(set.values());
+            actual = ts.arrayFrom(set.values());
             actual.sort();
             assert.deepEqual(actual, expected);
 
-            const actualTuple = arrayFrom(set.entries());
+            const actualTuple = ts.arrayFrom(set.entries());
             assert.isFalse(actualTuple.some(([v, k]) => v !== k));
             actual = actualTuple.map(([v, _]) => v);
             actual.sort();
@@ -153,7 +153,7 @@ describe("unittests:: compilerCore", () => {
                 y: string;
             }
 
-            const set = createSet<Thing, string>(t => t.y, (t, u) => t.x === u.x && t.y === u.y);
+            const set = ts.createSet<Thing, string>(t => t.y, (t, u) => t.x === u.x && t.y === u.y);
 
             const thing1: Thing = {
                 x: 1,

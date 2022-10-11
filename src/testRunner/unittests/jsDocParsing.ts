@@ -3,7 +3,7 @@ describe("unittests:: JSDocParsing", () => {
     describe("TypeExpressions", () => {
         function parsesCorrectly(name: string, content: string) {
             it(name, () => {
-                const typeAndDiagnostics = parseJSDocTypeExpressionForTests(content);
+                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                 Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -13,7 +13,7 @@ describe("unittests:: JSDocParsing", () => {
 
         function parsesIncorrectly(name: string, content: string) {
             it(name, () => {
-                const type = parseJSDocTypeExpressionForTests(content);
+                const type = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             });
         }
@@ -88,12 +88,12 @@ describe("unittests:: JSDocParsing", () => {
     describe("DocComments", () => {
         function parsesCorrectly(name: string, content: string) {
             it(name, () => {
-                const comment = parseIsolatedJSDocComment(content)!;
+                const comment = ts.parseIsolatedJSDocComment(content)!;
                 if (!comment) {
-                    Debug.fail("Comment failed to parse entirely");
+                    ts.Debug.fail("Comment failed to parse entirely");
                 }
                 if (comment.diagnostics.length > 0) {
-                    Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
+                    ts.Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                 }
 
                 Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
@@ -104,7 +104,7 @@ describe("unittests:: JSDocParsing", () => {
 
         function parsesIncorrectly(name: string, content: string) {
             it(name, () => {
-                const type = parseIsolatedJSDocComment(content);
+                const type = ts.parseIsolatedJSDocComment(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             });
         }
@@ -376,33 +376,33 @@ oh.no
     });
     describe("getFirstToken", () => {
         it("gets jsdoc", () => {
-            const root = createSourceFile("foo.ts", "/** comment */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ true);
+            const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
             assert.isDefined(root);
-            assert.equal(root.kind, SyntaxKind.SourceFile);
+            assert.equal(root.kind, ts.SyntaxKind.SourceFile);
             const first = root.getFirstToken();
             assert.isDefined(first);
-            assert.equal(first!.kind, SyntaxKind.VarKeyword);
+            assert.equal(first!.kind, ts.SyntaxKind.VarKeyword);
         });
     });
     describe("getLastToken", () => {
         it("gets jsdoc", () => {
-            const root = createSourceFile("foo.ts", "var a = true;/** comment */", ScriptTarget.ES5, /*setParentNodes*/ true);
+            const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
             assert.isDefined(root);
             const last = root.getLastToken();
             assert.isDefined(last);
-            assert.equal(last!.kind, SyntaxKind.EndOfFileToken);
+            assert.equal(last!.kind, ts.SyntaxKind.EndOfFileToken);
         });
     });
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
-            const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
+            const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
             root.statements[0].getStart(root, /*includeJsdocComment*/ true);
         });
     });
     describe("parseIsolatedJSDocComment", () => {
         it("doesn't create a 1-element array with missing type parameter in jsDoc", () => {
-            const doc = parseIsolatedJSDocComment("/**\n    @template\n*/");
-            assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
+            const doc = ts.parseIsolatedJSDocComment("/**\n    @template\n*/");
+            assert.equal((doc?.jsDoc.tags?.[0] as ts.JSDocTemplateTag).typeParameters.length, 0);
         });
     });
 });

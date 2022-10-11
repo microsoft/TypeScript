@@ -1,6 +1,6 @@
 namespace Harness.Parallel {
 export interface RunnerTask {
-    runner: TestRunnerKind;
+    runner: Harness.TestRunnerKind;
     file: string;
     size: number;
 }

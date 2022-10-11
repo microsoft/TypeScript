@@ -11,8 +11,8 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
             )
         );
     }
-    function getParsedCommandJson(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
-        return parseJsonConfigFileContent(
+    function getParsedCommandJson(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: ts.WatchOptions) {
+        return ts.parseJsonConfigFileContent(
             json,
             createParseConfigHost(additionalFiles),
             "/",
@@ -25,9 +25,9 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         );
     }
 
-    function getParsedCommandJsonNode(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
-        const parsed = parseJsonText("tsconfig.json", JSON.stringify(json));
-        return parseJsonSourceFileConfigFileContent(
+    function getParsedCommandJsonNode(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: ts.WatchOptions) {
+        const parsed = ts.parseJsonText("tsconfig.json", JSON.stringify(json));
+        return ts.parseJsonSourceFileConfigFileContent(
             parsed,
             createParseConfigHost(additionalFiles),
             "/",
@@ -43,7 +43,7 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
     interface VerifyWatchOptions {
         json: object;
         additionalFiles?: vfs.FileSet;
-        existingWatchOptions?: WatchOptions | undefined;
+        existingWatchOptions?: ts.WatchOptions | undefined;
     }
 
     function verifyWatchOptions(subScenario: string, scenario: () => VerifyWatchOptions[]) {
@@ -64,14 +64,14 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 runBaseline(`${subScenario} with jsonSourceFile api`, baseline);
             });
         });
-        function addToBaseLine(baseline: string[], json: object, parsed: ParsedCommandLine) {
+        function addToBaseLine(baseline: string[], json: object, parsed: ts.ParsedCommandLine) {
             baseline.push(`Input:: ${JSON.stringify(json, /*replacer*/ undefined, " ")}`);
             baseline.push(`Result: WatchOptions::`);
             baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
             baseline.push(`Result: Errors::`);
-            baseline.push(formatDiagnosticsWithColorAndContext(parsed.errors, {
+            baseline.push(ts.formatDiagnosticsWithColorAndContext(parsed.errors, {
                 getCurrentDirectory: () => "/",
-                getCanonicalFileName: identity,
+                getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n"
             }));
         }

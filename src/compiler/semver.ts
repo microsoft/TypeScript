@@ -44,19 +44,19 @@ export class Version {
     constructor(major: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[]);
     constructor(major: number | string, minor = 0, patch = 0, prerelease: string | readonly string[] = "", build: string | readonly string[] = "") {
         if (typeof major === "string") {
-            const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
+            const result = ts.Debug.checkDefined(tryParseComponents(major), "Invalid version");
             ({ major, minor, patch, prerelease, build } = result);
         }
 
-        Debug.assert(major >= 0, "Invalid argument: major");
-        Debug.assert(minor >= 0, "Invalid argument: minor");
-        Debug.assert(patch >= 0, "Invalid argument: patch");
+        ts.Debug.assert(major >= 0, "Invalid argument: major");
+        ts.Debug.assert(minor >= 0, "Invalid argument: minor");
+        ts.Debug.assert(patch >= 0, "Invalid argument: patch");
 
-        const prereleaseArray = prerelease ? isArray(prerelease) ? prerelease : prerelease.split(".") : emptyArray;
-        const buildArray = build ? isArray(build) ? build : build.split(".") : emptyArray;
+        const prereleaseArray = prerelease ? ts.isArray(prerelease) ? prerelease : prerelease.split(".") : ts.emptyArray;
+        const buildArray = build ? ts.isArray(build) ? build : build.split(".") : ts.emptyArray;
 
-        Debug.assert(every(prereleaseArray, s => prereleasePartRegExp.test(s)), "Invalid argument: prerelease");
-        Debug.assert(every(buildArray, s => buildPartRegExp.test(s)), "Invalid argument: build");
+        ts.Debug.assert(ts.every(prereleaseArray, s => prereleasePartRegExp.test(s)), "Invalid argument: prerelease");
+        ts.Debug.assert(ts.every(buildArray, s => buildPartRegExp.test(s)), "Invalid argument: build");
 
         this.major = major;
         this.minor = minor;
@@ -86,11 +86,11 @@ export class Version {
         //
         // https://semver.org/#spec-item-11
         // > Build metadata does not figure into precedence
-        if (this === other) return Comparison.EqualTo;
-        if (other === undefined) return Comparison.GreaterThan;
-        return compareValues(this.major, other.major)
-            || compareValues(this.minor, other.minor)
-            || compareValues(this.patch, other.patch)
+        if (this === other) return ts.Comparison.EqualTo;
+        if (other === undefined) return ts.Comparison.GreaterThan;
+        return ts.compareValues(this.major, other.major)
+            || ts.compareValues(this.minor, other.minor)
+            || ts.compareValues(this.patch, other.patch)
             || comparePrereleaseIdentifiers(this.prerelease, other.prerelease);
     }
 
@@ -99,7 +99,7 @@ export class Version {
             case "major": return new Version(this.major + 1, 0, 0);
             case "minor": return new Version(this.major, this.minor + 1, 0);
             case "patch": return new Version(this.major, this.minor, this.patch + 1);
-            default: return Debug.assertNever(field);
+            default: return ts.Debug.assertNever(field);
         }
     }
 
@@ -116,8 +116,8 @@ export class Version {
 
     toString() {
         let result = `${this.major}.${this.minor}.${this.patch}`;
-        if (some(this.prerelease)) result += `-${this.prerelease.join(".")}`;
-        if (some(this.build)) result += `+${this.build.join(".")}`;
+        if (ts.some(this.prerelease)) result += `-${this.prerelease.join(".")}`;
+        if (ts.some(this.build)) result += `+${this.build.join(".")}`;
         return result;
     }
 }
@@ -142,9 +142,9 @@ function comparePrereleaseIdentifiers(left: readonly string[], right: readonly s
     // https://semver.org/#spec-item-11
     // > When major, minor, and patch are equal, a pre-release version has lower precedence
     // > than a normal version.
-    if (left === right) return Comparison.EqualTo;
-    if (left.length === 0) return right.length === 0 ? Comparison.EqualTo : Comparison.GreaterThan;
-    if (right.length === 0) return Comparison.LessThan;
+    if (left === right) return ts.Comparison.EqualTo;
+    if (left.length === 0) return right.length === 0 ? ts.Comparison.EqualTo : ts.Comparison.GreaterThan;
+    if (right.length === 0) return ts.Comparison.LessThan;
 
     // https://semver.org/#spec-item-11
     // > Precedence for two pre-release versions with the same major, minor, and patch version
@@ -161,17 +161,17 @@ function comparePrereleaseIdentifiers(left: readonly string[], right: readonly s
         if (leftIsNumeric || rightIsNumeric) {
             // https://semver.org/#spec-item-11
             // > Numeric identifiers always have lower precedence than non-numeric identifiers.
-            if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? Comparison.LessThan : Comparison.GreaterThan;
+            if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? ts.Comparison.LessThan : ts.Comparison.GreaterThan;
 
             // https://semver.org/#spec-item-11
             // > identifiers consisting of only digits are compared numerically
-            const result = compareValues(+leftIdentifier, +rightIdentifier);
+            const result = ts.compareValues(+leftIdentifier, +rightIdentifier);
             if (result) return result;
         }
         else {
             // https://semver.org/#spec-item-11
             // > identifiers with letters or hyphens are compared lexically in ASCII sort order.
-            const result = compareStringsCaseSensitive(leftIdentifier, rightIdentifier);
+            const result = ts.compareStringsCaseSensitive(leftIdentifier, rightIdentifier);
             if (result) return result;
         }
     }
@@ -179,7 +179,7 @@ function comparePrereleaseIdentifiers(left: readonly string[], right: readonly s
     // https://semver.org/#spec-item-11
     // > A larger set of pre-release fields has a higher precedence than a smaller set, if all
     // > of the preceding identifiers are equal.
-    return compareValues(left.length, right.length);
+    return ts.compareValues(left.length, right.length);
 }
 
 /**
@@ -189,7 +189,7 @@ export class VersionRange {
     private _alternatives: readonly (readonly Comparator[])[];
 
     constructor(spec: string) {
-        this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+        this._alternatives = spec ? ts.Debug.checkDefined(parseRange(spec), "Invalid range spec.") : ts.emptyArray;
     }
 
     static tryParse(text: string) {
@@ -256,17 +256,17 @@ const rangeRegExp = /^(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
 
 function parseRange(text: string) {
     const alternatives: Comparator[][] = [];
-    for (let range of trimString(text).split(logicalOrRegExp)) {
+    for (let range of ts.trimString(text).split(logicalOrRegExp)) {
         if (!range) continue;
         const comparators: Comparator[] = [];
-        range = trimString(range);
+        range = ts.trimString(range);
         const match = hyphenRegExp.exec(range);
         if (match) {
             if (!parseHyphen(match[1], match[2], comparators)) return undefined;
         }
         else {
             for (const simple of range.split(whitespaceRegExp)) {
-                const match = rangeRegExp.exec(trimString(simple));
+                const match = rangeRegExp.exec(ts.trimString(simple));
                 if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
             }
         }
@@ -398,16 +398,16 @@ function testComparator(version: Version, operator: Comparator["operator"], oper
         case ">": return cmp > 0;
         case ">=": return cmp >= 0;
         case "=": return cmp === 0;
-        default: return Debug.assertNever(operator);
+        default: return ts.Debug.assertNever(operator);
     }
 }
 
 function formatDisjunction(alternatives: readonly (readonly Comparator[])[]) {
-    return map(alternatives, formatAlternative).join(" || ") || "*";
+    return ts.map(alternatives, formatAlternative).join(" || ") || "*";
 }
 
 function formatAlternative(comparators: readonly Comparator[]) {
-    return map(comparators, formatComparator).join(" ");
+    return ts.map(comparators, formatComparator).join(" ");
 }
 
 function formatComparator(comparator: Comparator) {

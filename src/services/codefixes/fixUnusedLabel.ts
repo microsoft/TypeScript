@@ -1,25 +1,25 @@
 /* @internal */
 namespace ts.codefix {
 const fixId = "fixUnusedLabel";
-const errorCodes = [Diagnostics.Unused_label.code];
-registerCodeFix({
+const errorCodes = [ts.Diagnostics.Unused_label.code];
+ts.codefix.registerCodeFix({
     errorCodes,
     getCodeActions(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unused_label, fixId, Diagnostics.Remove_all_unused_labels)];
+        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start));
+        return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Remove_unused_label, fixId, ts.Diagnostics.Remove_all_unused_labels)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),
+    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
-    const token = getTokenAtPosition(sourceFile, start);
-    const labeledStatement = cast(token.parent, isLabeledStatement);
+function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, start: number): void {
+    const token = ts.getTokenAtPosition(sourceFile, start);
+    const labeledStatement = ts.cast(token.parent, ts.isLabeledStatement);
     const pos = token.getStart(sourceFile);
     const statementPos = labeledStatement.statement.getStart(sourceFile);
     // If label is on a separate line, just delete the rest of that line, but not the indentation of the labeled statement.
-    const end = positionsAreOnSameLine(pos, statementPos, sourceFile) ? statementPos
-        : skipTrivia(sourceFile.text, findChildOfKind(labeledStatement, SyntaxKind.ColonToken, sourceFile)!.end, /*stopAfterLineBreak*/ true);
+    const end = ts.positionsAreOnSameLine(pos, statementPos, sourceFile) ? statementPos
+        : ts.skipTrivia(sourceFile.text, ts.findChildOfKind(labeledStatement, ts.SyntaxKind.ColonToken, sourceFile)!.end, /*stopAfterLineBreak*/ true);
     changes.deleteRange(sourceFile, { pos, end });
 }
 }

@@ -12,7 +12,7 @@ export class TextStorage {
      * Generated only on demand (based on edits, or information requested)
      * The property text is set to undefined when edits happen on the cache
      */
-    private svc: ScriptVersionCache | undefined;
+    private svc: ts.server.ScriptVersionCache | undefined;
 
     /**
      * Stores the text when there are no changes to the script version cache
@@ -46,7 +46,7 @@ export class TextStorage {
      */
     private pendingReloadFromDisk = false;
 
-    constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
+    constructor(private readonly host: ts.server.ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
         this.version = initialVersion || { svc: 0, text: 0 };
     }
 
@@ -97,7 +97,7 @@ export class TextStorage {
      * returns true if text changed
      */
     public reload(newText: string): boolean {
-        Debug.assert(newText !== undefined);
+        ts.Debug.assert(newText !== undefined);
 
         // Reload always has fresh content
         this.pendingReloadFromDisk = false;
@@ -161,24 +161,24 @@ export class TextStorage {
                     : this.getSnapshot().getLength(); // Should be strictly correct
     }
 
-    public getSnapshot(): IScriptSnapshot {
+    public getSnapshot(): ts.IScriptSnapshot {
         return this.useScriptVersionCacheIfValidOrOpen()
             ? this.svc!.getSnapshot()
-            : ScriptSnapshot.fromString(this.getOrLoadText());
+            : ts.ScriptSnapshot.fromString(this.getOrLoadText());
     }
 
-    public getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+    public getAbsolutePositionAndLineText(line: number): ts.server.AbsolutePositionAndLineText {
         return this.switchToScriptVersionCache().getAbsolutePositionAndLineText(line);
     }
     /**
      *  @param line 0 based index
      */
-    lineToTextSpan(line: number): TextSpan {
+    lineToTextSpan(line: number): ts.TextSpan {
         if (!this.useScriptVersionCacheIfValidOrOpen()) {
             const lineMap = this.getLineMap();
             const start = lineMap[line]; // -1 since line is 1-based
             const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text!.length;
-            return createTextSpanFromBounds(start, end);
+            return ts.createTextSpanFromBounds(start, end);
         }
         return this.svc!.lineToTextSpan(line);
     }
@@ -189,16 +189,16 @@ export class TextStorage {
      */
     lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
         if (!this.useScriptVersionCacheIfValidOrOpen()) {
-            return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
+            return ts.computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
         }
 
         // TODO: assert this offset is actually on the line
         return this.svc!.lineOffsetToPosition(line, offset);
     }
 
-    positionToLineOffset(position: number): protocol.Location {
+    positionToLineOffset(position: number): ts.server.protocol.Location {
         if (!this.useScriptVersionCacheIfValidOrOpen()) {
-            const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
+            const { line, character } = ts.computeLineAndCharacterOfPosition(this.getLineMap(), position);
             return { line: line + 1, offset: character + 1 };
         }
         return this.svc!.positionToLineOffset(position);
@@ -209,10 +209,10 @@ export class TextStorage {
         const fileName = tempFileName || this.info.fileName;
         const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
         // Only non typescript files have size limitation
-        if (!hasTSFileExtension(this.info.fileName)) {
+        if (!ts.hasTSFileExtension(this.info.fileName)) {
             const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
-            if (fileSize > maxFileSize) {
-                Debug.assert(!!this.info.containingProjects.length);
+            if (fileSize > ts.server.maxFileSize) {
+                ts.Debug.assert(!!this.info.containingProjects.length);
                 const service = this.info.containingProjects[0].projectService;
                 service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
                 this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
@@ -222,15 +222,15 @@ export class TextStorage {
         return { text: getText() };
     }
 
-    private switchToScriptVersionCache(): ScriptVersionCache {
+    private switchToScriptVersionCache(): ts.server.ScriptVersionCache {
         if (!this.svc || this.pendingReloadFromDisk) {
-            this.svc = ScriptVersionCache.fromString(this.getOrLoadText());
+            this.svc = ts.server.ScriptVersionCache.fromString(this.getOrLoadText());
             this.version.svc++;
         }
         return this.svc;
     }
 
-    private useScriptVersionCacheIfValidOrOpen(): ScriptVersionCache | undefined {
+    private useScriptVersionCacheIfValidOrOpen(): ts.server.ScriptVersionCache | undefined {
         // If this is open script, use the cache
         if (this.isOpen) {
             return this.switchToScriptVersionCache();
@@ -247,18 +247,18 @@ export class TextStorage {
 
     private getOrLoadText() {
         if (this.text === undefined || this.pendingReloadFromDisk) {
-            Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
+            ts.Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
             this.reloadWithFileText();
         }
         return this.text!;
     }
 
     private getLineMap() {
-        Debug.assert(!this.svc, "ScriptVersionCache should not be set");
-        return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
+        ts.Debug.assert(!this.svc, "ScriptVersionCache should not be set");
+        return this.lineMap || (this.lineMap = ts.computeLineStarts(this.getOrLoadText()));
     }
 
-    getLineInfo(): LineInfo {
+    getLineInfo(): ts.LineInfo {
         if (this.svc) {
             return {
                 getLineCount: () => this.svc!.getLineCount(),
@@ -266,39 +266,39 @@ export class TextStorage {
             };
         }
         const lineMap = this.getLineMap();
-        return getLineInfo(this.text!, lineMap);
+        return ts.getLineInfo(this.text!, lineMap);
     }
 }
 
-export function isDynamicFileName(fileName: NormalizedPath) {
+export function isDynamicFileName(fileName: ts.server.NormalizedPath) {
     return fileName[0] === "^" ||
-        ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
-            getBaseFileName(fileName)[0] === "^") ||
-        (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
+        ((ts.stringContains(fileName, "walkThroughSnippet:/") || ts.stringContains(fileName, "untitled:/")) &&
+            ts.getBaseFileName(fileName)[0] === "^") ||
+        (ts.stringContains(fileName, ":^") && !ts.stringContains(fileName, ts.directorySeparator));
 }
 
 /*@internal*/
 export interface DocumentRegistrySourceFileCache {
-    key: DocumentRegistryBucketKeyWithMode;
-    sourceFile: SourceFile;
+    key: ts.DocumentRegistryBucketKeyWithMode;
+    sourceFile: ts.SourceFile;
 }
 
 /*@internal*/
 export interface SourceMapFileWatcher {
-    watcher: FileWatcher;
-    sourceInfos?: Set<Path>;
+    watcher: ts.FileWatcher;
+    sourceInfos?: ts.Set<ts.Path>;
 }
 
 export class ScriptInfo {
     /**
      * All projects that include this file
      */
-    readonly containingProjects: Project[] = [];
-    private formatSettings: FormatCodeSettings | undefined;
-    private preferences: protocol.UserPreferences | undefined;
+    readonly containingProjects: ts.server.Project[] = [];
+    private formatSettings: ts.FormatCodeSettings | undefined;
+    private preferences: ts.server.protocol.UserPreferences | undefined;
 
     /* @internal */
-    fileWatcher: FileWatcher | undefined;
+    fileWatcher: ts.FileWatcher | undefined;
     private textStorage: TextStorage;
 
     /*@internal*/
@@ -306,7 +306,7 @@ export class ScriptInfo {
 
     /*@internal*/
     /** Set to real path if path is different from info.path */
-    private realpath: Path | undefined;
+    private realpath: ts.Path | undefined;
 
     /*@internal*/
     cacheSourceFile: DocumentRegistrySourceFileCache | undefined;
@@ -315,25 +315,25 @@ export class ScriptInfo {
     mTime?: number;
 
     /*@internal*/
-    sourceFileLike?: SourceFileLike;
+    sourceFileLike?: ts.SourceFileLike;
 
     /*@internal*/
-    sourceMapFilePath?: Path | SourceMapFileWatcher | false;
+    sourceMapFilePath?: ts.Path | SourceMapFileWatcher | false;
 
     // Present on sourceMapFile info
     /*@internal*/
-    declarationInfoPath?: Path;
+    declarationInfoPath?: ts.Path;
     /*@internal*/
-    sourceInfos?: Set<Path>;
+    sourceInfos?: ts.Set<ts.Path>;
     /*@internal*/
-    documentPositionMapper?: DocumentPositionMapper | false;
+    documentPositionMapper?: ts.DocumentPositionMapper | false;
 
     constructor(
-        private readonly host: ServerHost,
-        readonly fileName: NormalizedPath,
-        readonly scriptKind: ScriptKind,
+        private readonly host: ts.server.ServerHost,
+        readonly fileName: ts.server.NormalizedPath,
+        readonly scriptKind: ts.ScriptKind,
         public readonly hasMixedContent: boolean,
-        readonly path: Path,
+        readonly path: ts.Path,
         initialVersion?: ScriptInfoVersion) {
         this.isDynamic = isDynamicFileName(fileName);
 
@@ -344,7 +344,7 @@ export class ScriptInfo {
         }
         this.scriptKind = scriptKind
             ? scriptKind
-            : getScriptKindFromFileName(fileName);
+            : ts.getScriptKindFromFileName(fileName);
     }
 
     /*@internal*/
@@ -396,7 +396,7 @@ export class ScriptInfo {
             // Default is just the path
             this.realpath = this.path;
             if (this.host.realpath) {
-                Debug.assert(!!this.containingProjects.length);
+                ts.Debug.assert(!!this.containingProjects.length);
                 const project = this.containingProjects[0];
                 const realpath = this.host.realpath(this.path);
                 if (realpath) {
@@ -411,7 +411,7 @@ export class ScriptInfo {
     }
 
     /*@internal*/
-    getRealpathIfDifferent(): Path | undefined {
+    getRealpathIfDifferent(): ts.Path | undefined {
         return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
     }
 
@@ -424,10 +424,10 @@ export class ScriptInfo {
         return this.realpath && this.realpath !== this.path;
     }
 
-    getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-    getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
+    getFormatCodeSettings(): ts.FormatCodeSettings | undefined { return this.formatSettings; }
+    getPreferences(): ts.server.protocol.UserPreferences | undefined { return this.preferences; }
 
-    attachToProject(project: Project): boolean {
+    attachToProject(project: ts.server.Project): boolean {
         const isNew = !this.isAttached(project);
         if (isNew) {
             this.containingProjects.push(project);
@@ -439,17 +439,17 @@ export class ScriptInfo {
         return isNew;
     }
 
-    isAttached(project: Project) {
+    isAttached(project: ts.server.Project) {
         // unrolled for common cases
         switch (this.containingProjects.length) {
             case 0: return false;
             case 1: return this.containingProjects[0] === project;
             case 2: return this.containingProjects[0] === project || this.containingProjects[1] === project;
-            default: return contains(this.containingProjects, project);
+            default: return ts.contains(this.containingProjects, project);
         }
     }
 
-    detachFromProject(project: Project) {
+    detachFromProject(project: ts.server.Project) {
         // unrolled for common cases
         switch (this.containingProjects.length) {
             case 0:
@@ -471,7 +471,7 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                if (ts.unorderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
@@ -480,8 +480,8 @@ export class ScriptInfo {
 
     detachAllProjects() {
         for (const p of this.containingProjects) {
-            if (isConfiguredProject(p)) {
-                p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+            if (ts.server.isConfiguredProject(p)) {
+                p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, ts.FileWatcherEventKind.Deleted);
             }
             const existingRoot = p.getRootFilesMap().get(this.path);
             // detach is unnecessary since we'll clean the list of containing projects anyways
@@ -489,17 +489,17 @@ export class ScriptInfo {
             p.onFileAddedOrRemoved(this.isSymlink());
             // If the info was for the external or configured project's root,
             // add missing file as the root
-            if (existingRoot && !isInferredProject(p)) {
+            if (existingRoot && !ts.server.isInferredProject(p)) {
                 p.addMissingFileRoot(existingRoot.fileName);
             }
         }
-        clear(this.containingProjects);
+        ts.clear(this.containingProjects);
     }
 
     getDefaultProject() {
         switch (this.containingProjects.length) {
             case 0:
-                return Errors.ThrowNoProject();
+                return ts.server.Errors.ThrowNoProject();
             case 1:
                 return ensurePrimaryProjectKind(this.containingProjects[0]);
             default:
@@ -509,14 +509,14 @@ export class ScriptInfo {
                 // - first configured project
                 // - first external project
                 // - first inferred project
-                let firstExternalProject: ExternalProject | undefined;
-                let firstConfiguredProject: ConfiguredProject | undefined;
-                let firstInferredProject: InferredProject | undefined;
-                let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
-                let defaultConfiguredProject: ConfiguredProject | false | undefined;
+                let firstExternalProject: ts.server.ExternalProject | undefined;
+                let firstConfiguredProject: ts.server.ConfiguredProject | undefined;
+                let firstInferredProject: ts.server.InferredProject | undefined;
+                let firstNonSourceOfProjectReferenceRedirect: ts.server.ConfiguredProject | undefined;
+                let defaultConfiguredProject: ts.server.ConfiguredProject | false | undefined;
                 for (let index = 0; index < this.containingProjects.length; index++) {
                     const project = this.containingProjects[index];
-                    if (isConfiguredProject(project)) {
+                    if (ts.server.isConfiguredProject(project)) {
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
@@ -529,10 +529,10 @@ export class ScriptInfo {
                         }
                         if (!firstConfiguredProject) firstConfiguredProject = project;
                     }
-                    else if (!firstExternalProject && isExternalProject(project)) {
+                    else if (!firstExternalProject && ts.server.isExternalProject(project)) {
                         firstExternalProject = project;
                     }
-                    else if (!firstInferredProject && isInferredProject(project)) {
+                    else if (!firstInferredProject && ts.server.isInferredProject(project)) {
                         firstInferredProject = project;
                     }
                 }
@@ -550,11 +550,11 @@ export class ScriptInfo {
         }
     }
 
-    setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
+    setOptions(formatSettings: ts.FormatCodeSettings, preferences: ts.server.protocol.UserPreferences | undefined): void {
         if (formatSettings) {
             if (!this.formatSettings) {
-                this.formatSettings = getDefaultFormatCodeSettings(this.host.newLine);
-                assign(this.formatSettings, formatSettings);
+                this.formatSettings = ts.getDefaultFormatCodeSettings(this.host.newLine);
+                ts.assign(this.formatSettings, formatSettings);
             }
             else {
                 this.formatSettings = { ...this.formatSettings, ...formatSettings };
@@ -563,7 +563,7 @@ export class ScriptInfo {
 
         if (preferences) {
             if (!this.preferences) {
-                this.preferences = emptyOptions;
+                this.preferences = ts.emptyOptions;
             }
             this.preferences = { ...this.preferences, ...preferences };
         }
@@ -576,17 +576,17 @@ export class ScriptInfo {
     }
 
     saveTo(fileName: string) {
-        this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
+        this.host.writeFile(fileName, ts.getSnapshotText(this.textStorage.getSnapshot()));
     }
 
     /*@internal*/
     delayReloadNonMixedContentFile() {
-        Debug.assert(!this.isDynamicOrHasMixedContent());
+        ts.Debug.assert(!this.isDynamicOrHasMixedContent());
         this.textStorage.delayReloadFromFileIntoText();
         this.markContainingProjectsAsDirty();
     }
 
-    reloadFromFile(tempFileName?: NormalizedPath) {
+    reloadFromFile(tempFileName?: ts.server.NormalizedPath) {
         if (this.isDynamicOrHasMixedContent()) {
             this.textStorage.reload("");
             this.markContainingProjectsAsDirty();
@@ -602,7 +602,7 @@ export class ScriptInfo {
     }
 
     /*@internal*/
-    getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+    getAbsolutePositionAndLineText(line: number): ts.server.AbsolutePositionAndLineText {
         return this.textStorage.getAbsolutePositionAndLineText(line);
     }
 
@@ -618,14 +618,14 @@ export class ScriptInfo {
     }
 
     isOrphan() {
-        return !forEach(this.containingProjects, p => !p.isOrphan());
+        return !ts.forEach(this.containingProjects, p => !p.isOrphan());
     }
 
     /*@internal*/
     isContainedByBackgroundProject() {
-        return some(
+        return ts.some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary);
+            p => p.projectKind === ts.server.ProjectKind.AutoImportProvider || p.projectKind === ts.server.ProjectKind.Auxiliary);
     }
 
     /**
@@ -646,7 +646,7 @@ export class ScriptInfo {
         return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
     }
 
-    positionToLineOffset(position: number): protocol.Location {
+    positionToLineOffset(position: number): ts.server.protocol.Location {
         failIfInvalidPosition(position);
         const location = this.textStorage.positionToLineOffset(position);
         failIfInvalidLocation(location);
@@ -654,18 +654,18 @@ export class ScriptInfo {
     }
 
     public isJavaScript() {
-        return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
+        return this.scriptKind === ts.ScriptKind.JS || this.scriptKind === ts.ScriptKind.JSX;
     }
 
     /*@internal*/
-    getLineInfo(): LineInfo {
+    getLineInfo(): ts.LineInfo {
         return this.textStorage.getLineInfo();
     }
 
     /*@internal*/
     closeSourceMapFileWatcher() {
-        if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
-            closeFileWatcherOf(this.sourceMapFilePath);
+        if (this.sourceMapFilePath && !ts.isString(this.sourceMapFilePath)) {
+            ts.closeFileWatcherOf(this.sourceMapFilePath);
             this.sourceMapFilePath = undefined;
         }
     }
@@ -676,23 +676,23 @@ export class ScriptInfo {
  * which are used in the background by other Projects and should never be
  * reported as the default project for a ScriptInfo.
  */
-function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
-        return Errors.ThrowNoProject();
+function ensurePrimaryProjectKind(project: ts.server.Project | undefined) {
+    if (!project || project.projectKind === ts.server.ProjectKind.AutoImportProvider || project.projectKind === ts.server.ProjectKind.Auxiliary) {
+        return ts.server.Errors.ThrowNoProject();
     }
     return project;
 }
 
 function failIfInvalidPosition(position: number) {
-    Debug.assert(typeof position === "number", `Expected position ${position} to be a number.`);
-    Debug.assert(position >= 0, `Expected position to be non-negative.`);
+    ts.Debug.assert(typeof position === "number", `Expected position ${position} to be a number.`);
+    ts.Debug.assert(position >= 0, `Expected position to be non-negative.`);
 }
 
-function failIfInvalidLocation(location: protocol.Location) {
-    Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
-    Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
+function failIfInvalidLocation(location: ts.server.protocol.Location) {
+    ts.Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
+    ts.Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
 
-    Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
-    Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
+    ts.Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
+    ts.Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
 }
 }

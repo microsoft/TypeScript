@@ -1,10 +1,10 @@
 namespace ts {
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
-    function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
+    function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
         it(subScenario, () => {
             const baseline: string[] = [];
             baseline.push(commandLine.join(" "));
-            const parsed = parseCommandLineWorker(workerDiagnostic?.() || compilerOptionsDidYouMeanDiagnostics, commandLine);
+            const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
             baseline.push("CompilerOptions::");
             baseline.push(JSON.stringify(parsed.options, /*replacer*/ undefined, " "));
             baseline.push("WatchOptions::");
@@ -12,9 +12,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             baseline.push("FileNames::");
             baseline.push(parsed.fileNames.join());
             baseline.push("Errors::");
-            baseline.push(formatDiagnostics(parsed.errors, {
+            baseline.push(ts.formatDiagnostics(parsed.errors, {
                 getCurrentDirectory: () => "/",
-                getCanonicalFileName: identity,
+                getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
             Harness.Baseline.runBaseline(`config/commandLineParsing/parseCommandLine/${subScenario}.js`, baseline.join("\n"));
@@ -68,7 +68,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             subScenario: string,
             optionName: string;
             nonNullValue?: string;
-            workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics;
+            workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics;
         }
         function verifyNull({ subScenario, optionName, nonNullValue, workerDiagnostic }: VerifyNull) {
             describe(subScenario, () => {
@@ -101,7 +101,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         interface VerifyNullNonIncludedOption {
             subScenario: string,
-            type: () => "string" | "number" | ESMap<string, number | string>;
+            type: () => "string" | "number" | ts.ESMap<string, number | string>;
             nonNullValue?: string;
         }
         function verifyNullNonIncludedOption({ subScenario, type, nonNullValue }: VerifyNullNonIncludedOption) {
@@ -110,21 +110,21 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 optionName: "optionName",
                 nonNullValue,
                 workerDiagnostic: () => {
-                    const optionDeclarations: CommandLineOption[] = [
-                        ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
+                    const optionDeclarations: ts.CommandLineOption[] = [
+                        ...ts.compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
                         {
                             name: "optionName",
                             type: type(),
                             isTSConfigOnly: true,
-                            category: Diagnostics.Backwards_Compatibility,
-                            description: Diagnostics.Enable_project_compilation,
+                            category: ts.Diagnostics.Backwards_Compatibility,
+                            description: ts.Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
                         }
                     ];
                     return {
-                        ...compilerOptionsDidYouMeanDiagnostics,
+                        ...ts.compilerOptionsDidYouMeanDiagnostics,
                         optionDeclarations,
-                        getOptionsNameMap: () => createOptionNameMap(optionDeclarations)
+                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations)
                     };
                 }
             });
@@ -167,9 +167,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         verifyNullNonIncludedOption({
             subScenario: "option of type custom map",
-            type: () => new Map(getEntries({
-                node: ModuleResolutionKind.NodeJs,
-                classic: ModuleResolutionKind.Classic,
+            type: () => new ts.Map(ts.getEntries({
+                node: ts.ModuleResolutionKind.NodeJs,
+                classic: ts.ModuleResolutionKind.Classic,
             })),
             nonNullValue: "node"
         });
@@ -195,7 +195,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         it(subScenario, () => {
             const baseline: string[] = [];
             baseline.push(commandLine.join(" "));
-            const parsed = parseBuildCommand(commandLine);
+            const parsed = ts.parseBuildCommand(commandLine);
             baseline.push("buildOptions::");
             baseline.push(JSON.stringify(parsed.buildOptions, /*replacer*/ undefined, " "));
             baseline.push("WatchOptions::");
@@ -203,9 +203,9 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             baseline.push("Projects::");
             baseline.push(parsed.projects.join());
             baseline.push("Errors::");
-            baseline.push(formatDiagnostics(parsed.errors, {
+            baseline.push(ts.formatDiagnostics(parsed.errors, {
                 getCurrentDirectory: () => "/",
-                getCanonicalFileName: identity,
+                getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
             Harness.Baseline.runBaseline(`config/commandLineParsing/parseBuildOptions/${subScenario}.js`, baseline.join("\n"));
@@ -223,7 +223,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
     assertParseResult("reports other common may not be used with --build flags", ["--declaration", "--strict"]);
 
     describe("Combining options that make no sense together", () => {
-        function verifyInvalidCombination(flag1: keyof BuildOptions, flag2: keyof BuildOptions) {
+        function verifyInvalidCombination(flag1: keyof ts.BuildOptions, flag2: keyof ts.BuildOptions) {
             assertParseResult(`--${flag1} and --${flag2} together is invalid`, [`--${flag1}`, `--${flag2}`]);
         }
         verifyInvalidCombination("clean", "force");

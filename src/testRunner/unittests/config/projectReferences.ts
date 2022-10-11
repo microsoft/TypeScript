@@ -1,24 +1,24 @@
 namespace ts {
 interface TestProjectSpecification {
     configFileName?: string;
-    references?: readonly (string | ProjectReference)[];
+    references?: readonly (string | ts.ProjectReference)[];
     files: { [fileName: string]: string };
     outputFiles?: { [fileName: string]: string };
     config?: object;
-    options?: Partial<CompilerOptions>;
+    options?: Partial<ts.CompilerOptions>;
 }
 interface TestSpecification {
     [path: string]: TestProjectSpecification;
 }
 
-function assertHasError(message: string, errors: readonly Diagnostic[], diag: DiagnosticMessage) {
+function assertHasError(message: string, errors: readonly ts.Diagnostic[], diag: ts.DiagnosticMessage) {
     if (!errors.some(e => e.code === diag.code)) {
         const errorString = errors.map(e => `    ${e.file ? e.file.fileName : "[global]"}: ${e.messageText}`).join("\r\n");
         assert(false, `${message}: Did not find any diagnostic for ${diag.message} in:\r\n${errorString}`);
     }
 }
 
-function assertNoErrors(message: string, errors: readonly Diagnostic[]) {
+function assertNoErrors(message: string, errors: readonly ts.Diagnostic[]) {
     if (errors && errors.length > 0) {
         assert(false, `${message}: Expected no errors, but found:\r\n${errors.map(e => `    ${e.messageText}`).join("\r\n")}`);
     }
@@ -27,7 +27,7 @@ function assertNoErrors(message: string, errors: readonly Diagnostic[]) {
 function combineAllPaths(...paths: string[]) {
     let result = paths[0];
     for (let i = 1; i < paths.length; i++) {
-        result = combinePaths(result, paths[i]);
+        result = ts.combinePaths(result, paths[i]);
     }
     return result;
 }
@@ -42,8 +42,8 @@ function moduleImporting(...names: string[]) {
     return names.map((n, i) => `import * as mod_${i} from ${n}`).join("\r\n");
 }
 
-function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: fakes.CompilerHost) => void) {
-    const files = new Map<string, string>();
+function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: ts.Program, host: fakes.CompilerHost) => void) {
+    const files = new ts.Map<string, string>();
     for (const key in spec) {
         const sp = spec[key];
         const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");
@@ -74,20 +74,20 @@ function testProjectReferences(spec: TestSpecification, entryPointConfigFileName
         }
     }
 
-    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content } });
+    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": ts.TestFSWithWatch.libFile.content } });
     files.forEach((v, k) => {
-        vfsys.mkdirpSync(getDirectoryPath(k));
+        vfsys.mkdirpSync(ts.getDirectoryPath(k));
         vfsys.writeFileSync(k, v);
     });
     const host = new fakes.CompilerHost(new fakes.System(vfsys));
 
-    const { config, error } = readConfigFile(entryPointConfigFileName, name => host.readFile(name));
+    const { config, error } = ts.readConfigFile(entryPointConfigFileName, name => host.readFile(name));
 
     // We shouldn't have any errors about invalid tsconfig files in these tests
-    assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-    const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHostLike(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
+    assert(config && !error, ts.flattenDiagnosticMessageText(error && error.messageText, "\n"));
+    const file = ts.parseJsonConfigFileContent(config, ts.parseConfigHostFromCompilerHostLike(host), ts.getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
     file.options.configFilePath = entryPointConfigFileName;
-    const prog = createProgram({
+    const prog = ts.createProgram({
         rootNames: file.fileNames,
         options: file.options,
         host,
@@ -132,7 +132,7 @@ describe("unittests:: config:: project-references constraint checking for settin
 
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Composite_projects_may_not_disable_declaration_emit);
+            assertHasError("Reports an error about the wrong decl setting", errs, ts.Diagnostics.Composite_projects_may_not_disable_declaration_emit);
         });
     });
 
@@ -155,7 +155,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/reference/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about 'composite' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
+            assertHasError("Reports an error about 'composite' not being set", errs, ts.Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
         });
     });
 
@@ -194,7 +194,7 @@ describe("unittests:: config:: project-references constraint checking for settin
 
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getSemanticDiagnostics(program.getSourceFile("/primary/a.ts"));
-            assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
+            assertHasError("Reports an error about b.ts not being in the list", errs, ts.Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
         });
     });
 
@@ -207,7 +207,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_not_found);
+            assertHasError("Reports an error about a missing file", errs, ts.Diagnostics.File_0_not_found);
         });
     });
 
@@ -223,7 +223,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about outFile not being set", errs, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set);
+            assertHasError("Reports an error about outFile not being set", errs, ts.Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set);
         });
     });
 
@@ -240,7 +240,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about outFile being missing", errs, Diagnostics.Output_file_0_from_project_1_does_not_exist);
+            assertHasError("Reports an error about outFile being missing", errs, ts.Diagnostics.Output_file_0_from_project_1_does_not_exist);
         });
     });
 });
@@ -263,7 +263,7 @@ describe("unittests:: config:: project-references path mapping", () => {
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
             assertNoErrors("File setup should be correct", program.getOptionsDiagnostics());
-            assertHasError("Found a type error", program.getSemanticDiagnostics(), Diagnostics.Module_0_has_no_exported_member_1);
+            assertHasError("Found a type error", program.getSemanticDiagnostics(), ts.Diagnostics.Module_0_has_no_exported_member_1);
         });
     });
 });
@@ -281,7 +281,7 @@ describe("unittests:: config:: project-references nice-behavior", () => {
             }
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
-            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
+            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), ts.Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
         });
     });
 
@@ -303,7 +303,7 @@ describe("unittests:: config:: project-references nice-behavior", () => {
             }
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
-            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
+            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), ts.Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
         });
     });
 });
@@ -344,8 +344,8 @@ describe("unittests:: config:: project-references errors when a file in a compos
         };
         testProjectReferences(spec, "/alpha/tsconfig.json", (program) => {
             const semanticDiagnostics = program.getSemanticDiagnostics(program.getSourceFile("/alpha/src/a.ts"));
-            assertHasError("Issues an error about the rootDir", semanticDiagnostics, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
-            assertHasError("Issues an error about the fileList", semanticDiagnostics, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
+            assertHasError("Issues an error about the rootDir", semanticDiagnostics, ts.Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
+            assertHasError("Issues an error about the fileList", semanticDiagnostics, ts.Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
         });
     });
 });

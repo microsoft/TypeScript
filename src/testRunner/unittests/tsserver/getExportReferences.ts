@@ -5,11 +5,11 @@ describe("unittests:: tsserver:: getExportReferences", () => {
     const exportObjectDestructured = "export const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };";
     const exportNestedObject = "export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };";
 
-    const mainTs: File = {
+    const mainTs: ts.projectSystem.File = {
         path: "/main.ts",
         content: 'import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";',
     };
-    const modTs: File = {
+    const modTs: ts.projectSystem.File = {
         path: "/mod.ts",
         content: `${exportVariable}
 ${exportArrayDestructured}
@@ -17,20 +17,20 @@ ${exportObjectDestructured}
 ${exportNestedObject}
 `,
     };
-    const tsconfig: File = {
+    const tsconfig: ts.projectSystem.File = {
         path: "/tsconfig.json",
         content: "{}",
     };
 
     function makeSampleSession() {
-        const host = createServerHost([mainTs, modTs, tsconfig]);
-        const session = createSession(host);
-        openFilesForSession([mainTs, modTs], session);
+        const host = ts.projectSystem.createServerHost([mainTs, modTs, tsconfig]);
+        const session = ts.projectSystem.createSession(host);
+        ts.projectSystem.openFilesForSession([mainTs, modTs], session);
         return session;
     }
 
-    const referenceMainTs = (mainTs: File, text: string): protocol.ReferencesResponseItem =>
-        makeReferenceItem({
+    const referenceMainTs = (mainTs: ts.projectSystem.File, text: string): ts.projectSystem.protocol.ReferencesResponseItem =>
+        ts.projectSystem.makeReferenceItem({
             file: mainTs,
             isDefinition: false,
             isWriteAccess: true,
@@ -41,9 +41,9 @@ ${exportNestedObject}
 
     const referenceModTs = (
         texts: { text: string; lineText: string; contextText?: string },
-        override: Partial<MakeReferenceItem> = {},
-    ): protocol.ReferencesResponseItem =>
-        makeReferenceItem({
+        override: Partial<ts.projectSystem.MakeReferenceItem> = {},
+    ): ts.projectSystem.protocol.ReferencesResponseItem =>
+        ts.projectSystem.makeReferenceItem({
             file: modTs,
             isDefinition: true,
             ...texts,
@@ -53,10 +53,10 @@ ${exportNestedObject}
     it("should get const variable declaration references", () => {
         const session = makeSampleSession();
 
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "value"),
+            ts.projectSystem.protocol.CommandTypes.References,
+            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "value"),
         );
 
         const expectResponse = {
@@ -66,7 +66,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const value: 0",
             symbolName: "value",
-            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "value").offset,
+            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "value").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -74,10 +74,10 @@ ${exportNestedObject}
 
     it("should get array destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueA"),
+            ts.projectSystem.protocol.CommandTypes.References,
+            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueA"),
         );
 
         const expectResponse = {
@@ -91,7 +91,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueA: number",
             symbolName: "valueA",
-            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueA").offset,
+            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueA").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -99,10 +99,10 @@ ${exportNestedObject}
 
     it("should get object destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueC"),
+            ts.projectSystem.protocol.CommandTypes.References,
+            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueC"),
         );
         const expectResponse = {
             refs: [
@@ -122,7 +122,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueC: number",
             symbolName: "valueC",
-            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueC").offset,
+            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueC").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -130,10 +130,10 @@ ${exportNestedObject}
 
     it("should get object declaration references that renames destructured property", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "renamedD"),
+            ts.projectSystem.protocol.CommandTypes.References,
+            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "renamedD"),
         );
 
         const expectResponse = {
@@ -147,7 +147,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const renamedD: number",
             symbolName: "renamedD",
-            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "renamedD").offset,
+            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "renamedD").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -155,10 +155,10 @@ ${exportNestedObject}
 
     it("should get nested object declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueF"),
+            ts.projectSystem.protocol.CommandTypes.References,
+            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueF"),
         );
 
         const expectResponse = {
@@ -184,7 +184,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueF: number",
             symbolName: "valueF",
-            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueF").offset,
+            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueF").offset,
         };
 
         assert.deepEqual(response, expectResponse);
