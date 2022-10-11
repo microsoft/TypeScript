@@ -194,8 +194,6 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
-        PropertyCheck = 1 << 2,
-        InPropertyCheck = 1 << 3,
     }
 
     const enum RecursionFlags {
@@ -19142,28 +19140,6 @@ namespace ts {
                     let result = skipCaching ?
                         unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState) :
                         recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
-                    // For certain combinations involving intersections and optional, excess, or mismatched properties we need
-                    // an extra property check where the intersection is viewed as a single object. The following are motivating
-                    // examples that all should be errors, but aren't without this extra property check:
-                    //
-                    //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
-                    //
-                    //   declare let wrong: { a: { y: string } };
-                    //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
-                    //
-                    //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
-                    //     x = y;  // Mismatched property in source intersection
-                    //   }
-                    //
-                    // We suppress recursive intersection property checks because they can generate lots of work when relating
-                    // recursive intersections that are structurally similar but not exactly identical. See #37854.
-                    if (result && !inPropertyCheck && (
-                        target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection) ||
-                        isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
-                        inPropertyCheck = true;
-                        result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck, recursionFlags);
-                        inPropertyCheck = false;
-                    }
                     if (result) {
                         return result;
                     }
@@ -19567,8 +19543,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const keyIntersectionState = intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0);
-                const id = getRelationKey(source, target, keyIntersectionState, relation, /*ingnoreConstraints*/ false);
+                const id = getRelationKey(source, target, intersectionState, relation, /*ingnoreConstraints*/ false);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -19598,7 +19573,7 @@ namespace ts {
                     // A key that starts with "*" is an indication that we have type references that reference constrained
                     // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                     // were unconstrained.
-                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, keyIntersectionState, relation, /*ignoreConstraints*/ true) : undefined;
+                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
                         if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
@@ -19686,7 +19661,7 @@ namespace ts {
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 const saveErrorInfo = captureErrorCalculationState();
                 let result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState, saveErrorInfo);
-                if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
+                if (relation !== identityRelation) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
                     // the constituents. When an intersection type contains instantiable types with union type
                     // constraints, there are situations where we need to examine the combined constraint. One is
@@ -19700,10 +19675,34 @@ namespace ts {
                     // needs to have its constraint hoisted into an intersection with said type parameter, this way
                     // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                    if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
-                        // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                        result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
+                        const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
+                        if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
+                            result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        }
+                    }
+                    // For certain combinations involving intersections and optional, excess, or mismatched properties we need
+                    // an extra property check where the intersection is viewed as a single object. The following are motivating
+                    // examples that all should be errors, but aren't without this extra property check:
+                    //
+                    //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
+                    //
+                    //   declare let wrong: { a: { y: string } };
+                    //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
+                    //
+                    //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                    //     x = y;  // Mismatched property in source intersection
+                    //   }
+                    //
+                    // We suppress recursive intersection property checks because they can generate lots of work when relating
+                    // recursive intersections that are structurally similar but not exactly identical. See #37854.
+                    if (result && !inPropertyCheck && (
+                        target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection) ||
+                        isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                        inPropertyCheck = true;
+                        result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                        inPropertyCheck = false;
                     }
                 }
                 if (result) {
@@ -19713,9 +19712,6 @@ namespace ts {
             }
 
             function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
-                if (intersectionState & IntersectionState.PropertyCheck) {
-                    return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
-                }
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 let varianceCheckFailed = false;
