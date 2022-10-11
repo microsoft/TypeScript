@@ -568,8 +568,8 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
 >t : T
 >u : Uppercase<T>
->u1 : Uppercase<`1.${T}.3`>
->u2 : Uppercase<`1.${T}.4`>
+>u1 : `1.${Uppercase<T>}.3`
+>u2 : `1.${Uppercase<T>}.4`
 
     spread(`1.${t}.3`, `1.${t}.4`);
 >spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
@@ -588,9 +588,9 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >u : Uppercase<T>
 
     spread(u1, u2);
->spread(u1, u2) : Uppercase<`1.${T}.3`> | Uppercase<`1.${T}.4`>
+>spread(u1, u2) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 >spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
->u1 : Uppercase<`1.${T}.3`>
->u2 : Uppercase<`1.${T}.4`>
+>u1 : `1.${Uppercase<T>}.3`
+>u2 : `1.${Uppercase<T>}.4`
 }
 

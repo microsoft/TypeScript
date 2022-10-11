@@ -1031,7 +1031,53 @@
           ],
           "documentation": [
             {
-              "text": "Replaces one or more occurrences of substrings that match a search string or a regular expression.\r\nOnly the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.",
+              "text": "Replaces one or more occurrences of substrings that match a search string or a regular expression.\r\nWhen the ",
+              "kind": "text"
+            },
+            {
+              "text": "{@linkcode ",
+              "kind": "link"
+            },
+            {
+              "text": "searchValue",
+              "kind": "linkName",
+              "target": {
+                "fileName": "lib.d.ts",
+                "textSpan": {
+                  "start": 19735,
+                  "length": 28
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " is a `RegExp`, all matches are replaced if the `g` (global) flag is set\r\n(or only those matches at the beginning, if the `y` (sticky) flag is also present).\r\nOtherwise, only the first match of ",
+              "kind": "text"
+            },
+            {
+              "text": "{@linkcode ",
+              "kind": "link"
+            },
+            {
+              "text": "searchValue",
+              "kind": "linkName",
+              "target": {
+                "fileName": "lib.d.ts",
+                "textSpan": {
+                  "start": 19735,
+                  "length": 28
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " is replaced.",
               "kind": "text"
             }
           ],
@@ -1048,7 +1094,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string or RegExp search value.",
+                  "text": "A string or regular expression to search for.",
                   "kind": "text"
                 }
               ]

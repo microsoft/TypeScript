@@ -219,17 +219,19 @@ interface String {
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
-     * Replaces one or more occurrences of substrings that match the method provided by `searchValue`.
+     * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}.
      * @param searchValue An object that supports searching for and replacing matches within a string.
+     * This object is expected to implement its own replacement algorithm.
      * @param replaceValue The replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
-    /**
-     * Replaces one or more occurrences of substrings that match the method provided by `searchValue`.
-     * @param searchValue An object that supports searching for and replacing matches within a string.
-     * @param replacer A function that returns the replacement text.
-     */
+     /**
+      * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}.
+      * @param searchValue An object that supports searching for and replacing matches within a string.
+      * This object is expected to implement its own replacement algorithm.
+      * @param replacer A function that returns the replacement text.
+      */
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**

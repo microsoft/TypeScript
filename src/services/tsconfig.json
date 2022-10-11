@@ -82,6 +82,7 @@
         "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "codefixes/fixEnableExperimentalDecorators.ts",
         "codefixes/fixEnableJsxFlag.ts",
+        "codefixes/fixNaNEquality.ts",
         "codefixes/fixModuleAndTargetOptions.ts",
         "codefixes/fixPropertyAssignment.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",

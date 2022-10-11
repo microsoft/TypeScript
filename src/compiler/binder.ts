@@ -3044,7 +3044,7 @@ namespace ts {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
-            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
