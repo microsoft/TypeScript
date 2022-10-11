@@ -23326,13 +23326,25 @@ namespace ts {
                             }
                             else {
                                 const middleLength = targetArity - startLength - endLength;
-                                if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
-                                    // Middle of target is [...T, ...U] and source is tuple type
-                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
-                                    if (targetInfo && targetInfo.impliedArity !== undefined) {
+                                if (middleLength === 2) {
+                                    let impliedArity: number | undefined;
+
+                                    if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                        // Middle of target is [...T, ...U] and source is tuple type
+                                        impliedArity = getInferenceInfoForType(elementTypes[startLength])?.impliedArity;
+                                    }
+                                    else if (elementFlags[startLength] & ElementFlags.Variadic && elementFlags[startLength + 1] & ElementFlags.Rest && isTupleType(source)) {
+                                        // Middle of target is [...T, ...rest] and source is tuple type
+                                        const param = getInferenceInfoForType(elementTypes[startLength])?.typeParameter;
+                                        const constraint = param && getBaseConstraintOfType(param);
+                                        if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                            impliedArity = constraint.target.fixedLength;
+                                        }
+                                    }
+                                    if (impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of T.
-                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
-                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + impliedArity, endLength), elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
