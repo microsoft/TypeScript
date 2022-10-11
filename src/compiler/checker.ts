@@ -19112,7 +19112,7 @@ namespace ts {
                         }
                     }
 
-                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || !(source.flags & TypeFlags.Union) && isLiteralType(source)) &&
+                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || isUnitType(source)) &&
                         !(intersectionState & IntersectionState.Target) &&
                         source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                         target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
@@ -19158,7 +19158,7 @@ namespace ts {
                     // We suppress recursive intersection property checks because they can generate lots of work when relating
                     // recursive intersections that are structurally similar but not exactly identical. See #37854.
                     if (result && !inPropertyCheck && (
-                        target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
+                        target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection) ||
                         isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
                         inPropertyCheck = true;
                         result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck, recursionFlags);
