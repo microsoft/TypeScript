@@ -48,11 +48,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 2    [00:00:33.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 3    [00:00:34.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 4    [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 5    [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 6    [00:00:37.000] 	Files (2)
+Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:36.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -62,14 +61,14 @@ Info 6    [00:00:37.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 7    [00:00:38.000] -----------------------------------------------
-Info 8    [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 8    [00:00:40.000] 	Files (2)
+Info 6    [00:00:37.000] -----------------------------------------------
+Info 7    [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:39.000] 	Files (2)
 
-Info 8    [00:00:41.000] -----------------------------------------------
-Info 8    [00:00:42.000] Open files: 
-Info 8    [00:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 8    [00:00:44.000] 		Projects: /dev/null/inferredProject1*
+Info 7    [00:00:40.000] -----------------------------------------------
+Info 7    [00:00:41.000] Open files: 
+Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -78,11 +77,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [00:00:45.000] response:
+Info 7    [00:00:44.000] response:
     {
       "responseRequired": false
     }
-Info 9    [00:00:46.000] request:
+Info 8    [00:00:45.000] request:
     {
       "type": "request",
       "seq": 1,
@@ -99,5 +98,5 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 10   [00:00:47.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic
-Info 11   [00:00:48.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic
+Info 9    [00:00:46.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic
+Info 10   [00:00:47.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic

@@ -3709,7 +3709,7 @@ namespace ts {
     export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): CompilerOptions {
         const out: CompilerOptions = {};
         for (const key in opts) {
-            if (opts.hasOwnProperty(key)) {
+            if (hasProperty(opts, key)) {
                 const type = getOptionFromName(key);
                 if (type !== undefined) { // Ignore unknown options
                     out[key] = getOptionValueWithEmptyStrings(opts[key], type);
