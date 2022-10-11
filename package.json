@@ -80,6 +80,7 @@
         "which": "^2.0.2"
     },
     "scripts": {
+        "prepare": "node ./scripts/installGulpShim.mjs",
         "test": "hereby runtests-parallel --light=false",
         "test:eslint-rules": "hereby run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
