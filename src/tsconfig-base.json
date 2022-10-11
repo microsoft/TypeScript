@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "../built/local",
+
         "pretty": true,
         "lib": ["es2015.iterable", "es2015.generator", "es5"],
         "target": "es5",

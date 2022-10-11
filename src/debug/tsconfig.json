@@ -1,9 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
-        "tsBuildInfoFile": "../../built/local/debug.tsbuildinfo",
-        "rootDir": ".",
         "target": "es2019",
         "lib": ["es2019"],
     },

@@ -473,11 +473,14 @@ export const lint = task({
 
 const esbuildCancellationToken = esbuildTask("./src/cancellationToken/cancellationToken.ts", "./built/local/cancellationToken.js");
 
-// No need for writeCJSReexport, this outputs to the right place.
 const buildCancellationToken = task({
     name: "cancellation-token",
     dependencies: [generateDiagnostics],
-    run: () => cmdLineOptions.bundle ? esbuildCancellationToken.build() : buildProject("src/cancellationToken"),
+    run: async () =>{
+        if (cmdLineOptions.bundle) return esbuildCancellationToken.build();
+        await writeCJSReexport("./built/local/cancellationToken/cancellationToken.js", "./built/local/cancellationToken.js");
+        await buildProject("src/cancellationToken");
+    },
 });
 const cleanCancellationToken = task({
     name: "clean-cancellation-token",
@@ -493,7 +496,7 @@ const buildTypingsInstaller = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (cmdLineOptions.bundle) return esbuildTypingsInstaller.build();
-        await writeCJSReexport("./built/typingsInstaller/nodeTypingsInstaller.js", "./built/local/typingsInstaller.js");
+        await writeCJSReexport("./built/local/typingsInstaller/nodeTypingsInstaller.js", "./built/local/typingsInstaller.js");
         await buildProject("src/typingsInstaller");
     },
 });
@@ -506,11 +509,14 @@ cleanTasks.push(cleanTypingsInstaller);
 
 const esbuildWatchGuard = esbuildTask("./src/watchGuard/watchGuard.ts", "./built/local/watchGuard.js");
 
-// No need for writeCJSReexport, this outputs to the right place.
 const buildWatchGuard = task({
     name: "watch-guard",
     dependencies: [generateDiagnostics],
-    run: () => cmdLineOptions.bundle ? esbuildWatchGuard.build() : buildProject("src/watchGuard"),
+    run: async () => {
+        if (cmdLineOptions.bundle) return esbuildWatchGuard.build();
+        await writeCJSReexport("./built/local/watchGuard/watchGuard.js", "./built/local/watchGuard.js");
+        await buildProject("src/watchGuard");
+    },
 });
 const cleanWatchGuard = task({
     name: "clean-watch-guard",

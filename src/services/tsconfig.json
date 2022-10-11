@@ -1,7 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local/services"
     },
     "references": [
         { "path": "../compiler" },
