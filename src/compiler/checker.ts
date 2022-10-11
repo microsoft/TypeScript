@@ -40134,7 +40134,7 @@ namespace ts {
                 }
             }
             else {
-                forEach(jsdocParameters, ({ name }, index) => {
+                forEach(jsdocParameters, ({ name, isNameFirst }, index) => {
                     if (excludedParameters.has(index) || isIdentifier(name) && parameters.has(name.escapedText)) {
                         return;
                     }
@@ -40144,7 +40144,9 @@ namespace ts {
                         }
                     }
                     else {
-                        errorOrSuggestion(isJs, name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name, idText(name));
+                        if (!isNameFirst) {
+                            errorOrSuggestion(isJs, name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name, idText(name));
+                        }
                     }
                 });
             }
