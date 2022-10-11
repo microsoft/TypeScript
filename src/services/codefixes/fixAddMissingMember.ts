@@ -257,7 +257,7 @@ namespace ts.codefix {
         }
 
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
+        if (enumDeclaration && !(leftExpressionType.flags & TypeFlags.EnumLike) && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
 
