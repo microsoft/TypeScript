@@ -2,7 +2,6 @@
     "extends": "../tsconfig-base",
  
     "compilerOptions": {
-        "outDir": "../../built/local/tsserver",
         "types": [
             "node"
         ]
