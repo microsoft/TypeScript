@@ -1,5 +1,9 @@
-import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
+import {
+    ErrorInfo, ParallelClientMessage, ParallelHostMessage, RunnerTask, shimNoopTestInterface, Task, TaskResult,
+    TestInfo, UnitTestTask,
+} from "../_namespaces/Harness.Parallel";
+import { createRunner, globalTimeout, RunnerBase, runUnitTests } from "../_namespaces/Harness";
 
 export function start() {
     function hookUncaughtExceptions() {
@@ -137,7 +141,7 @@ export function start() {
     /**
      * Run the tests in the requested task.
      */
-    function runTests(task: Harness.Parallel.Task, fn: (payload: Harness.Parallel.TaskResult) => void) {
+    function runTests(task: Task, fn: (payload: TaskResult) => void) {
         if (task.runner === "unittest") {
             return executeUnitTests(task, fn);
         }
@@ -146,7 +150,7 @@ export function start() {
         }
     }
 
-    function executeUnitTests(task: Harness.Parallel.UnitTestTask, fn: (payload: Harness.Parallel.TaskResult) => void) {
+    function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
         if (!unitTestSuiteMap && unitTestSuite.suites.length) {
             unitTestSuiteMap = new ts.Map<string, Mocha.Suite>();
             for (const suite of unitTestSuite.suites) {
@@ -171,7 +175,7 @@ export function start() {
         }
 
         const root = new Suite("", new Mocha.Context());
-        root.timeout(Harness.globalTimeout || 40_000);
+        root.timeout(globalTimeout || 40_000);
         if (suite) {
             root.addSuite(suite);
             Object.setPrototypeOf(suite.ctx, root.ctx);
@@ -193,13 +197,13 @@ export function start() {
         });
     }
 
-    function runFileTests(task: Harness.Parallel.RunnerTask, fn: (result: Harness.Parallel.TaskResult) => void) {
+    function runFileTests(task: RunnerTask, fn: (result: TaskResult) => void) {
         let instance = runners.get(task.runner);
-        if (!instance) runners.set(task.runner, instance = Harness.createRunner(task.runner));
+        if (!instance) runners.set(task.runner, instance = createRunner(task.runner));
         instance.tests = [task.file];
 
         const suite = new Suite("", new Mocha.Context());
-        suite.timeout(Harness.globalTimeout || 40_000);
+        suite.timeout(globalTimeout || 40_000);
 
         shimTestInterface(suite, global);
         instance.initializeTests();
@@ -207,9 +211,9 @@ export function start() {
         runSuite(task, suite, fn);
     }
 
-    function runSuite(task: Harness.Parallel.Task, suite: Mocha.Suite, fn: (result: Harness.Parallel.TaskResult) => void) {
-        const errors: Harness.Parallel.ErrorInfo[] = [];
-        const passes: Harness.Parallel.TestInfo[] = [];
+    function runSuite(task: Task, suite: Mocha.Suite, fn: (result: TaskResult) => void) {
+        const errors: ErrorInfo[] = [];
+        const passes: TestInfo[] = [];
         const start = +new Date();
         const runner = new Mocha.Runner(suite, { delay: false });
 
@@ -235,7 +239,7 @@ export function start() {
     /**
      * Validates a message received from the host is well-formed.
      */
-    function validateHostMessage(message: Harness.Parallel.ParallelHostMessage) {
+    function validateHostMessage(message: ParallelHostMessage) {
         switch (message.type) {
             case "test": return validateTest(message.payload);
             case "batch": return validateBatch(message.payload);
@@ -247,18 +251,18 @@ export function start() {
     /**
      * Validates a test task is well formed.
      */
-    function validateTest(task: Harness.Parallel.Task) {
+    function validateTest(task: Task) {
         return !!task && !!task.runner && !!task.file;
     }
 
     /**
      * Validates a batch of test tasks are well formed.
      */
-    function validateBatch(tasks: Harness.Parallel.Task[]) {
+    function validateBatch(tasks: Task[]) {
         return !!tasks && Array.isArray(tasks) && tasks.length > 0 && tasks.every(validateTest);
     }
 
-    function processHostMessage(message: Harness.Parallel.ParallelHostMessage) {
+    function processHostMessage(message: ParallelHostMessage) {
         if (!validateHostMessage(message)) {
             console.log("Invalid message:", message);
             return;
@@ -271,14 +275,14 @@ export function start() {
         }
     }
 
-    function processTest(task: Harness.Parallel.Task, last: boolean, fn?: () => void) {
+    function processTest(task: Task, last: boolean, fn?: () => void) {
         runTests(task, payload => {
             sendMessage(last ? { type: "result", payload } : { type: "progress", payload });
             if (fn) fn();
         });
     }
 
-    function processBatch(tasks: Harness.Parallel.Task[], fn?: () => void) {
+    function processBatch(tasks: Task[], fn?: () => void) {
         const next = () => {
             const task = tasks.shift();
             if (task) return processTest(task, tasks.length === 0, next);
@@ -292,12 +296,12 @@ export function start() {
         sendMessage({ type: "error", payload: { error: error.message, stack: error.stack! } });
     }
 
-    function sendMessage(message: Harness.Parallel.ParallelClientMessage) {
+    function sendMessage(message: ParallelClientMessage) {
         process.send!(message);
     }
 
     // A cache of test harness Runner instances.
-    const runners = new ts.Map<string, Harness.RunnerBase>();
+    const runners = new ts.Map<string, RunnerBase>();
 
     // The root suite for all unit tests.
     let unitTestSuite: Suite;
@@ -305,14 +309,14 @@ export function start() {
     // (Unit) Tests directly within the root suite
     let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
 
-    if (Harness.runUnitTests) {
+    if (runUnitTests) {
         unitTestSuite = new Suite("", new Mocha.Context());
-        unitTestSuite.timeout(Harness.globalTimeout || 40_000);
+        unitTestSuite.timeout(globalTimeout || 40_000);
         shimTestInterface(unitTestSuite, global);
     }
     else {
         // ensure unit tests do not get run
-        Harness.Parallel.shimNoopTestInterface(global);
+        shimNoopTestInterface(global);
     }
 
     process.on("message", processHostMessage);

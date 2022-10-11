@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import { Debug, Node, SyntaxKind, TypeAssertion } from "../_namespaces/ts";
 
 // DEPRECATION: Renamed node tests
 // DEPRECATION PLAN:
@@ -6,8 +6,8 @@ import * as ts from "../_namespaces/ts";
 //     - warn: 4.1
 //     - error: TBD
 /** @deprecated Use `isTypeAssertionExpression` instead. */
-export const isTypeAssertion = ts.Debug.deprecate(function isTypeAssertion(node: ts.Node): node is ts.TypeAssertion {
-    return node.kind === ts.SyntaxKind.TypeAssertionExpression;
+export const isTypeAssertion = Debug.deprecate(function isTypeAssertion(node: Node): node is TypeAssertion {
+    return node.kind === SyntaxKind.TypeAssertionExpression;
 }, {
     since: "4.0",
     warnAfter: "4.1",

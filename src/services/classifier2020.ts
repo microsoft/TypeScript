@@ -1,4 +1,12 @@
-import * as ts from "./_namespaces/ts";
+import {
+    BindingElement, CancellationToken, Classifications, ClassifiedSpan2020, createTextSpan, Debug, Declaration,
+    EndOfLineState, forEachChild, getCombinedModifierFlags, getCombinedNodeFlags, getMeaningFromLocation,
+    isBindingElement, isCallExpression, isCatchClause, isFunctionDeclaration, isIdentifier, isImportClause,
+    isImportSpecifier, isInfinityOrNaNString, isJsxElement, isJsxExpression, isJsxSelfClosingElement, isNamespaceImport,
+    isPropertyAccessExpression, isQualifiedName, isSourceFile, isVariableDeclaration, Map, ModifierFlags,
+    NamedDeclaration, Node, NodeFlags, ParameterDeclaration, Program, SemanticMeaning, SourceFile, Symbol, SymbolFlags,
+    SyntaxKind, TextSpan, textSpanIntersectsWith, Type, TypeChecker, VariableDeclaration,
+} from "./_namespaces/ts";
 
 /** @internal */
 
@@ -20,15 +28,15 @@ export const enum TokenModifier {
 
 /** @internal */
 /** This is mainly used internally for testing */
-export function getSemanticClassifications(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFile: ts.SourceFile, span: ts.TextSpan): ts.ClassifiedSpan2020[] {
+export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
-    ts.Debug.assert(classifications.spans.length % 3 === 0);
+    Debug.assert(classifications.spans.length % 3 === 0);
     const dense = classifications.spans;
-    const result: ts.ClassifiedSpan2020[] = [];
+    const result: ClassifiedSpan2020[] = [];
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
-            textSpan: ts.createTextSpan(dense[i], dense[i + 1]),
+            textSpan: createTextSpan(dense[i], dense[i + 1]),
             classificationType: dense[i + 2]
         });
     }
@@ -37,17 +45,17 @@ export function getSemanticClassifications(program: ts.Program, cancellationToke
 }
 
 /** @internal */
-export function getEncodedSemanticClassifications(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFile: ts.SourceFile, span: ts.TextSpan): ts.Classifications {
+export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
-        endOfLineState: ts.EndOfLineState.None
+        endOfLineState: EndOfLineState.None
     };
 }
 
-function getSemanticTokens(program: ts.Program, sourceFile: ts.SourceFile, span: ts.TextSpan, cancellationToken: ts.CancellationToken): number[] {
+function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan, cancellationToken: CancellationToken): number[] {
     const resultTokens: number[] = [];
 
-    const collector = (node: ts.Node, typeIdx: number, modifierSet: number) => {
+    const collector = (node: Node, typeIdx: number, modifierSet: number) => {
         resultTokens.push(node.getStart(sourceFile), node.getWidth(sourceFile), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
     };
 
@@ -57,46 +65,46 @@ function getSemanticTokens(program: ts.Program, sourceFile: ts.SourceFile, span:
     return resultTokens;
 }
 
-function collectTokens(program: ts.Program, sourceFile: ts.SourceFile, span: ts.TextSpan, collector: (node: ts.Node, tokenType: number, tokenModifier: number) => void, cancellationToken: ts.CancellationToken) {
+function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void, cancellationToken: CancellationToken) {
     const typeChecker = program.getTypeChecker();
 
     let inJSXElement = false;
 
-    function visit(node: ts.Node) {
+    function visit(node: Node) {
         switch(node.kind) {
-            case ts.SyntaxKind.ModuleDeclaration:
-            case ts.SyntaxKind.ClassDeclaration:
-            case ts.SyntaxKind.InterfaceDeclaration:
-            case ts.SyntaxKind.FunctionDeclaration:
-            case ts.SyntaxKind.ClassExpression:
-            case ts.SyntaxKind.FunctionExpression:
-            case ts.SyntaxKind.ArrowFunction:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
                 cancellationToken.throwIfCancellationRequested();
         }
 
-        if (!node || !ts.textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
+        if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
             return;
         }
         const prevInJSXElement = inJSXElement;
-        if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+        if (isJsxElement(node) || isJsxSelfClosingElement(node)) {
             inJSXElement = true;
         }
-        if (ts.isJsxExpression(node)) {
+        if (isJsxExpression(node)) {
             inJSXElement = false;
         }
 
-        if (ts.isIdentifier(node) && !inJSXElement && !inImportClause(node) && !ts.isInfinityOrNaNString(node.escapedText)) {
+        if (isIdentifier(node) && !inJSXElement && !inImportClause(node) && !isInfinityOrNaNString(node.escapedText)) {
             let symbol = typeChecker.getSymbolAtLocation(node);
             if (symbol) {
-                if (symbol.flags & ts.SymbolFlags.Alias) {
+                if (symbol.flags & SymbolFlags.Alias) {
                     symbol = typeChecker.getAliasedSymbol(symbol);
                 }
-                let typeIdx = classifySymbol(symbol, ts.getMeaningFromLocation(node));
+                let typeIdx = classifySymbol(symbol, getMeaningFromLocation(node));
                 if (typeIdx !== undefined) {
                     let modifierSet = 0;
                     if (node.parent) {
-                        const parentIsDeclaration = (ts.isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx);
-                        if (parentIsDeclaration && (node.parent as ts.NamedDeclaration).name === node) {
+                        const parentIsDeclaration = (isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx);
+                        if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
                             modifierSet = 1 << TokenModifier.declaration;
                         }
                     }
@@ -110,16 +118,16 @@ function collectTokens(program: ts.Program, sourceFile: ts.SourceFile, span: ts.
 
                     const decl = symbol.valueDeclaration;
                     if (decl) {
-                        const modifiers = ts.getCombinedModifierFlags(decl);
-                        const nodeFlags = ts.getCombinedNodeFlags(decl);
-                        if (modifiers & ts.ModifierFlags.Static) {
+                        const modifiers = getCombinedModifierFlags(decl);
+                        const nodeFlags = getCombinedNodeFlags(decl);
+                        if (modifiers & ModifierFlags.Static) {
                             modifierSet |= 1 << TokenModifier.static;
                         }
-                        if (modifiers & ts.ModifierFlags.Async) {
+                        if (modifiers & ModifierFlags.Async) {
                             modifierSet |= 1 << TokenModifier.async;
                         }
                         if (typeIdx !== TokenType.class && typeIdx !== TokenType.interface) {
-                            if ((modifiers & ts.ModifierFlags.Readonly) || (nodeFlags & ts.NodeFlags.Const) || (symbol.getFlags() & ts.SymbolFlags.EnumMember)) {
+                            if ((modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) || (symbol.getFlags() & SymbolFlags.EnumMember)) {
                                 modifierSet |= 1 << TokenModifier.readonly;
                             }
                         }
@@ -139,45 +147,45 @@ function collectTokens(program: ts.Program, sourceFile: ts.SourceFile, span: ts.
                 }
             }
         }
-        ts.forEachChild(node, visit);
+        forEachChild(node, visit);
 
         inJSXElement = prevInJSXElement;
     }
     visit(sourceFile);
 }
 
-function classifySymbol(symbol: ts.Symbol, meaning: ts.SemanticMeaning): TokenType | undefined {
+function classifySymbol(symbol: Symbol, meaning: SemanticMeaning): TokenType | undefined {
     const flags = symbol.getFlags();
-    if (flags & ts.SymbolFlags.Class) {
+    if (flags & SymbolFlags.Class) {
         return TokenType.class;
     }
-    else if (flags & ts.SymbolFlags.Enum) {
+    else if (flags & SymbolFlags.Enum) {
         return TokenType.enum;
     }
-     else if (flags & ts.SymbolFlags.TypeAlias) {
+     else if (flags & SymbolFlags.TypeAlias) {
         return TokenType.type;
     }
-    else if (flags & ts.SymbolFlags.Interface) {
-        if (meaning & ts.SemanticMeaning.Type) {
+    else if (flags & SymbolFlags.Interface) {
+        if (meaning & SemanticMeaning.Type) {
             return TokenType.interface;
         }
     }
-    else if (flags & ts.SymbolFlags.TypeParameter) {
+    else if (flags & SymbolFlags.TypeParameter) {
         return TokenType.typeParameter;
     }
     let decl = symbol.valueDeclaration || symbol.declarations && symbol.declarations[0];
-    if (decl && ts.isBindingElement(decl)) {
+    if (decl && isBindingElement(decl)) {
         decl = getDeclarationForBindingElement(decl);
     }
     return decl && tokenFromDeclarationMapping.get(decl.kind);
 }
 
-function reclassifyByType(typeChecker: ts.TypeChecker, node: ts.Node, typeIdx: TokenType): TokenType {
+function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenType): TokenType {
     // type based classifications
     if (typeIdx === TokenType.variable || typeIdx === TokenType.property || typeIdx === TokenType.parameter) {
         const type = typeChecker.getTypeAtLocation(node);
         if (type) {
-            const test = (condition: (type: ts.Type) => boolean) => {
+            const test = (condition: (type: Type) => boolean) => {
                 return condition(type) || type.isUnion() && type.types.some(condition);
             };
             if (typeIdx !== TokenType.parameter && test(t => t.getConstructSignatures().length > 0)) {
@@ -191,22 +199,22 @@ function reclassifyByType(typeChecker: ts.TypeChecker, node: ts.Node, typeIdx: T
     return typeIdx;
 }
 
-function isLocalDeclaration(decl: ts.Declaration, sourceFile: ts.SourceFile): boolean {
-    if (ts.isBindingElement(decl)) {
+function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean {
+    if (isBindingElement(decl)) {
         decl = getDeclarationForBindingElement(decl);
     }
-    if (ts.isVariableDeclaration(decl)) {
-        return (!ts.isSourceFile(decl.parent.parent.parent) || ts.isCatchClause(decl.parent)) && decl.getSourceFile() === sourceFile;
+    if (isVariableDeclaration(decl)) {
+        return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) && decl.getSourceFile() === sourceFile;
     }
-    else if (ts.isFunctionDeclaration(decl)) {
-        return !ts.isSourceFile(decl.parent) && decl.getSourceFile() === sourceFile;
+    else if (isFunctionDeclaration(decl)) {
+        return !isSourceFile(decl.parent) && decl.getSourceFile() === sourceFile;
     }
     return false;
 }
 
-function getDeclarationForBindingElement(element: ts.BindingElement): ts.VariableDeclaration | ts.ParameterDeclaration {
+function getDeclarationForBindingElement(element: BindingElement): VariableDeclaration | ParameterDeclaration {
     while (true) {
-        if (ts.isBindingElement(element.parent.parent)) {
+        if (isBindingElement(element.parent.parent)) {
             element = element.parent.parent;
         }
         else {
@@ -215,40 +223,40 @@ function getDeclarationForBindingElement(element: ts.BindingElement): ts.Variabl
     }
 }
 
-function inImportClause(node: ts.Node): boolean {
+function inImportClause(node: Node): boolean {
     const parent = node.parent;
-    return parent && (ts.isImportClause(parent) || ts.isImportSpecifier(parent) || ts.isNamespaceImport(parent));
+    return parent && (isImportClause(parent) || isImportSpecifier(parent) || isNamespaceImport(parent));
 }
 
-function isExpressionInCallExpression(node: ts.Node): boolean {
+function isExpressionInCallExpression(node: Node): boolean {
     while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
         node = node.parent;
     }
-    return ts.isCallExpression(node.parent) && node.parent.expression === node;
+    return isCallExpression(node.parent) && node.parent.expression === node;
 }
 
-function isRightSideOfQualifiedNameOrPropertyAccess(node: ts.Node): boolean {
-    return (ts.isQualifiedName(node.parent) && node.parent.right === node) || (ts.isPropertyAccessExpression(node.parent) && node.parent.name === node);
+function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
+    return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
 }
 
-const tokenFromDeclarationMapping = new ts.Map<ts.SyntaxKind, TokenType>([
-    [ts.SyntaxKind.VariableDeclaration, TokenType.variable],
-    [ts.SyntaxKind.Parameter, TokenType.parameter],
-    [ts.SyntaxKind.PropertyDeclaration, TokenType.property],
-    [ts.SyntaxKind.ModuleDeclaration, TokenType.namespace],
-    [ts.SyntaxKind.EnumDeclaration, TokenType.enum],
-    [ts.SyntaxKind.EnumMember, TokenType.enumMember],
-    [ts.SyntaxKind.ClassDeclaration, TokenType.class],
-    [ts.SyntaxKind.MethodDeclaration, TokenType.member],
-    [ts.SyntaxKind.FunctionDeclaration, TokenType.function],
-    [ts.SyntaxKind.FunctionExpression, TokenType.function],
-    [ts.SyntaxKind.MethodSignature, TokenType.member],
-    [ts.SyntaxKind.GetAccessor, TokenType.property],
-    [ts.SyntaxKind.SetAccessor, TokenType.property],
-    [ts.SyntaxKind.PropertySignature, TokenType.property],
-    [ts.SyntaxKind.InterfaceDeclaration, TokenType.interface],
-    [ts.SyntaxKind.TypeAliasDeclaration, TokenType.type],
-    [ts.SyntaxKind.TypeParameter, TokenType.typeParameter],
-    [ts.SyntaxKind.PropertyAssignment, TokenType.property],
-    [ts.SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
+const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
+    [SyntaxKind.VariableDeclaration, TokenType.variable],
+    [SyntaxKind.Parameter, TokenType.parameter],
+    [SyntaxKind.PropertyDeclaration, TokenType.property],
+    [SyntaxKind.ModuleDeclaration, TokenType.namespace],
+    [SyntaxKind.EnumDeclaration, TokenType.enum],
+    [SyntaxKind.EnumMember, TokenType.enumMember],
+    [SyntaxKind.ClassDeclaration, TokenType.class],
+    [SyntaxKind.MethodDeclaration, TokenType.member],
+    [SyntaxKind.FunctionDeclaration, TokenType.function],
+    [SyntaxKind.FunctionExpression, TokenType.function],
+    [SyntaxKind.MethodSignature, TokenType.member],
+    [SyntaxKind.GetAccessor, TokenType.property],
+    [SyntaxKind.SetAccessor, TokenType.property],
+    [SyntaxKind.PropertySignature, TokenType.property],
+    [SyntaxKind.InterfaceDeclaration, TokenType.interface],
+    [SyntaxKind.TypeAliasDeclaration, TokenType.type],
+    [SyntaxKind.TypeParameter, TokenType.typeParameter],
+    [SyntaxKind.PropertyAssignment, TokenType.property],
+    [SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
 ]);

@@ -1,4 +1,9 @@
 import * as ts from "./_namespaces/ts";
+import {
+    CompilerOptionsValue, EndOfLineState, FileExtensionInfo, HighlightSpanKind, MapLike, OutliningSpanKind, OutputFile,
+    PluginImport, ProjectReference, RenameLocation, ScriptElementKind, ScriptKind, TextChange, TextInsertion,
+    TodoComment, TodoCommentDescriptor, TypeAcquisition,
+} from "./_namespaces/ts";
 
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
@@ -316,7 +321,7 @@ export interface DocCommentTemplateRequest extends FileLocationRequest {
  * Response to DocCommentTemplateRequest
  */
 export interface DocCommandTemplateResponse extends Response {
-    body?: ts.TextInsertion;
+    body?: TextInsertion;
 }
 
 /**
@@ -334,14 +339,14 @@ export interface TodoCommentRequestArgs extends FileRequestArgs {
     /**
      * Array of target TodoCommentDescriptors that describes TODO comments to be found
      */
-    descriptors: ts.TodoCommentDescriptor[];
+    descriptors: TodoCommentDescriptor[];
 }
 
 /**
  * Response for TodoCommentRequest request.
  */
 export interface TodoCommentsResponse extends Response {
-    body?: ts.TodoComment[];
+    body?: TodoComment[];
 }
 
 /**
@@ -385,7 +390,7 @@ export interface OutliningSpan {
     /**
      * Classification of the contents of the span
      */
-    kind: ts.OutliningSpanKind;
+    kind: OutliningSpanKind;
 }
 
 /**
@@ -888,7 +893,7 @@ export interface EncodedSemanticClassificationsResponse extends Response {
  * Implementation response message. Gives series of text spans depending on the format ar.
  */
 export interface EncodedSemanticClassificationsResponseBody {
-    endOfLineState: ts.EndOfLineState;
+    endOfLineState: EndOfLineState;
     spans: number[];
 }
 /**
@@ -940,7 +945,7 @@ export interface EmitOutputResponse extends Response {
 }
 /** @internal */
 export interface EmitOutput {
-    outputFiles: ts.OutputFile[];
+    outputFiles: OutputFile[];
     emitSkipped: boolean;
     diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
 }
@@ -1080,7 +1085,7 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
 export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
 
 export interface JsxClosingTagResponse extends Response {
-    readonly body: ts.TextInsertion;
+    readonly body: TextInsertion;
 }
 
 /**
@@ -1125,7 +1130,7 @@ export interface DocumentHighlightsRequest extends FileLocationRequest {
  * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
  */
 export interface HighlightSpan extends TextSpanWithContext {
-    kind: ts.HighlightSpanKind;
+    kind: HighlightSpanKind;
 }
 
 /**
@@ -1267,7 +1272,7 @@ export interface RenameFullRequest extends FileLocationRequest {
 
 /* @internal */
 export interface RenameFullResponse extends Response {
-    readonly body: readonly ts.RenameLocation[];
+    readonly body: readonly RenameLocation[];
 }
 
 /**
@@ -1298,7 +1303,7 @@ export interface RenameInfoSuccess {
     /**
      * The items's kind (such as 'className' or 'parameterName' or plain 'text').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
 
     /**
      * Optional modifiers for the kind (such as 'public').
@@ -1367,7 +1372,7 @@ export interface ExternalFile {
     /**
      * Script kind of the file
      */
-    scriptKind?: ScriptKindName | ts.ScriptKind;
+    scriptKind?: ScriptKindName | ScriptKind;
     /**
      * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
      */
@@ -1397,11 +1402,11 @@ export interface ExternalProject {
     /**
      * @deprecated typingOptions. Use typeAcquisition instead
      */
-    typingOptions?: ts.TypeAcquisition;
+    typingOptions?: TypeAcquisition;
     /**
      * Explicitly specified type acquisition for the project
      */
-    typeAcquisition?: ts.TypeAcquisition;
+    typeAcquisition?: TypeAcquisition;
 }
 
 export interface CompileOnSaveMixin {
@@ -1531,7 +1536,7 @@ export interface ChangedOpenFile {
     /**
      * List of changes that should be applied to known open file
      */
-    changes: ts.TextChange[];
+    changes: TextChange[];
 }
 
 
@@ -1561,7 +1566,7 @@ export interface ConfigureRequestArguments {
     /**
      * The host's additional supported .js file extensions
      */
-    extraFileExtensions?: ts.FileExtensionInfo[];
+    extraFileExtensions?: FileExtensionInfo[];
 
     watchOptions?: WatchOptions;
 }
@@ -1596,7 +1601,7 @@ export interface WatchOptions {
     synchronousWatchDirectory?: boolean;
     excludeDirectories?: string[];
     excludeFiles?: string[];
-    [option: string]: ts.CompilerOptionsValue | undefined;
+    [option: string]: CompilerOptionsValue | undefined;
 }
 
 /**
@@ -1852,7 +1857,7 @@ export interface UpdateOpenRequestArgs {
 /**
  * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
  */
-export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & ts.TypeAcquisition;
+export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
 
 /**
  * Request to set compiler options for inferred projects.
@@ -1993,7 +1998,7 @@ export interface QuickInfoResponseBody {
     /**
      * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
 
     /**
      * Optional modifiers for the kind (such as 'public').
@@ -2271,7 +2276,7 @@ export interface CompletionEntry {
     /**
      * The symbol's kind (such as 'className' or 'parameterName').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
     /**
      * Optional modifiers for the kind (such as 'public').
      */
@@ -2369,7 +2374,7 @@ export interface CompletionEntryDetails {
     /**
      * The symbol's kind (such as 'className' or 'parameterName').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
     /**
      * Optional modifiers for the kind (such as 'public').
      */
@@ -3077,7 +3082,7 @@ export interface NavtoItem extends FileSpan {
     /**
      * The symbol's kind (such as 'className' or 'parameterName').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
 
     /**
      * exact, substring, or prefix.
@@ -3103,7 +3108,7 @@ export interface NavtoItem extends FileSpan {
     /**
      * Kind of symbol's container symbol (if any).
      */
-    containerKind?: ts.ScriptElementKind;
+    containerKind?: ScriptElementKind;
 }
 
 /**
@@ -3176,7 +3181,7 @@ export interface NavigationBarItem {
     /**
      * The symbol's kind (such as 'className' or 'parameterName').
      */
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
 
     /**
      * Optional modifiers for the kind (such as 'public').
@@ -3202,7 +3207,7 @@ export interface NavigationBarItem {
 /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
 export interface NavigationTree {
     text: string;
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
     kindModifiers: string;
     spans: TextSpan[];
     nameSpan: TextSpan | undefined;
@@ -3326,7 +3331,7 @@ export interface NavTreeResponse extends Response {
 
 export interface CallHierarchyItem {
     name: string;
-    kind: ts.ScriptElementKind;
+    kind: ScriptElementKind;
     kindModifiers?: string
     file: string;
     span: TextSpan;
@@ -3534,14 +3539,14 @@ export interface CompilerOptions {
     out?: string;
     outDir?: string;
     outFile?: string;
-    paths?: ts.MapLike<string[]>;
-    plugins?: ts.PluginImport[];
+    paths?: MapLike<string[]>;
+    plugins?: PluginImport[];
     preserveConstEnums?: boolean;
     preserveSymlinks?: boolean;
     project?: string;
     reactNamespace?: string;
     removeComments?: boolean;
-    references?: ts.ProjectReference[];
+    references?: ProjectReference[];
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -3559,7 +3564,7 @@ export interface CompilerOptions {
     types?: string[];
     /** Paths used to used to compute primary types search locations */
     typeRoots?: string[];
-    [option: string]: ts.CompilerOptionsValue | undefined;
+    [option: string]: CompilerOptionsValue | undefined;
 }
 
 export const enum JsxEmit {

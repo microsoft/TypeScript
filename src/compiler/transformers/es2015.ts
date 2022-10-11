@@ -1,4 +1,40 @@
-import * as ts from "../_namespaces/ts";
+import {
+    __String, AccessorDeclaration, addEmitHelpers, addRange, addSyntheticLeadingComment, AllAccessorDeclarations,
+    append, arrayIsEqualTo, ArrayLiteralExpression, ArrowFunction, BinaryExpression, BindingElement, BindingPattern,
+    Block, BreakOrContinueStatement, CallExpression, CaseBlock, CaseClause, cast, CatchClause, chainBundle,
+    ClassDeclaration, ClassElement, ClassExpression, ClassLikeDeclaration, CommaListExpression, ComputedPropertyName,
+    concatenate, ConstructorDeclaration, createExpressionForPropertyName, createMemberAccessForPropertyName,
+    createRange, createTokenRange, Debug, Declaration, DoStatement, elementAt, EmitFlags, EmitHint, emptyArray, ESMap,
+    Expression, ExpressionStatement, ExpressionWithTypeArguments, filter, first, firstOrUndefined, flatMap, flatten,
+    flattenDestructuringAssignment, flattenDestructuringBinding, FlattenLevel, ForInStatement, ForOfStatement,
+    ForStatement, FunctionBody, FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration,
+    GeneratedIdentifierFlags, getAllAccessorDeclarations, getClassExtendsHeritageElement, getCombinedNodeFlags,
+    getCommentRange, getEmitFlags, getEnclosingBlockScopeContainer, getFirstConstructorWithBody, getNameOfDeclaration,
+    getOriginalNode, getParseTreeNode, getSourceMapRange, getSuperCallFromStatement, getUseDefineForClassFields,
+    hasStaticModifier, hasSyntacticModifier, Identifier, idText, IfStatement, insertStatementAfterCustomPrologue,
+    insertStatementsAfterCustomPrologue, insertStatementsAfterStandardPrologue, isArrayLiteralExpression,
+    isArrowFunction, isAssignmentExpression, isBinaryExpression, isBindingPattern, isBlock, isCallExpression,
+    isCallToHelper, isCaseBlock, isCaseClause, isCatchClause, isClassElement, isClassLike, isComputedPropertyName,
+    isDefaultClause, isDestructuringAssignment, isExpression, isExpressionStatement, isForInitializer, isForStatement,
+    isFunctionExpression, isFunctionLike, isHoistedFunction, isHoistedVariableStatement, isIdentifier,
+    isIdentifierANonContextualKeyword, isIfStatement, isInternalName, isIterationStatement, isLabeledStatement,
+    isModifier, isObjectLiteralElementLike, isOmittedExpression, isPackedArrayLiteral, isPrivateIdentifier,
+    isPrologueDirective, isPropertyDeclaration, isPropertyName, isReturnStatement, isSpreadElement, isStatement,
+    isStatic, isSuperProperty, isSwitchStatement, isTryStatement, isVariableDeclarationList, isVariableStatement,
+    isWithStatement, IterationStatement, LabeledStatement, last, lastOrUndefined, LeftHandSideExpression,
+    LiteralExpression, map, Map, MetaProperty, MethodDeclaration, ModifierFlags, moveRangeEnd, moveRangePos,
+    moveSyntheticComments, NamedDeclaration, NewExpression, Node, NodeArray, NodeCheckFlags, NodeFlags,
+    nodeIsSynthesized, NumericLiteral, ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration,
+    ParenthesizedExpression, PrimaryExpression, ProcessLevel, processTaggedTemplateExpression, PropertyAssignment,
+    rangeEndIsOnSameLineAsRangeStart, ReturnStatement, SemicolonClassElement, setCommentRange, setEmitFlags,
+    setOriginalNode, setParent, setSourceMapRange, setTextRange, setTextRangeEnd, setTextRangePos,
+    setTokenSourceMapRange, ShorthandPropertyAssignment, singleOrMany, singleOrUndefined, skipOuterExpressions,
+    skipTrivia, some, SourceFile, spanMap, SpreadElement, startOnNewLine, Statement, StringLiteral, SwitchStatement,
+    SyntaxKind, TaggedTemplateExpression, takeWhile, TemplateExpression, TextRange, TokenFlags, TransformationContext,
+    TransformFlags, tryCast, unescapeLeadingUnderscores, unwrapInnermostStatementOfLabel, VariableDeclaration,
+    VariableDeclarationList, VariableStatement, visitEachChild, visitNode, visitNodes, visitParameterList, VisitResult,
+    VoidExpression, WhileStatement, YieldExpression,
+} from "../_namespaces/ts";
 
 const enum ES2015SubstitutionFlags {
     /** Enables substitutions for captured `this` */
@@ -47,8 +83,8 @@ const enum ES2015SubstitutionFlags {
  */
 interface LoopOutParameter {
     flags: LoopOutParameterFlags;
-    originalName: ts.Identifier;
-    outParamName: ts.Identifier;
+    originalName: Identifier;
+    outParamName: Identifier;
 }
 
 const enum LoopOutParameterFlags {
@@ -72,15 +108,15 @@ interface ConvertedLoopState {
      * set of labels that occurred inside the converted loop
      * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
      */
-    labels?: ts.ESMap<string, boolean>;
+    labels?: ESMap<string, boolean>;
     /*
      * collection of labeled jumps that transfer control outside the converted loop.
      * maps store association 'label -> labelMarker' where
      * - label - value of label as it appear in code
      * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
      */
-    labeledNonLocalBreaks?: ts.ESMap<string, string>;
-    labeledNonLocalContinues?: ts.ESMap<string, string>;
+    labeledNonLocalBreaks?: ESMap<string, string>;
+    labeledNonLocalContinues?: ESMap<string, string>;
 
     /*
      * set of non-labeled jumps that transfer control outside the converted loop
@@ -106,12 +142,12 @@ interface ConvertedLoopState {
      * will refer to function that holds converted loop.
      * This value is set on demand.
      */
-    argumentsName?: ts.Identifier;
+    argumentsName?: Identifier;
 
     /*
      * alias for 'this' from the calling code stack frame in case if this was used inside the converted loop
      */
-    thisName?: ts.Identifier;
+    thisName?: Identifier;
 
     /*
      * set to true if node contains lexical 'this' so we can mark function that wraps convered loop body as 'CapturedThis' for subsequent substitution.
@@ -133,11 +169,11 @@ interface ConvertedLoopState {
      * var y;
      * for (var x;;) loop(x);
      */
-    hoistedLocalVariables?: ts.Identifier[];
+    hoistedLocalVariables?: Identifier[];
 
-    conditionVariable?: ts.Identifier;
+    conditionVariable?: Identifier;
 
-    loopParameters: ts.ParameterDeclaration[];
+    loopParameters: ParameterDeclaration[];
 
     /**
      * List of loop out parameters - detailed descripion can be found in the comment to LoopOutParameter
@@ -145,7 +181,7 @@ interface ConvertedLoopState {
     loopOutParameters: LoopOutParameter[];
 }
 
-type LoopConverter = (node: ts.IterationStatement, outermostLabeledStatement: ts.LabeledStatement | undefined, convertedLoopBodyStatements: ts.Statement[] | undefined, ancestorFacts: HierarchyFacts) => ts.Statement;
+type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
 // Facts we track as we traverse the tree
 const enum HierarchyFacts {
@@ -255,15 +291,15 @@ const enum SpreadSegmentKind {
 
 interface SpreadSegment {
     kind: SpreadSegmentKind;
-    expression: ts.Expression;
+    expression: Expression;
 }
 
-function createSpreadSegment(kind: SpreadSegmentKind, expression: ts.Expression): SpreadSegment {
+function createSpreadSegment(kind: SpreadSegmentKind, expression: Expression): SpreadSegment {
     return { kind, expression };
 }
 
 /** @internal */
-export function transformES2015(context: ts.TransformationContext) {
+export function transformES2015(context: TransformationContext) {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -280,13 +316,13 @@ export function transformES2015(context: ts.TransformationContext) {
     context.onEmitNode = onEmitNode;
     context.onSubstituteNode = onSubstituteNode;
 
-    let currentSourceFile: ts.SourceFile;
+    let currentSourceFile: SourceFile;
     let currentText: string;
     let hierarchyFacts: HierarchyFacts;
-    let taggedTemplateStringDeclarations: ts.VariableDeclaration[];
+    let taggedTemplateStringDeclarations: VariableDeclaration[];
 
-    function recordTaggedTemplateString(temp: ts.Identifier) {
-        taggedTemplateStringDeclarations = ts.append(
+    function recordTaggedTemplateString(temp: Identifier) {
+        taggedTemplateStringDeclarations = append(
             taggedTemplateStringDeclarations,
             factory.createVariableDeclaration(temp));
     }
@@ -303,9 +339,9 @@ export function transformES2015(context: ts.TransformationContext) {
      */
     let enabledSubstitutions: ES2015SubstitutionFlags;
 
-    return ts.chainBundle(context, transformSourceFile);
+    return chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: ts.SourceFile) {
+    function transformSourceFile(node: SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
@@ -314,7 +350,7 @@ export function transformES2015(context: ts.TransformationContext) {
         currentText = node.text;
 
         const visited = visitSourceFile(node);
-        ts.addEmitHelpers(visited, context.readEmitHelpers());
+        addEmitHelpers(visited, context.readEmitHelpers());
 
         currentSourceFile = undefined!;
         currentText = undefined!;
@@ -345,48 +381,48 @@ export function transformES2015(context: ts.TransformationContext) {
         hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
     }
 
-    function isReturnVoidStatementInConstructorWithCapturedSuper(node: ts.Node): boolean {
+    function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
         return (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper) !== 0
-            && node.kind === ts.SyntaxKind.ReturnStatement
-            && !(node as ts.ReturnStatement).expression;
+            && node.kind === SyntaxKind.ReturnStatement
+            && !(node as ReturnStatement).expression;
     }
 
-    function isOrMayContainReturnCompletion(node: ts.Node) {
-        return node.transformFlags & ts.TransformFlags.ContainsHoistedDeclarationOrCompletion
-            && (ts.isReturnStatement(node)
-                || ts.isIfStatement(node)
-                || ts.isWithStatement(node)
-                || ts.isSwitchStatement(node)
-                || ts.isCaseBlock(node)
-                || ts.isCaseClause(node)
-                || ts.isDefaultClause(node)
-                || ts.isTryStatement(node)
-                || ts.isCatchClause(node)
-                || ts.isLabeledStatement(node)
-                || ts.isIterationStatement(node, /*lookInLabeledStatements*/ false)
-                || ts.isBlock(node));
+    function isOrMayContainReturnCompletion(node: Node) {
+        return node.transformFlags & TransformFlags.ContainsHoistedDeclarationOrCompletion
+            && (isReturnStatement(node)
+                || isIfStatement(node)
+                || isWithStatement(node)
+                || isSwitchStatement(node)
+                || isCaseBlock(node)
+                || isCaseClause(node)
+                || isDefaultClause(node)
+                || isTryStatement(node)
+                || isCatchClause(node)
+                || isLabeledStatement(node)
+                || isIterationStatement(node, /*lookInLabeledStatements*/ false)
+                || isBlock(node));
     }
 
-    function shouldVisitNode(node: ts.Node): boolean {
-        return (node.transformFlags & ts.TransformFlags.ContainsES2015) !== 0
+    function shouldVisitNode(node: Node): boolean {
+        return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
             || convertedLoopState !== undefined
             || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isOrMayContainReturnCompletion(node))
-            || (ts.isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
-            || (ts.getEmitFlags(node) & ts.EmitFlags.TypeScriptClassWrapper) !== 0;
+            || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
+            || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
     }
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+    function visitor(node: Node): VisitResult<Node> {
         return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ false) : node;
     }
 
-    function visitorWithUnusedExpressionResult(node: ts.Node): ts.VisitResult<ts.Node> {
+    function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
         return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
     }
 
-    function classWrapperStatementVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
+    function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
         if (shouldVisitNode(node)) {
-            const original = ts.getOriginalNode(node);
-            if (ts.isPropertyDeclaration(original) && ts.hasStaticModifier(original)) {
+            const original = getOriginalNode(node);
+            if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
                 const ancestorFacts = enterSubtree(
                     HierarchyFacts.StaticInitializerExcludes,
                     HierarchyFacts.StaticInitializerIncludes
@@ -400,168 +436,168 @@ export function transformES2015(context: ts.TransformationContext) {
         return node;
     }
 
-    function callExpressionVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        if (node.kind === ts.SyntaxKind.SuperKeyword) {
+    function callExpressionVisitor(node: Node): VisitResult<Node> {
+        if (node.kind === SyntaxKind.SuperKeyword) {
             return visitSuperKeyword(/*isExpressionOfCall*/ true);
         }
         return visitor(node);
     }
 
-    function visitorWorker(node: ts.Node, expressionResultIsUnused: boolean): ts.VisitResult<ts.Node> {
+    function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
         switch (node.kind) {
-            case ts.SyntaxKind.StaticKeyword:
+            case SyntaxKind.StaticKeyword:
                 return undefined; // elide static keyword
 
-            case ts.SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ts.ClassDeclaration);
+            case SyntaxKind.ClassDeclaration:
+                return visitClassDeclaration(node as ClassDeclaration);
 
-            case ts.SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ts.ClassExpression);
+            case SyntaxKind.ClassExpression:
+                return visitClassExpression(node as ClassExpression);
 
-            case ts.SyntaxKind.Parameter:
-                return visitParameter(node as ts.ParameterDeclaration);
+            case SyntaxKind.Parameter:
+                return visitParameter(node as ParameterDeclaration);
 
-            case ts.SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as ts.FunctionDeclaration);
+            case SyntaxKind.FunctionDeclaration:
+                return visitFunctionDeclaration(node as FunctionDeclaration);
 
-            case ts.SyntaxKind.ArrowFunction:
-                return visitArrowFunction(node as ts.ArrowFunction);
+            case SyntaxKind.ArrowFunction:
+                return visitArrowFunction(node as ArrowFunction);
 
-            case ts.SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as ts.FunctionExpression);
+            case SyntaxKind.FunctionExpression:
+                return visitFunctionExpression(node as FunctionExpression);
 
-            case ts.SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as ts.VariableDeclaration);
+            case SyntaxKind.VariableDeclaration:
+                return visitVariableDeclaration(node as VariableDeclaration);
 
-            case ts.SyntaxKind.Identifier:
-                return visitIdentifier(node as ts.Identifier);
+            case SyntaxKind.Identifier:
+                return visitIdentifier(node as Identifier);
 
-            case ts.SyntaxKind.VariableDeclarationList:
-                return visitVariableDeclarationList(node as ts.VariableDeclarationList);
+            case SyntaxKind.VariableDeclarationList:
+                return visitVariableDeclarationList(node as VariableDeclarationList);
 
-            case ts.SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as ts.SwitchStatement);
+            case SyntaxKind.SwitchStatement:
+                return visitSwitchStatement(node as SwitchStatement);
 
-            case ts.SyntaxKind.CaseBlock:
-                return visitCaseBlock(node as ts.CaseBlock);
+            case SyntaxKind.CaseBlock:
+                return visitCaseBlock(node as CaseBlock);
 
-            case ts.SyntaxKind.Block:
-                return visitBlock(node as ts.Block, /*isFunctionBody*/ false);
+            case SyntaxKind.Block:
+                return visitBlock(node as Block, /*isFunctionBody*/ false);
 
-            case ts.SyntaxKind.BreakStatement:
-            case ts.SyntaxKind.ContinueStatement:
-                return visitBreakOrContinueStatement(node as ts.BreakOrContinueStatement);
+            case SyntaxKind.BreakStatement:
+            case SyntaxKind.ContinueStatement:
+                return visitBreakOrContinueStatement(node as BreakOrContinueStatement);
 
-            case ts.SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as ts.LabeledStatement);
+            case SyntaxKind.LabeledStatement:
+                return visitLabeledStatement(node as LabeledStatement);
 
-            case ts.SyntaxKind.DoStatement:
-            case ts.SyntaxKind.WhileStatement:
-                return visitDoOrWhileStatement(node as ts.DoStatement | ts.WhileStatement, /*outermostLabeledStatement*/ undefined);
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return visitDoOrWhileStatement(node as DoStatement | WhileStatement, /*outermostLabeledStatement*/ undefined);
 
-            case ts.SyntaxKind.ForStatement:
-                return visitForStatement(node as ts.ForStatement, /*outermostLabeledStatement*/ undefined);
+            case SyntaxKind.ForStatement:
+                return visitForStatement(node as ForStatement, /*outermostLabeledStatement*/ undefined);
 
-            case ts.SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ts.ForInStatement, /*outermostLabeledStatement*/ undefined);
+            case SyntaxKind.ForInStatement:
+                return visitForInStatement(node as ForInStatement, /*outermostLabeledStatement*/ undefined);
 
-            case ts.SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ts.ForOfStatement, /*outermostLabeledStatement*/ undefined);
+            case SyntaxKind.ForOfStatement:
+                return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
 
-            case ts.SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ts.ExpressionStatement);
+            case SyntaxKind.ExpressionStatement:
+                return visitExpressionStatement(node as ExpressionStatement);
 
-            case ts.SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ts.ObjectLiteralExpression);
+            case SyntaxKind.ObjectLiteralExpression:
+                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
 
-            case ts.SyntaxKind.CatchClause:
-                return visitCatchClause(node as ts.CatchClause);
+            case SyntaxKind.CatchClause:
+                return visitCatchClause(node as CatchClause);
 
-            case ts.SyntaxKind.ShorthandPropertyAssignment:
-                return visitShorthandPropertyAssignment(node as ts.ShorthandPropertyAssignment);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return visitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
 
-            case ts.SyntaxKind.ComputedPropertyName:
-                return visitComputedPropertyName(node as ts.ComputedPropertyName);
+            case SyntaxKind.ComputedPropertyName:
+                return visitComputedPropertyName(node as ComputedPropertyName);
 
-            case ts.SyntaxKind.ArrayLiteralExpression:
-                return visitArrayLiteralExpression(node as ts.ArrayLiteralExpression);
+            case SyntaxKind.ArrayLiteralExpression:
+                return visitArrayLiteralExpression(node as ArrayLiteralExpression);
 
-            case ts.SyntaxKind.CallExpression:
-                return visitCallExpression(node as ts.CallExpression);
+            case SyntaxKind.CallExpression:
+                return visitCallExpression(node as CallExpression);
 
-            case ts.SyntaxKind.NewExpression:
-                return visitNewExpression(node as ts.NewExpression);
+            case SyntaxKind.NewExpression:
+                return visitNewExpression(node as NewExpression);
 
-            case ts.SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ts.ParenthesizedExpression, expressionResultIsUnused);
+            case SyntaxKind.ParenthesizedExpression:
+                return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
 
-            case ts.SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as ts.BinaryExpression, expressionResultIsUnused);
+            case SyntaxKind.BinaryExpression:
+                return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
 
-            case ts.SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as ts.CommaListExpression, expressionResultIsUnused);
+            case SyntaxKind.CommaListExpression:
+                return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
 
-            case ts.SyntaxKind.NoSubstitutionTemplateLiteral:
-            case ts.SyntaxKind.TemplateHead:
-            case ts.SyntaxKind.TemplateMiddle:
-            case ts.SyntaxKind.TemplateTail:
-                return visitTemplateLiteral(node as ts.LiteralExpression);
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateHead:
+            case SyntaxKind.TemplateMiddle:
+            case SyntaxKind.TemplateTail:
+                return visitTemplateLiteral(node as LiteralExpression);
 
-            case ts.SyntaxKind.StringLiteral:
-                return visitStringLiteral(node as ts.StringLiteral);
+            case SyntaxKind.StringLiteral:
+                return visitStringLiteral(node as StringLiteral);
 
-            case ts.SyntaxKind.NumericLiteral:
-                return visitNumericLiteral(node as ts.NumericLiteral);
+            case SyntaxKind.NumericLiteral:
+                return visitNumericLiteral(node as NumericLiteral);
 
-            case ts.SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as ts.TaggedTemplateExpression);
+            case SyntaxKind.TaggedTemplateExpression:
+                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
 
-            case ts.SyntaxKind.TemplateExpression:
-                return visitTemplateExpression(node as ts.TemplateExpression);
+            case SyntaxKind.TemplateExpression:
+                return visitTemplateExpression(node as TemplateExpression);
 
-            case ts.SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as ts.YieldExpression);
+            case SyntaxKind.YieldExpression:
+                return visitYieldExpression(node as YieldExpression);
 
-            case ts.SyntaxKind.SpreadElement:
-                return visitSpreadElement(node as ts.SpreadElement);
+            case SyntaxKind.SpreadElement:
+                return visitSpreadElement(node as SpreadElement);
 
-            case ts.SyntaxKind.SuperKeyword:
+            case SyntaxKind.SuperKeyword:
                 return visitSuperKeyword(/*isExpressionOfCall*/ false);
 
-            case ts.SyntaxKind.ThisKeyword:
+            case SyntaxKind.ThisKeyword:
                 return visitThisKeyword(node);
 
-            case ts.SyntaxKind.MetaProperty:
-                return visitMetaProperty(node as ts.MetaProperty);
+            case SyntaxKind.MetaProperty:
+                return visitMetaProperty(node as MetaProperty);
 
-            case ts.SyntaxKind.MethodDeclaration:
-                return visitMethodDeclaration(node as ts.MethodDeclaration);
+            case SyntaxKind.MethodDeclaration:
+                return visitMethodDeclaration(node as MethodDeclaration);
 
-            case ts.SyntaxKind.GetAccessor:
-            case ts.SyntaxKind.SetAccessor:
-                return visitAccessorDeclaration(node as ts.AccessorDeclaration);
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return visitAccessorDeclaration(node as AccessorDeclaration);
 
-            case ts.SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as ts.VariableStatement);
+            case SyntaxKind.VariableStatement:
+                return visitVariableStatement(node as VariableStatement);
 
-            case ts.SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ts.ReturnStatement);
+            case SyntaxKind.ReturnStatement:
+                return visitReturnStatement(node as ReturnStatement);
 
-            case ts.SyntaxKind.VoidExpression:
-                return visitVoidExpression(node as ts.VoidExpression);
+            case SyntaxKind.VoidExpression:
+                return visitVoidExpression(node as VoidExpression);
 
             default:
-                return ts.visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
         }
     }
 
-    function visitSourceFile(node: ts.SourceFile): ts.SourceFile {
+    function visitSourceFile(node: SourceFile): SourceFile {
         const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
-        const prologue: ts.Statement[] = [];
-        const statements: ts.Statement[] = [];
+        const prologue: Statement[] = [];
+        const statements: Statement[] = [];
         startLexicalEnvironment();
         const statementOffset = factory.copyPrologue(node.statements, prologue, /*ensureUseStrict*/ false, visitor);
-        ts.addRange(statements, ts.visitNodes(node.statements, visitor, ts.isStatement, statementOffset));
+        addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
         if (taggedTemplateStringDeclarations) {
             statements.push(
                 factory.createVariableStatement(/*modifiers*/ undefined,
@@ -572,34 +608,34 @@ export function transformES2015(context: ts.TransformationContext) {
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return factory.updateSourceFile(
             node,
-            ts.setTextRange(factory.createNodeArray(ts.concatenate(prologue, statements)), node.statements)
+            setTextRange(factory.createNodeArray(concatenate(prologue, statements)), node.statements)
         );
     }
 
-    function visitSwitchStatement(node: ts.SwitchStatement): ts.SwitchStatement {
+    function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
         if (convertedLoopState !== undefined) {
             const savedAllowedNonLabeledJumps = convertedLoopState.allowedNonLabeledJumps;
             // for switch statement allow only non-labeled break
             convertedLoopState.allowedNonLabeledJumps! |= Jump.Break;
-            const result = ts.visitEachChild(node, visitor, context);
+            const result = visitEachChild(node, visitor, context);
             convertedLoopState.allowedNonLabeledJumps = savedAllowedNonLabeledJumps;
             return result;
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitCaseBlock(node: ts.CaseBlock): ts.CaseBlock {
+    function visitCaseBlock(node: CaseBlock): CaseBlock {
         const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
-        const updated = ts.visitEachChild(node, visitor, context);
+        const updated = visitEachChild(node, visitor, context);
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return updated;
     }
 
-    function returnCapturedThis(node: ts.Node): ts.ReturnStatement {
-        return ts.setOriginalNode(factory.createReturnStatement(factory.createUniqueName("_this", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel)), node);
+    function returnCapturedThis(node: Node): ReturnStatement {
+        return setOriginalNode(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)), node);
     }
 
-    function visitReturnStatement(node: ts.ReturnStatement): ts.Statement {
+    function visitReturnStatement(node: ReturnStatement): Statement {
         if (convertedLoopState) {
             convertedLoopState.nonLocalJumps! |= Jump.Return;
             if (isReturnVoidStatementInConstructorWithCapturedSuper(node)) {
@@ -611,7 +647,7 @@ export function transformES2015(context: ts.TransformationContext) {
                         factory.createPropertyAssignment(
                             factory.createIdentifier("value"),
                             node.expression
-                                ? ts.visitNode(node.expression, visitor, ts.isExpression)
+                                ? visitNode(node.expression, visitor, isExpression)
                                 : factory.createVoidZero()
                         )
                     ]
@@ -621,10 +657,10 @@ export function transformES2015(context: ts.TransformationContext) {
         else if (isReturnVoidStatementInConstructorWithCapturedSuper(node)) {
             return returnCapturedThis(node);
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitThisKeyword(node: ts.Node): ts.Node {
+    function visitThisKeyword(node: Node): Node {
         if (hierarchyFacts & HierarchyFacts.ArrowFunction && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
             hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
         }
@@ -639,41 +675,41 @@ export function transformES2015(context: ts.TransformationContext) {
         return node;
     }
 
-    function visitVoidExpression(node: ts.VoidExpression): ts.Expression {
-        return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
+    function visitVoidExpression(node: VoidExpression): Expression {
+        return visitEachChild(node, visitorWithUnusedExpressionResult, context);
     }
 
-    function visitIdentifier(node: ts.Identifier): ts.Identifier {
+    function visitIdentifier(node: Identifier): Identifier {
         if (convertedLoopState) {
             if (resolver.isArgumentsLocalBinding(node)) {
                 return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
             }
         }
         if (node.hasExtendedUnicodeEscape) {
-            return ts.setOriginalNode(ts.setTextRange(
-                factory.createIdentifier(ts.unescapeLeadingUnderscores(node.escapedText)),
+            return setOriginalNode(setTextRange(
+                factory.createIdentifier(unescapeLeadingUnderscores(node.escapedText)),
                 node
             ), node);
         }
         return node;
     }
 
-    function visitBreakOrContinueStatement(node: ts.BreakOrContinueStatement): ts.Statement {
+    function visitBreakOrContinueStatement(node: BreakOrContinueStatement): Statement {
         if (convertedLoopState) {
             // check if we can emit break/continue as is
             // it is possible if either
             //   - break/continue is labeled and label is located inside the converted loop
             //   - break/continue is non-labeled and located in non-converted loop/switch statement
-            const jump = node.kind === ts.SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
+            const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
             const canUseBreakOrContinue =
-                (node.label && convertedLoopState.labels && convertedLoopState.labels.get(ts.idText(node.label))) ||
+                (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label))) ||
                 (!node.label && (convertedLoopState.allowedNonLabeledJumps! & jump));
 
             if (!canUseBreakOrContinue) {
                 let labelMarker: string;
                 const label = node.label;
                 if (!label) {
-                    if (node.kind === ts.SyntaxKind.BreakStatement) {
+                    if (node.kind === SyntaxKind.BreakStatement) {
                         convertedLoopState.nonLocalJumps! |= Jump.Break;
                         labelMarker = "break";
                     }
@@ -684,34 +720,34 @@ export function transformES2015(context: ts.TransformationContext) {
                     }
                 }
                 else {
-                    if (node.kind === ts.SyntaxKind.BreakStatement) {
+                    if (node.kind === SyntaxKind.BreakStatement) {
                         labelMarker = `break-${label.escapedText}`;
-                        setLabeledJump(convertedLoopState, /*isBreak*/ true, ts.idText(label), labelMarker);
+                        setLabeledJump(convertedLoopState, /*isBreak*/ true, idText(label), labelMarker);
                     }
                     else {
                         labelMarker = `continue-${label.escapedText}`;
-                        setLabeledJump(convertedLoopState, /*isBreak*/ false, ts.idText(label), labelMarker);
+                        setLabeledJump(convertedLoopState, /*isBreak*/ false, idText(label), labelMarker);
                     }
                 }
-                let returnExpression: ts.Expression = factory.createStringLiteral(labelMarker);
+                let returnExpression: Expression = factory.createStringLiteral(labelMarker);
                 if (convertedLoopState.loopOutParameters.length) {
                     const outParams = convertedLoopState.loopOutParameters;
-                    let expr: ts.Expression | undefined;
+                    let expr: Expression | undefined;
                     for (let i = 0; i < outParams.length; i++) {
                         const copyExpr = copyOutParameter(outParams[i], CopyDirection.ToOutParameter);
                         if (i === 0) {
                             expr = copyExpr;
                         }
                         else {
-                            expr = factory.createBinaryExpression(expr!, ts.SyntaxKind.CommaToken, copyExpr);
+                            expr = factory.createBinaryExpression(expr!, SyntaxKind.CommaToken, copyExpr);
                         }
                     }
-                    returnExpression = factory.createBinaryExpression(expr!, ts.SyntaxKind.CommaToken, returnExpression);
+                    returnExpression = factory.createBinaryExpression(expr!, SyntaxKind.CommaToken, returnExpression);
                 }
                 return factory.createReturnStatement(returnExpression);
             }
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -719,7 +755,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A ClassDeclaration node.
      */
-    function visitClassDeclaration(node: ts.ClassDeclaration): ts.VisitResult<ts.Statement> {
+    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         // [source]
         //      class C { }
         //
@@ -737,34 +773,34 @@ export function transformES2015(context: ts.TransformationContext) {
             transformClassLikeDeclarationToExpression(node)
         );
 
-        ts.setOriginalNode(variable, node);
+        setOriginalNode(variable, node);
 
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([variable]));
 
-        ts.setOriginalNode(statement, node);
-        ts.setTextRange(statement, node);
-        ts.startOnNewLine(statement);
+        setOriginalNode(statement, node);
+        setTextRange(statement, node);
+        startOnNewLine(statement);
         statements.push(statement);
 
         // Add an `export default` statement for default exports (for `--target es5 --module es6`)
-        if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
-            const exportStatement = ts.hasSyntacticModifier(node, ts.ModifierFlags.Default)
+        if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+            const exportStatement = hasSyntacticModifier(node, ModifierFlags.Default)
                 ? factory.createExportDefault(factory.getLocalName(node))
                 : factory.createExternalModuleExport(factory.getLocalName(node));
 
-            ts.setOriginalNode(exportStatement, statement);
+            setOriginalNode(exportStatement, statement);
             statements.push(exportStatement);
         }
 
-        const emitFlags = ts.getEmitFlags(node);
-        if ((emitFlags & ts.EmitFlags.HasEndOfDeclarationMarker) === 0) {
+        const emitFlags = getEmitFlags(node);
+        if ((emitFlags & EmitFlags.HasEndOfDeclarationMarker) === 0) {
             // Add a DeclarationMarker as a marker for the end of the declaration
             statements.push(factory.createEndOfDeclarationMarker(node));
-            ts.setEmitFlags(statement, emitFlags | ts.EmitFlags.HasEndOfDeclarationMarker);
+            setEmitFlags(statement, emitFlags | EmitFlags.HasEndOfDeclarationMarker);
         }
 
-        return ts.singleOrMany(statements);
+        return singleOrMany(statements);
     }
 
     /**
@@ -772,7 +808,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A ClassExpression node.
      */
-    function visitClassExpression(node: ts.ClassExpression): ts.Expression {
+    function visitClassExpression(node: ClassExpression): Expression {
         // [source]
         //      C = class { }
         //
@@ -791,7 +827,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A ClassExpression or ClassDeclaration node.
      */
-    function transformClassLikeDeclarationToExpression(node: ts.ClassExpression | ts.ClassDeclaration): ts.Expression {
+    function transformClassLikeDeclarationToExpression(node: ClassExpression | ClassDeclaration): Expression {
         // [source]
         //      class C extends D {
         //          constructor() {}
@@ -819,13 +855,13 @@ export function transformES2015(context: ts.TransformationContext) {
             enableSubstitutionsForBlockScopedBindings();
         }
 
-        const extendsClauseElement = ts.getClassExtendsHeritageElement(node);
+        const extendsClauseElement = getClassExtendsHeritageElement(node);
         const classFunction = factory.createFunctionExpression(
             /*modifiers*/ undefined,
             /*asteriskToken*/ undefined,
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel))] : [],
+            extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
             /*type*/ undefined,
             transformClassBody(node, extendsClauseElement)
         );
@@ -833,28 +869,28 @@ export function transformES2015(context: ts.TransformationContext) {
         // To preserve the behavior of the old emitter, we explicitly indent
         // the body of the function here if it was requested in an earlier
         // transformation.
-        ts.setEmitFlags(classFunction, (ts.getEmitFlags(node) & ts.EmitFlags.Indented) | ts.EmitFlags.ReuseTempVariableScope);
+        setEmitFlags(classFunction, (getEmitFlags(node) & EmitFlags.Indented) | EmitFlags.ReuseTempVariableScope);
 
         // "inner" and "outer" below are added purely to preserve source map locations from
         // the old emitter
         const inner = factory.createPartiallyEmittedExpression(classFunction);
-        ts.setTextRangeEnd(inner, node.end);
-        ts.setEmitFlags(inner, ts.EmitFlags.NoComments);
+        setTextRangeEnd(inner, node.end);
+        setEmitFlags(inner, EmitFlags.NoComments);
 
         const outer = factory.createPartiallyEmittedExpression(inner);
-        ts.setTextRangeEnd(outer, ts.skipTrivia(currentText, node.pos));
-        ts.setEmitFlags(outer, ts.EmitFlags.NoComments);
+        setTextRangeEnd(outer, skipTrivia(currentText, node.pos));
+        setEmitFlags(outer, EmitFlags.NoComments);
 
         const result = factory.createParenthesizedExpression(
             factory.createCallExpression(
                 outer,
                 /*typeArguments*/ undefined,
                 extendsClauseElement
-                    ? [ts.visitNode(extendsClauseElement.expression, visitor, ts.isExpression)]
+                    ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
                     : []
             )
         );
-        ts.addSyntheticLeadingComment(result, ts.SyntaxKind.MultiLineCommentTrivia, "* @class ");
+        addSyntheticLeadingComment(result, SyntaxKind.MultiLineCommentTrivia, "* @class ");
         return result;
     }
 
@@ -864,33 +900,33 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param node A ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function transformClassBody(node: ts.ClassExpression | ts.ClassDeclaration, extendsClauseElement: ts.ExpressionWithTypeArguments | undefined): ts.Block {
-        const statements: ts.Statement[] = [];
+    function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): Block {
+        const statements: Statement[] = [];
         const name = factory.getInternalName(node);
-        const constructorLikeName = ts.isIdentifierANonContextualKeyword(name) ? factory.getGeneratedNameForNode(name) : name;
+        const constructorLikeName = isIdentifierANonContextualKeyword(name) ? factory.getGeneratedNameForNode(name) : name;
         startLexicalEnvironment();
         addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
         addConstructor(statements, node, constructorLikeName, extendsClauseElement);
         addClassMembers(statements, node);
 
         // Create a synthetic text range for the return statement.
-        const closingBraceLocation = ts.createTokenRange(ts.skipTrivia(currentText, node.members.end), ts.SyntaxKind.CloseBraceToken);
+        const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
 
         // The following partially-emitted expression exists purely to align our sourcemap
         // emit with the original emitter.
         const outer = factory.createPartiallyEmittedExpression(constructorLikeName);
-        ts.setTextRangeEnd(outer, closingBraceLocation.end);
-        ts.setEmitFlags(outer, ts.EmitFlags.NoComments);
+        setTextRangeEnd(outer, closingBraceLocation.end);
+        setEmitFlags(outer, EmitFlags.NoComments);
 
         const statement = factory.createReturnStatement(outer);
-        ts.setTextRangePos(statement, closingBraceLocation.pos);
-        ts.setEmitFlags(statement, ts.EmitFlags.NoComments | ts.EmitFlags.NoTokenSourceMaps);
+        setTextRangePos(statement, closingBraceLocation.pos);
+        setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
         statements.push(statement);
 
-        ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
-        const block = factory.createBlock(ts.setTextRange(factory.createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
-        ts.setEmitFlags(block, ts.EmitFlags.NoComments);
+        const block = factory.createBlock(setTextRange(factory.createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
+        setEmitFlags(block, EmitFlags.NoComments);
         return block;
     }
 
@@ -901,10 +937,10 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param node The ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function addExtendsHelperIfNeeded(statements: ts.Statement[], node: ts.ClassExpression | ts.ClassDeclaration, extendsClauseElement: ts.ExpressionWithTypeArguments | undefined): void {
+    function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
         if (extendsClauseElement) {
             statements.push(
-                ts.setTextRange(
+                setTextRange(
                     factory.createExpressionStatement(
                         emitHelpers().createExtendsHelper(factory.getInternalName(node))
                     ),
@@ -921,11 +957,11 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param node The ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function addConstructor(statements: ts.Statement[], node: ts.ClassExpression | ts.ClassDeclaration, name: ts.Identifier, extendsClauseElement: ts.ExpressionWithTypeArguments | undefined): void {
+    function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, name: Identifier, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = enterSubtree(HierarchyFacts.ConstructorExcludes, HierarchyFacts.ConstructorIncludes);
-        const constructor = ts.getFirstConstructorWithBody(node);
+        const constructor = getFirstConstructorWithBody(node);
         const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
         const constructorFunction = factory.createFunctionDeclaration(
             /*modifiers*/ undefined,
@@ -937,9 +973,9 @@ export function transformES2015(context: ts.TransformationContext) {
             transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper)
         );
 
-        ts.setTextRange(constructorFunction, constructor || node);
+        setTextRange(constructorFunction, constructor || node);
         if (extendsClauseElement) {
-            ts.setEmitFlags(constructorFunction, ts.EmitFlags.CapturesThis);
+            setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
         }
 
         statements.push(constructorFunction);
@@ -954,21 +990,21 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
      *                            synthesized `super` call.
      */
-    function transformConstructorParameters(constructor: ts.ConstructorDeclaration | undefined, hasSynthesizedSuper: boolean) {
+    function transformConstructorParameters(constructor: ConstructorDeclaration | undefined, hasSynthesizedSuper: boolean) {
         // If the TypeScript transformer needed to synthesize a constructor for property
         // initializers, it would have also added a synthetic `...args` parameter and
         // `super` call.
         // If this is the case, we do not include the synthetic `...args` parameter and
         // will instead use the `arguments` object in ES5/3.
-        return ts.visitParameterList(constructor && !hasSynthesizedSuper ? constructor.parameters : undefined, visitor, context)
-            || [] as ts.ParameterDeclaration[];
+        return visitParameterList(constructor && !hasSynthesizedSuper ? constructor.parameters : undefined, visitor, context)
+            || [] as ParameterDeclaration[];
     }
 
-    function createDefaultConstructorBody(node: ts.ClassDeclaration | ts.ClassExpression, isDerivedClass: boolean) {
+    function createDefaultConstructorBody(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
         // We must be here because the user didn't write a constructor
         // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
         // If that's the case we can just immediately return the result of a 'super()' call.
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         resumeLexicalEnvironment();
         factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
@@ -978,11 +1014,11 @@ export function transformES2015(context: ts.TransformationContext) {
         }
 
         const statementsArray = factory.createNodeArray(statements);
-        ts.setTextRange(statementsArray, node.members);
+        setTextRange(statementsArray, node.members);
 
         const block = factory.createBlock(statementsArray, /*multiLine*/ true);
-        ts.setTextRange(block, node);
-        ts.setEmitFlags(block, ts.EmitFlags.NoComments);
+        setTextRange(block, node);
+        setEmitFlags(block, EmitFlags.NoComments);
         return block;
     }
 
@@ -995,10 +1031,10 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
      *                            synthesized `super` call.
      */
-    function transformConstructorBody(constructor: ts.ConstructorDeclaration & { body: ts.FunctionBody } | undefined, node: ts.ClassDeclaration | ts.ClassExpression, extendsClauseElement: ts.ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
+    function transformConstructorBody(constructor: ConstructorDeclaration & { body: FunctionBody } | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
         // determine whether the class is known syntactically to be a derived class (e.g. a
         // class that extends a value that is not syntactically known to be `null`).
-        const isDerivedClass = !!extendsClauseElement && ts.skipOuterExpressions(extendsClauseElement.expression).kind !== ts.SyntaxKind.NullKeyword;
+        const isDerivedClass = !!extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
 
         // When the subclass does not have a constructor, we synthesize a *default* constructor using the following
         // representation:
@@ -1018,13 +1054,13 @@ export function transformES2015(context: ts.TransformationContext) {
         if (!constructor) return createDefaultConstructorBody(node, isDerivedClass);
 
         // The prologue will contain all leading standard and custom prologue statements added by this transform
-        const prologue: ts.Statement[] = [];
-        const statements: ts.Statement[] = [];
+        const prologue: Statement[] = [];
+        const statements: Statement[] = [];
         resumeLexicalEnvironment();
 
         // In derived classes, there may be code before the necessary super() call
         // We'll remove pre-super statements to be tacked on after the rest of the body
-        const existingPrologue = ts.takeWhile(constructor.body.statements, ts.isPrologueDirective);
+        const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
         const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue);
         const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
 
@@ -1036,7 +1072,7 @@ export function transformES2015(context: ts.TransformationContext) {
         if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
         // If there already exists a call to `super()`, visit the statement directly
-        let superCallExpression: ts.Expression | undefined;
+        let superCallExpression: Expression | undefined;
         if (hasSynthesizedSuper) {
             superCallExpression = createDefaultSuperCallOrThis();
         }
@@ -1053,13 +1089,13 @@ export function transformES2015(context: ts.TransformationContext) {
         addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
 
         // visit the remaining statements
-        ts.addRange(statements, ts.visitNodes(constructor.body.statements, visitor, ts.isStatement, /*start*/ statementOffset));
+        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
 
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
         insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
         if (isDerivedClass || superCallExpression) {
-            if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & ts.TransformFlags.ContainsLexicalThis)) {
+            if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                 // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                 // following representation:
                 //
@@ -1079,10 +1115,10 @@ export function transformES2015(context: ts.TransformationContext) {
                 //     return C;
                 // })(Base);
                 // ```
-                const superCall = ts.cast(ts.cast(superCallExpression, ts.isBinaryExpression).left, ts.isCallExpression);
+                const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
                 const returnStatement = factory.createReturnStatement(superCallExpression);
-                ts.setCommentRange(returnStatement, ts.getCommentRange(superCall));
-                ts.setEmitFlags(superCall, ts.EmitFlags.NoComments);
+                setCommentRange(returnStatement, getCommentRange(superCall));
+                setEmitFlags(superCall, EmitFlags.NoComments);
                 statements.push(returnStatement);
             }
             else {
@@ -1123,7 +1159,7 @@ export function transformES2015(context: ts.TransformationContext) {
                 }
 
                 if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
-                    statements.push(factory.createReturnStatement(factory.createUniqueName("_this", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel)));
+                    statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
                 }
             }
         }
@@ -1146,12 +1182,12 @@ export function transformES2015(context: ts.TransformationContext) {
         }
 
         const body = factory.createBlock(
-            ts.setTextRange(
+            setTextRange(
                 factory.createNodeArray(
                     [
                         ...existingPrologue,
                         ...prologue,
-                        ...(superStatementIndex <= existingPrologue.length ? ts.emptyArray : ts.visitNodes(constructor.body.statements, visitor, ts.isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
+                        ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
                         ...statements
                     ]
                 ),
@@ -1160,13 +1196,13 @@ export function transformES2015(context: ts.TransformationContext) {
             /*multiLine*/ true
         );
 
-        ts.setTextRange(body, constructor.body);
+        setTextRange(body, constructor.body);
         return body;
     }
 
-    function findSuperCallAndStatementIndex(originalBodyStatements: ts.NodeArray<ts.Statement>, existingPrologue: ts.Statement[]) {
+    function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
         for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
-            const superCall = ts.getSuperCallFromStatement(originalBodyStatements[i]);
+            const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
             if (superCall) {
                 // With a super() call, split the statements into pre-super() and 'body' (post-super())
                 return {
@@ -1187,22 +1223,22 @@ export function transformES2015(context: ts.TransformationContext) {
      * It would generate obviously dead code, so we'll try to make things a little bit prettier
      * by doing a minimal check on whether some common patterns always explicitly return.
      */
-    function isSufficientlyCoveredByReturnStatements(statement: ts.Statement): boolean {
+    function isSufficientlyCoveredByReturnStatements(statement: Statement): boolean {
         // A return statement is considered covered.
-        if (statement.kind === ts.SyntaxKind.ReturnStatement) {
+        if (statement.kind === SyntaxKind.ReturnStatement) {
             return true;
         }
         // An if-statement with two covered branches is covered.
-        else if (statement.kind === ts.SyntaxKind.IfStatement) {
-            const ifStatement = statement as ts.IfStatement;
+        else if (statement.kind === SyntaxKind.IfStatement) {
+            const ifStatement = statement as IfStatement;
             if (ifStatement.elseStatement) {
                 return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
                     isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
             }
         }
         // A block is covered if it has a last statement which is covered.
-        else if (statement.kind === ts.SyntaxKind.Block) {
-            const lastStatement = ts.lastOrUndefined((statement as ts.Block).statements);
+        else if (statement.kind === SyntaxKind.Block) {
+            const lastStatement = lastOrUndefined((statement as Block).statements);
             if (lastStatement && isSufficientlyCoveredByReturnStatements(lastStatement)) {
                 return true;
             }
@@ -1212,18 +1248,18 @@ export function transformES2015(context: ts.TransformationContext) {
     }
 
     function createActualThis() {
-        return ts.setEmitFlags(factory.createThis(), ts.EmitFlags.NoSubstitution);
+        return setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution);
     }
 
     function createDefaultSuperCallOrThis() {
         return factory.createLogicalOr(
             factory.createLogicalAnd(
                 factory.createStrictInequality(
-                    factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                     factory.createNull()
                 ),
                 factory.createFunctionApplyCall(
-                    factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                     createActualThis(),
                     factory.createIdentifier("arguments"),
                 )
@@ -1237,16 +1273,16 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A ParameterDeclaration node.
      */
-    function visitParameter(node: ts.ParameterDeclaration): ts.ParameterDeclaration | undefined {
+    function visitParameter(node: ParameterDeclaration): ParameterDeclaration | undefined {
         if (node.dotDotDotToken) {
             // rest parameters are elided
             return undefined;
         }
-        else if (ts.isBindingPattern(node.name)) {
+        else if (isBindingPattern(node.name)) {
             // Binding patterns are converted into a generated name and are
             // evaluated inside the function body.
-            return ts.setOriginalNode(
-                ts.setTextRange(
+            return setOriginalNode(
+                setTextRange(
                     factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
@@ -1262,8 +1298,8 @@ export function transformES2015(context: ts.TransformationContext) {
         }
         else if (node.initializer) {
             // Initializers are elided
-            return ts.setOriginalNode(
-                ts.setTextRange(
+            return setOriginalNode(
+                setTextRange(
                     factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
@@ -1282,9 +1318,9 @@ export function transformES2015(context: ts.TransformationContext) {
         }
     }
 
-    function hasDefaultValueOrBindingPattern(node: ts.ParameterDeclaration) {
+    function hasDefaultValueOrBindingPattern(node: ParameterDeclaration) {
         return node.initializer !== undefined
-            || ts.isBindingPattern(node.name);
+            || isBindingPattern(node.name);
     }
 
     /**
@@ -1294,8 +1330,8 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param statements The statements for the new function body.
      * @param node A function-like node.
      */
-    function addDefaultValueAssignmentsIfNeeded(statements: ts.Statement[], node: ts.FunctionLikeDeclaration): boolean {
-        if (!ts.some(node.parameters, hasDefaultValueOrBindingPattern)) {
+    function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): boolean {
+        if (!some(node.parameters, hasDefaultValueOrBindingPattern)) {
             return false;
         }
 
@@ -1309,7 +1345,7 @@ export function transformES2015(context: ts.TransformationContext) {
                 continue;
             }
 
-            if (ts.isBindingPattern(name)) {
+            if (isBindingPattern(name)) {
                 added = insertDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer) || added;
             }
             else if (initializer) {
@@ -1328,42 +1364,42 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param name The name of the parameter.
      * @param initializer The initializer for the parameter.
      */
-    function insertDefaultValueAssignmentForBindingPattern(statements: ts.Statement[], parameter: ts.ParameterDeclaration, name: ts.BindingPattern, initializer: ts.Expression | undefined): boolean {
+    function insertDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression | undefined): boolean {
         // In cases where a binding pattern is simply '[]' or '{}',
         // we usually don't want to emit a var declaration; however, in the presence
         // of an initializer, we must emit that expression to preserve side effects.
         if (name.elements.length > 0) {
-            ts.insertStatementAfterCustomPrologue(
+            insertStatementAfterCustomPrologue(
                 statements,
-                ts.setEmitFlags(
+                setEmitFlags(
                     factory.createVariableStatement(
                         /*modifiers*/ undefined,
                         factory.createVariableDeclarationList(
-                            ts.flattenDestructuringBinding(
+                            flattenDestructuringBinding(
                                 parameter,
                                 visitor,
                                 context,
-                                ts.FlattenLevel.All,
+                                FlattenLevel.All,
                                 factory.getGeneratedNameForNode(parameter)
                             )
                         )
                     ),
-                    ts.EmitFlags.CustomPrologue
+                    EmitFlags.CustomPrologue
                 )
             );
             return true;
         }
         else if (initializer) {
-            ts.insertStatementAfterCustomPrologue(
+            insertStatementAfterCustomPrologue(
                 statements,
-                ts.setEmitFlags(
+                setEmitFlags(
                     factory.createExpressionStatement(
                         factory.createAssignment(
                             factory.getGeneratedNameForNode(parameter),
-                            ts.visitNode(initializer, visitor, ts.isExpression)
+                            visitNode(initializer, visitor, isExpression)
                         )
                     ),
-                    ts.EmitFlags.CustomPrologue
+                    EmitFlags.CustomPrologue
                 )
             );
             return true;
@@ -1379,37 +1415,37 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param name The name of the parameter.
      * @param initializer The initializer for the parameter.
      */
-    function insertDefaultValueAssignmentForInitializer(statements: ts.Statement[], parameter: ts.ParameterDeclaration, name: ts.Identifier, initializer: ts.Expression): void {
-        initializer = ts.visitNode(initializer, visitor, ts.isExpression);
+    function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
+        initializer = visitNode(initializer, visitor, isExpression);
         const statement = factory.createIfStatement(
             factory.createTypeCheck(factory.cloneNode(name), "undefined"),
-            ts.setEmitFlags(
-                ts.setTextRange(
+            setEmitFlags(
+                setTextRange(
                     factory.createBlock([
                         factory.createExpressionStatement(
-                            ts.setEmitFlags(
-                                ts.setTextRange(
+                            setEmitFlags(
+                                setTextRange(
                                     factory.createAssignment(
                                         // TODO(rbuckton): Does this need to be parented?
-                                        ts.setEmitFlags(ts.setParent(ts.setTextRange(factory.cloneNode(name), name), name.parent), ts.EmitFlags.NoSourceMap),
-                                        ts.setEmitFlags(initializer, ts.EmitFlags.NoSourceMap | ts.getEmitFlags(initializer) | ts.EmitFlags.NoComments)
+                                        setEmitFlags(setParent(setTextRange(factory.cloneNode(name), name), name.parent), EmitFlags.NoSourceMap),
+                                        setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
                                     ),
                                     parameter
                                 ),
-                                ts.EmitFlags.NoComments
+                                EmitFlags.NoComments
                             )
                         )
                     ]),
                     parameter
                 ),
-                ts.EmitFlags.SingleLine | ts.EmitFlags.NoTrailingSourceMap | ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoComments
+                EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
             )
         );
 
-        ts.startOnNewLine(statement);
-        ts.setTextRange(statement, parameter);
-        ts.setEmitFlags(statement, ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoTrailingSourceMap | ts.EmitFlags.CustomPrologue | ts.EmitFlags.NoComments);
-        ts.insertStatementAfterCustomPrologue(statements, statement);
+        startOnNewLine(statement);
+        setTextRange(statement, parameter);
+        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
+        insertStatementAfterCustomPrologue(statements, statement);
     }
 
     /**
@@ -1420,7 +1456,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *                                          part of a constructor declaration with a
      *                                          synthesized call to `super`
      */
-    function shouldAddRestParameter(node: ts.ParameterDeclaration | undefined, inConstructorWithSynthesizedSuper: boolean): node is ts.ParameterDeclaration {
+    function shouldAddRestParameter(node: ParameterDeclaration | undefined, inConstructorWithSynthesizedSuper: boolean): node is ParameterDeclaration {
         return !!(node && node.dotDotDotToken && !inConstructorWithSynthesizedSuper);
     }
 
@@ -1433,27 +1469,27 @@ export function transformES2015(context: ts.TransformationContext) {
      *                                          part of a constructor declaration with a
      *                                          synthesized call to `super`
      */
-    function addRestParameterIfNeeded(statements: ts.Statement[], node: ts.FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): boolean {
-        const prologueStatements: ts.Statement[] = [];
-        const parameter = ts.lastOrUndefined(node.parameters);
+    function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): boolean {
+        const prologueStatements: Statement[] = [];
+        const parameter = lastOrUndefined(node.parameters);
         if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
             return false;
         }
 
         // `declarationName` is the name of the local declaration for the parameter.
         // TODO(rbuckton): Does this need to be parented?
-        const declarationName = parameter.name.kind === ts.SyntaxKind.Identifier ? ts.setParent(ts.setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);
-        ts.setEmitFlags(declarationName, ts.EmitFlags.NoSourceMap);
+        const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
         // `expressionName` is the name of the parameter used in expressions.
-        const expressionName = parameter.name.kind === ts.SyntaxKind.Identifier ? factory.cloneNode(parameter.name) : declarationName;
+        const expressionName = parameter.name.kind === SyntaxKind.Identifier ? factory.cloneNode(parameter.name) : declarationName;
         const restIndex = node.parameters.length - 1;
         const temp = factory.createLoopVariable();
 
         // var param = [];
         prologueStatements.push(
-            ts.setEmitFlags(
-                ts.setTextRange(
+            setEmitFlags(
+                setTextRange(
                     factory.createVariableStatement(
                         /*modifiers*/ undefined,
                         factory.createVariableDeclarationList([
@@ -1467,7 +1503,7 @@ export function transformES2015(context: ts.TransformationContext) {
                     ),
                     /*location*/ parameter
                 ),
-                ts.EmitFlags.CustomPrologue
+                EmitFlags.CustomPrologue
             )
         );
 
@@ -1475,23 +1511,23 @@ export function transformES2015(context: ts.TransformationContext) {
         //   param[_i - restIndex] = arguments[_i];
         // }
         const forStatement = factory.createForStatement(
-            ts.setTextRange(
+            setTextRange(
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration(temp, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(restIndex))
                 ]),
                 parameter
             ),
-            ts.setTextRange(
+            setTextRange(
                 factory.createLessThan(
                     temp,
                     factory.createPropertyAccessExpression(factory.createIdentifier("arguments"), "length")
                 ),
                 parameter
             ),
-            ts.setTextRange(factory.createPostfixIncrement(temp), parameter),
+            setTextRange(factory.createPostfixIncrement(temp), parameter),
             factory.createBlock([
-                ts.startOnNewLine(
-                    ts.setTextRange(
+                startOnNewLine(
+                    setTextRange(
                         factory.createExpressionStatement(
                             factory.createAssignment(
                                 factory.createElementAccessExpression(
@@ -1509,29 +1545,29 @@ export function transformES2015(context: ts.TransformationContext) {
             ])
         );
 
-        ts.setEmitFlags(forStatement, ts.EmitFlags.CustomPrologue);
-        ts.startOnNewLine(forStatement);
+        setEmitFlags(forStatement, EmitFlags.CustomPrologue);
+        startOnNewLine(forStatement);
         prologueStatements.push(forStatement);
 
-        if (parameter.name.kind !== ts.SyntaxKind.Identifier) {
+        if (parameter.name.kind !== SyntaxKind.Identifier) {
             // do the actual destructuring of the rest parameter if necessary
             prologueStatements.push(
-                ts.setEmitFlags(
-                    ts.setTextRange(
+                setEmitFlags(
+                    setTextRange(
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
                             factory.createVariableDeclarationList(
-                                ts.flattenDestructuringBinding(parameter, visitor, context, ts.FlattenLevel.All, expressionName),
+                                flattenDestructuringBinding(parameter, visitor, context, FlattenLevel.All, expressionName),
                             )
                         ),
                         parameter
                     ),
-                    ts.EmitFlags.CustomPrologue
+                    EmitFlags.CustomPrologue
                 )
             );
         }
 
-        ts.insertStatementsAfterCustomPrologue(statements, prologueStatements);
+        insertStatementsAfterCustomPrologue(statements, prologueStatements);
         return true;
     }
 
@@ -1542,8 +1578,8 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param statements The statements for the new function body.
      * @param node A node.
      */
-    function insertCaptureThisForNodeIfNeeded(statements: ts.Statement[], node: ts.Node): boolean {
-        if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== ts.SyntaxKind.ArrowFunction) {
+    function insertCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): boolean {
+        if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
             insertCaptureThisForNode(statements, node, factory.createThis());
             return true;
         }
@@ -1556,77 +1592,77 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param statements Statements in the constructor body.
      * @param superExpression Existing `super()` call for the constructor.
      */
-    function insertSuperThisCaptureThisForNode(statements: ts.Statement[], superExpression: ts.Expression): void {
+    function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
         enableSubstitutionsForCapturedThis();
         const assignSuperExpression = factory.createExpressionStatement(
             factory.createBinaryExpression(
                 factory.createThis(),
-                ts.SyntaxKind.EqualsToken,
+                SyntaxKind.EqualsToken,
                 superExpression
             )
         );
-        ts.insertStatementAfterCustomPrologue(statements, assignSuperExpression);
-        ts.setCommentRange(assignSuperExpression, ts.getOriginalNode(superExpression).parent);
+        insertStatementAfterCustomPrologue(statements, assignSuperExpression);
+        setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
     }
 
-    function insertCaptureThisForNode(statements: ts.Statement[], node: ts.Node, initializer: ts.Expression | undefined): void {
+    function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
         enableSubstitutionsForCapturedThis();
         const captureThisStatement = factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList([
                 factory.createVariableDeclaration(
-                    factory.createUniqueName("_this", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
                     initializer
                 )
             ])
         );
-        ts.setEmitFlags(captureThisStatement, ts.EmitFlags.NoComments | ts.EmitFlags.CustomPrologue);
-        ts.setSourceMapRange(captureThisStatement, node);
-        ts.insertStatementAfterCustomPrologue(statements, captureThisStatement);
+        setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+        setSourceMapRange(captureThisStatement, node);
+        insertStatementAfterCustomPrologue(statements, captureThisStatement);
     }
 
-    function insertCaptureNewTargetIfNeeded(statements: ts.Statement[], node: ts.FunctionLikeDeclaration, copyOnWrite: boolean): ts.Statement[] {
+    function insertCaptureNewTargetIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, copyOnWrite: boolean): Statement[] {
         if (hierarchyFacts & HierarchyFacts.NewTarget) {
-            let newTarget: ts.Expression;
+            let newTarget: Expression;
             switch (node.kind) {
-                case ts.SyntaxKind.ArrowFunction:
+                case SyntaxKind.ArrowFunction:
                     return statements;
 
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     // Methods and accessors cannot be constructors, so 'new.target' will
                     // always return 'undefined'.
                     newTarget = factory.createVoidZero();
                     break;
 
-                case ts.SyntaxKind.Constructor:
+                case SyntaxKind.Constructor:
                     // Class constructors can only be called with `new`, so `this.constructor`
                     // should be relatively safe to use.
                     newTarget = factory.createPropertyAccessExpression(
-                        ts.setEmitFlags(factory.createThis(), ts.EmitFlags.NoSubstitution),
+                        setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                         "constructor"
                     );
                     break;
 
-                case ts.SyntaxKind.FunctionDeclaration:
-                case ts.SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
                     // Functions can be called or constructed, and may have a `this` due to
                     // being a member or when calling an imported function via `other_1.f()`.
                     newTarget = factory.createConditionalExpression(
                         factory.createLogicalAnd(
-                            ts.setEmitFlags(factory.createThis(), ts.EmitFlags.NoSubstitution),
+                            setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                             factory.createBinaryExpression(
-                                ts.setEmitFlags(factory.createThis(), ts.EmitFlags.NoSubstitution),
-                                ts.SyntaxKind.InstanceOfKeyword,
+                                setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
+                                SyntaxKind.InstanceOfKeyword,
                                 factory.getLocalName(node)
                             )
                         ),
                         /*questionToken*/ undefined,
                         factory.createPropertyAccessExpression(
-                            ts.setEmitFlags(factory.createThis(), ts.EmitFlags.NoSubstitution),
+                            setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                             "constructor"
                         ),
                         /*colonToken*/ undefined,
@@ -1635,14 +1671,14 @@ export function transformES2015(context: ts.TransformationContext) {
                     break;
 
                 default:
-                    return ts.Debug.failBadSyntaxKind(node);
+                    return Debug.failBadSyntaxKind(node);
             }
 
             const captureNewTargetStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration(
-                        factory.createUniqueName("_newTarget", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
+                        factory.createUniqueName("_newTarget", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
                         newTarget
@@ -1650,13 +1686,13 @@ export function transformES2015(context: ts.TransformationContext) {
                 ])
             );
 
-            ts.setEmitFlags(captureNewTargetStatement, ts.EmitFlags.NoComments | ts.EmitFlags.CustomPrologue);
+            setEmitFlags(captureNewTargetStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
 
             if (copyOnWrite) {
                 statements = statements.slice();
             }
 
-            ts.insertStatementAfterCustomPrologue(statements, captureNewTargetStatement);
+            insertStatementAfterCustomPrologue(statements, captureNewTargetStatement);
         }
 
         return statements;
@@ -1669,33 +1705,33 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param statements The statements for the class body function.
      * @param node The ClassExpression or ClassDeclaration node.
      */
-    function addClassMembers(statements: ts.Statement[], node: ts.ClassExpression | ts.ClassDeclaration): void {
+    function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration): void {
         for (const member of node.members) {
             switch (member.kind) {
-                case ts.SyntaxKind.SemicolonClassElement:
-                    statements.push(transformSemicolonClassElementToStatement(member as ts.SemicolonClassElement));
+                case SyntaxKind.SemicolonClassElement:
+                    statements.push(transformSemicolonClassElementToStatement(member as SemicolonClassElement));
                     break;
 
-                case ts.SyntaxKind.MethodDeclaration:
-                    statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), member as ts.MethodDeclaration, node));
+                case SyntaxKind.MethodDeclaration:
+                    statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), member as MethodDeclaration, node));
                     break;
 
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                    const accessors = ts.getAllAccessorDeclarations(node.members, member as ts.AccessorDeclaration);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    const accessors = getAllAccessorDeclarations(node.members, member as AccessorDeclaration);
                     if (member === accessors.firstAccessor) {
                         statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member), accessors, node));
                     }
 
                     break;
 
-                case ts.SyntaxKind.Constructor:
-                case ts.SyntaxKind.ClassStaticBlockDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // Constructors are handled in visitClassExpression/visitClassDeclaration
                     break;
 
                 default:
-                    ts.Debug.failBadSyntaxKind(member, currentSourceFile && currentSourceFile.fileName);
+                    Debug.failBadSyntaxKind(member, currentSourceFile && currentSourceFile.fileName);
                     break;
             }
         }
@@ -1706,8 +1742,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param member The SemicolonClassElement node.
      */
-    function transformSemicolonClassElementToStatement(member: ts.SemicolonClassElement) {
-        return ts.setTextRange(factory.createEmptyStatement(), member);
+    function transformSemicolonClassElementToStatement(member: SemicolonClassElement) {
+        return setTextRange(factory.createEmptyStatement(), member);
     }
 
     /**
@@ -1716,33 +1752,33 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param receiver The receiver for the member.
      * @param member The MethodDeclaration node.
      */
-    function transformClassMethodDeclarationToStatement(receiver: ts.LeftHandSideExpression, member: ts.MethodDeclaration, container: ts.Node) {
-        const commentRange = ts.getCommentRange(member);
-        const sourceMapRange = ts.getSourceMapRange(member);
+    function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
+        const commentRange = getCommentRange(member);
+        const sourceMapRange = getSourceMapRange(member);
         const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
-        const propertyName = ts.visitNode(member.name, visitor, ts.isPropertyName);
-        let e: ts.Expression;
-        if (!ts.isPrivateIdentifier(propertyName) && ts.getUseDefineForClassFields(context.getCompilerOptions())) {
-            const name = ts.isComputedPropertyName(propertyName) ? propertyName.expression
-                : ts.isIdentifier(propertyName) ? factory.createStringLiteral(ts.unescapeLeadingUnderscores(propertyName.escapedText))
+        const propertyName = visitNode(member.name, visitor, isPropertyName);
+        let e: Expression;
+        if (!isPrivateIdentifier(propertyName) && getUseDefineForClassFields(context.getCompilerOptions())) {
+            const name = isComputedPropertyName(propertyName) ? propertyName.expression
+                : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                 : propertyName;
             e = factory.createObjectDefinePropertyCall(receiver, name, factory.createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
         }
         else {
-            const memberName = ts.createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ member.name);
+            const memberName = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ member.name);
             e = factory.createAssignment(memberName, memberFunction);
         }
-        ts.setEmitFlags(memberFunction, ts.EmitFlags.NoComments);
-        ts.setSourceMapRange(memberFunction, sourceMapRange);
-        const statement = ts.setTextRange(factory.createExpressionStatement(e), /*location*/ member);
+        setEmitFlags(memberFunction, EmitFlags.NoComments);
+        setSourceMapRange(memberFunction, sourceMapRange);
+        const statement = setTextRange(factory.createExpressionStatement(e), /*location*/ member);
 
-        ts.setOriginalNode(statement, member);
-        ts.setCommentRange(statement, commentRange);
+        setOriginalNode(statement, member);
+        setCommentRange(statement, commentRange);
 
         // The location for the statement is used to emit comments only.
         // No source map should be emitted for this statement to align with the
         // old emitter.
-        ts.setEmitFlags(statement, ts.EmitFlags.NoSourceMap);
+        setEmitFlags(statement, EmitFlags.NoSourceMap);
         return statement;
     }
 
@@ -1752,13 +1788,13 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param receiver The receiver for the member.
      * @param accessors The set of related get/set accessors.
      */
-    function transformAccessorsToStatement(receiver: ts.LeftHandSideExpression, accessors: ts.AllAccessorDeclarations, container: ts.Node): ts.Statement {
+    function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
         const statement = factory.createExpressionStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
         // The location for the statement is used to emit source maps only.
         // No comments should be emitted for this statement to align with the
         // old emitter.
-        ts.setEmitFlags(statement, ts.EmitFlags.NoComments);
-        ts.setSourceMapRange(statement, ts.getSourceMapRange(accessors.firstAccessor));
+        setEmitFlags(statement, EmitFlags.NoComments);
+        setSourceMapRange(statement, getSourceMapRange(accessors.firstAccessor));
         return statement;
     }
 
@@ -1768,38 +1804,38 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param receiver The receiver for the member.
      */
-    function transformAccessorsToExpression(receiver: ts.LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: ts.AllAccessorDeclarations, container: ts.Node, startsOnNewLine: boolean): ts.Expression {
+    function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
         // To align with source maps in the old emitter, the receiver and property name
         // arguments are both mapped contiguously to the accessor name.
         // TODO(rbuckton): Does this need to be parented?
-        const target = ts.setParent(ts.setTextRange(factory.cloneNode(receiver), receiver), receiver.parent);
-        ts.setEmitFlags(target, ts.EmitFlags.NoComments | ts.EmitFlags.NoTrailingSourceMap);
-        ts.setSourceMapRange(target, firstAccessor.name);
+        const target = setParent(setTextRange(factory.cloneNode(receiver), receiver), receiver.parent);
+        setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
+        setSourceMapRange(target, firstAccessor.name);
 
-        const visitedAccessorName = ts.visitNode(firstAccessor.name, visitor, ts.isPropertyName);
-        if (ts.isPrivateIdentifier(visitedAccessorName)) {
-            return ts.Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
+        const visitedAccessorName = visitNode(firstAccessor.name, visitor, isPropertyName);
+        if (isPrivateIdentifier(visitedAccessorName)) {
+            return Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
         }
-        const propertyName = ts.createExpressionForPropertyName(factory, visitedAccessorName);
-        ts.setEmitFlags(propertyName, ts.EmitFlags.NoComments | ts.EmitFlags.NoLeadingSourceMap);
-        ts.setSourceMapRange(propertyName, firstAccessor.name);
+        const propertyName = createExpressionForPropertyName(factory, visitedAccessorName);
+        setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);
+        setSourceMapRange(propertyName, firstAccessor.name);
 
-        const properties: ts.ObjectLiteralElementLike[] = [];
+        const properties: ObjectLiteralElementLike[] = [];
         if (getAccessor) {
             const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined, container);
-            ts.setSourceMapRange(getterFunction, ts.getSourceMapRange(getAccessor));
-            ts.setEmitFlags(getterFunction, ts.EmitFlags.NoLeadingComments);
+            setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
+            setEmitFlags(getterFunction, EmitFlags.NoLeadingComments);
             const getter = factory.createPropertyAssignment("get", getterFunction);
-            ts.setCommentRange(getter, ts.getCommentRange(getAccessor));
+            setCommentRange(getter, getCommentRange(getAccessor));
             properties.push(getter);
         }
 
         if (setAccessor) {
             const setterFunction = transformFunctionLikeToExpression(setAccessor, /*location*/ undefined, /*name*/ undefined, container);
-            ts.setSourceMapRange(setterFunction, ts.getSourceMapRange(setAccessor));
-            ts.setEmitFlags(setterFunction, ts.EmitFlags.NoLeadingComments);
+            setSourceMapRange(setterFunction, getSourceMapRange(setAccessor));
+            setEmitFlags(setterFunction, EmitFlags.NoLeadingComments);
             const setter = factory.createPropertyAssignment("set", setterFunction);
-            ts.setCommentRange(setter, ts.getCommentRange(setAccessor));
+            setCommentRange(setter, getCommentRange(setAccessor));
             properties.push(setter);
         }
 
@@ -1818,7 +1854,7 @@ export function transformES2015(context: ts.TransformationContext) {
             ]
         );
         if (startsOnNewLine) {
-            ts.startOnNewLine(call);
+            startOnNewLine(call);
         }
 
         return call;
@@ -1829,8 +1865,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An ArrowFunction node.
      */
-    function visitArrowFunction(node: ts.ArrowFunction) {
-        if (node.transformFlags & ts.TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
+    function visitArrowFunction(node: ArrowFunction) {
+        if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
             hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
         }
 
@@ -1842,13 +1878,13 @@ export function transformES2015(context: ts.TransformationContext) {
             /*asteriskToken*/ undefined,
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            ts.visitParameterList(node.parameters, visitor, context),
+            visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             transformFunctionBody(node)
         );
-        ts.setTextRange(func, node);
-        ts.setOriginalNode(func, node);
-        ts.setEmitFlags(func, ts.EmitFlags.CapturesThis);
+        setTextRange(func, node);
+        setOriginalNode(func, node);
+        setEmitFlags(func, EmitFlags.CapturesThis);
 
         // If an arrow function contains
         exitSubtree(ancestorFacts, HierarchyFacts.ArrowFunctionSubtreeExcludes, HierarchyFacts.None);
@@ -1862,14 +1898,14 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node a FunctionExpression node.
      */
-    function visitFunctionExpression(node: ts.FunctionExpression): ts.Expression {
-        const ancestorFacts = ts.getEmitFlags(node) & ts.EmitFlags.AsyncFunctionBody
+    function visitFunctionExpression(node: FunctionExpression): Expression {
+        const ancestorFacts = getEmitFlags(node) & EmitFlags.AsyncFunctionBody
             ? enterSubtree(HierarchyFacts.AsyncFunctionBodyExcludes, HierarchyFacts.AsyncFunctionBodyIncludes)
             : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
 
-        const parameters = ts.visitParameterList(node.parameters, visitor, context);
+        const parameters = visitParameterList(node.parameters, visitor, context);
         const body = transformFunctionBody(node);
         const name = hierarchyFacts & HierarchyFacts.NewTarget
             ? factory.getLocalName(node)
@@ -1894,11 +1930,11 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node a FunctionDeclaration node.
      */
-    function visitFunctionDeclaration(node: ts.FunctionDeclaration): ts.FunctionDeclaration {
+    function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-        const parameters = ts.visitParameterList(node.parameters, visitor, context);
+        const parameters = visitParameterList(node.parameters, visitor, context);
         const body = transformFunctionBody(node);
         const name = hierarchyFacts & HierarchyFacts.NewTarget
             ? factory.getLocalName(node)
@@ -1908,7 +1944,7 @@ export function transformES2015(context: ts.TransformationContext) {
         convertedLoopState = savedConvertedLoopState;
         return factory.updateFunctionDeclaration(
             node,
-            ts.visitNodes(node.modifiers, visitor, ts.isModifier),
+            visitNodes(node.modifiers, visitor, isModifier),
             node.asteriskToken,
             name,
             /*typeParameters*/ undefined,
@@ -1925,22 +1961,22 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param location The source-map location for the new FunctionExpression.
      * @param name The name of the new FunctionExpression.
      */
-    function transformFunctionLikeToExpression(node: ts.FunctionLikeDeclaration, location: ts.TextRange | undefined, name: ts.Identifier | undefined, container: ts.Node | undefined): ts.FunctionExpression {
+    function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
-        const ancestorFacts = container && ts.isClassLike(container) && !ts.isStatic(node)
+        const ancestorFacts = container && isClassLike(container) && !isStatic(node)
             ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
             : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-        const parameters = ts.visitParameterList(node.parameters, visitor, context);
+        const parameters = visitParameterList(node.parameters, visitor, context);
         const body = transformFunctionBody(node);
-        if (hierarchyFacts & HierarchyFacts.NewTarget && !name && (node.kind === ts.SyntaxKind.FunctionDeclaration || node.kind === ts.SyntaxKind.FunctionExpression)) {
+        if (hierarchyFacts & HierarchyFacts.NewTarget && !name && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) {
             name = factory.getGeneratedNameForNode(node);
         }
 
         exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
         convertedLoopState = savedConvertedLoopState;
-        return ts.setOriginalNode(
-            ts.setTextRange(
+        return setOriginalNode(
+            setTextRange(
                 factory.createFunctionExpression(
                     /*modifiers*/ undefined,
                     node.asteriskToken,
@@ -1961,35 +1997,35 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A function-like node.
      */
-    function transformFunctionBody(node: ts.FunctionLikeDeclaration) {
+    function transformFunctionBody(node: FunctionLikeDeclaration) {
         let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
         let singleLine = false; // indicates whether the block *may* be emitted as a single line
-        let statementsLocation: ts.TextRange;
-        let closeBraceLocation: ts.TextRange | undefined;
+        let statementsLocation: TextRange;
+        let closeBraceLocation: TextRange | undefined;
 
-        const prologue: ts.Statement[] = [];
-        const statements: ts.Statement[] = [];
+        const prologue: Statement[] = [];
+        const statements: Statement[] = [];
         const body = node.body!;
         let statementOffset: number | undefined;
 
         resumeLexicalEnvironment();
-        if (ts.isBlock(body)) {
+        if (isBlock(body)) {
             // ensureUseStrict is false because no new prologue-directive should be added.
             // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
             statementOffset = factory.copyStandardPrologue(body.statements, prologue, 0, /*ensureUseStrict*/ false);
-            statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, ts.isHoistedFunction);
-            statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, ts.isHoistedVariableStatement);
+            statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedFunction);
+            statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedVariableStatement);
         }
 
         multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
         multiLine = addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false) || multiLine;
 
-        if (ts.isBlock(body)) {
+        if (isBlock(body)) {
             // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
             statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor);
 
             statementsLocation = body.statements;
-            ts.addRange(statements, ts.visitNodes(body.statements, visitor, ts.isStatement, statementOffset));
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
             // If the original body was a multi-line block, this must be a multi-line block.
             if (!multiLine && body.multiLine) {
@@ -1997,17 +2033,17 @@ export function transformES2015(context: ts.TransformationContext) {
             }
         }
         else {
-            ts.Debug.assert(node.kind === ts.SyntaxKind.ArrowFunction);
+            Debug.assert(node.kind === SyntaxKind.ArrowFunction);
 
             // To align with the old emitter, we use a synthetic end position on the location
             // for the statement list we synthesize when we down-level an arrow function with
             // an expression function body. This prevents both comments and source maps from
             // being emitted for the end position only.
-            statementsLocation = ts.moveRangeEnd(body, -1);
+            statementsLocation = moveRangeEnd(body, -1);
 
             const equalsGreaterThanToken = node.equalsGreaterThanToken;
-            if (!ts.nodeIsSynthesized(equalsGreaterThanToken) && !ts.nodeIsSynthesized(body)) {
-                if (ts.rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
+            if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
+                if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
                     singleLine = true;
                 }
                 else {
@@ -2015,11 +2051,11 @@ export function transformES2015(context: ts.TransformationContext) {
                 }
             }
 
-            const expression = ts.visitNode(body, visitor, ts.isExpression);
+            const expression = visitNode(body, visitor, isExpression);
             const returnStatement = factory.createReturnStatement(expression);
-            ts.setTextRange(returnStatement, body);
-            ts.moveSyntheticComments(returnStatement, body);
-            ts.setEmitFlags(returnStatement, ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoTrailingSourceMap | ts.EmitFlags.NoTrailingComments);
+            setTextRange(returnStatement, body);
+            moveSyntheticComments(returnStatement, body);
+            setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
             statements.push(returnStatement);
 
             // To align with the source map emit for the old emitter, we set a custom
@@ -2032,39 +2068,39 @@ export function transformES2015(context: ts.TransformationContext) {
         insertCaptureThisForNodeIfNeeded(prologue, node);
 
         // If we added any final generated statements, this must be a multi-line block
-        if (ts.some(prologue)) {
+        if (some(prologue)) {
             multiLine = true;
         }
 
         statements.unshift(...prologue);
-        if (ts.isBlock(body) && ts.arrayIsEqualTo(statements, body.statements)) {
+        if (isBlock(body) && arrayIsEqualTo(statements, body.statements)) {
             // no changes were made, preserve the tree
             return body;
         }
 
-        const block = factory.createBlock(ts.setTextRange(factory.createNodeArray(statements), statementsLocation), multiLine);
-        ts.setTextRange(block, node.body);
+        const block = factory.createBlock(setTextRange(factory.createNodeArray(statements), statementsLocation), multiLine);
+        setTextRange(block, node.body);
         if (!multiLine && singleLine) {
-            ts.setEmitFlags(block, ts.EmitFlags.SingleLine);
+            setEmitFlags(block, EmitFlags.SingleLine);
         }
 
         if (closeBraceLocation) {
-            ts.setTokenSourceMapRange(block, ts.SyntaxKind.CloseBraceToken, closeBraceLocation);
+            setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
         }
 
-        ts.setOriginalNode(block, node.body);
+        setOriginalNode(block, node.body);
         return block;
     }
 
-    function visitBlock(node: ts.Block, isFunctionBody: boolean): ts.Block {
+    function visitBlock(node: Block, isFunctionBody: boolean): Block {
         if (isFunctionBody) {
             // A function body is not a block scope.
-            return ts.visitEachChild(node, visitor, context);
+            return visitEachChild(node, visitor, context);
         }
         const ancestorFacts = hierarchyFacts & HierarchyFacts.IterationStatement
             ? enterSubtree(HierarchyFacts.IterationStatementBlockExcludes, HierarchyFacts.IterationStatementBlockIncludes)
             : enterSubtree(HierarchyFacts.BlockExcludes, HierarchyFacts.BlockIncludes);
-        const updated = ts.visitEachChild(node, visitor, context);
+        const updated = visitEachChild(node, visitor, context);
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return updated;
     }
@@ -2074,8 +2110,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An ExpressionStatement node.
      */
-    function visitExpressionStatement(node: ts.ExpressionStatement): ts.Statement {
-        return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
+    function visitExpressionStatement(node: ExpressionStatement): Statement {
+        return visitEachChild(node, visitorWithUnusedExpressionResult, context);
     }
 
     /**
@@ -2085,8 +2121,8 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitParenthesizedExpression(node: ts.ParenthesizedExpression, expressionResultIsUnused: boolean): ts.ParenthesizedExpression {
-        return ts.visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
+    function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
+        return visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
     }
 
     /**
@@ -2096,82 +2132,82 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitBinaryExpression(node: ts.BinaryExpression, expressionResultIsUnused: boolean): ts.Expression {
+    function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
         // If we are here it is because this is a destructuring assignment.
-        if (ts.isDestructuringAssignment(node)) {
-            return ts.flattenDestructuringAssignment(
+        if (isDestructuringAssignment(node)) {
+            return flattenDestructuringAssignment(
                 node,
                 visitor,
                 context,
-                ts.FlattenLevel.All,
+                FlattenLevel.All,
                 !expressionResultIsUnused);
         }
-        if (node.operatorToken.kind === ts.SyntaxKind.CommaToken) {
+        if (node.operatorToken.kind === SyntaxKind.CommaToken) {
             return factory.updateBinaryExpression(
                 node,
-                ts.visitNode(node.left, visitorWithUnusedExpressionResult, ts.isExpression),
+                visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
                 node.operatorToken,
-                ts.visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, ts.isExpression)
+                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
             );
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitCommaListExpression(node: ts.CommaListExpression, expressionResultIsUnused: boolean): ts.Expression {
+    function visitCommaListExpression(node: CommaListExpression, expressionResultIsUnused: boolean): Expression {
         if (expressionResultIsUnused) {
-            return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
+            return visitEachChild(node, visitorWithUnusedExpressionResult, context);
         }
-        let result: ts.Expression[] | undefined;
+        let result: Expression[] | undefined;
         for (let i = 0; i < node.elements.length; i++) {
             const element = node.elements[i];
-            const visited = ts.visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, ts.isExpression);
+            const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
             if (result || visited !== element) {
                 result ||= node.elements.slice(0, i);
                 result.push(visited);
             }
         }
-        const elements = result ? ts.setTextRange(factory.createNodeArray(result), node.elements) : node.elements;
+        const elements = result ? setTextRange(factory.createNodeArray(result), node.elements) : node.elements;
         return factory.updateCommaListExpression(node, elements);
     }
 
-    function isVariableStatementOfTypeScriptClassWrapper(node: ts.VariableStatement) {
+    function isVariableStatementOfTypeScriptClassWrapper(node: VariableStatement) {
         return node.declarationList.declarations.length === 1
             && !!node.declarationList.declarations[0].initializer
-            && !!(ts.getEmitFlags(node.declarationList.declarations[0].initializer) & ts.EmitFlags.TypeScriptClassWrapper);
+            && !!(getEmitFlags(node.declarationList.declarations[0].initializer) & EmitFlags.TypeScriptClassWrapper);
     }
 
-    function visitVariableStatement(node: ts.VariableStatement): ts.Statement | undefined {
-        const ancestorFacts = enterSubtree(HierarchyFacts.None, ts.hasSyntacticModifier(node, ts.ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
-        let updated: ts.Statement | undefined;
-        if (convertedLoopState && (node.declarationList.flags & ts.NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
+    function visitVariableStatement(node: VariableStatement): Statement | undefined {
+        const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
+        let updated: Statement | undefined;
+        if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
             // we are inside a converted loop - hoist variable declarations
-            let assignments: ts.Expression[] | undefined;
+            let assignments: Expression[] | undefined;
             for (const decl of node.declarationList.declarations) {
                 hoistVariableDeclarationDeclaredInConvertedLoop(convertedLoopState, decl);
                 if (decl.initializer) {
-                    let assignment: ts.Expression;
-                    if (ts.isBindingPattern(decl.name)) {
-                        assignment = ts.flattenDestructuringAssignment(
+                    let assignment: Expression;
+                    if (isBindingPattern(decl.name)) {
+                        assignment = flattenDestructuringAssignment(
                             decl,
                             visitor,
                             context,
-                            ts.FlattenLevel.All
+                            FlattenLevel.All
                         );
                     }
                     else {
-                        assignment = factory.createBinaryExpression(decl.name, ts.SyntaxKind.EqualsToken, ts.visitNode(decl.initializer, visitor, ts.isExpression));
-                        ts.setTextRange(assignment, decl);
+                        assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                        setTextRange(assignment, decl);
                     }
 
-                    assignments = ts.append(assignments, assignment);
+                    assignments = append(assignments, assignment);
                 }
             }
             if (assignments) {
-                updated = ts.setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
+                updated = setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
             }
             else {
                 // none of declarations has initializer - the entire variable statement can be deleted
@@ -2179,7 +2215,7 @@ export function transformES2015(context: ts.TransformationContext) {
             }
         }
         else {
-            updated = ts.visitEachChild(node, visitor, context);
+            updated = visitEachChild(node, visitor, context);
         }
 
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -2191,34 +2227,34 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A VariableDeclarationList node.
      */
-    function visitVariableDeclarationList(node: ts.VariableDeclarationList): ts.VariableDeclarationList {
-        if (node.flags & ts.NodeFlags.BlockScoped || node.transformFlags & ts.TransformFlags.ContainsBindingPattern) {
-            if (node.flags & ts.NodeFlags.BlockScoped) {
+    function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
+        if (node.flags & NodeFlags.BlockScoped || node.transformFlags & TransformFlags.ContainsBindingPattern) {
+            if (node.flags & NodeFlags.BlockScoped) {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const declarations = ts.flatMap(node.declarations, node.flags & ts.NodeFlags.Let
+            const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
                 ? visitVariableDeclarationInLetDeclarationList
                 : visitVariableDeclaration);
 
             const declarationList = factory.createVariableDeclarationList(declarations);
-            ts.setOriginalNode(declarationList, node);
-            ts.setTextRange(declarationList, node);
-            ts.setCommentRange(declarationList, node);
+            setOriginalNode(declarationList, node);
+            setTextRange(declarationList, node);
+            setCommentRange(declarationList, node);
 
             // If the first or last declaration is a binding pattern, we need to modify
             // the source map range for the declaration list.
-            if (node.transformFlags & ts.TransformFlags.ContainsBindingPattern
-                && (ts.isBindingPattern(node.declarations[0].name) || ts.isBindingPattern(ts.last(node.declarations).name))) {
-                ts.setSourceMapRange(declarationList, getRangeUnion(declarations));
+            if (node.transformFlags & TransformFlags.ContainsBindingPattern
+                && (isBindingPattern(node.declarations[0].name) || isBindingPattern(last(node.declarations).name))) {
+                setSourceMapRange(declarationList, getRangeUnion(declarations));
             }
 
             return declarationList;
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function getRangeUnion(declarations: readonly ts.Node[]): ts.TextRange {
+    function getRangeUnion(declarations: readonly Node[]): TextRange {
         // declarations may not be sorted by position.
         // pos should be the minimum* position over all nodes (that's not -1), end should be the maximum end over all nodes.
         let pos = -1, end = -1;
@@ -2226,7 +2262,7 @@ export function transformES2015(context: ts.TransformationContext) {
             pos = pos === -1 ? node.pos : node.pos === -1 ? pos : Math.min(pos, node.pos);
             end = Math.max(end, node.end);
         }
-        return ts.createRange(pos, end);
+        return createRange(pos, end);
     }
 
     /**
@@ -2235,7 +2271,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A VariableDeclaration node.
      */
-    function shouldEmitExplicitInitializerForLetDeclaration(node: ts.VariableDeclaration) {
+    function shouldEmitExplicitInitializerForLetDeclaration(node: VariableDeclaration) {
         // Nested let bindings might need to be initialized explicitly to preserve
         // ES6 semantic:
         //
@@ -2277,8 +2313,8 @@ export function transformES2015(context: ts.TransformationContext) {
         //     - Since we've introduced a fresh name it already will be undefined.
 
         const flags = resolver.getNodeCheckFlags(node);
-        const isCapturedInFunction = flags & ts.NodeCheckFlags.CapturedBlockScopedBinding;
-        const isDeclaredInLoop = flags & ts.NodeCheckFlags.BlockScopedBindingInLoop;
+        const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
+        const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
         const emittedAsTopLevel =
             (hierarchyFacts & HierarchyFacts.TopLevel) !== 0
             || (isCapturedInFunction
@@ -2301,12 +2337,12 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A VariableDeclaration node.
      */
-    function visitVariableDeclarationInLetDeclarationList(node: ts.VariableDeclaration) {
+    function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration) {
         // For binding pattern names that lack initializers there is no point to emit
         // explicit initializer since downlevel codegen for destructuring will fail
         // in the absence of initializer so all binding elements will say uninitialized
         const name = node.name;
-        if (ts.isBindingPattern(name)) {
+        if (isBindingPattern(name)) {
             return visitVariableDeclaration(node);
         }
 
@@ -2314,7 +2350,7 @@ export function transformES2015(context: ts.TransformationContext) {
             return factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createVoidZero());
         }
 
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -2322,67 +2358,67 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A VariableDeclaration node.
      */
-    function visitVariableDeclaration(node: ts.VariableDeclaration): ts.VisitResult<ts.VariableDeclaration> {
+    function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
         const ancestorFacts = enterSubtree(HierarchyFacts.ExportedVariableStatement, HierarchyFacts.None);
-        let updated: ts.VisitResult<ts.VariableDeclaration>;
-        if (ts.isBindingPattern(node.name)) {
-            updated = ts.flattenDestructuringBinding(
+        let updated: VisitResult<VariableDeclaration>;
+        if (isBindingPattern(node.name)) {
+            updated = flattenDestructuringBinding(
                 node,
                 visitor,
                 context,
-                ts.FlattenLevel.All,
+                FlattenLevel.All,
                 /*value*/ undefined,
                 (ancestorFacts & HierarchyFacts.ExportedVariableStatement) !== 0
             );
         }
         else {
-            updated = ts.visitEachChild(node, visitor, context);
+            updated = visitEachChild(node, visitor, context);
         }
 
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return updated;
     }
 
-    function recordLabel(node: ts.LabeledStatement) {
-        convertedLoopState!.labels!.set(ts.idText(node.label), true);
+    function recordLabel(node: LabeledStatement) {
+        convertedLoopState!.labels!.set(idText(node.label), true);
     }
 
-    function resetLabel(node: ts.LabeledStatement) {
-        convertedLoopState!.labels!.set(ts.idText(node.label), false);
+    function resetLabel(node: LabeledStatement) {
+        convertedLoopState!.labels!.set(idText(node.label), false);
     }
 
-    function visitLabeledStatement(node: ts.LabeledStatement): ts.VisitResult<ts.Statement> {
+    function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
         if (convertedLoopState && !convertedLoopState.labels) {
-            convertedLoopState.labels = new ts.Map<string, boolean>();
+            convertedLoopState.labels = new Map<string, boolean>();
         }
-        const statement = ts.unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
-        return ts.isIterationStatement(statement, /*lookInLabeledStatements*/ false)
+        const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
+        return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
             ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-            : factory.restoreEnclosingLabel(ts.visitNode(statement, visitor, ts.isStatement, factory.liftToBlock), node, convertedLoopState && resetLabel);
+            : factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node, convertedLoopState && resetLabel);
     }
 
-    function visitIterationStatement(node: ts.IterationStatement, outermostLabeledStatement: ts.LabeledStatement) {
+    function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
         switch (node.kind) {
-            case ts.SyntaxKind.DoStatement:
-            case ts.SyntaxKind.WhileStatement:
-                return visitDoOrWhileStatement(node as ts.DoStatement | ts.WhileStatement, outermostLabeledStatement);
-            case ts.SyntaxKind.ForStatement:
-                return visitForStatement(node as ts.ForStatement, outermostLabeledStatement);
-            case ts.SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ts.ForInStatement, outermostLabeledStatement);
-            case ts.SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ts.ForOfStatement, outermostLabeledStatement);
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return visitDoOrWhileStatement(node as DoStatement | WhileStatement, outermostLabeledStatement);
+            case SyntaxKind.ForStatement:
+                return visitForStatement(node as ForStatement, outermostLabeledStatement);
+            case SyntaxKind.ForInStatement:
+                return visitForInStatement(node as ForInStatement, outermostLabeledStatement);
+            case SyntaxKind.ForOfStatement:
+                return visitForOfStatement(node as ForOfStatement, outermostLabeledStatement);
         }
     }
 
-    function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: ts.IterationStatement, outermostLabeledStatement: ts.LabeledStatement | undefined, convert?: LoopConverter) {
+    function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
         const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
         const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return updated;
     }
 
-    function visitDoOrWhileStatement(node: ts.DoStatement | ts.WhileStatement, outermostLabeledStatement: ts.LabeledStatement | undefined) {
+    function visitDoOrWhileStatement(node: DoStatement | WhileStatement, outermostLabeledStatement: LabeledStatement | undefined) {
         return visitIterationStatementWithFacts(
             HierarchyFacts.DoOrWhileStatementExcludes,
             HierarchyFacts.DoOrWhileStatementIncludes,
@@ -2390,7 +2426,7 @@ export function transformES2015(context: ts.TransformationContext) {
             outermostLabeledStatement);
     }
 
-    function visitForStatement(node: ts.ForStatement, outermostLabeledStatement: ts.LabeledStatement | undefined) {
+    function visitForStatement(node: ForStatement, outermostLabeledStatement: LabeledStatement | undefined) {
         return visitIterationStatementWithFacts(
             HierarchyFacts.ForStatementExcludes,
             HierarchyFacts.ForStatementIncludes,
@@ -2398,17 +2434,17 @@ export function transformES2015(context: ts.TransformationContext) {
             outermostLabeledStatement);
     }
 
-    function visitEachChildOfForStatement(node: ts.ForStatement) {
+    function visitEachChildOfForStatement(node: ForStatement) {
         return factory.updateForStatement(
             node,
-            ts.visitNode(node.initializer, visitorWithUnusedExpressionResult, ts.isForInitializer),
-            ts.visitNode(node.condition, visitor, ts.isExpression),
-            ts.visitNode(node.incrementor, visitorWithUnusedExpressionResult, ts.isExpression),
-            ts.visitNode(node.statement, visitor, ts.isStatement, factory.liftToBlock)
+            visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
+            visitNode(node.condition, visitor, isExpression),
+            visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
+            visitNode(node.statement, visitor, isStatement, factory.liftToBlock)
         );
     }
 
-    function visitForInStatement(node: ts.ForInStatement, outermostLabeledStatement: ts.LabeledStatement | undefined) {
+    function visitForInStatement(node: ForInStatement, outermostLabeledStatement: LabeledStatement | undefined) {
         return visitIterationStatementWithFacts(
             HierarchyFacts.ForInOrForOfStatementExcludes,
             HierarchyFacts.ForInOrForOfStatementIncludes,
@@ -2416,7 +2452,7 @@ export function transformES2015(context: ts.TransformationContext) {
             outermostLabeledStatement);
     }
 
-    function visitForOfStatement(node: ts.ForOfStatement, outermostLabeledStatement: ts.LabeledStatement | undefined): ts.VisitResult<ts.Statement> {
+    function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
         return visitIterationStatementWithFacts(
             HierarchyFacts.ForInOrForOfStatementExcludes,
             HierarchyFacts.ForInOrForOfStatementIncludes,
@@ -2425,32 +2461,32 @@ export function transformES2015(context: ts.TransformationContext) {
             compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
     }
 
-    function convertForOfStatementHead(node: ts.ForOfStatement, boundValue: ts.Expression, convertedLoopBodyStatements: ts.Statement[]) {
-        const statements: ts.Statement[] = [];
+    function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+        const statements: Statement[] = [];
         const initializer = node.initializer;
-        if (ts.isVariableDeclarationList(initializer)) {
-            if (node.initializer.flags & ts.NodeFlags.BlockScoped) {
+        if (isVariableDeclarationList(initializer)) {
+            if (node.initializer.flags & NodeFlags.BlockScoped) {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const firstOriginalDeclaration = ts.firstOrUndefined(initializer.declarations);
-            if (firstOriginalDeclaration && ts.isBindingPattern(firstOriginalDeclaration.name)) {
+            const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
+            if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                 // This works whether the declaration is a var, let, or const.
                 // It will use rhsIterationValue _a[_i] as the initializer.
-                const declarations = ts.flattenDestructuringBinding(
+                const declarations = flattenDestructuringBinding(
                     firstOriginalDeclaration,
                     visitor,
                     context,
-                    ts.FlattenLevel.All,
+                    FlattenLevel.All,
                     boundValue
                 );
 
-                const declarationList = ts.setTextRange(factory.createVariableDeclarationList(declarations), node.initializer);
-                ts.setOriginalNode(declarationList, node.initializer);
+                const declarationList = setTextRange(factory.createVariableDeclarationList(declarations), node.initializer);
+                setOriginalNode(declarationList, node.initializer);
 
                 // Adjust the source map range for the first declaration to align with the old
                 // emitter.
-                ts.setSourceMapRange(declarationList, ts.createRange(declarations[0].pos, ts.last(declarations).end));
+                setSourceMapRange(declarationList, createRange(declarations[0].pos, last(declarations).end));
 
                 statements.push(
                     factory.createVariableStatement(
@@ -2463,11 +2499,11 @@ export function transformES2015(context: ts.TransformationContext) {
                 // The following call does not include the initializer, so we have
                 // to emit it separately.
                 statements.push(
-                    ts.setTextRange(
+                    setTextRange(
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
-                            ts.setOriginalNode(
-                                ts.setTextRange(
+                            setOriginalNode(
+                                setTextRange(
                                     factory.createVariableDeclarationList([
                                         factory.createVariableDeclaration(
                                             firstOriginalDeclaration ? firstOriginalDeclaration.name : factory.createTempVariable(/*recordTempVariable*/ undefined),
@@ -2476,12 +2512,12 @@ export function transformES2015(context: ts.TransformationContext) {
                                             boundValue
                                         )
                                     ]),
-                                    ts.moveRangePos(initializer, -1)
+                                    moveRangePos(initializer, -1)
                                 ),
                                 initializer
                             )
                         ),
-                        ts.moveRangeEnd(initializer, -1)
+                        moveRangeEnd(initializer, -1)
                     )
                 );
             }
@@ -2490,22 +2526,22 @@ export function transformES2015(context: ts.TransformationContext) {
             // Initializer is an expression. Emit the expression in the body, so that it's
             // evaluated on every iteration.
             const assignment = factory.createAssignment(initializer, boundValue);
-            if (ts.isDestructuringAssignment(assignment)) {
+            if (isDestructuringAssignment(assignment)) {
                 statements.push(factory.createExpressionStatement(visitBinaryExpression(assignment, /*expressionResultIsUnused*/ true)));
             }
             else {
-                ts.setTextRangeEnd(assignment, initializer.end);
-                statements.push(ts.setTextRange(factory.createExpressionStatement(ts.visitNode(assignment, visitor, ts.isExpression)), ts.moveRangeEnd(initializer, -1)));
+                setTextRangeEnd(assignment, initializer.end);
+                statements.push(setTextRange(factory.createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
             }
         }
 
         if (convertedLoopBodyStatements) {
-            return createSyntheticBlockForConvertedStatements(ts.addRange(statements, convertedLoopBodyStatements));
+            return createSyntheticBlockForConvertedStatements(addRange(statements, convertedLoopBodyStatements));
         }
         else {
-            const statement = ts.visitNode(node.statement, visitor, ts.isStatement, factory.liftToBlock);
-            if (ts.isBlock(statement)) {
-                return factory.updateBlock(statement, ts.setTextRange(factory.createNodeArray(ts.concatenate(statements, statement.statements)), statement.statements));
+            const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);
+            if (isBlock(statement)) {
+                return factory.updateBlock(statement, setTextRange(factory.createNodeArray(concatenate(statements, statement.statements)), statement.statements));
             }
             else {
                 statements.push(statement);
@@ -2514,17 +2550,17 @@ export function transformES2015(context: ts.TransformationContext) {
         }
     }
 
-    function createSyntheticBlockForConvertedStatements(statements: ts.Statement[]) {
-        return ts.setEmitFlags(
+    function createSyntheticBlockForConvertedStatements(statements: Statement[]) {
+        return setEmitFlags(
             factory.createBlock(
                 factory.createNodeArray(statements),
                 /*multiLine*/ true
             ),
-            ts.EmitFlags.NoSourceMap | ts.EmitFlags.NoTokenSourceMaps
+            EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
         );
     }
 
-    function convertForOfStatementForArray(node: ts.ForOfStatement, outermostLabeledStatement: ts.LabeledStatement, convertedLoopBodyStatements: ts.Statement[]): ts.Statement {
+    function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
         // The following ES6 code:
         //
         //    for (let v of expr) { }
@@ -2546,7 +2582,7 @@ export function transformES2015(context: ts.TransformationContext) {
         // Note also that because an extra statement is needed to assign to the LHS,
         // for-of bodies are always emitted as blocks.
 
-        const expression = ts.visitNode(node.expression, visitor, ts.isExpression);
+        const expression = visitNode(node.expression, visitor, isExpression);
 
         // In the case where the user wrote an identifier as the RHS, like this:
         //
@@ -2554,31 +2590,31 @@ export function transformES2015(context: ts.TransformationContext) {
         //
         // we don't want to emit a temporary variable for the RHS, just use it directly.
         const counter = factory.createLoopVariable();
-        const rhsReference = ts.isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const rhsReference = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
 
         // The old emitter does not emit source maps for the expression
-        ts.setEmitFlags(expression, ts.EmitFlags.NoSourceMap | ts.getEmitFlags(expression));
+        setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
 
-        const forStatement = ts.setTextRange(
+        const forStatement = setTextRange(
             factory.createForStatement(
-                /*initializer*/ ts.setEmitFlags(
-                    ts.setTextRange(
+                /*initializer*/ setEmitFlags(
+                    setTextRange(
                         factory.createVariableDeclarationList([
-                            ts.setTextRange(factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)), ts.moveRangePos(node.expression, -1)),
-                            ts.setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression)
+                            setTextRange(factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)), moveRangePos(node.expression, -1)),
+                            setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression)
                         ]),
                         node.expression
                     ),
-                    ts.EmitFlags.NoHoisting
+                    EmitFlags.NoHoisting
                 ),
-                /*condition*/ ts.setTextRange(
+                /*condition*/ setTextRange(
                     factory.createLessThan(
                         counter,
                         factory.createPropertyAccessExpression(rhsReference, "length")
                     ),
                     node.expression
                 ),
-                /*incrementor*/ ts.setTextRange(factory.createPostfixIncrement(counter), node.expression),
+                /*incrementor*/ setTextRange(factory.createPostfixIncrement(counter), node.expression),
                 /*statement*/ convertForOfStatementHead(
                     node,
                     factory.createElementAccessExpression(rhsReference, counter),
@@ -2589,19 +2625,19 @@ export function transformES2015(context: ts.TransformationContext) {
         );
 
         // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
-        ts.setEmitFlags(forStatement, ts.EmitFlags.NoTokenTrailingSourceMaps);
-        ts.setTextRange(forStatement, node);
+        setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
+        setTextRange(forStatement, node);
         return factory.restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
     }
 
-    function convertForOfStatementForIterable(node: ts.ForOfStatement, outermostLabeledStatement: ts.LabeledStatement, convertedLoopBodyStatements: ts.Statement[], ancestorFacts: HierarchyFacts): ts.Statement {
-        const expression = ts.visitNode(node.expression, visitor, ts.isExpression);
-        const iterator = ts.isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
-        const result = ts.isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+    function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], ancestorFacts: HierarchyFacts): Statement {
+        const expression = visitNode(node.expression, visitor, isExpression);
+        const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const errorRecord = factory.createUniqueName("e");
         const catchVariable = factory.getGeneratedNameForNode(errorRecord);
         const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
-        const values = ts.setTextRange(emitHelpers().createValuesHelper(expression), node.expression);
+        const values = setTextRange(emitHelpers().createValuesHelper(expression), node.expression);
         const next = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
 
         hoistVariableDeclaration(errorRecord);
@@ -2612,18 +2648,18 @@ export function transformES2015(context: ts.TransformationContext) {
             ? factory.inlineExpressions([factory.createAssignment(errorRecord, factory.createVoidZero()), values])
             : values;
 
-        const forStatement = ts.setEmitFlags(
-            ts.setTextRange(
+        const forStatement = setEmitFlags(
+            setTextRange(
                 factory.createForStatement(
-                    /*initializer*/ ts.setEmitFlags(
-                        ts.setTextRange(
+                    /*initializer*/ setEmitFlags(
+                        setTextRange(
                             factory.createVariableDeclarationList([
-                                ts.setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
+                                setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
                                 factory.createVariableDeclaration(result, /*exclamationToken*/ undefined, /*type*/ undefined, next)
                             ]),
                             node.expression
                         ),
-                        ts.EmitFlags.NoHoisting
+                        EmitFlags.NoHoisting
                     ),
                     /*condition*/ factory.createLogicalNot(factory.createPropertyAccessExpression(result, "done")),
                     /*incrementor*/ factory.createAssignment(result, next),
@@ -2635,7 +2671,7 @@ export function transformES2015(context: ts.TransformationContext) {
                 ),
                 /*location*/ node
             ),
-            ts.EmitFlags.NoTokenTrailingSourceMaps
+            EmitFlags.NoTokenTrailingSourceMaps
         );
 
         return factory.createTryStatement(
@@ -2647,7 +2683,7 @@ export function transformES2015(context: ts.TransformationContext) {
                 )
             ]),
             factory.createCatchClause(factory.createVariableDeclaration(catchVariable),
-                ts.setEmitFlags(
+                setEmitFlags(
                     factory.createBlock([
                         factory.createExpressionStatement(
                             factory.createAssignment(
@@ -2658,13 +2694,13 @@ export function transformES2015(context: ts.TransformationContext) {
                             )
                         )
                     ]),
-                    ts.EmitFlags.SingleLine
+                    EmitFlags.SingleLine
                 )
             ),
             factory.createBlock([
                 factory.createTryStatement(
                     /*tryBlock*/ factory.createBlock([
-                        ts.setEmitFlags(
+                        setEmitFlags(
                             factory.createIfStatement(
                                 factory.createLogicalAnd(
                                     factory.createLogicalAnd(
@@ -2682,23 +2718,23 @@ export function transformES2015(context: ts.TransformationContext) {
                                     factory.createFunctionCallCall(returnMethod, iterator, [])
                                 )
                             ),
-                            ts.EmitFlags.SingleLine
+                            EmitFlags.SingleLine
                         ),
                     ]),
                     /*catchClause*/ undefined,
-                    /*finallyBlock*/ ts.setEmitFlags(
+                    /*finallyBlock*/ setEmitFlags(
                         factory.createBlock([
-                            ts.setEmitFlags(
+                            setEmitFlags(
                                 factory.createIfStatement(
                                     errorRecord,
                                     factory.createThrowStatement(
                                         factory.createPropertyAccessExpression(errorRecord, "error")
                                     )
                                 ),
-                                ts.EmitFlags.SingleLine
+                                EmitFlags.SingleLine
                             )
                         ]),
-                        ts.EmitFlags.SingleLine
+                        EmitFlags.SingleLine
                     )
                 )
             ])
@@ -2710,7 +2746,7 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An ObjectLiteralExpression node.
      */
-    function visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): ts.Expression {
+    function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
         const properties = node.properties;
 
         // Find the first computed property.
@@ -2718,16 +2754,16 @@ export function transformES2015(context: ts.TransformationContext) {
         let numInitialProperties = -1, hasComputed = false;
         for (let i = 0; i < properties.length; i++) {
             const property = properties[i];
-            if ((property.transformFlags & ts.TransformFlags.ContainsYield &&
+            if ((property.transformFlags & TransformFlags.ContainsYield &&
                  hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
-                || (hasComputed = ts.Debug.checkDefined(property.name).kind === ts.SyntaxKind.ComputedPropertyName)) {
+                || (hasComputed = Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName)) {
                 numInitialProperties = i;
                 break;
             }
         }
 
         if (numInitialProperties < 0) {
-            return ts.visitEachChild(node, visitor, context);
+            return visitEachChild(node, visitor, context);
         }
 
         // For computed properties, we need to create a unique handle to the object
@@ -2735,20 +2771,20 @@ export function transformES2015(context: ts.TransformationContext) {
         const temp = factory.createTempVariable(hoistVariableDeclaration);
 
         // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
-        const expressions: ts.Expression[] = [];
+        const expressions: Expression[] = [];
         const assignment = factory.createAssignment(
             temp,
-            ts.setEmitFlags(
+            setEmitFlags(
                 factory.createObjectLiteralExpression(
-                    ts.visitNodes(properties, visitor, ts.isObjectLiteralElementLike, 0, numInitialProperties),
+                    visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                     node.multiLine
                 ),
-                hasComputed ? ts.EmitFlags.Indented : 0
+                hasComputed ? EmitFlags.Indented : 0
             )
         );
 
         if (node.multiLine) {
-            ts.startOnNewLine(assignment);
+            startOnNewLine(assignment);
         }
 
         expressions.push(assignment);
@@ -2757,64 +2793,64 @@ export function transformES2015(context: ts.TransformationContext) {
 
         // We need to clone the temporary identifier so that we can write it on a
         // new line
-        expressions.push(node.multiLine ? ts.startOnNewLine(ts.setParent(ts.setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
+        expressions.push(node.multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
         return factory.inlineExpressions(expressions);
     }
 
-    interface ForStatementWithConvertibleInitializer extends ts.ForStatement {
-        initializer: ts.VariableDeclarationList;
+    interface ForStatementWithConvertibleInitializer extends ForStatement {
+        initializer: VariableDeclarationList;
     }
 
-    interface ForStatementWithConvertibleCondition extends ts.ForStatement {
-        condition: ts.Expression;
+    interface ForStatementWithConvertibleCondition extends ForStatement {
+        condition: Expression;
     }
 
-    interface ForStatementWithConvertibleIncrementor extends ts.ForStatement {
-        incrementor: ts.Expression;
+    interface ForStatementWithConvertibleIncrementor extends ForStatement {
+        incrementor: Expression;
     }
 
-    function shouldConvertPartOfIterationStatement(node: ts.Node) {
-        return (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0;
+    function shouldConvertPartOfIterationStatement(node: Node) {
+        return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0;
     }
 
-    function shouldConvertInitializerOfForStatement(node: ts.IterationStatement): node is ForStatementWithConvertibleInitializer {
-        return ts.isForStatement(node) && !!node.initializer && shouldConvertPartOfIterationStatement(node.initializer);
+    function shouldConvertInitializerOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleInitializer {
+        return isForStatement(node) && !!node.initializer && shouldConvertPartOfIterationStatement(node.initializer);
     }
 
-    function shouldConvertConditionOfForStatement(node: ts.IterationStatement): node is ForStatementWithConvertibleCondition {
-        return ts.isForStatement(node) && !!node.condition && shouldConvertPartOfIterationStatement(node.condition);
+    function shouldConvertConditionOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleCondition {
+        return isForStatement(node) && !!node.condition && shouldConvertPartOfIterationStatement(node.condition);
     }
 
-    function shouldConvertIncrementorOfForStatement(node: ts.IterationStatement): node is ForStatementWithConvertibleIncrementor {
-        return ts.isForStatement(node) && !!node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
+    function shouldConvertIncrementorOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleIncrementor {
+        return isForStatement(node) && !!node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
     }
 
-    function shouldConvertIterationStatement(node: ts.IterationStatement) {
+    function shouldConvertIterationStatement(node: IterationStatement) {
         return shouldConvertBodyOfIterationStatement(node)
             || shouldConvertInitializerOfForStatement(node);
     }
 
-    function shouldConvertBodyOfIterationStatement(node: ts.IterationStatement): boolean {
-        return (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
+    function shouldConvertBodyOfIterationStatement(node: IterationStatement): boolean {
+        return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
     }
 
     /**
      * Records constituents of name for the given variable to be hoisted in the outer scope.
      */
-    function hoistVariableDeclarationDeclaredInConvertedLoop(state: ConvertedLoopState, node: ts.VariableDeclaration): void {
+    function hoistVariableDeclarationDeclaredInConvertedLoop(state: ConvertedLoopState, node: VariableDeclaration): void {
         if (!state.hoistedLocalVariables) {
             state.hoistedLocalVariables = [];
         }
 
         visit(node.name);
 
-        function visit(node: ts.Identifier | ts.BindingPattern) {
-            if (node.kind === ts.SyntaxKind.Identifier) {
+        function visit(node: Identifier | BindingPattern) {
+            if (node.kind === SyntaxKind.Identifier) {
                 state.hoistedLocalVariables!.push(node);
             }
             else {
                 for (const element of node.elements) {
-                    if (!ts.isOmittedExpression(element)) {
+                    if (!isOmittedExpression(element)) {
                         visit(element.name);
                     }
                 }
@@ -2822,7 +2858,7 @@ export function transformES2015(context: ts.TransformationContext) {
         }
     }
 
-    function convertIterationStatementBodyIfNecessary(node: ts.IterationStatement, outermostLabeledStatement: ts.LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): ts.VisitResult<ts.Statement> {
+    function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
         if (!shouldConvertIterationStatement(node)) {
             let saveAllowedNonLabeledJumps: Jump | undefined;
             if (convertedLoopState) {
@@ -2835,7 +2871,7 @@ export function transformES2015(context: ts.TransformationContext) {
             const result = convert
                 ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined, ancestorFacts)
                 : factory.restoreEnclosingLabel(
-                    ts.isForStatement(node) ? visitEachChildOfForStatement(node) : ts.visitEachChild(node, visitor, context),
+                    isForStatement(node) ? visitEachChildOfForStatement(node) : visitEachChild(node, visitor, context),
                     outermostLabeledStatement,
                     convertedLoopState && resetLabel);
 
@@ -2846,7 +2882,7 @@ export function transformES2015(context: ts.TransformationContext) {
         }
 
         const currentState = createConvertedLoopState(node);
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
 
         const outerConvertedLoopState = convertedLoopState;
         convertedLoopState = currentState;
@@ -2865,7 +2901,7 @@ export function transformES2015(context: ts.TransformationContext) {
             statements.push(generateCallToConvertedLoopInitializer(initializerFunction.functionName, initializerFunction.containsYield));
         }
 
-        let loop: ts.Statement;
+        let loop: Statement;
         if (bodyFunction) {
             if (convert) {
                 loop = convert(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts);
@@ -2876,7 +2912,7 @@ export function transformES2015(context: ts.TransformationContext) {
             }
         }
         else {
-            const clone = convertIterationStatementCore(node, initializerFunction, ts.visitNode(node.statement, visitor, ts.isStatement, factory.liftToBlock));
+            const clone = convertIterationStatementCore(node, initializerFunction, visitNode(node.statement, visitor, isStatement, factory.liftToBlock));
             loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
@@ -2884,78 +2920,78 @@ export function transformES2015(context: ts.TransformationContext) {
         return statements;
     }
 
-    function convertIterationStatementCore(node: ts.IterationStatement, initializerFunction: IterationStatementPartFunction<ts.VariableDeclarationList> | undefined, convertedLoopBody: ts.Statement) {
+    function convertIterationStatementCore(node: IterationStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
         switch (node.kind) {
-            case ts.SyntaxKind.ForStatement: return convertForStatement(node as ts.ForStatement, initializerFunction, convertedLoopBody);
-            case ts.SyntaxKind.ForInStatement: return convertForInStatement(node as ts.ForInStatement, convertedLoopBody);
-            case ts.SyntaxKind.ForOfStatement: return convertForOfStatement(node as ts.ForOfStatement, convertedLoopBody);
-            case ts.SyntaxKind.DoStatement: return convertDoStatement(node as ts.DoStatement, convertedLoopBody);
-            case ts.SyntaxKind.WhileStatement: return convertWhileStatement(node as ts.WhileStatement, convertedLoopBody);
-            default: return ts.Debug.failBadSyntaxKind(node, "IterationStatement expected");
+            case SyntaxKind.ForStatement: return convertForStatement(node as ForStatement, initializerFunction, convertedLoopBody);
+            case SyntaxKind.ForInStatement: return convertForInStatement(node as ForInStatement, convertedLoopBody);
+            case SyntaxKind.ForOfStatement: return convertForOfStatement(node as ForOfStatement, convertedLoopBody);
+            case SyntaxKind.DoStatement: return convertDoStatement(node as DoStatement, convertedLoopBody);
+            case SyntaxKind.WhileStatement: return convertWhileStatement(node as WhileStatement, convertedLoopBody);
+            default: return Debug.failBadSyntaxKind(node, "IterationStatement expected");
         }
     }
 
-    function convertForStatement(node: ts.ForStatement, initializerFunction: IterationStatementPartFunction<ts.VariableDeclarationList> | undefined, convertedLoopBody: ts.Statement) {
+    function convertForStatement(node: ForStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
         const shouldConvertCondition = node.condition && shouldConvertPartOfIterationStatement(node.condition);
         const shouldConvertIncrementor = shouldConvertCondition || node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
         return factory.updateForStatement(
             node,
-            ts.visitNode(initializerFunction ? initializerFunction.part : node.initializer, visitorWithUnusedExpressionResult, ts.isForInitializer),
-            ts.visitNode(shouldConvertCondition ? undefined : node.condition, visitor, ts.isExpression),
-            ts.visitNode(shouldConvertIncrementor ? undefined : node.incrementor, visitorWithUnusedExpressionResult, ts.isExpression),
+            visitNode(initializerFunction ? initializerFunction.part : node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
+            visitNode(shouldConvertCondition ? undefined : node.condition, visitor, isExpression),
+            visitNode(shouldConvertIncrementor ? undefined : node.incrementor, visitorWithUnusedExpressionResult, isExpression),
             convertedLoopBody
         );
     }
 
-    function convertForOfStatement(node: ts.ForOfStatement, convertedLoopBody: ts.Statement) {
+    function convertForOfStatement(node: ForOfStatement, convertedLoopBody: Statement) {
         return factory.updateForOfStatement(
             node,
             /*awaitModifier*/ undefined,
-            ts.visitNode(node.initializer, visitor, ts.isForInitializer),
-            ts.visitNode(node.expression, visitor, ts.isExpression),
+            visitNode(node.initializer, visitor, isForInitializer),
+            visitNode(node.expression, visitor, isExpression),
             convertedLoopBody);
     }
 
-    function convertForInStatement(node: ts.ForInStatement, convertedLoopBody: ts.Statement) {
+    function convertForInStatement(node: ForInStatement, convertedLoopBody: Statement) {
         return factory.updateForInStatement(
             node,
-            ts.visitNode(node.initializer, visitor, ts.isForInitializer),
-            ts.visitNode(node.expression, visitor, ts.isExpression),
+            visitNode(node.initializer, visitor, isForInitializer),
+            visitNode(node.expression, visitor, isExpression),
             convertedLoopBody);
     }
 
-    function convertDoStatement(node: ts.DoStatement, convertedLoopBody: ts.Statement) {
+    function convertDoStatement(node: DoStatement, convertedLoopBody: Statement) {
         return factory.updateDoStatement(
             node,
             convertedLoopBody,
-            ts.visitNode(node.expression, visitor, ts.isExpression));
+            visitNode(node.expression, visitor, isExpression));
     }
 
-    function convertWhileStatement(node: ts.WhileStatement, convertedLoopBody: ts.Statement) {
+    function convertWhileStatement(node: WhileStatement, convertedLoopBody: Statement) {
         return factory.updateWhileStatement(
             node,
-            ts.visitNode(node.expression, visitor, ts.isExpression),
+            visitNode(node.expression, visitor, isExpression),
             convertedLoopBody);
     }
 
-    function createConvertedLoopState(node: ts.IterationStatement) {
-        let loopInitializer: ts.VariableDeclarationList | undefined;
+    function createConvertedLoopState(node: IterationStatement) {
+        let loopInitializer: VariableDeclarationList | undefined;
         switch (node.kind) {
-            case ts.SyntaxKind.ForStatement:
-            case ts.SyntaxKind.ForInStatement:
-            case ts.SyntaxKind.ForOfStatement:
-                const initializer = (node as ts.ForStatement | ts.ForInStatement | ts.ForOfStatement).initializer;
-                if (initializer && initializer.kind === ts.SyntaxKind.VariableDeclarationList) {
-                    loopInitializer = initializer as ts.VariableDeclarationList;
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+                const initializer = (node as ForStatement | ForInStatement | ForOfStatement).initializer;
+                if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    loopInitializer = initializer as VariableDeclarationList;
                 }
                 break;
         }
 
         // variables that will be passed to the loop as parameters
-        const loopParameters: ts.ParameterDeclaration[] = [];
+        const loopParameters: ParameterDeclaration[] = [];
         // variables declared in the loop initializer that will be changed inside the loop
         const loopOutParameters: LoopOutParameter[] = [];
-        if (loopInitializer && (ts.getCombinedNodeFlags(loopInitializer) & ts.NodeFlags.BlockScoped)) {
+        if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
             const hasCapturedBindingsInForHead = shouldConvertInitializerOfForStatement(node) ||
                 shouldConvertConditionOfForStatement(node) ||
                 shouldConvertIncrementorOfForStatement(node);
@@ -2987,8 +3023,8 @@ export function transformES2015(context: ts.TransformationContext) {
         return currentState;
     }
 
-    function addExtraDeclarationsForConvertedLoop(statements: ts.Statement[], state: ConvertedLoopState, outerState: ConvertedLoopState | undefined) {
-        let extraVariableDeclarations: ts.VariableDeclaration[] | undefined;
+    function addExtraDeclarationsForConvertedLoop(statements: Statement[], state: ConvertedLoopState, outerState: ConvertedLoopState | undefined) {
+        let extraVariableDeclarations: VariableDeclaration[] | undefined;
         // propagate state from the inner loop to the outer loop if necessary
         if (state.argumentsName) {
             // if alias for arguments is set
@@ -3075,8 +3111,8 @@ export function transformES2015(context: ts.TransformationContext) {
     }
 
     interface IterationStatementPartFunction<T> {
-        functionName: ts.Identifier;
-        functionDeclaration: ts.Statement;
+        functionName: Identifier;
+        functionDeclaration: Statement;
         containsYield: boolean;
         part: T;
     }
@@ -3091,15 +3127,15 @@ export function transformES2015(context: ts.TransformationContext) {
      * used to preserve the per-iteration environment semantics of
      * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
      */
-    function createFunctionForInitializerOfForStatement(node: ForStatementWithConvertibleInitializer, currentState: ConvertedLoopState): IterationStatementPartFunction<ts.VariableDeclarationList> {
+    function createFunctionForInitializerOfForStatement(node: ForStatementWithConvertibleInitializer, currentState: ConvertedLoopState): IterationStatementPartFunction<VariableDeclarationList> {
         const functionName = factory.createUniqueName("_loop_init");
 
-        const containsYield = (node.initializer.transformFlags & ts.TransformFlags.ContainsYield) !== 0;
-        let emitFlags = ts.EmitFlags.None;
-        if (currentState.containsLexicalThis) emitFlags |= ts.EmitFlags.CapturesThis;
-        if (containsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody) emitFlags |= ts.EmitFlags.AsyncFunctionBody;
+        const containsYield = (node.initializer.transformFlags & TransformFlags.ContainsYield) !== 0;
+        let emitFlags = EmitFlags.None;
+        if (currentState.containsLexicalThis) emitFlags |= EmitFlags.CapturesThis;
+        if (containsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody) emitFlags |= EmitFlags.AsyncFunctionBody;
 
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         statements.push(factory.createVariableStatement(/*modifiers*/ undefined, node.initializer));
         copyOutParameters(currentState.loopOutParameters, LoopOutParameterFlags.Initializer, CopyDirection.ToOutParameter, statements);
 
@@ -3126,35 +3162,35 @@ export function transformES2015(context: ts.TransformationContext) {
 
         const functionDeclaration = factory.createVariableStatement(
             /*modifiers*/ undefined,
-            ts.setEmitFlags(
+            setEmitFlags(
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration(
                         functionName,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
-                        ts.setEmitFlags(
+                        setEmitFlags(
                             factory.createFunctionExpression(
                                 /*modifiers*/ undefined,
-                                containsYield ? factory.createToken(ts.SyntaxKind.AsteriskToken) : undefined,
+                                containsYield ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
                                 /*parameters*/ undefined,
                                 /*type*/ undefined,
-                                ts.visitNode(
+                                visitNode(
                                     factory.createBlock(statements, /*multiLine*/ true),
                                     visitor,
-                                    ts.isBlock
+                                    isBlock
                                 )
                             ),
                             emitFlags
                         )
                     )
                 ]),
-                ts.EmitFlags.NoHoisting
+                EmitFlags.NoHoisting
             )
         );
 
-        const part = factory.createVariableDeclarationList(ts.map(currentState.loopOutParameters, createOutVariable));
+        const part = factory.createVariableDeclarationList(map(currentState.loopOutParameters, createOutVariable));
         return { functionName, containsYield, functionDeclaration, part };
     }
 
@@ -3164,13 +3200,13 @@ export function transformES2015(context: ts.TransformationContext) {
      * preserve the per-iteration environment semantics of
      * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
      */
-    function createFunctionForBodyOfIterationStatement(node: ts.IterationStatement, currentState: ConvertedLoopState, outerState: ConvertedLoopState | undefined): IterationStatementPartFunction<ts.Statement[]> {
+    function createFunctionForBodyOfIterationStatement(node: IterationStatement, currentState: ConvertedLoopState, outerState: ConvertedLoopState | undefined): IterationStatementPartFunction<Statement[]> {
         const functionName = factory.createUniqueName("_loop");
         startLexicalEnvironment();
-        const statement = ts.visitNode(node.statement, visitor, ts.isStatement, factory.liftToBlock);
+        const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);
         const lexicalEnvironment = endLexicalEnvironment();
 
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         if (shouldConvertConditionOfForStatement(node) || shouldConvertIncrementorOfForStatement(node)) {
             // If a block-scoped variable declared in the initializer of `node` is captured in
             // the condition or incrementor, we must move the condition and incrementor into
@@ -3214,7 +3250,7 @@ export function transformES2015(context: ts.TransformationContext) {
             if (node.incrementor) {
                 statements.push(factory.createIfStatement(
                     currentState.conditionVariable,
-                    factory.createExpressionStatement(ts.visitNode(node.incrementor, visitor, ts.isExpression)),
+                    factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
                     factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
                 ));
             }
@@ -3227,30 +3263,30 @@ export function transformES2015(context: ts.TransformationContext) {
 
             if (shouldConvertConditionOfForStatement(node)) {
                 statements.push(factory.createIfStatement(
-                    factory.createPrefixUnaryExpression(ts.SyntaxKind.ExclamationToken, ts.visitNode(node.condition, visitor, ts.isExpression)),
-                    ts.visitNode(factory.createBreakStatement(), visitor, ts.isStatement)
+                    factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
+                    visitNode(factory.createBreakStatement(), visitor, isStatement)
                 ));
             }
         }
 
-        if (ts.isBlock(statement)) {
-            ts.addRange(statements, statement.statements);
+        if (isBlock(statement)) {
+            addRange(statements, statement.statements);
         }
         else {
             statements.push(statement);
         }
 
         copyOutParameters(currentState.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOutParameter, statements);
-        ts.insertStatementsAfterStandardPrologue(statements, lexicalEnvironment);
+        insertStatementsAfterStandardPrologue(statements, lexicalEnvironment);
 
         const loopBody = factory.createBlock(statements, /*multiLine*/ true);
-        if (ts.isBlock(statement)) ts.setOriginalNode(loopBody, statement);
+        if (isBlock(statement)) setOriginalNode(loopBody, statement);
 
-        const containsYield = (node.statement.transformFlags & ts.TransformFlags.ContainsYield) !== 0;
+        const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
 
-        let emitFlags: ts.EmitFlags = ts.EmitFlags.ReuseTempVariableScope;
-        if (currentState.containsLexicalThis) emitFlags |= ts.EmitFlags.CapturesThis;
-        if (containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0) emitFlags |= ts.EmitFlags.AsyncFunctionBody;
+        let emitFlags: EmitFlags = EmitFlags.ReuseTempVariableScope;
+        if (currentState.containsLexicalThis) emitFlags |= EmitFlags.CapturesThis;
+        if (containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0) emitFlags |= EmitFlags.AsyncFunctionBody;
 
         // This transforms the following ES2015 syntax (in addition to other variations):
         //
@@ -3270,17 +3306,17 @@ export function transformES2015(context: ts.TransformationContext) {
         const functionDeclaration =
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.setEmitFlags(
+                setEmitFlags(
                     factory.createVariableDeclarationList(
                         [
                             factory.createVariableDeclaration(
                                 functionName,
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
-                                ts.setEmitFlags(
+                                setEmitFlags(
                                     factory.createFunctionExpression(
                                         /*modifiers*/ undefined,
-                                        containsYield ? factory.createToken(ts.SyntaxKind.AsteriskToken) : undefined,
+                                        containsYield ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         currentState.loopParameters,
@@ -3292,7 +3328,7 @@ export function transformES2015(context: ts.TransformationContext) {
                             )
                         ]
                     ),
-                    ts.EmitFlags.NoHoisting
+                    EmitFlags.NoHoisting
                 )
             );
 
@@ -3300,13 +3336,13 @@ export function transformES2015(context: ts.TransformationContext) {
         return { functionName, containsYield, functionDeclaration, part };
     }
 
-    function copyOutParameter(outParam: LoopOutParameter, copyDirection: CopyDirection): ts.BinaryExpression {
+    function copyOutParameter(outParam: LoopOutParameter, copyDirection: CopyDirection): BinaryExpression {
         const source = copyDirection === CopyDirection.ToOriginal ? outParam.outParamName : outParam.originalName;
         const target = copyDirection === CopyDirection.ToOriginal ? outParam.originalName : outParam.outParamName;
-        return factory.createBinaryExpression(target, ts.SyntaxKind.EqualsToken, source);
+        return factory.createBinaryExpression(target, SyntaxKind.EqualsToken, source);
     }
 
-    function copyOutParameters(outParams: LoopOutParameter[], partFlags: LoopOutParameterFlags, copyDirection: CopyDirection, statements: ts.Statement[]): void {
+    function copyOutParameters(outParams: LoopOutParameter[], partFlags: LoopOutParameterFlags, copyDirection: CopyDirection, statements: Statement[]): void {
         for (const outParam of outParams) {
             if (outParam.flags & partFlags) {
                 statements.push(factory.createExpressionStatement(copyOutParameter(outParam, copyDirection)));
@@ -3314,20 +3350,20 @@ export function transformES2015(context: ts.TransformationContext) {
         }
     }
 
-    function generateCallToConvertedLoopInitializer(initFunctionExpressionName: ts.Identifier, containsYield: boolean): ts.Statement {
+    function generateCallToConvertedLoopInitializer(initFunctionExpressionName: Identifier, containsYield: boolean): Statement {
         const call = factory.createCallExpression(initFunctionExpressionName, /*typeArguments*/ undefined, []);
         const callResult = containsYield
             ? factory.createYieldExpression(
-                factory.createToken(ts.SyntaxKind.AsteriskToken),
-                ts.setEmitFlags(call, ts.EmitFlags.Iterator)
+                factory.createToken(SyntaxKind.AsteriskToken),
+                setEmitFlags(call, EmitFlags.Iterator)
             )
             : call;
         return factory.createExpressionStatement(callResult);
     }
 
-    function generateCallToConvertedLoop(loopFunctionExpressionName: ts.Identifier, state: ConvertedLoopState, outerState: ConvertedLoopState | undefined, containsYield: boolean): ts.Statement[] {
+    function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, state: ConvertedLoopState, outerState: ConvertedLoopState | undefined, containsYield: boolean): Statement[] {
 
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
         // simple loops are emitted as just 'loop()';
         // NOTE: if loop uses only 'continue' it still will be emitted as simple loop
@@ -3336,11 +3372,11 @@ export function transformES2015(context: ts.TransformationContext) {
             !state.labeledNonLocalBreaks &&
             !state.labeledNonLocalContinues;
 
-        const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, ts.map(state.loopParameters, p => p.name as ts.Identifier));
+        const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => p.name as Identifier));
         const callResult = containsYield
             ? factory.createYieldExpression(
-                factory.createToken(ts.SyntaxKind.AsteriskToken),
-                ts.setEmitFlags(call, ts.EmitFlags.Iterator)
+                factory.createToken(SyntaxKind.AsteriskToken),
+                setEmitFlags(call, EmitFlags.Iterator)
             )
             : call;
         if (isSimpleLoop) {
@@ -3359,7 +3395,7 @@ export function transformES2015(context: ts.TransformationContext) {
             copyOutParameters(state.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOriginal, statements);
 
             if (state.nonLocalJumps! & Jump.Return) {
-                let returnStatement: ts.ReturnStatement;
+                let returnStatement: ReturnStatement;
                 if (outerState) {
                     outerState.nonLocalJumps! |= Jump.Return;
                     returnStatement = factory.createReturnStatement(loopResultName);
@@ -3388,7 +3424,7 @@ export function transformES2015(context: ts.TransformationContext) {
             }
 
             if (state.labeledNonLocalBreaks || state.labeledNonLocalContinues) {
-                const caseClauses: ts.CaseClause[] = [];
+                const caseClauses: CaseClause[] = [];
                 processLabeledJumps(state.labeledNonLocalBreaks!, /*isBreak*/ true, loopResultName, outerState, caseClauses);
                 processLabeledJumps(state.labeledNonLocalContinues!, /*isBreak*/ false, loopResultName, outerState, caseClauses);
                 statements.push(
@@ -3405,24 +3441,24 @@ export function transformES2015(context: ts.TransformationContext) {
     function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
         if (isBreak) {
             if (!state.labeledNonLocalBreaks) {
-                state.labeledNonLocalBreaks = new ts.Map<string, string>();
+                state.labeledNonLocalBreaks = new Map<string, string>();
             }
             state.labeledNonLocalBreaks.set(labelText, labelMarker);
         }
         else {
             if (!state.labeledNonLocalContinues) {
-                state.labeledNonLocalContinues = new ts.Map<string, string>();
+                state.labeledNonLocalContinues = new Map<string, string>();
             }
             state.labeledNonLocalContinues.set(labelText, labelMarker);
         }
     }
 
-    function processLabeledJumps(table: ts.ESMap<string, string>, isBreak: boolean, loopResultName: ts.Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: ts.CaseClause[]): void {
+    function processLabeledJumps(table: ESMap<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
         if (!table) {
             return;
         }
         table.forEach((labelMarker, labelText) => {
-            const statements: ts.Statement[] = [];
+            const statements: Statement[] = [];
             // if there are no outer converted loop or outer label in question is located inside outer converted loop
             // then emit labeled break\continue
             // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
@@ -3438,11 +3474,11 @@ export function transformES2015(context: ts.TransformationContext) {
         });
     }
 
-    function processLoopVariableDeclaration(container: ts.IterationStatement, decl: ts.VariableDeclaration | ts.BindingElement, loopParameters: ts.ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForHead: boolean) {
+    function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForHead: boolean) {
         const name = decl.name;
-        if (ts.isBindingPattern(name)) {
+        if (isBindingPattern(name)) {
             for (const element of name.elements) {
-                if (!ts.isOmittedExpression(element)) {
+                if (!isOmittedExpression(element)) {
                     processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
                 }
             }
@@ -3450,13 +3486,13 @@ export function transformES2015(context: ts.TransformationContext) {
         else {
             loopParameters.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
             const checkFlags = resolver.getNodeCheckFlags(decl);
-            if (checkFlags & ts.NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
-                const outParamName = factory.createUniqueName("out_" + ts.idText(name));
+            if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
+                const outParamName = factory.createUniqueName("out_" + idText(name));
                 let flags: LoopOutParameterFlags = 0;
-                if (checkFlags & ts.NodeCheckFlags.NeedsLoopOutParameter) {
+                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
                     flags |= LoopOutParameterFlags.Body;
                 }
-                if (ts.isForStatement(container)) {
+                if (isForStatement(container)) {
                     if (container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
                         flags |= LoopOutParameterFlags.Initializer;
                     }
@@ -3479,35 +3515,35 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param numInitialNonComputedProperties The number of initial properties without
      *                                        computed property names.
      */
-    function addObjectLiteralMembers(expressions: ts.Expression[], node: ts.ObjectLiteralExpression, receiver: ts.Identifier, start: number) {
+    function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number) {
         const properties = node.properties;
         const numProperties = properties.length;
         for (let i = start; i < numProperties; i++) {
             const property = properties[i];
             switch (property.kind) {
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                    const accessors = ts.getAllAccessorDeclarations(node.properties, property);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    const accessors = getAllAccessorDeclarations(node.properties, property);
                     if (property === accessors.firstAccessor) {
                         expressions.push(transformAccessorsToExpression(receiver, accessors, node, !!node.multiLine));
                     }
 
                     break;
 
-                case ts.SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodDeclaration:
                     expressions.push(transformObjectLiteralMethodDeclarationToExpression(property, receiver, node, node.multiLine!));
                     break;
 
-                case ts.SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
                     expressions.push(transformPropertyAssignmentToExpression(property, receiver, node.multiLine!));
                     break;
 
-                case ts.SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
                     expressions.push(transformShorthandPropertyAssignmentToExpression(property, receiver, node.multiLine!));
                     break;
 
                 default:
-                    ts.Debug.failBadSyntaxKind(node);
+                    Debug.failBadSyntaxKind(node);
                     break;
             }
         }
@@ -3520,18 +3556,18 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param property The PropertyAssignment node.
      * @param receiver The receiver for the assignment.
      */
-    function transformPropertyAssignmentToExpression(property: ts.PropertyAssignment, receiver: ts.Expression, startsOnNewLine: boolean) {
+    function transformPropertyAssignmentToExpression(property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
         const expression = factory.createAssignment(
-            ts.createMemberAccessForPropertyName(
+            createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                ts.visitNode(property.name, visitor, ts.isPropertyName)
+                visitNode(property.name, visitor, isPropertyName)
             ),
-            ts.visitNode(property.initializer, visitor, ts.isExpression)
+            visitNode(property.initializer, visitor, isExpression)
         );
-        ts.setTextRange(expression, property);
+        setTextRange(expression, property);
         if (startsOnNewLine) {
-            ts.startOnNewLine(expression);
+            startOnNewLine(expression);
         }
         return expression;
     }
@@ -3543,18 +3579,18 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param property The ShorthandPropertyAssignment node.
      * @param receiver The receiver for the assignment.
      */
-    function transformShorthandPropertyAssignmentToExpression(property: ts.ShorthandPropertyAssignment, receiver: ts.Expression, startsOnNewLine: boolean) {
+    function transformShorthandPropertyAssignmentToExpression(property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
         const expression = factory.createAssignment(
-            ts.createMemberAccessForPropertyName(
+            createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                ts.visitNode(property.name, visitor, ts.isPropertyName)
+                visitNode(property.name, visitor, isPropertyName)
             ),
             factory.cloneNode(property.name)
         );
-        ts.setTextRange(expression, property);
+        setTextRange(expression, property);
         if (startsOnNewLine) {
-            ts.startOnNewLine(expression);
+            startOnNewLine(expression);
         }
         return expression;
     }
@@ -3566,52 +3602,52 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param method The MethodDeclaration node.
      * @param receiver The receiver for the assignment.
      */
-    function transformObjectLiteralMethodDeclarationToExpression(method: ts.MethodDeclaration, receiver: ts.Expression, container: ts.Node, startsOnNewLine: boolean) {
+    function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
         const expression = factory.createAssignment(
-            ts.createMemberAccessForPropertyName(
+            createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                ts.visitNode(method.name, visitor, ts.isPropertyName)
+                visitNode(method.name, visitor, isPropertyName)
             ),
             transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container)
         );
-        ts.setTextRange(expression, method);
+        setTextRange(expression, method);
         if (startsOnNewLine) {
-            ts.startOnNewLine(expression);
+            startOnNewLine(expression);
         }
         return expression;
     }
 
-    function visitCatchClause(node: ts.CatchClause): ts.CatchClause {
+    function visitCatchClause(node: CatchClause): CatchClause {
         const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
-        let updated: ts.CatchClause;
-        ts.Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
-        if (ts.isBindingPattern(node.variableDeclaration.name)) {
+        let updated: CatchClause;
+        Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
+        if (isBindingPattern(node.variableDeclaration.name)) {
             const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
             const newVariableDeclaration = factory.createVariableDeclaration(temp);
-            ts.setTextRange(newVariableDeclaration, node.variableDeclaration);
-            const vars = ts.flattenDestructuringBinding(
+            setTextRange(newVariableDeclaration, node.variableDeclaration);
+            const vars = flattenDestructuringBinding(
                 node.variableDeclaration,
                 visitor,
                 context,
-                ts.FlattenLevel.All,
+                FlattenLevel.All,
                 temp
             );
             const list = factory.createVariableDeclarationList(vars);
-            ts.setTextRange(list, node.variableDeclaration);
+            setTextRange(list, node.variableDeclaration);
             const destructure = factory.createVariableStatement(/*modifiers*/ undefined, list);
             updated = factory.updateCatchClause(node, newVariableDeclaration, addStatementToStartOfBlock(node.block, destructure));
         }
         else {
-            updated = ts.visitEachChild(node, visitor, context);
+            updated = visitEachChild(node, visitor, context);
         }
 
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
         return updated;
     }
 
-    function addStatementToStartOfBlock(block: ts.Block, statement: ts.Statement): ts.Block {
-        const transformedStatements = ts.visitNodes(block.statements, visitor, ts.isStatement);
+    function addStatementToStartOfBlock(block: Block, statement: Statement): Block {
+        const transformedStatements = visitNodes(block.statements, visitor, isStatement);
         return factory.updateBlock(block, [statement, ...transformedStatements]);
     }
 
@@ -3621,14 +3657,14 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A MethodDeclaration node.
      */
-    function visitMethodDeclaration(node: ts.MethodDeclaration): ts.ObjectLiteralElementLike {
+    function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElementLike {
         // We should only get here for methods on an object literal with regular identifier names.
         // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
         // Methods with computed property names are handled in visitObjectLiteralExpression.
-        ts.Debug.assert(!ts.isComputedPropertyName(node.name));
-        const functionExpression = transformFunctionLikeToExpression(node, /*location*/ ts.moveRangePos(node, -1), /*name*/ undefined, /*container*/ undefined);
-        ts.setEmitFlags(functionExpression, ts.EmitFlags.NoLeadingComments | ts.getEmitFlags(functionExpression));
-        return ts.setTextRange(
+        Debug.assert(!isComputedPropertyName(node.name));
+        const functionExpression = transformFunctionLikeToExpression(node, /*location*/ moveRangePos(node, -1), /*name*/ undefined, /*container*/ undefined);
+        setEmitFlags(functionExpression, EmitFlags.NoLeadingComments | getEmitFlags(functionExpression));
+        return setTextRange(
             factory.createPropertyAssignment(
                 node.name,
                 functionExpression
@@ -3642,15 +3678,15 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An AccessorDeclaration node.
      */
-    function visitAccessorDeclaration(node: ts.AccessorDeclaration): ts.AccessorDeclaration {
-        ts.Debug.assert(!ts.isComputedPropertyName(node.name));
+    function visitAccessorDeclaration(node: AccessorDeclaration): AccessorDeclaration {
+        Debug.assert(!isComputedPropertyName(node.name));
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-        let updated: ts.AccessorDeclaration;
-        const parameters = ts.visitParameterList(node.parameters, visitor, context);
+        let updated: AccessorDeclaration;
+        const parameters = visitParameterList(node.parameters, visitor, context);
         const body = transformFunctionBody(node);
-        if (node.kind === ts.SyntaxKind.GetAccessor) {
+        if (node.kind === SyntaxKind.GetAccessor) {
             updated = factory.updateGetAccessorDeclaration(node, node.modifiers, node.name, parameters, node.type, body);
         }
         else {
@@ -3666,8 +3702,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A ShorthandPropertyAssignment node.
      */
-    function visitShorthandPropertyAssignment(node: ts.ShorthandPropertyAssignment): ts.ObjectLiteralElementLike {
-        return ts.setTextRange(
+    function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
+        return setTextRange(
             factory.createPropertyAssignment(
                 node.name,
                 visitIdentifier(factory.cloneNode(node.name))
@@ -3676,8 +3712,8 @@ export function transformES2015(context: ts.TransformationContext) {
         );
     }
 
-    function visitComputedPropertyName(node: ts.ComputedPropertyName) {
-        return ts.visitEachChild(node, visitor, context);
+    function visitComputedPropertyName(node: ComputedPropertyName) {
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -3685,9 +3721,9 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A YieldExpression node.
      */
-    function visitYieldExpression(node: ts.YieldExpression): ts.Expression {
+    function visitYieldExpression(node: YieldExpression): Expression {
         // `yield` expressions are transformed using the generators transformer.
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -3695,12 +3731,12 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An ArrayLiteralExpression node.
      */
-    function visitArrayLiteralExpression(node: ts.ArrayLiteralExpression): ts.Expression {
-        if (ts.some(node.elements, ts.isSpreadElement)) {
+    function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
+        if (some(node.elements, isSpreadElement)) {
             // We are here because we contain a SpreadElementExpression.
             return transformAndSpreadElements(node.elements, /*isArgumentList*/ false, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -3708,27 +3744,27 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node a CallExpression.
      */
-    function visitCallExpression(node: ts.CallExpression) {
-        if (ts.getEmitFlags(node) & ts.EmitFlags.TypeScriptClassWrapper) {
+    function visitCallExpression(node: CallExpression) {
+        if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
             return visitTypeScriptClassWrapper(node);
         }
 
-        const expression = ts.skipOuterExpressions(node.expression);
-        if (expression.kind === ts.SyntaxKind.SuperKeyword ||
-            ts.isSuperProperty(expression) ||
-            ts.some(node.arguments, ts.isSpreadElement)) {
+        const expression = skipOuterExpressions(node.expression);
+        if (expression.kind === SyntaxKind.SuperKeyword ||
+            isSuperProperty(expression) ||
+            some(node.arguments, isSpreadElement)) {
             return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
         }
 
         return factory.updateCallExpression(
             node,
-            ts.visitNode(node.expression, callExpressionVisitor, ts.isExpression),
+            visitNode(node.expression, callExpressionVisitor, isExpression),
             /*typeArguments*/ undefined,
-            ts.visitNodes(node.arguments, visitor, ts.isExpression)
+            visitNodes(node.arguments, visitor, isExpression)
         );
     }
 
-    function visitTypeScriptClassWrapper(node: ts.CallExpression) {
+    function visitTypeScriptClassWrapper(node: CallExpression) {
         // This is a call to a class wrapper function (an IIFE) created by the 'ts' transformer.
         // The wrapper has a form similar to:
         //
@@ -3762,26 +3798,26 @@ export function transformES2015(context: ts.TransformationContext) {
 
         // We skip any outer expressions in a number of places to get to the innermost
         // expression, but we will restore them later to preserve comments and source maps.
-        const body = ts.cast(ts.cast(ts.skipOuterExpressions(node.expression), ts.isArrowFunction).body, ts.isBlock);
+        const body = cast(cast(skipOuterExpressions(node.expression), isArrowFunction).body, isBlock);
 
         // The class statements are the statements generated by visiting the first statement with initializer of the
         // body (1), while all other statements are added to remainingStatements (2)
-        const isVariableStatementWithInitializer = (stmt: ts.Statement) => ts.isVariableStatement(stmt) && !!ts.first(stmt.declarationList.declarations).initializer;
+        const isVariableStatementWithInitializer = (stmt: Statement) => isVariableStatement(stmt) && !!first(stmt.declarationList.declarations).initializer;
 
         // visit the class body statements outside of any converted loop body.
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
-        const bodyStatements = ts.visitNodes(body.statements, classWrapperStatementVisitor, ts.isStatement);
+        const bodyStatements = visitNodes(body.statements, classWrapperStatementVisitor, isStatement);
         convertedLoopState = savedConvertedLoopState;
 
-        const classStatements = ts.filter(bodyStatements, isVariableStatementWithInitializer);
-        const remainingStatements = ts.filter(bodyStatements, stmt => !isVariableStatementWithInitializer(stmt));
-        const varStatement = ts.cast(ts.first(classStatements), ts.isVariableStatement);
+        const classStatements = filter(bodyStatements, isVariableStatementWithInitializer);
+        const remainingStatements = filter(bodyStatements, stmt => !isVariableStatementWithInitializer(stmt));
+        const varStatement = cast(first(classStatements), isVariableStatement);
 
         // We know there is only one variable declaration here as we verified this in an
         // earlier call to isTypeScriptClassWrapper
         const variable = varStatement.declarationList.declarations[0];
-        const initializer = ts.skipOuterExpressions(variable.initializer!);
+        const initializer = skipOuterExpressions(variable.initializer!);
 
         // Under certain conditions, the 'ts' transformer may introduce a class alias, which
         // we see as an assignment, for example:
@@ -3798,24 +3834,24 @@ export function transformES2015(context: ts.TransformationContext) {
         //      return C;
         //  }())
         //
-        let aliasAssignment = ts.tryCast(initializer, ts.isAssignmentExpression);
-        if (!aliasAssignment && ts.isBinaryExpression(initializer) && initializer.operatorToken.kind === ts.SyntaxKind.CommaToken) {
-            aliasAssignment = ts.tryCast(initializer.left, ts.isAssignmentExpression);
+        let aliasAssignment = tryCast(initializer, isAssignmentExpression);
+        if (!aliasAssignment && isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.CommaToken) {
+            aliasAssignment = tryCast(initializer.left, isAssignmentExpression);
         }
 
         // The underlying call (3) is another IIFE that may contain a '_super' argument.
-        const call = ts.cast(aliasAssignment ? ts.skipOuterExpressions(aliasAssignment.right) : initializer, ts.isCallExpression);
-        const func = ts.cast(ts.skipOuterExpressions(call.expression), ts.isFunctionExpression);
+        const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
+        const func = cast(skipOuterExpressions(call.expression), isFunctionExpression);
 
         const funcStatements = func.body.statements;
         let classBodyStart = 0;
         let classBodyEnd = -1;
 
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         if (aliasAssignment) {
             // If we have a class alias assignment, we need to move it to the down-level constructor
             // function we generated for the class.
-            const extendsCall = ts.tryCast(funcStatements[classBodyStart], ts.isExpressionStatement);
+            const extendsCall = tryCast(funcStatements[classBodyStart], isExpressionStatement);
             if (extendsCall) {
                 statements.push(extendsCall);
                 classBodyStart++;
@@ -3830,33 +3866,33 @@ export function transformES2015(context: ts.TransformationContext) {
                 factory.createExpressionStatement(
                     factory.createAssignment(
                         aliasAssignment.left,
-                        ts.cast(variable.name, ts.isIdentifier)
+                        cast(variable.name, isIdentifier)
                     )
                 )
             );
         }
 
         // Find the trailing 'return' statement (4)
-        while (!ts.isReturnStatement(ts.elementAt(funcStatements, classBodyEnd)!)) {
+        while (!isReturnStatement(elementAt(funcStatements, classBodyEnd)!)) {
             classBodyEnd--;
         }
 
         // When we extract the statements of the inner IIFE, we exclude the 'return' statement (4)
         // as we already have one that has been introduced by the 'ts' transformer.
-        ts.addRange(statements, funcStatements, classBodyStart, classBodyEnd);
+        addRange(statements, funcStatements, classBodyStart, classBodyEnd);
 
         if (classBodyEnd < -1) {
             // If there were any hoisted declarations following the return statement, we should
             // append them.
-            ts.addRange(statements, funcStatements, classBodyEnd + 1);
+            addRange(statements, funcStatements, classBodyEnd + 1);
         }
 
         // Add the remaining statements of the outer wrapper.
-        ts.addRange(statements, remainingStatements);
+        addRange(statements, remainingStatements);
 
         // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
         // after the remaining statements from the 'ts' transformer.
-        ts.addRange(statements, classStatements, /*start*/ 1);
+        addRange(statements, classStatements, /*start*/ 1);
 
         // Recreate any outer parentheses or partially-emitted expressions to preserve source map
         // and comment locations.
@@ -3887,24 +3923,24 @@ export function transformES2015(context: ts.TransformationContext) {
         );
     }
 
-    function visitSuperCallInBody(node: ts.CallExpression) {
+    function visitSuperCallInBody(node: CallExpression) {
         return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
     }
 
-    function visitCallExpressionWithPotentialCapturedThisAssignment(node: ts.CallExpression, assignToCapturedThis: boolean): ts.CallExpression | ts.BinaryExpression {
+    function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
         // We are here either because SuperKeyword was used somewhere in the expression, or
         // because we contain a SpreadElementExpression.
-        if (node.transformFlags & ts.TransformFlags.ContainsRestOrSpread ||
-            node.expression.kind === ts.SyntaxKind.SuperKeyword ||
-            ts.isSuperProperty(ts.skipOuterExpressions(node.expression))) {
+        if (node.transformFlags & TransformFlags.ContainsRestOrSpread ||
+            node.expression.kind === SyntaxKind.SuperKeyword ||
+            isSuperProperty(skipOuterExpressions(node.expression))) {
 
             const { target, thisArg } = factory.createCallBinding(node.expression, hoistVariableDeclaration);
-            if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
-                ts.setEmitFlags(thisArg, ts.EmitFlags.NoSubstitution);
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                setEmitFlags(thisArg, EmitFlags.NoSubstitution);
             }
 
-            let resultingCall: ts.CallExpression | ts.BinaryExpression;
-            if (node.transformFlags & ts.TransformFlags.ContainsRestOrSpread) {
+            let resultingCall: CallExpression | BinaryExpression;
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
                 // [source]
                 //      f(...a, b)
                 //      x.m(...a, b)
@@ -3920,8 +3956,8 @@ export function transformES2015(context: ts.TransformationContext) {
                 //      _super.prototype.m.apply(this, a.concat([b]))
 
                 resultingCall = factory.createFunctionApplyCall(
-                    ts.visitNode(target, callExpressionVisitor, ts.isExpression),
-                    node.expression.kind === ts.SyntaxKind.SuperKeyword ? thisArg : ts.visitNode(thisArg, visitor, ts.isExpression),
+                    visitNode(target, callExpressionVisitor, isExpression),
+                    node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
                     transformAndSpreadElements(node.arguments, /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 );
             }
@@ -3935,30 +3971,30 @@ export function transformES2015(context: ts.TransformationContext) {
                 //      _super.call(this, a)
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
-                resultingCall = ts.setTextRange(
+                resultingCall = setTextRange(
                     factory.createFunctionCallCall(
-                        ts.visitNode(target, callExpressionVisitor, ts.isExpression),
-                        node.expression.kind === ts.SyntaxKind.SuperKeyword ? thisArg : ts.visitNode(thisArg, visitor, ts.isExpression),
-                        ts.visitNodes(node.arguments, visitor, ts.isExpression)
+                        visitNode(target, callExpressionVisitor, isExpression),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
+                        visitNodes(node.arguments, visitor, isExpression)
                     ),
                     node
                 );
             }
 
-            if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const initializer =
                     factory.createLogicalOr(
                         resultingCall,
                         createActualThis()
                     );
                 resultingCall = assignToCapturedThis
-                    ? factory.createAssignment(factory.createUniqueName("_this", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel), initializer)
+                    ? factory.createAssignment(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), initializer)
                     : initializer;
             }
-            return ts.setOriginalNode(resultingCall, node);
+            return setOriginalNode(resultingCall, node);
         }
 
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -3966,8 +4002,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A NewExpression node.
      */
-    function visitNewExpression(node: ts.NewExpression): ts.LeftHandSideExpression {
-        if (ts.some(node.arguments, ts.isSpreadElement)) {
+    function visitNewExpression(node: NewExpression): LeftHandSideExpression {
+        if (some(node.arguments, isSpreadElement)) {
             // We are here because we contain a SpreadElementExpression.
             // [source]
             //      new C(...a)
@@ -3978,7 +4014,7 @@ export function transformES2015(context: ts.TransformationContext) {
             const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
             return factory.createNewExpression(
                 factory.createFunctionApplyCall(
-                    ts.visitNode(target, visitor, ts.isExpression),
+                    visitNode(target, visitor, isExpression),
                     thisArg,
                     transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 ),
@@ -3986,7 +4022,7 @@ export function transformES2015(context: ts.TransformationContext) {
                 []
             );
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
     /**
@@ -3998,7 +4034,7 @@ export function transformES2015(context: ts.TransformationContext) {
      * argument list.
      * @param multiLine A value indicating whether the result should be emitted on multiple lines.
      */
-    function transformAndSpreadElements(elements: ts.NodeArray<ts.Expression>, isArgumentList: boolean, multiLine: boolean, hasTrailingComma: boolean): ts.Expression {
+    function transformAndSpreadElements(elements: NodeArray<Expression>, isArgumentList: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
         // When there is no leading SpreadElement:
         //
         // [source]
@@ -4033,11 +4069,11 @@ export function transformES2015(context: ts.TransformationContext) {
         // Map spans of spread expressions into their expressions and spans of other
         // expressions into an array literal.
         const numElements = elements.length;
-        const segments = ts.flatten<SpreadSegment>(
+        const segments = flatten<SpreadSegment>(
             // As we visit each element, we return one of two functions to use as the "key":
             // - `visitSpanOfSpreads` for one or more contiguous `...` spread expressions, i.e. `...a, ...b` in `[1, 2, ...a, ...b]`
             // - `visitSpanOfNonSpreads` for one or more contiguous non-spread elements, i.e. `1, 2`, in `[1, 2, ...a, ...b]`
-            ts.spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
+            spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
                 visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
             )
         );
@@ -4049,15 +4085,15 @@ export function transformES2015(context: ts.TransformationContext) {
             // to coerce this into an array for use with `apply`, so we will use the code path
             // that follows instead.
             if (isArgumentList && !compilerOptions.downlevelIteration
-                || ts.isPackedArrayLiteral(firstSegment.expression) // see NOTE (above)
-                || ts.isCallToHelper(firstSegment.expression, "___spreadArray" as ts.__String)) {
+                || isPackedArrayLiteral(firstSegment.expression) // see NOTE (above)
+                || isCallToHelper(firstSegment.expression, "___spreadArray" as __String)) {
                 return firstSegment.expression;
             }
         }
 
         const helpers = emitHelpers();
         const startsWithSpread = segments[0].kind !== SpreadSegmentKind.None;
-        let expression: ts.Expression =
+        let expression: Expression =
             startsWithSpread ? factory.createArrayLiteralExpression() :
             segments[0].expression;
         for (let i = startsWithSpread ? 0 : 1; i < segments.length; i++) {
@@ -4071,25 +4107,25 @@ export function transformES2015(context: ts.TransformationContext) {
         return expression;
     }
 
-    function partitionSpread(node: ts.Expression) {
-        return ts.isSpreadElement(node)
+    function partitionSpread(node: Expression) {
+        return isSpreadElement(node)
             ? visitSpanOfSpreads
             : visitSpanOfNonSpreads;
     }
 
-    function visitSpanOfSpreads(chunk: ts.Expression[]): SpreadSegment[] {
-        return ts.map(chunk, visitExpressionOfSpread);
+    function visitSpanOfSpreads(chunk: Expression[]): SpreadSegment[] {
+        return map(chunk, visitExpressionOfSpread);
     }
 
-    function visitExpressionOfSpread(node: ts.SpreadElement): SpreadSegment {
-        let expression = ts.visitNode(node.expression, visitor, ts.isExpression);
+    function visitExpressionOfSpread(node: SpreadElement): SpreadSegment {
+        let expression = visitNode(node.expression, visitor, isExpression);
 
         // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
-        const isCallToReadHelper = ts.isCallToHelper(expression, "___read" as ts.__String);
-        let kind = isCallToReadHelper || ts.isPackedArrayLiteral(expression) ? SpreadSegmentKind.PackedSpread : SpreadSegmentKind.UnpackedSpread;
+        const isCallToReadHelper = isCallToHelper(expression, "___read" as __String);
+        let kind = isCallToReadHelper || isPackedArrayLiteral(expression) ? SpreadSegmentKind.PackedSpread : SpreadSegmentKind.UnpackedSpread;
 
         // We don't need the `__read` helper for array literals. Array packing will be performed by `__spreadArray`.
-        if (compilerOptions.downlevelIteration && kind === SpreadSegmentKind.UnpackedSpread && !ts.isArrayLiteralExpression(expression) && !isCallToReadHelper) {
+        if (compilerOptions.downlevelIteration && kind === SpreadSegmentKind.UnpackedSpread && !isArrayLiteralExpression(expression) && !isCallToReadHelper) {
             expression = emitHelpers().createReadHelper(expression, /*count*/ undefined);
             // the `__read` helper returns a packed array, so we don't need to ensure a packed array
             kind = SpreadSegmentKind.PackedSpread;
@@ -4098,9 +4134,9 @@ export function transformES2015(context: ts.TransformationContext) {
         return createSpreadSegment(kind, expression);
     }
 
-    function visitSpanOfNonSpreads(chunk: ts.Expression[], multiLine: boolean, hasTrailingComma: boolean): SpreadSegment {
+    function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): SpreadSegment {
         const expression = factory.createArrayLiteralExpression(
-            ts.visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, ts.isExpression),
+            visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
             multiLine);
 
         // We do not pack non-spread segments, this is so that `[1, , ...[2, , 3], , 4]` is properly downleveled to
@@ -4108,8 +4144,8 @@ export function transformES2015(context: ts.TransformationContext) {
         return createSpreadSegment(SpreadSegmentKind.None, expression);
     }
 
-    function visitSpreadElement(node: ts.SpreadElement) {
-        return ts.visitNode(node.expression, visitor, ts.isExpression);
+    function visitSpreadElement(node: SpreadElement) {
+        return visitNode(node.expression, visitor, isExpression);
     }
 
     /**
@@ -4117,8 +4153,8 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A template literal.
      */
-    function visitTemplateLiteral(node: ts.LiteralExpression): ts.LeftHandSideExpression {
-        return ts.setTextRange(factory.createStringLiteral(node.text), node);
+    function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
+        return setTextRange(factory.createStringLiteral(node.text), node);
     }
 
     /**
@@ -4126,9 +4162,9 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A string literal.
      */
-    function visitStringLiteral(node: ts.StringLiteral) {
+    function visitStringLiteral(node: StringLiteral) {
         if (node.hasExtendedUnicodeEscape) {
-            return ts.setTextRange(factory.createStringLiteral(node.text), node);
+            return setTextRange(factory.createStringLiteral(node.text), node);
         }
         return node;
     }
@@ -4138,9 +4174,9 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A string literal.
      */
-    function visitNumericLiteral(node: ts.NumericLiteral) {
-        if (node.numericLiteralFlags & ts.TokenFlags.BinaryOrOctalSpecifier) {
-            return ts.setTextRange(factory.createNumericLiteral(node.text), node);
+    function visitNumericLiteral(node: NumericLiteral) {
+        if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
+            return setTextRange(factory.createNumericLiteral(node.text), node);
         }
         return node;
     }
@@ -4150,14 +4186,14 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A TaggedTemplateExpression node.
      */
-    function visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression) {
-        return ts.processTaggedTemplateExpression(
+    function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+        return processTaggedTemplateExpression(
             context,
             node,
             visitor,
             currentSourceFile,
             recordTaggedTemplateString,
-            ts.ProcessLevel.All
+            ProcessLevel.All
         );
     }
 
@@ -4166,10 +4202,10 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node A TemplateExpression node.
      */
-    function visitTemplateExpression(node: ts.TemplateExpression): ts.Expression {
-        let expression: ts.Expression = factory.createStringLiteral(node.head.text);
+    function visitTemplateExpression(node: TemplateExpression): Expression {
+        let expression: Expression = factory.createStringLiteral(node.head.text);
         for (const span of node.templateSpans) {
-            const args = [ts.visitNode(span.expression, visitor, ts.isExpression)];
+            const args = [visitNode(span.expression, visitor, isExpression)];
 
             if (span.literal.text.length > 0) {
                 args.push(factory.createStringLiteral(span.literal.text));
@@ -4182,23 +4218,23 @@ export function transformES2015(context: ts.TransformationContext) {
             );
         }
 
-        return ts.setTextRange(expression, node);
+        return setTextRange(expression, node);
     }
 
     /**
      * Visits the `super` keyword
      */
-    function visitSuperKeyword(isExpressionOfCall: boolean): ts.LeftHandSideExpression {
+    function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
         return hierarchyFacts & HierarchyFacts.NonStaticClassElement
             && !isExpressionOfCall
-                ? factory.createPropertyAccessExpression(factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel), "prototype")
-                : factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel);
+                ? factory.createPropertyAccessExpression(factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), "prototype")
+                : factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
     }
 
-    function visitMetaProperty(node: ts.MetaProperty) {
-        if (node.keywordToken === ts.SyntaxKind.NewKeyword && node.name.escapedText === "target") {
+    function visitMetaProperty(node: MetaProperty) {
+        if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
             hierarchyFacts |= HierarchyFacts.NewTarget;
-            return factory.createUniqueName("_newTarget", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel);
+            return factory.createUniqueName("_newTarget", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
         }
         return node;
     }
@@ -4210,12 +4246,12 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param node The node to be printed.
      * @param emitCallback The callback used to emit the node.
      */
-    function onEmitNode(hint: ts.EmitHint, node: ts.Node, emitCallback: (hint: ts.EmitHint, node: ts.Node) => void) {
-        if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && ts.isFunctionLike(node)) {
+    function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+        if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
             // If we are tracking a captured `this`, keep track of the enclosing function.
             const ancestorFacts = enterSubtree(
                 HierarchyFacts.FunctionExcludes,
-                ts.getEmitFlags(node) & ts.EmitFlags.CapturesThis
+                getEmitFlags(node) & EmitFlags.CapturesThis
                     ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
                     : HierarchyFacts.FunctionIncludes);
             previousOnEmitNode(hint, node, emitCallback);
@@ -4232,7 +4268,7 @@ export function transformES2015(context: ts.TransformationContext) {
     function enableSubstitutionsForBlockScopedBindings() {
         if ((enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) === 0) {
             enabledSubstitutions |= ES2015SubstitutionFlags.BlockScopedBindings;
-            context.enableSubstitution(ts.SyntaxKind.Identifier);
+            context.enableSubstitution(SyntaxKind.Identifier);
         }
     }
 
@@ -4243,14 +4279,14 @@ export function transformES2015(context: ts.TransformationContext) {
     function enableSubstitutionsForCapturedThis() {
         if ((enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis) === 0) {
             enabledSubstitutions |= ES2015SubstitutionFlags.CapturedThis;
-            context.enableSubstitution(ts.SyntaxKind.ThisKeyword);
-            context.enableEmitNotification(ts.SyntaxKind.Constructor);
-            context.enableEmitNotification(ts.SyntaxKind.MethodDeclaration);
-            context.enableEmitNotification(ts.SyntaxKind.GetAccessor);
-            context.enableEmitNotification(ts.SyntaxKind.SetAccessor);
-            context.enableEmitNotification(ts.SyntaxKind.ArrowFunction);
-            context.enableEmitNotification(ts.SyntaxKind.FunctionExpression);
-            context.enableEmitNotification(ts.SyntaxKind.FunctionDeclaration);
+            context.enableSubstitution(SyntaxKind.ThisKeyword);
+            context.enableEmitNotification(SyntaxKind.Constructor);
+            context.enableEmitNotification(SyntaxKind.MethodDeclaration);
+            context.enableEmitNotification(SyntaxKind.GetAccessor);
+            context.enableEmitNotification(SyntaxKind.SetAccessor);
+            context.enableEmitNotification(SyntaxKind.ArrowFunction);
+            context.enableEmitNotification(SyntaxKind.FunctionExpression);
+            context.enableEmitNotification(SyntaxKind.FunctionDeclaration);
         }
     }
 
@@ -4260,14 +4296,14 @@ export function transformES2015(context: ts.TransformationContext) {
      * @param hint The context for the emitter.
      * @param node The node to substitute.
      */
-    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
+    function onSubstituteNode(hint: EmitHint, node: Node) {
         node = previousOnSubstituteNode(hint, node);
 
-        if (hint === ts.EmitHint.Expression) {
+        if (hint === EmitHint.Expression) {
             return substituteExpression(node);
         }
 
-        if (ts.isIdentifier(node)) {
+        if (isIdentifier(node)) {
             return substituteIdentifier(node);
         }
 
@@ -4277,13 +4313,13 @@ export function transformES2015(context: ts.TransformationContext) {
     /**
      * Hooks substitutions for non-expression identifiers.
      */
-    function substituteIdentifier(node: ts.Identifier) {
+    function substituteIdentifier(node: Identifier) {
         // Only substitute the identifier if we have enabled substitutions for block-scoped
         // bindings.
-        if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !ts.isInternalName(node)) {
-            const original = ts.getParseTreeNode(node, ts.isIdentifier);
+        if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
+            const original = getParseTreeNode(node, isIdentifier);
             if (original && isNameOfDeclarationWithCollidingName(original)) {
-                return ts.setTextRange(factory.getGeneratedNameForNode(original), node);
+                return setTextRange(factory.getGeneratedNameForNode(original), node);
             }
         }
 
@@ -4296,14 +4332,14 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An original source tree node.
      */
-    function isNameOfDeclarationWithCollidingName(node: ts.Identifier) {
+    function isNameOfDeclarationWithCollidingName(node: Identifier) {
         switch (node.parent.kind) {
-            case ts.SyntaxKind.BindingElement:
-            case ts.SyntaxKind.ClassDeclaration:
-            case ts.SyntaxKind.EnumDeclaration:
-            case ts.SyntaxKind.VariableDeclaration:
-                return (node.parent as ts.NamedDeclaration).name === node
-                    && resolver.isDeclarationWithCollidingName(node.parent as ts.Declaration);
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.VariableDeclaration:
+                return (node.parent as NamedDeclaration).name === node
+                    && resolver.isDeclarationWithCollidingName(node.parent as Declaration);
         }
 
         return false;
@@ -4314,13 +4350,13 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An Expression node.
      */
-    function substituteExpression(node: ts.Node) {
+    function substituteExpression(node: Node) {
         switch (node.kind) {
-            case ts.SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as ts.Identifier);
+            case SyntaxKind.Identifier:
+                return substituteExpressionIdentifier(node as Identifier);
 
-            case ts.SyntaxKind.ThisKeyword:
-                return substituteThisKeyword(node as ts.PrimaryExpression);
+            case SyntaxKind.ThisKeyword:
+                return substituteThisKeyword(node as PrimaryExpression);
         }
 
         return node;
@@ -4331,19 +4367,19 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node An Identifier node.
      */
-    function substituteExpressionIdentifier(node: ts.Identifier): ts.Identifier {
-        if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !ts.isInternalName(node)) {
+    function substituteExpressionIdentifier(node: Identifier): Identifier {
+        if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
             const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
-            if (declaration && !(ts.isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
-                return ts.setTextRange(factory.getGeneratedNameForNode(ts.getNameOfDeclaration(declaration)), node);
+            if (declaration && !(isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
+                return setTextRange(factory.getGeneratedNameForNode(getNameOfDeclaration(declaration)), node);
             }
         }
 
         return node;
     }
 
-    function isPartOfClassBody(declaration: ts.ClassLikeDeclaration, node: ts.Identifier) {
-        let currentNode: ts.Node | undefined = ts.getParseTreeNode(node);
+    function isPartOfClassBody(declaration: ClassLikeDeclaration, node: Identifier) {
+        let currentNode: Node | undefined = getParseTreeNode(node);
         if (!currentNode || currentNode === declaration || currentNode.end <= declaration.pos || currentNode.pos >= declaration.end) {
             // if the node has no correlation to a parse tree node, its definitely not
             // part of the body.
@@ -4351,14 +4387,14 @@ export function transformES2015(context: ts.TransformationContext) {
             // definitely not part of the body.
             return false;
         }
-        const blockScope = ts.getEnclosingBlockScopeContainer(declaration);
+        const blockScope = getEnclosingBlockScopeContainer(declaration);
         while (currentNode) {
             if (currentNode === blockScope || currentNode === declaration) {
                 // if we are in the enclosing block scope of the declaration, we are definitely
                 // not inside the class body.
                 return false;
             }
-            if (ts.isClassElement(currentNode) && currentNode.parent === declaration) {
+            if (isClassElement(currentNode) && currentNode.parent === declaration) {
                 return true;
             }
             currentNode = currentNode.parent;
@@ -4371,50 +4407,50 @@ export function transformES2015(context: ts.TransformationContext) {
      *
      * @param node The ThisKeyword node.
      */
-    function substituteThisKeyword(node: ts.PrimaryExpression): ts.PrimaryExpression {
+    function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
         if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
             && hierarchyFacts & HierarchyFacts.CapturesThis) {
-            return ts.setTextRange(factory.createUniqueName("_this", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel), node);
+            return setTextRange(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), node);
         }
         return node;
     }
 
-    function getClassMemberPrefix(node: ts.ClassExpression | ts.ClassDeclaration, member: ts.ClassElement) {
-        return ts.isStatic(member)
+    function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
+        return isStatic(member)
             ? factory.getInternalName(node)
             : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
     }
 
-    function hasSynthesizedDefaultSuperCall(constructor: ts.ConstructorDeclaration | undefined, hasExtendsClause: boolean) {
+    function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration | undefined, hasExtendsClause: boolean) {
         if (!constructor || !hasExtendsClause) {
             return false;
         }
 
-        if (ts.some(constructor.parameters)) {
+        if (some(constructor.parameters)) {
             return false;
         }
 
-        const statement = ts.firstOrUndefined(constructor.body!.statements);
-        if (!statement || !ts.nodeIsSynthesized(statement) || statement.kind !== ts.SyntaxKind.ExpressionStatement) {
+        const statement = firstOrUndefined(constructor.body!.statements);
+        if (!statement || !nodeIsSynthesized(statement) || statement.kind !== SyntaxKind.ExpressionStatement) {
             return false;
         }
 
-        const statementExpression = (statement as ts.ExpressionStatement).expression;
-        if (!ts.nodeIsSynthesized(statementExpression) || statementExpression.kind !== ts.SyntaxKind.CallExpression) {
+        const statementExpression = (statement as ExpressionStatement).expression;
+        if (!nodeIsSynthesized(statementExpression) || statementExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
 
-        const callTarget = (statementExpression as ts.CallExpression).expression;
-        if (!ts.nodeIsSynthesized(callTarget) || callTarget.kind !== ts.SyntaxKind.SuperKeyword) {
+        const callTarget = (statementExpression as CallExpression).expression;
+        if (!nodeIsSynthesized(callTarget) || callTarget.kind !== SyntaxKind.SuperKeyword) {
             return false;
         }
 
-        const callArgument = ts.singleOrUndefined((statementExpression as ts.CallExpression).arguments);
-        if (!callArgument || !ts.nodeIsSynthesized(callArgument) || callArgument.kind !== ts.SyntaxKind.SpreadElement) {
+        const callArgument = singleOrUndefined((statementExpression as CallExpression).arguments);
+        if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElement) {
             return false;
         }
 
-        const expression = (callArgument as ts.SpreadElement).expression;
-        return ts.isIdentifier(expression) && expression.escapedText === "arguments";
+        const expression = (callArgument as SpreadElement).expression;
+        return isIdentifier(expression) && expression.escapedText === "arguments";
     }
 }

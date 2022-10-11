@@ -1,14 +1,14 @@
-import * as ts from "./_namespaces/ts";
+import { BuildInfo, Diagnostic } from "./_namespaces/ts";
 
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
-    /* @internal */ diagnostics: readonly ts.Diagnostic[];
+    /* @internal */ diagnostics: readonly Diagnostic[];
 }
 
 export interface OutputFile {
     name: string;
     writeByteOrderMark: boolean;
     text: string;
-    /* @internal */ buildInfo?: ts.BuildInfo
+    /* @internal */ buildInfo?: BuildInfo
 }

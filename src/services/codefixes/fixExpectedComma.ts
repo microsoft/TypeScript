@@ -1,45 +1,49 @@
-import * as ts from "../_namespaces/ts";
+import {
+    Diagnostics, factory, getTokenAtPosition, isArrayLiteralExpression, isObjectLiteralExpression, Node, SourceFile,
+    SyntaxKind, textChanges,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "fixExpectedComma";
-const expectedErrorCode = ts.Diagnostics._0_expected.code;
+const expectedErrorCode = Diagnostics._0_expected.code;
 const errorCodes = [expectedErrorCode];
 
-ts.codefix.registerCodeFix({
+registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile } = context;
         const info = getInfo(sourceFile, context.span.start, context.errorCode);
         if (!info) return undefined;
 
-        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
 
-        return [ts.codefix.createCodeFixAction(
+        return [createCodeFixAction(
             fixId,
             changes,
-            [ts.Diagnostics.Change_0_to_1, ";", ","],
+            [Diagnostics.Change_0_to_1, ";", ","],
             fixId,
-            [ts.Diagnostics.Change_0_to_1, ";", ","]
+            [Diagnostics.Change_0_to_1, ";", ","]
         )];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, diag.start, diag.code);
         if (info) doChange(changes, context.sourceFile, info);
     }),
 });
 
-interface Info { readonly node: ts.Node; }
+interface Info { readonly node: Node; }
 
-function getInfo(sourceFile: ts.SourceFile, pos: number, _: number): Info | undefined {
-    const node = ts.getTokenAtPosition(sourceFile, pos);
+function getInfo(sourceFile: SourceFile, pos: number, _: number): Info | undefined {
+    const node = getTokenAtPosition(sourceFile, pos);
 
-    return (node.kind === ts.SyntaxKind.SemicolonToken &&
+    return (node.kind === SyntaxKind.SemicolonToken &&
             node.parent &&
-            (ts.isObjectLiteralExpression(node.parent) ||
-             ts.isArrayLiteralExpression(node.parent))) ? { node } : undefined;
+            (isObjectLiteralExpression(node.parent) ||
+             isArrayLiteralExpression(node.parent))) ? { node } : undefined;
 }
 
-function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, { node }: Info): void {
-    const newNode = ts.factory.createToken(ts.SyntaxKind.CommaToken);
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {
+    const newNode = factory.createToken(SyntaxKind.CommaToken);
     changes.replaceNode(sourceFile, node, newNode);
 }

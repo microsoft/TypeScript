@@ -1,8 +1,11 @@
-import * as ts from "./_namespaces/ts";
+import {
+    FileReference, isKeyword, lastOrUndefined, length, noop, PragmaContext, PreProcessedFileInfo, processCommentPragmas,
+    processPragmasIntoFields, scanner, ScriptTarget, SyntaxKind,
+} from "./_namespaces/ts";
 
-export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): ts.PreProcessedFileInfo {
-    const pragmaContext: ts.PragmaContext = {
-        languageVersion: ts.ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
+export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
+    const pragmaContext: PragmaContext = {
+        languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
         pragmas: undefined,
         checkJsDirective: undefined,
         referencedFiles: [],
@@ -12,10 +15,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         hasNoDefaultLib: undefined,
         moduleName: undefined
     };
-    const importedFiles: ts.FileReference[] = [];
-    let ambientExternalModules: { ref: ts.FileReference, depth: number }[] | undefined;
-    let lastToken: ts.SyntaxKind;
-    let currentToken: ts.SyntaxKind;
+    const importedFiles: FileReference[] = [];
+    let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
+    let lastToken: SyntaxKind;
+    let currentToken: SyntaxKind;
     let braceNesting = 0;
     // assume that text represent an external module if it contains at least one top level import/export
     // ambient modules that are found inside external modules are interpreted as module augmentations
@@ -23,19 +26,19 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
 
     function nextToken() {
         lastToken = currentToken;
-        currentToken = ts.scanner.scan();
-        if (currentToken === ts.SyntaxKind.OpenBraceToken) {
+        currentToken = scanner.scan();
+        if (currentToken === SyntaxKind.OpenBraceToken) {
             braceNesting++;
         }
-        else if (currentToken === ts.SyntaxKind.CloseBraceToken) {
+        else if (currentToken === SyntaxKind.CloseBraceToken) {
             braceNesting--;
         }
         return currentToken;
     }
 
     function getFileReference() {
-        const fileName = ts.scanner.getTokenValue();
-        const pos = ts.scanner.getTokenPos();
+        const fileName = scanner.getTokenValue();
+        const pos = scanner.getTokenPos();
         return { fileName, pos, end: pos + fileName.length };
     }
 
@@ -62,13 +65,13 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
      * Returns true if at least one token was consumed from the stream
      */
     function tryConsumeDeclare(): boolean {
-        let token = ts.scanner.getToken();
-        if (token === ts.SyntaxKind.DeclareKeyword) {
+        let token = scanner.getToken();
+        if (token === SyntaxKind.DeclareKeyword) {
             // declare module "mod"
             token = nextToken();
-            if (token === ts.SyntaxKind.ModuleKeyword) {
+            if (token === SyntaxKind.ModuleKeyword) {
                 token = nextToken();
-                if (token === ts.SyntaxKind.StringLiteral) {
+                if (token === SyntaxKind.StringLiteral) {
                     recordAmbientExternalModule();
                 }
             }
@@ -82,34 +85,34 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
      * Returns true if at least one token was consumed from the stream
      */
     function tryConsumeImport(): boolean {
-        if (lastToken === ts.SyntaxKind.DotToken) {
+        if (lastToken === SyntaxKind.DotToken) {
             return false;
         }
-        let token = ts.scanner.getToken();
-        if (token === ts.SyntaxKind.ImportKeyword) {
+        let token = scanner.getToken();
+        if (token === SyntaxKind.ImportKeyword) {
             token = nextToken();
-            if (token === ts.SyntaxKind.OpenParenToken) {
+            if (token === SyntaxKind.OpenParenToken) {
                 token = nextToken();
-                if (token === ts.SyntaxKind.StringLiteral || token === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
+                if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     // import("mod");
                     recordModuleName();
                     return true;
                 }
             }
-            else if (token === ts.SyntaxKind.StringLiteral) {
+            else if (token === SyntaxKind.StringLiteral) {
                 // import "mod";
                 recordModuleName();
                 return true;
             }
             else {
-                if (token === ts.SyntaxKind.TypeKeyword) {
-                    const skipTypeKeyword = ts.scanner.lookAhead(() => {
-                        const token = ts.scanner.scan();
-                        return token !== ts.SyntaxKind.FromKeyword && (
-                            token === ts.SyntaxKind.AsteriskToken ||
-                            token === ts.SyntaxKind.OpenBraceToken ||
-                            token === ts.SyntaxKind.Identifier ||
-                            ts.isKeyword(token)
+                if (token === SyntaxKind.TypeKeyword) {
+                    const skipTypeKeyword = scanner.lookAhead(() => {
+                        const token = scanner.scan();
+                        return token !== SyntaxKind.FromKeyword && (
+                            token === SyntaxKind.AsteriskToken ||
+                            token === SyntaxKind.OpenBraceToken ||
+                            token === SyntaxKind.Identifier ||
+                            isKeyword(token)
                         );
                     });
                     if (skipTypeKeyword) {
@@ -117,22 +120,22 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                     }
                 }
 
-                if (token === ts.SyntaxKind.Identifier || ts.isKeyword(token)) {
+                if (token === SyntaxKind.Identifier || isKeyword(token)) {
                     token = nextToken();
-                    if (token === ts.SyntaxKind.FromKeyword) {
+                    if (token === SyntaxKind.FromKeyword) {
                         token = nextToken();
-                        if (token === ts.SyntaxKind.StringLiteral) {
+                        if (token === SyntaxKind.StringLiteral) {
                             // import d from "mod";
                             recordModuleName();
                             return true;
                         }
                     }
-                    else if (token === ts.SyntaxKind.EqualsToken) {
+                    else if (token === SyntaxKind.EqualsToken) {
                         if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
                             return true;
                         }
                     }
-                    else if (token === ts.SyntaxKind.CommaToken) {
+                    else if (token === SyntaxKind.CommaToken) {
                         // consume comma and keep going
                         token = nextToken();
                     }
@@ -142,19 +145,19 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                     }
                 }
 
-                if (token === ts.SyntaxKind.OpenBraceToken) {
+                if (token === SyntaxKind.OpenBraceToken) {
                     token = nextToken();
                     // consume "{ a as B, c, d as D}" clauses
                     // make sure that it stops on EOF
-                    while (token !== ts.SyntaxKind.CloseBraceToken && token !== ts.SyntaxKind.EndOfFileToken) {
+                    while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
                         token = nextToken();
                     }
 
-                    if (token === ts.SyntaxKind.CloseBraceToken) {
+                    if (token === SyntaxKind.CloseBraceToken) {
                         token = nextToken();
-                        if (token === ts.SyntaxKind.FromKeyword) {
+                        if (token === SyntaxKind.FromKeyword) {
                             token = nextToken();
-                            if (token === ts.SyntaxKind.StringLiteral) {
+                            if (token === SyntaxKind.StringLiteral) {
                                 // import {a as A} from "mod";
                                 // import d, {a, b as B} from "mod"
                                 recordModuleName();
@@ -162,15 +165,15 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                         }
                     }
                 }
-                else if (token === ts.SyntaxKind.AsteriskToken) {
+                else if (token === SyntaxKind.AsteriskToken) {
                     token = nextToken();
-                    if (token === ts.SyntaxKind.AsKeyword) {
+                    if (token === SyntaxKind.AsKeyword) {
                         token = nextToken();
-                        if (token === ts.SyntaxKind.Identifier || ts.isKeyword(token)) {
+                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
                             token = nextToken();
-                            if (token === ts.SyntaxKind.FromKeyword) {
+                            if (token === SyntaxKind.FromKeyword) {
                                 token = nextToken();
-                                if (token === ts.SyntaxKind.StringLiteral) {
+                                if (token === SyntaxKind.StringLiteral) {
                                     // import * as NS from "mod"
                                     // import d, * as NS from "mod"
                                     recordModuleName();
@@ -188,33 +191,33 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
     }
 
     function tryConsumeExport(): boolean {
-        let token = ts.scanner.getToken();
-        if (token === ts.SyntaxKind.ExportKeyword) {
+        let token = scanner.getToken();
+        if (token === SyntaxKind.ExportKeyword) {
             markAsExternalModuleIfTopLevel();
             token = nextToken();
-            if (token === ts.SyntaxKind.TypeKeyword) {
-                const skipTypeKeyword = ts.scanner.lookAhead(() => {
-                    const token = ts.scanner.scan();
-                    return token === ts.SyntaxKind.AsteriskToken ||
-                        token === ts.SyntaxKind.OpenBraceToken;
+            if (token === SyntaxKind.TypeKeyword) {
+                const skipTypeKeyword = scanner.lookAhead(() => {
+                    const token = scanner.scan();
+                    return token === SyntaxKind.AsteriskToken ||
+                        token === SyntaxKind.OpenBraceToken;
                 });
                 if (skipTypeKeyword) {
                     token = nextToken();
                 }
             }
-            if (token === ts.SyntaxKind.OpenBraceToken) {
+            if (token === SyntaxKind.OpenBraceToken) {
                 token = nextToken();
                 // consume "{ a as B, c, d as D}" clauses
                 // make sure it stops on EOF
-                while (token !== ts.SyntaxKind.CloseBraceToken && token !== ts.SyntaxKind.EndOfFileToken) {
+                while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
                     token = nextToken();
                 }
 
-                if (token === ts.SyntaxKind.CloseBraceToken) {
+                if (token === SyntaxKind.CloseBraceToken) {
                     token = nextToken();
-                    if (token === ts.SyntaxKind.FromKeyword) {
+                    if (token === SyntaxKind.FromKeyword) {
                         token = nextToken();
-                        if (token === ts.SyntaxKind.StringLiteral) {
+                        if (token === SyntaxKind.StringLiteral) {
                             // export {a as A} from "mod";
                             // export {a, b as B} from "mod"
                             recordModuleName();
@@ -222,31 +225,31 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                     }
                 }
             }
-            else if (token === ts.SyntaxKind.AsteriskToken) {
+            else if (token === SyntaxKind.AsteriskToken) {
                 token = nextToken();
-                if (token === ts.SyntaxKind.FromKeyword) {
+                if (token === SyntaxKind.FromKeyword) {
                     token = nextToken();
-                    if (token === ts.SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral) {
                         // export * from "mod"
                         recordModuleName();
                     }
                 }
             }
-            else if (token === ts.SyntaxKind.ImportKeyword) {
+            else if (token === SyntaxKind.ImportKeyword) {
                 token = nextToken();
-                if (token === ts.SyntaxKind.TypeKeyword) {
-                    const skipTypeKeyword = ts.scanner.lookAhead(() => {
-                        const token = ts.scanner.scan();
-                        return token === ts.SyntaxKind.Identifier ||
-                            ts.isKeyword(token);
+                if (token === SyntaxKind.TypeKeyword) {
+                    const skipTypeKeyword = scanner.lookAhead(() => {
+                        const token = scanner.scan();
+                        return token === SyntaxKind.Identifier ||
+                            isKeyword(token);
                     });
                     if (skipTypeKeyword) {
                         token = nextToken();
                     }
                 }
-                if (token === ts.SyntaxKind.Identifier || ts.isKeyword(token)) {
+                if (token === SyntaxKind.Identifier || isKeyword(token)) {
                     token = nextToken();
-                    if (token === ts.SyntaxKind.EqualsToken) {
+                    if (token === SyntaxKind.EqualsToken) {
                         if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
                             return true;
                         }
@@ -261,13 +264,13 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
     }
 
     function tryConsumeRequireCall(skipCurrentToken: boolean, allowTemplateLiterals = false): boolean {
-        let token = skipCurrentToken ? nextToken() : ts.scanner.getToken();
-        if (token === ts.SyntaxKind.RequireKeyword) {
+        let token = skipCurrentToken ? nextToken() : scanner.getToken();
+        if (token === SyntaxKind.RequireKeyword) {
             token = nextToken();
-            if (token === ts.SyntaxKind.OpenParenToken) {
+            if (token === SyntaxKind.OpenParenToken) {
                 token = nextToken();
-                if (token === ts.SyntaxKind.StringLiteral ||
-                    allowTemplateLiterals && token === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
+                if (token === SyntaxKind.StringLiteral ||
+                    allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     //  require("mod");
                     recordModuleName();
                 }
@@ -278,18 +281,18 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
     }
 
     function tryConsumeDefine(): boolean {
-        let token = ts.scanner.getToken();
-        if (token === ts.SyntaxKind.Identifier && ts.scanner.getTokenValue() === "define") {
+        let token = scanner.getToken();
+        if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
             token = nextToken();
-            if (token !== ts.SyntaxKind.OpenParenToken) {
+            if (token !== SyntaxKind.OpenParenToken) {
                 return true;
             }
 
             token = nextToken();
-            if (token === ts.SyntaxKind.StringLiteral || token === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
+            if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                 // looks like define ("modname", ... - skip string literal and comma
                 token = nextToken();
-                if (token === ts.SyntaxKind.CommaToken) {
+                if (token === SyntaxKind.CommaToken) {
                     token = nextToken();
                 }
                 else {
@@ -299,16 +302,16 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             }
 
             // should be start of dependency list
-            if (token !== ts.SyntaxKind.OpenBracketToken) {
+            if (token !== SyntaxKind.OpenBracketToken) {
                 return true;
             }
 
             // skip open bracket
             token = nextToken();
             // scan until ']' or EOF
-            while (token !== ts.SyntaxKind.CloseBracketToken && token !== ts.SyntaxKind.EndOfFileToken) {
+            while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                 // record string literals as module names
-                if (token === ts.SyntaxKind.StringLiteral || token === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
+                if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     recordModuleName();
                 }
 
@@ -321,7 +324,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
     }
 
     function processImports(): void {
-        ts.scanner.setText(sourceText);
+        scanner.setText(sourceText);
         nextToken();
         // Look for:
         //    import "mod";
@@ -342,32 +345,32 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         //    AnySymbol.nested.import("mod")
 
         while (true) {
-            if (ts.scanner.getToken() === ts.SyntaxKind.EndOfFileToken) {
+            if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
                 break;
             }
 
-            if (ts.scanner.getToken() === ts.SyntaxKind.TemplateHead) {
-                const stack = [ts.scanner.getToken()];
-                loop: while (ts.length(stack)) {
-                    const token = ts.scanner.scan();
+            if (scanner.getToken() === SyntaxKind.TemplateHead) {
+                const stack = [scanner.getToken()];
+                loop: while (length(stack)) {
+                    const token = scanner.scan();
                     switch (token) {
-                        case ts.SyntaxKind.EndOfFileToken:
+                        case SyntaxKind.EndOfFileToken:
                             break loop;
-                        case ts.SyntaxKind.ImportKeyword:
+                        case SyntaxKind.ImportKeyword:
                             tryConsumeImport();
                             break;
-                        case ts.SyntaxKind.TemplateHead:
+                        case SyntaxKind.TemplateHead:
                             stack.push(token);
                             break;
-                        case ts.SyntaxKind.OpenBraceToken:
-                            if (ts.length(stack)) {
+                        case SyntaxKind.OpenBraceToken:
+                            if (length(stack)) {
                                 stack.push(token);
                             }
                             break;
-                        case ts.SyntaxKind.CloseBraceToken:
-                            if (ts.length(stack)) {
-                                if (ts.lastOrUndefined(stack) === ts.SyntaxKind.TemplateHead) {
-                                    if (ts.scanner.reScanTemplateToken(/* isTaggedTemplate */ false) === ts.SyntaxKind.TemplateTail) {
+                        case SyntaxKind.CloseBraceToken:
+                            if (length(stack)) {
+                                if (lastOrUndefined(stack) === SyntaxKind.TemplateHead) {
+                                    if (scanner.reScanTemplateToken(/* isTaggedTemplate */ false) === SyntaxKind.TemplateTail) {
                                         stack.pop();
                                     }
                                 }
@@ -396,14 +399,14 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             }
         }
 
-        ts.scanner.setText(undefined);
+        scanner.setText(undefined);
     }
 
     if (readImportFiles) {
         processImports();
     }
-    ts.processCommentPragmas(pragmaContext, sourceText);
-    ts.processPragmasIntoFields(pragmaContext, ts.noop);
+    processCommentPragmas(pragmaContext, sourceText);
+    processPragmasIntoFields(pragmaContext, noop);
     if (externalModule) {
         // for external modules module all nested ambient modules are augmentations
         if (ambientExternalModules) {

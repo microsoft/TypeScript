@@ -1,9 +1,13 @@
-import * as ts from "../_namespaces/ts";
+import {
+    cast, Diagnostics, factory, getTokenAtPosition, isIdentifier, isPropertySignature, isTypeLiteralNode, SourceFile,
+    textChanges, TypeLiteralNode, TypeNode,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "convertLiteralTypeToMappedType";
-const errorCodes = [ts.Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
+const errorCodes = [Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
 
-ts.codefix.registerCodeFix({
+registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertLiteralTypeToMappedType(context) {
         const { sourceFile, span } = context;
@@ -12,11 +16,11 @@ ts.codefix.registerCodeFix({
             return undefined;
         }
         const { name, constraint } = info;
-        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
-        return [ts.codefix.createCodeFixAction(fixId, changes, [ts.Diagnostics.Convert_0_to_1_in_0, constraint, name], fixId, ts.Diagnostics.Convert_all_type_literals_to_mapped_type)];
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_1_in_0, constraint, name], fixId, Diagnostics.Convert_all_type_literals_to_mapped_type)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, diag.start);
         if (info) {
             doChange(changes, diag.file, info);
@@ -25,19 +29,19 @@ ts.codefix.registerCodeFix({
 });
 
 interface Info {
-    container: ts.TypeLiteralNode,
-    typeNode: ts.TypeNode | undefined;
+    container: TypeLiteralNode,
+    typeNode: TypeNode | undefined;
     constraint: string;
     name: string;
 }
 
-function getInfo(sourceFile: ts.SourceFile, pos: number): Info | undefined {
-    const token = ts.getTokenAtPosition(sourceFile, pos);
-    if (ts.isIdentifier(token)) {
-        const propertySignature = ts.cast(token.parent.parent, ts.isPropertySignature);
+function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
+    const token = getTokenAtPosition(sourceFile, pos);
+    if (isIdentifier(token)) {
+        const propertySignature = cast(token.parent.parent, isPropertySignature);
         const propertyName = token.getText(sourceFile);
         return {
-            container: ts.cast(propertySignature.parent, ts.isTypeLiteralNode),
+            container: cast(propertySignature.parent, isTypeLiteralNode),
             typeNode: propertySignature.type,
             constraint: propertyName,
             name: propertyName === "K" ? "P" : "K",
@@ -46,10 +50,10 @@ function getInfo(sourceFile: ts.SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, { container, typeNode, constraint, name }: Info): void {
-    changes.replaceNode(sourceFile, container, ts.factory.createMappedTypeNode(
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
+    changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(
         /*readonlyToken*/ undefined,
-        ts.factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, ts.factory.createTypeReferenceNode(constraint)),
+        factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, factory.createTypeReferenceNode(constraint)),
         /*nameType*/ undefined,
         /*questionToken*/ undefined,
         typeNode,

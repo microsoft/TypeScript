@@ -1,7 +1,14 @@
-import * as ts from "./_namespaces/ts";
+import {
+    ActionInvalidate, ActionPackageInstalled, ActionSet, EventBeginInstallTypes, EventEndInstallTypes,
+    EventInitializationFailed, EventTypesRegistry,
+} from "./_namespaces/ts.server";
+import {
+    CompilerOptions, DirectoryWatcherCallback, FileWatcher, FileWatcherCallback, JsTyping, MapLike, Path,
+    SortedReadonlyArray, TypeAcquisition, WatchOptions,
+} from "./_namespaces/ts";
 
 export interface TypingInstallerResponse {
-    readonly kind: ts.server.ActionSet | ts.server.ActionInvalidate | ts.server.EventTypesRegistry | ts.server.ActionPackageInstalled | ts.server.EventBeginInstallTypes | ts.server.EventEndInstallTypes | ts.server.EventInitializationFailed;
+    readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
 }
 
 export interface TypingInstallerRequestWithProjectName {
@@ -13,11 +20,11 @@ export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | Types
 
 export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
     readonly fileNames: string[];
-    readonly projectRootPath: ts.Path;
-    readonly compilerOptions: ts.CompilerOptions;
-    readonly watchOptions?: ts.WatchOptions;
-    readonly typeAcquisition: ts.TypeAcquisition;
-    readonly unresolvedImports: ts.SortedReadonlyArray<string>;
+    readonly projectRootPath: Path;
+    readonly compilerOptions: CompilerOptions;
+    readonly watchOptions?: WatchOptions;
+    readonly typeAcquisition: TypeAcquisition;
+    readonly unresolvedImports: SortedReadonlyArray<string>;
     readonly cachePath?: string;
     readonly kind: "discover";
 }
@@ -32,25 +39,25 @@ export interface TypesRegistryRequest {
 
 export interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
     readonly kind: "installPackage";
-    readonly fileName: ts.Path;
+    readonly fileName: Path;
     readonly packageName: string;
-    readonly projectRootPath: ts.Path;
+    readonly projectRootPath: Path;
 }
 
 /* @internal */
 export interface TypesRegistryResponse extends TypingInstallerResponse {
-    readonly kind: ts.server.EventTypesRegistry;
-    readonly typesRegistry: ts.MapLike<ts.MapLike<string>>;
+    readonly kind: EventTypesRegistry;
+    readonly typesRegistry: MapLike<MapLike<string>>;
 }
 
 export interface PackageInstalledResponse extends ProjectResponse {
-    readonly kind: ts.server.ActionPackageInstalled;
+    readonly kind: ActionPackageInstalled;
     readonly success: boolean;
     readonly message: string;
 }
 
 export interface InitializationFailedResponse extends TypingInstallerResponse {
-    readonly kind: ts.server.EventInitializationFailed;
+    readonly kind: EventInitializationFailed;
     readonly message: string;
     readonly stack?: string;
 }
@@ -60,41 +67,41 @@ export interface ProjectResponse extends TypingInstallerResponse {
 }
 
 export interface InvalidateCachedTypings extends ProjectResponse {
-    readonly kind: ts.server.ActionInvalidate;
+    readonly kind: ActionInvalidate;
 }
 
 export interface InstallTypes extends ProjectResponse {
-    readonly kind: ts.server.EventBeginInstallTypes | ts.server.EventEndInstallTypes;
+    readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
     readonly eventId: number;
     readonly typingsInstallerVersion: string;
     readonly packagesToInstall: readonly string[];
 }
 
 export interface BeginInstallTypes extends InstallTypes {
-    readonly kind: ts.server.EventBeginInstallTypes;
+    readonly kind: EventBeginInstallTypes;
 }
 
 export interface EndInstallTypes extends InstallTypes {
-    readonly kind: ts.server.EventEndInstallTypes;
+    readonly kind: EventEndInstallTypes;
     readonly installSuccess: boolean;
 }
 
 /* @internal */
-export interface InstallTypingHost extends ts.JsTyping.TypingResolutionHost {
+export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
     useCaseSensitiveFileNames: boolean;
     writeFile(path: string, content: string): void;
     createDirectory(path: string): void;
     getCurrentDirectory?(): string;
-    watchFile?(path: string, callback: ts.FileWatcherCallback, pollingInterval?: number, options?: ts.WatchOptions): ts.FileWatcher;
-    watchDirectory?(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher;
+    watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
+    watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
 }
 
 export interface SetTypings extends ProjectResponse {
-    readonly typeAcquisition: ts.TypeAcquisition;
-    readonly compilerOptions: ts.CompilerOptions;
+    readonly typeAcquisition: TypeAcquisition;
+    readonly compilerOptions: CompilerOptions;
     readonly typings: string[];
-    readonly unresolvedImports: ts.SortedReadonlyArray<string>;
-    readonly kind: ts.server.ActionSet;
+    readonly unresolvedImports: SortedReadonlyArray<string>;
+    readonly kind: ActionSet;
 }
 
 /* @internal */
