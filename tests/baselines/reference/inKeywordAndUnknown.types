@@ -16,7 +16,7 @@ function f(x: {}, y: unknown) {
         return;
     }
     x;  // {}
->x : {}
+>x : Record<"a", unknown>
 
     if (!y) {
 >!y : boolean
@@ -37,6 +37,6 @@ function f(x: {}, y: unknown) {
         return;
     }
     y;  // {}
->y : {}
+>y : Record<"a", unknown>
 }
 

@@ -35,18 +35,17 @@ FsWatchesRecursive::
 
 Info 2    [00:00:21.000] Search path: /User/userName/Projects/i
 Info 3    [00:00:22.000] For info: /User/userName/Projects/i/foo.ts :: No config files found.
-Info 4    [00:00:23.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 5    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/i/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 6    [00:00:25.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/i/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 7    [00:00:26.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 8    [00:00:27.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 9    [00:00:28.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 10   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 11   [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 12   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 13   [00:00:32.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 14   [00:00:33.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 15   [00:00:34.000] 	Files (2)
+Info 4    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/i/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 5    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/i/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 6    [00:00:25.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 7    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 8    [00:00:27.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 9    [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 10   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 11   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /User/userName/Projects/i/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 12   [00:00:31.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 13   [00:00:32.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 14   [00:00:33.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/User/userName/Projects/i/foo.ts
 
@@ -56,14 +55,14 @@ Info 15   [00:00:34.000] 	Files (2)
 	foo.ts
 	  Root file specified for compilation
 
-Info 16   [00:00:35.000] -----------------------------------------------
-Info 17   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 17   [00:00:37.000] 	Files (2)
+Info 15   [00:00:34.000] -----------------------------------------------
+Info 16   [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 16   [00:00:36.000] 	Files (2)
 
-Info 17   [00:00:38.000] -----------------------------------------------
-Info 17   [00:00:39.000] Open files: 
-Info 17   [00:00:40.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
-Info 17   [00:00:41.000] 		Projects: /dev/null/inferredProject1*
+Info 16   [00:00:37.000] -----------------------------------------------
+Info 16   [00:00:38.000] Open files: 
+Info 16   [00:00:39.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
+Info 16   [00:00:40.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -82,7 +81,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [00:00:42.000] response:
+Info 16   [00:00:41.000] response:
     {
       "responseRequired": false
     }
