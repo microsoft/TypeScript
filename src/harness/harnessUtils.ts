@@ -314,7 +314,7 @@ namespace Utils {
 
     function findChildName(parent: any, child: any) {
         for (const name in parent) {
-            if (parent.hasOwnProperty(name) && parent[name] === child) {
+            if (ts.hasProperty(parent, name) && parent[name] === child) {
                 return name;
             }
         }

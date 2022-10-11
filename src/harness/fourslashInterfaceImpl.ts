@@ -624,8 +624,8 @@ namespace FourSlashInterface {
             this.state.noMoveToNewFile();
         }
 
-        public organizeImports(newContent: string) {
-            this.state.verifyOrganizeImports(newContent);
+        public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
+            this.state.verifyOrganizeImports(newContent, mode);
         }
     }
 
@@ -1901,11 +1901,11 @@ namespace FourSlashInterface {
     };
     export interface DiagnosticIgnoredInterpolations {
         template: string
-    };
+    }
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
     export interface RenameOptions {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-    };
+    }
 }

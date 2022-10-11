@@ -53,17 +53,16 @@ Info 6    [00:00:27.000] Config: c:/myfolder/allproject/project/tsconfig.json : 
 }
 Info 7    [00:00:28.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project 1 undefined Config: c:/myfolder/allproject/project/tsconfig.json WatchType: Wild card directory
 Info 8    [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project 1 undefined Config: c:/myfolder/allproject/project/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:30.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 10   [00:00:31.000] FileWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/file2.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:32.000] Starting updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json
-Info 12   [00:00:33.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info 14   [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info 15   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info 16   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info 17   [00:00:38.000] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:00:39.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
-Info 19   [00:00:40.000] 	Files (3)
+Info 9    [00:00:30.000] FileWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/file2.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:31.000] Starting updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json
+Info 11   [00:00:32.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 13   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 14   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:38.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
+Info 18   [00:00:39.000] 	Files (3)
 	c:/a/lib/lib.d.ts
 	c:/myfolder/allproject/project/file1.ts
 	c:/myfolder/allproject/project/file2.ts
@@ -76,14 +75,14 @@ Info 19   [00:00:40.000] 	Files (3)
 	file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 20   [00:00:41.000] -----------------------------------------------
-Info 21   [00:00:42.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
-Info 21   [00:00:43.000] 	Files (3)
+Info 19   [00:00:40.000] -----------------------------------------------
+Info 20   [00:00:41.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
+Info 20   [00:00:42.000] 	Files (3)
 
-Info 21   [00:00:44.000] -----------------------------------------------
-Info 21   [00:00:45.000] Open files: 
-Info 21   [00:00:46.000] 	FileName: c:/myfolder/allproject/project/file1.ts ProjectRootPath: undefined
-Info 21   [00:00:47.000] 		Projects: c:/myfolder/allproject/project/tsconfig.json
+Info 20   [00:00:43.000] -----------------------------------------------
+Info 20   [00:00:44.000] Open files: 
+Info 20   [00:00:45.000] 	FileName: c:/myfolder/allproject/project/file1.ts ProjectRootPath: undefined
+Info 20   [00:00:46.000] 		Projects: c:/myfolder/allproject/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -104,7 +103,7 @@ FsWatchesRecursive::
 c:/myfolder/allproject/project:
   {}
 
-Info 21   [00:00:48.000] response:
+Info 20   [00:00:47.000] response:
     {
       "responseRequired": false
     }

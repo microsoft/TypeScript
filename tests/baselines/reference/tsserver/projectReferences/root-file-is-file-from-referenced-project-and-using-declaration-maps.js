@@ -253,19 +253,18 @@ Info 6    [00:01:23.000] Config: /user/username/projects/project/src/common/tsco
 }
 Info 7    [00:01:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
 Info 8    [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
-Info 9    [00:01:26.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 10   [00:01:27.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/input/keyboard.test.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:01:28.000] Starting updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json
-Info 12   [00:01:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:01:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 14   [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 15   [00:01:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 16   [00:01:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 17   [00:01:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 18   [00:01:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info 19   [00:01:36.000] Finishing updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 20   [00:01:37.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
-Info 21   [00:01:38.000] 	Files (3)
+Info 9    [00:01:26.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/input/keyboard.test.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:01:27.000] Starting updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json
+Info 11   [00:01:28.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:01:29.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 13   [00:01:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 14   [00:01:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 15   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 16   [00:01:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 17   [00:01:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info 18   [00:01:35.000] Finishing updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 19   [00:01:36.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
+Info 20   [00:01:37.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/project/src/common/input/keyboard.ts
 	/user/username/projects/project/src/common/input/keyboard.test.ts
@@ -279,24 +278,24 @@ Info 21   [00:01:38.000] 	Files (3)
 	input/keyboard.test.ts
 	  Matched by include pattern './**/*' in 'tsconfig.json'
 
-Info 22   [00:01:39.000] -----------------------------------------------
-Info 23   [00:01:40.000] Search path: /user/username/projects/project/src/common
-Info 24   [00:01:41.000] For info: /user/username/projects/project/src/common/tsconfig.json :: Config file name: /user/username/projects/project/src/tsconfig.json
-Info 25   [00:01:42.000] Creating configuration project /user/username/projects/project/src/tsconfig.json
-Info 26   [00:01:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Config file
-Info 27   [00:01:44.000] Search path: /user/username/projects/project/src
-Info 28   [00:01:45.000] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
-Info 29   [00:01:46.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
-Info 29   [00:01:47.000] 	Files (3)
+Info 21   [00:01:38.000] -----------------------------------------------
+Info 22   [00:01:39.000] Search path: /user/username/projects/project/src/common
+Info 23   [00:01:40.000] For info: /user/username/projects/project/src/common/tsconfig.json :: Config file name: /user/username/projects/project/src/tsconfig.json
+Info 24   [00:01:41.000] Creating configuration project /user/username/projects/project/src/tsconfig.json
+Info 25   [00:01:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Config file
+Info 26   [00:01:43.000] Search path: /user/username/projects/project/src
+Info 27   [00:01:44.000] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
+Info 28   [00:01:45.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
+Info 28   [00:01:46.000] 	Files (3)
 
-Info 29   [00:01:48.000] -----------------------------------------------
-Info 29   [00:01:49.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
-Info 29   [00:01:50.000] 	Files (0) InitialLoadPending
+Info 28   [00:01:47.000] -----------------------------------------------
+Info 28   [00:01:48.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
+Info 28   [00:01:49.000] 	Files (0) InitialLoadPending
 
-Info 29   [00:01:51.000] -----------------------------------------------
-Info 29   [00:01:52.000] Open files: 
-Info 29   [00:01:53.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
-Info 29   [00:01:54.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json
+Info 28   [00:01:50.000] -----------------------------------------------
+Info 28   [00:01:51.000] Open files: 
+Info 28   [00:01:52.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
+Info 28   [00:01:53.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json
 After request
 
 PolledWatches::
@@ -321,11 +320,11 @@ FsWatchesRecursive::
 /user/username/projects/project/src/common:
   {}
 
-Info 29   [00:01:55.000] response:
+Info 28   [00:01:54.000] response:
     {
       "responseRequired": false
     }
-Info 30   [00:01:56.000] request:
+Info 29   [00:01:55.000] request:
     {
       "seq": 0,
       "type": "request",
@@ -358,10 +357,10 @@ FsWatchesRecursive::
 /user/username/projects/project/src/common:
   {}
 
-Info 31   [00:01:57.000] Search path: /user/username/projects/project/src
-Info 32   [00:01:58.000] For info: /user/username/projects/project/src/terminal.ts :: Config file name: /user/username/projects/project/src/tsconfig.json
-Info 33   [00:01:59.000] Loading configured project /user/username/projects/project/src/tsconfig.json
-Info 34   [00:02:00.000] Config: /user/username/projects/project/src/tsconfig.json : {
+Info 30   [00:01:56.000] Search path: /user/username/projects/project/src
+Info 31   [00:01:57.000] For info: /user/username/projects/project/src/terminal.ts :: Config file name: /user/username/projects/project/src/tsconfig.json
+Info 32   [00:01:58.000] Loading configured project /user/username/projects/project/src/tsconfig.json
+Info 33   [00:01:59.000] Config: /user/username/projects/project/src/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/src/terminal.ts",
   "/user/username/projects/project/src/common/input/keyboard.test.ts",
@@ -389,18 +388,17 @@ Info 34   [00:02:00.000] Config: /user/username/projects/project/src/tsconfig.js
   }
  ]
 }
-Info 35   [00:02:01.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info 36   [00:02:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info 37   [00:02:03.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 38   [00:02:04.000] Starting updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json
-Info 39   [00:02:05.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts 500 undefined WatchType: Closed Script info
-Info 40   [00:02:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info 41   [00:02:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info 42   [00:02:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info 43   [00:02:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info 44   [00:02:10.000] Finishing updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 45   [00:02:11.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
-Info 46   [00:02:12.000] 	Files (4)
+Info 34   [00:02:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
+Info 35   [00:02:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
+Info 36   [00:02:02.000] Starting updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json
+Info 37   [00:02:03.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts 500 undefined WatchType: Closed Script info
+Info 38   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
+Info 39   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
+Info 40   [00:02:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
+Info 41   [00:02:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
+Info 42   [00:02:08.000] Finishing updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 43   [00:02:09.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
+Info 44   [00:02:10.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/project/out/input/keyboard.d.ts
 	/user/username/projects/project/src/terminal.ts
@@ -419,22 +417,22 @@ Info 46   [00:02:12.000] 	Files (4)
 	common/input/keyboard.test.ts
 	  Matched by include pattern './**/*' in 'tsconfig.json'
 
-Info 47   [00:02:13.000] -----------------------------------------------
-Info 48   [00:02:14.000] Search path: /user/username/projects/project/src
-Info 49   [00:02:15.000] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
-Info 50   [00:02:16.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
-Info 50   [00:02:17.000] 	Files (3)
+Info 45   [00:02:11.000] -----------------------------------------------
+Info 46   [00:02:12.000] Search path: /user/username/projects/project/src
+Info 47   [00:02:13.000] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
+Info 48   [00:02:14.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
+Info 48   [00:02:15.000] 	Files (3)
 
-Info 50   [00:02:18.000] -----------------------------------------------
-Info 50   [00:02:19.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
-Info 50   [00:02:20.000] 	Files (4)
+Info 48   [00:02:16.000] -----------------------------------------------
+Info 48   [00:02:17.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
+Info 48   [00:02:18.000] 	Files (4)
 
-Info 50   [00:02:21.000] -----------------------------------------------
-Info 50   [00:02:22.000] Open files: 
-Info 50   [00:02:23.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
-Info 50   [00:02:24.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
-Info 50   [00:02:25.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
-Info 50   [00:02:26.000] 		Projects: /user/username/projects/project/src/tsconfig.json
+Info 48   [00:02:19.000] -----------------------------------------------
+Info 48   [00:02:20.000] Open files: 
+Info 48   [00:02:21.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
+Info 48   [00:02:22.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
+Info 48   [00:02:23.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
+Info 48   [00:02:24.000] 		Projects: /user/username/projects/project/src/tsconfig.json
 After request
 
 PolledWatches::
@@ -463,11 +461,11 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 50   [00:02:27.000] response:
+Info 48   [00:02:25.000] response:
     {
       "responseRequired": false
     }
-Info 51   [00:02:28.000] request:
+Info 49   [00:02:26.000] request:
     {
       "command": "references",
       "arguments": {
@@ -506,13 +504,13 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 52   [00:02:29.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
-Info 53   [00:02:30.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
-Info 54   [00:02:31.000] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
+Info 50   [00:02:27.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
+Info 51   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
+Info 52   [00:02:29.000] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
+Info 53   [00:02:30.000] Search path: /user/username/projects/project/src/common/input
+Info 54   [00:02:31.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info 55   [00:02:32.000] Search path: /user/username/projects/project/src/common/input
 Info 56   [00:02:33.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info 57   [00:02:34.000] Search path: /user/username/projects/project/src/common/input
-Info 58   [00:02:35.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 After request
 
 PolledWatches::
@@ -543,7 +541,7 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 59   [00:02:36.000] response:
+Info 57   [00:02:34.000] response:
     {
       "response": {
         "refs": [

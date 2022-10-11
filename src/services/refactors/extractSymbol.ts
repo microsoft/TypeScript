@@ -240,11 +240,6 @@ namespace ts.refactor.extractSymbol {
         readonly range: Expression | Statement[];
         readonly facts: RangeFacts;
         /**
-         * A list of symbols that are declared in the selected range which are visible in the containing lexical scope
-         * Used to ensure we don't turn something used outside the range free (or worse, resolve to a different entity).
-         */
-        readonly declarations: Symbol[];
-        /**
          * If `this` is referring to a function instead of class, we need to retrieve its type.
          */
         readonly thisNode: Node | undefined;
@@ -294,8 +289,6 @@ namespace ts.refactor.extractSymbol {
         // Do the same for the ending position
         const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
 
-        const declarations: Symbol[] = [];
-
         // We'll modify these flags as we walk the tree to collect data
         // about what things need to be done as part of the extraction.
         let rangeFacts = RangeFacts.None;
@@ -344,7 +337,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
 
-            return { targetRange: { range: statements, facts: rangeFacts, declarations, thisNode } };
+            return { targetRange: { range: statements, facts: rangeFacts, thisNode } };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -359,7 +352,7 @@ namespace ts.refactor.extractSymbol {
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, declarations, thisNode } }; // TODO: GH#18217
+        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, thisNode } }; // TODO: GH#18217
 
         /**
          * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
@@ -489,7 +482,6 @@ namespace ts.refactor.extractSymbol {
                         (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                         return true;
                     }
-                    declarations.push(node.symbol);
                 }
 
                 // Some things can't be extracted in certain situations

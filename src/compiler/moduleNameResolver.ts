@@ -2437,12 +2437,7 @@ namespace ts {
             }
         }
 
-        const { packageName, rest } = parsePackageName(moduleName);
         const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
-            // package exports are higher priority than file/directory lookups (and, if there's exports present, blocks them)
-            if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
-                return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
-            }
             let pathAndExtension =
                 loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
                 loadNodeModuleFromDirectoryWorker(
@@ -2466,20 +2461,24 @@ namespace ts {
             return withPackageId(packageInfo, pathAndExtension);
         };
 
-        if (rest !== "") { // If "rest" is empty, we just did this search above.
-            const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
-
-            // Don't use a "types" or "main" from here because we're not loading the root, but a subdirectory -- just here for the packageId and path mappings.
+        const { packageName, rest } = parsePackageName(moduleName);
+        const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
+        if (rest !== "") {
+            // Previous `packageInfo` may have been from a nested package.json; ensure we have the one from the package root now.
             packageInfo = getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
-            if (packageInfo && packageInfo.contents.versionPaths) {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.contents.versionPaths.version, version, rest);
-                }
-                const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.contents.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
-                if (fromPaths) {
-                    return fromPaths.value;
-                }
+        }
+        // package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present, blocks them)
+        if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
+            return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
+        }
+        if (rest !== "" && packageInfo && packageInfo.contents.versionPaths) {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.contents.versionPaths.version, version, rest);
+            }
+            const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
+            const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.contents.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
+            if (fromPaths) {
+                return fromPaths.value;
             }
         }
 
