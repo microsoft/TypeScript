@@ -1,4 +1,5 @@
-import * as ts from "../_namespaces/ts";
+import { FormattingContext } from "../_namespaces/ts.formatting";
+import { emptyArray, SyntaxKind } from "../_namespaces/ts";
 
 /** @internal */
 export interface Rule {
@@ -10,9 +11,9 @@ export interface Rule {
 }
 
 /** @internal */
-export type ContextPredicate = (context: ts.formatting.FormattingContext) => boolean;
+export type ContextPredicate = (context: FormattingContext) => boolean;
 /** @internal */
-export const anyContext: readonly ContextPredicate[] = ts.emptyArray;
+export const anyContext: readonly ContextPredicate[] = emptyArray;
 
 /** @internal */
 export const enum RuleAction {
@@ -37,6 +38,6 @@ export const enum RuleFlags {
 
 /** @internal */
 export interface TokenRange {
-    readonly tokens: readonly ts.SyntaxKind[];
+    readonly tokens: readonly SyntaxKind[];
     readonly isSpecific: boolean;
 }

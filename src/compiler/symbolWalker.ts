@@ -1,50 +1,54 @@
-import * as ts from "./_namespaces/ts";
+import {
+    clear, EntityNameOrEntityNameExpression, forEach, getOwnValues, getSymbolId, Identifier, IndexedAccessType,
+    IndexType, InterfaceType, MappedType, Node, ObjectFlags, ObjectType, ResolvedType, Signature, Symbol, SymbolWalker,
+    SyntaxKind, Type, TypeFlags, TypeParameter, TypePredicate, TypeQueryNode, TypeReference, UnionOrIntersectionType,
+} from "./_namespaces/ts";
 
 /** @internal */
 
 /** @internal */
 export function createGetSymbolWalker(
-    getRestTypeOfSignature: (sig: ts.Signature) => ts.Type,
-    getTypePredicateOfSignature: (sig: ts.Signature) => ts.TypePredicate | undefined,
-    getReturnTypeOfSignature: (sig: ts.Signature) => ts.Type,
-    getBaseTypes: (type: ts.Type) => ts.Type[],
-    resolveStructuredTypeMembers: (type: ts.ObjectType) => ts.ResolvedType,
-    getTypeOfSymbol: (sym: ts.Symbol) => ts.Type,
-    getResolvedSymbol: (node: ts.Node) => ts.Symbol,
-    getConstraintOfTypeParameter: (typeParameter: ts.TypeParameter) => ts.Type | undefined,
-    getFirstIdentifier: (node: ts.EntityNameOrEntityNameExpression) => ts.Identifier,
-    getTypeArguments: (type: ts.TypeReference) => readonly ts.Type[]) {
+    getRestTypeOfSignature: (sig: Signature) => Type,
+    getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
+    getReturnTypeOfSignature: (sig: Signature) => Type,
+    getBaseTypes: (type: Type) => Type[],
+    resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
+    getTypeOfSymbol: (sym: Symbol) => Type,
+    getResolvedSymbol: (node: Node) => Symbol,
+    getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
+    getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
+    getTypeArguments: (type: TypeReference) => readonly Type[]) {
 
     return getSymbolWalker;
 
-    function getSymbolWalker(accept: (symbol: ts.Symbol) => boolean = () => true): ts.SymbolWalker {
-        const visitedTypes: ts.Type[] = []; // Sparse array from id to type
-        const visitedSymbols: ts.Symbol[] = []; // Sparse array from id to symbol
+    function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
+        const visitedTypes: Type[] = []; // Sparse array from id to type
+        const visitedSymbols: Symbol[] = []; // Sparse array from id to symbol
 
         return {
             walkType: type => {
                 try {
                     visitType(type);
-                    return { visitedTypes: ts.getOwnValues(visitedTypes), visitedSymbols: ts.getOwnValues(visitedSymbols) };
+                    return { visitedTypes: getOwnValues(visitedTypes), visitedSymbols: getOwnValues(visitedSymbols) };
                 }
                 finally {
-                    ts.clear(visitedTypes);
-                    ts.clear(visitedSymbols);
+                    clear(visitedTypes);
+                    clear(visitedSymbols);
                 }
             },
             walkSymbol: symbol => {
                 try {
                     visitSymbol(symbol);
-                    return { visitedTypes: ts.getOwnValues(visitedTypes), visitedSymbols: ts.getOwnValues(visitedSymbols) };
+                    return { visitedTypes: getOwnValues(visitedTypes), visitedSymbols: getOwnValues(visitedSymbols) };
                 }
                 finally {
-                    ts.clear(visitedTypes);
-                    ts.clear(visitedSymbols);
+                    clear(visitedTypes);
+                    clear(visitedSymbols);
                 }
             },
         };
 
-        function visitType(type: ts.Type | undefined): void {
+        function visitType(type: Type | undefined): void {
             if (!type) {
                 return;
             }
@@ -60,72 +64,72 @@ export function createGetSymbolWalker(
             if (shouldBail) return;
 
             // Visit the type's related types, if any
-            if (type.flags & ts.TypeFlags.Object) {
-                const objectType = type as ts.ObjectType;
+            if (type.flags & TypeFlags.Object) {
+                const objectType = type as ObjectType;
                 const objectFlags = objectType.objectFlags;
-                if (objectFlags & ts.ObjectFlags.Reference) {
-                    visitTypeReference(type as ts.TypeReference);
+                if (objectFlags & ObjectFlags.Reference) {
+                    visitTypeReference(type as TypeReference);
                 }
-                if (objectFlags & ts.ObjectFlags.Mapped) {
-                    visitMappedType(type as ts.MappedType);
+                if (objectFlags & ObjectFlags.Mapped) {
+                    visitMappedType(type as MappedType);
                 }
-                if (objectFlags & (ts.ObjectFlags.Class | ts.ObjectFlags.Interface)) {
-                    visitInterfaceType(type as ts.InterfaceType);
+                if (objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                    visitInterfaceType(type as InterfaceType);
                 }
-                if (objectFlags & (ts.ObjectFlags.Tuple | ts.ObjectFlags.Anonymous)) {
+                if (objectFlags & (ObjectFlags.Tuple | ObjectFlags.Anonymous)) {
                     visitObjectType(objectType);
                 }
             }
-            if (type.flags & ts.TypeFlags.TypeParameter) {
-                visitTypeParameter(type as ts.TypeParameter);
+            if (type.flags & TypeFlags.TypeParameter) {
+                visitTypeParameter(type as TypeParameter);
             }
-            if (type.flags & ts.TypeFlags.UnionOrIntersection) {
-                visitUnionOrIntersectionType(type as ts.UnionOrIntersectionType);
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                visitUnionOrIntersectionType(type as UnionOrIntersectionType);
             }
-            if (type.flags & ts.TypeFlags.Index) {
-                visitIndexType(type as ts.IndexType);
+            if (type.flags & TypeFlags.Index) {
+                visitIndexType(type as IndexType);
             }
-            if (type.flags & ts.TypeFlags.IndexedAccess) {
-                visitIndexedAccessType(type as ts.IndexedAccessType);
+            if (type.flags & TypeFlags.IndexedAccess) {
+                visitIndexedAccessType(type as IndexedAccessType);
             }
         }
 
-        function visitTypeReference(type: ts.TypeReference): void {
+        function visitTypeReference(type: TypeReference): void {
             visitType(type.target);
-            ts.forEach(getTypeArguments(type), visitType);
+            forEach(getTypeArguments(type), visitType);
         }
 
-        function visitTypeParameter(type: ts.TypeParameter): void {
+        function visitTypeParameter(type: TypeParameter): void {
             visitType(getConstraintOfTypeParameter(type));
         }
 
-        function visitUnionOrIntersectionType(type: ts.UnionOrIntersectionType): void {
-            ts.forEach(type.types, visitType);
+        function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
+            forEach(type.types, visitType);
         }
 
-        function visitIndexType(type: ts.IndexType): void {
+        function visitIndexType(type: IndexType): void {
             visitType(type.type);
         }
 
-        function visitIndexedAccessType(type: ts.IndexedAccessType): void {
+        function visitIndexedAccessType(type: IndexedAccessType): void {
             visitType(type.objectType);
             visitType(type.indexType);
             visitType(type.constraint);
         }
 
-        function visitMappedType(type: ts.MappedType): void {
+        function visitMappedType(type: MappedType): void {
             visitType(type.typeParameter);
             visitType(type.constraintType);
             visitType(type.templateType);
             visitType(type.modifiersType);
         }
 
-        function visitSignature(signature: ts.Signature): void {
+        function visitSignature(signature: Signature): void {
             const typePredicate = getTypePredicateOfSignature(signature);
             if (typePredicate) {
                 visitType(typePredicate.type);
             }
-            ts.forEach(signature.typeParameters, visitType);
+            forEach(signature.typeParameters, visitType);
 
             for (const parameter of signature.parameters) {
                 visitSymbol(parameter);
@@ -134,14 +138,14 @@ export function createGetSymbolWalker(
             visitType(getReturnTypeOfSignature(signature));
         }
 
-        function visitInterfaceType(interfaceT: ts.InterfaceType): void {
+        function visitInterfaceType(interfaceT: InterfaceType): void {
             visitObjectType(interfaceT);
-            ts.forEach(interfaceT.typeParameters, visitType);
-            ts.forEach(getBaseTypes(interfaceT), visitType);
+            forEach(interfaceT.typeParameters, visitType);
+            forEach(getBaseTypes(interfaceT), visitType);
             visitType(interfaceT.thisType);
         }
 
-        function visitObjectType(type: ts.ObjectType): void {
+        function visitObjectType(type: ObjectType): void {
             const resolved = resolveStructuredTypeMembers(type);
             for (const info of resolved.indexInfos) {
                 visitType(info.keyType);
@@ -158,11 +162,11 @@ export function createGetSymbolWalker(
             }
         }
 
-        function visitSymbol(symbol: ts.Symbol | undefined): boolean {
+        function visitSymbol(symbol: Symbol | undefined): boolean {
             if (!symbol) {
                 return false;
             }
-            const symbolId = ts.getSymbolId(symbol);
+            const symbolId = getSymbolId(symbol);
             if (visitedSymbols[symbolId]) {
                 return false;
             }
@@ -175,13 +179,13 @@ export function createGetSymbolWalker(
             if (symbol.exports) {
                 symbol.exports.forEach(visitSymbol);
             }
-            ts.forEach(symbol.declarations, d => {
+            forEach(symbol.declarations, d => {
                 // Type queries are too far resolved when we just visit the symbol's type
                 //  (their type resolved directly to the member deeply referenced)
                 // So to get the intervening symbols, we need to check if there's a type
                 // query node on any of the symbol's declarations and get symbols there
-                if ((d as any).type && (d as any).type.kind === ts.SyntaxKind.TypeQuery) {
-                    const query = (d as any).type as ts.TypeQueryNode;
+                if ((d as any).type && (d as any).type.kind === SyntaxKind.TypeQuery) {
+                    const query = (d as any).type as TypeQueryNode;
                     const entity = getResolvedSymbol(getFirstIdentifier(query.exprName));
                     visitSymbol(entity);
                 }

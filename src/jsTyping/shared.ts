@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import { padLeft, sys } from "./_namespaces/ts";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";
@@ -43,14 +43,14 @@ export namespace Arguments {
 
 /* @internal */
 export function hasArgument(argumentName: string) {
-    return ts.sys.args.indexOf(argumentName) >= 0;
+    return sys.args.indexOf(argumentName) >= 0;
 }
 
 /* @internal */
 export function findArgument(argumentName: string): string | undefined {
-    const index = ts.sys.args.indexOf(argumentName);
-    return index >= 0 && index < ts.sys.args.length - 1
-        ? ts.sys.args[index + 1]
+    const index = sys.args.indexOf(argumentName);
+    return index >= 0 && index < sys.args.length - 1
+        ? sys.args[index + 1]
         : undefined;
 }
 
@@ -58,5 +58,5 @@ export function findArgument(argumentName: string): string | undefined {
 export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();
-    return `${ts.padLeft(d.getHours().toString(), 2, "0")}:${ts.padLeft(d.getMinutes().toString(), 2, "0")}:${ts.padLeft(d.getSeconds().toString(), 2, "0")}.${ts.padLeft(d.getMilliseconds().toString(), 3, "0")}`;
+    return `${padLeft(d.getHours().toString(), 2, "0")}:${padLeft(d.getMinutes().toString(), 2, "0")}:${padLeft(d.getSeconds().toString(), 2, "0")}.${padLeft(d.getMilliseconds().toString(), 3, "0")}`;
 }

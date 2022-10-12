@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import { Debug, DeprecationOptions, hasProperty } from "./_namespaces/ts";
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
@@ -36,7 +36,7 @@ type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[key
 type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
 
 /** Defines deprecations for specific overloads by ordinal. */
-type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: ts.DeprecationOptions; };
+type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 
 /** @internal */
 export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
@@ -45,8 +45,8 @@ export function createOverload<T extends OverloadDefinitions>(name: string, over
     if (deprecations) {
         for (const key of Object.keys(deprecations)) {
             const index = +key as (keyof T & number);
-            if (!isNaN(index) && ts.hasProperty(overloads, `${index}`)) {
-                overloads[index] = ts.Debug.deprecate(overloads[index], { ...deprecations[index], name });
+            if (!isNaN(index) && hasProperty(overloads, `${index}`)) {
+                overloads[index] = Debug.deprecate(overloads[index], { ...deprecations[index], name });
             }
         }
     }
@@ -66,7 +66,7 @@ export function createOverload<T extends OverloadDefinitions>(name: string, over
 
 function createBinder<T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>): OverloadBinder<T> {
     return args => {
-        for (let i = 0; ts.hasProperty(overloads, `${i}`) && ts.hasProperty(binder, `${i}`); i++) {
+        for (let i = 0; hasProperty(overloads, `${i}`) && hasProperty(binder, `${i}`); i++) {
             const fn = binder[i];
             if (fn(args)) {
                 return i as OverloadKeys<T>;

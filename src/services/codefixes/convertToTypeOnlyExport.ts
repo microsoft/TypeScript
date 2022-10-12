@@ -1,32 +1,37 @@
-import * as ts from "../_namespaces/ts";
+import {
+    addToSeen, CodeFixContextBase, contains, createTextSpanFromNode, Diagnostics, ExportSpecifier, factory, filter,
+    findDiagnosticForNode, getDiagnosticsWithinSpan, getNodeId, getTokenAtPosition, isExportSpecifier, Map, SourceFile,
+    SyntaxKind, textChanges, TextSpan, tryCast,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
-const errorCodes = [ts.Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
+const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
-ts.codefix.registerCodeFix({
+registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertToTypeOnlyExport(context) {
-        const changes = ts.textChanges.ChangeTracker.with(context, t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context));
+        const changes = textChanges.ChangeTracker.with(context, t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context));
         if (changes.length) {
-            return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Convert_to_type_only_export, fixId, ts.Diagnostics.Convert_all_re_exported_types_to_type_only_exports)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_type_only_export, fixId, Diagnostics.Convert_all_re_exported_types_to_type_only_exports)];
         }
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyExport(context) {
-        const fixedExportDeclarations = new ts.Map<number, true>();
-        return ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+        const fixedExportDeclarations = new Map<number, true>();
+        return codeFixAll(context, errorCodes, (changes, diag) => {
             const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
-            if (exportSpecifier && ts.addToSeen(fixedExportDeclarations, ts.getNodeId(exportSpecifier.parent.parent))) {
+            if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
                 fixSingleExportDeclaration(changes, exportSpecifier, context);
             }
         });
     }
 });
 
-function getExportSpecifierForDiagnosticSpan(span: ts.TextSpan, sourceFile: ts.SourceFile) {
-    return ts.tryCast(ts.getTokenAtPosition(sourceFile, span.start).parent, ts.isExportSpecifier);
+function getExportSpecifierForDiagnosticSpan(span: TextSpan, sourceFile: SourceFile) {
+    return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isExportSpecifier);
 }
 
-function fixSingleExportDeclaration(changes: ts.textChanges.ChangeTracker, exportSpecifier: ts.ExportSpecifier | undefined, context: ts.CodeFixContextBase) {
+function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSpecifier: ExportSpecifier | undefined, context: CodeFixContextBase) {
     if (!exportSpecifier) {
         return;
     }
@@ -35,44 +40,44 @@ function fixSingleExportDeclaration(changes: ts.textChanges.ChangeTracker, expor
     const exportDeclaration = exportClause.parent;
     const typeExportSpecifiers = getTypeExportSpecifiers(exportSpecifier, context);
     if (typeExportSpecifiers.length === exportClause.elements.length) {
-        changes.insertModifierBefore(context.sourceFile, ts.SyntaxKind.TypeKeyword, exportClause);
+        changes.insertModifierBefore(context.sourceFile, SyntaxKind.TypeKeyword, exportClause);
     }
     else {
-        const valueExportDeclaration = ts.factory.updateExportDeclaration(
+        const valueExportDeclaration = factory.updateExportDeclaration(
             exportDeclaration,
             exportDeclaration.modifiers,
             /*isTypeOnly*/ false,
-            ts.factory.updateNamedExports(exportClause, ts.filter(exportClause.elements, e => !ts.contains(typeExportSpecifiers, e))),
+            factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
             /*assertClause*/ undefined
         );
-        const typeExportDeclaration = ts.factory.createExportDeclaration(
+        const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ true,
-            ts.factory.createNamedExports(typeExportSpecifiers),
+            factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
             /*assertClause*/ undefined
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
-            leadingTriviaOption: ts.textChanges.LeadingTriviaOption.IncludeAll,
-            trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude
+            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
         });
         changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
     }
 }
 
-function getTypeExportSpecifiers(originExportSpecifier: ts.ExportSpecifier, context: ts.CodeFixContextBase): readonly ts.ExportSpecifier[] {
+function getTypeExportSpecifiers(originExportSpecifier: ExportSpecifier, context: CodeFixContextBase): readonly ExportSpecifier[] {
     const exportClause = originExportSpecifier.parent;
     if (exportClause.elements.length === 1) {
         return exportClause.elements;
     }
 
-    const diagnostics = ts.getDiagnosticsWithinSpan(
-        ts.createTextSpanFromNode(exportClause),
+    const diagnostics = getDiagnosticsWithinSpan(
+        createTextSpanFromNode(exportClause),
         context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken));
 
-    return ts.filter(exportClause.elements, element => {
-        return element === originExportSpecifier || ts.findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];
+    return filter(exportClause.elements, element => {
+        return element === originExportSpecifier || findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];
     });
 }

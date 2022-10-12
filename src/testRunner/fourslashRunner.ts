@@ -1,10 +1,10 @@
-import * as Harness from "./_namespaces/Harness";
 import * as FourSlash from "./_namespaces/FourSlash";
 import * as ts from "./_namespaces/ts";
+import { IO, RunnerBase, TestRunnerKind } from "./_namespaces/Harness";
 
-export class FourSlashRunner extends Harness.RunnerBase {
+export class FourSlashRunner extends RunnerBase {
     protected basePath: string;
-    protected testSuiteName: Harness.TestRunnerKind;
+    protected testSuiteName: TestRunnerKind;
 
     constructor(private testType: FourSlash.FourSlashTestType) {
         super();
@@ -41,7 +41,7 @@ export class FourSlashRunner extends Harness.RunnerBase {
 
     public initializeTests() {
         if (this.tests.length === 0) {
-            this.tests = Harness.IO.enumerateTestFiles(this);
+            this.tests = IO.enumerateTestFiles(this);
         }
 
         describe(this.testSuiteName + " tests", () => {

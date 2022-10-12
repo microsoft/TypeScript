@@ -1,35 +1,39 @@
-import * as ts from "../_namespaces/ts";
+import {
+    ApplicableRefactorInfo, codefix, Debug, Diagnostics, emptyArray, getRenameLocation, isIdentifier, isParameter,
+    RefactorContext,
+} from "../_namespaces/ts";
+import { isRefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
 
 const actionName = "Generate 'get' and 'set' accessors";
-const actionDescription = ts.Diagnostics.Generate_get_and_set_accessors.message;
+const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
 
 const generateGetSetAction = {
     name: actionName,
     description: actionDescription,
     kind: "refactor.rewrite.property.generateAccessors",
 };
-ts.refactor.registerRefactor(actionName, {
+registerRefactor(actionName, {
     kinds: [generateGetSetAction.kind],
     getEditsForAction: function getRefactorActionsToGenerateGetAndSetAccessors(context, actionName) {
         if (!context.endPosition) return undefined;
-        const info = ts.codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
-        ts.Debug.assert(info && !ts.refactor.isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = ts.codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
+        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
+        Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
+        const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
         if (!edits) return undefined;
 
         const renameFilename = context.file.fileName;
         const nameNeedRename = info.renameAccessor ? info.accessorName : info.fieldName;
-        const renameLocationOffset = ts.isIdentifier(nameNeedRename) ? 0 : -1;
-        const renameLocation = renameLocationOffset + ts.getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ ts.isParameter(info.declaration));
+        const renameLocationOffset = isIdentifier(nameNeedRename) ? 0 : -1;
+        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(info.declaration));
 
         return { renameFilename, renameLocation, edits };
     },
-    getAvailableActions(context: ts.RefactorContext): readonly ts.ApplicableRefactorInfo[] {
-        if (!context.endPosition) return ts.emptyArray;
-        const info = ts.codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
-        if (!info) return ts.emptyArray;
+    getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+        if (!context.endPosition) return emptyArray;
+        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+        if (!info) return emptyArray;
 
-        if (!ts.refactor.isRefactorErrorInfo(info)) {
+        if (!isRefactorErrorInfo(info)) {
             return [{
                 name: actionName,
                 description: actionDescription,
@@ -45,6 +49,6 @@ ts.refactor.registerRefactor(actionName, {
             }];
         }
 
-        return ts.emptyArray;
+        return emptyArray;
     }
 });
