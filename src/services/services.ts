@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
@@ -2872,4 +2873,3 @@ export function getDefaultLibFilePath(options: ts.CompilerOptions): string {
 }
 
 ts.setObjectAllocator(getServicesObjectAllocator());
-}

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "requireInTs";
 const errorCodes = [ts.Diagnostics.require_call_may_be_converted_to_an_import.code];
 ts.codefix.registerCodeFix({
@@ -68,5 +68,4 @@ function tryCreateNamedImportsFromObjectBindingPattern(node: ts.ObjectBindingPat
     if (importSpecifiers.length) {
         return ts.factory.createNamedImports(importSpecifiers);
     }
-}
 }

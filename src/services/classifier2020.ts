@@ -1,19 +1,24 @@
-/** @internal */
-namespace ts.classifier.v2020 {
+import * as ts from "./_namespaces/ts";
 
+/** @internal */
+
+/** @internal */
 export const enum TokenEncodingConsts {
     typeOffset = 8,
     modifierMask = (1 << typeOffset) - 1
 }
 
+/** @internal */
 export const enum TokenType {
     class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
 }
 
+/** @internal */
 export const enum TokenModifier {
     declaration, static, async, readonly, defaultLibrary, local
 }
 
+/** @internal */
 /** This is mainly used internally for testing */
 export function getSemanticClassifications(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFile: ts.SourceFile, span: ts.TextSpan): ts.ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
@@ -31,6 +36,7 @@ export function getSemanticClassifications(program: ts.Program, cancellationToke
     return result;
 }
 
+/** @internal */
 export function getEncodedSemanticClassifications(program: ts.Program, cancellationToken: ts.CancellationToken, sourceFile: ts.SourceFile, span: ts.TextSpan): ts.Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
@@ -246,4 +252,3 @@ const tokenFromDeclarationMapping = new ts.Map<ts.SyntaxKind, TokenType>([
     [ts.SyntaxKind.PropertyAssignment, TokenType.property],
     [ts.SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
 ]);
-}

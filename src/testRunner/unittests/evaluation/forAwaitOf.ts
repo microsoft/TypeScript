@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`

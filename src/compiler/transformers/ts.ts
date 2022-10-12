@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 /**
  * Indicates whether to emit type metadata in the new format.
  */
@@ -29,6 +29,7 @@ const enum ClassFacts {
     IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
 }
 
+/** @internal */
 export function transformTypeScript(context: ts.TransformationContext) {
     const {
         factory,
@@ -2468,5 +2469,4 @@ export function transformTypeScript(context: ts.TransformationContext) {
                 ? resolver.isValueAliasDeclaration(node)
                 : resolver.isReferencedAliasDeclaration(node));
     }
-}
 }

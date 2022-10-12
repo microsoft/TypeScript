@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 const enum ES2015SubstitutionFlags {
     /** Enables substitutions for captured `this` */
     CapturedThis = 1 << 0,
@@ -262,6 +262,7 @@ function createSpreadSegment(kind: SpreadSegmentKind, expression: ts.Expression)
     return { kind, expression };
 }
 
+/** @internal */
 export function transformES2015(context: ts.TransformationContext) {
     const {
         factory,
@@ -4416,5 +4417,4 @@ export function transformES2015(context: ts.TransformationContext) {
         const expression = (callArgument as ts.SpreadElement).expression;
         return ts.isIdentifier(expression) && expression.escapedText === "arguments";
     }
-}
 }

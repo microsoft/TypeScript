@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness";
+
 describe("unittests:: jsonParserRecovery", () => {
     function parsesToValidSourceFileWithErrors(name: string, text: string) {
         it(name, () => {
@@ -36,4 +38,3 @@ describe("unittests:: jsonParserRecovery", () => {
           </div>
         )`);
 });
-}

@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Utils from "../_namespaces/Utils";
+
 function withChange(text: ts.IScriptSnapshot, start: number, length: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     const contents = ts.getSnapshotText(text);
     const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
@@ -990,4 +992,3 @@ module m3 { }\
         });
     }
 });
-}

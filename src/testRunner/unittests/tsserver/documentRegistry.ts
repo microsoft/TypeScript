@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
     const file: ts.projectSystem.File = {
@@ -90,4 +91,3 @@ describe("unittests:: tsserver:: document registry in project service", () => {
         assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
     });
 });
-}

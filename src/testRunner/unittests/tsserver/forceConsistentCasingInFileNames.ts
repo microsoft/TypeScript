@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
     it("works when extends is specified with a case insensitive file system", () => {
         const rootPath = "/Users/username/dev/project";
@@ -133,4 +134,3 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         ts.projectSystem.baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
     });
 });
-}

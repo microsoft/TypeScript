@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness";
+
 describe("unittests:: customTransforms", () => {
     function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
         it(name, () => {
@@ -165,4 +167,3 @@ describe("unittests:: customTransforms", () => {
     );
 
 });
-}

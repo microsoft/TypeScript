@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
 const fixIdAddUndefinedType = "addMissingPropertyUndefinedType";
@@ -153,5 +153,4 @@ function getDefaultValueFromType(checker: ts.TypeChecker, type: ts.Type): ts.Exp
         return ts.factory.createArrayLiteralExpression();
     }
     return undefined;
-}
 }

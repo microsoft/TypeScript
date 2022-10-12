@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export interface SessionClientHost extends ts.LanguageServiceHost {
     writeMessage(message: string): void;
 }
@@ -927,5 +928,4 @@ export class SessionClient implements ts.LanguageService {
     dispose(): void {
         throw new Error("dispose is not available through the server layer.");
     }
-}
 }

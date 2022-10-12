@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: ts.tscWatch.File = {
         path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
@@ -369,4 +370,3 @@ const a: string = "hello";`),
         });
     });
 });
-}

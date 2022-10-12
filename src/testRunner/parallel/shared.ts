@@ -1,4 +1,6 @@
-namespace Harness.Parallel {
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+
 export interface RunnerTask {
     runner: Harness.TestRunnerKind;
     file: string;
@@ -84,5 +86,4 @@ export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
     global.it = global.specify = ((_: any, __: any) => { /*empty*/ }) as Mocha.TestFunction;
     global.it.skip = global.xit = global.xspecify = ts.noop as Mocha.PendingTestFunction;
     global.it.only = ts.noop as Mocha.ExclusiveTestFunction;
-}
 }

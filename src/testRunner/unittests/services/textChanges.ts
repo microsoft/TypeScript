@@ -1,6 +1,8 @@
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 // Some tests have trailing whitespace
 
-namespace ts {
 describe("unittests:: services:: textChanges", () => {
     function findChild(name: string, n: ts.Node) {
         return find(n)!;
@@ -767,4 +769,3 @@ let x = foo
         });
     }
 });
-}

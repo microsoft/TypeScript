@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
         const configFile: ts.projectSystem.File = {
@@ -1257,4 +1258,3 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         }]);
     });
 });
-}

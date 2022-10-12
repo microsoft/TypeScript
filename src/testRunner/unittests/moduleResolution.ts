@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness";
+
 export function checkResolvedModule(actual: ts.ResolvedModuleFull | undefined, expected: ts.ResolvedModuleFull | undefined): boolean {
     if (!expected) {
         if (actual) {
@@ -1574,4 +1576,3 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         });
     });
 });
-}

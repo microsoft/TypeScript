@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): ts.PreProcessedFileInfo {
     const pragmaContext: ts.PragmaContext = {
         languageVersion: ts.ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
@@ -431,5 +432,4 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         }
         return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
     }
-}
 }

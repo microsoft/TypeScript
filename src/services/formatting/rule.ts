@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export interface Rule {
     // Used for debugging to identify each rule based on the property name it's assigned to.
     readonly debugName: string;
@@ -8,9 +9,12 @@ export interface Rule {
     readonly flags: RuleFlags;
 }
 
+/** @internal */
 export type ContextPredicate = (context: ts.formatting.FormattingContext) => boolean;
+/** @internal */
 export const anyContext: readonly ContextPredicate[] = ts.emptyArray;
 
+/** @internal */
 export const enum RuleAction {
     StopProcessingSpaceActions = 1 << 0,
     StopProcessingTokenActions = 1 << 1,
@@ -25,13 +29,14 @@ export const enum RuleAction {
     ModifyTokenAction = DeleteToken | InsertTrailingSemicolon,
 }
 
+/** @internal */
 export const enum RuleFlags {
     None,
     CanDeleteNewLines,
 }
 
+/** @internal */
 export interface TokenRange {
     readonly tokens: readonly ts.SyntaxKind[];
     readonly isSpecific: boolean;
-}
 }

@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 type SerializedEntityName =
     | ts.Identifier // Globals (i.e., `String`, `Number`, etc.)
     | ts.PropertyAccessEntityNameExpression // `A.B`
@@ -11,6 +11,7 @@ type SerializedTypeNode =
     | ts.VoidExpression // `void 0` used for null/undefined/never
     ;
 
+/** @internal */
 export interface RuntimeTypeSerializerContext {
     /** Specifies the current lexical block scope */
     currentLexicalScope: ts.SourceFile | ts.Block | ts.ModuleBlock | ts.CaseBlock;
@@ -18,6 +19,7 @@ export interface RuntimeTypeSerializerContext {
     currentNameScope: ts.ClassLikeDeclaration | undefined;
 }
 
+/** @internal */
 export interface RuntimeTypeSerializer {
     /**
      * Serializes a type node for use with decorator type metadata.
@@ -55,6 +57,7 @@ export interface RuntimeTypeSerializer {
     serializeReturnTypeOfNode(serializerContext: RuntimeTypeSerializerContext, node: ts.Node): SerializedTypeNode;
 }
 
+/** @internal */
 export function createRuntimeTypeSerializer(context: ts.TransformationContext): RuntimeTypeSerializer {
     const {
         hoistVariableDeclaration
@@ -565,5 +568,4 @@ export function createRuntimeTypeSerializer(context: ts.TransformationContext): 
             getGlobalConstructorWithFallback(name) :
             ts.factory.createIdentifier(name);
     }
-}
 }

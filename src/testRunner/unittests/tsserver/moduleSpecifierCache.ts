@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 const packageJson: ts.projectSystem.File = {
     path: "/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`
@@ -146,5 +147,4 @@ function setup(createLogger?: (host: ts.projectSystem.TestServerHost) => ts.proj
             ...requestLocation,
         });
     }
-}
 }

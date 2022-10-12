@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [
     ts.Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
     ts.Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
@@ -51,5 +51,4 @@ function symbolPointsToNonPrivateAndAbstractMember(symbol: ts.Symbol): boolean {
     // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
     const flags = ts.getSyntacticModifierFlags(ts.first(symbol.getDeclarations()!));
     return !(flags & ts.ModifierFlags.Private) && !!(flags & ts.ModifierFlags.Abstract);
-}
 }

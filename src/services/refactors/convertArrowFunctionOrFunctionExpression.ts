@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = ts.getLocaleSpecificMessage(ts.Diagnostics.Convert_arrow_function_or_function_expression);
 
@@ -254,5 +254,4 @@ function canBeConvertedToExpression(body: ts.Block, head: ts.Statement): head is
 
 function isFunctionReferencedInFile(sourceFile: ts.SourceFile, typeChecker: ts.TypeChecker, node: ts.FunctionExpression): boolean {
     return !!node.name && ts.FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
-}
 }

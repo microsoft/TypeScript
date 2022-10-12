@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "unusedIdentifier";
 const fixIdPrefix = "unusedIdentifier_prefix";
 const fixIdDelete = "unusedIdentifier_delete";
@@ -346,5 +346,4 @@ function isLastParameter(func: ts.FunctionLikeDeclaration, parameter: ts.Paramet
 function mayDeleteExpression(node: ts.Node) {
     return ((ts.isBinaryExpression(node.parent) && node.parent.left === node) ||
         ((ts.isPostfixUnaryExpression(node.parent) || ts.isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && ts.isExpressionStatement(node.parent.parent);
-}
 }

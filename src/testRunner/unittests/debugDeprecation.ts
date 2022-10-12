@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: debugDeprecation", () => {
     let loggingHost: ts.LoggingHost | undefined;
     beforeEach(() => {
@@ -94,4 +95,3 @@ describe("unittests:: debugDeprecation", () => {
         });
     });
 });
-}

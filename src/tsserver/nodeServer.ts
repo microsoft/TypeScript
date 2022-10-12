@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 interface LogOptions {
     file?: string;
     detailLevel?: ts.server.LogLevel;
@@ -88,6 +88,7 @@ function parseServerMode(): ts.LanguageServiceMode | string | undefined {
     }
 }
 
+/** @internal */
 export function initializeNodeSystem(): ts.server.StartInput {
     const sys = ts.Debug.checkDefined(ts.sys) as ts.server.ServerHost;
     const childProcess: {
@@ -854,5 +855,4 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
             : ".cache";
         return ts.combinePaths(ts.normalizeSlashes(homePath), cacheFolder);
     }
-}
 }

@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export namespace SmartIndenter {
 
     const enum Value {
@@ -706,5 +707,4 @@ export namespace SmartIndenter {
         const endLine = sourceFile.getLineAndCharacterOfPosition(range.end).line;
         return startLine === endLine;
     }
-}
 }

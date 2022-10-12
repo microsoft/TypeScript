@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: getExportReferences", () => {
     const exportVariable = "export const value = 0;";
     const exportArrayDestructured = "export const [valueA, valueB] = [0, 1];";
@@ -190,4 +191,3 @@ ${exportNestedObject}
         assert.deepEqual(response, expectResponse);
     });
 });
-}

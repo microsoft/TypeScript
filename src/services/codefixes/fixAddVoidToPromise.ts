@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "addVoidToPromise";
 const fixId = "addVoidToPromise";
 const errorCodes = [
@@ -79,5 +79,4 @@ function getEffectiveTypeArguments(node: ts.NewExpression) {
     else {
         return node.typeArguments;
     }
-}
 }

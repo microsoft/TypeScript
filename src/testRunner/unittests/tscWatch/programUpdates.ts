@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";
     const configFilePath = "/a/b/tsconfig.json";
@@ -1947,4 +1949,3 @@ import { x } from "../b";`),
         ]
     });
 });
-}

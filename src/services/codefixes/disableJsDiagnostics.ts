@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "disableJsDiagnostics";
 const fixId = "disableJsDiagnostics";
 const errorCodes = ts.mapDefined(Object.keys(ts.Diagnostics) as readonly (keyof typeof ts.Diagnostics)[], key => {
@@ -52,5 +52,4 @@ function makeChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.Source
     if (!seenLines || ts.tryAddToSet(seenLines, lineNumber)) {
         changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
     }
-}
 }

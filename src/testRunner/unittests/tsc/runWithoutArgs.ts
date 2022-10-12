@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc:: runWithoutArgs::", () => {
     ts.verifyTsc({
         scenario: "runWithoutArgs",
@@ -24,4 +25,3 @@ describe("unittests:: tsc:: runWithoutArgs::", () => {
     });
 
 });
-}

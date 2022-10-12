@@ -1,7 +1,8 @@
+import * as ts from "./_namespaces/ts";
+
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
 
-namespace ts {
 /**
  * djb2 hashing algorithm
  * http://www.cse.yorku.ca/~oz/hash.html
@@ -1977,5 +1978,4 @@ if (sys && sys.getEnvironmentVariable) {
 }
 if (sys && sys.debugMode) {
     ts.Debug.isDebugging = true;
-}
 }

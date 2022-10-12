@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -44,4 +46,3 @@ export const b = new A();`);
         modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "node"),
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
     const file: ts.tscWatch.File = {
@@ -63,4 +64,3 @@ describe("unittests:: tsc-watch:: console clearing", () => {
         });
     });
 });
-}

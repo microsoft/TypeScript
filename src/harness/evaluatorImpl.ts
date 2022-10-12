@@ -1,4 +1,10 @@
-namespace evaluator {
+import * as vpath from "./_namespaces/vpath";
+import * as vfs from "./_namespaces/vfs";
+import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness";
+import * as fakes from "./_namespaces/fakes";
+import * as compiler from "./_namespaces/compiler";
+
 declare let Symbol: SymbolConstructor;
 
 const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
@@ -455,5 +461,4 @@ class SystemLoader extends Loader<SystemModule> {
             throw e;
         }
     }
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert export";
 
 const defaultToNamedAction = {
@@ -273,5 +273,4 @@ function getExportingModuleSymbol(node: ts.Node, checker: ts.TypeChecker) {
         return checker.getMergedSymbol(symbol);
     }
     return symbol;
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [
     ts.Diagnostics.Class_0_incorrectly_implements_interface_1.code,
     ts.Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
@@ -91,5 +91,4 @@ function getHeritageClauseSymbolTable(classDeclaration: ts.ClassLikeDeclaration,
     const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as ts.InterfaceType;
     const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);
     return ts.createSymbolTable(heritageClauseTypeSymbols.filter(symbolPointsToNonPrivateMember));
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export interface InstallPackageOptionsWithProject extends ts.InstallPackageOptions {
     projectName: string;
     projectRootPath: ts.Path;
@@ -139,5 +140,4 @@ export class TypingsCache {
         this.perProjectCache.delete(project.getProjectName());
         this.installer.onProjectClosed(project);
     }
-}
 }

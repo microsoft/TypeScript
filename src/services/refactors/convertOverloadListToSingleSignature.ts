@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = ts.Diagnostics.Convert_overload_list_to_single_signature.message;
 
@@ -222,5 +222,4 @@ function getConvertableOverloadListAtPosition(file: ts.SourceFile, startPosition
     }
 
     return signatureDecls;
-}
 }

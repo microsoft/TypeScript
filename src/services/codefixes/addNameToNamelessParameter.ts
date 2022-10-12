@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addNameToNamelessParameter";
 const errorCodes = [ts.Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];
 ts.codefix.registerCodeFix({
@@ -32,5 +32,4 @@ function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.
         param.dotDotDotToken ? ts.factory.createArrayTypeNode(typeNode) : typeNode,
         param.initializer);
     changeTracker.replaceNode(sourceFile, param, replacement);
-}
 }

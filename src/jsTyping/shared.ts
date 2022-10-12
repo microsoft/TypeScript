@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";
 export type ActionPackageInstalled = "action::packageInstalled";
@@ -58,5 +59,4 @@ export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();
     return `${ts.padLeft(d.getHours().toString(), 2, "0")}:${ts.padLeft(d.getMinutes().toString(), 2, "0")}:${ts.padLeft(d.getSeconds().toString(), 2, "0")}.${ts.padLeft(d.getMilliseconds().toString(), 3, "0")}`;
-}
 }

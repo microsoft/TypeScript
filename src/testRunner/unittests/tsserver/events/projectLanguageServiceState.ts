@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../../_namespaces/ts";
+
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
     it("language service disabled events are triggered", () => {
         const f1 = {
@@ -76,4 +77,3 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         ts.projectSystem.baselineTsserverLogs("projectLanguageServiceStateEvent", "large file size is determined correctly", service);
     });
 });
-}

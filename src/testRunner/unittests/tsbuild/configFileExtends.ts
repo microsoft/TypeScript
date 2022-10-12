@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeFs() {
         return ts.loadProjectFromFiles({
@@ -49,4 +50,3 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
         commandLineArgs: ["--b", "/src/webpack/tsconfig.json", "--v", "--listFiles"],
     });
 });
-}

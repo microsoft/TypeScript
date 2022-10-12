@@ -1,4 +1,8 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as compiler from "./_namespaces/compiler";
+import * as Utils from "./_namespaces/Utils";
+
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 export class Test262BaselineRunner extends Harness.RunnerBase {
     private static readonly basePath = "internal/cases/test262";
@@ -106,5 +110,4 @@ export class Test262BaselineRunner extends Harness.RunnerBase {
             this.tests.forEach(test => this.runTest(typeof test === "string" ? test : test.file));
         }
     }
-}
 }

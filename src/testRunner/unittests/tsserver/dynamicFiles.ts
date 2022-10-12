@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 export function verifyDynamic(service: ts.server.ProjectService, path: string) {
     const info = ts.Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(ts.arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
     assert.isTrue(info.isDynamic);
@@ -257,4 +258,3 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
         });
     });
 });
-}

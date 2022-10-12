@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addMissingNewOperator";
 const errorCodes = [ts.Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
 ts.codefix.registerCodeFix({
@@ -28,5 +28,4 @@ function findAncestorMatchingSpan(sourceFile: ts.SourceFile, span: ts.TextSpan):
         token = token.parent;
     }
     return token;
-}
 }

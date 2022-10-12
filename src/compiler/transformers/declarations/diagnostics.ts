@@ -1,13 +1,16 @@
-/* @internal */
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
+/** @internal */
 export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: ts.SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
 
+/** @internal */
 export interface SymbolAccessibilityDiagnostic {
     errorNode: ts.Node;
     diagnosticMessage: ts.DiagnosticMessage;
     typeName?: ts.DeclarationName | ts.QualifiedName;
 }
 
+/** @internal */
 export type DeclarationDiagnosticProducing =
     | ts.VariableDeclaration
     | ts.PropertyDeclaration
@@ -32,6 +35,7 @@ export type DeclarationDiagnosticProducing =
     | ts.JSDocCallbackTag
     | ts.JSDocEnumTag;
 
+/** @internal */
 export function canProduceDiagnostics(node: ts.Node): node is DeclarationDiagnosticProducing {
     return ts.isVariableDeclaration(node) ||
         ts.isPropertyDeclaration(node) ||
@@ -55,6 +59,7 @@ export function canProduceDiagnostics(node: ts.Node): node is DeclarationDiagnos
         ts.isJSDocTypeAlias(node);
 }
 
+/** @internal */
 export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
     if (ts.isSetAccessor(node) || ts.isGetAccessor(node)) {
         return getAccessorNameVisibilityError;
@@ -128,6 +133,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
     }
 }
 
+/** @internal */
 export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): GetSymbolAccessibilityDiagnostic {
     if (ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node) || ts.isPropertySignature(node) || ts.isPropertyAccessExpression(node) || ts.isBindingElement(node) || ts.isConstructorDeclaration(node)) {
         return getVariableDeclarationTypeVisibilityError;
@@ -487,5 +493,4 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             typeName: ts.isJSDocTypeAlias(node) ? ts.getNameOfDeclaration(node) : (node as ts.TypeAliasDeclaration).name,
         };
     }
-}
 }

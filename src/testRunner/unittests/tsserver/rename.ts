@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: rename", () => {
     it("works with fileToRename", () => {
         const aTs: ts.projectSystem.File = { path: "/a.ts", content: "export const a = 0;" };
@@ -300,4 +301,3 @@ describe("unittests:: tsserver:: rename", () => {
         });
     });
 });
-}

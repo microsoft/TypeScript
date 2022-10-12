@@ -1,4 +1,6 @@
-namespace Harness.Parallel.Worker {
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+
 export function start() {
     function hookUncaughtExceptions() {
         if (!exceptionsHooked) {
@@ -314,5 +316,4 @@ export function start() {
     }
 
     process.on("message", processHostMessage);
-}
 }

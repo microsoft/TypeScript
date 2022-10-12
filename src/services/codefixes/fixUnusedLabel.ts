@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixUnusedLabel";
 const errorCodes = [ts.Diagnostics.Unused_label.code];
 ts.codefix.registerCodeFix({
@@ -21,5 +21,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
     const end = ts.positionsAreOnSameLine(pos, statementPos, sourceFile) ? statementPos
         : ts.skipTrivia(sourceFile.text, ts.findChildOfKind(labeledStatement, ts.SyntaxKind.ColonToken, sourceFile)!.end, /*stopAfterLineBreak*/ true);
     changes.deleteRange(sourceFile, { pos, end });
-}
 }

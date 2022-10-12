@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     it("named export -> type-only namespace import -> named export -> named import", () => {
         const a = {
@@ -160,5 +161,4 @@ function assertUsageError(files: readonly ts.TestFSWithWatch.File[], openFile: t
     const diagnostics = session.executeCommand(req).response as ts.projectSystem.protocol.Diagnostic[];
     assert.lengthOf(diagnostics, 1);
     assert.equal(diagnostics[0].code, diagnostic.code);
-}
 }

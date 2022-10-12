@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "removeUnnecessaryAwait";
 const errorCodes = [
     ts.Diagnostics.await_has_no_effect_on_the_type_of_this_expression.code,
@@ -39,5 +39,4 @@ function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.
     }
 
     changeTracker.replaceNode(sourceFile, expressionToReplace, awaitExpression.expression);
-}
 }

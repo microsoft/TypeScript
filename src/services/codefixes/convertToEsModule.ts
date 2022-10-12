@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 ts.codefix.registerCodeFix({
     errorCodes: [ts.Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
     getCodeActions(context) {
@@ -598,5 +598,4 @@ function convertedImports(newImports: readonly ts.Node[], useSitesToUnqualify?: 
         newImports,
         useSitesToUnqualify
     };
-}
 }

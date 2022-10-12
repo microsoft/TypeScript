@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: occurrence highlight on string", () => {
     it("should be marked if only on string values", () => {
         const file1: ts.projectSystem.File = {
@@ -44,4 +45,3 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         }
     });
 });
-}

@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function getDeclarationDiagnostics(host: ts.EmitHost, resolver: ts.EmitResolver, file: ts.SourceFile | undefined): ts.DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
     const result = ts.transformNodes(resolver, host, ts.factory, compilerOptions, file ? [file] : ts.filter(host.getSourceFiles(), ts.isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
@@ -11,6 +12,7 @@ function hasInternalAnnotation(range: ts.CommentRange, currentSourceFile: ts.Sou
     return ts.stringContains(comment, "@internal");
 }
 
+/** @internal */
 export function isInternalDeclaration(node: ts.Node, currentSourceFile: ts.SourceFile) {
     const parseTreeNode = ts.getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === ts.SyntaxKind.Parameter) {
@@ -43,6 +45,7 @@ const declarationEmitNodeBuilderFlags =
     ts.NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     ts.NodeBuilderFlags.NoTruncation;
 
+/** @internal */
 /**
  * Transforms a ts file into a .d.ts file
  * This process requires type information, which is retrieved through the emit resolver. Because of this,
@@ -1741,5 +1744,4 @@ function isProcessedComponent(node: ts.Node): node is ProcessedComponent {
             return true;
     }
     return false;
-}
 }

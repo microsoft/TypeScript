@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
         it(subScenario, () => {
@@ -243,4 +245,3 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*"]);
     });
 });
-}
