@@ -13931,7 +13931,7 @@ namespace ts {
                 }
                 else if (isTypeReferenceType(node)) {
                     const aliasSymbol = resolveTypeReferenceName(node, SymbolFlags.Alias, /*ignoreErrors*/ true);
-                    // refers to an alias import/export/reexport - by making sure we use the target as an aliasSymbol, 
+                    // refers to an alias import/export/reexport - by making sure we use the target as an aliasSymbol,
                     // we ensure the exported symbol is used to refer to the type when it's reserialized later
                     if (aliasSymbol && aliasSymbol !== unknownSymbol) {
                         const resolved = resolveAlias(aliasSymbol);
