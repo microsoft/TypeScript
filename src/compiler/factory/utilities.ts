@@ -1244,4 +1244,141 @@ namespace ts {
         if (nodes.length === 0) return nodes;
         return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
     }
+
+    /**
+     * Gets the node from which a name should be generated.
+     */
+    export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+        if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
+            const autoGenerateId = name.autoGenerateId;
+            let node = name as Node;
+            let original = node.original;
+            while (original) {
+                node = original;
+
+                // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
+                if (isMemberName(node)
+                    && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
+                    && node.autoGenerateId !== autoGenerateId) {
+                    break;
+                }
+
+                original = node.original;
+            }
+            // otherwise, return the original node for the source
+            return node;
+        }
+        return name;
+    }
+
+    /**
+     * Formats a prefix or suffix of a generated name.
+     */
+    export function formatGeneratedNamePart(part: string | undefined): string;
+    /**
+     * Formats a prefix or suffix of a generated name. If the part is a {@link GeneratedNamePart}, calls {@link generateName} to format the source node.
+     */
+    export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+    export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string {
+        return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
+            typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
+            "";
+    }
+
+    function formatIdentifier(name: string | Identifier | PrivateIdentifier, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        return typeof name === "string" ? name :
+            formatIdentifierWorker(name, Debug.checkDefined(generateName));
+    }
+
+    function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
+            isGeneratedIdentifier(node) ? generateName(node) :
+            isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :
+            idText(node);
+    }
+
+    /**
+     * Formats a generated name.
+     * @param privateName When `true`, inserts a `#` character at the start of the result.
+     * @param prefix The prefix (if any) to include before the base name.
+     * @param baseName The base name for the generated name.
+     * @param suffix The suffix (if any) to include after the base name.
+     */
+    export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
+    /**
+     * Formats a generated name.
+     * @param privateName When `true`, inserts a `#` character at the start of the result.
+     * @param prefix The prefix (if any) to include before the base name.
+     * @param baseName The base name for the generated name.
+     * @param suffix The suffix (if any) to include after the base name.
+     * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
+     */
+    export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+    export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        prefix = formatGeneratedNamePart(prefix, generateName!);
+        suffix = formatGeneratedNamePart(suffix, generateName!);
+        baseName = formatIdentifier(baseName, generateName);
+        return `${privateName ? "#" : ""}${prefix}${baseName}${suffix}`;
+    }
+
+
+    /**
+     * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
+     */
+    export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
+        return factory.updatePropertyDeclaration(
+            node,
+            modifiers,
+            factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage"),
+            /*questionOrExclamationToken*/ undefined,
+            /*type*/ undefined,
+            initializer
+        );
+    }
+
+    /**
+     * Creates a {@link GetAccessorDeclaration} that reads from a private backing field.
+     */
+    export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+        return factory.createGetAccessorDeclaration(
+            modifiers,
+            name,
+            [],
+            /*type*/ undefined,
+            factory.createBlock([
+                factory.createReturnStatement(
+                    factory.createPropertyAccessExpression(
+                        factory.createThis(),
+                        factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
+                    )
+                )
+            ])
+        );
+    }
+
+    /**
+     * Creates a {@link SetAccessorDeclaration} that writes to a private backing field.
+     */
+    export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+        return factory.createSetAccessorDeclaration(
+            modifiers,
+            name,
+            [factory.createParameterDeclaration(
+                /*modifiers*/ undefined,
+                /*dotdotDotToken*/ undefined,
+                "value"
+            )],
+            factory.createBlock([
+                factory.createExpressionStatement(
+                    factory.createAssignment(
+                        factory.createPropertyAccessExpression(
+                            factory.createThis(),
+                            factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
+                        ),
+                        factory.createIdentifier("value")
+                    )
+                )
+            ])
+        );
+    }
 }

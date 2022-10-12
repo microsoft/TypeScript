@@ -437,7 +437,7 @@ namespace ts.projectSystem {
 
                         const openFiles = [file1.path];
                         const host = createServerHost([file1, file3, libFile, configFile]);
-                        const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs());
+                        const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs(host));
                         verifyInitialOpen(file1);
 
                         file3.content += "export class d {}";

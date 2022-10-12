@@ -43,23 +43,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/src/app.ts (used version)
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-/a/src/app.ts:
-  {"fileName":"/a/src/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/node_modules/@types:
-  {"fileName":"/a/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /a/notexistingfolder:
-  {"fileName":"/a/notexistingfolder","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/tsconfig.json:
+  {}
+/a/src/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/src:
-  {"directoryName":"/a/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

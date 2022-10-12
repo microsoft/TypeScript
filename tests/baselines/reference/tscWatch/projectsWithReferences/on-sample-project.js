@@ -406,35 +406,35 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/sample1/tests/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -540,35 +540,35 @@ function foo() { }
 
 Output::
 
-WatchedFiles::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/sample1/tests/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -727,35 +727,35 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/sample1/tests/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -987,35 +987,35 @@ Dependencies for::
   /user/username/projects/sample1/logic/decls/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.d.ts","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/sample1/tests/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/tests/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
-  {"fileName":"/user/username/projects/sample1/node_modules/@types","pollingInterval":500}
-/user/username/projects/sample1/logic/decls/index.d.ts:
-  {"fileName":"/user/username/projects/sample1/logic/decls/index.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/sample1/logic/decls/index.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
