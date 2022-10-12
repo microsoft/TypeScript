@@ -33328,7 +33328,17 @@ namespace ts {
 
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             const links = getNodeLinks(node);
-            return links.isExhaustive !== undefined ? links.isExhaustive : (links.isExhaustive = computeExhaustiveSwitchStatement(node));
+            if (links.isExhaustive === undefined) {
+                links.isExhaustive = 0;  // Indicate resolution is in process
+                const exhaustive = computeExhaustiveSwitchStatement(node);
+                if (links.isExhaustive === 0) {
+                    links.isExhaustive = exhaustive;
+                }
+            }
+            else if (links.isExhaustive === 0) {
+                links.isExhaustive = false;  // Resolve circularity to false
+            }
+            return links.isExhaustive;
         }
 
         function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
@@ -33337,7 +33347,7 @@ namespace ts {
                 if (!witnesses) {
                     return false;
                 }
-                const operandConstraint = getBaseConstraintOrType(getTypeOfExpression((node.expression as TypeOfExpression).expression));
+                const operandConstraint = getBaseConstraintOrType(checkExpressionCached((node.expression as TypeOfExpression).expression));
                 // Get the not-equal flags for all handled cases.
                 const notEqualFacts = getNotEqualFactsFromTypeofSwitch(0, 0, witnesses);
                 if (operandConstraint.flags & TypeFlags.AnyOrUnknown) {
@@ -33347,7 +33357,7 @@ namespace ts {
                 // A missing not-equal flag indicates that the type wasn't handled by some case.
                 return !someType(operandConstraint, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
             }
-            const type = getTypeOfExpression(node.expression);
+            const type = checkExpressionCached(node.expression);
             if (!isLiteralType(type)) {
                 return false;
             }
