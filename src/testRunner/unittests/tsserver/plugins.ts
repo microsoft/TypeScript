@@ -100,5 +100,50 @@ namespace ts.projectSystem {
             };
             assert.deepEqual(resp, expectedResp);
         });
+
+        it("gets external files with config file reload", () => {
+            const aTs: File = { path: `${tscWatch.projectRoot}/a.ts`, content: `export const x = 10;` };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        plugins: [{ name: "some-plugin" }]
+                    }
+                })
+            };
+
+            const externalFiles: MapLike<string[]> = {
+                "some-plugin": ["someFile.txt"],
+                "some-other-plugin": ["someOtherFile.txt"],
+            };
+
+            const host = createServerHost([aTs, tsconfig, libFile]);
+            host.require = (_initialPath, moduleName) => {
+                session.logger.logs.push(`Require:: ${moduleName}`);
+                return {
+                    module: (): server.PluginModule => {
+                        session.logger.logs.push(`PluginFactory Invoke`);
+                        return {
+                            create: Harness.LanguageService.makeDefaultProxy,
+                            getExternalFiles: () => externalFiles[moduleName]
+                        };
+                    },
+                    error: undefined
+                };
+            };
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([aTs], session);
+            session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+
+            host.writeFile(tsconfig.path, JSON.stringify({
+                compilerOptions: {
+                    plugins: [{ name: "some-other-plugin" }]
+                }
+            }));
+            host.runQueuedTimeoutCallbacks();
+            session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+
+            baselineTsserverLogs("plugins", "gets external files with config file reload", session);
+        });
     });
 }

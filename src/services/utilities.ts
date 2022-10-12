@@ -790,6 +790,8 @@ namespace ts {
     }
 
     export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+        if (node.flags & (NodeFlags.JSDoc & ~NodeFlags.JavaScriptFile)) return undefined;
+
         const contextualType = getContextualTypeFromParent(node, checker);
         if (contextualType) return contextualType;
 

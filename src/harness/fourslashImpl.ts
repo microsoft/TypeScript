@@ -529,8 +529,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyOrganizeImports(newContent: string) {
-            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
+        public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
+            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
             this.applyChanges(changes);
             this.verifyFileContent(this.activeFile.fileName, newContent);
         }
@@ -2737,7 +2737,7 @@ namespace FourSlash {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
-            };
+            }
             replacement.push(");");
 
             throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");

@@ -24,6 +24,11 @@ namespace ts.SmartSelectionRange {
                 }
 
                 if (positionShouldSnapToNode(sourceFile, pos, node)) {
+                    if (isFunctionBody(node)
+                        && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)) {
+                        pushSelectionRange(node.getStart(sourceFile), node.getEnd());
+                    }
+
                     // 1. Blocks are effectively redundant with SyntaxLists.
                     // 2. TemplateSpans, along with the SyntaxLists containing them, are a somewhat unintuitive grouping
                     //    of things that should be considered independently.
