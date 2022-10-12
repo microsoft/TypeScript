@@ -204,7 +204,7 @@ async function runDtsBundler(entrypoint, output) {
         },
         // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         minify: true,
-        keepNames: true,
+        // keepNames: true,
         plugins: [
             {
                 name: "fix-require",
