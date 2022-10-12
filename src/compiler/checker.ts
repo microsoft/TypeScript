@@ -1647,7 +1647,7 @@ namespace ts {
                 return true;
             }
 
-            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInTypeDeclaration(usage)) {
+            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
@@ -23635,8 +23635,8 @@ namespace ts {
                 n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
         }
 
-        function isInTypeDeclaration(node: Node): boolean {
-            return !!findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || !!(n.flags & NodeFlags.Ambient));
+        function isInAmbientOrTypeNode(node: Node): boolean {
+            return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n)));
         }
 
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -26310,7 +26310,7 @@ namespace ts {
             // declaration container are the same).
             const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isBindingElement(declaration) ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
-                isInTypeQuery(node) || isInTypeDeclaration(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+                isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
