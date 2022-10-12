@@ -185,11 +185,6 @@ async function runDtsBundler(entrypoint, output) {
  * @param {boolean} exportIsTsObject True if this file exports the TS object and should have relevant code injected.
  */
  function esbuildTask(entrypoint, outfile, exportIsTsObject = false) {
-    // Note: we do not use --minify, as that would hide function names from user backtraces
-    // (we don't ship our sourcemaps), and would break consumers like monaco which modify
-    // typescript.js for their own needs. Also, using --sourcesContent=false doesn't help,
-    // as even though it's a smaller source map that could be shipped to users for better
-    // stack traces via names, the maps are bigger than the actual source files themselves.
     /** @type {esbuild.BuildOptions} */
     const options = {
         entryPoints: [entrypoint],
@@ -208,11 +203,14 @@ async function runDtsBundler(entrypoint, output) {
             "template-literal": false, // TODO(jakebailey): workaround for https://github.com/microsoft/TypeScript/issues/51072
         },
         // legalComments: "none", // If we add copyright headers to the source files, uncomment.
+        minify: true,
+        keepNames: true,
         plugins: [
             {
                 name: "fix-require",
                 setup: (build) => {
                     build.onEnd(async () => {
+                        // TODO(jakebailey): this definitely does not work with --minify.
                         // esbuild converts calls to "require" to "__require"; this function
                         // calls the real require if it exists, or throws if it does not (rather than
                         // throwing an error like "require not defined"). But, since we want typescript
