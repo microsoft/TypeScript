@@ -25,3 +25,53 @@ type SubTup2Variadic<T extends unknown[]> = T extends [
 type SubTup2VariadicTest = SubTup2Variadic<[a: 0, b: 1, ...c: number[]]>;
 >SubTup2VariadicTest : [a: 0, b: 1]
 
+type SubTup2VariadicTest2 = SubTup2Variadic<[a: 0, b: 1, c: 2, ...d: number[]]>;
+>SubTup2VariadicTest2 : [a: 0, b: 1]
+
+type SubTup2TrailingVariadic<T extends unknown[]> = T extends [
+>SubTup2TrailingVariadic : SubTup2TrailingVariadic<T>
+
+  ...any,
+  ...infer B extends [any, any],
+]
+  ? B
+  : never;
+
+type SubTup2TrailingVariadicTest = SubTup2TrailingVariadic<[...a: number[], b: 1, c: 2]>;
+>SubTup2TrailingVariadicTest : [b: 1, c: 2]
+
+type SubTup2TrailingVariadicTest2 = SubTup2TrailingVariadic<[...a: number[], b: 1, c: 2, d: 3]>;
+>SubTup2TrailingVariadicTest2 : [c: 2, d: 3]
+
+type SubTup2VariadicWithLeadingFixedElements<T extends unknown[]> = T extends [
+>SubTup2VariadicWithLeadingFixedElements : SubTup2VariadicWithLeadingFixedElements<T>
+
+  any,
+  ...infer B extends [any, any],
+  ...any
+]
+  ? B
+  : never;
+
+type SubTup2VariadicWithLeadingFixedElementsTest = SubTup2VariadicWithLeadingFixedElements<[a: 0, b: 1, c: 2, ...d: number[]]>;
+>SubTup2VariadicWithLeadingFixedElementsTest : [b: 1, c: 2]
+
+type SubTup2VariadicWithLeadingFixedElementsTest2 = SubTup2VariadicWithLeadingFixedElements<[a: 0, b: 1, c: 2, d: 3, ...e: number[]]>;
+>SubTup2VariadicWithLeadingFixedElementsTest2 : [b: 1, c: 2]
+
+type SubTup2TrailingVariadicWithTrailingFixedElements<T extends unknown[]> = T extends [
+>SubTup2TrailingVariadicWithTrailingFixedElements : SubTup2TrailingVariadicWithTrailingFixedElements<T>
+
+  ...any,
+  ...infer B extends [any, any],
+  any,
+]
+  ? B
+  : never;
+
+type SubTup2TrailingVariadicWithTrailingFixedElementsTest = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: number[], b: 1, c: 2, d: 3]>;
+>SubTup2TrailingVariadicWithTrailingFixedElementsTest : [b: 1, c: 2]
+
+type SubTup2TrailingVariadicWithTrailingFixedElementsTest2 = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: number[], b: 1, c: 2, d: 3, e: 4]>;
+>SubTup2TrailingVariadicWithTrailingFixedElementsTest2 : [c: 2, d: 3]
+
