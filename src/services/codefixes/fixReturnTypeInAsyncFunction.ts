@@ -2,17 +2,17 @@
 namespace ts.codefix {
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [
-    Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0.code,
+    ts.Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0.code,
 ];
 
 interface Info {
-    readonly returnTypeNode: TypeNode;
-    readonly returnType: Type;
-    readonly promisedTypeNode: TypeNode;
-    readonly promisedType: Type;
+    readonly returnTypeNode: ts.TypeNode;
+    readonly returnType: ts.Type;
+    readonly promisedTypeNode: ts.TypeNode;
+    readonly promisedType: ts.Type;
 }
 
-registerCodeFix({
+ts.codefix.registerCodeFix({
     errorCodes,
     fixIds: [fixId],
     getCodeActions: function getCodeActionsToFixReturnTypeInAsyncFunction(context) {
@@ -23,14 +23,14 @@ registerCodeFix({
             return undefined;
         }
         const { returnTypeNode, returnType, promisedTypeNode, promisedType } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
-        return [createCodeFixAction(
+        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
+        return [ts.codefix.createCodeFixAction(
             fixId, changes,
-            [Diagnostics.Replace_0_with_Promise_1,
+            [ts.Diagnostics.Replace_0_with_Promise_1,
              checker.typeToString(returnType), checker.typeToString(promisedType)],
-            fixId, Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions)];
+            fixId, ts.Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions)];
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
+    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, context.program.getTypeChecker(), diag.start);
         if (info) {
             doChange(changes, diag.file, info.returnTypeNode, info.promisedTypeNode);
@@ -38,13 +38,13 @@ registerCodeFix({
     })
 });
 
-function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Info | undefined {
-    if (isInJSFile(sourceFile)) {
+function getInfo(sourceFile: ts.SourceFile, checker: ts.TypeChecker, pos: number): Info | undefined {
+    if (ts.isInJSFile(sourceFile)) {
         return undefined;
     }
 
-    const token = getTokenAtPosition(sourceFile, pos);
-    const func = findAncestor(token, isFunctionLikeDeclaration);
+    const token = ts.getTokenAtPosition(sourceFile, pos);
+    const func = ts.findAncestor(token, ts.isFunctionLikeDeclaration);
     const returnTypeNode = func?.type;
     if (!returnTypeNode) {
         return undefined;
@@ -58,7 +58,7 @@ function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Inf
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
-    changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
+function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, returnTypeNode: ts.TypeNode, promisedTypeNode: ts.TypeNode): void {
+    changes.replaceNode(sourceFile, returnTypeNode, ts.factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
 }
 }

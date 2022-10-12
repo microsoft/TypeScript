@@ -1,11 +1,11 @@
 namespace ts.tscWatch {
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "nodenext watch emit",
         subScenario: "esm-mode file is edited",
         commandLineArgs: ["--w", "--p", "/project/tsconfig.json"],
         sys: () => {
-            const configFile: File = {
+            const configFile: ts.tscWatch.File = {
                 path: "/project/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -17,7 +17,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                     }
                 })
             };
-            const packageFile: File = {
+            const packageFile: ts.tscWatch.File = {
                 path: "/project/package.json",
                 content: JSON.stringify({
                     name: "some-proj",
@@ -27,18 +27,18 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                     main: "index.js",
                 })
             };
-            const file1: File = {
+            const file1: ts.tscWatch.File = {
                 path: "/project/src/index.ts",
                 content: Utils.dedent`
                         import * as Thing from "thing";
 
                         Thing.fn();`
             };
-            const declFile: File = {
+            const declFile: ts.tscWatch.File = {
                 path: "/project/src/deps.d.ts",
                 content: `declare module "thing";`
             };
-            return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
+            return ts.tscWatch.createWatchedSystem([configFile, file1, declFile, packageFile, { ...ts.tscWatch.libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
         },
         changes: [
             {
@@ -50,7 +50,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                             Thing.fn();`,
                     {},
                 ),
-                timeouts: runQueuedTimeoutCallbacks,
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
             }
         ],
     });

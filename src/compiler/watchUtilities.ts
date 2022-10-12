@@ -29,8 +29,8 @@ export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
 
     /** Returns the queried result for the file exists and directory exists if at all it was done */
-    addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
-    addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
+    addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: ts.Path): FileAndDirectoryExistence | undefined;
+    addOrDeleteFile(fileName: string, filePath: ts.Path, eventKind: ts.FileWatcherEventKind): void;
     clearCache(): void;
 }
 
@@ -39,15 +39,15 @@ type Canonicalized = string & { __canonicalized: void };
 interface MutableFileSystemEntries {
     readonly files: string[];
     readonly directories: string[];
-    sortedAndCanonicalizedFiles?: SortedArray<Canonicalized>
-    sortedAndCanonicalizedDirectories?: SortedArray<Canonicalized>
+    sortedAndCanonicalizedFiles?: ts.SortedArray<Canonicalized>
+    sortedAndCanonicalizedDirectories?: ts.SortedArray<Canonicalized>
 }
 
 interface SortedAndCanonicalizedMutableFileSystemEntries {
     readonly files: string[];
     readonly directories: string[];
-    readonly sortedAndCanonicalizedFiles: SortedArray<Canonicalized>
-    readonly sortedAndCanonicalizedDirectories: SortedArray<Canonicalized>
+    readonly sortedAndCanonicalizedFiles: ts.SortedArray<Canonicalized>
+    readonly sortedAndCanonicalizedDirectories: ts.SortedArray<Canonicalized>
 }
 
 export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
@@ -55,8 +55,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         return undefined;
     }
 
-    const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries | false>();
-    const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames) as ((name: string) => Canonicalized);
+    const cachedReadDirectoryResult = new ts.Map<string, MutableFileSystemEntries | false>();
+    const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames) as ((name: string) => Canonicalized);
     return {
         useCaseSensitiveFileNames,
         fileExists,
@@ -76,36 +76,36 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
-    function getCachedFileSystemEntries(rootDirPath: Path) {
-        return cachedReadDirectoryResult.get(ensureTrailingDirectorySeparator(rootDirPath));
+    function getCachedFileSystemEntries(rootDirPath: ts.Path) {
+        return cachedReadDirectoryResult.get(ts.ensureTrailingDirectorySeparator(rootDirPath));
     }
 
-    function getCachedFileSystemEntriesForBaseDir(path: Path) {
-        const entries = getCachedFileSystemEntries(getDirectoryPath(path));
+    function getCachedFileSystemEntriesForBaseDir(path: ts.Path) {
+        const entries = getCachedFileSystemEntries(ts.getDirectoryPath(path));
         if (!entries) {
             return entries;
         }
 
         // If we're looking for the base directory, we're definitely going to search the entries
         if (!entries.sortedAndCanonicalizedFiles) {
-            entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
-            entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
+            entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort() as ts.SortedArray<Canonicalized>;
+            entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort() as ts.SortedArray<Canonicalized>;
         }
         return entries as SortedAndCanonicalizedMutableFileSystemEntries;
     }
 
     function getBaseNameOfFileName(fileName: string) {
-        return getBaseFileName(normalizePath(fileName));
+        return ts.getBaseFileName(ts.normalizePath(fileName));
     }
 
-    function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-        if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
+    function createCachedFileSystemEntries(rootDir: string, rootDirPath: ts.Path) {
+        if (!host.realpath || ts.ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                files: ts.map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
                 directories: host.getDirectories!(rootDir) || []
             };
 
-            cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
+            cachedReadDirectoryResult.set(ts.ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
             return resultFromHost;
         }
 
@@ -124,8 +124,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
      * Otherwise gets result from host and caches it.
      * The host request is done under try catch block to avoid caching incorrect result
      */
-    function tryReadDirectory(rootDir: string, rootDirPath: Path) {
-        rootDirPath = ensureTrailingDirectorySeparator(rootDirPath);
+    function tryReadDirectory(rootDir: string, rootDirPath: ts.Path) {
+        rootDirPath = ts.ensureTrailingDirectorySeparator(rootDirPath);
         const cachedResult = getCachedFileSystemEntries(rootDirPath);
         if (cachedResult) {
             return cachedResult;
@@ -136,14 +136,14 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         }
         catch (_e) {
             // If there is exception to read directories, dont cache the result and direct the calls to host
-            Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
+            ts.Debug.assert(!cachedReadDirectoryResult.has(ts.ensureTrailingDirectorySeparator(rootDirPath)));
             return undefined;
         }
     }
 
-    function hasEntry(entries: SortedReadonlyArray<Canonicalized>, name: Canonicalized) {
+    function hasEntry(entries: ts.SortedReadonlyArray<Canonicalized>, name: Canonicalized) {
         // Case-sensitive comparison since already canonicalized
-        const index = binarySearch(entries, name, identity, compareStringsCaseSensitive);
+        const index = ts.binarySearch(entries, name, ts.identity, ts.compareStringsCaseSensitive);
         return index >= 0;
     }
 
@@ -165,7 +165,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
 
     function directoryExists(dirPath: string): boolean {
         const path = toPath(dirPath);
-        return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists!(dirPath);
+        return cachedReadDirectoryResult.has(ts.ensureTrailingDirectorySeparator(path)) || host.directoryExists!(dirPath);
     }
 
     function createDirectory(dirPath: string) {
@@ -176,7 +176,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             const canonicalizedBaseName = getCanonicalFileName(baseName);
             const canonicalizedDirectories = result.sortedAndCanonicalizedDirectories;
             // Case-sensitive comparison since already canonicalized
-            if (insertSorted(canonicalizedDirectories, canonicalizedBaseName, compareStringsCaseSensitive)) {
+            if (ts.insertSorted(canonicalizedDirectories, canonicalizedBaseName, ts.compareStringsCaseSensitive)) {
                 result.directories.push(baseName);
             }
         }
@@ -195,13 +195,13 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
         const rootDirPath = toPath(rootDir);
         const rootResult = tryReadDirectory(rootDir, rootDirPath);
-        let rootSymLinkResult: FileSystemEntries | undefined;
+        let rootSymLinkResult: ts.FileSystemEntries | undefined;
         if (rootResult !== undefined) {
-            return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
+            return ts.matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
         }
         return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
-        function getFileSystemEntries(dir: string): FileSystemEntries {
+        function getFileSystemEntries(dir: string): ts.FileSystemEntries {
             const path = toPath(dir);
             if (path === rootDirPath) {
                 return rootResult || getFileSystemEntriesFromHost(dir, path);
@@ -209,14 +209,14 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             const result = tryReadDirectory(dir, path);
             return result !== undefined ?
                 result || getFileSystemEntriesFromHost(dir, path) :
-                emptyFileSystemEntries;
+                ts.emptyFileSystemEntries;
         }
 
-        function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
+        function getFileSystemEntriesFromHost(dir: string, path: ts.Path): ts.FileSystemEntries {
             if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
-            const result: FileSystemEntries = {
-                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
-                directories: host.getDirectories!(dir) || emptyArray
+            const result: ts.FileSystemEntries = {
+                files: ts.map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || ts.emptyArray,
+                directories: host.getDirectories!(dir) || ts.emptyArray
             };
             if (path === rootDirPath) rootSymLinkResult = result;
             return result;
@@ -227,7 +227,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         return host.realpath ? host.realpath(s) : s;
     }
 
-    function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
+    function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: ts.Path) {
         const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
         if (existingResult !== undefined) {
             // Just clear the cache for now
@@ -267,14 +267,14 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
 
     }
 
-    function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
-        if (eventKind === FileWatcherEventKind.Changed) {
+    function addOrDeleteFile(fileName: string, filePath: ts.Path, eventKind: ts.FileWatcherEventKind) {
+        if (eventKind === ts.FileWatcherEventKind.Changed) {
             return;
         }
 
         const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
         if (parentResult) {
-            updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
+            updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === ts.FileWatcherEventKind.Created);
         }
     }
 
@@ -283,13 +283,13 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         const canonicalizedBaseName = getCanonicalFileName(baseName);
         if (fileExists) {
             // Case-sensitive comparison since already canonicalized
-            if (insertSorted(canonicalizedFiles, canonicalizedBaseName, compareStringsCaseSensitive)) {
+            if (ts.insertSorted(canonicalizedFiles, canonicalizedBaseName, ts.compareStringsCaseSensitive)) {
                 parentResult.files.push(baseName);
             }
         }
         else {
             // Case-sensitive comparison since already canonicalized
-            const sortedIndex = binarySearch(canonicalizedFiles, canonicalizedBaseName, identity, compareStringsCaseSensitive);
+            const sortedIndex = ts.binarySearch(canonicalizedFiles, canonicalizedBaseName, ts.identity, ts.compareStringsCaseSensitive);
             if (sortedIndex >= 0) {
                 canonicalizedFiles.splice(sortedIndex, 1);
                 const unsortedIndex = parentResult.files.findIndex(entry => getCanonicalFileName(entry) === canonicalizedBaseName);
@@ -311,9 +311,9 @@ export enum ConfigFileProgramReloadLevel {
     Full
 }
 
-export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
-    watcher: FileWatcher;
-    projects: Set<T>;
+export interface SharedExtendedConfigFileWatcher<T> extends ts.FileWatcher {
+    watcher: ts.FileWatcher;
+    projects: ts.Set<T>;
 }
 
 /**
@@ -321,12 +321,12 @@ export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
  */
 export function updateSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
-    options: CompilerOptions | undefined,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
-    createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
-    toPath: (fileName: string) => Path,
+    options: ts.CompilerOptions | undefined,
+    extendedConfigFilesMap: ts.ESMap<ts.Path, SharedExtendedConfigFileWatcher<T>>,
+    createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: ts.Path) => ts.FileWatcher,
+    toPath: (fileName: string) => ts.Path,
 ) {
-    const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
+    const extendedConfigs = ts.arrayToMap(options?.configFile?.extendedSourceFiles || ts.emptyArray, toPath);
     // remove project from all unrelated watchers
     extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
         if (!extendedConfigs.has(extendedConfigFilePath)) {
@@ -343,7 +343,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
         else {
             // start watching previously unseen extended config
             extendedConfigFilesMap.set(extendedConfigFilePath, {
-                projects: new Set([projectPath]),
+                projects: new ts.Set([projectPath]),
                 watcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
                 close: () => {
                     const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
@@ -361,7 +361,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
  */
 export function clearSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+    extendedConfigFilesMap: ts.ESMap<ts.Path, SharedExtendedConfigFileWatcher<T>>,
 ) {
     extendedConfigFilesMap.forEach(watcher => {
         if (watcher.projects.delete(projectPath)) watcher.close();
@@ -372,14 +372,14 @@ export function clearSharedExtendedConfigFileWatcher<T>(
  * Clean the extendsConfigCache when extended config file has changed
  */
 export function cleanExtendedConfigCache(
-    extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
-    extendedConfigFilePath: Path,
-    toPath: (fileName: string) => Path,
+    extendedConfigCache: ts.ESMap<string, ts.ExtendedConfigCacheEntry>,
+    extendedConfigFilePath: ts.Path,
+    toPath: (fileName: string) => ts.Path,
 ) {
     if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
     extendedConfigCache.forEach(({ extendedResult }, key) => {
         if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
-            cleanExtendedConfigCache(extendedConfigCache, key as Path, toPath);
+            cleanExtendedConfigCache(extendedConfigCache, key as ts.Path, toPath);
         }
     });
 }
@@ -388,17 +388,17 @@ export function cleanExtendedConfigCache(
  * Updates watchers based on the package json files used in module resolution
  */
 export function updatePackageJsonWatch(
-    lookups: readonly (readonly [Path, object | boolean])[],
-    packageJsonWatches: ESMap<Path, FileWatcher>,
-    createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
+    lookups: readonly (readonly [ts.Path, object | boolean])[],
+    packageJsonWatches: ts.ESMap<ts.Path, ts.FileWatcher>,
+    createPackageJsonWatch: (packageJsonPath: ts.Path, data: object | boolean) => ts.FileWatcher,
 ) {
-    const newMap = new Map(lookups);
-    mutateMap(
+    const newMap = new ts.Map(lookups);
+    ts.mutateMap(
         packageJsonWatches,
         newMap,
         {
             createNewValue: createPackageJsonWatch,
-            onDeleteValue: closeFileWatcher
+            onDeleteValue: ts.closeFileWatcher
         }
     );
 }
@@ -407,15 +407,15 @@ export function updatePackageJsonWatch(
  * Updates the existing missing file watches with the new set of missing files after new program is created
  */
 export function updateMissingFilePathsWatch(
-    program: Program,
-    missingFileWatches: ESMap<Path, FileWatcher>,
-    createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
+    program: ts.Program,
+    missingFileWatches: ts.ESMap<ts.Path, ts.FileWatcher>,
+    createMissingFileWatch: (missingFilePath: ts.Path) => ts.FileWatcher,
 ) {
     const missingFilePaths = program.getMissingFilePaths();
     // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
-    const newMissingFilePathMap = arrayToMap(missingFilePaths, identity, returnTrue);
+    const newMissingFilePathMap = ts.arrayToMap(missingFilePaths, ts.identity, ts.returnTrue);
     // Update the missing file paths watcher
-    mutateMap(
+    ts.mutateMap(
         missingFileWatches,
         newMissingFilePathMap,
         {
@@ -423,14 +423,14 @@ export function updateMissingFilePathsWatch(
             createNewValue: createMissingFileWatch,
             // Files that are no longer missing (e.g. because they are no longer required)
             // should no longer be watched.
-            onDeleteValue: closeFileWatcher
+            onDeleteValue: ts.closeFileWatcher
         }
     );
 }
 
 export interface WildcardDirectoryWatcher {
-    watcher: FileWatcher;
-    flags: WatchDirectoryFlags;
+    watcher: ts.FileWatcher;
+    flags: ts.WatchDirectoryFlags;
 }
 
 /**
@@ -440,11 +440,11 @@ export interface WildcardDirectoryWatcher {
  * as wildcard directories wont change unless reloading config file
  */
 export function updateWatchingWildcardDirectories(
-    existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>,
-    wildcardDirectories: ESMap<string, WatchDirectoryFlags>,
-    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
+    existingWatchedForWildcards: ts.ESMap<string, WildcardDirectoryWatcher>,
+    wildcardDirectories: ts.ESMap<string, ts.WatchDirectoryFlags>,
+    watchDirectory: (directory: string, flags: ts.WatchDirectoryFlags) => ts.FileWatcher
 ) {
-    mutateMap(
+    ts.mutateMap(
         existingWatchedForWildcards,
         wildcardDirectories,
         {
@@ -457,7 +457,7 @@ export function updateWatchingWildcardDirectories(
         }
     );
 
-    function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
+    function createWildcardDirectoryWatcher(directory: string, flags: ts.WatchDirectoryFlags): WildcardDirectoryWatcher {
         // Create new watch and recursive info
         return {
             watcher: watchDirectory(directory, flags),
@@ -465,7 +465,7 @@ export function updateWatchingWildcardDirectories(
         };
     }
 
-    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
+    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: ts.WatchDirectoryFlags, directory: string) {
         // Watcher needs to be updated if the recursive flags dont match
         if (existingWatcher.flags === flags) {
             return;
@@ -477,17 +477,17 @@ export function updateWatchingWildcardDirectories(
 }
 
 export interface IsIgnoredFileFromWildCardWatchingInput {
-    watchedDirPath: Path;
+    watchedDirPath: ts.Path;
     fileOrDirectory: string;
-    fileOrDirectoryPath: Path;
+    fileOrDirectoryPath: ts.Path;
     configFileName: string;
-    options: CompilerOptions;
-    program: BuilderProgram | Program | readonly string[] | undefined;
-    extraFileExtensions?: readonly FileExtensionInfo[];
+    options: ts.CompilerOptions;
+    program: ts.BuilderProgram | ts.Program | readonly string[] | undefined;
+    extraFileExtensions?: readonly ts.FileExtensionInfo[];
     currentDirectory: string;
     useCaseSensitiveFileNames: boolean;
     writeLog: (s: string) => void;
-    toPath: (fileName: string) => Path;
+    toPath: (fileName: string) => ts.Path;
 }
 /* @internal */
 export function isIgnoredFileFromWildCardWatching({
@@ -496,7 +496,7 @@ export function isIgnoredFileFromWildCardWatching({
     currentDirectory, useCaseSensitiveFileNames,
     writeLog, toPath,
 }: IsIgnoredFileFromWildCardWatchingInput): boolean {
-    const newPath = removeIgnoredPath(fileOrDirectoryPath);
+    const newPath = ts.removeIgnoredPath(fileOrDirectoryPath);
     if (!newPath) {
         writeLog(`Project: ${configFileName} Detected ignored path: ${fileOrDirectory}`);
         return true;
@@ -507,12 +507,12 @@ export function isIgnoredFileFromWildCardWatching({
 
     // If the the added or created file or directory is not supported file name, ignore the file
     // But when watched directory is added/removed, we need to reload the file list
-    if (hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)) {
+    if (ts.hasExtension(fileOrDirectoryPath) && !ts.isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)) {
         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
         return true;
     }
 
-    if (isExcludedFile(fileOrDirectory, options.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
+    if (ts.isExcludedFile(fileOrDirectory, options.configFile!.configFileSpecs!, ts.getNormalizedAbsolutePath(ts.getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
         writeLog(`Project: ${configFileName} Detected excluded file: ${fileOrDirectory}`);
         return true;
     }
@@ -521,42 +521,42 @@ export function isIgnoredFileFromWildCardWatching({
 
     // We want to ignore emit file check if file is not going to be emitted next to source file
     // In that case we follow config file inclusion rules
-    if (outFile(options) || options.outDir) return false;
+    if (ts.outFile(options) || options.outDir) return false;
 
     // File if emitted next to input needs to be ignored
-    if (isDeclarationFileName(fileOrDirectoryPath)) {
+    if (ts.isDeclarationFileName(fileOrDirectoryPath)) {
         // If its declaration directory: its not ignored if not excluded by config
         if (options.declarationDir) return false;
     }
-    else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
+    else if (!ts.fileExtensionIsOneOf(fileOrDirectoryPath, ts.supportedJSExtensionsFlat)) {
         return false;
     }
 
     // just check if sourceFile with the name exists
-    const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
-    const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
-    const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
-    if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
-        hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
+    const filePathWithoutExtension = ts.removeFileExtension(fileOrDirectoryPath);
+    const realProgram = ts.isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+    const builderProgram = !realProgram && !ts.isArray(program) ? program as ts.BuilderProgram : undefined;
+    if (hasSourceFile((filePathWithoutExtension + ts.Extension.Ts) as ts.Path) ||
+        hasSourceFile((filePathWithoutExtension + ts.Extension.Tsx) as ts.Path)) {
         writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
         return true;
     }
     return false;
 
-    function hasSourceFile(file: Path): boolean {
+    function hasSourceFile(file: ts.Path): boolean {
         return realProgram ?
             !!realProgram.getSourceFileByPath(file) :
             builderProgram ?
                 builderProgram.getState().fileInfos.has(file) :
-                !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
+                !!ts.find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 }
 
-function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
+function isBuilderProgram<T extends ts.BuilderProgram>(program: ts.Program | T): program is T {
     return !!(program as T).getState;
 }
 
-export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
+export function isEmittedFileOfProgram(program: ts.Program | undefined, file: string) {
     if (!program) {
         return false;
     }
@@ -571,23 +571,23 @@ export enum WatchLogLevel {
 }
 
 export interface WatchFactoryHost {
-    watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
-    watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    watchFile(path: string, callback: ts.FileWatcherCallback, pollingInterval?: number, options?: ts.WatchOptions): ts.FileWatcher;
+    watchDirectory(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher;
     getCurrentDirectory?(): string;
     useCaseSensitiveFileNames: boolean | (() => boolean);
 }
 
 export interface WatchFactory<X, Y = undefined> {
-    watchFile: (file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
-    watchDirectory: (directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
+    watchFile: (file: string, callback: ts.FileWatcherCallback, pollingInterval: ts.PollingInterval, options: ts.WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => ts.FileWatcher;
+    watchDirectory: (directory: string, callback: ts.DirectoryWatcherCallback, flags: ts.WatchDirectoryFlags, options: ts.WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => ts.FileWatcher;
 }
 
 export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
 export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
-    setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
+    ts.setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : ts.noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
         watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
-        watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
+        watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & ts.WatchDirectoryFlags.Recursive) !== 0, options),
     };
     const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
         {
@@ -603,7 +603,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         triggerInvokingFactory || plainInvokeFactory;
     const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
         createExcludeWatcherWithLogging :
-        returnNoopFileWatcher;
+        ts.returnNoopFileWatcher;
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
@@ -613,12 +613,12 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
         return (
             file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
+            cb: ts.FileWatcherCallback | ts.DirectoryWatcherCallback,
+            flags: ts.PollingInterval | ts.WatchDirectoryFlags,
+            options: ts.WatchOptions | undefined,
             detailInfo1: X,
             detailInfo2?: Y
-        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
+        ) => !ts.matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
                 factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
                 excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
     }
@@ -631,8 +631,8 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     function createExcludeWatcherWithLogging(
         file: string,
-        flags: PollingInterval | WatchDirectoryFlags,
-        options: WatchOptions | undefined,
+        flags: ts.PollingInterval | ts.WatchDirectoryFlags,
+        options: ts.WatchOptions | undefined,
         detailInfo1: X,
         detailInfo2?: Y
     ) {
@@ -644,12 +644,12 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     function createFileWatcherWithLogging(
         file: string,
-        cb: FileWatcherCallback,
-        flags: PollingInterval,
-        options: WatchOptions | undefined,
+        cb: ts.FileWatcherCallback,
+        flags: ts.PollingInterval,
+        options: ts.WatchOptions | undefined,
         detailInfo1: X,
         detailInfo2?: Y
-    ): FileWatcher {
+    ): ts.FileWatcher {
         log(`FileWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         const watcher = triggerInvokingFactory!.watchFile(file, cb, flags, options, detailInfo1, detailInfo2);
         return {
@@ -662,25 +662,25 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     function createDirectoryWatcherWithLogging(
         file: string,
-        cb: DirectoryWatcherCallback,
-        flags: WatchDirectoryFlags,
-        options: WatchOptions | undefined,
+        cb: ts.DirectoryWatcherCallback,
+        flags: ts.WatchDirectoryFlags,
+        options: ts.WatchOptions | undefined,
         detailInfo1: X,
         detailInfo2?: Y
-    ): FileWatcher {
+    ): ts.FileWatcher {
         const watchInfo = `DirectoryWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
         log(watchInfo);
-        const start = timestamp();
+        const start = ts.timestamp();
         const watcher = triggerInvokingFactory!.watchDirectory(file, cb, flags, options, detailInfo1, detailInfo2);
-        const elapsed = timestamp() - start;
+        const elapsed = ts.timestamp() - start;
         log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
         return {
             close: () => {
                 const watchInfo = `DirectoryWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
                 log(watchInfo);
-                const start = timestamp();
+                const start = ts.timestamp();
                 watcher.close();
-                const elapsed = timestamp() - start;
+                const elapsed = ts.timestamp() - start;
                 log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
             }
         };
@@ -689,36 +689,36 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
         return (
             file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
+            cb: ts.FileWatcherCallback | ts.DirectoryWatcherCallback,
+            flags: ts.PollingInterval | ts.WatchDirectoryFlags,
+            options: ts.WatchOptions | undefined,
             detailInfo1: X,
             detailInfo2?: Y
         ) => plainInvokeFactory[key].call(/*thisArgs*/ undefined, file, (...args: any[]) => {
             const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
             log(triggerredInfo);
-            const start = timestamp();
+            const start = ts.timestamp();
             cb.call(/*thisArg*/ undefined, ...args);
-            const elapsed = timestamp() - start;
+            const elapsed = ts.timestamp() - start;
             log(`Elapsed:: ${elapsed}ms ${triggerredInfo}`);
         }, flags, options, detailInfo1, detailInfo2);
     }
 
-    function getWatchInfo<T>(file: string, flags: T, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
+    function getWatchInfo<T>(file: string, flags: T, options: ts.WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
         return `WatchInfo: ${file} ${flags} ${JSON.stringify(options)} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`}`;
     }
 }
 
-export function getFallbackOptions(options: WatchOptions | undefined): WatchOptions {
+export function getFallbackOptions(options: ts.WatchOptions | undefined): ts.WatchOptions {
     const fallbackPolling = options?.fallbackPolling;
     return {
         watchFile: fallbackPolling !== undefined ?
-            fallbackPolling as unknown as WatchFileKind :
-            WatchFileKind.PriorityPollingInterval
+            fallbackPolling as unknown as ts.WatchFileKind :
+            ts.WatchFileKind.PriorityPollingInterval
     };
 }
 
-export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
+export function closeFileWatcherOf<T extends { watcher: ts.FileWatcher; }>(objWithWatcher: T) {
     objWithWatcher.watcher.close();
 }
 }

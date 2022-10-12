@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-export function transformLegacyDecorators(context: TransformationContext) {
+export function transformLegacyDecorators(context: ts.TransformationContext) {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -9,7 +9,7 @@ export function transformLegacyDecorators(context: TransformationContext) {
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
+    const languageVersion = ts.getEmitScriptTarget(compilerOptions);
 
     // Save the previous transformation hooks.
     const previousOnSubstituteNode = context.onSubstituteNode;
@@ -21,90 +21,90 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * A map that keeps track of aliases created for classes with decorators to avoid issues
      * with the double-binding behavior of classes.
      */
-    let classAliases: Identifier[];
+    let classAliases: ts.Identifier[];
 
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: SourceFile) {
-        const visited = visitEachChild(node, visitor, context);
-        addEmitHelpers(visited, context.readEmitHelpers());
+    function transformSourceFile(node: ts.SourceFile) {
+        const visited = ts.visitEachChild(node, visitor, context);
+        ts.addEmitHelpers(visited, context.readEmitHelpers());
         return visited;
     }
 
-    function modifierVisitor(node: Node): VisitResult<Node> {
-        return isDecorator(node) ? undefined : node;
+    function modifierVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
+        return ts.isDecorator(node) ? undefined : node;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
-        if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+        if (!(node.transformFlags & ts.TransformFlags.ContainsDecorators)) {
             return node;
         }
 
         switch (node.kind) {
-            case SyntaxKind.Decorator:
+            case ts.SyntaxKind.Decorator:
                 // Decorators are elided. They will be emitted as part of `visitClassDeclaration`.
                 return undefined;
-            case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
-            case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression);
-            case SyntaxKind.Constructor:
-                return visitConstructorDeclaration(node as ConstructorDeclaration);
-            case SyntaxKind.MethodDeclaration:
-                return visitMethodDeclaration(node as MethodDeclaration);
-            case SyntaxKind.SetAccessor:
-                return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
-            case SyntaxKind.GetAccessor:
-                return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
-            case SyntaxKind.PropertyDeclaration:
-                return visitPropertyDeclaration(node as PropertyDeclaration);
-            case SyntaxKind.Parameter:
-                return visitParameterDeclaration(node as ParameterDeclaration);
+            case ts.SyntaxKind.ClassDeclaration:
+                return visitClassDeclaration(node as ts.ClassDeclaration);
+            case ts.SyntaxKind.ClassExpression:
+                return visitClassExpression(node as ts.ClassExpression);
+            case ts.SyntaxKind.Constructor:
+                return visitConstructorDeclaration(node as ts.ConstructorDeclaration);
+            case ts.SyntaxKind.MethodDeclaration:
+                return visitMethodDeclaration(node as ts.MethodDeclaration);
+            case ts.SyntaxKind.SetAccessor:
+                return visitSetAccessorDeclaration(node as ts.SetAccessorDeclaration);
+            case ts.SyntaxKind.GetAccessor:
+                return visitGetAccessorDeclaration(node as ts.GetAccessorDeclaration);
+            case ts.SyntaxKind.PropertyDeclaration:
+                return visitPropertyDeclaration(node as ts.PropertyDeclaration);
+            case ts.SyntaxKind.Parameter:
+                return visitParameterDeclaration(node as ts.ParameterDeclaration);
             default:
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) return visitEachChild(node, visitor, context);
+    function visitClassDeclaration(node: ts.ClassDeclaration): ts.VisitResult<ts.Statement> {
+        if (!(ts.classOrConstructorParameterIsDecorated(node) || ts.childIsDecorated(node))) return ts.visitEachChild(node, visitor, context);
 
-        const statements = hasDecorators(node) ?
+        const statements = ts.hasDecorators(node) ?
             transformClassDeclarationWithClassDecorators(node, node.name) :
             transformClassDeclarationWithoutClassDecorators(node, node.name);
 
         if (statements.length > 1) {
             // Add a DeclarationMarker as a marker for the end of the declaration
             statements.push(factory.createEndOfDeclarationMarker(node));
-            setEmitFlags(statements[0], getEmitFlags(statements[0]) | EmitFlags.HasEndOfDeclarationMarker);
+            ts.setEmitFlags(statements[0], ts.getEmitFlags(statements[0]) | ts.EmitFlags.HasEndOfDeclarationMarker);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
-    function decoratorContainsPrivateIdentifierInExpression(decorator: Decorator) {
-        return !!(decorator.transformFlags & TransformFlags.ContainsPrivateIdentifierInExpression);
+    function decoratorContainsPrivateIdentifierInExpression(decorator: ts.Decorator) {
+        return !!(decorator.transformFlags & ts.TransformFlags.ContainsPrivateIdentifierInExpression);
     }
 
-    function parameterDecoratorsContainPrivateIdentifierInExpression(parameterDecorators: readonly Decorator[] | undefined) {
-        return some(parameterDecorators, decoratorContainsPrivateIdentifierInExpression);
+    function parameterDecoratorsContainPrivateIdentifierInExpression(parameterDecorators: readonly ts.Decorator[] | undefined) {
+        return ts.some(parameterDecorators, decoratorContainsPrivateIdentifierInExpression);
     }
 
-    function hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node: ClassDeclaration) {
+    function hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node: ts.ClassDeclaration) {
         for (const member of node.members) {
-            if (!canHaveDecorators(member)) continue;
-            const allDecorators = getAllDecoratorsOfClassElement(member, node);
-            if (some(allDecorators?.decorators, decoratorContainsPrivateIdentifierInExpression)) return true;
-            if (some(allDecorators?.parameters, parameterDecoratorsContainPrivateIdentifierInExpression)) return true;
+            if (!ts.canHaveDecorators(member)) continue;
+            const allDecorators = ts.getAllDecoratorsOfClassElement(member, node);
+            if (ts.some(allDecorators?.decorators, decoratorContainsPrivateIdentifierInExpression)) return true;
+            if (ts.some(allDecorators?.parameters, parameterDecoratorsContainPrivateIdentifierInExpression)) return true;
         }
         return false;
     }
 
-    function transformDecoratorsOfClassElements(node: ClassDeclaration, members: NodeArray<ClassElement>) {
-        let decorationStatements: Statement[] | undefined = [];
+    function transformDecoratorsOfClassElements(node: ts.ClassDeclaration, members: ts.NodeArray<ts.ClassElement>) {
+        let decorationStatements: ts.Statement[] | undefined = [];
         addClassElementDecorationStatements(decorationStatements, node, /*isStatic*/ false);
         addClassElementDecorationStatements(decorationStatements, node, /*isStatic*/ true);
         if (hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node)) {
-            members = setTextRange(factory.createNodeArray([
+            members = ts.setTextRange(factory.createNodeArray([
                 ...members,
                 factory.createClassStaticBlockDeclaration(
                     factory.createBlock(decorationStatements, /*multiLine*/ true)
@@ -121,16 +121,16 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param node A ClassDeclaration node.
      * @param name The name of the class.
      */
-    function transformClassDeclarationWithoutClassDecorators(node: ClassDeclaration, name: Identifier | undefined) {
+    function transformClassDeclarationWithoutClassDecorators(node: ts.ClassDeclaration, name: ts.Identifier | undefined) {
         //  ${modifiers} class ${name} ${heritageClauses} {
         //      ${members}
         //  }
 
-        const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
-        const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-        let members = visitNodes(node.members, visitor, isClassElement);
+        const modifiers = ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier);
+        const heritageClauses = ts.visitNodes(node.heritageClauses, visitor, ts.isHeritageClause);
+        let members = ts.visitNodes(node.members, visitor, ts.isClassElement);
 
-        let decorationStatements: Statement[] | undefined = [];
+        let decorationStatements: ts.Statement[] | undefined = [];
         ({ members, decorationStatements } = transformDecoratorsOfClassElements(node, members));
 
         const updated = factory.updateClassDeclaration(
@@ -142,14 +142,14 @@ export function transformLegacyDecorators(context: TransformationContext) {
             members
         );
 
-        return addRange([updated], decorationStatements);
+        return ts.addRange([updated], decorationStatements);
     }
 
     /**
      * Transforms a decorated class declaration and appends the resulting statements. If
      * the class requires an alias to avoid issues with double-binding, the alias is returned.
      */
-    function transformClassDeclarationWithClassDecorators(node: ClassDeclaration, name: Identifier | undefined) {
+    function transformClassDeclarationWithClassDecorators(node: ts.ClassDeclaration, name: ts.Identifier | undefined) {
         // When we emit an ES6 class that has a class decorator, we must tailor the
         // emit to certain specific cases.
         //
@@ -236,22 +236,22 @@ export function transformLegacyDecorators(context: TransformationContext) {
         //  ---------------------------------------------------------------------
         //
 
-        const location = moveRangePastModifiers(node);
+        const location = ts.moveRangePastModifiers(node);
         const classAlias = getClassAliasIfNeeded(node);
 
         // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
         // without any block-scoped variable collision handling
-        const declName = languageVersion <= ScriptTarget.ES2015 ?
+        const declName = languageVersion <= ts.ScriptTarget.ES2015 ?
             factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
             factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  ... = class ${name} ${heritageClauses} {
         //      ${members}
         //  }
-        const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-        let members = visitNodes(node.members, visitor, isClassElement);
+        const heritageClauses = ts.visitNodes(node.heritageClauses, visitor, ts.isHeritageClause);
+        let members = ts.visitNodes(node.members, visitor, ts.isClassElement);
 
-        let decorationStatements: Statement[] | undefined = [];
+        let decorationStatements: ts.Statement[] | undefined = [];
         ({ members, decorationStatements } = transformDecoratorsOfClassElements(node, members));
 
         const classExpression = factory.createClassExpression(
@@ -261,8 +261,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
             heritageClauses,
             members);
 
-        setOriginalNode(classExpression, node);
-        setTextRange(classExpression, location);
+        ts.setOriginalNode(classExpression, node);
+        ts.setTextRange(classExpression, location);
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
@@ -275,115 +275,115 @@ export function transformLegacyDecorators(context: TransformationContext) {
                     /*type*/ undefined,
                     classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
                 )
-            ], NodeFlags.Let)
+            ], ts.NodeFlags.Let)
         );
-        setOriginalNode(statement, node);
-        setTextRange(statement, location);
-        setCommentRange(statement, node);
+        ts.setOriginalNode(statement, node);
+        ts.setTextRange(statement, location);
+        ts.setCommentRange(statement, node);
 
-        const statements: Statement[] = [statement];
-        addRange(statements, decorationStatements);
+        const statements: ts.Statement[] = [statement];
+        ts.addRange(statements, decorationStatements);
         addConstructorDecorationStatement(statements, node);
         return statements;
     }
 
-    function visitClassExpression(node: ClassExpression) {
+    function visitClassExpression(node: ts.ClassExpression) {
         // Legacy decorators were not supported on class expressions
         return factory.updateClassExpression(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
             node.name,
             /*typeParameters*/ undefined,
-            visitNodes(node.heritageClauses, visitor, isHeritageClause),
-            visitNodes(node.members, visitor, isClassElement)
+            ts.visitNodes(node.heritageClauses, visitor, ts.isHeritageClause),
+            ts.visitNodes(node.members, visitor, ts.isClassElement)
         );
     }
 
-    function visitConstructorDeclaration(node: ConstructorDeclaration) {
+    function visitConstructorDeclaration(node: ts.ConstructorDeclaration) {
         return factory.updateConstructorDeclaration(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
-            visitNode(node.body, visitor, isBlock));
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
+            ts.visitNodes(node.parameters, visitor, ts.isParameterDeclaration),
+            ts.visitNode(node.body, visitor, ts.isBlock));
     }
 
-    function finishClassElement(updated: ClassElement, original: ClassElement) {
+    function finishClassElement(updated: ts.ClassElement, original: ts.ClassElement) {
         if (updated !== original) {
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            setCommentRange(updated, original);
-            setSourceMapRange(updated, moveRangePastModifiers(original));
+            ts.setCommentRange(updated, original);
+            ts.setSourceMapRange(updated, ts.moveRangePastModifiers(original));
         }
         return updated;
     }
 
-    function visitMethodDeclaration(node: MethodDeclaration) {
+    function visitMethodDeclaration(node: ts.MethodDeclaration) {
         return finishClassElement(factory.updateMethodDeclaration(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
             node.asteriskToken,
-            visitNode(node.name, visitor, isPropertyName),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
             /*questionToken*/ undefined,
             /*typeParameters*/ undefined,
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            ts.visitNodes(node.parameters, visitor, ts.isParameterDeclaration),
             /*type*/ undefined,
-            visitNode(node.body, visitor, isBlock)
+            ts.visitNode(node.body, visitor, ts.isBlock)
         ), node);
     }
 
-    function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+    function visitGetAccessorDeclaration(node: ts.GetAccessorDeclaration) {
         return finishClassElement(factory.updateGetAccessorDeclaration(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
+            ts.visitNodes(node.parameters, visitor, ts.isParameterDeclaration),
             /*type*/ undefined,
-            visitNode(node.body, visitor, isBlock)
+            ts.visitNode(node.body, visitor, ts.isBlock)
         ), node);
     }
 
-    function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+    function visitSetAccessorDeclaration(node: ts.SetAccessorDeclaration) {
         return finishClassElement(factory.updateSetAccessorDeclaration(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
-            visitNode(node.body, visitor, isBlock)
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
+            ts.visitNodes(node.parameters, visitor, ts.isParameterDeclaration),
+            ts.visitNode(node.body, visitor, ts.isBlock)
         ), node);
     }
 
-    function visitPropertyDeclaration(node: PropertyDeclaration) {
-        if (node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Ambient)) {
+    function visitPropertyDeclaration(node: ts.PropertyDeclaration) {
+        if (node.flags & ts.NodeFlags.Ambient || ts.hasSyntacticModifier(node, ts.ModifierFlags.Ambient)) {
             return undefined;
         }
 
         return finishClassElement(factory.updatePropertyDeclaration(
             node,
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
+            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor, isExpression)
+            ts.visitNode(node.initializer, visitor, ts.isExpression)
         ), node);
     }
 
-    function visitParameterDeclaration(node: ParameterDeclaration) {
+    function visitParameterDeclaration(node: ts.ParameterDeclaration) {
         const updated = factory.updateParameterDeclaration(
             node,
-            elideNodes(factory, node.modifiers),
+            ts.elideNodes(factory, node.modifiers),
             node.dotDotDotToken,
-            visitNode(node.name, visitor, isBindingName),
+            ts.visitNode(node.name, visitor, ts.isBindingName),
             /*questionToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor, isExpression)
+            ts.visitNode(node.initializer, visitor, ts.isExpression)
         );
         if (updated !== node) {
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            setCommentRange(updated, node);
-            setTextRange(updated, moveRangePastModifiers(node));
-            setSourceMapRange(updated, moveRangePastModifiers(node));
-            setEmitFlags(updated.name, EmitFlags.NoTrailingSourceMap);
+            ts.setCommentRange(updated, node);
+            ts.setTextRange(updated, ts.moveRangePastModifiers(node));
+            ts.setSourceMapRange(updated, ts.moveRangePastModifiers(node));
+            ts.setEmitFlags(updated.name, ts.EmitFlags.NoTrailingSourceMap);
         }
         return updated;
     }
@@ -393,14 +393,14 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param allDecorators An object containing all of the decorators for the declaration.
      */
-    function transformAllDecoratorsOfDeclaration(allDecorators: AllDecorators | undefined) {
+    function transformAllDecoratorsOfDeclaration(allDecorators: ts.AllDecorators | undefined) {
         if (!allDecorators) {
             return undefined;
         }
 
-        const decoratorExpressions: Expression[] = [];
-        addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
-        addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
+        const decoratorExpressions: ts.Expression[] = [];
+        ts.addRange(decoratorExpressions, ts.map(allDecorators.decorators, transformDecorator));
+        ts.addRange(decoratorExpressions, ts.flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
         return decoratorExpressions;
     }
 
@@ -412,8 +412,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param isStatic A value indicating whether to generate statements for static or
      *                 instance members.
      */
-    function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
-        addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expr => factory.createExpressionStatement(expr)));
+    function addClassElementDecorationStatements(statements: ts.Statement[], node: ts.ClassDeclaration, isStatic: boolean) {
+        ts.addRange(statements, ts.map(generateClassElementDecorationExpressions(node, isStatic), expr => factory.createExpressionStatement(expr)));
     }
 
     /**
@@ -422,9 +422,9 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param member The class member.
      */
-    function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-        return nodeOrChildIsDecorated(member, parent)
-            && isStaticElement === isStatic(member);
+    function isDecoratedClassElement(member: ts.ClassElement, isStaticElement: boolean, parent: ts.ClassLikeDeclaration) {
+        return ts.nodeOrChildIsDecorated(member, parent)
+            && isStaticElement === ts.isStatic(member);
     }
 
     /**
@@ -435,8 +435,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param isStatic A value indicating whether to retrieve static or instance members of
      *                 the class.
      */
-    function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
-        return filter(node.members, m => isDecoratedClassElement(m, isStatic, node));
+    function getDecoratedClassElements(node: ts.ClassExpression | ts.ClassDeclaration, isStatic: boolean): readonly ts.ClassElement[] {
+        return ts.filter(node.members, m => isDecoratedClassElement(m, isStatic, node));
     }
 
     /**
@@ -447,11 +447,11 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param isStatic A value indicating whether to generate expressions for static or
      *                 instance members.
      */
-    function generateClassElementDecorationExpressions(node: ClassExpression | ClassDeclaration, isStatic: boolean) {
+    function generateClassElementDecorationExpressions(node: ts.ClassExpression | ts.ClassDeclaration, isStatic: boolean) {
         const members = getDecoratedClassElements(node, isStatic);
-        let expressions: Expression[] | undefined;
+        let expressions: ts.Expression[] | undefined;
         for (const member of members) {
-            expressions = append(expressions, generateClassElementDecorationExpression(node, member));
+            expressions = ts.append(expressions, generateClassElementDecorationExpression(node, member));
         }
         return expressions;
     }
@@ -462,8 +462,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param node The class node that contains the member.
      * @param member The class member.
      */
-    function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-        const allDecorators = getAllDecoratorsOfClassElement(member, node);
+    function generateClassElementDecorationExpression(node: ts.ClassExpression | ts.ClassDeclaration, member: ts.ClassElement) {
+        const allDecorators = ts.getAllDecoratorsOfClassElement(member, node);
         const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
         if (!decoratorExpressions) {
             return undefined;
@@ -501,9 +501,9 @@ export function transformLegacyDecorators(context: TransformationContext) {
         //
 
         const prefix = getClassMemberPrefix(node, member);
-        const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
-        const descriptor = languageVersion > ScriptTarget.ES3
-            ? isPropertyDeclaration(member) && !hasAccessorModifier(member)
+        const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !ts.hasSyntacticModifier(member, ts.ModifierFlags.Ambient));
+        const descriptor = languageVersion > ts.ScriptTarget.ES3
+            ? ts.isPropertyDeclaration(member) && !ts.hasAccessorModifier(member)
                 // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
                 // should not invoke `Object.getOwnPropertyDescriptor`.
                 ? factory.createVoidZero()
@@ -520,8 +520,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
             descriptor
         );
 
-        setEmitFlags(helper, EmitFlags.NoComments);
-        setSourceMapRange(helper, moveRangePastModifiers(member));
+        ts.setEmitFlags(helper, ts.EmitFlags.NoComments);
+        ts.setSourceMapRange(helper, ts.moveRangePastModifiers(member));
         return helper;
     }
 
@@ -530,10 +530,10 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param node The class node.
      */
-    function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
+    function addConstructorDecorationStatement(statements: ts.Statement[], node: ts.ClassDeclaration) {
         const expression = generateConstructorDecorationExpression(node);
         if (expression) {
-            statements.push(setOriginalNode(factory.createExpressionStatement(expression), node));
+            statements.push(ts.setOriginalNode(factory.createExpressionStatement(expression), node));
         }
     }
 
@@ -542,24 +542,24 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param node The class node.
      */
-    function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
-        const allDecorators = getAllDecoratorsOfClass(node);
+    function generateConstructorDecorationExpression(node: ts.ClassExpression | ts.ClassDeclaration) {
+        const allDecorators = ts.getAllDecoratorsOfClass(node);
         const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
         if (!decoratorExpressions) {
             return undefined;
         }
 
-        const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
+        const classAlias = classAliases && classAliases[ts.getOriginalNodeId(node)];
 
         // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
         // without any block-scoped variable collision handling
-        const localName = languageVersion <= ScriptTarget.ES2015 ?
+        const localName = languageVersion <= ts.ScriptTarget.ES2015 ?
             factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
             factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
         const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
         const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
-        setEmitFlags(expression, EmitFlags.NoComments);
-        setSourceMapRange(expression, moveRangePastModifiers(node));
+        ts.setEmitFlags(expression, ts.EmitFlags.NoComments);
+        ts.setSourceMapRange(expression, ts.moveRangePastModifiers(node));
         return expression;
     }
 
@@ -568,8 +568,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param decorator The decorator node.
      */
-    function transformDecorator(decorator: Decorator) {
-        return visitNode(decorator.expression, visitor, isExpression);
+    function transformDecorator(decorator: ts.Decorator) {
+        return ts.visitNode(decorator.expression, visitor, ts.isExpression);
     }
 
     /**
@@ -578,16 +578,16 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param decorators The decorators for the parameter at the provided offset.
      * @param parameterOffset The offset of the parameter.
      */
-    function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
-        let expressions: Expression[] | undefined;
+    function transformDecoratorsOfParameter(decorators: ts.Decorator[], parameterOffset: number) {
+        let expressions: ts.Expression[] | undefined;
         if (decorators) {
             expressions = [];
             for (const decorator of decorators) {
                 const helper = emitHelpers().createParamHelper(
                     transformDecorator(decorator),
                     parameterOffset);
-                setTextRange(helper, decorator.expression);
-                setEmitFlags(helper, EmitFlags.NoComments);
+                ts.setTextRange(helper, decorator.expression);
+                ts.setEmitFlags(helper, ts.EmitFlags.NoComments);
                 expressions.push(helper);
             }
         }
@@ -601,18 +601,18 @@ export function transformLegacyDecorators(context: TransformationContext) {
      *
      * @param member The member whose name should be converted into an expression.
      */
-    function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
+    function getExpressionForPropertyName(member: ts.ClassElement | ts.EnumMember, generateNameForComputedPropertyName: boolean): ts.Expression {
         const name = member.name!;
-        if (isPrivateIdentifier(name)) {
+        if (ts.isPrivateIdentifier(name)) {
             return factory.createIdentifier("");
         }
-        else if (isComputedPropertyName(name)) {
-            return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
+        else if (ts.isComputedPropertyName(name)) {
+            return generateNameForComputedPropertyName && !ts.isSimpleInlineableExpression(name.expression)
                 ? factory.getGeneratedNameForNode(name)
                 : name.expression;
         }
-        else if (isIdentifier(name)) {
-            return factory.createStringLiteral(idText(name));
+        else if (ts.isIdentifier(name)) {
+            return factory.createStringLiteral(ts.idText(name));
         }
         else {
             return factory.cloneNode(name);
@@ -623,7 +623,7 @@ export function transformLegacyDecorators(context: TransformationContext) {
         if (!classAliases) {
             // We need to enable substitutions for identifiers. This allows us to
             // substitute class names inside of a class declaration.
-            context.enableSubstitution(SyntaxKind.Identifier);
+            context.enableSubstitution(ts.SyntaxKind.Identifier);
 
             // Keep track of class aliases.
             classAliases = [];
@@ -635,22 +635,22 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * reference to the static side of the class. This is necessary to avoid issues with
      * double-binding semantics for the class name.
      */
-    function getClassAliasIfNeeded(node: ClassDeclaration) {
-        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+    function getClassAliasIfNeeded(node: ts.ClassDeclaration) {
+        if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.ClassWithConstructorReference) {
             enableSubstitutionForClassAliases();
-            const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
-            classAliases[getOriginalNodeId(node)] = classAlias;
+            const classAlias = factory.createUniqueName(node.name && !ts.isGeneratedIdentifier(node.name) ? ts.idText(node.name) : "default");
+            classAliases[ts.getOriginalNodeId(node)] = classAlias;
             hoistVariableDeclaration(classAlias);
             return classAlias;
         }
     }
 
-    function getClassPrototype(node: ClassExpression | ClassDeclaration) {
+    function getClassPrototype(node: ts.ClassExpression | ts.ClassDeclaration) {
         return factory.createPropertyAccessExpression(factory.getDeclarationName(node), "prototype");
     }
 
-    function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-        return isStatic(member)
+    function getClassMemberPrefix(node: ts.ClassExpression | ts.ClassDeclaration, member: ts.ClassElement) {
+        return ts.isStatic(member)
             ? factory.getDeclarationName(node)
             : getClassPrototype(node);
     }
@@ -661,31 +661,31 @@ export function transformLegacyDecorators(context: TransformationContext) {
      * @param hint A hint as to the intended usage of the node.
      * @param node The node to substitute.
      */
-    function onSubstituteNode(hint: EmitHint, node: Node) {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
         node = previousOnSubstituteNode(hint, node);
-        if (hint === EmitHint.Expression) {
-            return substituteExpression(node as Expression);
+        if (hint === ts.EmitHint.Expression) {
+            return substituteExpression(node as ts.Expression);
         }
         return node;
     }
 
-    function substituteExpression(node: Expression) {
+    function substituteExpression(node: ts.Expression) {
         switch (node.kind) {
-            case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+            case ts.SyntaxKind.Identifier:
+                return substituteExpressionIdentifier(node as ts.Identifier);
         }
 
         return node;
     }
 
-    function substituteExpressionIdentifier(node: Identifier): Expression {
+    function substituteExpressionIdentifier(node: ts.Identifier): ts.Expression {
         return trySubstituteClassAlias(node)
             ?? node;
     }
 
-    function trySubstituteClassAlias(node: Identifier): Expression | undefined {
+    function trySubstituteClassAlias(node: ts.Identifier): ts.Expression | undefined {
         if (classAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
+            if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.ConstructorReferenceInClass) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
@@ -696,8 +696,8 @@ export function transformLegacyDecorators(context: TransformationContext) {
                     const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
                     if (classAlias) {
                         const clone = factory.cloneNode(classAlias);
-                        setSourceMapRange(clone, node);
-                        setCommentRange(clone, node);
+                        ts.setSourceMapRange(clone, node);
+                        ts.setCommentRange(clone, node);
                         return clone;
                     }
                 }

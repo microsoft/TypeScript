@@ -7,50 +7,50 @@ declare const location: any;
 declare const XMLHttpRequest: any;
 declare const self: any;
 
-const nullLogger: Logger = {
-    close: noop,
-    hasLevel: returnFalse,
-    loggingEnabled: returnFalse,
-    perftrc: noop,
-    info: noop,
-    msg: noop,
-    startGroup: noop,
-    endGroup: noop,
-    getLogFileName: returnUndefined,
+const nullLogger: ts.server.Logger = {
+    close: ts.noop,
+    hasLevel: ts.returnFalse,
+    loggingEnabled: ts.returnFalse,
+    perftrc: ts.noop,
+    info: ts.noop,
+    msg: ts.noop,
+    startGroup: ts.noop,
+    endGroup: ts.noop,
+    getLogFileName: ts.returnUndefined,
 };
 
-function parseServerMode(): LanguageServiceMode | string | undefined {
-    const mode = findArgument("--serverMode");
+function parseServerMode(): ts.LanguageServiceMode | string | undefined {
+    const mode = ts.server.findArgument("--serverMode");
     if (!mode) return undefined;
     switch (mode.toLowerCase()) {
         case "partialsemantic":
-            return LanguageServiceMode.PartialSemantic;
+            return ts.LanguageServiceMode.PartialSemantic;
         case "syntactic":
-            return LanguageServiceMode.Syntactic;
+            return ts.LanguageServiceMode.Syntactic;
         default:
             return mode;
     }
 }
 
-export function initializeWebSystem(args: string[]): StartInput {
+export function initializeWebSystem(args: string[]): ts.server.StartInput {
     createWebSystem(args);
     const modeOrUnknown = parseServerMode();
-    let serverMode: LanguageServiceMode | undefined;
+    let serverMode: ts.LanguageServiceMode | undefined;
     let unknownServerMode: string | undefined;
     if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
     else unknownServerMode = modeOrUnknown;
     const logger = createLogger();
 
     // enable deprecation logging
-    Debug.loggingHost = {
+    ts.Debug.loggingHost = {
         log(level, s) {
             switch (level) {
                 case ts.LogLevel.Error:
                 case ts.LogLevel.Warning:
-                    return logger.msg(s, Msg.Err);
+                    return logger.msg(s, ts.server.Msg.Err);
                 case ts.LogLevel.Info:
                 case ts.LogLevel.Verbose:
-                    return logger.msg(s, Msg.Info);
+                    return logger.msg(s, ts.server.Msg.Info);
             }
         }
     };
@@ -58,17 +58,17 @@ export function initializeWebSystem(args: string[]): StartInput {
     return {
         args,
         logger,
-        cancellationToken: nullCancellationToken,
+        cancellationToken: ts.server.nullCancellationToken,
         // Webserver defaults to partial semantic mode
-        serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
+        serverMode: serverMode ?? ts.LanguageServiceMode.PartialSemantic,
         unknownServerMode,
         startSession: startWebSession
     };
 }
 
 function createLogger() {
-    const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-    return cmdLineVerbosity !== undefined ? new MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
+    const cmdLineVerbosity = ts.server.getLogLevel(ts.server.findArgument("--logVerbosity"));
+    return cmdLineVerbosity !== undefined ? new ts.server.MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
 }
 
 function writeMessage(s: any) {
@@ -76,8 +76,8 @@ function writeMessage(s: any) {
 }
 
 function createWebSystem(args: string[]) {
-    Debug.assert(ts.sys === undefined);
-    const webHost: WebHost = {
+    ts.Debug.assert(ts.sys === undefined);
+    const webHost: ts.server.WebHost = {
         readFile: webPath => {
             const request = new XMLHttpRequest();
             request.open("GET", webPath, /* asynchronous */ false);
@@ -93,11 +93,11 @@ function createWebSystem(args: string[]) {
         writeMessage,
     };
     // Do this after sys has been set as findArguments is going to work only then
-    const sys = server.createWebSystem(webHost, args, () => findArgument("--executingFilePath") || location + "");
-    setSys(sys);
-    const localeStr = findArgument("--locale");
+    const sys = ts.server.createWebSystem(webHost, args, () => ts.server.findArgument("--executingFilePath") || location + "");
+    ts.setSys(sys);
+    const localeStr = ts.server.findArgument("--locale");
     if (localeStr) {
-        validateLocaleAndSetLanguage(localeStr, sys);
+        ts.validateLocaleAndSetLanguage(localeStr, sys);
     }
 }
 
@@ -116,10 +116,10 @@ function hrtime(previous?: [number, number]) {
     return [seconds, nanoseconds];
 }
 
-function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
-    class WorkerSession extends server.WorkerSession {
+function startWebSession(options: ts.server.StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken) {
+    class WorkerSession extends ts.server.WorkerSession {
         constructor() {
-            super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
+            super(ts.sys as ts.server.ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
         }
 
         exit() {

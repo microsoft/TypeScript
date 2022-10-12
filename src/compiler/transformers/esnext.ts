@@ -1,23 +1,23 @@
 /*@internal*/
 namespace ts {
-export function transformESNext(context: TransformationContext) {
-  return chainBundle(context, transformSourceFile);
+export function transformESNext(context: ts.TransformationContext) {
+  return ts.chainBundle(context, transformSourceFile);
 
-  function transformSourceFile(node: SourceFile) {
+  function transformSourceFile(node: ts.SourceFile) {
       if (node.isDeclarationFile) {
           return node;
       }
 
-      return visitEachChild(node, visitor, context);
+      return ts.visitEachChild(node, visitor, context);
   }
 
-  function visitor(node: Node): VisitResult<Node> {
-      if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+  function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+      if ((node.transformFlags & ts.TransformFlags.ContainsESNext) === 0) {
           return node;
       }
       switch (node.kind) {
           default:
-              return visitEachChild(node, visitor, context);
+              return ts.visitEachChild(node, visitor, context);
       }
   }
 }

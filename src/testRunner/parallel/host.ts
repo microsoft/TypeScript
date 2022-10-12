@@ -17,9 +17,9 @@ export function start() {
     const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";
-    const perfData = readSavedPerfData(configOption);
-    const newTasks: Task[] = [];
-    let tasks: Task[] = [];
+    const perfData = readSavedPerfData(Harness.configOption);
+    const newTasks: Harness.Parallel.Task[] = [];
+    let tasks: Harness.Parallel.Task[] = [];
     let unknownValue: string | undefined;
     let totalCost = 0;
 
@@ -41,8 +41,8 @@ export function start() {
     }
 
     class RemoteTest extends Mocha.Test {
-        info: ErrorInfo | TestInfo;
-        constructor(info: ErrorInfo | TestInfo) {
+        info: Harness.Parallel.ErrorInfo | Harness.Parallel.TestInfo;
+        constructor(info: Harness.Parallel.ErrorInfo | Harness.Parallel.TestInfo) {
             super(info.name[info.name.length - 1]);
             this.info = info;
             this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line local/no-in-operator
@@ -175,14 +175,14 @@ export function start() {
     }
 
     function readSavedPerfData(target?: string): { [testHash: string]: number } | undefined {
-        const perfDataContents = IO.readFile(perfdataFileName(target));
+        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
         return undefined;
     }
 
-    function hashName(runner: TestRunnerKind | "unittest", test: string) {
+    function hashName(runner: Harness.TestRunnerKind | "unittest", test: string) {
         return `tsrunner-${runner}://${test}`;
     }
 
@@ -190,7 +190,7 @@ export function start() {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
-        for (const runner of runners) {
+        for (const runner of Harness.runners) {
             for (const test of runner.getTestFiles()) {
                 const file = typeof test === "string" ? test : test.file;
                 let size: number;
@@ -201,7 +201,7 @@ export function start() {
                     catch {
                         // May be a directory
                         try {
-                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = Harness.IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
@@ -225,17 +225,17 @@ export function start() {
         }
         tasks.sort((a, b) => a.size - b.size);
         tasks = tasks.concat(newTasks);
-        const batchCount = workerCount;
+        const batchCount = Harness.workerCount;
         const packfraction = 0.9;
         const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test
-        const batchSize = (totalCost / workerCount) * packfraction; // Keep spare tests for unittest thread in reserve
+        const batchSize = (totalCost / Harness.workerCount) * packfraction; // Keep spare tests for unittest thread in reserve
         console.log(`Discovered ${tasks.length} test files in ${+(new Date()) - discoverStart}ms.`);
-        console.log(`Starting to run tests using ${workerCount} threads...`);
+        console.log(`Starting to run tests using ${Harness.workerCount} threads...`);
 
         const totalFiles = tasks.length;
         let passingFiles = 0;
         let failingFiles = 0;
-        let errorResults: ErrorInfo[] = [];
+        let errorResults: Harness.Parallel.ErrorInfo[] = [];
         let passingResults: { name: string[] }[] = [];
         let totalPassing = 0;
         const startDate = new Date();
@@ -248,11 +248,11 @@ export function start() {
 
         const workers: Worker[] = [];
         let closedWorkers = 0;
-        for (let i = 0; i < workerCount; i++) {
+        for (let i = 0; i < Harness.workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: Harness.runUnitTests, stackTraceLimit: Harness.stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
-            const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
-            IO.writeFile(configPath, JSON.stringify(config));
+            const config: Harness.TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: Harness.runUnitTests, stackTraceLimit: Harness.stackTraceLimit, timeout: Harness.globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            const configPath = ts.combinePaths(Harness.taskConfigsFolder, `task-config${i}.json`);
+            Harness.IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
                 process: fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
                 accumulatedOutput: "",
@@ -265,7 +265,7 @@ export function start() {
             };
             worker.process.stderr!.on("data", appendOutput);
             worker.process.stdout!.on("data", appendOutput);
-            const killChild = (timeout: TaskTimeout) => {
+            const killChild = (timeout: Harness.Parallel.TaskTimeout) => {
                 worker.process.kill();
                 console.error(`Worker exceeded ${timeout.duration}ms timeout ${worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`}`);
                 return process.exit(2);
@@ -282,7 +282,7 @@ export function start() {
                     return process.exit(2);
                 }
             });
-            worker.process.on("message", (data: ParallelClientMessage) => {
+            worker.process.on("message", (data: Harness.Parallel.ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
                         console.error(`Test worker encountered unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
@@ -334,7 +334,7 @@ export function start() {
                                 // No more tasks to distribute
                                 worker.process.send({ type: "close" });
                                 closedWorkers++;
-                                if (closedWorkers === workerCount) {
+                                if (closedWorkers === Harness.workerCount) {
                                     outputFinalResult();
                                 }
                                 return;
@@ -346,10 +346,10 @@ export function start() {
                             }
                             worker.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                worker.process.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "test", payload: taskList[0] } as Harness.Parallel.ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                worker.process.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "batch", payload: taskList } as Harness.Parallel.ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }
@@ -361,12 +361,12 @@ export function start() {
         // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
         if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
+            const batches: { runner: Harness.TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
             batcher: while (true) {
                 for (let i = 0; i < batchCount; i++) {
-                    if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
+                    if (tasks.length <= Harness.workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
                         break batcher;
                     }
@@ -414,7 +414,7 @@ export function start() {
             }
         }
         else {
-            for (let i = 0; i < workerCount; i++) {
+            for (let i = 0; i < Harness.workerCount; i++) {
                 const task = tasks.pop()!;
                 workers[i].currentTasks = [task];
                 workers[i].process.send({ type: "test", payload: task });
@@ -434,7 +434,7 @@ export function start() {
             const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
             const summaryDuration = "(" + ms(duration) + ")";
             const savedUseColors = Base.useColors;
-            Base.useColors = !noColors;
+            Base.useColors = !Harness.noColors;
 
             const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " + color("light", summaryDuration);
             Base.useColors = savedUseColors;
@@ -478,9 +478,9 @@ export function start() {
                 });
             }
 
-            function rebuildSuite(failures: ErrorInfo[], passes: TestInfo[]) {
+            function rebuildSuite(failures: Harness.Parallel.ErrorInfo[], passes: Harness.Parallel.TestInfo[]) {
                 const root = new RemoteSuite("");
-                for (const result of [...failures, ...passes] as (ErrorInfo | TestInfo)[]) {
+                for (const result of [...failures, ...passes] as (Harness.Parallel.ErrorInfo | Harness.Parallel.TestInfo)[]) {
                     getSuite(root, result.name.slice(0, -1)).addTest(new RemoteTest(result));
                 }
                 return root;
@@ -492,7 +492,7 @@ export function start() {
                 }
             }
 
-            function rebuildError(result: ErrorInfo) {
+            function rebuildError(result: Harness.Parallel.ErrorInfo) {
                 const error = new Error(result.error);
                 error.stack = result.stack;
                 return error;
@@ -555,16 +555,16 @@ export function start() {
             }
 
             const savedUseColors = Base.useColors;
-            if (noColors) Base.useColors = false;
+            if (Harness.noColors) Base.useColors = false;
             replayRunner.started = true;
             replayRunner.emit("start");
             replaySuite(replayRunner, rebuildSuite(errorResults, passingResults));
             replayRunner.emit("end");
             consoleReporter.epilogue();
-            if (noColors) Base.useColors = savedUseColors;
+            if (Harness.noColors) Base.useColors = savedUseColors;
 
             // eslint-disable-next-line no-null/no-null
-            IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
+            Harness.IO.writeFile(perfdataFileName(Harness.configOption), JSON.stringify(newPerfData, null, 4));
 
             if (xunitReporter) {
                 xunitReporter.done(errorResults.length, failures => process.exit(failures));
@@ -594,9 +594,9 @@ export function start() {
     }
 
     function shimDiscoveryInterface(context: Mocha.MochaGlobals) {
-        shimNoopTestInterface(context);
+        Harness.Parallel.shimNoopTestInterface(context);
 
-        const perfData = readSavedPerfData(configOption);
+        const perfData = readSavedPerfData(Harness.configOption);
         context.describe = addSuite as Mocha.SuiteFunction;
         context.it = addSuite as Mocha.TestFunction;
 
@@ -616,11 +616,11 @@ export function start() {
         }
     }
 
-    if (runUnitTests) {
+    if (Harness.runUnitTests) {
         shimDiscoveryInterface(global);
     }
     else {
-        shimNoopTestInterface(global);
+        Harness.Parallel.shimNoopTestInterface(global);
     }
 
     // eslint-disable-next-line no-restricted-globals

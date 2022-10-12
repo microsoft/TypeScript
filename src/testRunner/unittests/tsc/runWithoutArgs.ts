@@ -1,24 +1,24 @@
 namespace ts {
 describe("unittests:: tsc:: runWithoutArgs::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
-        fs: () => loadProjectFromFiles({}),
+        fs: () => ts.loadProjectFromFiles({}),
         commandLineArgs: [],
         environmentVariables: { TS_TEST_TERMINAL_WIDTH: "120" }
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host can't provide terminal width",
-        fs: () => loadProjectFromFiles({}),
+        fs: () => ts.loadProjectFromFiles({}),
         commandLineArgs: [],
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "does not add color when NO_COLOR is set",
-        fs: () => loadProjectFromFiles({}),
+        fs: () => ts.loadProjectFromFiles({}),
         commandLineArgs: [],
         environmentVariables: { NO_COLOR: "true" }
     });

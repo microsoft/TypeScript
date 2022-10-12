@@ -1,47 +1,47 @@
 namespace ts {
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
-    function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic[] }) {
-        const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+    function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: ts.Diagnostic[] }) {
+        const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
         assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
     }
 
     function assertParseErrorWithExcludesKeyword(jsonText: string) {
         {
-            const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-            const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "tests/cases/unittests");
+            const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+            const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
         {
-            const parsed = parseJsonText("/apath/tsconfig.json", jsonText);
-            const parsedCommand = parseJsonSourceFileConfigFileContent(parsed, sys, "tests/cases/unittests");
+            const parsed = ts.parseJsonText("/apath/tsconfig.json", jsonText);
+            const parsedCommand = ts.parseJsonSourceFileConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
     }
 
     function getParsedCommandJson(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
-        const parsed = parseConfigFileTextToJson(configFileName, jsonText);
+        const parsed = ts.parseConfigFileTextToJson(configFileName, jsonText);
         const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
-        return parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
+        const host: ts.ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
+        return ts.parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
     }
 
     function getParsedCommandJsonNode(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
-        const parsed = parseJsonText(configFileName, jsonText);
+        const parsed = ts.parseJsonText(configFileName, jsonText);
         const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
-        return parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
+        const host: ts.ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
+        return ts.parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
     }
 
     function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
         {
             const parsed = getParsedCommandJson(jsonText, configFileName, basePath, allFileList);
-            assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
+            assert.isTrue(ts.arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
         }
         {
             const parsed = getParsedCommandJsonNode(jsonText, configFileName, basePath, allFileList);
-            assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
+            assert.isTrue(ts.arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
         }
     }
 
@@ -140,9 +140,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("returns object with error when json is invalid", () => {
-        const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
+        const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
         assert.deepEqual(parsed.config, {});
-        const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
+        const expected = ts.createCompilerDiagnostic(ts.Diagnostics._0_expected, "{");
         const error = parsed.error!;
         assert.equal(error.messageText, expected.messageText);
         assert.equal(error.category, expected.category);
@@ -268,9 +268,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 }
                 "files": ["file1.ts"]
             }`;
-        const result = parseJsonText("config.json", content);
+        const result = ts.parseJsonText("config.json", content);
         const diagnostics = result.parseDiagnostics;
-        const configJsonObject = convertToObject(result, diagnostics);
+        const configJsonObject = ts.convertToObject(result, diagnostics);
         const expectedResult = {
             compilerOptions: {
                 allowJs: true,
@@ -290,7 +290,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for empty files list when no references are provided", () => {
@@ -302,7 +302,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("does not generate errors for empty files list when one or more references are provided", () => {
@@ -314,7 +314,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for directory with no .ts files", () => {
@@ -324,7 +324,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.js"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -338,7 +338,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             [],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -350,7 +350,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -365,7 +365,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -395,7 +395,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+            ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
             /*noLocation*/ true);
     });
 
@@ -409,26 +409,26 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+            ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
             /*noLocation*/ true);
     });
 
     it("parses wildcard directories even when parent directories have dots", () => {
-        const parsed = parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
+        const parsed = ts.parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
             include: ["src"]
         }));
 
-        const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "/foo.bar");
-        assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo.bar/src": WatchDirectoryFlags.Recursive });
+        const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "/foo.bar");
+        assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo.bar/src": ts.WatchDirectoryFlags.Recursive });
     });
 
     it("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => {
-        const parsed = parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
+        const parsed = ts.parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
             include: ["./", "./**/*.json"]
         }));
 
-        const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "/foo");
-        assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo": WatchDirectoryFlags.Recursive });
+        const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "/foo");
+        assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo": ts.WatchDirectoryFlags.Recursive });
     });
 });
 }

@@ -5,13 +5,13 @@ export const enum CompilerTestType {
     Test262
 }
 
-interface CompilerFileBasedTest extends FileBasedTest {
+interface CompilerFileBasedTest extends Harness.FileBasedTest {
     readonly content?: string;
 }
 
-export class CompilerBaselineRunner extends RunnerBase {
+export class CompilerBaselineRunner extends Harness.RunnerBase {
     private basePath = "tests/cases";
-    private testSuiteName: TestRunnerKind;
+    private testSuiteName: Harness.TestRunnerKind;
     private emit: boolean;
 
     public options: string | undefined;
@@ -50,7 +50,7 @@ export class CompilerBaselineRunner extends RunnerBase {
             });
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
-            const files = this.tests.length > 0 ? this.tests : IO.enumerateTestFiles(this);
+            const files = this.tests.length > 0 ? this.tests : Harness.IO.enumerateTestFiles(this);
             files.forEach(test => {
                 const file = typeof test === "string" ? test : test.file;
                 this.checkTestCodeOutput(vpath.normalizeSeparators(file), typeof test === "string" ? CompilerTest.getConfigurations(test) : test);
@@ -61,7 +61,7 @@ export class CompilerBaselineRunner extends RunnerBase {
     public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
         if (test && ts.some(test.configurations)) {
             test.configurations.forEach(configuration => {
-                describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
+                describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${Harness.getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
                     this.runSuite(fileName, test, configuration);
                 });
             });
@@ -73,7 +73,7 @@ export class CompilerBaselineRunner extends RunnerBase {
         }
     }
 
-    private runSuite(fileName: string, test?: CompilerFileBasedTest, configuration?: FileBasedTestConfiguration) {
+    private runSuite(fileName: string, test?: CompilerFileBasedTest, configuration?: Harness.FileBasedTestConfiguration) {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
@@ -81,7 +81,7 @@ export class CompilerBaselineRunner extends RunnerBase {
             let payload;
             if (test && test.content) {
                 const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
-                payload = TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
+                payload = Harness.TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
             }
             compilerTest = new CompilerTest(fileName, payload, configuration);
         });
@@ -149,18 +149,18 @@ class CompilerTest {
     private fileName: string;
     private justName: string;
     private configuredName: string;
-    private lastUnit: TestCaseParser.TestUnitData;
-    private harnessSettings: TestCaseParser.CompilerSettings;
+    private lastUnit: Harness.TestCaseParser.TestUnitData;
+    private harnessSettings: Harness.TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
     private result: compiler.CompilationResult;
     private options: ts.CompilerOptions;
-    private tsConfigFiles: Compiler.TestFile[];
+    private tsConfigFiles: Harness.Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line
-    private toBeCompiled: Compiler.TestFile[];
+    private toBeCompiled: Harness.Compiler.TestFile[];
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
-    private otherFiles: Compiler.TestFile[];
+    private otherFiles: Harness.Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+    constructor(fileName: string, testCaseContent?: Harness.TestCaseParser.TestCaseContent, configurationOverrides?: Harness.TestCaseParser.CompilerSettings) {
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
         this.configuredName = this.justName;
@@ -185,7 +185,7 @@ class CompilerTest {
         const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
 
         if (testCaseContent === undefined) {
-            testCaseContent = TestCaseParser.makeUnitsFromTest(IO.readFile(fileName)!, fileName, rootDir);
+            testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(Harness.IO.readFile(fileName)!, fileName, rootDir);
         }
 
         if (configurationOverrides) {
@@ -237,7 +237,7 @@ class CompilerTest {
             tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
         }
 
-        this.result = Compiler.compileFiles(
+        this.result = Harness.Compiler.compileFiles(
             this.toBeCompiled,
             this.otherFiles,
             this.harnessSettings,
@@ -251,15 +251,15 @@ class CompilerTest {
 
     public static getConfigurations(file: string): CompilerFileBasedTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
-        const content = IO.readFile(file)!;
-        const settings = TestCaseParser.extractCompilerSettings(content);
-        const configurations = getFileBasedTestConfigurations(settings, CompilerTest.varyBy);
+        const content = Harness.IO.readFile(file)!;
+        const settings = Harness.TestCaseParser.extractCompilerSettings(content);
+        const configurations = Harness.getFileBasedTestConfigurations(settings, CompilerTest.varyBy);
         return { file, configurations, content };
     }
 
     public verifyDiagnostics() {
         // check errors
-        Compiler.doErrorBaseline(
+        Harness.Compiler.doErrorBaseline(
             this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
@@ -268,7 +268,7 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
                 JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
@@ -280,13 +280,13 @@ class CompilerTest {
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                 ? null // eslint-disable-line no-null/no-null
                 : record;
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
+            Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
 
     public verifyJavaScriptOutput() {
         if (this.hasNonDtsFiles) {
-            Compiler.doJsEmitBaseline(
+            Harness.Compiler.doJsEmitBaseline(
                 this.configuredName,
                 this.fileName,
                 this.options,
@@ -299,7 +299,7 @@ class CompilerTest {
     }
 
     public verifySourceMapOutput() {
-        Compiler.doSourcemapBaseline(
+        Harness.Compiler.doSourcemapBaseline(
             this.configuredName,
             this.options,
             this.result,
@@ -318,7 +318,7 @@ class CompilerTest {
             return;
         }
 
-        Compiler.doTypeAndSymbolBaseline(
+        Harness.Compiler.doTypeAndSymbolBaseline(
             this.configuredName,
             this.result.program!,
             this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
@@ -332,11 +332,11 @@ class CompilerTest {
 
     private makeUnitName(name: string, root: string) {
         const path = ts.toPath(name, root, ts.identity);
-        const pathStart = ts.toPath(IO.getCurrentDirectory(), "", ts.identity);
+        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", ts.identity);
         return pathStart ? path.replace(pathStart, "/") : path;
     }
 
-    private createHarnessTestFile(lastUnit: TestCaseParser.TestUnitData, rootDir: string, unitName?: string): Compiler.TestFile {
+    private createHarnessTestFile(lastUnit: Harness.TestCaseParser.TestUnitData, rootDir: string, unitName?: string): Harness.Compiler.TestFile {
         return { unitName: unitName || this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions };
     }
 }

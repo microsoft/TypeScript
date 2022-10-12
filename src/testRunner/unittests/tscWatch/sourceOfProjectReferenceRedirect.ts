@@ -1,28 +1,28 @@
 namespace ts.tscWatch {
-import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
+import getFileFromProject = ts.TestFSWithWatch.getTsBuildProjectFile;
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {
-        files: readonly TestFSWithWatch.FileOrFolderOrSymLink[];
+        files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[];
         config: string;
         subScenario: string;
     }
 
     function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
-            createWatchedSystem(files),
+        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(
+            ts.tscWatch.createWatchedSystem(files),
             alreadyBuilt ? (sys, originalRead) => {
-                solutionBuildWithBaseline(sys, [config], originalRead);
+                ts.tscWatch.solutionBuildWithBaseline(sys, [config], originalRead);
                 sys.clearOutput();
             } : undefined
         );
-        const host = createWatchCompilerHostOfConfigFileForBaseline({
+        const host = ts.tscWatch.createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config,
             system: sys,
             cb,
         });
-        host.useSourceOfProjectReferenceRedirect = returnTrue;
-        const watch = createWatchProgram(host);
-        runWatchBaseline({
+        host.useSourceOfProjectReferenceRedirect = ts.returnTrue;
+        const watch = ts.createWatchProgram(host);
+        ts.tscWatch.runWatchBaseline({
             scenario: "sourceOfProjectReferenceRedirect",
             subScenario: `${subScenario}${alreadyBuilt ? " when solution is already built" : ""}`,
             commandLineArgs: ["--w", "--p", config],
@@ -30,7 +30,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             baseline,
             oldSnap,
             getPrograms,
-            changes: emptyArray,
+            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     }
@@ -55,7 +55,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             const indexTs = getFileFromProject("demo", "animals/index.ts");
             const animalsConfig = getFileFromProject("demo", "animals/tsconfig.json");
             return {
-                files: [{ path: libFile.path, content: libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
+                files: [{ path: ts.tscWatch.libFile.path, content: ts.libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
                 config: animalsConfig.path,
                 subScenario: "with simple project"
             };
@@ -64,11 +64,11 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
 
     describe("when references are monorepo like with symlinks", () => {
         interface Packages {
-            bPackageJson: File;
-            aTest: File;
-            bFoo: File;
-            bBar: File;
-            bSymlink: SymLink;
+            bPackageJson: ts.tscWatch.File;
+            aTest: ts.tscWatch.File;
+            bFoo: ts.tscWatch.File;
+            bBar: ts.tscWatch.File;
+            bSymlink: ts.tscWatch.SymLink;
             subScenario: string;
         }
         function verifySymlinkScenario(packages: () => Packages) {
@@ -80,22 +80,22 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             });
         }
 
-        function verifySymlinkScenarioWorker(packages: () => Packages, extraOptions: CompilerOptions) {
+        function verifySymlinkScenarioWorker(packages: () => Packages, extraOptions: ts.CompilerOptions) {
             verifyScenario(() => {
                 const { bPackageJson, aTest, bFoo, bBar, bSymlink, subScenario } = packages();
                 const aConfig = config("A", extraOptions, ["../B"]);
                 const bConfig = config("B", extraOptions);
                 return {
-                    files: [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
+                    files: [ts.tscWatch.libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
                     config: aConfig.path,
                     subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`
                 };
             });
         }
 
-        function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
+        function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): ts.tscWatch.File {
             return {
-                path: `${projectRoot}/packages/${packageName}/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "lib",
@@ -109,9 +109,9 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             };
         }
 
-        function file(packageName: string, fileName: string, content: string): File {
+        function file(packageName: string, fileName: string, content: string): ts.tscWatch.File {
             return {
-                path: `${projectRoot}/packages/${packageName}/src/${fileName}`,
+                path: `${ts.tscWatch.projectRoot}/packages/${packageName}/src/${fileName}`,
                 content
             };
         }
@@ -120,7 +120,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             describe("when packageJson has types field", () => {
                 verifySymlinkScenario(() => ({
                     bPackageJson: {
-                        path: `${projectRoot}/packages/B/package.json`,
+                        path: `${ts.tscWatch.projectRoot}/packages/B/package.json`,
                         content: JSON.stringify({
                             main: "lib/index.js",
                             types: "lib/index.d.ts"
@@ -134,8 +134,8 @@ bar();
                     bFoo: file("B", "index.ts", `export function foo() { }`),
                     bBar: file("B", "bar.ts", `export function bar() { }`),
                     bSymlink: {
-                        path: `${projectRoot}/node_modules/${scope}b`,
-                        symLink: `${projectRoot}/packages/B`
+                        path: `${ts.tscWatch.projectRoot}/node_modules/${scope}b`,
+                        symLink: `${ts.tscWatch.projectRoot}/packages/B`
                     },
                     subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
                 }));
@@ -144,7 +144,7 @@ bar();
             describe("when referencing file from subFolder", () => {
                 verifySymlinkScenario(() => ({
                     bPackageJson: {
-                        path: `${projectRoot}/packages/B/package.json`,
+                        path: `${ts.tscWatch.projectRoot}/packages/B/package.json`,
                         content: "{}"
                     },
                     aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
@@ -155,8 +155,8 @@ bar();
                     bFoo: file("B", "foo.ts", `export function foo() { }`),
                     bBar: file("B", "bar/foo.ts", `export function bar() { }`),
                     bSymlink: {
-                        path: `${projectRoot}/node_modules/${scope}b`,
-                        symLink: `${projectRoot}/packages/B`
+                        path: `${ts.tscWatch.projectRoot}/node_modules/${scope}b`,
+                        symLink: `${ts.tscWatch.projectRoot}/packages/B`
                     },
                     subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`
                 }));

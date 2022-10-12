@@ -1,8 +1,8 @@
 namespace ts.projectSystem {
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
-        const libProjectLocation = `${tscWatch.projectRoot}/lib`;
-        const typeLib: File = {
+        const libProjectLocation = `${ts.tscWatch.projectRoot}/lib`;
+        const typeLib: ts.projectSystem.File = {
             path: `${libProjectLocation}/@types/UpperCasePackage/index.d.ts`,
             content: `declare class BrokenTest {
     constructor(name: string, width: number, height: number, onSelect: Function);
@@ -10,7 +10,7 @@ describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     SelectedFile: string;
 }`
         };
-        const appLib: File = {
+        const appLib: ts.projectSystem.File = {
             path: `${libProjectLocation}/@app/lib/index.d.ts`,
             content: `/// <reference types="UpperCasePackage" />
 declare class TestLib {
@@ -19,8 +19,8 @@ declare class TestLib {
     test(): void;
 }`
         };
-        const testProjectLocation = `${tscWatch.projectRoot}/test`;
-        const testFile: File = {
+        const testProjectLocation = `${ts.tscWatch.projectRoot}/test`;
+        const testFile: ts.projectSystem.File = {
             path: `${testProjectLocation}/test.ts`,
             content: `class TestClass1 {
 
@@ -35,7 +35,7 @@ declare class TestLib {
     }
 }`
         };
-        const testConfig: File = {
+        const testConfig: ts.projectSystem.File = {
             path: `${testProjectLocation}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -45,24 +45,24 @@ declare class TestLib {
             })
         };
 
-        const files = [typeLib, appLib, testFile, testConfig, libFile];
-        const host = createServerHost(files);
-        const service = createProjectService(host);
+        const files = [typeLib, appLib, testFile, testConfig, ts.projectSystem.libFile];
+        const host = ts.projectSystem.createServerHost(files);
+        const service = ts.projectSystem.createProjectService(host);
         service.openClientFile(testFile.path);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
+        ts.projectSystem.checkNumberOfProjects(service, { configuredProjects: 1 });
         const project = service.configuredProjects.get(testConfig.path)!;
-        checkProjectActualFiles(project, files.map(f => f.path));
+        ts.projectSystem.checkProjectActualFiles(project, files.map(f => f.path));
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.checkTimeoutQueueLengthAndRun(2);
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
-        const projectPath = `${tscWatch.projectRoot}/background`;
-        const file: File = {
+        const projectPath = `${ts.tscWatch.projectRoot}/background`;
+        const file: ts.projectSystem.File = {
             path: `${projectPath}/a.ts`,
             content: "let x = 10;"
         };
-        const tsconfig: File = {
+        const tsconfig: ts.projectSystem.File = {
             path: `${projectPath}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -72,13 +72,13 @@ declare class TestLib {
                 }
             })
         };
-        const filesystem: File = {
-            path: `${tscWatch.projectRoot}/typedefs/filesystem.d.ts`,
+        const filesystem: ts.projectSystem.File = {
+            path: `${ts.tscWatch.projectRoot}/typedefs/filesystem.d.ts`,
             content: `interface LocalFileSystem { someProperty: string; }`
         };
-        const files = [file, tsconfig, filesystem, libFile];
-        const host = createServerHost(files);
-        const service = createProjectService(host);
+        const files = [file, tsconfig, filesystem, ts.projectSystem.libFile];
+        const host = ts.projectSystem.createServerHost(files);
+        const service = ts.projectSystem.createProjectService(host);
         service.openClientFile(file.path);
     });
 });
