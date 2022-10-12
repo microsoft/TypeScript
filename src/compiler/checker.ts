@@ -13185,6 +13185,13 @@ namespace ts {
                     }
                 }
 
+                if (isInJSFile(declaration)) {
+                    const thisTag = getJSDocThisTag(declaration);
+                    if (thisTag && thisTag.typeExpression) {
+                        thisParameter = createSymbolWithType(createSymbol(SymbolFlags.FunctionScopedVariable, InternalSymbolName.This), getTypeFromTypeNode(thisTag.typeExpression));
+                    }
+                }
+
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol))
                     : undefined;
