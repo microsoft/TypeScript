@@ -13924,8 +13924,24 @@ namespace ts {
                 // accessible--which in turn may lead to a large structural expansion of the type when generating
                 // a .d.ts file. See #43622 for an example.
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                const newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
+                let newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
+                let aliasTypeArguments: Type[] | undefined;
+                if (newAliasSymbol) {
+                    aliasTypeArguments = getTypeArgumentsForAliasSymbol(newAliasSymbol);
+                }
+                else if (isTypeReferenceType(node)) {
+                    const aliasSymbol = resolveTypeReferenceName(node, SymbolFlags.Alias, /*ignoreErrors*/ true);
+                    // refers to an alias import/export/reexport - by making sure we use the target as an aliasSymbol, 
+                    // we ensure the exported symbol is used to refer to the type when it's reserialized later
+                    if (aliasSymbol && aliasSymbol !== unknownSymbol) {
+                        const resolved = resolveAlias(aliasSymbol);
+                        if (resolved && resolved.flags & SymbolFlags.TypeAlias) {
+                            newAliasSymbol = resolved;
+                            aliasTypeArguments = typeArgumentsFromTypeReferenceNode(node);
+                        }
+                    }
+                }
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, aliasTypeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
