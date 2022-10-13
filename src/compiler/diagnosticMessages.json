@@ -6687,6 +6687,14 @@
         "category": "Message",
         "code": 90058
     },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90059
+    },
+    "Export all referenced locals": {
+        "category": "Message",
+        "code": 90060
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
