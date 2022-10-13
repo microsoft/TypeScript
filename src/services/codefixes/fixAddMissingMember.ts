@@ -264,10 +264,6 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function isSourceFileFromLibrary(program: Program, node: SourceFile) {
-        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
-    }
-
     function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: TypeLikeDeclarationInfo): CodeFixAction[] | undefined {
         return info.isJSFile ? singleElementArray(createActionForAddMissingMemberInJavascriptFile(context, info)) :
             createActionsForAddMissingMemberInTypeScriptFile(context, info);
