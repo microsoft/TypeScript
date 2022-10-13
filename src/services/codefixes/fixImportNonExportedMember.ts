@@ -13,7 +13,7 @@ namespace ts.codefix {
             const info = getInfo(sourceFile, span.start, program);
             if (info === undefined) return undefined;
 
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, info));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, program, info));
             return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier], fixId, Diagnostics.Export_all_referenced_locals)];
         },
         getAllCodeActions(context) {
@@ -44,11 +44,11 @@ namespace ts.codefix {
                 exports.forEach((moduleExports, moduleSourceFile) => {
                     const exportDeclaration = tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ true);
                     if (exportDeclaration && exportDeclaration.isTypeOnly) {
-                        doChanges(changes, moduleSourceFile, moduleExports.typeOnlyExports, exportDeclaration);
-                        doChanges(changes, moduleSourceFile, moduleExports.exports, tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ false));
+                        doChanges(changes, program, moduleSourceFile, moduleExports.typeOnlyExports, exportDeclaration);
+                        doChanges(changes, program, moduleSourceFile, moduleExports.exports, tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ false));
                     }
                     else {
-                        doChanges(changes, moduleSourceFile, [...moduleExports.exports, ...moduleExports.typeOnlyExports], exportDeclaration);
+                        doChanges(changes, program, moduleSourceFile, [...moduleExports.exports, ...moduleExports.typeOnlyExports], exportDeclaration);
                     }
                 });
             }));
@@ -103,25 +103,27 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function doChange(changes: textChanges.ChangeTracker, { exportName, node, moduleSourceFile }: Info) {
+    function doChange(changes: textChanges.ChangeTracker, program: Program, { exportName, node, moduleSourceFile }: Info) {
         const exportDeclaration = tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly);
         if (exportDeclaration) {
-            updateExport(changes, moduleSourceFile, exportDeclaration, [exportName]);
+            updateExport(changes, program, moduleSourceFile, exportDeclaration, [exportName]);
         }
         else if (canHaveExportModifier(node)) {
             changes.insertExportModifier(moduleSourceFile, node);
         }
         else {
-            createExport(changes, moduleSourceFile, [exportName]);
+            createExport(changes, program, moduleSourceFile, [exportName]);
         }
     }
 
-    function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleExports: ExportName[], node: ExportDeclaration | undefined) {
-        if (node) {
-            updateExport(changes, sourceFile, node, moduleExports);
-        }
-        else {
-            createExport(changes, sourceFile, moduleExports);
+    function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, moduleExports: ExportName[], node: ExportDeclaration | undefined) {
+        if (length(moduleExports)) {
+            if (node) {
+                updateExport(changes, program, sourceFile, node, moduleExports);
+            }
+            else {
+                createExport(changes, program, sourceFile, moduleExports);
+            }
         }
     }
 
@@ -131,23 +133,23 @@ namespace ts.codefix {
         return findLast(sourceFile.statements, predicate);
     }
 
-    function updateExport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
+    function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
         const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
-        const exportNames = map(names, n => ({ ...n, isTypeOnly: node.isTypeOnly ? false : n.isTypeOnly }));
+        const allowTypeModifier = !node.isTypeOnly && !!(program.getCompilerOptions().isolatedModules || find(namedExports, e => e.isTypeOnly));
         changes.replaceNode(sourceFile, node,
             factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
                 factory.createNamedExports(
-                    factory.createNodeArray([...namedExports, ...createExportSpecifiers(exportNames)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                    factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
     }
 
-    function createExport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, names: ExportName[]) {
+    function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
         changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
             factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
-                factory.createNamedExports(createExportSpecifiers(names)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+                factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ !!program.getCompilerOptions().isolatedModules)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
     }
 
-    function createExportSpecifiers(names: ExportName[]) {
-        return factory.createNodeArray(map(names, n => factory.createExportSpecifier(n.isTypeOnly, /*propertyName*/ undefined, n.node)));
+    function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {
+        return factory.createNodeArray(map(names, n => factory.createExportSpecifier(allowTypeModifier && n.isTypeOnly, /*propertyName*/ undefined, n.node)));
     }
 
     function getNodeOfSymbol(symbol: Symbol) {

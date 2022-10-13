@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
 // @module: esnext
+// @isolatedModules: true
 // @filename: /a.ts
-////const a = 1;
-////type T = number;
-////export { a };
+////type T = {};
+////export {};
 
 // @filename: /b.ts
 ////import { T } from "./a";
@@ -15,8 +15,7 @@ verify.codeFix({
     index: 0,
     newFileContent: {
         "/a.ts":
-`const a = 1;
-type T = number;
-export { a, T };`,
+`type T = {};
+export { type T };`,
     }
 });

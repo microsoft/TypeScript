@@ -64,7 +64,7 @@ export { b };
 
 type T5 = number;
 type T6 = number;
-export { a, c, type T5 };`,
+export { a, c, T5 };`,
 
         "/d.ts":
 `export const a = 1;
