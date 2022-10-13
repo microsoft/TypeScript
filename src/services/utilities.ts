@@ -1911,7 +1911,7 @@ namespace ts {
     }
     // TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
     export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
-        return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
+        return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
     export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {

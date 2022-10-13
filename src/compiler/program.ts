@@ -3657,7 +3657,7 @@ namespace ts {
                 createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
             }
 
-            if (options.allowImportingTsExtensions && !(getEmitModuleResolutionKind(options) === ModuleResolutionKind.Minimal && (options.noEmit || options.emitDeclarationOnly))) {
+            if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
                 createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_minimal_and_either_noEmit_or_emitDeclarationOnly_is_set);
             }
 

@@ -32,10 +32,7 @@ namespace ts.moduleSpecifiers {
                 importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
                 RelativePreference.Shortest,
             getAllowedEndingsInPrefererredOrder: syntaxImpliedNodeFormat => {
-                if (syntaxImpliedNodeFormat === ModuleKind.ESNext ||
-                    getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal ||
-                    isFormatRequiringExtensions()
-                ) {
+                if (syntaxImpliedNodeFormat === ModuleKind.ESNext || isFormatRequiringExtensions()) {
                     if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                         return [Ending.TsExtension, Ending.JsExtension];
                     }
@@ -71,8 +68,6 @@ namespace ts.moduleSpecifiers {
 
         function isFormatRequiringExtensions() {
             switch (getEmitModuleResolutionKind(compilerOptions)) {
-                case ModuleResolutionKind.Minimal:
-                    return true;
                 case ModuleResolutionKind.Node16:
                 case ModuleResolutionKind.NodeNext:
                     return getImpliedNodeFormatForFile(
@@ -765,7 +760,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile , host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ModuleKind.ESNext | ModuleKind.CommonJS): string | undefined {
-        if (!host.fileExists || !host.readFile || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Minimal) {
+        if (!host.fileExists || !host.readFile) {
             return undefined;
         }
         const parts: NodeModulePathParts = getNodeModulePathParts(path)!;

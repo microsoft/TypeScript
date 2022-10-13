@@ -663,7 +663,7 @@ namespace ts.codefix {
         const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
         const getChecker = createGetChecker(program, host);
         const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-        const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution) || moduleResolution === ModuleResolutionKind.Minimal;
+        const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
         const getModuleSpecifiers = fromCacheOnly
             ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
             : (moduleSymbol: Symbol, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);

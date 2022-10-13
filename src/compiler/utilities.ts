@@ -6371,6 +6371,10 @@ namespace ts {
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
     }
 
+    export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
+        return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
+    }
+
     export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
         let moduleResolution = compilerOptions.moduleResolution;
         if (moduleResolution === undefined) {

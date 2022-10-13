@@ -25,10 +25,6 @@ namespace ts {
         return r && { path: r.path, extension: r.ext, packageId, resolvedUsingTsExtension: r.resolvedUsingTsExtension };
     }
 
-    function createLoaderWithNoPackageId<P extends any[]>(loader: (...args: P) => PathAndExtension | undefined): (...args: P) => Resolved | undefined {
-        return (...args) => noPackageId(loader(...args));
-    }
-
     function noPackageId(r: PathAndExtension | undefined): Resolved | undefined {
         return withPackageId(/*packageInfo*/ undefined, r);
     }
@@ -1033,9 +1029,6 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                     break;
-                case ModuleResolutionKind.Minimal:
-                    result = minimalModuleNameResolver(moduleName, containingFile, compilerOptions, host);
-                    break;
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
@@ -1577,7 +1570,7 @@ namespace ts {
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         if (hasJSFileExtension(candidate) ||
             (state.compilerOptions.resolveJsonModule && fileExtensionIs(candidate, Extension.Json)) ||
-            (shouldResolveTsExtension(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat))
+            (moduleResolutionSupportsResolvingTsExtensions(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat))
         ) {
             const extensionless = removeFileExtension(candidate);
             const extension = candidate.substring(extensionless.length);
@@ -1641,7 +1634,7 @@ namespace ts {
                     case Extension.Ts:
                     case Extension.Tsx:
                     case Extension.Dts:
-                        if (shouldResolveTsExtension(state.compilerOptions)) {
+                        if (moduleResolutionSupportsResolvingTsExtensions(state.compilerOptions)) {
                             return tryExtension(originalExtension, /*resolvedUsingTsExtension*/ true);
                         }
                         // falls through
@@ -2671,54 +2664,14 @@ namespace ts {
         }
     }
 
-    export function minimalModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-        const traceEnabled = isTraceEnabled(compilerOptions, host);
-        const failedLookupLocations: string[] = [];
-        const affectingLocations: string[] = [];
-        const containingDirectory = getDirectoryPath(containingFile);
-        const diagnostics: Diagnostic[] = [];
-        const state: ModuleResolutionState = {
-            compilerOptions,
-            host,
-            traceEnabled,
-            failedLookupLocations,
-            affectingLocations,
-            packageJsonInfoCache: undefined,
-            features: NodeResolutionFeatures.None,
-            conditions: [],
-            requestContainingDirectory: containingDirectory,
-            reportDiagnostic: diag => void diagnostics.push(diag),
-        };
-
-        const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-        return createResolvedModuleWithFailedLookupLocations(
-            tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript),
-            /*isExternalLibraryImport*/ false,
-            failedLookupLocations,
-            affectingLocations,
-            diagnostics,
-            state.resultFromCache);
-
-        function tryResolve(extensions: Extensions) {
-            const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, createLoaderWithNoPackageId(loadModuleFromFileNoImplicitExtensions), state);
-            if (resolvedUsingSettings) {
-                return resolvedUsingSettings;
-            }
-            const resolvedRelative = loadModuleFromFileNoImplicitExtensions(extensions, candidate, /*onlyRecordFailures*/ false, state);
-            if (resolvedRelative) {
-                return noPackageId(resolvedRelative);
-            }
-        }
-    }
-
-    export function shouldResolveTsExtension(compilerOptions: CompilerOptions) {
-      return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
+    export function moduleResolutionSupportsResolvingTsExtensions(_compilerOptions: CompilerOptions) {
+      return false;
     }
 
     // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
     // so this function doesn't check them to avoid propagating errors.
     export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
-        return shouldResolveTsExtension(compilerOptions) && (
+        return moduleResolutionSupportsResolvingTsExtensions(compilerOptions) && (
             !!compilerOptions.allowImportingTsExtensions ||
             fromFileName && isDeclarationFileName(fromFileName));
     }

@@ -377,11 +377,8 @@ namespace ts.Completions.StringCompletions {
             : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, getIncludeExtensionOption(), typeChecker);
 
         function getIncludeExtensionOption() {
-            const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-            if (moduleResolution === ModuleResolutionKind.Minimal) {
-                return shouldAllowImportingTsExtension(compilerOptions)
-                    ? IncludeExtensionsOption.Include
-                    : IncludeExtensionsOption.ModuleSpecifierCompletion;
+            if (shouldAllowImportingTsExtension(compilerOptions)) {
+                return IncludeExtensionsOption.Include;
             }
             const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
             return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext
@@ -525,10 +522,9 @@ namespace ts.Completions.StringCompletions {
         const directories = tryGetDirectories(host, baseDirectory);
 
         if (directories) {
-            const moduleResolution = getEmitModuleResolutionKind(host.getCompilationSettings());
             for (const directory of directories) {
                 const directoryName = getBaseFileName(normalizePath(directory));
-                if (directoryName !== "@types" && !(directoryName === "node_modules" && moduleResolution === ModuleResolutionKind.Minimal)) {
+                if (directoryName !== "@types") {
                     result.add(directoryResult(directoryName));
                 }
             }
@@ -656,9 +652,7 @@ namespace ts.Completions.StringCompletions {
             result.add(nameAndKind(ambientName, ScriptElementKind.externalModuleName, /*extension*/ undefined));
         }
 
-        if (moduleResolution !== ModuleResolutionKind.Minimal) {
-            getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
-        }
+        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
 
         if (moduleResolutionUsesNodeModules(moduleResolution)) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.

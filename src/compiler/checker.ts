@@ -3619,22 +3619,7 @@ namespace ts {
                     error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
                 }
 
-                if (moduleResolutionKind === ModuleResolutionKind.Minimal && pathContainsNodeModules(moduleReference)) {
-                    // A relative import into node_modules is a problem for a few reasons:
-                    //   1. Portability - if the code gets published as a library, it will very likely break
-                    //   2. It's unclear how we should resolve types. By typical relative import rules, we
-                    //      would ignore package.json fields that tell us where to find types and would have
-                    //      no special behavior linking up node_modules/@types with their implementations -
-                    //      we would only find .d.ts files as siblings of .js files. Any package that puts
-                    //      their types in a separate directory, or is typed by @types, would be broken.
-                    //      Some of these redirections would be safe to do, but others might reflect
-                    //      Node-specific resolution features that would only work with non-relative imports.
-                    // The module resolver still returns a result, because it's possible for a module in
-                    // node_modules to end up in the program, and module specifier generation assumes that it
-                    // is always possible to generate a module specifier, even if it also generates a diagnostic.
-                    error(errorNode, Diagnostics.Relative_imports_into_node_modules_are_not_allowed);
-                }
-                else if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
+                if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
                     const importOrExport =
                         findAncestor(location, isImportDeclaration)?.importClause ||
                         findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
@@ -3764,10 +3749,7 @@ namespace ts {
                     const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
                     const resolutionIsNode16OrNext = moduleResolutionKind === ModuleResolutionKind.Node16 ||
                         moduleResolutionKind === ModuleResolutionKind.NodeNext;
-                    if (moduleResolutionKind === ModuleResolutionKind.Minimal && pathContainsNodeModules(moduleReference)) {
-                        error(errorNode, Diagnostics.Relative_imports_into_node_modules_are_not_allowed);
-                    }
-                    else if (tsExtension) {
+                    if (tsExtension) {
                         errorOnTSExtensionImport(tsExtension);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
@@ -3806,7 +3788,7 @@ namespace ts {
                  * Direct users to import source with .js extension if outputting an ES module.
                  * @see https://github.com/microsoft/TypeScript/issues/42151
                  */
-                if (moduleKind >= ModuleKind.ES2015 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal) {
+                if (emitModuleKindIsNonNodeESM(moduleKind) || mode === ModuleKind.ESNext) {
                     return importSourceWithoutExtension + (tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js");
                 }
                 return importSourceWithoutExtension;

@@ -193,17 +193,12 @@ namespace ts.Completions {
         cb: (context: ModuleSpecifierResolutionContext) => TReturn,
     ): TReturn {
         const start = timestamp();
-        const moduleResolution = getEmitModuleResolutionKind(program.getCompilerOptions());
         // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
         // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
         // relative path into node_modules), and we want to filter those completions out entirely.
-        // Under `--moduleResolution minimal`, we want to reject relative module specifiers into
-        // node_modules, so need to exhaust any other possibilities for how those can be referenced.
         // Import statement completions always need specifier resolution because the module specifier is
         // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-        const needsFullResolution = isForImportStatementCompletion
-            || moduleResolutionRespectsExports(moduleResolution)
-            || moduleResolution === ModuleResolutionKind.Minimal;
+        const needsFullResolution = isForImportStatementCompletion || moduleResolutionRespectsExports(getEmitModuleResolutionKind(program.getCompilerOptions()));
         let skippedAny = false;
         let ambientCount = 0;
         let resolvedCount = 0;

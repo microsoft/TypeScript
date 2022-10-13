@@ -3571,10 +3571,6 @@
         "category": "Error",
         "code": 2846
     },
-    "Relative imports into 'node_modules' are not allowed.": {
-        "category": "Error",
-        "code": 2847
-    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
