@@ -203,7 +203,7 @@ async function runDtsBundler(entrypoint, output) {
             "template-literal": false, // TODO(jakebailey): workaround for https://github.com/microsoft/TypeScript/issues/51072
         },
         // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-        minify: true,
+        minifyWhitespace: true,
         // keepNames: true,
         plugins: [
             {
