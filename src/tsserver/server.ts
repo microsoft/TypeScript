@@ -1,8 +1,9 @@
 import {
-    emptyArray, findArgument, hasArgument, initializeNodeSystem, initializeWebSystem, Logger, LogLevel, Msg,
-    ServerCancellationToken, StartSessionOptions,
+    emptyArray, findArgument, hasArgument, initializeNodeSystem, initializeWebSystem, Msg,
+    StartInput,
 } from "./_namespaces/ts.server";
-import { Debug, getNodeMajorVersion, LanguageServiceMode, setStackTraceLimit, sys, version } from "./_namespaces/ts";
+import { Debug, getNodeMajorVersion, setStackTraceLimit, sys, version } from "./_namespaces/ts";
+export * from "./_namespaces/ts";
 
 declare const addEventListener: any;
 declare const removeEventListener: any;
@@ -14,28 +15,7 @@ function findArgumentStringArray(argName: string): readonly string[] {
     return arg.split(",").filter(name => name !== "");
 }
 
-/** @internal */
-export function getLogLevel(level: string | undefined) {
-    if (level) {
-        const l = level.toLowerCase();
-        for (const name in LogLevel) {
-            if (isNaN(+name) && l === name.toLowerCase()) {
-                return LogLevel[name] as any as LogLevel;
-            }
-        }
-    }
-    return undefined;
-}
 
-/** @internal */
-export interface StartInput {
-    args: readonly string[];
-    logger: Logger;
-    cancellationToken: ServerCancellationToken;
-    serverMode: LanguageServiceMode | undefined;
-    unknownServerMode?: string;
-    startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) => void;
-}
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
     const syntaxOnly = hasArgument("--syntaxOnly");
 
