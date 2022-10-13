@@ -14,6 +14,11 @@ type C2 = { c: string };
 
 const ab2: A2 & B2 = {} as C2;  // Error
 
+enum E { A = "A" }
+
+let x: { nope?: any } = E.A;  // Error
+let y: { nope?: any } = "A";  // Error
+
 // Repros from #51043
 
 type OverridesInput = {

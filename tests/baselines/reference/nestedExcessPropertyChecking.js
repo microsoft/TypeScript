@@ -13,6 +13,11 @@ type C2 = { c: string };
 
 const ab2: A2 & B2 = {} as C2;  // Error
 
+enum E { A = "A" }
+
+let x: { nope?: any } = E.A;  // Error
+let y: { nope?: any } = "A";  // Error
+
 // Repros from #51043
 
 type OverridesInput = {
@@ -42,6 +47,12 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
 "use strict";
 var ab1 = {}; // Error
 var ab2 = {}; // Error
+var E;
+(function (E) {
+    E["A"] = "A";
+})(E || (E = {}));
+var x = E.A; // Error
+var y = "A"; // Error
 var foo1 = { variables: { overrides: false } }; // Error
 var foo2 = {
     variables: {

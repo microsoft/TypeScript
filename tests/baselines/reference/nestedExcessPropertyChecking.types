@@ -36,6 +36,23 @@ const ab2: A2 & B2 = {} as C2;  // Error
 >{} as C2 : C2
 >{} : {}
 
+enum E { A = "A" }
+>E : E
+>A : E.A
+>"A" : "A"
+
+let x: { nope?: any } = E.A;  // Error
+>x : { nope?: any; }
+>nope : any
+>E.A : E
+>E : typeof E
+>A : E
+
+let y: { nope?: any } = "A";  // Error
+>y : { nope?: any; }
+>nope : any
+>"A" : "A"
+
 // Repros from #51043
 
 type OverridesInput = {
