@@ -2941,8 +2941,7 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
         Node16 = 3,
-        NodeNext = 99,
-        Minimal = 100
+        NodeNext = 99
     }
     export enum ModuleDetectionKind {
         /**
@@ -5060,8 +5059,7 @@ declare namespace ts {
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations;
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    export function minimalModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
-    export function shouldResolveTsExtension(compilerOptions: CompilerOptions): boolean;
+    export function moduleResolutionSupportsResolvingTsExtensions(_compilerOptions: CompilerOptions): boolean;
     export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     export {};
 }
