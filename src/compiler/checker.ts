@@ -33204,23 +33204,23 @@ namespace ts {
                         const node = decorator.parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                         if (isClassLike(node.parent)) {
                             const targetType = getOrCreateTypeFromSignature(getSignatureFromDeclaration(node));
-    
+
                             // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
                             //                 evaluating all decorators.
                             const valueFinalType = targetType;
                             const thisFinalType = hasStaticModifier(node) ?
                                 getTypeOfSymbol(getSymbolOfNode(node.parent)) :
                                 getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
-    
+
                             const isStatic = hasStaticModifier(node);
                             const isPrivate = isPrivateIdentifier(node.name);
                             const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
-    
+
                             const contextType =
                                 isGetAccessorDeclaration(node) ? createClassGetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
                                 isSetAccessorDeclaration(node) ? createClassSetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
                                 createClassMethodESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
-    
+
                             const returnType = getUnionType([targetType, voidType]);
                             const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
                             const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
@@ -33233,22 +33233,22 @@ namespace ts {
                         const node = decorator.parent as PropertyDeclaration;
                         if (isClassLike(node.parent)) {
                             const targetType = getTypeOfNode(node);
-    
+
                             // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
                             //                 evaluating all decorators.
                             const valueFinalType = targetType;
                             const thisFinalType = hasStaticModifier(node) ?
                                 getTypeOfSymbol(getSymbolOfNode(node.parent)) :
                                 getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
-    
+
                             const isStatic = hasStaticModifier(node);
                             const isPrivate = isPrivateIdentifier(node.name);
                             const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
-    
+
                             const contextType =
                                 hasAccessorModifier(node) ? createClassAccessorESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
                                 createClassFieldESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
-    
+
                             const returnType =
                                 hasAccessorModifier(node) ? createClassAccessorESDecoratorReturnType(targetType) :
                                 createClassFieldESDecoratorReturnType(targetType);

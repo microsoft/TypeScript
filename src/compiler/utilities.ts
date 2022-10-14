@@ -5519,6 +5519,10 @@ namespace ts {
      * Moves the start position of a range past any decorators or modifiers.
      */
     export function moveRangePastModifiers(node: Node): TextRange {
+        if (isPropertyDeclaration(node) || isMethodDeclaration(node)) {
+            return moveRangePos(node, node.name.pos);
+        }
+
         const lastModifier = canHaveModifiers(node) ? lastOrUndefined(node.modifiers) : undefined;
         return lastModifier && !positionIsSynthesized(lastModifier.end)
             ? moveRangePos(node, lastModifier.end)

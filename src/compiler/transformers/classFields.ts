@@ -2096,6 +2096,7 @@ namespace ts {
                 // capture the lexical environment for the member
                 setOriginalNode(transformed, property);
                 addEmitFlags(transformed, EmitFlags.AdviseOnEmitNode);
+                setSourceMapRange(transformed, getSourceMapRange(property.name));
                 lexicalEnvironmentMap.set(getOriginalNode(property), lexicalEnvironment);
             }
             currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;

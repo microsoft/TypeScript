@@ -628,7 +628,9 @@ namespace ts {
                     factory.createNull(),
                     classInfo.classExtraInitializersName
                 );
-                leadingBlockStatements.push(factory.createExpressionStatement(esDecorateHelper));
+                const esDecorateStatement = factory.createExpressionStatement(esDecorateHelper);
+                setSourceMapRange(esDecorateStatement, moveRangePastDecorators(node));
+                leadingBlockStatements.push(esDecorateStatement);
 
                 //  C = _classThis = _classDescriptor.value;
                 const classDescriptorValueReference = factory.createPropertyAccessExpression(classInfo.classDescriptorName, "value");
@@ -640,7 +642,9 @@ namespace ts {
             // 11. Static extra initializers are evaluated
             if (classInfo.staticExtraInitializersName) {
                 const runStaticInitializersHelper = emitHelpers().createRunInitializersHelper(renamedClassThis, classInfo.staticExtraInitializersName);
-                leadingBlockStatements = append(leadingBlockStatements, factory.createExpressionStatement(runStaticInitializersHelper));
+                const runStaticInitializersStatement = factory.createExpressionStatement(runStaticInitializersHelper);
+                setSourceMapRange(runStaticInitializersStatement, node.name ?? moveRangePastDecorators(node));
+                leadingBlockStatements = append(leadingBlockStatements, runStaticInitializersStatement);
             }
 
             // 12. Static fields are initialized and static blocks are evaluated
@@ -648,7 +652,9 @@ namespace ts {
             // 13. Class extra initializers are evaluated
             if (classInfo.classExtraInitializersName) {
                 const runClassInitializersHelper = emitHelpers().createRunInitializersHelper(renamedClassThis, classInfo.classExtraInitializersName);
-                trailingBlockStatements = append(trailingBlockStatements, factory.createExpressionStatement(runClassInitializersHelper));
+                const runClassInitializersStatement = factory.createExpressionStatement(runClassInitializersHelper);
+                setSourceMapRange(runClassInitializersStatement, node.name ?? moveRangePastDecorators(node));
+                trailingBlockStatements = append(trailingBlockStatements, runClassInitializersStatement);
             }
 
             // If there are no other static initializers to run, combine the leading and trailing block statements
@@ -926,11 +932,12 @@ namespace ts {
             if (memberDecorators) {
                 const memberDecoratorsName = createHelperVariable(member, "decorators");
                 const memberDecoratorsArray = factory.createArrayLiteralExpression(memberDecorators);
+                const memberDecoratorsAssignment = factory.createAssignment(memberDecoratorsName, memberDecoratorsArray);
                 const memberInfo: MemberInfo = { memberDecoratorsName };
                 classInfo.memberInfos ??= new Map();
                 classInfo.memberInfos.set(member, memberInfo);
                 pendingExpressions ??= [];
-                pendingExpressions.push(factory.createAssignment(memberDecoratorsName, memberDecoratorsArray));
+                pendingExpressions.push(memberDecoratorsAssignment);
 
                 // 5. Static non-field element decorators are applied
                 // 6. Non-static non-field element decorators are applied
@@ -1015,15 +1022,10 @@ namespace ts {
                        descriptor = factory.createAssignment(descriptorName, descriptor);
                     }
 
-                    statements.push(
-                        factory.createExpressionStatement(
-                            emitHelpers().createESDecorateHelper(
-                                factory.createThis(),
-                                descriptor ?? factory.createNull(),
-                                memberDecoratorsName,
-                                context,
-                                factory.createNull(),
-                                extraInitializers)));
+                    const esDecorateExpression = emitHelpers().createESDecorateHelper(factory.createThis(), descriptor ?? factory.createNull(), memberDecoratorsName, context, factory.createNull(), extraInitializers);
+                    const esDecorateStatement = factory.createExpressionStatement(esDecorateExpression);
+                    setSourceMapRange(esDecorateStatement, moveRangePastDecorators(member));
+                    statements.push(esDecorateStatement);
                 }
                 else if (isPropertyDeclaration(member)) {
                     initializersName = memberInfo.memberInitializersName ??= createHelperVariable(member, "initializers");
@@ -1041,17 +1043,18 @@ namespace ts {
 
                     // _static_field_initializers = __esDecorate(null, null, _static_member_decorators, { kind: "field", name: "...", static: true, private: ..., access: { ... } }, _staticExtraInitializers);
                     // _field_initializers = __esDecorate(null, null, _member_decorators, { kind: "field", name: "...", static: false, private: ..., access: { ... } }, _instanceExtraInitializers);
-                    statements.push(
-                        factory.createExpressionStatement(
-                            emitHelpers().createESDecorateHelper(
-                                isAutoAccessorPropertyDeclaration(member) ?
-                                    factory.createThis() :
-                                    factory.createNull(),
-                                descriptor ?? factory.createNull(),
-                                memberDecoratorsName,
-                                context,
-                                initializersName,
-                                extraInitializers)));
+                    const esDecorateExpression = emitHelpers().createESDecorateHelper(
+                        isAutoAccessorPropertyDeclaration(member) ?
+                            factory.createThis() :
+                            factory.createNull(),
+                        descriptor ?? factory.createNull(),
+                        memberDecoratorsName,
+                        context,
+                        initializersName,
+                        extraInitializers);
+                    const esDecorateStatement = factory.createExpressionStatement(esDecorateExpression);
+                    setSourceMapRange(esDecorateStatement, moveRangePastDecorators(member));
+                    statements.push(esDecorateStatement);
                 }
             }
 
@@ -1231,6 +1234,7 @@ namespace ts {
                     setOriginalNode(backingField, node);
                     setEmitFlags(backingField, EmitFlags.NoComments);
                     setSourceMapRange(backingField, sourceMapRange);
+                    setSourceMapRange(backingField.name, node.name);
 
                     const getter = createGetAccessorDescriptorForwarder(modifiersWithoutAccessor, getterName, descriptorName);
                     setOriginalNode(getter, node);
