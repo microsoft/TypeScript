@@ -5414,6 +5414,22 @@
         "category": "Message",
         "code": 6401
     },
+    "Resolving in {0} mode with conditions {1}.": {
+        "category": "Message",
+        "code": 6402
+    },
+    "Matched '{0}' condition '{1}'.": {
+        "category": "Message",
+        "code": 6403
+    },
+    "Using '{0}' subpath '{1}' with target '{2}'.": {
+        "category": "Message",
+        "code": 6404
+    },
+    "Saw non-matching condition '{0}'.": {
+        "category": "Message",
+        "code": 6405
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

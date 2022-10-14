@@ -34,7 +34,10 @@ Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Matched 'exports' condition 'default'.
+Using 'exports' subpath '.' with target './dist/index.js'.
 File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
