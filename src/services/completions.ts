@@ -764,7 +764,7 @@ namespace ts.Completions {
         if (preferences.includeCompletionsWithClassMemberSnippets &&
             preferences.includeCompletionsWithInsertText &&
             completionKind === CompletionKind.MemberLike &&
-            isClassLikeMemberCompletion(symbol, location)) {
+            isClassLikeMemberCompletion(symbol, location) && !hasInitializer(location.parent)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
             sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
