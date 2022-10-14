@@ -6,4 +6,10 @@
 
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
+
+    // To ignore commits listed in .git-blame-ignore-revs in GitLens:
+    // "gitlens.advanced.blame.customArguments": [
+    //     "--ignore-revs-file",
+    //     ".git-blame-ignore-revs"
+    // ]
 }
