@@ -5422,9 +5422,25 @@
         "category": "Message",
         "code": 6401
     },
-    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution minimal' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+    "Resolving in {0} mode with conditions {1}.": {
         "category": "Message",
         "code": 6402
+    },
+    "Matched '{0}' condition '{1}'.": {
+        "category": "Message",
+        "code": 6403
+    },
+    "Using '{0}' subpath '{1}' with target '{2}'.": {
+        "category": "Message",
+        "code": 6404
+    },
+    "Saw non-matching condition '{0}'.": {
+        "category": "Message",
+        "code": 6405
+    },
+    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution minimal' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+        "category": "Message",
+        "code": 6406
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6698,6 +6714,14 @@
     "Update import from \"{0}\"": {
         "category": "Message",
         "code": 90058
+    },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90059
+    },
+    "Export all referenced locals": {
+        "category": "Message",
+        "code": 90060
     },
 
     "Convert function to an ES2015 class": {

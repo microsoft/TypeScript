@@ -628,8 +628,8 @@ namespace FourSlashInterface {
             this.state.noMoveToNewFile();
         }
 
-        public organizeImports(newContent: string) {
-            this.state.verifyOrganizeImports(newContent);
+        public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
+            this.state.verifyOrganizeImports(newContent, mode);
         }
     }
 
