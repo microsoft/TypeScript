@@ -118,3 +118,93 @@ function fe<T>(data: T) {
 	}
 }
 
+function ff<T extends any>(a: T | T[]): T[] {
+>ff : Symbol(ff, Decl(isArrayConformance2.ts, 35, 1))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 37, 12))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 37, 27))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 37, 12))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 37, 12))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 37, 12))
+
+	return Array.isArray(a) ? a : [a]; // OK
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 37, 27))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 37, 27))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 37, 27))
+}
+
+function fg<T extends any>(arr1: T[], arr2: T[]) {
+>fg : Symbol(fg, Decl(isArrayConformance2.ts, 39, 1))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 41, 12))
+>arr1 : Symbol(arr1, Decl(isArrayConformance2.ts, 41, 27))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 41, 12))
+>arr2 : Symbol(arr2, Decl(isArrayConformance2.ts, 41, 37))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 41, 12))
+
+	for (let i = 0; i < arr1.length && i < arr2.length; i++) {
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+>arr1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr1 : Symbol(arr1, Decl(isArrayConformance2.ts, 41, 27))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+>arr2.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr2 : Symbol(arr2, Decl(isArrayConformance2.ts, 41, 37))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+
+		const item1 = arr1[i];
+>item1 : Symbol(item1, Decl(isArrayConformance2.ts, 43, 7))
+>arr1 : Symbol(arr1, Decl(isArrayConformance2.ts, 41, 27))
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+
+		const item2 = arr2[i];
+>item2 : Symbol(item2, Decl(isArrayConformance2.ts, 44, 7))
+>arr2 : Symbol(arr2, Decl(isArrayConformance2.ts, 41, 37))
+>i : Symbol(i, Decl(isArrayConformance2.ts, 42, 9))
+
+		if (Array.isArray(item1) && Array.isArray(item2)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>item1 : Symbol(item1, Decl(isArrayConformance2.ts, 43, 7))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>item2 : Symbol(item2, Decl(isArrayConformance2.ts, 44, 7))
+
+			fg(item1, item2); // OK
+>fg : Symbol(fg, Decl(isArrayConformance2.ts, 39, 1))
+>item1 : Symbol(item1, Decl(isArrayConformance2.ts, 43, 7))
+>item2 : Symbol(item2, Decl(isArrayConformance2.ts, 44, 7))
+		}
+	}
+}
+
+function fh(...args: [] | [attributes: ({ $: string } & Partial<Record<string, any>>) | Record<string, any>, children?: any[]] | [children: any[]]) {
+>fh : Symbol(fh, Decl(isArrayConformance2.ts, 49, 1))
+>args : Symbol(args, Decl(isArrayConformance2.ts, 51, 12))
+>$ : Symbol($, Decl(isArrayConformance2.ts, 51, 41))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+	if (Array.isArray(args[0])) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(isArrayConformance2.ts, 51, 12))
+>0 : Symbol(0)
+
+		const children: (Record<string, HTMLElement> | HTMLElement)[] = args[0]; // OK
+>children : Symbol(children, Decl(isArrayConformance2.ts, 53, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>args : Symbol(args, Decl(isArrayConformance2.ts, 51, 12))
+>0 : Symbol(0)
+	}
+}
+

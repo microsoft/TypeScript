@@ -24,7 +24,7 @@ function f2(a: unknown) {
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >a : Symbol(a, Decl(isArrayConformance.ts, 6, 12))
 
-		a; // Expected: unknown[]
+		a; // Expected: any[]
 >a : Symbol(a, Decl(isArrayConformance.ts, 6, 12))
 	}
 }
@@ -111,7 +111,7 @@ function f7(a: {} | null) {
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >a : Symbol(a, Decl(isArrayConformance.ts, 38, 12))
 
-		a; // Expected: unknown[]
+		a; // Expected: any[]
 >a : Symbol(a, Decl(isArrayConformance.ts, 38, 12))
 	}
 }

@@ -8,7 +8,7 @@ function f1(a: any) {
 
 function f2(a: unknown) {
 	if (Array.isArray(a)) {
-		a; // Expected: unknown[]
+		a; // Expected: any[]
 	}
 }
 
@@ -40,7 +40,7 @@ function f6(a: (number[] | null | "loading")[]) {
 
 function f7(a: {} | null) {
 	if (Array.isArray(a)) {
-		a; // Expected: unknown[]
+		a; // Expected: any[]
 	}
 }
 

@@ -6,9 +6,9 @@ function fa(a: [number, ...string[]] | readonly [boolean, boolean] | null) {
 
 	if (Array.isArray(a)) {
 >Array.isArray(a) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >a : [number, ...string[]] | readonly [boolean, boolean]
 
 		a; // Expected: [number, ...string[]] | readonly [boolean, boolean]
@@ -23,18 +23,18 @@ function fb<T extends [number, ...string[]] | readonly [boolean, boolean] | null
 
 	if (Array.isArray(a)) {
 >Array.isArray(a) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >a : T
 
 		var b: [number, ...string[]] | readonly [boolean, boolean] = a; // OK
 >b : [number, ...string[]] | readonly [boolean, boolean]
->a : T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>a : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 
 		a[0]; // Expected: number | boolean
 >a[0] : number | boolean
->a : T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>a : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >0 : 0
 	}
 }
@@ -52,14 +52,14 @@ function fc<T, P extends keyof T>(obj: T, prop: P) {
 
 	if (Array.isArray(value)) {
 >Array.isArray(value) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >value : T[P]
 
 		value.length; // OK
 >value.length : number
->value : T[P] extends any ? Extract<(true extends false & T[P] ? any : T[P] extends string | readonly any[] ? unknown : T[P] extends ArrayLike<infer U> ? U : unknown)[], T[P]> | Extract<true extends false & T[P] ? never : {} extends T[P] ? T[P] & unknown[] : Extract<T[P], readonly any[]>, T[P]> : never
+>value : T[P] extends any ? (true extends false & T[P] ? Extract<any[], T[P]> : T[P] extends string | readonly any[] ? never : T[P] extends ArrayLike<infer U> ? Extract<U[], T[P]> : never) | (true extends false & T[P] ? never : {} extends Required<T[P]> ? T[P] & any[] : Extract<T[P], readonly any[]>) : never
 >length : number
 	}
 }
@@ -70,14 +70,14 @@ function fd(value: Record<string, unknown>) {
 
 	if (Array.isArray(value)) {
 >Array.isArray(value) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >value : Record<string, unknown>
 
 		value.length; // OK
 >value.length : number
->value : Record<string, unknown> & unknown[]
+>value : Record<string, unknown> & any[]
 >length : number
 	}
 }
@@ -88,26 +88,26 @@ function fe<T>(data: T) {
 
 	if (Array.isArray(data)) {
 >Array.isArray(data) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >data : T
 
 		for (const key in data) { // OK
->key : Extract<keyof (T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never), string>
->data : T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>key : Extract<keyof (T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never), string>
+>data : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 
 			const value = data[key];
 >value : any
 >data[key] : any
->data : T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
->key : Extract<keyof (T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never), string>
+>data : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>key : Extract<keyof (T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never), string>
 
 			if (Array.isArray(value)) {
 >Array.isArray(value) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >value : any
 
 				value.length; // OK
@@ -116,6 +116,100 @@ function fe<T>(data: T) {
 >length : number
 			}
 		}
+	}
+}
+
+function ff<T extends any>(a: T | T[]): T[] {
+>ff : <T extends unknown>(a: T | T[]) => T[]
+>a : T | T[]
+
+	return Array.isArray(a) ? a : [a]; // OK
+>Array.isArray(a) ? a : [a] : T[] | (T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never)
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>a : T | T[]
+>a : T[] | (T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never)
+>[a] : T[]
+>a : T
+}
+
+function fg<T extends any>(arr1: T[], arr2: T[]) {
+>fg : <T extends unknown>(arr1: T[], arr2: T[]) => void
+>arr1 : T[]
+>arr2 : T[]
+
+	for (let i = 0; i < arr1.length && i < arr2.length; i++) {
+>i : number
+>0 : 0
+>i < arr1.length && i < arr2.length : boolean
+>i < arr1.length : boolean
+>i : number
+>arr1.length : number
+>arr1 : T[]
+>length : number
+>i < arr2.length : boolean
+>i : number
+>arr2.length : number
+>arr2 : T[]
+>length : number
+>i++ : number
+>i : number
+
+		const item1 = arr1[i];
+>item1 : T
+>arr1[i] : T
+>arr1 : T[]
+>i : number
+
+		const item2 = arr2[i];
+>item2 : T
+>arr2[i] : T
+>arr2 : T[]
+>i : number
+
+		if (Array.isArray(item1) && Array.isArray(item2)) {
+>Array.isArray(item1) && Array.isArray(item2) : boolean
+>Array.isArray(item1) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>item1 : T
+>Array.isArray(item2) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>item2 : T
+
+			fg(item1, item2); // OK
+>fg(item1, item2) : void
+>fg : <T extends unknown>(arr1: T[], arr2: T[]) => void
+>item1 : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>item2 : T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+		}
+	}
+}
+
+function fh(...args: [] | [attributes: ({ $: string } & Partial<Record<string, any>>) | Record<string, any>, children?: any[]] | [children: any[]]) {
+>fh : (...args: [] | [attributes: ({    $: string;} & Partial<Record<string, any>>) | Record<string, any>, children?: any[]] | [children: any[]]) => void
+>args : [] | [attributes: Record<string, any> | ({ $: string; } & Partial<Record<string, any>>), children?: any[]] | [children: any[]]
+>$ : string
+
+	if (Array.isArray(args[0])) {
+>Array.isArray(args[0]) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
+>args[0] : any[] | Record<string, any> | ({ $: string; } & Partial<Record<string, any>>)
+>args : [] | [attributes: Record<string, any> | ({ $: string; } & Partial<Record<string, any>>), children?: any[]] | [children: any[]]
+>0 : 0
+
+		const children: (Record<string, HTMLElement> | HTMLElement)[] = args[0]; // OK
+>children : (HTMLElement | Record<string, HTMLElement>)[]
+>args[0] : any[] | (Record<string, any> & any[])
+>args : [] | [attributes: Record<string, any> | ({ $: string; } & Partial<Record<string, any>>), children?: any[]] | [children: any[]]
+>0 : 0
 	}
 }
 

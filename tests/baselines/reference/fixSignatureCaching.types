@@ -1109,9 +1109,9 @@ define(function () {
 >Array : ArrayConstructor
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? (true extends false & T ? Extract<any[], T> : T extends string | readonly any[] ? never : T extends ArrayLike<infer U> ? Extract<U[], T> : never) | (true extends false & T ? never : {} extends Required<T> ? T & any[] : Extract<T, readonly any[]>) : never
 >function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (value: any) => boolean
 >value : any
 >Object.prototype.toString.call(value) === '[object Array]' : boolean

@@ -1469,18 +1469,18 @@ interface ArrayConstructor {
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
     isArray<T>(arg: T): arg is
-        T extends any ? Extract<
+        T extends any ?
             (
-                true extends false & T ? any :
-                T extends string | readonly any[] ? unknown :
-                T extends ArrayLike<infer U> ? U :
-                unknown
-            )[] | (
+                true extends false & T ? Extract<any[], T> :
+                T extends string | readonly any[] ? never :
+                T extends ArrayLike<infer U> ? Extract<U[], T> :
+                never
+            ) | (
                 true extends false & T ? never :
-                {} extends T ? T & unknown[] :
+                {} extends Required<T> ? T & any[] :
                 Extract<T, readonly any[]>
-            ), T
-        > : never;
+            )
+        : never;
     readonly prototype: any[];
 }
 
