@@ -185,75 +185,76 @@ async function runDtsBundler(entrypoint, output) {
  * @param {boolean} exportIsTsObject True if this file exports the TS object and should have relevant code injected.
  */
  function esbuildTask(entrypoint, outfile, exportIsTsObject = false) {
-    // Note: we do not use --minify, as that would hide function names from user backtraces
-    // (we don't ship our sourcemaps), and would break consumers like monaco which modify
-    // typescript.js for their own needs. Also, using --sourcesContent=false doesn't help,
-    // as even though it's a smaller source map that could be shipped to users for better
-    // stack traces via names, the maps are bigger than the actual source files themselves.
-    /** @type {esbuild.BuildOptions} */
-    const options = {
-        entryPoints: [entrypoint],
-        banner: { js: getCopyrightHeader() },
-        bundle: true,
-        outfile,
-        platform: "node",
-        target: "es2018", // Covers Node 10.
-        format: "cjs",
-        sourcemap: "linked",
-        external: ["./node_modules/*"],
-        conditions: ["require"],
-        supported: {
-            // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
-            "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
-        },
-        // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-        plugins: [
-            {
-                name: "fix-require",
-                setup: (build) => {
-                    build.onEnd(async () => {
-                        // esbuild converts calls to "require" to "__require"; this function
-                        // calls the real require if it exists, or throws if it does not (rather than
-                        // throwing an error like "require not defined"). But, since we want typescript
-                        // to be consumable by other bundlers, we need to convert these calls back to
-                        // require so our imports are visible again.
-                        //
-                        // Note that this step breaks source maps, but only for lines that reference
-                        // "__require", which is an okay tradeoff for the performance of not running
-                        // the output through transpileModule/babel/etc.
-                        //
-                        // See: https://github.com/evanw/esbuild/issues/1905
-                        let contents = await fs.promises.readFile(outfile, "utf-8");
-                        contents = contents.replace(/__require\(/g, "require(");
-                        await fs.promises.writeFile(outfile, contents);
-                    });
+    return {
+        build: async () => {
+            // Note: we do not use --minify, as that would hide function names from user backtraces
+            // (we don't ship our sourcemaps), and would break consumers like monaco which modify
+            // typescript.js for their own needs. Also, using --sourcesContent=false doesn't help,
+            // as even though it's a smaller source map that could be shipped to users for better
+            // stack traces via names, the maps are bigger than the actual source files themselves.
+            /** @type {esbuild.BuildOptions} */
+            const options = {
+                entryPoints: [entrypoint],
+                banner: { js: getCopyrightHeader() },
+                bundle: true,
+                outfile,
+                platform: "node",
+                target: "es2018", // Covers Node 10.
+                format: "cjs",
+                sourcemap: "linked",
+                external: ["./node_modules/*"],
+                conditions: ["require"],
+                supported: {
+                    // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
+                    "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
                 },
-            }
-        ]
-    };
+                // legalComments: "none", // If we add copyright headers to the source files, uncomment.
+                plugins: [
+                    {
+                        name: "fix-require",
+                        setup: (build) => {
+                            build.onEnd(async () => {
+                                // esbuild converts calls to "require" to "__require"; this function
+                                // calls the real require if it exists, or throws if it does not (rather than
+                                // throwing an error like "require not defined"). But, since we want typescript
+                                // to be consumable by other bundlers, we need to convert these calls back to
+                                // require so our imports are visible again.
+                                //
+                                // Note that this step breaks source maps, but only for lines that reference
+                                // "__require", which is an okay tradeoff for the performance of not running
+                                // the output through transpileModule/babel/etc.
+                                //
+                                // See: https://github.com/evanw/esbuild/issues/1905
+                                let contents = await fs.promises.readFile(outfile, "utf-8");
+                                contents = contents.replace(/__require\(/g, "require(");
+                                await fs.promises.writeFile(outfile, contents);
+                            });
+                        },
+                    }
+                ]
+            };
 
-    if (exportIsTsObject) {
-        options.format = "iife"; // We use an IIFE so we can inject the code below.
-        options.globalName = "ts"; // Name the variable ts, matching our old big bundle and so we can use the code below.
-        options.footer = {
-            // These snippets cannot appear in the actual source files, otherwise they will be rewritten
-            // to things like exports or requires.
-            js: `
+            if (exportIsTsObject) {
+                options.format = "iife"; // We use an IIFE so we can inject the code below.
+                options.globalName = "ts"; // Name the variable ts, matching our old big bundle and so we can use the code below.
+                options.footer = {
+                    // These snippets cannot appear in the actual source files, otherwise they will be rewritten
+                    // to things like exports or requires.
+                    js: `
 if (typeof module !== "undefined" && module.exports) {
-    // If we are in a CJS context, export the ts namespace.
-    module.exports = ts;
+// If we are in a CJS context, export the ts namespace.
+module.exports = ts;
 }
 if (ts.server) {
-    // If we are in a server bundle, inject the dynamicImport function.
-    ts.server.dynamicImport = id => import(id);
+// If we are in a server bundle, inject the dynamicImport function.
+ts.server.dynamicImport = id => import(id);
 }`
-        };
-    }
+                };
+            }
 
-    return {
-        build: () => esbuild.build(options),
+            await esbuild.build(options);
+        },
         clean: () => del([outfile, `${outfile}.map`]),
-        watch: () => esbuild.build({ ...options, watch: true }),
     };
 }
 
