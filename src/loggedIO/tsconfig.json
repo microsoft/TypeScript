@@ -17,11 +17,5 @@
         { "path": "../harness" },
     ],
 
-    "files": [
-        "loggedIO.ts",
-        "_namespaces/Playback.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts",
-        "_namespaces/Harness.ts"
-    ]
+    "include": ["**/*"]
 }

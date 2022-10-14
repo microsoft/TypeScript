@@ -8,7 +8,5 @@
             "es6"
         ]
     },
-    "files": [
-        "watchGuard.ts"
-    ]
+    "include": ["**/*"]
 }

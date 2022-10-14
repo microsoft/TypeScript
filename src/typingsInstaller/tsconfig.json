@@ -14,10 +14,5 @@
         { "path": "../jsTyping" },
         { "path": "../typingsInstallerCore" }
     ],
-    "files": [
-        "nodeTypingsInstaller.ts",
-        "_namespaces/ts.server.typingsInstaller.ts",
-        "_namespaces/ts.ts",
-        "_namespaces/ts.server.ts"
-    ]
+    "include": ["**/*"]
 }

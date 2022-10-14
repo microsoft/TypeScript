@@ -12,12 +12,5 @@
     "references": [
         { "path": "../compiler" }
     ],
-    "files": [
-        "shared.ts",
-        "types.ts",
-        "jsTyping.ts",
-        "_namespaces/ts.JsTyping.ts",
-        "_namespaces/ts.ts",
-        "_namespaces/ts.server.ts"
-    ]
+    "include": ["**/*"]
 }

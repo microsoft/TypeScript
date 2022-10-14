@@ -2,16 +2,12 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
     },
-    "files": [
-        "tsserverlibrary.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts"
-    ],
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
         { "path": "../server" },
         { "path": "../deprecatedCompat" }
-    ]
+    ],
+    "include": ["**/*"]
 }

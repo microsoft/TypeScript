@@ -11,9 +11,5 @@
         { "path": "../services" },
         { "path": "../server" }
     ],
-    "files": [
-        "webServer.ts",
-        "_namespaces/ts.server.ts",
-        "_namespaces/ts.ts"
-    ]
+    "include": ["**/*"]
 }

@@ -4,7 +4,5 @@
         "target": "es2019",
         "lib": ["es2019"],
     },
-    "files": [
-        "compilerDebug.ts",
-    ]
+    "include": ["**/*"]
 }

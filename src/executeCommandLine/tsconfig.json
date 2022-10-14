@@ -7,8 +7,5 @@
         { "path": "../compiler" }
     ],
 
-    "files": [
-        "executeCommandLine.ts",
-        "_namespaces/ts.ts"
-    ]
+    "include": ["**/*"]
 }

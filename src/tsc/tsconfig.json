@@ -2,12 +2,9 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
     },
-    "files": [
-        "tsc.ts",
-        "_namespaces/ts.ts"
-    ],
     "references": [
         { "path": "../compiler" },
         { "path": "../executeCommandLine" }
-    ]
+    ],
+    "include": ["**/*"]
 }

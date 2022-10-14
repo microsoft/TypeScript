@@ -9,7 +9,5 @@
             "es6"
         ]
     },
-    "files": [
-        "cancellationToken.ts"
-    ]
+    "include": ["**/*"]
 }
