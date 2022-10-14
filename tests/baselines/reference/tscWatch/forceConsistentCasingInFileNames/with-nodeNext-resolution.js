@@ -56,6 +56,7 @@ File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
 'package.json' does not have a 'typesVersions' field.
 Matched 'exports' condition 'types'.
+Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.

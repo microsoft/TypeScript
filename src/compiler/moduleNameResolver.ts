@@ -2213,6 +2213,9 @@ namespace ts {
                                 return result;
                             }
                         }
+                        else {
+                            traceIfEnabled(state, Diagnostics.Saw_non_matching_condition_0, condition);
+                        }
                     }
                     return undefined;
                 }
