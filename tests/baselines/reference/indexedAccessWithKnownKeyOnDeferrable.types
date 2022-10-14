@@ -1,0 +1,16 @@
+=== tests/cases/compiler/indexedAccessWithKnownKeyOnDeferrable.ts ===
+// repro #51161
+
+export type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
+>AnyOneof : { [k: string]: unknown; oneofKind: string; } | { oneofKind: undefined; }
+>oneofKind : string
+>k : string
+>oneofKind : undefined
+
+export type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+>AnyOneofKind : AnyOneofKind<T>
+>oneofKind : keyof T
+
+    ? T['oneofKind']
+    : never;
+

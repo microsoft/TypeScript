@@ -1,0 +1,22 @@
+=== tests/cases/compiler/indexedAccessWithKnownKeyOnDeferrable.ts ===
+// repro #51161
+
+export type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
+>AnyOneof : Symbol(AnyOneof, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 0, 0))
+>oneofKind : Symbol(oneofKind, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 2, 24))
+>k : Symbol(k, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 2, 45))
+>oneofKind : Symbol(oneofKind, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 2, 70))
+
+export type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+>AnyOneofKind : Symbol(AnyOneofKind, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 2, 94))
+>T : Symbol(T, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 3, 25))
+>AnyOneof : Symbol(AnyOneof, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 3, 25))
+>oneofKind : Symbol(oneofKind, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 3, 58))
+>T : Symbol(T, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 3, 25))
+
+    ? T['oneofKind']
+>T : Symbol(T, Decl(indexedAccessWithKnownKeyOnDeferrable.ts, 3, 25))
+
+    : never;
+

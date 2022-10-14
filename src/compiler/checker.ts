@@ -15571,10 +15571,9 @@ namespace ts {
                 type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
         }
 
-        function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
+        function getImmediateIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             type = getReducedType(type);
-            return shouldDeferIndexType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
-                type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
@@ -15582,6 +15581,13 @@ namespace ts {
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
                 getLiteralTypeFromProperties(type, (noIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (stringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike),
                     stringsOnly === keyofStringsOnly && !noIndexSignatures);
+        }
+
+        function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
+            type = getReducedType(type);
+            return shouldDeferIndexType(type)
+                ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly)
+                : getImmediateIndexType(type, stringsOnly, noIndexSignatures);
         }
 
         function getExtractStringType(type: Type) {
@@ -36437,6 +36443,9 @@ namespace ts {
                 return type;
             }
             if (isGenericObjectType(objectType)) {
+                if (isTypeAssignableTo(indexType, getImmediateIndexType(apparentObjectType, /*stringsOnly*/ false))) {
+                    return type;
+                }
                 const propertyName = getPropertyNameFromIndex(indexType, accessNode);
                 if (propertyName) {
                     const propertySymbol = forEachType(apparentObjectType, t => getPropertyOfType(t, propertyName));
