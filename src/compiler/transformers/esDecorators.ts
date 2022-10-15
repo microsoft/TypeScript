@@ -1212,10 +1212,10 @@ namespace ts {
                     let getterName = name;
                     let setterName = name;
                     if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
-                        const cacheVariable = findComputedPropertyNameCacheVariable(name);
-                        if (cacheVariable) {
+                        const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
+                        if (cacheAssignment) {
                             getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
-                            setterName = factory.updateComputedPropertyName(name, cacheVariable);
+                            setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
                         }
                         else {
                             const temp = factory.createTempVariable(hoistVariableDeclaration);
@@ -1522,7 +1522,9 @@ namespace ts {
                 return { referencedName, name };
             }
 
-            const referencedName = factory.createTempVariable(hoistVariableDeclaration);
+            const referencedName = factory.getGeneratedNameForNode(node);
+            hoistVariableDeclaration(referencedName);
+
             const key = emitHelpers().createPropKeyHelper(visitNode(node.expression, visitor, isExpression));
             const assignment = factory.createAssignment(referencedName, key);
             const name = factory.updateComputedPropertyName(node, injectPendingExpressions(assignment));

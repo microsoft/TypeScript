@@ -13,8 +13,8 @@ class C {
 //// [esDecorators-classDeclaration-fields-nonStatic.js]
 var field3 = "field3";
 var C = function () {
-    var _a, _b;
-    var _c;
+    var _a;
+    var _b;
     var _instanceExtraInitializers = [];
     var _field1_decorators;
     var _field1_initializers = [];
@@ -22,7 +22,7 @@ var C = function () {
     var _member_initializers = [];
     var _member_decorators_1;
     var _member_initializers_1 = [];
-    return _b = /** @class */ (function () {
+    return _a = /** @class */ (function () {
             function C() {
                 Object.defineProperty(this, "field1", {
                     enumerable: true,
@@ -36,7 +36,7 @@ var C = function () {
                     writable: true,
                     value: __runInitializers(this, _member_initializers, 2)
                 });
-                Object.defineProperty(this, _a, {
+                Object.defineProperty(this, _b, {
                     enumerable: true,
                     configurable: true,
                     writable: true,
@@ -45,11 +45,14 @@ var C = function () {
             }
             return C;
         }()),
-        _a = (_field1_decorators = [dec(1)], _member_decorators = [dec(2)], _member_decorators_1 = [dec(3)], _c = __propKey(field3)),
+        _field1_decorators = [dec(1)],
+        _member_decorators = [dec(2)],
+        _member_decorators_1 = [dec(3)],
+        _b = __propKey(field3),
         (function () {
             __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { get: function () { return this.field1; }, set: function (value) { this.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
             __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { get: function () { return this["field2"]; }, set: function (value) { this["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _c, static: false, private: false, access: { get: function () { return this[_c]; }, set: function (value) { this[_c] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false, access: { get: function () { return this[_b]; }, set: function (value) { this[_b] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
         })(),
-        _b;
+        _a;
 }();

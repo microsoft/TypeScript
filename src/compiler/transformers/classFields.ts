@@ -648,10 +648,10 @@ namespace ts {
             let getterName = name;
             let setterName = name;
             if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
-                const cacheVariable = findComputedPropertyNameCacheVariable(name);
-                if (cacheVariable) {
+                const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
+                if (cacheAssignment) {
                     getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
-                    setterName = factory.updateComputedPropertyName(name, cacheVariable);
+                    setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
                 }
                 else {
                     const temp = factory.createTempVariable(hoistVariableDeclaration);
@@ -734,7 +734,7 @@ namespace ts {
                     /*shouldHoist*/ !!node.initializer || useDefineForClassFields,
                     /*captureReferencedName*/ !!node.initializer && isAnonymousClassDeclarationNeedingAssignedName(node.initializer));
                 if (expr) {
-                    getPendingExpressions().push(expr);
+                    getPendingExpressions().push(...flattenCommaList(expr));
                 }
 
                 if (isStatic(node) && !shouldTransformPrivateElementsOrClassStaticBlocks) {
@@ -2258,10 +2258,11 @@ namespace ts {
          */
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, captureReferencedName: boolean): Expression | undefined {
             if (isComputedPropertyName(name)) {
+                const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
                 let expression = visitNode(name.expression, visitor, isExpression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 const inlinable = isSimpleInlineableExpression(innerExpression);
-                const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
+                const alreadyTransformed = !!cacheAssignment || isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
                 if (!alreadyTransformed && !inlinable && shouldHoist) {
                     const generatedName = factory.getGeneratedNameForNode(name);
                     if (resolver.getNodeCheckFlags(name) & NodeCheckFlags.BlockScopedBindingInLoop) {

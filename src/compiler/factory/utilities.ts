@@ -1399,7 +1399,7 @@ namespace ts {
         );
     }
 
-    export function findComputedPropertyNameCacheVariable(name: ComputedPropertyName) {
+    export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyName) {
         let node = name.expression;
         while (true) {
             node = skipOuterExpressions(node);
@@ -1414,10 +1414,44 @@ namespace ts {
             }
 
             if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isGeneratedIdentifier(node.left)) {
-                return node.left;
+                return node as AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier };
             }
 
             break;
         }
+    }
+
+    function isSyntheticParenthesizedExpression(node: Expression): node is ParenthesizedExpression {
+        return isParenthesizedExpression(node)
+            && nodeIsSynthesized(node)
+            && !node.emitNode;
+    }
+
+    function flattenCommaListWorker(node: Expression, expressions: Expression[]) {
+        if (isSyntheticParenthesizedExpression(node)) {
+            flattenCommaListWorker(node.expression, expressions);
+        }
+        else if (isCommaExpression(node)) {
+            flattenCommaListWorker(node.left, expressions);
+            flattenCommaListWorker(node.right, expressions);
+        }
+        else if (isCommaListExpression(node)) {
+            for (const child of node.elements) {
+                flattenCommaListWorker(child, expressions);
+            }
+        }
+        else {
+            expressions.push(node);
+        }
+    }
+
+    /**
+     * Flatten a CommaExpression or CommaListExpression into an array of one or more expressions, unwrapping any nested
+     * comma expressions and synthetic parens.
+     */
+    export function flattenCommaList(node: Expression) {
+        const expressions: Expression[] = [];
+        flattenCommaListWorker(node, expressions);
+        return expressions;
     }
 }
