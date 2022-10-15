@@ -1,8 +1,0 @@
-{
-    "extends": "../tsconfig-base",
-    "compilerOptions": {
-        "target": "es2019",
-        "lib": ["es2019"],
-    },
-    "include": ["**/*"]
-}

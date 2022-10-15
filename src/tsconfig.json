@@ -4,7 +4,6 @@
     "references": [
         { "path": "./cancellationToken" },
         { "path": "./compiler" },
-        { "path": "./debug" },
         { "path": "./deprecatedCompat" },
         { "path": "./executeCommandLine" },
         { "path": "./harness" },

@@ -364,15 +364,6 @@ function entrypointBuildTask(options) {
     return { build, bundle, shim, main, watch };
 }
 
-const { main: compilerDebug } = entrypointBuildTask({
-    name: "compiler-debug",
-    buildDeps: [generateDiagnostics],
-    project: "src/debug",
-    srcEntrypoint: "./src/debug/compilerDebug.ts",
-    builtEntrypoint: "./built/local/debug/compilerDebug.js",
-    output: "./built/local/compiler-debug.js",
-});
-
 
 const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
@@ -382,7 +373,7 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     srcEntrypoint: "./src/tsc/tsc.ts",
     builtEntrypoint: "./built/local/tsc/tsc.js",
     output: "./built/local/tsc.js",
-    mainDeps: [generateLibs, compilerDebug],
+    mainDeps: [generateLibs],
 });
 export { tsc, watchTsc };
 
@@ -395,7 +386,7 @@ const { main: services, build: buildServices, watch: watchServices } = entrypoin
     srcEntrypoint: "./src/typescript/typescript.ts",
     builtEntrypoint: "./built/local/typescript/typescript.js",
     output: "./built/local/typescript.js",
-    mainDeps: [generateLibs, compilerDebug],
+    mainDeps: [generateLibs],
     bundlerOptions: { exportIsTsObject: true },
 });
 export { services, watchServices };
@@ -420,7 +411,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserver/server.ts",
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
-    mainDeps: [generateLibs, compilerDebug],
+    mainDeps: [generateLibs],
     // Even though this seems like an exectuable, so could be the default CJS,
     // this is used in the browser too. Do the same thing that we do for our
     // libraries and generate an IIFE with name `ts`, as to not pollute the global
@@ -453,7 +444,7 @@ const { main: lssl, build: buildLssl, watch: watchLssl } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserverlibrary/tsserverlibrary.ts",
     builtEntrypoint: "./built/local/tsserverlibrary/tsserverlibrary.js",
     output: "./built/local/tsserverlibrary.js",
-    mainDeps: [generateLibs, compilerDebug],
+    mainDeps: [generateLibs],
     bundlerOptions: { exportIsTsObject: true },
 });
 export { lssl, watchLssl };
@@ -485,7 +476,7 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     srcEntrypoint: "./src/testRunner/_namespaces/Harness.ts",
     builtEntrypoint: "./built/local/testRunner/runner.js",
     output: testRunner,
-    mainDeps: [generateLibs, compilerDebug],
+    mainDeps: [generateLibs],
     bundlerOptions: {
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
