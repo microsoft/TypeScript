@@ -536,6 +536,7 @@ import {
     isJSDocNonNullableType,
     isJSDocNullableType,
     isJSDocOptionalType,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocReturnTag,
@@ -14269,6 +14270,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (i > 0 && (decl as FunctionLikeDeclaration).body) {
                 const previous = symbol.declarations[i - 1];
                 if (decl.parent === previous.parent && decl.kind === previous.kind && decl.pos === previous.end) {
+                    continue;
+                }
+            }
+            if (isInJSFile(decl) && decl.jsDoc) {
+                let hasJSDocOverloads = false;
+                for (const node of decl.jsDoc) {
+                    if (node.tags) {
+                        for (const tag of node.tags) {
+                            if (isJSDocOverloadTag(tag)) {
+                                result.push(getSignatureFromDeclaration(tag.typeExpression));
+                                hasJSDocOverloads = true;
+                            }
+                        }
+                    }
+                }
+                if (hasJSDocOverloads) {
                     continue;
                 }
             }

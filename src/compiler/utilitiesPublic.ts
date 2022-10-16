@@ -122,6 +122,7 @@ import {
     isJSDocEnumTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocOverloadTag,
     isJSDocOverrideTag,
     isJSDocParameterTag,
     isJSDocPrivateTag,
@@ -1207,6 +1208,14 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
  */
 export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
     if (isJSDocSignature(node)) {
+        if (isJSDoc(node.parent)) {
+            const overloadTag = find(node.parent.tags, (tag) => {
+                return isJSDocOverloadTag(tag) && tag.typeExpression === node;
+            });
+            if (overloadTag) {
+                return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
+            }
+        }
         return emptyArray;
     }
     if (isJSDocTypeAlias(node)) {

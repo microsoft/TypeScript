@@ -268,6 +268,7 @@ import {
     isJSDocMemberName,
     isJSDocNameReference,
     isJSDocNode,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocSignature,
@@ -5633,7 +5634,7 @@ export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParam
 
 /** template tags are only available when a typedef isn't already using them */
 function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
-    return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && tag.parent.tags!.some(isJSDocTypeAlias));
+    return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && (tag.parent.tags!.some(isJSDocTypeAlias) || tag.parent.tags!.some(isJSDocOverloadTag)));
 }
 
 /**
