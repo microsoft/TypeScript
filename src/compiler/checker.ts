@@ -41414,18 +41414,6 @@ namespace ts {
                     if (isGlobalAugmentation) {
                         return;
                     }
-                    const symbol = getSymbolOfNode(node);
-                    if (symbol) {
-                        // module augmentations cannot introduce new names on the top level scope of the module
-                        // this is done it two steps
-                        // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
-                        // 2. main check - report error if value declaration of the parent symbol is module augmentation)
-                        let reportError = !(symbol.flags & SymbolFlags.Transient);
-                        if (!reportError) {
-                            // symbol should not originate in augmentation
-                            reportError = !!symbol.parent?.declarations && isExternalModuleAugmentation(symbol.parent.declarations[0]);
-                        }
-                    }
                     break;
             }
         }
