@@ -129,7 +129,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5515933561-const x: 20 = 10;","signature":"-1601647902-declare const x: 20;\r\n","affectsGlobalScope":true},{"version":"2026006654-const y = 10;","signature":"-5539113915-declare const y = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"noEmitOnError":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./a.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type '10' is not assignable to type '20'."}]],3],"affectedFilesPendingEmit":[2,3],"emitSignatures":[[2,"-3198459068-declare const x = 10;\r\n"]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5515933561-const x: 20 = 10;","signature":"-1601647902-declare const x: 20;\r\n","affectsGlobalScope":true},{"version":"2026006654-const y = 10;","signature":"-5539113915-declare const y = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"noEmitOnError":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./a.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type '10' is not assignable to type '20'."}]],3],"affectedFilesPendingEmit":[2,3],"emitSignatures":[[2,"-3198459068-declare const x = 10;\r\n"]],"emitSignatureDtsMapDiffers":[2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -198,11 +198,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "./a.ts",
-        "Full"
+        "Js | Dts | DtsMap"
       ],
       [
         "./b.ts",
-        "Full"
+        "Js | Dts | DtsMap"
       ]
     ],
     "emitSignatures": [
@@ -211,10 +211,14 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "-3198459068-declare const x = 10;\r\n"
       ]
     ],
+    "emitSignatureDtsMapDiffers": [
+      "./a.ts",
+      "./b.ts"
+    ],
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1249
+  "size": 1284
 }
 
 
@@ -231,10 +235,18 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/project/a.d.ts]
+declare const x = 10;
+//# sourceMappingURL=a.d.ts.map
+
 //// [/src/project/a.d.ts.map]
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC"}
 
 //// [/src/project/a.js] file written with same contents
+//// [/src/project/b.d.ts]
+declare const y = 10;
+//# sourceMappingURL=b.d.ts.map
+
 //// [/src/project/b.d.ts.map]
 {"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC"}
 

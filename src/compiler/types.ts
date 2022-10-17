@@ -4261,6 +4261,7 @@ namespace ts {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
         /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
+        /*@internal*/ differsOnlyInMap?: true;
     }
     export type WriteFileCallback = (
         fileName: string,

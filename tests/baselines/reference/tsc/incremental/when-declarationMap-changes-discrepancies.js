@@ -98,22 +98,11 @@ IncrementalBuild:
         "-3198459068-declare const x = 10;\r\n"
       ]
     ],
+    "emitSignatureDtsMapDiffers": [
+      "./a.ts",
+      "./b.ts"
+    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
-1:: fix error declarationMap
-*** Needs explanation
-File: /src/project/a.d.ts
-CleanBuild:
-declare const x = 10;
-//# sourceMappingURL=a.d.ts.map
-IncrementalBuild:
-declare const x = 10;
-
-File: /src/project/b.d.ts
-CleanBuild:
-declare const y = 10;
-//# sourceMappingURL=b.d.ts.map
-IncrementalBuild:
-declare const y = 10;

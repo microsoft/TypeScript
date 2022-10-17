@@ -321,7 +321,7 @@ exports.multiply = multiply;
     "affectedFilesPendingEmit": [
       [
         "./index.ts",
-        "Full"
+        "Js | JsMap | Dts"
       ]
     ],
     "emitSignatures": [

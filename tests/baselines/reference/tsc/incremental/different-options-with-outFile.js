@@ -625,6 +625,21 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/outFile.d.ts]
+declare module "a" {
+    export const a = 10;
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c = 10;
+}
+declare module "d" {
+    export const d = 10;
+}
+//# sourceMappingURL=outFile.d.ts.map
+
 //// [/src/outFile.d.ts.map]
 {"version":3,"file":"outFile.d.ts","sourceRoot":"","sources":["project/a.ts","project/b.ts","project/c.ts","project/d.ts"],"names":[],"mappings":";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICAI,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC;;;ICAnB,MAAM,CAAC,MAAM,CAAC,KAAI,CAAC"}
 
@@ -713,6 +728,21 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+
+//// [/src/outFile.d.ts]
+declare module "a" {
+    export const a = 10;
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c = 10;
+}
+declare module "d" {
+    export const d = 10;
+}
 
 
 //// [/src/outFile.js] file written with same contents
@@ -1510,6 +1540,21 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+
+//// [/src/outFile.d.ts]
+declare module "a" {
+    export const a = 10;
+}
+declare module "b" {
+    export const b = 10;
+}
+declare module "c" {
+    export const c = 10;
+}
+declare module "d" {
+    export const d = 10;
+}
+//# sourceMappingURL=outFile.d.ts.map
 
 //// [/src/outFile.d.ts.map] file written with same contents
 //// [/src/outFile.js]

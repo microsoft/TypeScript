@@ -838,7 +838,7 @@ namespace ts {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
                         newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, buildInfo: newBuildInfo });
+                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, data: { buildInfo: newBuildInfo } });
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;

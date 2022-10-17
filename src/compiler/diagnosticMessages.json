@@ -5426,6 +5426,10 @@
         "category": "Message",
         "code": 6405
     },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates there is change in compilerOptions": {
+        "category": "Message",
+        "code": 6406
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

@@ -1,23 +1,5 @@
 0:: Disable declarationMap
 *** Needs explanation
-File: /src/core/anothermodule.d.ts
-CleanBuild:
-export declare const World = "hello";
-
-IncrementalBuild:
-export declare const World = "hello";
-//# sourceMappingURL=anotherModule.d.ts.map
-File: /src/core/index.d.ts
-CleanBuild:
-export declare const someString: string;
-export declare function leftPad(s: string, n: number): string;
-export declare function multiply(a: number, b: number): number;
-
-IncrementalBuild:
-export declare const someString: string;
-export declare function leftPad(s: string, n: number): string;
-export declare function multiply(a: number, b: number): number;
-//# sourceMappingURL=index.d.ts.map
 TsBuild info text without affectedFilesPendingEmit:: /src/logic/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {

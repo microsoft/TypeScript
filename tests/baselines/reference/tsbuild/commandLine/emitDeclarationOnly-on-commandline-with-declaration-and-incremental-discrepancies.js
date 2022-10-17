@@ -1,144 +1,6 @@
-2:: non local change
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-3:: emit js files
-*** Needs explanation
-File: /src/project1/src/a.js
-CleanBuild:
-"use strict";
-exports.__esModule = true;
-exports.aaa = exports.a = void 0;
-exports.a = 10;
-var aLocal = 10;
-var aa = 10;
-exports.aaa = 10;
-
-IncrementalBuild:
-
-File: /src/project1/src/b.js
-CleanBuild:
-"use strict";
-exports.__esModule = true;
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-
-IncrementalBuild:
-
-File: /src/project1/src/c.js
-CleanBuild:
-"use strict";
-exports.__esModule = true;
-exports.c = void 0;
-var a_1 = require("./a");
-exports.c = a_1.a;
-
-IncrementalBuild:
-
-File: /src/project1/src/d.js
-CleanBuild:
-"use strict";
-exports.__esModule = true;
-exports.d = void 0;
-var b_1 = require("./b");
-exports.d = b_1.b;
-
-IncrementalBuild:
-
+4:: no-change-run
+Clean build tsbuildinfo for both projects will have compilerOptions with composite and emitDeclarationOnly
+Incremental build will detect that it doesnt need to rebuild so tsbuild info for projects is from before which has option composite only
 TsBuild info text without affectedFilesPendingEmit:: /src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -162,7 +24,8 @@ CleanBuild:
       }
     },
     "options": {
-      "declaration": true
+      "declaration": true,
+      "emitDeclarationOnly": true
     },
     "referencedMap": {
       "./c.ts": [
@@ -204,8 +67,7 @@ IncrementalBuild:
       }
     },
     "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
+      "declaration": true
     },
     "referencedMap": {
       "./c.ts": [
@@ -251,103 +113,6 @@ CleanBuild:
       }
     },
     "options": {
-      "declaration": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-4:: no-change-run
-Clean build tsbuildinfo for both projects will have compilerOptions with composite and emitDeclarationOnly
-Incremental build will detect that it doesnt need to rebuild so tsbuild info for projects is from before which has option composite only
-TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
       "declaration": true,
       "emitDeclarationOnly": true
     },
@@ -371,56 +136,6 @@ CleanBuild:
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-5:: js emit with change without emitDeclarationOnly
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
 {
   "program": {
     "fileInfos": {
@@ -446,53 +161,6 @@ CleanBuild:
     },
     "options": {
       "declaration": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
     },
     "referencedMap": {
       "./f.ts": [
@@ -576,160 +244,13 @@ IncrementalBuild:
         "version": "-13789510868-export const e = 10;"
       },
       "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-7:: non local change
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
         "version": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
       },
       "./f.ts": {
         "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
       },
       "../../project1/src/b.d.ts": {
-        "version": "-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
         "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-8:: js emit with change without emitDeclarationOnly
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-2735127622-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\nexport declare const a2 = 10;\r\n"
       },
       "./g.ts": {
         "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
@@ -737,53 +258,6 @@ CleanBuild:
     },
     "options": {
       "declaration": true
-    },
-    "referencedMap": {
-      "./f.ts": [
-        "../../project1/src/a.d.ts"
-      ],
-      "./g.ts": [
-        "../../project1/src/b.d.ts"
-      ]
-    },
-    "changeFileSet": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./e.ts": {
-        "version": "-13789510868-export const e = 10;"
-      },
-      "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
-      },
-      "./f.ts": {
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
-      },
-      "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
-      },
-      "./g.ts": {
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
-      }
-    },
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
     },
     "referencedMap": {
       "./f.ts": [

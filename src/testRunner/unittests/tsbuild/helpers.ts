@@ -198,7 +198,8 @@ interface Symbol {
     }
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-    type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: "DtsOnly" | "Full"];
+    type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
+    type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
     type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & {
         impliedFormat: string | undefined;
@@ -207,7 +208,7 @@ interface Symbol {
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
         "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures" | "emitSignatureDtsMapDiffers"
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
@@ -217,9 +218,12 @@ interface Symbol {
         affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
         changeFileSet: readonly string[] | undefined;
         emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
+        emitSignatureDtsMapDiffers: readonly string[] | undefined;
     };
-    type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos"> & {
+    type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ProgramBuildInfoBundlePendingEmit];
+    type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
         fileInfos: MapLike<string>;
+        pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
     };
 
     type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
@@ -234,15 +238,23 @@ interface Symbol {
         if (buildInfo.program && isProgramBundleEmitBuildInfo(buildInfo.program)) {
             const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
             buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = fileInfo);
+            const pendingEmit = buildInfo.program.pendingEmit;
             program = {
                 ...buildInfo.program,
-                fileInfos
+                fileInfos,
+                pendingEmit: pendingEmit === undefined ?
+                    undefined :
+                    [
+                        toReadableBuilderFileEmit(toProgramEmitPending(pendingEmit, buildInfo.program.options)),
+                        pendingEmit
+                    ],
             };
         }
         else if (buildInfo.program) {
             const fileInfos: ReadableProgramMultiFileEmitBuildInfo["fileInfos"] = {};
             buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
             fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+            const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? getBuilderFileEmit(buildInfo.program.options || {}) : undefined;
             program = buildInfo.program && {
                 fileNames: buildInfo.program.fileNames,
                 fileNamesList,
@@ -255,13 +267,14 @@ interface Symbol {
                         toFileName(d) :
                         [toFileName(d[0]), d[1]]
                 ),
-                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(toReadableProgramBuilderInfoFilePendingEmit),
+                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
                 changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
                 emitSignatures: buildInfo.program.emitSignatures?.map(s =>
                     isNumber(s) ?
                         toFileName(s) :
                         [toFileName(s[0]), s[1]]
                 ),
+                emitSignatureDtsMapDiffers: buildInfo.program.emitSignatureDtsMapDiffers?.map(toFileName),
                 latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
             };
         }
@@ -316,14 +329,26 @@ interface Symbol {
             return result;
         }
 
-        function toReadableProgramBuilderInfoFilePendingEmit(value: ProgramBuilderInfoFilePendingEmit): ReadableProgramBuilderInfoFilePendingEmit {
-            const emitKind = toBuilderFileEmit(value);
+        function toReadableProgramBuilderInfoFilePendingEmit(value: ProgramBuilderInfoFilePendingEmit, fullEmitForOptions: BuilderFileEmit): ReadableProgramBuilderInfoFilePendingEmit {
             return [
                 isNumber(value) ? toFileName(value) : [toFileName(value[0])],
-                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
-                    emitKind === BuilderFileEmit.Full ? "Full" :
-                        Debug.assertNever(emitKind),
+                toReadableBuilderFileEmit(toBuilderFileEmit(value, fullEmitForOptions)),
             ];
+        }
+
+        function toReadableBuilderFileEmit(emit: BuilderFileEmit | undefined): ReadableBuilderFileEmit {
+            let result = "";
+            if (emit) {
+                if (emit & BuilderFileEmit.Js) addFlags("Js");
+                if (emit & BuilderFileEmit.JsMap) addFlags("JsMap");
+                if (emit & BuilderFileEmit.JsInlineMap) addFlags("JsInlineMap");
+                if (emit & BuilderFileEmit.Dts) addFlags("Dts");
+                if (emit & BuilderFileEmit.DtsMap) addFlags("DtsMap");
+            }
+            return (result || "None") as ReadableBuilderFileEmit;
+            function addFlags(flag: string) {
+                result = result ? `${result} | ${flag}` : flag;
+            }
         }
     }
 

@@ -304,7 +304,7 @@ namespace ts {
             name: "declaration",
             shortName: "d",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             showInSimplifiedHelpView: true,
@@ -316,7 +316,7 @@ namespace ts {
         {
             name: "declarationMap",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             showInSimplifiedHelpView: true,
@@ -328,7 +328,7 @@ namespace ts {
         {
             name: "emitDeclarationOnly",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             showInSimplifiedHelpView: true,
@@ -340,7 +340,7 @@ namespace ts {
         {
             name: "sourceMap",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             showInSimplifiedHelpView: true,
@@ -351,7 +351,7 @@ namespace ts {
         {
             name: "inlineSourceMap",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             category: Diagnostics.Emit,
@@ -587,7 +587,7 @@ namespace ts {
         {
             name: "composite",
             type: "boolean",
-            affectsEmit: true,
+            // Not setting affectsEmit because we calculate this flag might not affect full emit
             affectsMultiFileEmitBuildInfo: true,
             affectsBundleEmitBuildInfo: true,
             isTSConfigOnly: true,
