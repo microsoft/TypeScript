@@ -2411,7 +2411,8 @@ namespace ts {
         return config;
     }
 
-    function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
+    /*@internal*/
+    export function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
         return {
             ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
         };
@@ -2464,7 +2465,8 @@ namespace ts {
         });
     }
 
-    function serializeCompilerOptions(
+    /* @internal */
+    export function serializeCompilerOptions(
         options: CompilerOptions,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
     ): ESMap<string, CompilerOptionsValue> {

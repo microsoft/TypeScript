@@ -6,6 +6,10 @@ namespace ts {
         storeFilesChangingSignatureDuringEmit?: boolean;
     };
 
+    export function compilerOptionsToConfigJson(options: CompilerOptions) {
+        return optionMapToObject(serializeCompilerOptions(options));
+    }
+
     export const noChangeRun: TestTscEdit = {
         subScenario: "no-change-run",
         modifyFs: noop
