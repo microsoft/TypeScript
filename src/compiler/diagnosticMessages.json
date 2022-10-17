@@ -2480,10 +2480,6 @@
         "category": "Error",
         "code": 2534
     },
-    "Enum type '{0}' has members with initializers that are not literals.": {
-        "category": "Error",
-        "code": 2535
-    },
     "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
         "code": 2536
@@ -7457,7 +7453,7 @@
         "category": "Error",
         "code": 18032
     },
-    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+    "Type '{0}' is not assignable to type '{1}' as required for computed enum member values.": {
         "category": "Error",
         "code": 18033
     },

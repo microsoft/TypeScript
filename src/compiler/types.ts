@@ -5583,7 +5583,7 @@ namespace ts {
         String          = 1 << 2,
         Number          = 1 << 3,
         Boolean         = 1 << 4,
-        Enum            = 1 << 5,
+        Enum            = 1 << 5,   // Numeric computed enum member value
         BigInt          = 1 << 6,
         StringLiteral   = 1 << 7,
         NumberLiteral   = 1 << 8,
