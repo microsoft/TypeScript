@@ -22661,7 +22661,7 @@ namespace ts {
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
             let bivariant = false;
             let propagationType: Type;
-            let inferencePriority = InferencePriority.MaxValue;
+            let inferencePriority: number = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
             let visited: ESMap<string, number>;
             let sourceStack: object[];
@@ -23026,7 +23026,7 @@ namespace ts {
                         else {
                             for (let i = 0; i < sources.length; i++) {
                                 const saveInferencePriority = inferencePriority;
-                                inferencePriority = InferencePriority.MaxValue as InferencePriority;
+                                inferencePriority = InferencePriority.MaxValue;
                                 inferFromTypes(sources[i], t);
                                 if (inferencePriority === priority) matched[i] = true;
                                 inferenceCircularity = inferenceCircularity || inferencePriority === InferencePriority.Circularity;
