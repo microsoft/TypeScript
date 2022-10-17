@@ -41,6 +41,7 @@ File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
 ======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.
@@ -54,6 +55,10 @@ File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
 'package.json' does not have a 'typesVersions' field.
+Matched 'exports' condition 'types'.
+Saw non-matching condition 'import'.
+Matched 'exports' condition 'default'.
+Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========

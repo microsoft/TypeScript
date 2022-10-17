@@ -69,8 +69,8 @@ namespace ts.refactor.extractSymbol {
 
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
-            const description = functionExtraction.description;
             if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
+                const description = functionExtraction.description;
                 if (functionExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
@@ -95,11 +95,11 @@ namespace ts.refactor.extractSymbol {
             }
 
             if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+                const description = constantExtraction.description;
                 if (constantExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
                     // preferentially go into nearer scopes
-                    const description = constantExtraction.description;
                     if (!usedConstantNames.has(description)) {
                         usedConstantNames.set(description, true);
                         constantActions.push({
