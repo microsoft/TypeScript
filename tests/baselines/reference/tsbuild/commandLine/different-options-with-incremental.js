@@ -182,19 +182,6 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --sourceMap
-[91merror[0m[90m TS5094: [0mCompiler option '--sourceMap' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: should re-emit only js so they dont contain sourcemap
-Input::
-
-
-Output::
-/lib/tsc --b /src/project --verbose
 [[90m12:00:22 AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -205,35 +192,7 @@ exitCode:: ExitStatus.Success
 
 
 
-Change:: with declaration, emit Dts and should not emit js
-Input::
-
-
-Output::
-/lib/tsc --b /src/project --verbose --declaration
-[91merror[0m[90m TS5094: [0mCompiler option '--declaration' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: with declaration and declarationMap
-Input::
-
-
-Output::
-/lib/tsc --b /src/project --verbose --declaration --declarationMap
-[91merror[0m[90m TS5094: [0mCompiler option '--declaration' may not be used with '--build'.
-
-[91merror[0m[90m TS5094: [0mCompiler option '--declarationMap' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: no-change-run
+Change:: should re-emit only js so they dont contain sourcemap
 Input::
 
 
@@ -249,6 +208,54 @@ exitCode:: ExitStatus.Success
 
 
 
+Change:: with declaration, emit Dts and should not emit js
+Input::
+
+
+Output::
+/lib/tsc --b /src/project --verbose --declaration
+[[90m12:00:26 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90m12:00:27 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
+
+
+
+Change:: with declaration and declarationMap
+Input::
+
+
+Output::
+/lib/tsc --b /src/project --verbose --declaration --declarationMap
+[[90m12:00:28 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90m12:00:29 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/project --verbose
+[[90m12:00:30 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90m12:00:31 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
+
+
+
 Change:: local change
 Input::
 //// [/src/project/a.ts]
@@ -258,12 +265,12 @@ export const a = 10;const aLocal = 100;
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:27 AM[0m] Projects in this build: 
+[[90m12:00:33 AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:28 AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/project/tsconfig.tsbuildinfo' is older than input 'src/project/a.ts'
+[[90m12:00:34 AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/project/tsconfig.tsbuildinfo' is older than input 'src/project/a.ts'
 
-[[90m12:00:29 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90m12:00:35 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
@@ -383,11 +390,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[91merror[0m[90m TS5094: [0mCompiler option '--declaration' may not be used with '--build'.
+[[90m12:00:41 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
 
-[91merror[0m[90m TS5094: [0mCompiler option '--declarationMap' may not be used with '--build'.
+[[90m12:00:42 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -398,10 +406,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:35 AM[0m] Projects in this build: 
+[[90m12:00:43 AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:36 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+[[90m12:00:44 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -414,9 +422,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --inlineSourceMap
-[91merror[0m[90m TS5094: [0mCompiler option '--inlineSourceMap' may not be used with '--build'.
+[[90m12:00:45 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+[[90m12:00:46 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
 
 
 
@@ -427,9 +438,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --sourceMap
-[91merror[0m[90m TS5094: [0mCompiler option '--sourceMap' may not be used with '--build'.
+[[90m12:00:47 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+[[90m12:00:48 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
 
 
 
@@ -440,10 +454,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:37 AM[0m] Projects in this build: 
+[[90m12:00:49 AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:38 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
+[[90m12:00:50 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -456,11 +470,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[91merror[0m[90m TS5094: [0mCompiler option '--declaration' may not be used with '--build'.
+[[90m12:00:51 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
 
-[91merror[0m[90m TS5094: [0mCompiler option '--declarationMap' may not be used with '--build'.
+[[90m12:00:52 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -471,10 +486,11 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[91merror[0m[90m TS5094: [0mCompiler option '--declaration' may not be used with '--build'.
+[[90m12:00:53 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
 
-[91merror[0m[90m TS5094: [0mCompiler option '--declarationMap' may not be used with '--build'.
+[[90m12:00:54 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/project/tsconfig.tsbuildinfo'
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 

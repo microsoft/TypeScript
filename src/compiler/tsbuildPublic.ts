@@ -18,6 +18,11 @@ namespace ts {
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
+        declaration?: boolean;
+        declarationMap?: boolean;
+        emitDeclarationOnly?: boolean;
+        sourceMap?: boolean;
+        inlineSourceMap?: boolean;
 
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;

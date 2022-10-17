@@ -45,79 +45,21 @@ import { b } from "../../project1/src/b"; export const g = b;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: local change
-Input::
-//// [/src/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;
-
-
-
-Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: non local change
-Input::
-//// [/src/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
-
-
-
-Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: emit js files
-Input::
-
-
-Output::
-/lib/tsc --b /src/project2/src --verbose
-[[90m12:00:21 AM[0m] Projects in this build: 
+[[90m12:00:19 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:22 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/src/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:20 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/src/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:23 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:35 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/src/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:29 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/src/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:36 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:00:30 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -141,7 +83,7 @@ Shape signatures in builder refreshed for::
 /src/project1/src/d.ts (computed .d.ts during emit)
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -170,57 +112,434 @@ Shape signatures in builder refreshed for::
 
 //// [/src/project1/src/a.d.ts]
 export declare const a = 10;
-export declare const aaa = 10;
-
-
-//// [/src/project1/src/a.js]
-"use strict";
-exports.__esModule = true;
-exports.aaa = exports.a = void 0;
-exports.a = 10;
-var aLocal = 10;
-var aa = 10;
-exports.aaa = 10;
 
 
 //// [/src/project1/src/b.d.ts]
 export declare const b = 10;
 
 
-//// [/src/project1/src/b.js]
-"use strict";
-exports.__esModule = true;
-exports.b = void 0;
-exports.b = 10;
-var bLocal = 10;
-
-
 //// [/src/project1/src/c.d.ts]
 export declare const c = 10;
-
-
-//// [/src/project1/src/c.js]
-"use strict";
-exports.__esModule = true;
-exports.c = void 0;
-var a_1 = require("./a");
-exports.c = a_1.a;
 
 
 //// [/src/project1/src/d.d.ts]
 export declare const d = 10;
 
 
-//// [/src/project1/src/d.js]
-"use strict";
-exports.__esModule = true;
-exports.d = void 0;
-var b_1 = require("./b");
-exports.d = b_1.b;
+//// [/src/project1/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./d.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./a.ts"
+      ],
+      [
+        "./b.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-18487752940-export const a = 10;const aLocal = 10;",
+          "signature": "-3762229137-export declare const a = 10;\r\n"
+        },
+        "version": "-18487752940-export const a = 10;const aLocal = 10;",
+        "signature": "-3762229137-export declare const a = 10;\r\n"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-6189287562-export const b = 10;const bLocal = 10;",
+          "signature": "-1807916688-export declare const b = 10;\r\n"
+        },
+        "version": "-6189287562-export const b = 10;const bLocal = 10;",
+        "signature": "-1807916688-export declare const b = 10;\r\n"
+      },
+      "./c.ts": {
+        "original": {
+          "version": "3248317647-import { a } from \"./a\";export const c = a;",
+          "signature": "-4148571535-export declare const c = 10;\r\n"
+        },
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "signature": "-4148571535-export declare const c = 10;\r\n"
+      },
+      "./d.ts": {
+        "original": {
+          "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+          "signature": "-6489226382-export declare const d = 10;\r\n"
+        },
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "signature": "-6489226382-export declare const d = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./c.ts": [
+        "./a.ts"
+      ],
+      "./d.ts": [
+        "./b.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "latestChangedDtsFile": "./d.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1326
+}
+
+//// [/src/project2/src/e.d.ts]
+export declare const e = 10;
+
+
+//// [/src/project2/src/f.d.ts]
+export declare const f = 10;
+
+
+//// [/src/project2/src/g.d.ts]
+export declare const g = 10;
+
+
+//// [/src/project2/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4534913933-export declare const e = 10;\r\n"},"-3762229137-export declare const a = 10;\r\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-6875568780-export declare const f = 10;\r\n"},"-1807916688-export declare const b = 10;\r\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-4921256331-export declare const g = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,5,2,4,6],"latestChangedDtsFile":"./g.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./e.ts",
+      "../../project1/src/a.d.ts",
+      "./f.ts",
+      "../../project1/src/b.d.ts",
+      "./g.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../project1/src/a.d.ts"
+      ],
+      [
+        "../../project1/src/b.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "signature": "-4534913933-export declare const e = 10;\r\n"
+        },
+        "version": "-13789510868-export const e = 10;",
+        "signature": "-4534913933-export declare const e = 10;\r\n"
+      },
+      "../../project1/src/a.d.ts": {
+        "version": "-3762229137-export declare const a = 10;\r\n",
+        "signature": "-3762229137-export declare const a = 10;\r\n"
+      },
+      "./f.ts": {
+        "original": {
+          "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+          "signature": "-6875568780-export declare const f = 10;\r\n"
+        },
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "signature": "-6875568780-export declare const f = 10;\r\n"
+      },
+      "../../project1/src/b.d.ts": {
+        "version": "-1807916688-export declare const b = 10;\r\n",
+        "signature": "-1807916688-export declare const b = 10;\r\n"
+      },
+      "./g.ts": {
+        "original": {
+          "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+          "signature": "-4921256331-export declare const g = 10;\r\n"
+        },
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "signature": "-4921256331-export declare const g = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ],
+    "latestChangedDtsFile": "./g.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1363
+}
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+[[90m12:00:37 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90m12:00:38 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90m12:00:39 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
+
+
+
+Change:: local change
+Input::
+//// [/src/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;
+
+
+
+Output::
+/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+[[90m12:00:41 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90m12:00:42 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+
+[[90m12:00:43 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90m12:00:47 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:00:48 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/a.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/a.ts (computed .d.ts)
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./d.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./d.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./a.ts"
+      ],
+      [
+        "./b.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+          "signature": "-3762229137-export declare const a = 10;\r\n"
+        },
+        "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+        "signature": "-3762229137-export declare const a = 10;\r\n"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-6189287562-export const b = 10;const bLocal = 10;",
+          "signature": "-1807916688-export declare const b = 10;\r\n"
+        },
+        "version": "-6189287562-export const b = 10;const bLocal = 10;",
+        "signature": "-1807916688-export declare const b = 10;\r\n"
+      },
+      "./c.ts": {
+        "original": {
+          "version": "3248317647-import { a } from \"./a\";export const c = a;",
+          "signature": "-4148571535-export declare const c = 10;\r\n"
+        },
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "signature": "-4148571535-export declare const c = 10;\r\n"
+      },
+      "./d.ts": {
+        "original": {
+          "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+          "signature": "-6489226382-export declare const d = 10;\r\n"
+        },
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "signature": "-6489226382-export declare const d = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./c.ts": [
+        "./a.ts"
+      ],
+      "./d.ts": [
+        "./b.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "latestChangedDtsFile": "./d.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1340
+}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo] file changed its modified time
+
+
+Change:: non local change
+Input::
+//// [/src/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
+
+
+
+Output::
+/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+[[90m12:00:52 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90m12:00:53 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+
+[[90m12:00:54 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90m12:00:59 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output 'src/project2/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src'
+
+[[90m12:01:00 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/a.ts
+/src/project1/src/c.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/a.ts (computed .d.ts)
+/src/project1/src/c.ts (computed .d.ts)
+
+Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/a.d.ts (used version)
+/src/project2/src/f.ts (computed .d.ts)
+
+
+//// [/src/project1/src/a.d.ts]
+export declare const a = 10;
+export declare const aaa = 10;
+
+
+//// [/src/project1/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -284,7 +603,8 @@ exports.d = b_1.b;
       }
     },
     "options": {
-      "composite": true
+      "composite": true,
+      "emitDeclarationOnly": true
     },
     "referencedMap": {
       "./c.ts": [
@@ -302,49 +622,14 @@ exports.d = b_1.b;
       "./c.ts",
       "./d.ts"
     ],
-    "latestChangedDtsFile": "./d.d.ts"
+    "latestChangedDtsFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1367
+  "size": 1394
 }
 
-//// [/src/project2/src/e.d.ts]
-export declare const e = 10;
-
-
-//// [/src/project2/src/e.js]
-"use strict";
-exports.__esModule = true;
-exports.e = void 0;
-exports.e = 10;
-
-
-//// [/src/project2/src/f.d.ts]
-export declare const f = 10;
-
-
-//// [/src/project2/src/f.js]
-"use strict";
-exports.__esModule = true;
-exports.f = void 0;
-var a_1 = require("../../project1/src/a");
-exports.f = a_1.a;
-
-
-//// [/src/project2/src/g.d.ts]
-export declare const g = 10;
-
-
-//// [/src/project2/src/g.js]
-"use strict";
-exports.__esModule = true;
-exports.g = void 0;
-var b_1 = require("../../project1/src/b");
-exports.g = b_1.b;
-
-
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4534913933-export declare const e = 10;\r\n"},"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-6875568780-export declare const f = 10;\r\n"},"-1807916688-export declare const b = 10;\r\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-4921256331-export declare const g = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,5,2,4,6],"latestChangedDtsFile":"./g.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4534913933-export declare const e = 10;\r\n"},"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-6875568780-export declare const f = 10;\r\n"},"-1807916688-export declare const b = 10;\r\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-4921256331-export declare const g = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,5,2,4,6],"latestChangedDtsFile":"./g.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -409,7 +694,8 @@ exports.g = b_1.b;
       }
     },
     "options": {
-      "composite": true
+      "composite": true,
+      "emitDeclarationOnly": true
     },
     "referencedMap": {
       "./f.ts": [
@@ -431,8 +717,27 @@ exports.g = b_1.b;
     "latestChangedDtsFile": "./g.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1369
+  "size": 1396
 }
+
+
+
+Change:: emit js files
+Input::
+
+
+Output::
+/lib/tsc --b /src/project2/src --verbose
+[[90m12:01:04 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
+
+[[90m12:01:05 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90m12:01:06 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
 
 
 
@@ -442,9 +747,15 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
+[[90m12:01:07 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+[[90m12:01:08 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+
+[[90m12:01:09 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date because newest input 'src/project2/src/g.ts' is older than output 'src/project2/src/tsconfig.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
 
 
 
@@ -458,17 +769,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:00:47 AM[0m] Projects in this build: 
+[[90m12:01:11 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:48 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90m12:01:12 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:00:49 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:01:13 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:54 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:21 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:55 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
+[[90m12:01:22 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
@@ -488,6 +799,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/b.ts (computed .d.ts)
 
 
+//// [/src/project1/src/a.js]
+"use strict";
+exports.__esModule = true;
+exports.aaa = exports.a = void 0;
+exports.a = 10;
+var aLocal = 10;
+var aa = 10;
+exports.aaa = 10;
+
+
 //// [/src/project1/src/b.js]
 "use strict";
 exports.__esModule = true;
@@ -497,8 +818,24 @@ var bLocal = 10;
 var alocal = 10;
 
 
+//// [/src/project1/src/c.js]
+"use strict";
+exports.__esModule = true;
+exports.c = void 0;
+var a_1 = require("./a");
+exports.c = a_1.a;
+
+
+//// [/src/project1/src/d.js]
+"use strict";
+exports.__esModule = true;
+exports.d = void 0;
+var b_1 = require("./b");
+exports.d = b_1.b;
+
+
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./d.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -580,7 +917,7 @@ var alocal = 10;
       "./c.ts",
       "./d.ts"
     ],
-    "latestChangedDtsFile": "./d.d.ts"
+    "latestChangedDtsFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
   "size": 1385
@@ -598,11 +935,127 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
+[[90m12:01:26 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+[[90m12:01:27 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+
+[[90m12:01:28 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90m12:01:32 AM[0m] Project 'src/project2/src/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:01:33 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/b.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/b.ts (computed .d.ts)
 
 
+//// [/src/project1/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./a.ts"
+      ],
+      [
+        "./b.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+          "signature": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
+        },
+        "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+        "signature": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
+          "signature": "-1807916688-export declare const b = 10;\r\n"
+        },
+        "version": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
+        "signature": "-1807916688-export declare const b = 10;\r\n"
+      },
+      "./c.ts": {
+        "original": {
+          "version": "3248317647-import { a } from \"./a\";export const c = a;",
+          "signature": "-4148571535-export declare const c = 10;\r\n"
+        },
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "signature": "-4148571535-export declare const c = 10;\r\n"
+      },
+      "./d.ts": {
+        "original": {
+          "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+          "signature": "-6489226382-export declare const d = 10;\r\n"
+        },
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "signature": "-6489226382-export declare const d = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./c.ts": [
+        "./a.ts"
+      ],
+      "./d.ts": [
+        "./b.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "latestChangedDtsFile": "./a.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1428
+}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Change:: non local change
@@ -614,10 +1067,243 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[91merror[0m[90m TS5094: [0mCompiler option '--emitDeclarationOnly' may not be used with '--build'.
+[[90m12:01:37 AM[0m] Projects in this build: 
+    * src/project1/src/tsconfig.json
+    * src/project2/src/tsconfig.json
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+[[90m12:01:38 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
+[[90m12:01:39 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+
+[[90m12:01:44 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output 'src/project2/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src'
+
+[[90m12:01:45 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/b.ts
+/src/project1/src/d.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/b.ts (computed .d.ts)
+/src/project1/src/d.ts (computed .d.ts)
+
+Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
+Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/project2/src/e.ts
+/src/project1/src/a.d.ts
+/src/project2/src/f.ts
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project1/src/b.d.ts
+/src/project2/src/g.ts
+
+Shape signatures in builder refreshed for::
+/src/project1/src/b.d.ts (used version)
+/src/project2/src/g.ts (computed .d.ts)
+
+
+//// [/src/project1/src/b.d.ts]
+export declare const b = 10;
+export declare const aaaaa = 10;
+
+
+//// [/src/project1/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","signature":"-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./a.ts"
+      ],
+      [
+        "./b.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+          "signature": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
+        },
+        "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+        "signature": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
+          "signature": "-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n"
+        },
+        "version": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
+        "signature": "-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n"
+      },
+      "./c.ts": {
+        "original": {
+          "version": "3248317647-import { a } from \"./a\";export const c = a;",
+          "signature": "-4148571535-export declare const c = 10;\r\n"
+        },
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "signature": "-4148571535-export declare const c = 10;\r\n"
+      },
+      "./d.ts": {
+        "original": {
+          "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+          "signature": "-6489226382-export declare const d = 10;\r\n"
+        },
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "signature": "-6489226382-export declare const d = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./c.ts": [
+        "./a.ts"
+      ],
+      "./d.ts": [
+        "./b.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./d.ts"
+    ],
+    "latestChangedDtsFile": "./b.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1488
+}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4534913933-export declare const e = 10;\r\n"},"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-6875568780-export declare const f = 10;\r\n"},"-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-4921256331-export declare const g = 10;\r\n"}],"options":{"composite":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,5,2,4,6],"latestChangedDtsFile":"./g.d.ts"},"version":"FakeTSVersion"}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./e.ts",
+      "../../project1/src/a.d.ts",
+      "./f.ts",
+      "../../project1/src/b.d.ts",
+      "./g.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../project1/src/a.d.ts"
+      ],
+      [
+        "../../project1/src/b.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "signature": "-4534913933-export declare const e = 10;\r\n"
+        },
+        "version": "-13789510868-export const e = 10;",
+        "signature": "-4534913933-export declare const e = 10;\r\n"
+      },
+      "../../project1/src/a.d.ts": {
+        "version": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n",
+        "signature": "-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"
+      },
+      "./f.ts": {
+        "original": {
+          "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+          "signature": "-6875568780-export declare const f = 10;\r\n"
+        },
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "signature": "-6875568780-export declare const f = 10;\r\n"
+      },
+      "../../project1/src/b.d.ts": {
+        "version": "-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n",
+        "signature": "-3336829602-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\n"
+      },
+      "./g.ts": {
+        "original": {
+          "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+          "signature": "-4921256331-export declare const g = 10;\r\n"
+        },
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "signature": "-4921256331-export declare const g = 10;\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ],
+    "latestChangedDtsFile": "./g.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1432
+}
 
 
 
@@ -630,17 +1316,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:01:01 AM[0m] Projects in this build: 
+[[90m12:01:50 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:02 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90m12:01:51 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:01:03 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:01:52 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:10 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output 'src/project2/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src'
+[[90m12:02:01 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output 'src/project2/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src'
 
-[[90m12:01:11 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:02:02 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
@@ -681,6 +1367,7 @@ Shape signatures in builder refreshed for::
 /src/project2/src/g.ts (computed .d.ts)
 
 
+//// [/src/project1/src/a.js] file written with same contents
 //// [/src/project1/src/b.d.ts]
 export declare const b = 10;
 export declare const aaaaa = 10;
@@ -699,6 +1386,7 @@ exports.aaaaa = 10;
 exports.a2 = 10;
 
 
+//// [/src/project1/src/c.js] file written with same contents
 //// [/src/project1/src/d.js] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n"},{"version":"-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","signature":"-2735127622-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\nexport declare const a2 = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
@@ -789,7 +1477,29 @@ exports.a2 = 10;
   "size": 1516
 }
 
-//// [/src/project2/src/g.js] file written with same contents
+//// [/src/project2/src/e.js]
+"use strict";
+exports.__esModule = true;
+exports.e = void 0;
+exports.e = 10;
+
+
+//// [/src/project2/src/f.js]
+"use strict";
+exports.__esModule = true;
+exports.f = void 0;
+var a_1 = require("../../project1/src/a");
+exports.f = a_1.a;
+
+
+//// [/src/project2/src/g.js]
+"use strict";
+exports.__esModule = true;
+exports.g = void 0;
+var b_1 = require("../../project1/src/b");
+exports.g = b_1.b;
+
+
 //// [/src/project2/src/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":"-4534913933-export declare const e = 10;\r\n"},"-415701381-export declare const a = 10;\r\nexport declare const aaa = 10;\r\n",{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":"-6875568780-export declare const f = 10;\r\n"},"-2735127622-export declare const b = 10;\r\nexport declare const aaaaa = 10;\r\nexport declare const a2 = 10;\r\n",{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":"-4921256331-export declare const g = 10;\r\n"}],"options":{"composite":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,5,2,4,6],"latestChangedDtsFile":"./g.d.ts"},"version":"FakeTSVersion"}
 
