@@ -350,7 +350,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
-        public defaultWatchFileKind?: () => WatchFileKind | undefined;
         public storeFilesChangingSignatureDuringEmit = true;
         watchFile: HostWatchFile;
         private inodeWatching: boolean | undefined;
@@ -398,7 +397,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                 realpath: this.realpath.bind(this),
                 tscWatchFile,
                 tscWatchDirectory,
-                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
                 inodeWatching: !!this.inodeWatching,
                 sysLog: s => this.write(s + this.newLine),
             });
