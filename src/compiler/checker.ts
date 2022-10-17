@@ -27181,7 +27181,17 @@ namespace ts {
             // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
             const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
             if (signature && !isResolvingReturnTypeOfSignature(signature)) {
-                return getReturnTypeOfSignature(signature);
+                const functionFlags = getFunctionFlags(functionDecl);
+
+                return filterType(getReturnTypeOfSignature(signature), returnType => {
+                    if (functionFlags & FunctionFlags.Generator) {
+                        return checkGeneratorInstantiationAssignabilityToReturnType(returnType, functionFlags, /*errorNode*/ undefined);
+                    }
+                    if (functionFlags & FunctionFlags.Async) {
+                        return !!getAwaitedTypeOfPromise(returnType);
+                    }
+                    return true;
+                });
             }
             const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
             if (iife) {
@@ -35804,17 +35814,7 @@ namespace ts {
                             error(returnTypeNode, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
-                            // However, that would not catch the error in the following case.
-                            //
-                            //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
-                            //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
-                            //
-                            const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                            const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
-                            const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
-                            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
-                            checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeNode);
+                            checkGeneratorInstantiationAssignabilityToReturnType(returnType, functionFlags, returnTypeNode);
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
@@ -35825,6 +35825,21 @@ namespace ts {
                     registerForUnusedIdentifiersCheck(node);
                 }
             }
+        }
+
+        function checkGeneratorInstantiationAssignabilityToReturnType(returnType: Type, functionFlags: FunctionFlags, errorNode?: TypeNode) {
+            // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
+            // However, that would not catch the error in the following case.
+            //
+            //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
+            //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
+            //
+            const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
+            const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
+            const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
+            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+
+            return checkTypeAssignableTo(generatorInstantiation, returnType, errorNode);
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
