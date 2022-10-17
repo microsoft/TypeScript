@@ -23026,7 +23026,7 @@ namespace ts {
                         else {
                             for (let i = 0; i < sources.length; i++) {
                                 const saveInferencePriority = inferencePriority;
-                                inferencePriority = InferencePriority.MaxValue;
+                                inferencePriority = InferencePriority.MaxValue as InferencePriority;
                                 inferFromTypes(sources[i], t);
                                 if (inferencePriority === priority) matched[i] = true;
                                 inferenceCircularity = inferenceCircularity || inferencePriority === InferencePriority.Circularity;
@@ -34971,7 +34971,7 @@ namespace ts {
         }
 
         function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
-            if (checkMode && checkMode !== CheckMode.Normal) {
+            if (checkMode) {
                 return checkExpression(node, checkMode);
             }
             const links = getNodeLinks(node);
