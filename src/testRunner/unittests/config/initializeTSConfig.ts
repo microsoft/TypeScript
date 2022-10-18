@@ -4,7 +4,7 @@ namespace ts {
             describe(name, () => {
                 const commandLine = parseCommandLine(commandLinesArgs);
                 const initResult = generateTSConfig(commandLine.options, commandLine.fileNames, "\n");
-                const outputFileName = `tsConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
+                const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
                 it(`Correct output for ${outputFileName}`, () => {
                     Harness.Baseline.runBaseline(outputFileName, initResult, { PrintDiff: true });
