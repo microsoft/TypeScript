@@ -39,14 +39,13 @@ FsWatchesRecursive::
 
 Info 2    [00:00:27.000] Search path: 
 Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
-Info 4    [00:00:29.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 5    [00:00:30.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 6    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 8    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 9    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 10   [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 11   [00:00:36.000] 	Files (2)
+Info 4    [00:00:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 8    [00:00:33.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 9    [00:00:34.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [00:00:35.000] 	Files (2)
 	/a/lib/lib.d.ts
 	untitled:Untitled-1
 
@@ -56,14 +55,14 @@ Info 11   [00:00:36.000] 	Files (2)
 	untitled:Untitled-1
 	  Root file specified for compilation
 
-Info 12   [00:00:37.000] -----------------------------------------------
-Info 13   [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 13   [00:00:39.000] 	Files (2)
+Info 11   [00:00:36.000] -----------------------------------------------
+Info 12   [00:00:37.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 12   [00:00:38.000] 	Files (2)
 
-Info 13   [00:00:40.000] -----------------------------------------------
-Info 13   [00:00:41.000] Open files: 
-Info 13   [00:00:42.000] 	FileName: untitled:Untitled-1 ProjectRootPath: undefined
-Info 13   [00:00:43.000] 		Projects: /dev/null/inferredProject1*
+Info 12   [00:00:39.000] -----------------------------------------------
+Info 12   [00:00:40.000] Open files: 
+Info 12   [00:00:41.000] 	FileName: untitled:Untitled-1 ProjectRootPath: undefined
+Info 12   [00:00:42.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -78,7 +77,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 13   [00:00:44.000] response:
+Info 12   [00:00:43.000] response:
     {
       "responseRequired": false
     }
@@ -101,7 +100,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 14   [00:00:45.000] request:
+Info 13   [00:00:44.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -141,7 +140,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 15   [00:00:46.000] response:
+Info 14   [00:00:45.000] response:
     {
       "responseRequired": false
     }
@@ -159,7 +158,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 16   [00:00:47.000] event:
+Info 15   [00:00:46.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
@@ -189,7 +188,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [00:00:48.000] event:
+Info 16   [00:00:47.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"untitled:Untitled-1","diagnostics":[{"start":{"line":1,"offset":22},"end":{"line":1,"offset":63},"text":"File '../../../../../../typings/@epic/Core.d.ts' not found.","code":6053,"category":"error"},{"start":{"line":2,"offset":22},"end":{"line":2,"offset":41},"text":"File 'src/somefile.d.ts' not found.","code":6053,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
@@ -219,9 +218,9 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 18   [00:00:49.000] event:
+Info 17   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
-Info 19   [00:00:50.000] event:
+Info 18   [00:00:49.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 

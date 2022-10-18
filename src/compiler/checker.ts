@@ -194,8 +194,6 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
-        PropertyCheck = 1 << 2,
-        InPropertyCheck = 1 << 3,
     }
 
     const enum RecursionFlags {
@@ -7237,16 +7235,6 @@ namespace ts {
                     return statements;
                 }
 
-                function canHaveExportModifier(node: Statement): node is Extract<HasModifiers, Statement> {
-                    return isEnumDeclaration(node) ||
-                            isVariableStatement(node) ||
-                            isFunctionDeclaration(node) ||
-                            isClassDeclaration(node) ||
-                            (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node)) ||
-                            isInterfaceDeclaration(node) ||
-                            isTypeDeclaration(node);
-                }
-
                 function addExportModifier(node: Extract<HasModifiers, Statement>) {
                     const flags = (getEffectiveModifierFlags(node) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
                     return factory.updateModifiers(node, flags);
@@ -12073,7 +12061,20 @@ namespace ts {
         }
 
         function isGenericMappedType(type: Type): type is MappedType {
-            return !!(getObjectFlags(type) & ObjectFlags.Mapped) && isGenericIndexType(getConstraintTypeFromMappedType(type as MappedType));
+            if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                const constraint = getConstraintTypeFromMappedType(type as MappedType);
+                if (isGenericIndexType(constraint)) {
+                    return true;
+                }
+                // A mapped type is generic if the 'as' clause references generic types other than the iteration type.
+                // To determine this, we substitute the constraint type (that we now know isn't generic) for the iteration
+                // type and check whether the resulting type is generic.
+                const nameType = getNameTypeFromMappedType(type as MappedType);
+                if (nameType && isGenericIndexType(instantiateType(nameType, makeUnaryTypeMapper(getTypeParameterFromMappedType(type as MappedType), constraint)))) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -15638,8 +15639,14 @@ namespace ts {
                 return getStringLiteralType(text);
             }
             newTexts.push(text);
-            if (every(newTexts, t => t === "") && every(newTypes, t => !!(t.flags & TypeFlags.String))) {
-                return stringType;
+            if (every(newTexts, t => t === "")) {
+                if (every(newTypes, t => !!(t.flags & TypeFlags.String))) {
+                    return stringType;
+                }
+                // Normalize `${Mapping<xxx>}` into Mapping<xxx>
+                if (newTypes.length === 1 && isPatternLiteralType(newTypes[0])) {
+                    return newTypes[0];
+                }
             }
             const id = `${getTypeListId(newTypes)}|${map(newTexts, t => t.length).join(",")}|${newTexts.join("")}`;
             let type = templateLiteralTypes.get(id);
@@ -15698,11 +15705,13 @@ namespace ts {
 
         function getStringMappingType(symbol: Symbol, type: Type): Type {
             return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
-                // Mapping<Mapping<T>> === Mapping<T>
-                type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-                isGenericIndexType(type) || isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, isPatternLiteralPlaceholderType(type) && !(type.flags & TypeFlags.StringMapping) ? getTemplateLiteralType(["", ""], [type]) : type) :
                 type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
                 type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
+                // Mapping<Mapping<T>> === Mapping<T>
+                type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
+                type.flags & (TypeFlags.Any | TypeFlags.String || type.flags & TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+                // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
+                isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
                 type;
         }
 
@@ -16000,11 +16009,12 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || !!(type.flags & TypeFlags.StringMapping && isPatternLiteralPlaceholderType((type as StringMappingType).type));
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
         }
 
         function isPatternLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
+            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
+                !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
         }
 
         function isGenericType(type: Type): boolean {
@@ -16352,11 +16362,7 @@ namespace ts {
                             }
                         }
                     }
-                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
-                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
-                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
-                    // so in those cases we refain from performing inference and retain the uninfered type parameter
-                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                    if (!checkTypeInstantiable) {
                         // We don't want inferences from constraints as they may cause us to eagerly resolve the
                         // conditional type instead of deferring resolution. Also, we always want strict function
                         // types rules (i.e. proper contravariance) for inferences.
@@ -19090,7 +19096,7 @@ namespace ts {
                         }
                     }
 
-                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || !(source.flags & TypeFlags.Union) && isLiteralType(source)) &&
+                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || isUnitType(source)) &&
                         !(intersectionState & IntersectionState.Target) &&
                         source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                         target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
@@ -19117,31 +19123,9 @@ namespace ts {
 
                     const skipCaching = source.flags & TypeFlags.Union && (source as UnionType).types.length < 4 && !(target.flags & TypeFlags.Union) ||
                         target.flags & TypeFlags.Union && (target as UnionType).types.length < 4 && !(source.flags & TypeFlags.StructuredOrInstantiable);
-                    let result = skipCaching ?
+                    const result = skipCaching ?
                         unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState) :
                         recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
-                    // For certain combinations involving intersections and optional, excess, or mismatched properties we need
-                    // an extra property check where the intersection is viewed as a single object. The following are motivating
-                    // examples that all should be errors, but aren't without this extra property check:
-                    //
-                    //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
-                    //
-                    //   declare let wrong: { a: { y: string } };
-                    //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
-                    //
-                    //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
-                    //     x = y;  // Mismatched property in source intersection
-                    //   }
-                    //
-                    // We suppress recursive intersection property checks because they can generate lots of work when relating
-                    // recursive intersections that are structurally similar but not exactly identical. See #37854.
-                    if (result && !inPropertyCheck && (
-                        target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
-                        isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
-                        inPropertyCheck = true;
-                        result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck, recursionFlags);
-                        inPropertyCheck = false;
-                    }
                     if (result) {
                         return result;
                     }
@@ -19545,8 +19529,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const keyIntersectionState = intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0);
-                const id = getRelationKey(source, target, keyIntersectionState, relation, /*ingnoreConstraints*/ false);
+                const id = getRelationKey(source, target, intersectionState, relation, /*ingnoreConstraints*/ false);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -19576,7 +19559,7 @@ namespace ts {
                     // A key that starts with "*" is an indication that we have type references that reference constrained
                     // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                     // were unconstrained.
-                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, keyIntersectionState, relation, /*ignoreConstraints*/ true) : undefined;
+                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
                         if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
@@ -19664,7 +19647,7 @@ namespace ts {
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 const saveErrorInfo = captureErrorCalculationState();
                 let result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState, saveErrorInfo);
-                if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
+                if (relation !== identityRelation) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
                     // the constituents. When an intersection type contains instantiable types with union type
                     // constraints, there are situations where we need to examine the combined constraint. One is
@@ -19678,10 +19661,34 @@ namespace ts {
                     // needs to have its constraint hoisted into an intersection with said type parameter, this way
                     // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                    if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
-                        // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                        result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
+                        const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
+                        if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
+                            result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        }
+                    }
+                    // For certain combinations involving intersections and optional, excess, or mismatched properties we need
+                    // an extra property check where the intersection is viewed as a single object. The following are motivating
+                    // examples that all should be errors, but aren't without this extra property check:
+                    //
+                    //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
+                    //
+                    //   declare let wrong: { a: { y: string } };
+                    //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
+                    //
+                    //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                    //     x = y;  // Mismatched property in source intersection
+                    //   }
+                    //
+                    // We suppress recursive intersection property checks because they can generate lots of work when relating
+                    // recursive intersections that are structurally similar but not exactly identical. See #37854.
+                    if (result && !inPropertyCheck && (
+                        target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection) ||
+                        isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                        inPropertyCheck = true;
+                        result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                        inPropertyCheck = false;
                     }
                 }
                 if (result) {
@@ -19691,9 +19698,6 @@ namespace ts {
             }
 
             function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
-                if (intersectionState & IntersectionState.PropertyCheck) {
-                    return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
-                }
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 let varianceCheckFailed = false;
@@ -22559,7 +22563,7 @@ namespace ts {
         }
 
         function isMemberOfStringMapping(source: Type, target: Type): boolean {
-            if (target.flags & (TypeFlags.String | TypeFlags.AnyOrUnknown)) {
+            if (target.flags & (TypeFlags.String | TypeFlags.Any)) {
                 return true;
             }
             if (target.flags & TypeFlags.TemplateLiteral) {
@@ -33310,7 +33314,17 @@ namespace ts {
 
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             const links = getNodeLinks(node);
-            return links.isExhaustive !== undefined ? links.isExhaustive : (links.isExhaustive = computeExhaustiveSwitchStatement(node));
+            if (links.isExhaustive === undefined) {
+                links.isExhaustive = 0;  // Indicate resolution is in process
+                const exhaustive = computeExhaustiveSwitchStatement(node);
+                if (links.isExhaustive === 0) {
+                    links.isExhaustive = exhaustive;
+                }
+            }
+            else if (links.isExhaustive === 0) {
+                links.isExhaustive = false;  // Resolve circularity to false
+            }
+            return links.isExhaustive;
         }
 
         function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
@@ -33319,7 +33333,7 @@ namespace ts {
                 if (!witnesses) {
                     return false;
                 }
-                const operandConstraint = getBaseConstraintOrType(getTypeOfExpression((node.expression as TypeOfExpression).expression));
+                const operandConstraint = getBaseConstraintOrType(checkExpressionCached((node.expression as TypeOfExpression).expression));
                 // Get the not-equal flags for all handled cases.
                 const notEqualFacts = getNotEqualFactsFromTypeofSwitch(0, 0, witnesses);
                 if (operandConstraint.flags & TypeFlags.AnyOrUnknown) {
@@ -33329,7 +33343,7 @@ namespace ts {
                 // A missing not-equal flag indicates that the type wasn't handled by some case.
                 return !someType(operandConstraint, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
             }
-            const type = getTypeOfExpression(node.expression);
+            const type = checkExpressionCached(node.expression);
             if (!isLiteralType(type)) {
                 return false;
             }
@@ -40116,7 +40130,7 @@ namespace ts {
                 }
             }
             else {
-                forEach(jsdocParameters, ({ name }, index) => {
+                forEach(jsdocParameters, ({ name, isNameFirst }, index) => {
                     if (excludedParameters.has(index) || isIdentifier(name) && parameters.has(name.escapedText)) {
                         return;
                     }
@@ -40126,7 +40140,9 @@ namespace ts {
                         }
                     }
                     else {
-                        errorOrSuggestion(isJs, name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name, idText(name));
+                        if (!isNameFirst) {
+                            errorOrSuggestion(isJs, name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name, idText(name));
+                        }
                     }
                 });
             }
@@ -41402,18 +41418,6 @@ namespace ts {
                     if (isGlobalAugmentation) {
                         return;
                     }
-                    const symbol = getSymbolOfNode(node);
-                    if (symbol) {
-                        // module augmentations cannot introduce new names on the top level scope of the module
-                        // this is done it two steps
-                        // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
-                        // 2. main check - report error if value declaration of the parent symbol is module augmentation)
-                        let reportError = !(symbol.flags & SymbolFlags.Transient);
-                        if (!reportError) {
-                            // symbol should not originate in augmentation
-                            reportError = !!symbol.parent?.declarations && isExternalModuleAugmentation(symbol.parent.declarations[0]);
-                        }
-                    }
                     break;
             }
         }
@@ -42667,27 +42671,6 @@ namespace ts {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
                 getNameOfDeclaration(name.parent) === name;
-        }
-
-        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
-            switch (node.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocEnumTag:
-                    return true;
-                case SyntaxKind.ImportClause:
-                    return (node as ImportClause).isTypeOnly;
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.ExportSpecifier:
-                    return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
-                default:
-                    return false;
-            }
         }
 
         // True if the given identifier is part of a type reference
