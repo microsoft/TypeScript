@@ -27605,7 +27605,7 @@ namespace ts {
                 // replaced with their constraints similar to the apparent type.
                 if (
                     inferenceContext &&
-                    (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional | TypeFlags.IndexedAccess)) &&
+                    (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Simplifiable)) &&
                     some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)
                 ) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
