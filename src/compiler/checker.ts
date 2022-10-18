@@ -5481,6 +5481,12 @@ namespace ts {
                         }
                     }
                     else {
+                        if (getObjectFlags(type) & ObjectFlags.InstantiationExpressionType) {
+                            if (context.visitedTypes?.has(typeId)) {
+                                return createElidedInformationPlaceholder(context);
+                            }
+                            return visitAndTransformType(type, createTypeNodeFromObjectType);
+                        }
                         // Anonymous types without a symbol are never circular.
                         return createTypeNodeFromObjectType(type);
                     }
@@ -5589,7 +5595,6 @@ namespace ts {
                             const signature = resolved.callSignatures[0];
                             const signatureNode = signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, context) as FunctionTypeNode;
                             return signatureNode;
-
                         }
 
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
