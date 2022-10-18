@@ -70,44 +70,28 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "t",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
+          "text": "typeof",
           "kind": "keyword"
         },
         {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
           "text": " ",
           "kind": "space"
         },
         {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "...",
+          "text": "foo",
           "kind": "text"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "text"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
         }
       ],
       "documentation": []

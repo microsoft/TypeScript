@@ -5481,7 +5481,12 @@ namespace ts {
                         }
                     }
                     else {
-                        if (getObjectFlags(type) & ObjectFlags.InstantiationExpressionType) {
+                        const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
+                        if (isInstantiationExpressionType) {
+                            const instantiationExpressionType = type as InstantiationExpressionType;
+                            if (isTypeQueryNode(instantiationExpressionType.node)) {
+                                return factory.cloneNode(instantiationExpressionType.node);
+                            }
                             if (context.visitedTypes?.has(typeId)) {
                                 return createElidedInformationPlaceholder(context);
                             }
