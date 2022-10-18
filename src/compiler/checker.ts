@@ -20367,6 +20367,28 @@ namespace ts {
                 // Compare the remaining non-discriminant properties of each match.
                 let result = Ternary.True;
                 for (const type of matchingTypes) {
+                    if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(type) & ObjectFlags.Reference && (source as TypeReference).target === (type as TypeReference).target &&
+                        !isTupleType(source) && !(isMarkerType(source) || isMarkerType(type))) {
+                        // When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
+                        // and an empty array literal wouldn't be assignable to a `never[]` without this check.
+                        if (isEmptyArrayLiteralType(source)) {
+                            return Ternary.True;
+                        }
+                        // We have type references to the same generic type, and the type references are not marker
+                        // type references (which are intended by be compared structurally). Obtain the variance
+                        // information for the type parameters and relate the type arguments accordingly.
+                        const variances = getVariances((source as TypeReference).target);
+                        // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
+                        // effectively means we measure variance only from type parameter occurrences that aren't nested in
+                        // recursive instantiations of the generic type.
+                        if (variances === emptyArray) {
+                            return Ternary.Unknown;
+                        }
+                        if (!typeArgumentsRelatedTo(getTypeArguments(source as TypeReference), getTypeArguments(type as TypeReference), variances, /* reportErrors */ false, IntersectionState.None)) {
+                            return Ternary.False;
+                        }
+                    }
+
                     result &= propertiesRelatedTo(source, type, /*reportErrors*/ false, excludedProperties, IntersectionState.None);
                     if (result) {
                         result &= signaturesRelatedTo(source, type, SignatureKind.Call, /*reportStructuralErrors*/ false);

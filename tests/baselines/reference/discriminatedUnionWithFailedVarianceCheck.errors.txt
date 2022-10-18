@@ -1,0 +1,57 @@
+tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts(20,3): error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G> | ResultTwo<G>'.
+  Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+    Type 'StringType' is not assignable to type 'G'.
+      'StringType' is assignable to the constraint of type 'G', but 'G' could be instantiated with a different subtype of constraint 'UnknownType'.
+tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts(26,11): error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+  Type 'StringType' is not assignable to type 'G'.
+    'StringType' is assignable to the constraint of type 'G', but 'G' could be instantiated with a different subtype of constraint 'UnknownType'.
+tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts(27,11): error TS2741: Property 'other' is missing in type 'ResultOne<StringType>' but required in type 'ResultTwo<G>'.
+tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts(28,11): error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G> | ResultTwo<G>'.
+  Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+
+
+==== tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts (4 errors) ====
+    interface StringType { prop: string }
+    interface UnknownType { prop: unknown }
+    interface ResultOne<G extends UnknownType> {
+      type: "one";
+      value: G["prop"];
+    }
+    interface ResultTwo<G extends UnknownType> {
+      type: "two";
+      other: G["prop"];
+    }
+    
+    // repro #51180
+    
+    function callback<G extends UnknownType>(): ResultOne<G> | ResultTwo<G> {
+      const dt: ResultOne<StringType> = {
+        type: "one",
+        value: "abc",
+      };
+    
+      return dt; // error
+      ~~~~~~~~~~
+!!! error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G> | ResultTwo<G>'.
+!!! error TS2322:   Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+!!! error TS2322:     Type 'StringType' is not assignable to type 'G'.
+!!! error TS2322:       'StringType' is assignable to the constraint of type 'G', but 'G' could be instantiated with a different subtype of constraint 'UnknownType'.
+    }
+    
+    // repro #51180#issuecomment-1279445430
+    
+    function callback2<G extends UnknownType>(s: ResultOne<StringType>) {
+        const a1: ResultOne<G> = s; // error
+              ~~
+!!! error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+!!! error TS2322:   Type 'StringType' is not assignable to type 'G'.
+!!! error TS2322:     'StringType' is assignable to the constraint of type 'G', but 'G' could be instantiated with a different subtype of constraint 'UnknownType'.
+        const a2: ResultTwo<G> = s; // error
+              ~~
+!!! error TS2741: Property 'other' is missing in type 'ResultOne<StringType>' but required in type 'ResultTwo<G>'.
+!!! related TS2728 tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts:9:3: 'other' is declared here.
+        const m: ResultOne<G> | ResultTwo<G> = s; // error
+              ~
+!!! error TS2322: Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G> | ResultTwo<G>'.
+!!! error TS2322:   Type 'ResultOne<StringType>' is not assignable to type 'ResultOne<G>'.
+    }

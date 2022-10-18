@@ -1,0 +1,92 @@
+=== tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts ===
+interface StringType { prop: string }
+>StringType : Symbol(StringType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 0))
+>prop : Symbol(StringType.prop, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 22))
+
+interface UnknownType { prop: unknown }
+>UnknownType : Symbol(UnknownType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 37))
+>prop : Symbol(UnknownType.prop, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 23))
+
+interface ResultOne<G extends UnknownType> {
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 2, 20))
+>UnknownType : Symbol(UnknownType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 37))
+
+  type: "one";
+>type : Symbol(ResultOne.type, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 2, 44))
+
+  value: G["prop"];
+>value : Symbol(ResultOne.value, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 3, 14))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 2, 20))
+}
+interface ResultTwo<G extends UnknownType> {
+>ResultTwo : Symbol(ResultTwo, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 5, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 6, 20))
+>UnknownType : Symbol(UnknownType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 37))
+
+  type: "two";
+>type : Symbol(ResultTwo.type, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 6, 44))
+
+  other: G["prop"];
+>other : Symbol(ResultTwo.other, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 7, 14))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 6, 20))
+}
+
+// repro #51180
+
+function callback<G extends UnknownType>(): ResultOne<G> | ResultTwo<G> {
+>callback : Symbol(callback, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 9, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 13, 18))
+>UnknownType : Symbol(UnknownType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 37))
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 13, 18))
+>ResultTwo : Symbol(ResultTwo, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 5, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 13, 18))
+
+  const dt: ResultOne<StringType> = {
+>dt : Symbol(dt, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 14, 7))
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>StringType : Symbol(StringType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 0))
+
+    type: "one",
+>type : Symbol(type, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 14, 37))
+
+    value: "abc",
+>value : Symbol(value, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 15, 16))
+
+  };
+
+  return dt; // error
+>dt : Symbol(dt, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 14, 7))
+}
+
+// repro #51180#issuecomment-1279445430
+
+function callback2<G extends UnknownType>(s: ResultOne<StringType>) {
+>callback2 : Symbol(callback2, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 20, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 19))
+>UnknownType : Symbol(UnknownType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 37))
+>s : Symbol(s, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 42))
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>StringType : Symbol(StringType, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 0, 0))
+
+    const a1: ResultOne<G> = s; // error
+>a1 : Symbol(a1, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 25, 9))
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 19))
+>s : Symbol(s, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 42))
+
+    const a2: ResultTwo<G> = s; // error
+>a2 : Symbol(a2, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 26, 9))
+>ResultTwo : Symbol(ResultTwo, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 5, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 19))
+>s : Symbol(s, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 42))
+
+    const m: ResultOne<G> | ResultTwo<G> = s; // error
+>m : Symbol(m, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 27, 9))
+>ResultOne : Symbol(ResultOne, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 1, 39))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 19))
+>ResultTwo : Symbol(ResultTwo, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 5, 1))
+>G : Symbol(G, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 19))
+>s : Symbol(s, Decl(discriminatedUnionWithFailedVarianceCheck.ts, 24, 42))
+}

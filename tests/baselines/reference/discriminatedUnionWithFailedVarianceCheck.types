@@ -1,0 +1,63 @@
+=== tests/cases/compiler/discriminatedUnionWithFailedVarianceCheck.ts ===
+interface StringType { prop: string }
+>prop : string
+
+interface UnknownType { prop: unknown }
+>prop : unknown
+
+interface ResultOne<G extends UnknownType> {
+  type: "one";
+>type : "one"
+
+  value: G["prop"];
+>value : G["prop"]
+}
+interface ResultTwo<G extends UnknownType> {
+  type: "two";
+>type : "two"
+
+  other: G["prop"];
+>other : G["prop"]
+}
+
+// repro #51180
+
+function callback<G extends UnknownType>(): ResultOne<G> | ResultTwo<G> {
+>callback : <G extends UnknownType>() => ResultOne<G> | ResultTwo<G>
+
+  const dt: ResultOne<StringType> = {
+>dt : ResultOne<StringType>
+>{    type: "one",    value: "abc",  } : { type: "one"; value: string; }
+
+    type: "one",
+>type : "one"
+>"one" : "one"
+
+    value: "abc",
+>value : string
+>"abc" : "abc"
+
+  };
+
+  return dt; // error
+>dt : ResultOne<StringType>
+}
+
+// repro #51180#issuecomment-1279445430
+
+function callback2<G extends UnknownType>(s: ResultOne<StringType>) {
+>callback2 : <G extends UnknownType>(s: ResultOne<StringType>) => void
+>s : ResultOne<StringType>
+
+    const a1: ResultOne<G> = s; // error
+>a1 : ResultOne<G>
+>s : ResultOne<StringType>
+
+    const a2: ResultTwo<G> = s; // error
+>a2 : ResultTwo<G>
+>s : ResultOne<StringType>
+
+    const m: ResultOne<G> | ResultTwo<G> = s; // error
+>m : ResultOne<G> | ResultTwo<G>
+>s : ResultOne<StringType>
+}
