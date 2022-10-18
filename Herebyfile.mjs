@@ -5,7 +5,7 @@ import del from "del";
 import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
-import { exec, readJson, getDiffTool, getDirSize } from "./scripts/build/utils.mjs";
+import { exec, readJson, getDiffTool, getDirSize, memoize } from "./scripts/build/utils.mjs";
 import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
@@ -17,17 +17,10 @@ const glob = util.promisify(_glob);
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
-const copyright = "CopyrightNotice.txt";
-
-/** @type {string | undefined} */
-let copyrightHeader;
-function getCopyrightHeader() {
-    if (copyrightHeader === undefined) {
-        copyrightHeader = fs.readFileSync(copyright, "utf-8");
-        copyrightHeader.replace(/\r\n/g, "\n");
-    }
-    return copyrightHeader;
-}
+const copyright = memoize(async () => {
+    const contents = await fs.promises.readFile("CopyrightNotice.txt", "utf-8");
+    return contents.replace(/\r\n/g, "\n");
+});
 
 
 // TODO(jakebailey): This is really gross. If the build is cancelled (i.e. Ctrl+C), the modification will persist.
@@ -67,26 +60,28 @@ export const buildScripts = task({
     run: () => buildProject("scripts")
 });
 
-
-/** @type {{ libs: string[]; paths: Record<string, string | undefined>; }} */
-const libraries = readJson("./src/lib/libs.json");
-const libs = libraries.libs.map(lib => {
-    const relativeSources = ["header.d.ts", lib + ".d.ts"];
-    const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
-    const sources = relativeSources.map(s => path.posix.join("src/lib", s));
-    const target = `built/local/${relativeTarget}`;
-    return { target, relativeTarget, sources };
+const libs = memoize(() => {
+    /** @type {{ libs: string[]; paths: Record<string, string | undefined>; }} */
+    const libraries = readJson("./src/lib/libs.json");
+    const libs = libraries.libs.map(lib => {
+        const relativeSources = ["header.d.ts", lib + ".d.ts"];
+        const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+        const sources = relativeSources.map(s => path.posix.join("src/lib", s));
+        const target = `built/local/${relativeTarget}`;
+        return { target, sources };
+    });
+    return libs;
 });
+
 
 export const generateLibs = task({
     name: "lib",
     description: "Builds the library targets",
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
-        for (const lib of libs) {
-            let output = getCopyrightHeader();
+        for (const lib of libs()) {
+            let output = await copyright();
 
-            await fs.promises.writeFile(lib.target, getCopyrightHeader());
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
                 // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
@@ -181,12 +176,13 @@ async function runDtsBundler(entrypoint, output) {
  * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [setDynamicImport]
+ * @property {boolean} [treeShaking]
  */
 async function runEsbuild(entrypoint, outfile, taskOptions = {}) {
     /** @type {esbuild.BuildOptions} */
     const options = {
         entryPoints: [entrypoint],
-        banner: { js: getCopyrightHeader() },
+        banner: { js: await copyright() },
         bundle: true,
         outfile,
         platform: "node",
@@ -194,12 +190,12 @@ async function runEsbuild(entrypoint, outfile, taskOptions = {}) {
         format: "cjs",
         sourcemap: "linked",
         sourcesContent: false,
+        treeShaking: taskOptions.treeShaking,
         external: [
             ...(taskOptions.external ?? []),
             "source-map-support",
         ],
         supported: {
-            // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
             "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
         },
         logLevel: "warning",
@@ -379,6 +375,10 @@ const { main: tsserver } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs, compilerDebug],
+    // Even though this seems like an exectuable, so could be the default CJS,
+    // this is used in the browser too. Do the same thing that we do for our
+    // libraries and generate an IIFE with name `ts`, as to not pollute the global
+    // scope.
     esbuildOptions: { exportIsTsObject: true },
 });
 export { tsserver };
@@ -429,6 +429,9 @@ const { main: tests } = entrypointBuildTask({
     output: testRunner,
     mainDeps: [generateLibs, compilerDebug],
     esbuildOptions: {
+        // Ensure we never drop any dead code, which might be helpful while debugging.
+        treeShaking: false,
+        // These are directly imported via import statements and should not be bundled.
         external: [
             "chai",
             "del",
@@ -599,7 +602,7 @@ export const diffRwc = task({
  * @param {string} localBaseline Path to the local copy of the baselines
  * @param {string} refBaseline Path to the reference copy of the baselines
  */
-function createBaselineAccept(localBaseline, refBaseline) {
+function baselineAcceptTask(localBaseline, refBaseline) {
     /**
      * @param {string} p
      */
@@ -626,13 +629,13 @@ function createBaselineAccept(localBaseline, refBaseline) {
 export const baselineAccept = task({
     name: "baseline-accept",
     description: "Makes the most recent test results the new baseline, overwriting the old baseline",
-    run: createBaselineAccept(localBaseline, refBaseline),
+    run: baselineAcceptTask(localBaseline, refBaseline),
 });
 
 export const baselineAcceptRwc = task({
     name: "baseline-accept-rwc",
     description: "Makes the most recent rwc test results the new baseline, overwriting the old baseline",
-    run: createBaselineAccept(localRwcBaseline, refRwcBaseline),
+    run: baselineAcceptTask(localRwcBaseline, refRwcBaseline),
 });
 
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
@@ -675,7 +678,7 @@ export const produceLKG = task({
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
             "built/local/watchGuard.js",
-        ].concat(libs.map(lib => lib.target));
+        ].concat(libs().map(lib => lib.target));
         const missingFiles = expectedFiles
             .concat(localizationTargets)
             .filter(f => !fs.existsSync(f));

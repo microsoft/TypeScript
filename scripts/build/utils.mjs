@@ -200,3 +200,20 @@ export class Debouncer {
         }
     }
 }
+
+const unset = Symbol();
+/**
+ * @template T
+ * @param {() => T} fn
+ * @returns {() => T}
+ */
+export function memoize(fn) {
+    /** @type {T | unset} */
+    let value = unset;
+    return () => {
+        if (value === unset) {
+            value = fn();
+        }
+        return value;
+    };
+}
