@@ -11,8 +11,7 @@
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },
-        { "path": "../webServer" },
-        { "path": "../deprecatedCompat" }
+        { "path": "../webServer" }
     ],
     "include": ["**/*"]
 }
