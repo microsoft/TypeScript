@@ -2,7 +2,6 @@
 import path from "path";
 import fs from "fs";
 import del from "del";
-import esbuild from "esbuild";
 import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
@@ -11,6 +10,7 @@ import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBa
 import { buildProject as realBuildProject, cleanProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
+import esbuild from "esbuild";
 
 const glob = util.promisify(_glob);
 
@@ -178,95 +178,91 @@ async function runDtsBundler(entrypoint, output) {
  * @param {string} outfile
  * @param {ESBuildTaskOptions | undefined} [taskOptions]
  */
- function esbuildTask(entrypoint, outfile, taskOptions = {}) {
-    return {
-        build: async () => {
-            /** @type {esbuild.BuildOptions} */
-            const options = {
-                entryPoints: [entrypoint],
-                banner: { js: getCopyrightHeader() },
-                bundle: true,
-                outfile,
-                platform: "node",
-                target: "es2018", // Covers Node 10.
-                format: "cjs",
-                sourcemap: "linked",
-                sourcesContent: false,
-                external: [
-                    ...(taskOptions.external ?? []),
-                    "source-map-support",
-                ],
-                supported: {
-                    // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
-                    "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
-                },
-                logLevel: "warning",
-                // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-                plugins: [
-                    {
-                        name: "no-node-modules",
-                        setup: (build) => {
-                            build.onLoad({ filter: /[\\/]node_modules[\\/]/ }, () => {
-                                // Ideally, we'd use "--external:./node_modules/*" here, but that doesn't work; we
-                                // will instead end up with paths to node_modules rather than the package names.
-                                // Instead, we'll return a load error when we see that we're trying to bundle from
-                                // node_modules, then explicitly declare which external dependencies we rely on, which
-                                // ensures that the correct module specifier is kept in the output (the non-wildcard
-                                // form works properly). It also helps us keep tabs on what external dependencies we
-                                // may be importing, which is handy.
-                                //
-                                // See: https://github.com/evanw/esbuild/issues/1958
-                                return {
-                                    errors: [{ text: 'Attempted to bundle from node_modules; ensure "external" is set correctly.' }]
-                                };
-                            });
-                        }
-                    },
-                    {
-                        name: "fix-require",
-                        setup: (build) => {
-                            build.onEnd(async () => {
-                                // esbuild converts calls to "require" to "__require"; this function
-                                // calls the real require if it exists, or throws if it does not (rather than
-                                // throwing an error like "require not defined"). But, since we want typescript
-                                // to be consumable by other bundlers, we need to convert these calls back to
-                                // require so our imports are visible again.
-                                //
-                                // The leading spaces are to keep the offsets the same within the files to keep
-                                // source maps working (though this only really matters for the line the require is on).
-                                //
-                                // See: https://github.com/evanw/esbuild/issues/1905
-                                let contents = await fs.promises.readFile(outfile, "utf-8");
-                                contents = contents.replace(/__require\(/g, "  require(");
-                                await fs.promises.writeFile(outfile, contents);
-                            });
-                        },
-                    }
-                ]
-            };
-
-            if (taskOptions.exportIsTsObject) {
-                // These snippets cannot appear in the actual source files, otherwise they will be rewritten
-                // to things like exports or requires.
-
-                // If we are in a CJS context, export the ts namespace.
-                let footer = `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }`;
-
-                if (taskOptions.setDynamicImport) {
-                    // If we are in a server bundle, inject the dynamicImport function.
-                    // This only works because the web server's "start" function returns;
-                    // the node server does not, but we don't use this there.
-                    footer += `\nif (ts.server && ts.server.setDynamicImport) { ts.server.setDynamicImport(id => import(id)); }`;
-                }
-
-                options.format = "iife"; // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-                options.globalName = "ts"; // Name the variable ts, matching our old big bundle and so we can use the code below.
-                options.footer = { js: footer };
-            }
-
-            await esbuild.build(options);
+async function runEsbuild(entrypoint, outfile, taskOptions = {}) {
+    /** @type {esbuild.BuildOptions} */
+    const options = {
+        entryPoints: [entrypoint],
+        banner: { js: getCopyrightHeader() },
+        bundle: true,
+        outfile,
+        platform: "node",
+        target: "es2018", // Covers Node 10.
+        format: "cjs",
+        sourcemap: "linked",
+        sourcesContent: false,
+        external: [
+            ...(taskOptions.external ?? []),
+            "source-map-support",
+        ],
+        supported: {
+            // "const-and-let": false, // https://github.com/evanw/esbuild/issues/297
+            "object-rest-spread": false, // Performance enhancement, see: https://github.com/evanw/esbuild/releases/tag/v0.14.46
         },
+        logLevel: "warning",
+        // legalComments: "none", // If we add copyright headers to the source files, uncomment.
+        plugins: [
+            {
+                name: "no-node-modules",
+                setup: (build) => {
+                    build.onLoad({ filter: /[\\/]node_modules[\\/]/ }, () => {
+                        // Ideally, we'd use "--external:./node_modules/*" here, but that doesn't work; we
+                        // will instead end up with paths to node_modules rather than the package names.
+                        // Instead, we'll return a load error when we see that we're trying to bundle from
+                        // node_modules, then explicitly declare which external dependencies we rely on, which
+                        // ensures that the correct module specifier is kept in the output (the non-wildcard
+                        // form works properly). It also helps us keep tabs on what external dependencies we
+                        // may be importing, which is handy.
+                        //
+                        // See: https://github.com/evanw/esbuild/issues/1958
+                        return {
+                            errors: [{ text: 'Attempted to bundle from node_modules; ensure "external" is set correctly.' }]
+                        };
+                    });
+                }
+            },
+            {
+                name: "fix-require",
+                setup: (build) => {
+                    build.onEnd(async () => {
+                        // esbuild converts calls to "require" to "__require"; this function
+                        // calls the real require if it exists, or throws if it does not (rather than
+                        // throwing an error like "require not defined"). But, since we want typescript
+                        // to be consumable by other bundlers, we need to convert these calls back to
+                        // require so our imports are visible again.
+                        //
+                        // The leading spaces are to keep the offsets the same within the files to keep
+                        // source maps working (though this only really matters for the line the require is on).
+                        //
+                        // See: https://github.com/evanw/esbuild/issues/1905
+                        let contents = await fs.promises.readFile(outfile, "utf-8");
+                        contents = contents.replace(/__require\(/g, "  require(");
+                        await fs.promises.writeFile(outfile, contents);
+                    });
+                },
+            }
+        ]
     };
+
+    if (taskOptions.exportIsTsObject) {
+        // These snippets cannot appear in the actual source files, otherwise they will be rewritten
+        // to things like exports or requires.
+
+        // If we are in a CJS context, export the ts namespace.
+        let footer = `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }`;
+
+        if (taskOptions.setDynamicImport) {
+            // If we are in a server bundle, inject the dynamicImport function.
+            // This only works because the web server's "start" function returns;
+            // the node server does not, but we don't use this there.
+            footer += `\nif (ts.server && ts.server.setDynamicImport) { ts.server.setDynamicImport(id => import(id)); }`;
+        }
+
+        options.format = "iife"; // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
+        options.globalName = "ts"; // Name the variable ts, matching our old big bundle and so we can use the code below.
+        options.footer = { js: footer };
+    }
+
+    await esbuild.build(options);
 }
 
 /**
@@ -281,101 +277,142 @@ async function writeCJSReexport(infile, outfile) {
     await fs.promises.writeFile(outfile, `module.exports = require("./${inRelativeToOut}")`);
 }
 
-const esbuildDebugTools = esbuildTask("./src/debug/compilerDebug.ts", "./built/local/compilerDebug.js");
 
-const buildDebugTools = task({
-    name: "build-debug-tools",
+const buildCompilerDebug = task({
+    name: "build-compiler-debug",
     dependencies: [generateDiagnostics],
-    run: () => cmdLineOptions.bundle ? esbuildDebugTools.build() : buildProject("src/debug"),
+    run: () => buildProject("src/debug"),
+});
+
+const bundleCompilerDebug = task({
+    name: "bundle-compiler-debug",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/debug/compilerDebug.ts", "./built/local/compilerDebug.js"),
+});
+
+const shimCompilerDebug = task({
+    name: "shim-compiler-debug",
+    run: () => writeCJSReexport("./built/local/debug/compilerDebug.js", "./built/local/compilerDebug.js"),
+});
+
+const compilerDebug = task({
+    name: "compiler-debug",
+    dependencies: cmdLineOptions.bundle ? [bundleCompilerDebug] : [buildCompilerDebug, shimCompilerDebug],
 });
 
 
-const esbuildTsc = esbuildTask("./src/tsc/tsc.ts", "./built/local/tsc.js");
+const buildTsc = task({
+    name: "build-tsc",
+    dependencies: [generateDiagnostics],
+    run: () => buildProject("src/tsc"),
+});
 
-export const buildTsc = task({
+const bundleTsc = task({
+    name: "bundle-tsc",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/tsc/tsc.ts", "./built/local/tsc.js"),
+});
+
+const shimTsc = task({
+    name: "shim-tsc",
+    run: () => writeCJSReexport("./built/local/tsc/tsc.js", "./built/local/tsc.js"),
+});
+
+export const tsc = task({
     name: "tsc",
     description: "Builds the command-line compiler",
-    dependencies: [generateDiagnostics, buildDebugTools, generateLibs],
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildTsc.build();
-        await writeCJSReexport("./built/local/tsc/tsc.js", "./built/local/tsc.js");
-        await buildProject("src/tsc");
-    }
+    dependencies: [compilerDebug, generateLibs].concat(cmdLineOptions.bundle ? [bundleTsc] : [buildTsc, shimTsc]),
 });
 
 
-const buildServicesWithTsc = task({
-    name: "services-src",
+const buildServices = task({
+    name: "build-services",
     dependencies: [generateDiagnostics],
     run: () => buildProject("src/typescript"),
 });
 
-// TODO(jakebailey): rename this; no longer "services".
-
-const esbuildServices = esbuildTask("./src/typescript/typescript.ts", "./built/local/typescript.js", { exportIsTsObject: true });
-
-export const buildServices = task({
-    name: "services",
-    description: "Builds the language service",
-    dependencies: [generateDiagnostics, generateLibs].concat(cmdLineOptions.bundle ? [] : [buildServicesWithTsc]),
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildServices.build();
-        await writeCJSReexport("./built/local/typescript/typescript.js", "./built/local/typescript.js");
-    }
+const bundleServices = task({
+    name: "bundle-services",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/typescript/typescript.ts", "./built/local/typescript.js", { exportIsTsObject: true }),
 });
 
+const shimServices = task({
+    name: "shim-services",
+    run: () => writeCJSReexport("./built/local/typescript/typescript.js", "./built/local/typescript.js"),
+});
+
+export const services = task({
+    name: "services",
+    description: "Builds the language service",
+    dependencies: [generateLibs].concat(cmdLineOptions.bundle ? [bundleServices] : [buildServices, shimServices]),
+});
 
 export const dtsServices = task({
     name: "dts-services",
     description: "Bundles typescript.d.ts",
-    dependencies: [buildServicesWithTsc],
+    dependencies: [buildServices],
     run: () => runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts"),
 });
 
-const esbuildServer = esbuildTask("./src/tsserver/server.ts", "./built/local/tsserver.js", { exportIsTsObject: true, setDynamicImport: true });
+const buildServer = task({
+    name: "build-server",
+    dependencies: [generateDiagnostics],
+    run: () => buildProject("src/tsserver"),
+});
 
-export const buildServer = task({
+const bundleServer = task({
+    name: "bundle-server",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/tsserver/server.ts", "./built/local/tsserver.js", { exportIsTsObject: true }),
+});
+
+const shimServer = task({
+    name: "shim-server",
+    run: () => writeCJSReexport("./built/local/tsserver/server.js", "./built/local/tsserver.js"),
+});
+
+export const server = task({
     name: "tsserver",
     description: "Builds the language server",
-    dependencies: [generateDiagnostics, generateLibs],
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildServer.build();
-        await writeCJSReexport("./built/local/tsserver/server.js", "./built/local/tsserver.js");
-        await buildProject("src/tsserver");
-    }
+    dependencies: [generateLibs].concat(cmdLineOptions.bundle ? [bundleServer] : [buildServer, shimServer]),
 });
 
 
 export const min = task({
     name: "min",
     description: "Builds only tsc and tsserver",
-    dependencies: [buildTsc, buildServer],
+    dependencies: [tsc, server],
 });
 
 
-const buildLsslWithTsc = task({
-    name: "lssl-src",
+const buildLssl = task({
+    name: "build-lssl",
     dependencies: [generateDiagnostics],
     run: () => buildProject("src/tsserverlibrary"),
 });
 
-const esbuildLssl = esbuildTask("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js", { exportIsTsObject: true });
-
-export const buildLssl = task({
-    name: "lssl",
-    description: "Builds language service server library",
-    dependencies: [generateDiagnostics, generateLibs].concat(cmdLineOptions.bundle ? [] : [buildLsslWithTsc]),
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildLssl.build();
-        await writeCJSReexport("./built/local/tsserverlibrary/tsserverlibrary.js", "./built/local/tsserverlibrary.js");
-    },
+const bundleLssl = task({
+    name: "bundle-lssl",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js", { exportIsTsObject: true }),
 });
 
+const shimLssl = task({
+    name: "shim-lssl",
+    run: () => writeCJSReexport("./built/local/tsserverlibrary/tsserverlibrary.js", "./built/local/tsserverlibrary.js"),
+});
+
+export const lssl = task({
+    name: "lssl",
+    description: "Builds language service server library",
+    dependencies: [generateLibs].concat(cmdLineOptions.bundle ? [bundleLssl] : [buildLssl, shimLssl]),
+});
 
 export const dtsLssl = task({
     name: "dts-lssl",
     description: "Bundles tsserverlibrary.d.ts",
-    dependencies: [buildLsslWithTsc],
+    dependencies: [buildLssl],
     run: () => runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts")
 });
 
@@ -386,25 +423,37 @@ export const dts = task({
 
 
 const testRunner = "./built/local/run.js";
-const esbuildTests = esbuildTask("./src/testRunner/_namespaces/Harness.ts", testRunner, {
-    external: [
-        "chai",
-        "del",
-        "diff",
-        "mocha",
-        "ms",
-    ],
+
+const buildTests = task({
+    name: "build-tests",
+    dependencies: [generateDiagnostics],
+    run: () => buildProject("src/testRunner"),
 });
 
-export const buildTests = task({
+const bundleTests = task({
+    name: "bundle-tests",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/testRunner/_namespaces/Harness.ts", testRunner, {
+        external: [
+            "chai",
+            "del",
+            "diff",
+            "mocha",
+            "ms",
+        ],
+    }),
+});
+
+const shimTests = task({
+    name: "shim-tests",
+    // TODO(jakebailey): can we modify the test loading to have a consistent entrypoint?
+    run: () => writeCJSReexport("./built/local/testRunner/runner.js", testRunner),
+});
+
+export const tests = task({
     name: "tests",
     description: "Builds the test infrastructure",
-    dependencies: [generateDiagnostics],
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildTests.build();
-        await writeCJSReexport("./built/local/testRunner/runner.js", testRunner);
-        await buildProject("src/testRunner");
-    },
+    dependencies: [generateLibs].concat(cmdLineOptions.bundle ? [bundleTests] : [buildTests, shimTests]),
 });
 
 
@@ -439,41 +488,68 @@ export const lint = task({
 });
 
 
-const esbuildCancellationToken = esbuildTask("./src/cancellationToken/cancellationToken.ts", "./built/local/cancellationToken.js");
-
 const buildCancellationToken = task({
-    name: "cancellation-token",
-    dependencies: [generateDiagnostics],
-    run: async () =>{
-        if (cmdLineOptions.bundle) return esbuildCancellationToken.build();
-        await writeCJSReexport("./built/local/cancellationToken/cancellationToken.js", "./built/local/cancellationToken.js");
-        await buildProject("src/cancellationToken");
-    },
+    name: "build-cancellation-token",
+    run: () => buildProject("src/cancellationToken"),
 });
 
-const esbuildTypingsInstaller = esbuildTask("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js");
+const bundleCancellationToken = task({
+    name: "bundle-cancellation-token",
+    run: () => runEsbuild("./src/cancellationToken/cancellationToken.ts", "./built/local/cancellationToken.js"),
+});
+
+const shimCancellationToken = task({
+    name: "shim-cancellation-token",
+    run: () => writeCJSReexport("./built/local/tsserverlibrary/tsserverlibrary.js", "./built/local/tsserverlibrary.js"),
+});
+
+const cancellationToken = task({
+    name: "cancellation-token",
+    dependencies: cmdLineOptions.bundle ? [bundleCancellationToken] : [buildCancellationToken, shimCancellationToken],
+});
+
 
 const buildTypingsInstaller = task({
-    name: "typings-installer",
+    name: "build-typings-installer",
     dependencies: [generateDiagnostics],
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildTypingsInstaller.build();
-        await writeCJSReexport("./built/local/typingsInstaller/nodeTypingsInstaller.js", "./built/local/typingsInstaller.js");
-        await buildProject("src/typingsInstaller");
-    },
+    run: () => buildProject("src/typingsInstaller"),
+});
+
+const bundleTypingsInstaller = task({
+    name: "bundle-typings-installer",
+    dependencies: [generateDiagnostics],
+    run: () => runEsbuild("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js"),
+});
+
+const shimTypingsInstaller = task({
+    name: "shim-typings-installer",
+    run: () => writeCJSReexport("./built/local/typingsInstaller/nodeTypingsInstaller.js", "./built/local/typingsInstaller.js"),
+});
+
+const typingsInstaller = task({
+    name: "typings-installer",
+    dependencies: cmdLineOptions.bundle ? [bundleTypingsInstaller] : [buildTypingsInstaller, shimTypingsInstaller],
 });
 
 
-const esbuildWatchGuard = esbuildTask("./src/watchGuard/watchGuard.ts", "./built/local/watchGuard.js");
-
 const buildWatchGuard = task({
+    name: "build-watch-guard",
+    run: () => buildProject("src/watchGuard"),
+});
+
+const bundleWatchGuard = task({
+    name: "bundle-watch-guard",
+    run: () => runEsbuild("./src/watchGuard/watchGuard.ts", "./built/local/watchGuard.js"),
+});
+
+const shimWatchGuard = task({
+    name: "shim-watch-guard",
+    run: () => writeCJSReexport("./built/local/watchGuard/watchGuard.js", "./built/local/watchGuard.js"),
+});
+
+const watchGuard = task({
     name: "watch-guard",
-    dependencies: [generateDiagnostics],
-    run: async () => {
-        if (cmdLineOptions.bundle) return esbuildWatchGuard.build();
-        await writeCJSReexport("./built/local/watchGuard/watchGuard.js", "./built/local/watchGuard.js");
-        await buildProject("src/watchGuard");
-    },
+    dependencies: cmdLineOptions.bundle ? [bundleWatchGuard] : [buildWatchGuard, shimWatchGuard],
 });
 
 
@@ -504,16 +580,16 @@ const copyBuiltLocalDiagnosticMessages = task({
 });
 
 
-export const buildOtherOutputs = task({
+export const otherOutputs = task({
     name: "other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
-    dependencies: [buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [cancellationToken, typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, dts],
+    dependencies: [localize, tsc, server, services, lssl, otherOutputs, dts],
 });
 export default local;
 
@@ -521,7 +597,7 @@ export default local;
 export const runTests = task({
     name: "runtests",
     description: "Runs the tests using the built run.js file.",
-    dependencies: [buildTests, generateLibs, dts],
+    dependencies: [tests, generateLibs, dts],
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
 // task("runtests").flags = {
@@ -543,7 +619,7 @@ export const runTests = task({
 export const runTestsParallel = task({
     name: "runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
-    dependencies: [buildTests, generateLibs, dts],
+    dependencies: [tests, generateLibs, dts],
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
 // task("runtests-parallel").flags = {
@@ -621,7 +697,7 @@ export const baselineAcceptRwc = task({
 export const updateSublime = task({
     name: "update-sublime",
     description: "Updates the sublime plugin's tsserver",
-    dependencies: [buildServer],
+    dependencies: [server],
     run: async () => {
         for (const file of ["built/local/tsserver.js", "built/local/tsserver.js.map"]) {
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
@@ -640,7 +716,7 @@ export const importDefinitelyTypedTests = task({
 export const produceLKG = task({
     name: "LKG",
     description: "Makes a new LKG out of the built js files",
-    dependencies: [localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, dts],
+    dependencies: [localize, tsc, server, services, lssl, otherOutputs, dts],
     run: async () => {
         if (!cmdLineOptions.bundle) {
             throw new Error("LKG cannot be created when --bundle=false");
