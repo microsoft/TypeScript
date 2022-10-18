@@ -1,11 +1,10 @@
-import * as ts from "./_namespaces/ts";
 import {
     addRange, BuilderProgram, CancellationToken, chainDiagnosticMessages, combinePaths, CompilerHost, CompilerOptions,
     contains, convertToRelativePath, copyProperties, countWhere, createCompilerDiagnostic,
     createEmitAndSemanticDiagnosticsBuilderProgram, createGetCanonicalFileName, createIncrementalCompilerHost,
     createIncrementalProgram, CreateProgram, createSourceFile, CustomTransformers, Debug, Diagnostic,
     DiagnosticCategory, DiagnosticMessage, DiagnosticMessageChain, DiagnosticReporter, Diagnostics,
-    DirectoryStructureHost, EmitAndSemanticDiagnosticsBuilderProgram, emptyArray, endsWith, ExitStatus,
+    DirectoryStructureHost, EmitAndSemanticDiagnosticsBuilderProgram, EmitResult, emptyArray, endsWith, ExitStatus,
     ExtendedConfigCacheEntry, Extension, externalHelpersModuleNameText, FileExtensionInfo, fileExtensionIs,
     FileIncludeKind, FileIncludeReason, FileWatcher, filter, find, flattenDiagnosticMessageText, forEach, forEachEntry,
     ForegroundColorEscapeSequences, formatColorAndReset, formatDiagnostic, FormatDiagnosticsHost,
@@ -14,12 +13,13 @@ import {
     getParsedCommandLineOfConfigFile, getPatternFromSpec, getReferencedFileLocation, getRegexFromPattern,
     getRelativePathFromDirectory, getWatchFactory, HasCurrentDirectory, isExternalOrCommonJsModule, isReferencedFile,
     isReferenceFileLocation, isString, last, Map, maybeBind, memoize, ModuleKind, noop, normalizePath, outFile,
-    packageIdToString, ParseConfigFileHost, pathIsAbsolute, Program, ProgramHost, ProjectReference,
-    ReportEmitErrorSummary, ReportFileInError, sortAndDeduplicateDiagnostics, SourceFile, sys, System,
+    packageIdToString, ParseConfigFileHost, ParsedCommandLine, pathIsAbsolute, Program, ProgramHost, ProjectReference,
+    ReportEmitErrorSummary, ReportFileInError, sortAndDeduplicateDiagnostics, SortedReadonlyArray, SourceFile, sys, System,
     targetOptionDeclaration, WatchCompilerHost, WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions, WatchFactory, WatchFactoryHost, WatchHost, WatchLogLevel, WatchOptions,
     WatchStatusReporter, WriteFileCallback, writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
@@ -121,7 +121,7 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
  *
  * @internal
  */
-export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
+export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter): ParsedCommandLine | undefined {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
     const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
@@ -481,7 +481,7 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     cancellationToken?: CancellationToken,
     emitOnlyDtsFiles?: boolean,
     customTransformers?: CustomTransformers
-) {
+): { emitResult: EmitResult; diagnostics: SortedReadonlyArray<Diagnostic>; } {
     const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
 
     // First get and report any syntactic errors.
@@ -654,10 +654,10 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getSourceFile: (fileName, languageVersionOrOptions, onError) => {
             let text: string | undefined;
             try {
-                ts.performance.mark("beforeIORead");
+                performance.mark("beforeIORead");
                 text = host.readFile(fileName, getCompilerOptions().charset);
-                ts.performance.mark("afterIORead");
-                ts.performance.measure("I/O Read", "beforeIORead", "afterIORead");
+                performance.mark("afterIORead");
+                performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
                 if (onError) {
@@ -690,7 +690,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 
     function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
         try {
-            ts.performance.mark("beforeIOWrite");
+            performance.mark("beforeIOWrite");
 
             // NOTE: If patchWriteFileEnsuringDirectory has been called,
             // the host.writeFile will do its own directory creation and
@@ -703,8 +703,8 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
                 path => host.createDirectory!(path),
                 path => host.directoryExists!(path));
 
-            ts.performance.mark("afterIOWrite");
-            ts.performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            performance.mark("afterIOWrite");
+            performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
         }
         catch (e) {
             if (onError) {

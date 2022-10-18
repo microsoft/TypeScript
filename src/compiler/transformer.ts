@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     addRange, append, Bundle, chainBundle, CompilerOptions, createEmitHelperFactory, CustomTransformer,
     CustomTransformerFactory, CustomTransformers, Debug, DiagnosticWithLocation, disposeEmitNodes, EmitFlags,
@@ -12,6 +11,7 @@ import {
     transformLegacyDecorators, transformModule, transformNodeModule, transformSystemModule, transformTypeScript,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
@@ -240,7 +240,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
     }
 
-    ts.performance.mark("beforeTransform");
+    performance.mark("beforeTransform");
 
     // Chain together and initialize each transformer.
     const transformersWithContext = transformers.map(t => t(context));
@@ -265,8 +265,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     // prevent modification of the lexical environment.
     state = TransformationState.Completed;
 
-    ts.performance.mark("afterTransform");
-    ts.performance.measure("transformTime", "beforeTransform", "afterTransform");
+    performance.mark("afterTransform");
+    performance.measure("transformTime", "beforeTransform", "afterTransform");
 
     return {
         transformed,

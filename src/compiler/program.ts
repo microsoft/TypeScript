@@ -59,6 +59,7 @@ import {
     VariableStatement, walkUpParenthesizedExpressions, WriteFileCallback, WriteFileCallbackData,
     writeFileEnsuringDirectories, zipToModeAwareCache,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {
@@ -130,10 +131,10 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
     function getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void): SourceFile | undefined {
         let text: string | undefined;
         try {
-            ts.performance.mark("beforeIORead");
+            performance.mark("beforeIORead");
             text = compilerHost.readFile(fileName);
-            ts.performance.mark("afterIORead");
-            ts.performance.measure("I/O Read", "beforeIORead", "afterIORead");
+            performance.mark("afterIORead");
+            performance.measure("I/O Read", "beforeIORead", "afterIORead");
         }
         catch (e) {
             if (onError) {
@@ -157,7 +158,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
 
     function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
         try {
-            ts.performance.mark("beforeIOWrite");
+            performance.mark("beforeIOWrite");
 
             // NOTE: If patchWriteFileEnsuringDirectory has been called,
             // the system.writeFile will do its own directory creation and
@@ -170,8 +171,8 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
                 path => (compilerHost.createDirectory || system.createDirectory)(path),
                 path => directoryExists(path));
 
-            ts.performance.mark("afterIOWrite");
-            ts.performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            performance.mark("afterIOWrite");
+            performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
         }
         catch (e) {
             if (onError) {
@@ -1118,7 +1119,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
     tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
-    ts.performance.mark("beforeProgram");
+    performance.mark("beforeProgram");
 
     const host = createProgramOptions.host || createCompilerHost(options);
     const configParsingHost = parseConfigHostFromCompilerHostLike(host);
@@ -1424,8 +1425,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     });
 
     verifyCompilerOptions();
-    ts.performance.mark("afterProgram");
-    ts.performance.measure("Program", "beforeProgram", "afterProgram");
+    performance.mark("afterProgram");
+    performance.measure("Program", "beforeProgram", "afterProgram");
     tracing?.pop();
 
     return program;
@@ -1465,10 +1466,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
         const redirectedReference = getRedirectReferenceForResolution(containingFile);
         tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
-        ts.performance.mark("beforeResolveModule");
+        performance.mark("beforeResolveModule");
         const result = actualResolveModuleNamesWorker(moduleNames, containingFile, containingFileName, reusedNames, redirectedReference);
-        ts.performance.mark("afterResolveModule");
-        ts.performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
+        performance.mark("afterResolveModule");
+        performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
         tracing?.pop();
         pullDiagnosticsFromCache(moduleNames, containingFile);
         return result;
@@ -1480,10 +1481,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
         const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
         tracing?.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
-        ts.performance.mark("beforeResolveTypeReference");
+        performance.mark("beforeResolveTypeReference");
         const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference, containingFileMode);
-        ts.performance.mark("afterResolveTypeReference");
-        ts.performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
+        performance.mark("afterResolveTypeReference");
+        performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
         tracing?.pop();
         return result;
     }
@@ -2028,7 +2029,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
         Debug.assert(!outFile(options));
         tracing?.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
-        ts.performance.mark("beforeEmit");
+        performance.mark("beforeEmit");
         const emitResult = emitFiles(
             notImplementedResolver,
             getEmitHost(writeFileCallback),
@@ -2038,8 +2039,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             /*onlyBuildInfo*/ true
         );
 
-        ts.performance.mark("afterEmit");
-        ts.performance.measure("Emit", "beforeEmit", "afterEmit");
+        performance.mark("afterEmit");
+        performance.measure("Emit", "beforeEmit", "afterEmit");
         tracing?.pop();
         return emitResult;
     }
@@ -2123,7 +2124,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // checked is to not pass the file to getEmitResolver.
         const emitResolver = getTypeChecker().getEmitResolver(outFile(options) ? undefined : sourceFile, cancellationToken);
 
-        ts.performance.mark("beforeEmit");
+        performance.mark("beforeEmit");
 
         const emitResult = emitFiles(
             emitResolver,
@@ -2135,8 +2136,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             forceDtsEmit
         );
 
-        ts.performance.mark("afterEmit");
-        ts.performance.measure("Emit", "beforeEmit", "afterEmit");
+        performance.mark("afterEmit");
+        performance.measure("Emit", "beforeEmit", "afterEmit");
         return emitResult;
     }
 

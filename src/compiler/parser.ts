@@ -65,6 +65,7 @@ import {
     UnionOrIntersectionTypeNode, UnionTypeNode, UpdateExpression, VariableDeclaration, VariableDeclarationList,
     VariableStatement, VoidExpression, WhileStatement, WithStatement, YieldExpression,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const enum SignatureFlags {
     None = 0,
@@ -1005,7 +1006,7 @@ function setExternalModuleIndicator(sourceFile: SourceFile) {
 
 export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
     tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
-    ts.performance.mark("beforeParse");
+    performance.mark("beforeParse");
     let result: SourceFile;
 
     perfLogger.logStartParseSourceFile(fileName);
@@ -1026,8 +1027,8 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
     }
     perfLogger.logStopParseSourceFile();
 
-    ts.performance.mark("afterParse");
-    ts.performance.measure("Parse", "beforeParse", "afterParse");
+    performance.mark("afterParse");
+    performance.measure("Parse", "beforeParse", "afterParse");
     tracing?.pop();
     return result;
 }

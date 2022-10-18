@@ -18,6 +18,7 @@ import {
     supportedJSExtensionsFlat, supportedTSExtensionsFlat, sys, System, toPath, tracing, validateLocaleAndSetLanguage,
     version, WatchCompilerHost, WatchOptions,
 } from "./_namespaces/ts";
+import * as performance from "../compiler/_namespaces/ts.performance";
 
 interface Statistic {
     name: string;
@@ -958,7 +959,7 @@ interface SolutionPerformance {
 
 function enableSolutionPerformance(system: System, options: BuildOptions) {
     if (system === sys && options.extendedDiagnostics) {
-        ts.performance.enable();
+        performance.enable();
         return createSolutionPerfomrance();
     }
 }
@@ -996,7 +997,7 @@ function reportSolutionBuilderTimes(
     solutionPerformance: SolutionPerformance | undefined) {
     if (!solutionPerformance) return;
 
-    if (!ts.performance.isEnabled()) {
+    if (!performance.isEnabled()) {
         sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
         return;
     }
@@ -1012,16 +1013,16 @@ function reportSolutionBuilderTimes(
         s.name = `Aggregate ${s.name}`;
         statistics.push(s);
     });
-    ts.performance.forEachMeasure((name, duration) => {
+    performance.forEachMeasure((name, duration) => {
         if (isSolutionMarkOrMeasure(name)) statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
     });
-    ts.performance.disable();
-    ts.performance.enable();
+    performance.disable();
+    performance.enable();
 
     reportAllStatistics(sys, statistics);
 
     function reportSolutionBuilderCountStatistic(name: string) {
-        const value = ts.performance.getCount(name);
+        const value = performance.getCount(name);
         if (value) {
             statistics.push({ name: getNameFromSolutionBuilderMarkOrMeasure(name), value, type: StatisticType.count });
         }
@@ -1042,7 +1043,7 @@ function canTrace(system: System, compilerOptions: CompilerOptions) {
 
 function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
     if (canReportDiagnostics(system, compilerOptions)) {
-        ts.performance.enable(system);
+        performance.enable(system);
     }
 
     if (canTrace(system, compilerOptions)) {
@@ -1087,11 +1088,11 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
             reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
 
-        const isPerformanceEnabled = ts.performance.isEnabled();
-        const programTime = isPerformanceEnabled ? ts.performance.getDuration("Program") : 0;
-        const bindTime = isPerformanceEnabled ? ts.performance.getDuration("Bind") : 0;
-        const checkTime = isPerformanceEnabled ? ts.performance.getDuration("Check") : 0;
-        const emitTime = isPerformanceEnabled ? ts.performance.getDuration("Emit") : 0;
+        const isPerformanceEnabled = performance.isEnabled();
+        const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
+        const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
+        const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
+        const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
         if (compilerOptions.extendedDiagnostics) {
             const caches = program.getRelationCacheSizes();
             reportCountStatistic("Assignability cache size", caches.assignable);
@@ -1099,7 +1100,7 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
             reportCountStatistic("Subtype cache size", caches.subtype);
             reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
             if (isPerformanceEnabled) {
-                ts.performance.forEachMeasure((name, duration) => {
+                performance.forEachMeasure((name, duration) => {
                     if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);
                 });
             }
@@ -1109,8 +1110,8 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", ts.performance.getDuration("I/O Read"), /*aggregate*/ true);
-            reportTimeStatistic("I/O write", ts.performance.getDuration("I/O Write"), /*aggregate*/ true);
+            reportTimeStatistic("I/O read", performance.getDuration("I/O Read"), /*aggregate*/ true);
+            reportTimeStatistic("I/O write", performance.getDuration("I/O Write"), /*aggregate*/ true);
             reportTimeStatistic("Parse time", programTime, /*aggregate*/ true);
             reportTimeStatistic("Bind time", bindTime, /*aggregate*/ true);
             reportTimeStatistic("Check time", checkTime, /*aggregate*/ true);
@@ -1126,15 +1127,15 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         else {
             if (solutionPerformance) {
                 // Clear selected marks and measures
-                ts.performance.forEachMeasure(name => {
-                    if (!isSolutionMarkOrMeasure(name)) ts.performance.clearMeasures(name);
+                performance.forEachMeasure(name => {
+                    if (!isSolutionMarkOrMeasure(name)) performance.clearMeasures(name);
                 });
-                ts.performance.forEachMark(name => {
-                    if (!isSolutionMarkOrMeasure(name)) ts.performance.clearMarks(name);
+                performance.forEachMark(name => {
+                    if (!isSolutionMarkOrMeasure(name)) performance.clearMarks(name);
                 });
             }
             else {
-                ts.performance.disable();
+                performance.disable();
             }
         }
     }

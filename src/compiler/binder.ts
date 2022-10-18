@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String, AccessExpression, addRelatedInfo, append, appendIfUnique, ArrayBindingElement, ArrayLiteralExpression,
     ArrowFunction, AssignmentDeclarationKind, BinaryExpression, BinaryOperatorToken, BindableAccessExpression,
@@ -59,6 +58,7 @@ import {
     TypeLiteralNode, TypeOfExpression, TypeParameterDeclaration, unescapeLeadingUnderscores, unreachableCodeIsError,
     unusedLabelIsError, VariableDeclaration, WhileStatement, WithStatement,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 /** @internal */
 export const enum ModuleInstanceState {
@@ -236,12 +236,12 @@ const binder = createBinder();
 
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-    ts.performance.mark("beforeBind");
+    performance.mark("beforeBind");
     perfLogger.logStartBindFile("" + file.fileName);
     binder(file, options);
     perfLogger.logStopBindFile();
-    ts.performance.mark("afterBind");
-    ts.performance.measure("Bind", "beforeBind", "afterBind");
+    performance.mark("afterBind");
+    performance.measure("Bind", "beforeBind", "afterBind");
 }
 
 function createBinder(): (file: SourceFile, options: CompilerOptions) => void {

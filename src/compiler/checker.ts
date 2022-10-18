@@ -197,6 +197,7 @@ import {
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
@@ -42585,10 +42586,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSourceFile(node: SourceFile) {
         tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
-        ts.performance.mark("beforeCheck");
+        performance.mark("beforeCheck");
         checkSourceFileWorker(node);
-        ts.performance.mark("afterCheck");
-        ts.performance.measure("Check", "beforeCheck", "afterCheck");
+        performance.mark("afterCheck");
+        performance.measure("Check", "beforeCheck", "afterCheck");
         tracing?.pop();
     }
 
