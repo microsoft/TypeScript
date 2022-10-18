@@ -155,7 +155,7 @@ import {
     mapDefined, MappedSymbol, MappedType, MappedTypeNode, MatchingKeys, maybeBind, MemberName, MemberOverrideStatus,
     memoize, MetaProperty, MethodDeclaration, MethodSignature, minAndMax, MinusToken, Modifier, ModifierFlags,
     modifiersToFlags, modifierToFlag, ModuleBlock, ModuleDeclaration, ModuleInstanceState, ModuleKind,
-    ModuleResolutionKind, moduleSpecifiers, NamedDeclaration, NamedExports, NamedImportsOrExports, NamedTupleMember,
+    ModuleResolutionKind, NamedDeclaration, NamedExports, NamedImportsOrExports, NamedTupleMember,
     NamespaceDeclaration, NamespaceExport, NamespaceExportDeclaration, NamespaceImport, needsScopeMarker, NewExpression,
     Node, NodeArray, NodeBuilderFlags, nodeCanBeDecorated, NodeCheckFlags, NodeFlags, nodeHasName, nodeIsDecorated,
     nodeIsMissing, nodeIsPresent, nodeIsSynthesized, NodeLinks, nodeStartsNewLexicalEnvironment, NodeWithTypeArguments,
@@ -197,6 +197,8 @@ import {
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
+import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
@@ -42552,10 +42554,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSourceFile(node: SourceFile) {
         tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
-        ts.performance.mark("beforeCheck");
+        performance.mark("beforeCheck");
         checkSourceFileWorker(node);
-        ts.performance.mark("afterCheck");
-        ts.performance.measure("Check", "beforeCheck", "afterCheck");
+        performance.mark("afterCheck");
+        performance.measure("Check", "beforeCheck", "afterCheck");
         tracing?.pop();
     }
 

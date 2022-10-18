@@ -27,6 +27,7 @@ import {
     UpToDateStatus, UpToDateStatusType, version, WatchFactory, WatchHost, WatchOptions, WatchStatusReporter, WatchType,
     WildcardDirectoryWatcher, writeFile, WriteFileCallback,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const minimumDate = new Date(-8640000000000000);
 const maximumDate = new Date(8640000000000000);
@@ -443,7 +444,7 @@ function parseConfigFile(state: SolutionBuilderState, configFileName: ResolvedCo
         return isParsedCommandLine(value) ? value : undefined;
     }
 
-    ts.performance.mark("SolutionBuilder::beforeConfigFileParsing");
+    performance.mark("SolutionBuilder::beforeConfigFileParsing");
     let diagnostic: Diagnostic | undefined;
     const { parseConfigFileHost, baseCompilerOptions, baseWatchOptions, extendedConfigCache, host } = state;
     let parsed: ParsedCommandLine | undefined;
@@ -457,8 +458,8 @@ function parseConfigFile(state: SolutionBuilderState, configFileName: ResolvedCo
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
     }
     configFileCache.set(configFilePath, parsed || diagnostic!);
-    ts.performance.mark("SolutionBuilder::afterConfigFileParsing");
-    ts.performance.measure("SolutionBuilder::Config file parsing", "SolutionBuilder::beforeConfigFileParsing", "SolutionBuilder::afterConfigFileParsing");
+    performance.mark("SolutionBuilder::afterConfigFileParsing");
+    performance.measure("SolutionBuilder::Config file parsing", "SolutionBuilder::beforeConfigFileParsing", "SolutionBuilder::afterConfigFileParsing");
     return parsed;
 }
 
@@ -776,7 +777,7 @@ function createUpdateOutputFileStampsProject(
             if (updateOutputFileStampsPending) {
                 updateOutputTimestamps(state, config, projectPath);
             }
-            ts.performance.mark("SolutionBuilder::Timestamps only updates");
+            performance.mark("SolutionBuilder::Timestamps only updates");
             return doneInvalidatedProject(state, projectPath);
         }
     };
@@ -890,8 +891,8 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
 
     function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
         executeSteps(BuildStep.Done, cancellationToken, writeFile, customTransformers);
-        if (kind === InvalidatedProjectKind.Build) ts.performance.mark("SolutionBuilder::Projects built");
-        else ts.performance.mark("SolutionBuilder::Bundles updated");
+        if (kind === InvalidatedProjectKind.Build) performance.mark("SolutionBuilder::Projects built");
+        else performance.mark("SolutionBuilder::Bundles updated");
         return doneInvalidatedProject(state, projectPath);
     }
 
@@ -1857,10 +1858,10 @@ function getUpToDateStatus(state: SolutionBuilderState, project: ParsedCommandLi
         return prior;
     }
 
-    ts.performance.mark("SolutionBuilder::beforeUpToDateCheck");
+    performance.mark("SolutionBuilder::beforeUpToDateCheck");
     const actual = getUpToDateStatusWorker(state, project, resolvedPath);
-    ts.performance.mark("SolutionBuilder::afterUpToDateCheck");
-    ts.performance.measure("SolutionBuilder::Up-to-date check", "SolutionBuilder::beforeUpToDateCheck", "SolutionBuilder::afterUpToDateCheck");
+    performance.mark("SolutionBuilder::afterUpToDateCheck");
+    performance.measure("SolutionBuilder::Up-to-date check", "SolutionBuilder::beforeUpToDateCheck", "SolutionBuilder::afterUpToDateCheck");
     state.projectStatus.set(resolvedPath, actual);
     return actual;
 }
@@ -2009,10 +2010,10 @@ function queueReferencingProjects(
 }
 
 function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers, onlyReferences?: boolean): ExitStatus {
-    ts.performance.mark("SolutionBuilder::beforeBuild");
+    performance.mark("SolutionBuilder::beforeBuild");
     const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
-    ts.performance.mark("SolutionBuilder::afterBuild");
-    ts.performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
+    performance.mark("SolutionBuilder::afterBuild");
+    performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
     return result;
 }
 
@@ -2046,10 +2047,10 @@ function buildWorker(state: SolutionBuilderState, project: string | undefined, c
 }
 
 function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean): ExitStatus {
-    ts.performance.mark("SolutionBuilder::beforeClean");
+    performance.mark("SolutionBuilder::beforeClean");
     const result = cleanWorker(state, project, onlyReferences);
-    ts.performance.mark("SolutionBuilder::afterClean");
-    ts.performance.measure("SolutionBuilder::Clean", "SolutionBuilder::beforeClean", "SolutionBuilder::afterClean");
+    performance.mark("SolutionBuilder::afterClean");
+    performance.measure("SolutionBuilder::Clean", "SolutionBuilder::beforeClean", "SolutionBuilder::afterClean");
     return result;
 }
 
@@ -2130,10 +2131,10 @@ function scheduleBuildInvalidatedProject(state: SolutionBuilderState, time: numb
 }
 
 function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
-    ts.performance.mark("SolutionBuilder::beforeBuild");
+    performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
-    ts.performance.mark("SolutionBuilder::afterBuild");
-    ts.performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
+    performance.mark("SolutionBuilder::afterBuild");
+    performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
     if (buildOrder) reportErrorSummary(state, buildOrder);
 }
 
@@ -2274,7 +2275,7 @@ function watchPackageJsonFiles(state: SolutionBuilderState, resolved: ResolvedCo
 
 function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
     if (!state.watchAllProjectsPending) return;
-    ts.performance.mark("SolutionBuilder::beforeWatcherCreation");
+    performance.mark("SolutionBuilder::beforeWatcherCreation");
     state.watchAllProjectsPending = false;
     for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
         const resolvedPath = toResolvedConfigFilePath(state, resolved);
@@ -2293,8 +2294,8 @@ function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
             watchPackageJsonFiles(state, resolved, resolvedPath, cfg);
         }
     }
-    ts.performance.mark("SolutionBuilder::afterWatcherCreation");
-    ts.performance.measure("SolutionBuilder::Watcher creation", "SolutionBuilder::beforeWatcherCreation", "SolutionBuilder::afterWatcherCreation");
+    performance.mark("SolutionBuilder::afterWatcherCreation");
+    performance.measure("SolutionBuilder::Watcher creation", "SolutionBuilder::beforeWatcherCreation", "SolutionBuilder::afterWatcherCreation");
 }
 
 function stopWatching(state: SolutionBuilderState) {

@@ -28,7 +28,7 @@ import {
     isStringANonContextualKeyword, isStringLiteral, isStringLiteralLike, isTupleTypeNode, isTypeAliasDeclaration,
     isTypeNode, isTypeParameterDeclaration, isTypeQueryNode, isUnparsedSource, last, LateBoundDeclaration,
     LateVisibilityPaintedStatement, length, map, Map, mapDefined, MethodDeclaration, MethodSignature, Modifier,
-    ModifierFlags, ModuleBody, ModuleDeclaration, moduleSpecifiers, NamedDeclaration, NamespaceDeclaration,
+    ModifierFlags, ModuleBody, ModuleDeclaration, NamedDeclaration, NamespaceDeclaration,
     needsScopeMarker, Node, NodeArray, NodeBuilderFlags, NodeFlags, NodeId, normalizeSlashes, OmittedExpression,
     orderedRemoveItem, ParameterDeclaration, parseNodeFactory, pathContainsNodeModules, pathIsRelative,
     PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, Set, SetAccessorDeclaration,
@@ -39,6 +39,7 @@ import {
     TypeReferenceNode, unescapeLeadingUnderscores, UnparsedSource, VariableDeclaration, VariableStatement, visitArray,
     visitEachChild, visitNode, visitNodes, VisitResult,
 } from "../_namespaces/ts";
+import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

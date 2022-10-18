@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     arrayFrom, binarySearchKey, CharacterCodes, combinePaths, compareValues, Debug, DocumentPosition,
     DocumentPositionMapper, DocumentPositionMapperHost, EmitHost, emptyArray, ESMap, every, getDirectoryPath,
@@ -6,6 +5,7 @@ import {
     isString, Iterator, LineAndCharacter, Map, RawSourceMap, some, sortAndDeduplicate, SortedReadonlyArray,
     SourceMapGenerator, trimStringEnd,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {
@@ -15,8 +15,8 @@ export interface SourceMapGeneratorOptions {
 /** @internal */
 export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
     const { enter, exit } = generatorOptions.extendedDiagnostics
-        ? ts.performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
-        : ts.performance.nullTimer;
+        ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
+        : performance.nullTimer;
 
     // Current source map file and its index in the sources list
     const rawSources: string[] = [];

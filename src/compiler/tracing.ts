@@ -1,9 +1,9 @@
-import * as ts from "./_namespaces/ts";
 import {
     combinePaths, ConditionalType, Debug, EvolvingArrayType, getLineAndCharacterOfPosition, getSourceFileOfNode,
     IndexedAccessType, IndexType, IntersectionType, LineAndCharacter, Map, Node, ObjectFlags, Path, ReverseMappedType,
     SubstitutionType, timestamp, Type, TypeFlags, TypeReference, unescapeLeadingUnderscores, UnionType,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 /* Tracing events for the compiler. */
 
@@ -172,13 +172,13 @@ export namespace tracingEnabled {
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 
-        ts.performance.mark("beginTracing");
+        performance.mark("beginTracing");
         fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
         if (extras) fs.writeSync(traceFd, `,${extras}`);
         if (args) fs.writeSync(traceFd, `,"args":${JSON.stringify(args)}`);
         fs.writeSync(traceFd, `}`);
-        ts.performance.mark("endTracing");
-        ts.performance.measure("Tracing", "beginTracing", "endTracing");
+        performance.mark("endTracing");
+        performance.measure("Tracing", "beginTracing", "endTracing");
     }
 
     function getLocation(node: Node | undefined) {
@@ -200,7 +200,7 @@ export namespace tracingEnabled {
     }
 
     function dumpTypes(types: readonly Type[]) {
-        ts.performance.mark("beginDumpTypes");
+        performance.mark("beginDumpTypes");
 
         const typesPath = legend[legend.length - 1].typesPath!;
         const typesFd = fs.openSync(typesPath, "w");
@@ -329,8 +329,8 @@ export namespace tracingEnabled {
 
         fs.closeSync(typesFd);
 
-        ts.performance.mark("endDumpTypes");
-        ts.performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
+        performance.mark("endDumpTypes");
+        performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
     }
 
     export function dumpLegend() {

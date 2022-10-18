@@ -79,6 +79,7 @@ import {
     VariableDeclaration, VariableDeclarationList, VariableStatement, VoidExpression, WhileStatement, WithStatement,
     writeCommentRange, writeFile, WriteFileCallbackData, YieldExpression,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const brackets = createBracketsMap();
 
@@ -367,7 +368,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
     const emitterDiagnostics = createDiagnosticCollection();
     const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
     const writer = createTextWriter(newLine);
-    const { enter, exit } = ts.performance.createTimer("printTime", "beforePrint", "afterPrint");
+    const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
     let bundleBuildInfo: BundleBuildInfo | undefined;
     let emitSkipped = false;
 
@@ -1030,7 +1031,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     let commentsDisabled = !!printerOptions.removeComments;
     let lastSubstitution: Node | undefined;
     let currentParenthesizerRule: ((node: Node) => Node) | undefined;
-    const { enter: enterComment, exit: exitComment } = ts.performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
+    const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
     const parenthesizer = factory.parenthesizer;
     const typeArgumentParenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> = {
         select: index => index === 0 ? parenthesizer.parenthesizeLeadingTypeArgument : undefined
