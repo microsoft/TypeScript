@@ -154,6 +154,23 @@ namespace ts {
                 ]
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "when declarationMap changes",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                edits: [
+                    {
+                        subScenario: "Disable declarationMap",
+                        modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                    },
+                    {
+                        subScenario: "Enable declarationMap",
+                        modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                    },
+                ]
+            });
+
             verifyTsc({
                 scenario: "sample1",
                 subScenario: "indicates that it would skip builds during a dry build",
