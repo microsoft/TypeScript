@@ -19663,7 +19663,7 @@ namespace ts {
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
                     if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
                         const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                        if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                        if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                         }
@@ -21630,8 +21630,7 @@ namespace ts {
         }
 
         function isUnitLikeType(type: Type): boolean {
-            return type.flags & TypeFlags.Intersection ? some((type as IntersectionType).types, isUnitType) :
-                !!(type.flags & TypeFlags.Unit);
+            return isUnitType(getBaseConstraintOrType(type));
         }
 
         function extractUnitType(type: Type) {
