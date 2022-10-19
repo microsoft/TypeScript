@@ -60,6 +60,8 @@ namespace ts {
             createUniqueName,
             getGeneratedNameForNode,
             createPrivateIdentifier,
+            createUniquePrivateName,
+            getGeneratedPrivateNameForNode,
             createToken,
             createSuper,
             createThis,
@@ -819,7 +821,7 @@ namespace ts {
         }
 
         // @api
-        function createStringLiteralFromNode(sourceNode: PropertyNameLiteral): StringLiteral {
+        function createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier): StringLiteral {
             const node = createBaseStringLiteral(getTextOfIdentifierOrLiteral(sourceNode), /*isSingleQuote*/ undefined);
             node.textSourceNode = sourceNode;
             return node;
@@ -861,16 +863,18 @@ namespace ts {
             return node;
         }
 
-        function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags) {
+        function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
             const node = createBaseIdentifier(text, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
             node.autoGenerateFlags = autoGenerateFlags;
             node.autoGenerateId = nextAutoGenerateId;
+            node.autoGeneratePrefix = prefix;
+            node.autoGenerateSuffix = suffix;
             nextAutoGenerateId++;
             return node;
         }
 
         // @api
-        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier {
+        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
             const node = createBaseIdentifier(text, originalKeywordKind);
             if (typeArguments) {
                 // NOTE: we do not use `setChildren` here because typeArguments in an identifier do not contribute to transformations
@@ -878,6 +882,10 @@ namespace ts {
             }
             if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
+            }
+            if (hasExtendedUnicodeEscape) {
+                node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+                node.transformFlags |= TransformFlags.ContainsES2015;
             }
             return node;
         }
@@ -890,10 +898,10 @@ namespace ts {
         }
 
         // @api
-        function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): GeneratedIdentifier {
+        function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean, prefix?: string | GeneratedNamePart, suffix?: string): GeneratedIdentifier {
             let flags = GeneratedIdentifierFlags.Auto;
             if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
-            const name = createBaseGeneratedIdentifier("", flags);
+            const name = createBaseGeneratedIdentifier("", flags, prefix, suffix);
             if (recordTempVariable) {
                 recordTempVariable(name);
             }
@@ -905,33 +913,70 @@ namespace ts {
         function createLoopVariable(reservedInNestedScopes?: boolean): Identifier {
             let flags = GeneratedIdentifierFlags.Loop;
             if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
-            return createBaseGeneratedIdentifier("", flags);
+            return createBaseGeneratedIdentifier("", flags, /*prefix*/ undefined, /*suffix*/ undefined);
         }
 
         /** Create a unique name based on the supplied text. */
         // @api
-        function createUniqueName(text: string, flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None): Identifier {
+        function createUniqueName(text: string, flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None, prefix?: string | GeneratedNamePart, suffix?: string): Identifier {
             Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
             Debug.assert((flags & (GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)) !== GeneratedIdentifierFlags.FileLevel, "GeneratedIdentifierFlags.FileLevel cannot be set without also setting GeneratedIdentifierFlags.Optimistic");
-            return createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | flags);
+            return createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | flags, prefix, suffix);
         }
 
         /** Create a unique name generated for a node. */
         // @api
-        function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags = 0): Identifier {
+        function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags = 0, prefix?: string | GeneratedNamePart, suffix?: string): Identifier {
             Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
-            const name = createBaseGeneratedIdentifier(node && isIdentifier(node) ? idText(node) : "", GeneratedIdentifierFlags.Node | flags);
+            const text = !node ? "" :
+                isMemberName(node) ? formatGeneratedName(/*privateName*/ false, prefix, node, suffix, idText) :
+                `generated@${getNodeId(node)}`;
+            if (prefix || suffix) flags |= GeneratedIdentifierFlags.Optimistic;
+            const name = createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Node | flags, prefix, suffix);
             name.original = node;
             return name;
+        }
+
+        function createBasePrivateIdentifier(text: string) {
+            const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
+            node.escapedText = escapeLeadingUnderscores(text);
+            node.transformFlags |= TransformFlags.ContainsClassFields;
+            return node;
         }
 
         // @api
         function createPrivateIdentifier(text: string): PrivateIdentifier {
             if (!startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
-            const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
-            node.escapedText = escapeLeadingUnderscores(text);
-            node.transformFlags |= TransformFlags.ContainsClassFields;
+            return createBasePrivateIdentifier(text);
+        }
+
+        function createBaseGeneratedPrivateIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
+            const node = createBasePrivateIdentifier(text);
+            node.autoGenerateFlags = autoGenerateFlags;
+            node.autoGenerateId = nextAutoGenerateId;
+            node.autoGeneratePrefix = prefix;
+            node.autoGenerateSuffix = suffix;
+            nextAutoGenerateId++;
             return node;
+        }
+
+        /** Create a unique name based on the supplied text. */
+        // @api
+        function createUniquePrivateName(text?: string, prefix?: string | GeneratedNamePart, suffix?: string): PrivateIdentifier {
+            if (text && !startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
+            const autoGenerateFlags = GeneratedIdentifierFlags.ReservedInNestedScopes |
+                (text ? GeneratedIdentifierFlags.Unique : GeneratedIdentifierFlags.Auto);
+            return createBaseGeneratedPrivateIdentifier(text ?? "", autoGenerateFlags, prefix, suffix);
+        }
+
+        // @api
+        function getGeneratedPrivateNameForNode(node: Node, prefix?: string | GeneratedNamePart, suffix?: string): PrivateIdentifier {
+            const text = isMemberName(node) ? formatGeneratedName(/*privateName*/ true, prefix, node, suffix, idText) :
+                `#generated@${getNodeId(node)}`;
+            const flags = prefix || suffix ? GeneratedIdentifierFlags.Optimistic : GeneratedIdentifierFlags.None;
+            const name = createBaseGeneratedPrivateIdentifier(text, GeneratedIdentifierFlags.Node | flags, prefix, suffix);
+            name.original = node;
+            return name;
         }
 
         //
@@ -998,6 +1043,9 @@ namespace ts {
                 case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
+                case SyntaxKind.AccessorKeyword:
+                    transformFlags = TransformFlags.ContainsClassFields;
+                    break;
                 case SyntaxKind.ThisKeyword:
                     // 'this' indicates a lexical 'this'
                     transformFlags = TransformFlags.ContainsLexicalThis;
@@ -1061,6 +1109,7 @@ namespace ts {
             if (flags & ModifierFlags.Static) result.push(createModifier(SyntaxKind.StaticKeyword));
             if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
             if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
+            if (flags & ModifierFlags.Accessor) result.push(createModifier(SyntaxKind.AccessorKeyword));
             if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
             if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
             if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
@@ -5594,7 +5643,7 @@ namespace ts {
             setOriginalNode(clone, node);
 
             for (const key in node) {
-                if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+                if (hasProperty(clone, key) || !hasProperty(node, key)) {
                     continue;
                 }
 
@@ -6358,11 +6407,9 @@ namespace ts {
                 rawTextScanner.setText("`" + rawText + "`");
                 break;
             case SyntaxKind.TemplateHead:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("`" + rawText + "${");
                 break;
             case SyntaxKind.TemplateMiddle:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("}" + rawText + "${");
                 break;
             case SyntaxKind.TemplateTail:
@@ -6791,7 +6838,6 @@ namespace ts {
         return node;
     }
 
-    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**

@@ -79,23 +79,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (used version)
 
-WatchedFiles::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library"}
+  {}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -228,23 +228,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library"}
+  {}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -360,23 +360,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
-  {"directoryName":"/user/username/projects/sample1/library"}
+  {}
 /user/username/projects/sample1/app:
-  {"directoryName":"/user/username/projects/sample1/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

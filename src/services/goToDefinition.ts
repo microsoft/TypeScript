@@ -16,7 +16,7 @@ namespace ts.GoToDefinition {
         const { parent } = node;
         const typeChecker = program.getTypeChecker();
 
-        if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
+        if (node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)) {
             return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
         }
 
@@ -171,13 +171,15 @@ namespace ts.GoToDefinition {
         if (!baseDeclaration) return;
 
         const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
-        const baseType = baseTypeNode ? typeChecker.getTypeAtLocation(baseTypeNode) : undefined;
-        if (!baseType) return;
+        if (!baseTypeNode) return;
+        const expression = skipParentheses(baseTypeNode.expression);
+        const base = isClassExpression(expression) ? expression.symbol : typeChecker.getSymbolAtLocation(expression);
+        if (!base) return;
 
         const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
         const symbol = hasStaticModifier(classElement)
-            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
-            : typeChecker.getPropertyOfType(baseType, name);
+            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbol(base), name)
+            : typeChecker.getPropertyOfType(typeChecker.getDeclaredTypeOfSymbol(base), name);
         if (!symbol) return;
 
         return getDefinitionFromSymbol(typeChecker, symbol, node);

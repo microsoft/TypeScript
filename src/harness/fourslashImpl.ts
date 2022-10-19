@@ -1,4 +1,3 @@
-
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -529,8 +528,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyOrganizeImports(newContent: string) {
-            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
+        public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
+            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
             this.applyChanges(changes);
             this.verifyFileContent(this.activeFile.fileName, newContent);
         }
@@ -2737,7 +2736,7 @@ namespace FourSlash {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
-            };
+            }
             replacement.push(");");
 
             throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
@@ -3481,8 +3480,18 @@ namespace FourSlash {
 
         public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
-            refactors = refactors.filter(r =>
-                r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)) && (actionDescription === undefined || r.actions.some(a => a.description === actionDescription)));
+            refactors = refactors.filter(r => r.name === name);
+
+            if (actionName !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.name === actionName));
+            }
+
+            if (actionDescription !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.description === actionDescription));
+            }
+
+            refactors = refactors.filter(r => r.actions.length > 0);
+
             const isAvailable = refactors.length > 0;
 
             if (negative) {

@@ -262,7 +262,7 @@ namespace ts {
                     if (file.packageJsonScope) {
                         (result ??= []).push(chainDiagnosticMessages(
                             /*details*/ undefined,
-                            file.packageJsonScope.packageJsonContent.type ?
+                            file.packageJsonScope.contents.packageJsonContent.type ?
                                 Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
                                 Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
                             toFileName(last(file.packageJsonLocations!), fileNameConvertor)
