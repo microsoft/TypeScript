@@ -28,7 +28,7 @@ namespace ts.GoToDefinition {
 
         if (node.kind === SyntaxKind.ReturnKeyword) {
             const functionDeclaration = findAncestor(node.parent, n =>
-                isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration;
+                isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
             return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
         }
 
