@@ -1,18 +1,22 @@
+import * as ts from "../_namespaces/ts";
+
 // DEPRECATION: Overloads to createImportTypeNode/updateImportTypeNode that do not accept `assertions`
 // DEPRECATION PLAN:
 //     - soft: 4.6
 //     - warn: 4.7
 //     - error: 5.0
-namespace ts {
-export interface NodeFactory {
-    // NOTE: The following overload is not deprecated, but exists to ensure we don't mark `createImportTypeNode(argument)` as deprecated due to optional parameters.
-    createImportTypeNode(argument: ts.TypeNode, assertions?: ts.ImportTypeAssertionContainer, qualifier?: ts.EntityName, typeArguments?: readonly ts.TypeNode[], isTypeOf?: boolean): ts.ImportTypeNode;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface NodeFactory {
+        // NOTE: The following overload is not deprecated, but exists to ensure we don't mark `createImportTypeNode(argument)` as deprecated due to optional parameters.
+        createImportTypeNode(argument: ts.TypeNode, assertions?: ts.ImportTypeAssertionContainer, qualifier?: ts.EntityName, typeArguments?: readonly ts.TypeNode[], isTypeOf?: boolean): ts.ImportTypeNode;
 
-    /** @deprecated Use the overload that accepts 'assertions' */
-    createImportTypeNode(argument: ts.TypeNode, qualifier?: ts.EntityName, typeArguments?: readonly ts.TypeNode[], isTypeOf?: boolean): ts.ImportTypeNode;
+        /** @deprecated Use the overload that accepts 'assertions' */
+        createImportTypeNode(argument: ts.TypeNode, qualifier?: ts.EntityName, typeArguments?: readonly ts.TypeNode[], isTypeOf?: boolean): ts.ImportTypeNode;
 
-    /** @deprecated Use the overload that accepts 'assertions' */
-    updateImportTypeNode(node: ts.ImportTypeNode, argument: ts.TypeNode, qualifier: ts.EntityName | undefined, typeArguments: readonly ts.TypeNode[] | undefined, isTypeOf?: boolean): ts.ImportTypeNode;
+        /** @deprecated Use the overload that accepts 'assertions' */
+        updateImportTypeNode(node: ts.ImportTypeNode, argument: ts.TypeNode, qualifier: ts.EntityName | undefined, typeArguments: readonly ts.TypeNode[] | undefined, isTypeOf?: boolean): ts.ImportTypeNode;
+    }
 }
 
 function patchNodeFactory(factory: ts.NodeFactory) {
@@ -84,4 +88,3 @@ ts.addNodeFactoryPatcher(patchNodeFactory);
 
 // Patch `ts.factory` because its public
 patchNodeFactory(ts.factory);
-}

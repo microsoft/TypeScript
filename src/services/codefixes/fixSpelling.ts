@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixSpelling";
 const errorCodes = [
     ts.Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
@@ -137,5 +137,4 @@ function getResolvedSourceFileFromImportDeclaration(sourceFile: ts.SourceFile, c
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);
-}
 }

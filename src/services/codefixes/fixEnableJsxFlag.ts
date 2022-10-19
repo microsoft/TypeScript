@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixID = "fixEnableJsxFlag";
 const errorCodes = [ts.Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
 ts.codefix.registerCodeFix({
@@ -31,5 +31,4 @@ ts.codefix.registerCodeFix({
 
 function doChange(changeTracker: ts.textChanges.ChangeTracker, configFile: ts.TsConfigSourceFile) {
     ts.codefix.setJsonCompilerOptionValue(changeTracker, configFile, "jsx", ts.factory.createStringLiteral("react"));
-}
 }

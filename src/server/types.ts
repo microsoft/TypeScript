@@ -1,4 +1,5 @@
-declare namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export interface CompressedData {
     length: number;
     compressionKind: string;
@@ -22,5 +23,4 @@ export interface ServerHost extends ts.System {
     require?(initialPath: string, moduleName: string): ModuleImportResult;
     /*@internal*/
     importPlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
-}
 }

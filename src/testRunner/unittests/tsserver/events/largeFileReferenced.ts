@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../../_namespaces/ts";
+
 describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
 
     function getLargeFile(useLargeTsFile: boolean) {
@@ -72,4 +73,3 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
         verifyLargeFile(/*useLargeTsFile*/ false);
     });
 });
-}

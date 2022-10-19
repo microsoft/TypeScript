@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";
 const fixMissingAttributes = "fixMissingAttributes";
@@ -651,5 +651,4 @@ function findScope(node: ts.Node) {
         if (returnStatement) return returnStatement;
     }
     return ts.getSourceFileOfNode(node);
-}
 }

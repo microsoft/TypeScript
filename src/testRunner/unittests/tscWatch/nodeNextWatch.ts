@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "nodenext watch emit",
@@ -55,4 +57,3 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         ],
     });
 });
-}

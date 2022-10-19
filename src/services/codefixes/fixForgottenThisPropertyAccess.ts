@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = ts.Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
 const errorCodes = [
@@ -41,5 +41,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
     // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
     ts.suppressLeadingAndTrailingTrivia(node);
     changes.replaceNode(sourceFile, node, ts.factory.createPropertyAccessExpression(className ? ts.factory.createIdentifier(className) : ts.factory.createThis(), node));
-}
 }

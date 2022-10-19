@@ -1,7 +1,8 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const visitedNestedConvertibleFunctions = new ts.Map<string, true>();
 
+/** @internal */
 export function computeSuggestionDiagnostics(sourceFile: ts.SourceFile, program: ts.Program, cancellationToken: ts.CancellationToken): ts.DiagnosticWithLocation[] {
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: ts.DiagnosticWithLocation[] = [];
@@ -120,6 +121,7 @@ function isConvertibleFunction(node: ts.FunctionLikeDeclaration, checker: ts.Typ
         returnsPromise(node, checker);
 }
 
+/** @internal */
 export function returnsPromise(node: ts.FunctionLikeDeclaration, checker: ts.TypeChecker): boolean {
     const signature = checker.getSignatureFromDeclaration(node);
     const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
@@ -134,11 +136,13 @@ function hasReturnStatementWithPromiseHandler(body: ts.Block, checker: ts.TypeCh
     return !!ts.forEachReturnStatement(body, statement => isReturnStatementWithFixablePromiseHandler(statement, checker));
 }
 
+/** @internal */
 export function isReturnStatementWithFixablePromiseHandler(node: ts.Node, checker: ts.TypeChecker): node is ts.ReturnStatement & { expression: ts.CallExpression } {
     return ts.isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
 }
 
 // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
+/** @internal */
 export function isFixablePromiseHandler(node: ts.Node, checker: ts.TypeChecker): boolean {
     // ensure outermost call exists and is a promise handler
     if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
@@ -228,6 +232,7 @@ function canBeConvertedToClass(node: ts.Node, checker: ts.TypeChecker): boolean 
     return false;
 }
 
+/** @internal */
 export function canBeConvertedToAsync(node: ts.Node): node is ts.FunctionDeclaration | ts.MethodDeclaration | ts.FunctionExpression | ts.ArrowFunction {
     switch (node.kind) {
         case ts.SyntaxKind.FunctionDeclaration:
@@ -238,5 +243,4 @@ export function canBeConvertedToAsync(node: ts.Node): node is ts.FunctionDeclara
         default:
             return false;
     }
-}
 }

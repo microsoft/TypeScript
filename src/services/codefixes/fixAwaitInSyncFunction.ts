@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixAwaitInSyncFunction";
 const errorCodes = [
     ts.Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
@@ -79,5 +79,4 @@ function doChange(
         }
     }
     changes.insertModifierBefore(sourceFile, ts.SyntaxKind.AsyncKeyword, insertBefore);
-}
 }

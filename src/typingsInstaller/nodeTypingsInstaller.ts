@@ -1,4 +1,5 @@
-namespace ts.server.typingsInstaller {
+import * as ts from "./_namespaces/ts";
+
 const fs: {
     appendFileSync(file: string, content: string): void
 } = require("fs");
@@ -251,5 +252,4 @@ function indent(newline: string, str: string | undefined): string {
     return str && str.length
         ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
         : "";
-}
 }

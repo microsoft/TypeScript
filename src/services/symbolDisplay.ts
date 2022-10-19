@@ -1,8 +1,9 @@
-/* @internal */
-namespace ts.SymbolDisplay {
+import * as ts from "./_namespaces/ts";
+
 const symbolDisplayNodeBuilderFlags = ts.NodeBuilderFlags.OmitParameterModifiers | ts.NodeBuilderFlags.IgnoreErrors | ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
 // TODO(drosen): use contextual SemanticMeaning.
+/** @internal */
 export function getSymbolKind(typeChecker: ts.TypeChecker, symbol: ts.Symbol, location: ts.Node): ts.ScriptElementKind {
     const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
     if (result !== ts.ScriptElementKind.unknown) {
@@ -108,6 +109,7 @@ function getNormalizedSymbolModifiers(symbol: ts.Symbol) {
     return [];
 }
 
+/** @internal */
 export function getSymbolModifiers(typeChecker: ts.TypeChecker, symbol: ts.Symbol): string {
     if (!symbol) {
         return ts.ScriptElementKindModifier.none;
@@ -136,6 +138,7 @@ interface SymbolDisplayPartsDocumentationAndSymbolKind {
 }
 
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+/** @internal */
 export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: ts.TypeChecker, symbol: ts.Symbol, sourceFile: ts.SourceFile, enclosingDeclaration: ts.Node | undefined,
     location: ts.Node, semanticMeaning = ts.getMeaningFromLocation(location), alias?: ts.Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: ts.SymbolDisplayPart[] = [];
@@ -765,5 +768,4 @@ function isLocalVariableOrFunction(symbol: ts.Symbol) {
         // parent is in function block
         return true;
     });
-}
 }

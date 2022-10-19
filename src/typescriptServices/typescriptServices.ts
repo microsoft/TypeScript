@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 // enable deprecation logging
 declare const console: any;
 if (typeof console !== "undefined") {
@@ -13,5 +13,4 @@ if (typeof console !== "undefined") {
             }
         }
     };
-}
 }

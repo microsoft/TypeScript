@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
     AsyncMethodsWithSuper = 1 << 0
@@ -37,6 +37,7 @@ const enum HierarchyFacts {
     IterationStatementExcludes = None,
 }
 
+/** @internal */
 export function transformES2018(context: ts.TransformationContext) {
     const {
         factory,
@@ -1306,5 +1307,4 @@ export function transformES2018(context: ts.TransformationContext) {
             );
         }
     }
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.inferFunctionReturnType {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Infer function return type";
 const refactorDescription = ts.Diagnostics.Infer_function_return_type.message;
 
@@ -113,5 +113,4 @@ function tryGetReturnType(typeChecker: ts.TypeChecker, node: ConvertibleDeclarat
     if (signature) {
         return typeChecker.getReturnTypeOfSignature(signature);
     }
-}
 }

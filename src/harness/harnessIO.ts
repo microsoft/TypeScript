@@ -1,4 +1,12 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vpath from "./_namespaces/vpath";
+import * as vfs from "./_namespaces/vfs";
+import * as compiler from "./_namespaces/compiler";
+import * as documents from "./_namespaces/documents";
+import * as fakes from "./_namespaces/fakes";
+
 export interface IO {
     newLine(): string;
     getCurrentDirectory(): string;
@@ -1498,4 +1506,3 @@ export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "
 }
 
 if (Error) (Error as any).stackTraceLimit = 100;
-}

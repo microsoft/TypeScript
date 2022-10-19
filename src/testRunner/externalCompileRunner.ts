@@ -1,4 +1,6 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+
 const fs: typeof import("fs") = require("fs");
 const path: typeof import("path") = require("path");
 const del: typeof import("del") = require("del");
@@ -319,5 +321,4 @@ function splitBy<T>(xs: T[], isStart: (x: T) => boolean): T[][] {
         result.push(group);
     }
     return result;
-}
 }

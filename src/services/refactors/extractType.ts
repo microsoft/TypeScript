@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Extract type";
 
 const extractToTypeAliasAction = {
@@ -248,5 +248,4 @@ function doTypedefChange(changes: ts.textChanges.ChangeTracker, file: ts.SourceF
 
     changes.insertNodeBefore(file, firstStatement, ts.factory.createJSDocComment(/* comment */ undefined, ts.factory.createNodeArray(ts.concatenate<ts.JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
     changes.replaceNode(file, selection, ts.factory.createTypeReferenceNode(name, typeParameters.map(id => ts.factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
-}
 }

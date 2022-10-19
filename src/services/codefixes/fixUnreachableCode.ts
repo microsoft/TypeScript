@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixUnreachableCode";
 const errorCodes = [ts.Diagnostics.Unreachable_code_detected.code];
 ts.codefix.registerCodeFix({
@@ -66,5 +66,4 @@ function lastWhere<T>(a: readonly T[], pred: (value: T) => boolean): T | undefin
         last = value;
     }
     return last;
-}
 }

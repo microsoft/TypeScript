@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
  *
@@ -1329,5 +1330,4 @@ const visitEachChildTable: VisitEachChildTable = {
 function extractSingleNode(nodes: readonly ts.Node[]): ts.Node | undefined {
     ts.Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
     return ts.singleOrUndefined(nodes);
-}
 }

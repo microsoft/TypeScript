@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const enum SignatureFlags {
     None = 0,
     Yield = 1 << 0,
@@ -9961,5 +9962,4 @@ export function tagNamesAreEquivalent(lhs: ts.JsxTagNameExpression, rhs: ts.JsxT
     // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
     return (lhs as ts.PropertyAccessExpression).name.escapedText === (rhs as ts.PropertyAccessExpression).name.escapedText &&
         tagNamesAreEquivalent((lhs as ts.PropertyAccessExpression).expression as ts.JsxTagNameExpression, (rhs as ts.PropertyAccessExpression).expression as ts.JsxTagNameExpression);
-}
 }

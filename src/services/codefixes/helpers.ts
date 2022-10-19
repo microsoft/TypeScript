@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
  * and generates source code for the missing members.
@@ -23,6 +24,7 @@ export function createMissingMemberNodes(
     }
 }
 
+/** @internal */
 export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): ts.SymbolTracker {
     return {
         trackSymbol: () => false,
@@ -30,6 +32,7 @@ export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContex
     };
 }
 
+/** @internal */
 export interface TypeConstructionContext {
     program: ts.Program;
     host: ts.LanguageServiceHost;
@@ -37,12 +40,14 @@ export interface TypeConstructionContext {
 
 type AddNode = ts.PropertyDeclaration | ts.GetAccessorDeclaration | ts.SetAccessorDeclaration | ts.MethodDeclaration | ts.FunctionExpression | ts.ArrowFunction;
 
+/** @internal */
 export const enum PreserveOptionalFlags {
     Method  = 1 << 0,
     Property = 1 << 1,
     All     = Method | Property
 }
 
+/** @internal */
 /**
  * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
  * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
@@ -209,6 +214,7 @@ export function addNewNodeForMemberSymbol(
     }
 }
 
+/** @internal */
 export function createSignatureDeclarationFromSignature(
     kind:
         | ts.SyntaxKind.MethodDeclaration
@@ -318,6 +324,7 @@ export function createSignatureDeclarationFromSignature(
     return undefined;
 }
 
+/** @internal */
 export function createSignatureDeclarationFromCallExpression(
     kind: ts.SyntaxKind.MethodDeclaration | ts.SyntaxKind.FunctionDeclaration | ts.SyntaxKind.MethodSignature,
     context: ts.CodeFixContextBase,
@@ -419,6 +426,7 @@ function createTypeParameterName(index: number) {
         : `T${index}`;
 }
 
+/** @internal */
 export function typeToAutoImportableTypeNode(checker: ts.TypeChecker, importAdder: ts.codefix.ImportAdder, type: ts.Type, contextNode: ts.Node | undefined, scriptTarget: ts.ScriptTarget, flags?: ts.NodeBuilderFlags, tracker?: ts.SymbolTracker): ts.TypeNode | undefined {
     let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
     if (typeNode && ts.isImportTypeNode(typeNode)) {
@@ -441,6 +449,7 @@ function typeContainsTypeParameter(type: ts.Type) {
     return type.flags & ts.TypeFlags.TypeParameter;
 }
 
+/** @internal */
 export function getArgumentTypesAndTypeParameters(checker: ts.TypeChecker, importAdder: ts.codefix.ImportAdder, instanceTypes: ts.Type[], contextNode: ts.Node | undefined, scriptTarget: ts.ScriptTarget, flags?: ts.NodeBuilderFlags, tracker?: ts.SymbolTracker) {
     // Types to be used as the types of the parameters in the new function
     // E.g. from this source:
@@ -637,6 +646,7 @@ function createStubbedMethodBody(quotePreference: ts.QuotePreference) {
     return createStubbedBody(ts.Diagnostics.Method_not_implemented.message, quotePreference);
 }
 
+/** @internal */
 export function createStubbedBody(text: string, quotePreference: ts.QuotePreference): ts.Block {
     return ts.factory.createBlock(
         [ts.factory.createThrowStatement(
@@ -648,6 +658,7 @@ export function createStubbedBody(text: string, quotePreference: ts.QuotePrefere
         /*multiline*/ true);
 }
 
+/** @internal */
 export function setJsonCompilerOptionValues(
     changeTracker: ts.textChanges.ChangeTracker,
     configFile: ts.TsConfigSourceFile,
@@ -680,6 +691,7 @@ export function setJsonCompilerOptionValues(
     }
 }
 
+/** @internal */
 export function setJsonCompilerOptionValue(
     changeTracker: ts.textChanges.ChangeTracker,
     configFile: ts.TsConfigSourceFile,
@@ -689,14 +701,17 @@ export function setJsonCompilerOptionValue(
     setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
 }
 
+/** @internal */
 export function createJsonPropertyAssignment(name: string, initializer: ts.Expression) {
     return ts.factory.createPropertyAssignment(ts.factory.createStringLiteral(name), initializer);
 }
 
+/** @internal */
 export function findJsonProperty(obj: ts.ObjectLiteralExpression, name: string): ts.PropertyAssignment | undefined {
     return ts.find(obj.properties, (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && !!p.name && ts.isStringLiteral(p.name) && p.name.text === name);
 }
 
+/** @internal */
 /**
  * Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
  * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
@@ -734,10 +749,12 @@ function replaceFirstIdentifierOfEntityName(name: ts.EntityName, newIdentifier: 
     return ts.factory.createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
 }
 
+/** @internal */
 export function importSymbols(importAdder: ts.codefix.ImportAdder, symbols: readonly ts.Symbol[]) {
     symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
 }
 
+/** @internal */
 export function findAncestorMatchingSpan(sourceFile: ts.SourceFile, span: ts.TextSpan): ts.Node {
     const end = ts.textSpanEnd(span);
     let token = ts.getTokenAtPosition(sourceFile, span.start);
@@ -745,5 +762,4 @@ export function findAncestorMatchingSpan(sourceFile: ts.SourceFile, span: ts.Tex
         token = token.parent;
     }
     return token;
-}
 }

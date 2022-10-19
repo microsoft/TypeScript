@@ -1,15 +1,21 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function getIterator<I extends readonly any[] | ts.ReadonlySet<any> | ts.ReadonlyESMap<any, any> | undefined>(iterable: I): ts.Iterator<
     I extends ts.ReadonlyESMap<infer K, infer V> ? [K, V] :
     I extends ts.ReadonlySet<infer T> ? T :
     I extends readonly (infer T)[] ? T :
     I extends undefined ? undefined :
     never>;
+/** @internal */
 export function getIterator<K, V>(iterable: ts.ReadonlyESMap<K, V>): ts.Iterator<[K, V]>;
+/** @internal */
 export function getIterator<K, V>(iterable: ts.ReadonlyESMap<K, V> | undefined): ts.Iterator<[K, V]> | undefined;
+/** @internal */
 export function getIterator<T>(iterable: readonly T[] | ts.ReadonlySet<T>): ts.Iterator<T>;
+/** @internal */
 export function getIterator<T>(iterable: readonly T[] | ts.ReadonlySet<T> | undefined): ts.Iterator<T> | undefined;
+/** @internal */
 export function getIterator(iterable: readonly any[] | ts.ReadonlySet<any> | ts.ReadonlyESMap<any, any> | undefined): ts.Iterator<any> | undefined {
     if (iterable) {
         if (isArray(iterable)) return arrayIterator(iterable);
@@ -19,14 +25,19 @@ export function getIterator(iterable: readonly any[] | ts.ReadonlySet<any> | ts.
     }
 }
 
+/** @internal */
 export const emptyArray: never[] = [] as never[];
+/** @internal */
 export const emptyMap: ts.ReadonlyESMap<never, never> = new ts.Map<never, never>();
+/** @internal */
 export const emptySet: ts.ReadonlySet<never> = new ts.Set<never>();
 
+/** @internal */
 export function length(array: readonly any[] | undefined): number {
     return array ? array.length : 0;
 }
 
+/** @internal */
 /**
  * Iterates through 'array' by index and performs the callback on each element of array until the callback
  * returns a truthy value, then returns that value.
@@ -44,6 +55,7 @@ export function forEach<T, U>(array: readonly T[] | undefined, callback: (elemen
     return undefined;
 }
 
+/** @internal */
 /**
  * Like `forEach`, but iterates in reverse order.
  */
@@ -59,6 +71,7 @@ export function forEachRight<T, U>(array: readonly T[] | undefined, callback: (e
     return undefined;
 }
 
+/** @internal */
 /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
 export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
     if (array === undefined) {
@@ -74,6 +87,7 @@ export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (e
     return undefined;
 }
 
+/** @internal */
 export function firstDefinedIterator<T, U>(iter: ts.Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
     while (true) {
         const iterResult = iter.next();
@@ -87,6 +101,7 @@ export function firstDefinedIterator<T, U>(iter: ts.Iterator<T>, callback: (elem
     }
 }
 
+/** @internal */
 export function reduceLeftIterator<T, U>(iterator: ts.Iterator<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
     let result = initial;
     if (iterator) {
@@ -97,6 +112,7 @@ export function reduceLeftIterator<T, U>(iterator: ts.Iterator<T> | undefined, f
     return result;
 }
 
+/** @internal */
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
     const result: V[] = [];
     ts.Debug.assertEqual(arrayA.length, arrayB.length);
@@ -106,6 +122,7 @@ export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], cal
     return result;
 }
 
+/** @internal */
 export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]): ts.Iterator<[T, U]> {
     ts.Debug.assertEqual(arrayA.length, arrayB.length);
     let i = 0;
@@ -120,6 +137,7 @@ export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]):
     };
 }
 
+/** @internal */
 export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): ts.ESMap<K, V> {
     ts.Debug.assert(keys.length === values.length);
     const map = new ts.Map<K, V>();
@@ -129,6 +147,7 @@ export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): ts.ESM
     return map;
 }
 
+/** @internal */
 /**
  * Creates a new array with `element` interspersed in between each element of `input`
  * if there is more than 1 value in `input`. Otherwise, returns the existing array.
@@ -145,6 +164,7 @@ export function intersperse<T>(input: T[], element: T): T[] {
     return result;
 }
 
+/** @internal */
 /**
  * Iterates through `array` by index and performs the callback on each element of array until the callback
  * returns a falsey value, then returns false.
@@ -162,9 +182,12 @@ export function every<T>(array: readonly T[] | undefined, callback: (element: T,
     return true;
 }
 
+/** @internal */
 /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
 export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+/** @internal */
 export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+/** @internal */
 export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
     if (array === undefined) return undefined;
     for (let i = startIndex ?? 0; i < array.length; i++) {
@@ -176,8 +199,11 @@ export function find<T>(array: readonly T[] | undefined, predicate: (element: T,
     return undefined;
 }
 
+/** @internal */
 export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+/** @internal */
 export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+/** @internal */
 export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
     if (array === undefined) return undefined;
     for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
@@ -189,6 +215,7 @@ export function findLast<T>(array: readonly T[] | undefined, predicate: (element
     return undefined;
 }
 
+/** @internal */
 /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
 export function findIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
     if (array === undefined) return -1;
@@ -200,6 +227,7 @@ export function findIndex<T>(array: readonly T[] | undefined, predicate: (elemen
     return -1;
 }
 
+/** @internal */
 export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
     if (array === undefined) return -1;
     for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
@@ -210,6 +238,7 @@ export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (el
     return -1;
 }
 
+/** @internal */
 /**
  * Returns the first truthy result of `callback`, or else fails.
  * This is like `forEach`, but never returns undefined.
@@ -224,6 +253,7 @@ export function findMap<T, U>(array: readonly T[], callback: (element: T, index:
     return ts.Debug.fail();
 }
 
+/** @internal */
 export function contains<T>(array: readonly T[] | undefined, value: T, equalityComparer: ts.EqualityComparer<T> = equateValues): boolean {
     if (array) {
         for (const v of array) {
@@ -235,10 +265,12 @@ export function contains<T>(array: readonly T[] | undefined, value: T, equalityC
     return false;
 }
 
+/** @internal */
 export function arraysEqual<T>(a: readonly T[], b: readonly T[], equalityComparer: ts.EqualityComparer<T> = equateValues): boolean {
     return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
 }
 
+/** @internal */
 export function indexOfAnyCharCode(text: string, charCodes: readonly number[], start?: number): number {
     for (let i = start || 0; i < text.length; i++) {
         if (contains(charCodes, text.charCodeAt(i))) {
@@ -248,6 +280,7 @@ export function indexOfAnyCharCode(text: string, charCodes: readonly number[], s
     return -1;
 }
 
+/** @internal */
 export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T, i: number) => boolean): number {
     let count = 0;
     if (array) {
@@ -261,18 +294,27 @@ export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T,
     return count;
 }
 
+/** @internal */
 /**
  * Filters an array by a predicate function. Returns the same array instance if the predicate is
  * true for all elements, otherwise returns a new array instance containing the filtered subset.
  */
 export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
+/** @internal */
 export function filter<T>(array: T[], f: (x: T) => boolean): T[];
+/** @internal */
 export function filter<T, U extends T>(array: readonly T[], f: (x: T) => x is U): readonly U[];
+/** @internal */
 export function filter<T, U extends T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
+/** @internal */
 export function filter<T, U extends T>(array: T[] | undefined, f: (x: T) => x is U): U[] | undefined;
+/** @internal */
 export function filter<T>(array: T[] | undefined, f: (x: T) => boolean): T[] | undefined;
+/** @internal */
 export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => x is U): readonly U[] | undefined;
+/** @internal */
 export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
+/** @internal */
 export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined {
     if (array) {
         const len = array.length;
@@ -294,6 +336,7 @@ export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean)
     return array;
 }
 
+/** @internal */
 export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
     let outIndex = 0;
     for (let i = 0; i < array.length; i++) {
@@ -305,12 +348,16 @@ export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => 
     array.length = outIndex;
 }
 
+/** @internal */
 export function clear(array: unknown[]): void {
     array.length = 0;
 }
 
+/** @internal */
 export function map<T, U>(array: readonly T[], f: (x: T, i: number) => U): U[];
+/** @internal */
 export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) => U): U[] | undefined;
+/** @internal */
 export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) => U): U[] | undefined {
     let result: U[] | undefined;
     if (array) {
@@ -323,6 +370,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
 }
 
 
+/** @internal */
 export function mapIterator<T, U>(iter: ts.Iterator<T>, mapFn: (x: T) => U): ts.Iterator<U> {
     return {
         next() {
@@ -333,10 +381,15 @@ export function mapIterator<T, U>(iter: ts.Iterator<T>, mapFn: (x: T) => U): ts.
 }
 
 // Maps from T to T and avoids allocation if all elements map to themselves
+/** @internal */
 export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
+/** @internal */
 export function sameMap<T>(array: readonly T[], f: (x: T, i: number) => T): readonly T[];
+/** @internal */
 export function sameMap<T>(array: T[] | undefined, f: (x: T, i: number) => T): T[] | undefined;
+/** @internal */
 export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined;
+/** @internal */
 export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined {
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -355,6 +408,7 @@ export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number)
     return array;
 }
 
+/** @internal */
 /**
  * Flattens an array containing a mix of array or non-array elements.
  *
@@ -375,6 +429,7 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
     return result;
 }
 
+/** @internal */
 /**
  * Maps an array. If the mapped value is an array, it is spread into the result.
  *
@@ -399,6 +454,7 @@ export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: 
     return result || emptyArray;
 }
 
+/** @internal */
 export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): U[] {
     const result: U[] = [];
     if (array) {
@@ -417,6 +473,7 @@ export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (
     return result;
 }
 
+/** @internal */
 export function flatMapIterator<T, U>(iter: ts.Iterator<T>, mapfn: (x: T) => readonly U[] | ts.Iterator<U> | undefined): ts.Iterator<U> {
     const first = iter.next();
     if (first.done) {
@@ -445,6 +502,7 @@ export function flatMapIterator<T, U>(iter: ts.Iterator<T>, mapfn: (x: T) => rea
     }
 }
 
+/** @internal */
 /**
  * Maps an array. If the mapped value is an array, it is spread into the result.
  * Avoids allocation if all elements map to themselves.
@@ -453,7 +511,9 @@ export function flatMapIterator<T, U>(iter: ts.Iterator<T>, mapfn: (x: T) => rea
  * @param mapfn The callback used to map the result into one or more values.
  */
 export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | readonly T[]): T[];
+/** @internal */
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[];
+/** @internal */
 export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
     let result: T[] | undefined;
     if (array) {
@@ -476,6 +536,7 @@ export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]):
     return result || array;
 }
 
+/** @internal */
 export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
     const result: U[] = [];
     for (let i = 0; i < array.length; i++) {
@@ -488,6 +549,7 @@ export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number)
     return result;
 }
 
+/** @internal */
 export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
     const result: U[] = [];
     if (array) {
@@ -501,6 +563,7 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
     return result;
 }
 
+/** @internal */
 export function mapDefinedIterator<T, U>(iter: ts.Iterator<T>, mapFn: (x: T) => U | undefined): ts.Iterator<U> {
     return {
         next() {
@@ -518,8 +581,11 @@ export function mapDefinedIterator<T, U>(iter: ts.Iterator<T>, mapFn: (x: T) => 
     };
 }
 
+/** @internal */
 export function mapDefinedEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): ts.ESMap<K2, V2>;
+/** @internal */
 export function mapDefinedEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ts.ESMap<K2, V2> | undefined;
+/** @internal */
 export function mapDefinedEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ts.ESMap<K2, V2> | undefined {
     if (!map) {
         return undefined;
@@ -539,8 +605,11 @@ export function mapDefinedEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> 
     return result;
 }
 
+/** @internal */
 export function mapDefinedValues<V1, V2>(set: ts.ReadonlySet<V1>, f: (value: V1) => V2 | undefined): ts.Set<V2>;
+/** @internal */
 export function mapDefinedValues<V1, V2>(set: ts.ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): ts.Set<V2> | undefined;
+/** @internal */
 export function mapDefinedValues<V1, V2>(set: ts.ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): ts.Set<V2> | undefined {
     if (set) {
         const result = new ts.Set<V2>();
@@ -554,6 +623,7 @@ export function mapDefinedValues<V1, V2>(set: ts.ReadonlySet<V1> | undefined, f:
     }
 }
 
+/** @internal */
 export function getOrUpdate<K, V>(map: ts.ESMap<K, V>, key: K, callback: () => V) {
     if (map.has(key)) {
         return map.get(key)!;
@@ -563,6 +633,7 @@ export function getOrUpdate<K, V>(map: ts.ESMap<K, V>, key: K, callback: () => V
     return value;
 }
 
+/** @internal */
 export function tryAddToSet<T>(set: ts.Set<T>, value: T) {
     if (!set.has(value)) {
         set.add(value);
@@ -571,8 +642,10 @@ export function tryAddToSet<T>(set: ts.Set<T>, value: T) {
     return false;
 }
 
+/** @internal */
 export const emptyIterator: ts.Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
+/** @internal */
 export function singleIterator<T>(value: T): ts.Iterator<T> {
     let done = false;
     return {
@@ -584,6 +657,7 @@ export function singleIterator<T>(value: T): ts.Iterator<T> {
     };
 }
 
+/** @internal */
 /**
  * Maps contiguous spans of values with the same key.
  *
@@ -592,7 +666,9 @@ export function singleIterator<T>(value: T): ts.Iterator<T> {
  * @param mapfn A callback used to map a contiguous chunk of values to a single value.
  */
 export function spanMap<T, K, U>(array: readonly T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[];
+/** @internal */
 export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined;
+/** @internal */
 export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined {
     let result: U[] | undefined;
     if (array) {
@@ -633,8 +709,11 @@ export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, 
     return result;
 }
 
+/** @internal */
 export function mapEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): ts.ESMap<K2, V2>;
+/** @internal */
 export function mapEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ts.ESMap<K2, V2> | undefined;
+/** @internal */
 export function mapEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ts.ESMap<K2, V2> | undefined {
     if (!map) {
         return undefined;
@@ -648,8 +727,11 @@ export function mapEntries<K1, V1, K2, V2>(map: ts.ReadonlyESMap<K1, V1> | undef
     return result;
 }
 
+/** @internal */
 export function some<T>(array: readonly T[] | undefined): array is readonly T[];
+/** @internal */
 export function some<T>(array: readonly T[] | undefined, predicate: (value: T) => boolean): boolean;
+/** @internal */
 export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
     if (array) {
         if (predicate) {
@@ -666,6 +748,7 @@ export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) 
     return false;
 }
 
+/** @internal */
 /** Calls the callback with (start, afterEnd) index pairs for each range where 'pred' is true. */
 export function getRangesWhere<T>(arr: readonly T[], pred: (t: T) => boolean, cb: (start: number, afterEnd: number) => void): void {
     let start: number | undefined;
@@ -683,10 +766,15 @@ export function getRangesWhere<T>(arr: readonly T[], pred: (t: T) => boolean, cb
     if (start !== undefined) cb(start, arr.length);
 }
 
+/** @internal */
 export function concatenate<T>(array1: T[], array2: T[]): T[];
+/** @internal */
 export function concatenate<T>(array1: readonly T[], array2: readonly T[]): readonly T[];
+/** @internal */
 export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[];
+/** @internal */
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[];
+/** @internal */
 export function concatenate<T>(array1: T[], array2: T[]): T[] {
     if (!some(array2)) return array1;
     if (!some(array1)) return array2;
@@ -697,6 +785,7 @@ function selectIndex(_: unknown, i: number) {
     return i;
 }
 
+/** @internal */
 export function indicesOf(array: readonly unknown[]): number[] {
     return array.map(selectIndex);
 }
@@ -731,6 +820,7 @@ function deduplicateEquality<T>(array: readonly T[], equalityComparer: ts.Equali
     return result;
 }
 
+/** @internal */
 /**
  * Deduplicates an unsorted array.
  * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
@@ -774,10 +864,12 @@ function deduplicateSorted<T>(array: ts.SortedReadonlyArray<T>, comparer: ts.Equ
     return deduplicated as any as ts.SortedReadonlyArray<T>;
 }
 
+/** @internal */
 export function createSortedArray<T>(): ts.SortedArray<T> {
     return [] as any as ts.SortedArray<T>; // TODO: GH#19873
 }
 
+/** @internal */
 export function insertSorted<T>(array: ts.SortedArray<T>, insert: T, compare: ts.Comparer<T>, allowDuplicates?: boolean): boolean {
     if (array.length === 0) {
         array.push(insert);
@@ -798,12 +890,16 @@ export function insertSorted<T>(array: ts.SortedArray<T>, insert: T, compare: ts
     return false;
 }
 
+/** @internal */
 export function sortAndDeduplicate<T>(array: readonly string[]): ts.SortedReadonlyArray<string>;
+/** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: ts.Comparer<T>, equalityComparer?: ts.EqualityComparer<T>): ts.SortedReadonlyArray<T>;
+/** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer?: ts.Comparer<T>, equalityComparer?: ts.EqualityComparer<T>): ts.SortedReadonlyArray<T> {
     return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as ts.Comparer<T>);
 }
 
+/** @internal */
 export function arrayIsSorted<T>(array: readonly T[], comparer: ts.Comparer<T>) {
     if (array.length < 2) return true;
     let prevElement = array[0];
@@ -816,6 +912,7 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: ts.Comparer<T>) 
     return true;
 }
 
+/** @internal */
 export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
     if (!array1 || !array2) {
         return array1 === array2;
@@ -834,14 +931,19 @@ export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: read
     return true;
 }
 
+/** @internal */
 /**
  * Compacts an array, removing any falsey elements.
  */
 export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+/** @internal */
 export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[];
 // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
+/** @internal */
 export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
 export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
 export function compact<T>(array: T[]): T[] {
     let result: T[] | undefined;
     if (array) {
@@ -860,6 +962,7 @@ export function compact<T>(array: T[]): T[] {
     return result || array;
 }
 
+/** @internal */
 /**
  * Gets the relative complement of `arrayA` with respect to `arrayB`, returning the elements that
  * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
@@ -903,6 +1006,7 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
     return result;
 }
 
+/** @internal */
 export function sum<T extends Record<K, number>, K extends string>(array: readonly T[], prop: K): number {
     let result = 0;
     for (const v of array) {
@@ -911,6 +1015,7 @@ export function sum<T extends Record<K, number>, K extends string>(array: readon
     return result;
 }
 
+/** @internal */
 /**
  * Appends a value to an array, returning the array.
  *
@@ -920,10 +1025,15 @@ export function sum<T extends Record<K, number>, K extends string>(array: readon
  * appended.
  */
 export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
+/** @internal */
 export function append<T>(to: T[], value: T | undefined): T[];
+/** @internal */
 export function append<T>(to: T[] | undefined, value: T): T[];
+/** @internal */
 export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
+/** @internal */
 export function append<T>(to: ts.Push<T>, value: T | undefined): void;
+/** @internal */
 export function append<T>(to: T[], value: T | undefined): T[] | undefined {
     if (value === undefined) return to;
     if (to === undefined) return [value];
@@ -931,6 +1041,7 @@ export function append<T>(to: T[], value: T | undefined): T[] | undefined {
     return to;
 }
 
+/** @internal */
 /**
  * Combines two arrays, values, or undefineds into the smallest container that can accommodate the resulting set:
  *
@@ -944,7 +1055,9 @@ export function append<T>(to: T[], value: T | undefined): T[] | undefined {
  * ```
  */
 export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+/** @internal */
 export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+/** @internal */
 export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
     if (xs === undefined) return ys;
     if (ys === undefined) return xs;
@@ -961,6 +1074,7 @@ function toOffset(array: readonly any[], offset: number) {
     return offset < 0 ? array.length + offset : offset;
 }
 
+/** @internal */
 /**
  * Appends a range of value to an array, returning the array.
  *
@@ -972,7 +1086,9 @@ function toOffset(array: readonly any[], offset: number) {
  * @param end The offset in `from` at which to stop copying values (non-inclusive).
  */
 export function addRange<T>(to: T[], from: readonly T[] | undefined, start?: number, end?: number): T[];
+/** @internal */
 export function addRange<T>(to: T[] | undefined, from: readonly T[] | undefined, start?: number, end?: number): T[] | undefined;
+/** @internal */
 export function addRange<T>(to: T[] | undefined, from: readonly T[] | undefined, start?: number, end?: number): T[] | undefined {
     if (from === undefined || from.length === 0) return to;
     if (to === undefined) return from.slice(start, end);
@@ -986,6 +1102,7 @@ export function addRange<T>(to: T[] | undefined, from: readonly T[] | undefined,
     return to;
 }
 
+/** @internal */
 /**
  * @return Whether the value was added.
  */
@@ -999,6 +1116,7 @@ export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: ts.Equa
     }
 }
 
+/** @internal */
 /**
  * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
  */
@@ -1017,6 +1135,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
     indices.sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y));
 }
 
+/** @internal */
 /**
  * Returns a new sorted array.
  */
@@ -1024,6 +1143,7 @@ export function sort<T>(array: readonly T[], comparer?: ts.Comparer<T>): ts.Sort
     return (array.length === 0 ? array : array.slice().sort(comparer)) as ts.SortedReadonlyArray<T>;
 }
 
+/** @internal */
 export function arrayIterator<T>(array: readonly T[]): ts.Iterator<T> {
     let i = 0;
     return { next: () => {
@@ -1037,6 +1157,7 @@ export function arrayIterator<T>(array: readonly T[]): ts.Iterator<T> {
     }};
 }
 
+/** @internal */
 export function arrayReverseIterator<T>(array: readonly T[]): ts.Iterator<T> {
     let i = array.length;
     return {
@@ -1052,6 +1173,7 @@ export function arrayReverseIterator<T>(array: readonly T[]): ts.Iterator<T> {
     };
 }
 
+/** @internal */
 /**
  * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
  */
@@ -1061,6 +1183,7 @@ export function stableSort<T>(array: readonly T[], comparer: ts.Comparer<T>): ts
     return indices.map(i => array[i]) as ts.SortedArray<T> as ts.SortedReadonlyArray<T>;
 }
 
+/** @internal */
 export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: number, end: number) {
     while (pos < end) {
         if (array1[pos] !== array2[pos]) {
@@ -1071,6 +1194,7 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
     return true;
 }
 
+/** @internal */
 /**
  * Returns the element at a specific offset in an array if non-empty, `undefined` otherwise.
  * A negative offset indicates the element should be retrieved from the end of the array.
@@ -1085,6 +1209,7 @@ export function elementAt<T>(array: readonly T[] | undefined, offset: number): T
     return undefined;
 }
 
+/** @internal */
 /**
  * Returns the first element of an array if non-empty, `undefined` otherwise.
  */
@@ -1092,11 +1217,13 @@ export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefi
     return array === undefined || array.length === 0 ? undefined : array[0];
 }
 
+/** @internal */
 export function first<T>(array: readonly T[]): T {
     ts.Debug.assert(array.length !== 0);
     return array[0];
 }
 
+/** @internal */
 /**
  * Returns the last element of an array if non-empty, `undefined` otherwise.
  */
@@ -1104,11 +1231,13 @@ export function lastOrUndefined<T>(array: readonly T[] | undefined): T | undefin
     return array === undefined || array.length === 0 ? undefined : array[array.length - 1];
 }
 
+/** @internal */
 export function last<T>(array: readonly T[]): T {
     ts.Debug.assert(array.length !== 0);
     return array[array.length - 1];
 }
 
+/** @internal */
 /**
  * Returns the only element of an array if it contains only one element, `undefined` otherwise.
  */
@@ -1118,6 +1247,7 @@ export function singleOrUndefined<T>(array: readonly T[] | undefined): T | undef
         : undefined;
 }
 
+/** @internal */
 /**
  * Returns the only element of an array if it contains only one element; throws otherwise.
  */
@@ -1125,26 +1255,33 @@ export function single<T>(array: readonly T[]): T {
     return ts.Debug.checkDefined(singleOrUndefined(array));
 }
 
+/** @internal */
 /**
  * Returns the only element of an array if it contains only one element; otherwise, returns the
  * array.
  */
 export function singleOrMany<T>(array: T[]): T | T[];
+/** @internal */
 export function singleOrMany<T>(array: readonly T[]): T | readonly T[];
+/** @internal */
 export function singleOrMany<T>(array: T[] | undefined): T | T[] | undefined;
+/** @internal */
 export function singleOrMany<T>(array: readonly T[] | undefined): T | readonly T[] | undefined;
+/** @internal */
 export function singleOrMany<T>(array: readonly T[] | undefined): T | readonly T[] | undefined {
     return array && array.length === 1
         ? array[0]
         : array;
 }
 
+/** @internal */
 export function replaceElement<T>(array: readonly T[], index: number, value: T): T[] {
     const result = array.slice(0);
     result[index] = value;
     return result;
 }
 
+/** @internal */
 /**
  * Performs a binary search, finding the index at which `value` occurs in `array`.
  * If no such index is found, returns the 2's-complement of first index at which
@@ -1160,6 +1297,7 @@ export function binarySearch<T, U>(array: readonly T[], value: T, keySelector: (
     return binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset);
 }
 
+/** @internal */
 /**
  * Performs a binary search, finding the index at which an object with `key` occurs in `array`.
  * If no such index is found, returns the 2's-complement of first index at which
@@ -1195,8 +1333,11 @@ export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: 
     return ~low;
 }
 
+/** @internal */
 export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+/** @internal */
 export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
+/** @internal */
 export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
     if (array && array.length > 0) {
         const size = array.length;
@@ -1223,6 +1364,7 @@ export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
+/** @internal */
 /**
  * Indicates whether a map-like contains an own property with the specified key.
  *
@@ -1233,6 +1375,7 @@ export function hasProperty(map: ts.MapLike<any>, key: string): boolean {
     return hasOwnProperty.call(map, key);
 }
 
+/** @internal */
 /**
  * Gets the value of an owned property in a map-like.
  *
@@ -1243,6 +1386,7 @@ export function getProperty<T>(map: ts.MapLike<T>, key: string): T | undefined {
     return hasOwnProperty.call(map, key) ? map[key] : undefined;
 }
 
+/** @internal */
 /**
  * Gets the owned, enumerable property keys of a map-like.
  */
@@ -1257,6 +1401,7 @@ export function getOwnKeys<T>(map: ts.MapLike<T>): string[] {
     return keys;
 }
 
+/** @internal */
 export function getAllKeys(obj: object): string[] {
     const result: string[] = [];
     do {
@@ -1268,6 +1413,7 @@ export function getAllKeys(obj: object): string[] {
     return result;
 }
 
+/** @internal */
 export function getOwnValues<T>(collection: ts.MapLike<T> | T[]): T[] {
     const values: T[] = [];
     for (const key in collection) {
@@ -1288,10 +1434,12 @@ const _entries = Object.entries || (<T>(obj: ts.MapLike<T>) => {
     return result;
 });
 
+/** @internal */
 export function getEntries<T>(obj: ts.MapLike<T>): [string, T][] {
     return obj ? _entries(obj) : [];
 }
 
+/** @internal */
 export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
     const result = new Array(count);
     for (let i = 0; i < count; i++) {
@@ -1300,9 +1448,12 @@ export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
     return result;
 }
 
+/** @internal */
 /** Shims `Array.from`. */
 export function arrayFrom<T, U>(iterator: ts.Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+/** @internal */
 export function arrayFrom<T>(iterator: ts.Iterator<T> | IterableIterator<T>): T[];
+/** @internal */
 export function arrayFrom<T, U>(iterator: ts.Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
     const result: (T | U)[] = [];
     for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
@@ -1312,6 +1463,7 @@ export function arrayFrom<T, U>(iterator: ts.Iterator<T> | IterableIterator<T>, 
 }
 
 
+/** @internal */
 export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
     for (const arg of args) {
         if (arg === undefined) continue;
@@ -1324,6 +1476,7 @@ export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
     return t;
 }
 
+/** @internal */
 /**
  * Performs a shallow equality comparison of the contents of two map-likes.
  *
@@ -1349,6 +1502,7 @@ export function equalOwnProperties<T>(left: ts.MapLike<T> | undefined, right: ts
     return true;
 }
 
+/** @internal */
 /**
  * Creates a map from the elements of an array.
  *
@@ -1360,9 +1514,13 @@ export function equalOwnProperties<T>(left: ts.MapLike<T> | undefined, right: ts
  * index in the array will be the one associated with the produced key.
  */
 export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): ts.ESMap<K, V>;
+/** @internal */
 export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): ts.ESMap<K, V2>;
+/** @internal */
 export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ts.ESMap<string, T>;
+/** @internal */
 export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): ts.ESMap<string, U>;
+/** @internal */
 export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): ts.ESMap<K, V1 | V2> {
     const result = new ts.Map<K, V1 | V2>();
     for (const value of array) {
@@ -1372,8 +1530,11 @@ export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1)
     return result;
 }
 
+/** @internal */
 export function arrayToNumericMap<T>(array: readonly T[], makeKey: (value: T) => number): T[];
+/** @internal */
 export function arrayToNumericMap<T, U>(array: readonly T[], makeKey: (value: T) => number, makeValue: (value: T) => U): U[];
+/** @internal */
 export function arrayToNumericMap<T, U>(array: readonly T[], makeKey: (value: T) => number, makeValue: (value: T) => T | U = identity): (T | U)[] {
     const result: (T | U)[] = [];
     for (const value of array) {
@@ -1382,8 +1543,11 @@ export function arrayToNumericMap<T, U>(array: readonly T[], makeKey: (value: T)
     return result;
 }
 
+/** @internal */
 export function arrayToMultiMap<K, V>(values: readonly V[], makeKey: (value: V) => K): MultiMap<K, V>;
+/** @internal */
 export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => U): MultiMap<K, U>;
+/** @internal */
 export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => V | U = identity): MultiMap<K, V | U> {
     const result = createMultiMap<K, V | U>();
     for (const value of values) {
@@ -1392,14 +1556,20 @@ export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: 
     return result;
 }
 
+/** @internal */
 export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K): readonly (readonly T[])[];
+/** @internal */
 export function group<T, K, R>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => R): R[];
+/** @internal */
 export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+/** @internal */
 export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+/** @internal */
 export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
     return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
 }
 
+/** @internal */
 export function clone<T>(object: T): T {
     const result: any = {};
     for (const id in object) {
@@ -1410,6 +1580,7 @@ export function clone<T>(object: T): T {
     return result;
 }
 
+/** @internal */
 /**
  * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
  *
@@ -1432,6 +1603,7 @@ export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
     return result;
 }
 
+/** @internal */
 export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
     for (const id in second) {
         if (hasOwnProperty.call(second, id)) {
@@ -1440,10 +1612,12 @@ export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
     }
 }
 
+/** @internal */
 export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
     return fn ? fn.bind(obj) : undefined;
 }
 
+/** @internal */
 export interface MultiMap<K, V> extends ts.ESMap<K, V[]> {
     /**
      * Adds the value to an array of values associated with the key, and returns the array.
@@ -1458,8 +1632,11 @@ export interface MultiMap<K, V> extends ts.ESMap<K, V[]> {
     remove(key: K, value: V): void;
 }
 
+/** @internal */
 export function createMultiMap<K, V>(): MultiMap<K, V>;
+/** @internal */
 export function createMultiMap<V>(): MultiMap<string, V>;
+/** @internal */
 export function createMultiMap<K, V>(): MultiMap<K, V> {
     const map = new ts.Map<K, V[]>() as MultiMap<K, V>;
     map.add = multiMapAdd;
@@ -1486,6 +1663,7 @@ function multiMapRemove<K, V>(this: MultiMap<K, V>, key: K, value: V) {
     }
 }
 
+/** @internal */
 export interface UnderscoreEscapedMultiMap<T> extends ts.UnderscoreEscapedMap<T[]> {
     /**
      * Adds the value to an array of values associated with the key, and returns the array.
@@ -1500,10 +1678,12 @@ export interface UnderscoreEscapedMultiMap<T> extends ts.UnderscoreEscapedMap<T[
     remove(key: ts.__String, value: T): void;
 }
 
+/** @internal */
 export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
     return createMultiMap() as UnderscoreEscapedMultiMap<T>;
 }
 
+/** @internal */
 export function createQueue<T>(items?: readonly T[]): ts.Queue<T> {
     const elements: (T | undefined)[] = items?.slice() || [];
     let headIndex = 0;
@@ -1545,6 +1725,7 @@ export function createQueue<T>(items?: readonly T[]): ts.Queue<T> {
     };
 }
 
+/** @internal */
 /**
  * Creates a Set with custom equality and hash code functionality.  This is useful when you
  * want to use something looser than object identity - e.g. "has the same span".
@@ -1698,6 +1879,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     return set;
 }
 
+/** @internal */
 /**
  * Tests whether a value is an array.
  */
@@ -1705,62 +1887,78 @@ export function isArray(value: any): value is readonly unknown[] {
     return Array.isArray ? Array.isArray(value) : value instanceof Array;
 }
 
+/** @internal */
 export function toArray<T>(value: T | T[]): T[];
+/** @internal */
 export function toArray<T>(value: T | readonly T[]): readonly T[];
+/** @internal */
 export function toArray<T>(value: T | T[]): T[] {
     return isArray(value) ? value : [value];
 }
 
+/** @internal */
 /**
  * Tests whether a value is string
  */
 export function isString(text: unknown): text is string {
     return typeof text === "string";
 }
+/** @internal */
 export function isNumber(x: unknown): x is number {
     return typeof x === "number";
 }
 
+/** @internal */
 export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+/** @internal */
 export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
+/** @internal */
 export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
     return value !== undefined && test(value) ? value : undefined;
 }
 
+/** @internal */
 export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
     if (value !== undefined && test(value)) return value;
 
     return ts.Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${ts.Debug.getFunctionName(test)}'.`);
 }
 
+/** @internal */
 /** Does nothing. */
 export function noop(_?: unknown): void { }
 
+/** @internal */
 export const noopPush: ts.Push<any> = {
     push: noop,
     length: 0
 };
 
+/** @internal */
 /** Do nothing and return false */
 export function returnFalse(): false {
     return false;
 }
 
+/** @internal */
 /** Do nothing and return true */
 export function returnTrue(): true {
     return true;
 }
 
+/** @internal */
 /** Do nothing and return undefined */
 export function returnUndefined(): undefined {
     return undefined;
 }
 
+/** @internal */
 /** Returns its argument. */
 export function identity<T>(x: T) {
     return x;
 }
 
+/** @internal */
 /** Returns lower case string */
 export function toLowerCase(x: string) {
     return x.toLowerCase();
@@ -1789,6 +1987,7 @@ export function toLowerCase(x: string) {
 // But to avoid having to do string building for most common cases, also ignore
 // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
 const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
+/** @internal */
 /**
  * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
  * This function is used in places where we want to make file name as a key on these systems
@@ -1806,11 +2005,13 @@ export function toFileNameLowerCase(x: string) {
         x;
 }
 
+/** @internal */
 /** Throws an error because a function is not implemented. */
 export function notImplemented(): never {
     throw new Error("Not implemented");
 }
 
+/** @internal */
 export function memoize<T>(callback: () => T): () => T {
     let value: T;
     return () => {
@@ -1822,6 +2023,7 @@ export function memoize<T>(callback: () => T): () => T {
     };
 }
 
+/** @internal */
 /** A version of `memoize` that supports a single primitive argument */
 export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
     const map = new ts.Map<string, T>();
@@ -1836,6 +2038,7 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
     };
 }
 
+/** @internal */
 /**
  * High-order function, composes functions. Note that functions are composed inside-out;
  * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
@@ -1843,6 +2046,7 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
  * @param args The functions to compose.
  */
 export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
+/** @internal */
 export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
     if (!!e) {
         const args: ((t: T) => T)[] = [];
@@ -1869,6 +2073,7 @@ export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t
     }
 }
 
+/** @internal */
 export const enum AssertionLevel {
     None = 0,
     Normal = 1,
@@ -1876,17 +2081,21 @@ export const enum AssertionLevel {
     VeryAggressive = 3,
 }
 
+/** @internal */
 /**
  * Safer version of `Function` which should not be called.
  * Every function should be assignable to this, but this should not be assignable to every function.
  */
 export type AnyFunction = (...args: never[]) => void;
+/** @internal */
 export type AnyConstructor = new (...args: unknown[]) => unknown;
 
+/** @internal */
 export function equateValues<T>(a: T, b: T) {
     return a === b;
 }
 
+/** @internal */
 /**
  * Compare the equality of two strings using a case-sensitive ordinal comparison.
  *
@@ -1902,6 +2111,7 @@ export function equateStringsCaseInsensitive(a: string, b: string) {
         && a.toUpperCase() === b.toUpperCase();
 }
 
+/** @internal */
 /**
  * Compare the equality of two strings using a case-sensitive ordinal comparison.
  *
@@ -1922,6 +2132,7 @@ function compareComparableValues(a: string | number | undefined, b: string | num
         ts.Comparison.GreaterThan;
 }
 
+/** @internal */
 /**
  * Compare two numeric values for their order relative to each other.
  * To compare strings, use any of the `compareStrings` functions.
@@ -1930,6 +2141,7 @@ export function compareValues(a: number | undefined, b: number | undefined): ts.
     return compareComparableValues(a, b);
 }
 
+/** @internal */
 /**
  * Compare two TextSpans, first by `start`, then by `length`.
  */
@@ -1937,10 +2149,12 @@ export function compareTextSpans(a: Partial<ts.TextSpan> | undefined, b: Partial
     return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
 }
 
+/** @internal */
 export function min<T>(a: T, b: T, compare: ts.Comparer<T>): T {
     return compare(a, b) === ts.Comparison.LessThan ? a : b;
 }
 
+/** @internal */
 /**
  * Compare two strings using a case-insensitive ordinal comparison.
  *
@@ -1962,6 +2176,7 @@ export function compareStringsCaseInsensitive(a: string, b: string) {
     return a < b ? ts.Comparison.LessThan : a > b ? ts.Comparison.GreaterThan : ts.Comparison.EqualTo;
 }
 
+/** @internal */
 /**
  * Compare two strings using a case-sensitive ordinal comparison.
  *
@@ -1976,6 +2191,7 @@ export function compareStringsCaseSensitive(a: string | undefined, b: string | u
     return compareComparableValues(a, b);
 }
 
+/** @internal */
 export function getStringComparer(ignoreCase?: boolean) {
     return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
 }
@@ -2071,10 +2287,12 @@ const createUIStringComparer = (() => {
 let uiComparerCaseSensitive: ts.Comparer<string> | undefined;
 let uiLocale: string | undefined;
 
+/** @internal */
 export function getUILocale() {
     return uiLocale;
 }
 
+/** @internal */
 export function setUILocale(value: string | undefined) {
     if (uiLocale !== value) {
         uiLocale = value;
@@ -2082,6 +2300,7 @@ export function setUILocale(value: string | undefined) {
     }
 }
 
+/** @internal */
 /**
  * Compare two strings in a using the case-sensitive sort behavior of the UI locale.
  *
@@ -2097,6 +2316,7 @@ export function compareStringsCaseSensitiveUI(a: string, b: string) {
     return comparer(a, b);
 }
 
+/** @internal */
 export function compareProperties<T extends object, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: ts.Comparer<T[K]>): ts.Comparison {
     return a === b ? ts.Comparison.EqualTo :
         a === undefined ? ts.Comparison.LessThan :
@@ -2104,11 +2324,13 @@ export function compareProperties<T extends object, K extends keyof T>(a: T | un
         comparer(a[key], b[key]);
 }
 
+/** @internal */
 /** True is greater than false. */
 export function compareBooleans(a: boolean, b: boolean): ts.Comparison {
     return compareValues(a ? 1 : 0, b ? 1 : 0);
 }
 
+/** @internal */
 /**
  * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
  * Names less than length 3 only check for case-insensitive equality.
@@ -2198,23 +2420,28 @@ function levenshteinWithMax(s1: string, s2: string, max: number): number | undef
     return res > max ? undefined : res;
 }
 
+/** @internal */
 export function endsWith(str: string, suffix: string): boolean {
     const expectedPos = str.length - suffix.length;
     return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
 }
 
+/** @internal */
 export function removeSuffix(str: string, suffix: string): string {
     return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
 }
 
+/** @internal */
 export function tryRemoveSuffix(str: string, suffix: string): string | undefined {
     return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : undefined;
 }
 
+/** @internal */
 export function stringContains(str: string, substring: string): boolean {
     return str.indexOf(substring) !== -1;
 }
 
+/** @internal */
 /**
  * Takes a string like "jquery-min.4.2.3" and returns "jquery"
  */
@@ -2266,6 +2493,7 @@ export function removeMinAndVersionNumbers(fileName: string) {
     return end === fileName.length ? fileName : fileName.slice(0, end);
 }
 
+/** @internal */
 /** Remove an item from an array, moving everything to its right one space left. */
 export function orderedRemoveItem<T>(array: T[], item: T): boolean {
     for (let i = 0; i < array.length; i++) {
@@ -2277,6 +2505,7 @@ export function orderedRemoveItem<T>(array: T[], item: T): boolean {
     return false;
 }
 
+/** @internal */
 /** Remove an item by index from an array, moving everything to its right one space left. */
 export function orderedRemoveItemAt<T>(array: T[], index: number): void {
     // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
@@ -2286,12 +2515,14 @@ export function orderedRemoveItemAt<T>(array: T[], index: number): void {
     array.pop();
 }
 
+/** @internal */
 export function unorderedRemoveItemAt<T>(array: T[], index: number): void {
     // Fill in the "hole" left at `index`.
     array[index] = array[array.length - 1];
     array.pop();
 }
 
+/** @internal */
 /** Remove the *first* occurrence of `item` from the array. */
 export function unorderedRemoveItem<T>(array: T[], item: T) {
     return unorderedRemoveFirstItemWhere(array, element => element === item);
@@ -2308,21 +2539,26 @@ function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) =>
     return false;
 }
 
+/** @internal */
 export type GetCanonicalFileName = (fileName: string) => string;
+/** @internal */
 export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
     return useCaseSensitiveFileNames ? identity : toFileNameLowerCase;
 }
 
+/** @internal */
 /** Represents a "prefix*suffix" pattern. */
 export interface Pattern {
     prefix: string;
     suffix: string;
 }
 
+/** @internal */
 export function patternText({ prefix, suffix }: Pattern): string {
     return `${prefix}*${suffix}`;
 }
 
+/** @internal */
 /**
  * Given that candidate matches pattern, returns the text matching the '*'.
  * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
@@ -2332,6 +2568,7 @@ export function matchedText(pattern: Pattern, candidate: string): string {
     return candidate.substring(pattern.prefix.length, candidate.length - pattern.suffix.length);
 }
 
+/** @internal */
 /** Return the object corresponding to the best pattern to match `candidate`. */
 export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
     let matchedValue: T | undefined;
@@ -2349,31 +2586,40 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
     return matchedValue;
 }
 
+/** @internal */
 export function startsWith(str: string, prefix: string): boolean {
     return str.lastIndexOf(prefix, 0) === 0;
 }
 
+/** @internal */
 export function removePrefix(str: string, prefix: string): string {
     return startsWith(str, prefix) ? str.substr(prefix.length) : str;
 }
 
+/** @internal */
 export function tryRemovePrefix(str: string, prefix: string, getCanonicalFileName: GetCanonicalFileName = identity): string | undefined {
     return startsWith(getCanonicalFileName(str), getCanonicalFileName(prefix)) ? str.substring(prefix.length) : undefined;
 }
 
+/** @internal */
 export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
     return candidate.length >= prefix.length + suffix.length &&
         startsWith(candidate, prefix) &&
         endsWith(candidate, suffix);
 }
 
+/** @internal */
 export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
     return (arg: T) => f(arg) && g(arg);
 }
 
+/** @internal */
 export function or<P, R1 extends P, R2 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2): (p: P) => p is R1 | R2;
+/** @internal */
 export function or<P, R1 extends P, R2 extends P, R3 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2, f3: (p3: P) => p3 is R3): (p: P) => p is R1 | R2 | R3;
+/** @internal */
 export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U;
+/** @internal */
 export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
     return (...args) => {
         let lastResult: U;
@@ -2387,16 +2633,20 @@ export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...ar
     };
 }
 
+/** @internal */
 export function not<T extends unknown[]>(fn: (...args: T) => boolean): (...args: T) => boolean {
     return (...args) => !fn(...args);
 }
 
+/** @internal */
 export function assertType<T>(_: T): void { }
 
+/** @internal */
 export function singleElementArray<T>(t: T | undefined): T[] | undefined {
     return t === undefined ? undefined : [t];
 }
 
+/** @internal */
 export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItems: readonly U[], comparer: (a: T, b: U) => ts.Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
     unchanged = unchanged || noop;
     let newIndex = 0;
@@ -2435,6 +2685,7 @@ export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItem
     return hasChanges;
 }
 
+/** @internal */
 export function fill<T>(length: number, cb: (index: number) => T): T[] {
     const result = Array<T>(length);
     for (let i = 0; i < length; i++) {
@@ -2443,6 +2694,7 @@ export function fill<T>(length: number, cb: (index: number) => T): T[] {
     return result;
 }
 
+/** @internal */
 export function cartesianProduct<T>(arrays: readonly T[][]) {
     const result: T[][] = [];
     cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
@@ -2469,6 +2721,7 @@ function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (r
 }
 
 
+/** @internal */
 /**
  * Returns string left-padded with spaces or zeros until it reaches the given length.
  *
@@ -2480,6 +2733,7 @@ export function padLeft(s: string, length: number, padString: " " | "0" = " ") {
     return length <= s.length ? s : padString.repeat(length - s.length) + s;
 }
 
+/** @internal */
 /**
  * Returns string right-padded with spaces until it reaches the given length.
  *
@@ -2491,7 +2745,9 @@ export function padRight(s: string, length: number, padString: " " = " ") {
     return length <= s.length ? s : s + padString.repeat(length - s.length);
 }
 
+/** @internal */
 export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
+/** @internal */
 export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
     const len = array.length;
     let index = 0;
@@ -2501,16 +2757,19 @@ export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boo
     return array.slice(0, index);
 }
 
+/** @internal */
 /**
  * Removes the leading and trailing white space and line terminator characters from a string.
  */
 export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
 
+/** @internal */
 /**
  * Returns a copy with trailing whitespace removed.
  */
 export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
 
+/** @internal */
 /**
  * Returns a copy with leading whitespace removed.
  */
@@ -2529,5 +2788,4 @@ function trimEndImpl(s: string) {
         end--;
     }
     return s.slice(0, end + 1);
-}
 }

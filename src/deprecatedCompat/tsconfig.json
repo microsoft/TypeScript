@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/deprecatedCompat.js",
+        "outDir": "../../built/local",
         "experimentalDecorators": true
     },
     "references": [
@@ -16,6 +16,7 @@
         "4.2/abstractConstructorTypes.ts",
         "4.6/importTypeAssertions.ts",
         "4.7/typeParameterModifiers.ts",
-        "4.8/mergeDecoratorsAndModifiers.ts"
+        "4.8/mergeDecoratorsAndModifiers.ts",
+        "_namespaces/ts.ts"
     ]
 }

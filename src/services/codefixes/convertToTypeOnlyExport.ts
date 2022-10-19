@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [ts.Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
 ts.codefix.registerCodeFix({
@@ -75,5 +75,4 @@ function getTypeExportSpecifiers(originExportSpecifier: ts.ExportSpecifier, cont
     return ts.filter(exportClause.elements, element => {
         return element === originExportSpecifier || ts.findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];
     });
-}
 }

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /* @internal */
 export function trace(host: ts.ModuleResolutionHost, message: ts.DiagnosticMessage, ...args: any[]): void;
 export function trace(host: ts.ModuleResolutionHost): void {
@@ -2708,5 +2709,4 @@ function traceIfEnabled(state: ModuleResolutionState, diagnostic: ts.DiagnosticM
     if (state.traceEnabled) {
         trace(state.host, diagnostic, ...args);
     }
-}
 }

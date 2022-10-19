@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: refactors", () => {
     it("use formatting options", () => {
         const file = {
@@ -152,4 +153,3 @@ describe("unittests:: tsserver:: refactors", () => {
         });
     });
 });
-}

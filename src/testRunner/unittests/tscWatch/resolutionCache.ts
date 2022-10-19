@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
     it("caching works", () => {
@@ -563,4 +564,3 @@ declare namespace NodeJS {
         });
     });
 });
-}

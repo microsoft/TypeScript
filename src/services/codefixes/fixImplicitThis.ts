@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixImplicitThis";
 const errorCodes = [ts.Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
 ts.codefix.registerCodeFix({
@@ -52,5 +52,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
             return [ts.Diagnostics.Convert_function_declaration_0_to_arrow_function, name!.text];
         }
     }
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
         const file1: ts.projectSystem.File = {
@@ -223,4 +224,3 @@ function fooB() { }`
         ts.projectSystem.baselineTsserverLogs("partialSemanticServer", "should support go-to-definition on module specifiers", session);
     });
 });
-}

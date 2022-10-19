@@ -1,4 +1,7 @@
-namespace Playback { // eslint-disable-line local/one-namespace-per-file
+import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness";
+
+// eslint-disable-line local/one-namespace-per-file
 interface FileInformation {
     contents?: string;
     contentsPath?: string;
@@ -444,8 +447,5 @@ export function wrapSystem(underlying: ts.System): PlaybackSystem {
     initWrapper(wrapper, underlying);
     return wrapper;
 }
-}
 
 // empty modules for the module migration script
-namespace ts.server { } // eslint-disable-line local/one-namespace-per-file
-namespace Harness { } // eslint-disable-line local/one-namespace-per-file

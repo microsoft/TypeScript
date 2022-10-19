@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): ts.tscWatch.TscWatchCompileChange {
         return {
@@ -43,4 +44,3 @@ const a: string = "hello";`),
         baselineIncremental: true
     });
 });
-}

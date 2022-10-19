@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 interface StackTraceError extends Error {
     stack?: string;
 }
@@ -3542,5 +3543,4 @@ function isCompletionEntryData(data: any): data is ts.CompletionEntryData {
         && (data.fileName === undefined || typeof data.fileName === "string")
         && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
         && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
-}
 }

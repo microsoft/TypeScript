@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
+/** @internal */
 export function transformECMAScriptModule(context: ts.TransformationContext) {
     const {
         factory,
@@ -274,5 +275,4 @@ export function transformECMAScriptModule(context: ts.TransformationContext) {
         }
         return substitution;
     }
-}
 }

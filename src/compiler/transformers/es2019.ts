@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformES2019(context: ts.TransformationContext) {
     const factory = context.factory;
     return ts.chainBundle(context, transformSourceFile);
@@ -34,5 +35,4 @@ export function transformES2019(context: ts.TransformationContext) {
         }
         return ts.visitEachChild(node, visitor, context);
     }
-}
 }

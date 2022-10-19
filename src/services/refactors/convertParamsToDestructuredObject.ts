@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.convertParamsToDestructuredObject {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert parameters to destructured object";
 const minimumParameterLength = 1;
 const refactorDescription = ts.getLocaleSpecificMessage(ts.Diagnostics.Convert_parameters_to_destructured_object);
@@ -666,5 +666,4 @@ interface GroupedReferences {
 interface ClassReferences {
     accessExpressions: ts.Node[];
     typeUsages: ts.Node[];
-}
 }

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const minimumDate = new Date(-8640000000000000);
 const maximumDate = new Date(8640000000000000);
 
@@ -2478,5 +2479,4 @@ function verboseReportProjectStatus(state: SolutionBuilderState, configFileName:
     if (state.options.verbose) {
         reportUpToDateStatus(state, configFileName, status);
     }
-}
 }

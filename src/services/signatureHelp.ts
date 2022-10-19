@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.SignatureHelp {
+import * as ts from "./_namespaces/ts";
+
 const enum InvocationKind { Call, TypeArgs, Contextual }
 interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: ts.CallLikeExpression; }
 interface TypeArgsInvocation { readonly kind: InvocationKind.TypeArgs; readonly called: ts.Identifier; }
@@ -20,6 +20,7 @@ interface ArgumentListInfo {
     readonly argumentCount: number;
 }
 
+/** @internal */
 export function getSignatureHelpItems(program: ts.Program, sourceFile: ts.SourceFile, position: number, triggerReason: ts.SignatureHelpTriggerReason | undefined, cancellationToken: ts.CancellationToken): ts.SignatureHelpItems | undefined {
     const typeChecker = program.getTypeChecker();
 
@@ -158,11 +159,13 @@ function containsPrecedingToken(startingToken: ts.Node, sourceFile: ts.SourceFil
     return ts.Debug.fail("Could not find preceding token");
 }
 
+/** @internal */
 export interface ArgumentInfoForCompletions {
     readonly invocation: ts.CallLikeExpression;
     readonly argumentIndex: number;
     readonly argumentCount: number;
 }
+/** @internal */
 export function getArgumentInfoForCompletions(node: ts.Node, position: number, sourceFile: ts.SourceFile): ArgumentInfoForCompletions | undefined {
     const info = getImmediatelyContainingArgumentInfo(node, position, sourceFile);
     return !info || info.isTypeParameterList || info.invocation.kind !== InvocationKind.Call ? undefined
@@ -662,5 +665,4 @@ function createSignatureHelpParameterForTypeParameter(typeParameter: ts.TypePara
         printer.writeNode(ts.EmitHint.Unspecified, param, sourceFile, writer);
     });
     return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
-}
 }

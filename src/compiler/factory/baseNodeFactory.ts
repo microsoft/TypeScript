@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 /**
  * A `BaseNodeFactory` is an abstraction over an `ObjectAllocator` that handles caching `Node` constructors
  * and allocating `Node` instances based on a set of predefined types.
@@ -13,6 +13,7 @@ export interface BaseNodeFactory {
     createBaseNode(kind: ts.SyntaxKind): ts.Node;
 }
 
+/** @internal */
 /**
  * Creates a `BaseNodeFactory` which can be used to create `Node` instances from the constructors provided by the object allocator.
  */
@@ -50,5 +51,4 @@ export function createBaseNodeFactory(): BaseNodeFactory {
     function createBaseNode(kind: ts.SyntaxKind): ts.Node {
         return new (NodeConstructor || (NodeConstructor = ts.objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
     }
-}
 }

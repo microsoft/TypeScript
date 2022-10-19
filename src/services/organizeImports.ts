@@ -1,6 +1,6 @@
-/* @internal */
-namespace ts.OrganizeImports {
+import * as ts from "./_namespaces/ts";
 
+/** @internal */
 /**
  * Organize imports by:
  *   1) Removing unused imports
@@ -234,6 +234,7 @@ function getExternalModuleName(specifier: ts.Expression) {
 }
 
 // Internal for testing
+/** @internal */
 /**
  * @param importGroup a list of ImportDeclarations, all with the same module name.
  */
@@ -374,6 +375,7 @@ function getCategorizedImports(importGroup: readonly ts.ImportDeclaration[]) {
 }
 
 // Internal for testing
+/** @internal */
 /**
  * @param exportGroup a list of ExportDeclarations, all with the same module name.
  */
@@ -465,6 +467,7 @@ function sortSpecifiers<T extends ts.ImportOrExportSpecifier>(specifiers: readon
     return ts.stableSort(specifiers, compareImportOrExportSpecifiers);
 }
 
+/** @internal */
 export function compareImportOrExportSpecifiers<T extends ts.ImportOrExportSpecifier>(s1: T, s2: T) {
     return ts.compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
         || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
@@ -472,6 +475,7 @@ export function compareImportOrExportSpecifiers<T extends ts.ImportOrExportSpeci
 }
 
 /* internal */ // Exported for testing
+/** @internal */
 export function compareModuleSpecifiers(m1: ts.Expression | undefined, m2: ts.Expression | undefined) {
     const name1 = m1 === undefined ? undefined : getExternalModuleName(m1);
     const name2 = m2 === undefined ? undefined : getExternalModuleName(m2);
@@ -495,24 +499,29 @@ function getModuleSpecifierExpression(declaration: ts.AnyImportOrRequireStatemen
     }
 }
 
+/** @internal */
 export function importsAreSorted(imports: readonly ts.AnyImportOrRequireStatement[]): imports is ts.SortedReadonlyArray<ts.AnyImportOrRequireStatement> {
     return ts.arrayIsSorted(imports, compareImportsOrRequireStatements);
 }
 
+/** @internal */
 export function importSpecifiersAreSorted(imports: readonly ts.ImportSpecifier[]): imports is ts.SortedReadonlyArray<ts.ImportSpecifier> {
     return ts.arrayIsSorted(imports, compareImportOrExportSpecifiers);
 }
 
+/** @internal */
 export function getImportDeclarationInsertionIndex(sortedImports: ts.SortedReadonlyArray<ts.AnyImportOrRequireStatement>, newImport: ts.AnyImportOrRequireStatement) {
     const index = ts.binarySearch(sortedImports, newImport, ts.identity, compareImportsOrRequireStatements);
     return index < 0 ? ~index : index;
 }
 
+/** @internal */
 export function getImportSpecifierInsertionIndex(sortedImports: ts.SortedReadonlyArray<ts.ImportSpecifier>, newImport: ts.ImportSpecifier) {
     const index = ts.binarySearch(sortedImports, newImport, ts.identity, compareImportOrExportSpecifiers);
     return index < 0 ? ~index : index;
 }
 
+/** @internal */
 export function compareImportsOrRequireStatements(s1: ts.AnyImportOrRequireStatement, s2: ts.AnyImportOrRequireStatement) {
     return compareModuleSpecifiers(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2)) || compareImportKind(s1, s2);
 }
@@ -557,5 +566,4 @@ function tryGetNamedBindingElements(namedImport: ts.ImportDeclaration) {
     return namedImport.importClause?.namedBindings && ts.isNamedImports(namedImport.importClause.namedBindings)
         ? namedImport.importClause.namedBindings.elements
         : undefined;
-}
 }

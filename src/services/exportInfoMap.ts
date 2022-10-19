@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export const enum ImportKind {
     Named,
     Default,
@@ -7,6 +8,7 @@ export const enum ImportKind {
     CommonJS,
 }
 
+/** @internal */
 export const enum ExportKind {
     Named,
     Default,
@@ -14,6 +16,7 @@ export const enum ExportKind {
     UMD,
 }
 
+/** @internal */
 export interface SymbolExportInfo {
     readonly symbol: ts.Symbol;
     readonly moduleSymbol: ts.Symbol;
@@ -44,6 +47,7 @@ interface CachedSymbolExportInfo {
     isFromPackageJson: boolean;
 }
 
+/** @internal */
 export interface ExportInfoMap {
     isUsableByFile(importingFile: ts.Path): boolean;
     clear(): void;
@@ -56,12 +60,14 @@ export interface ExportInfoMap {
     onFileChanged(oldSourceFile: ts.SourceFile, newSourceFile: ts.SourceFile, typeAcquisitionEnabled: boolean): boolean;
 }
 
+/** @internal */
 export interface CacheableExportInfoMapHost {
     getCurrentProgram(): ts.Program | undefined;
     getPackageJsonAutoImportProvider(): ts.Program | undefined;
     getGlobalTypingsCacheLocation(): string | undefined;
 }
 
+/** @internal */
 export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
     let exportInfoId = 1;
     const exportInfo = ts.createMultiMap<string, CachedSymbolExportInfo>();
@@ -281,6 +287,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
     }
 }
 
+/** @internal */
 export function isImportableFile(
     program: ts.Program,
     from: ts.SourceFile,
@@ -334,6 +341,7 @@ function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName
         || (!!globalCachePath && ts.startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
 }
 
+/** @internal */
 export function forEachExternalModuleToImportFrom(
     program: ts.Program,
     host: ts.LanguageServiceHost,
@@ -372,6 +380,7 @@ function forEachExternalModule(checker: ts.TypeChecker, allSourceFiles: readonly
     }
 }
 
+/** @internal */
 export function getExportInfoMap(importingFile: ts.SourceFile, host: ts.LanguageServiceHost, program: ts.Program, preferences: ts.UserPreferences, cancellationToken: ts.CancellationToken | undefined): ExportInfoMap {
     const start = ts.timestamp();
     // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
@@ -436,6 +445,7 @@ export function getExportInfoMap(importingFile: ts.SourceFile, host: ts.Language
     return cache;
 }
 
+/** @internal */
 export function getDefaultLikeExportInfo(moduleSymbol: ts.Symbol, checker: ts.TypeChecker, compilerOptions: ts.CompilerOptions) {
     const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
     if (!exported) return undefined;
@@ -490,5 +500,4 @@ function getNameForExportDefault(symbol: ts.Symbol): string | undefined {
             return declaration.propertyName && declaration.propertyName.text;
         }
     });
-}
 }

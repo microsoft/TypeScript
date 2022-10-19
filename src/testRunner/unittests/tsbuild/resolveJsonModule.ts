@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -79,4 +81,3 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
         edits: ts.noChangeOnlyRuns
     });
 });
-}

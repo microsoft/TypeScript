@@ -1,6 +1,8 @@
+import * as ts from "./_namespaces/ts";
+
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
-/* @internal */
-namespace ts.FindAllReferences {
+
+/** @internal */
 export interface ImportsResult {
     /** For every import of the symbol, the location and local symbol for the import. */
     importSearches: readonly [ts.Identifier, ts.Symbol][];
@@ -9,8 +11,10 @@ export interface ImportsResult {
     /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
     indirectUsers: readonly ts.SourceFile[];
 }
+/** @internal */
 export type ImportTracker = (exportSymbol: ts.Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
+/** @internal */
 /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
 export function createImportTracker(sourceFiles: readonly ts.SourceFile[], sourceFilesSet: ts.ReadonlySet<string>, checker: ts.TypeChecker, cancellationToken: ts.CancellationToken | undefined): ImportTracker {
     const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
@@ -20,14 +24,17 @@ export function createImportTracker(sourceFiles: readonly ts.SourceFile[], sourc
     };
 }
 
+/** @internal */
 /** Info about an exported symbol to perform recursive search on. */
 export interface ExportInfo {
     exportingModuleSymbol: ts.Symbol;
     exportKind: ExportKind;
 }
 
+/** @internal */
 export const enum ExportKind { Named, Default, ExportEquals }
 
+/** @internal */
 export const enum ImportExport { Import, Export }
 
 interface AmbientModuleDeclaration extends ts.ModuleDeclaration { body?: ts.ModuleBlock; }
@@ -350,11 +357,13 @@ function findNamespaceReExports(sourceFileLike: SourceFileLike, name: ts.Identif
     });
 }
 
+/** @internal */
 export type ModuleReference =
     /** "import" also includes require() calls. */
     | { kind: "import", literal: ts.StringLiteralLike }
     /** <reference path> or <reference types> */
     | { kind: "reference", referencingFile: ts.SourceFile, ref: ts.FileReference };
+/** @internal */
 export function findModuleReferences(program: ts.Program, sourceFiles: readonly ts.SourceFile[], searchModuleSymbol: ts.Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
     const checker = program.getTypeChecker();
@@ -443,16 +452,19 @@ function forEachImport(sourceFile: ts.SourceFile, action: (importStatement: Impo
     }
 }
 
+/** @internal */
 export interface ImportedSymbol {
     kind: ImportExport.Import;
     symbol: ts.Symbol;
 }
+/** @internal */
 export interface ExportedSymbol {
     kind: ImportExport.Export;
     symbol: ts.Symbol;
     exportInfo: ExportInfo;
 }
 
+/** @internal */
 /**
  * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
  * If at an import, look locally for the symbol it imports.
@@ -628,6 +640,7 @@ function isNodeImport(node: ts.Node): boolean {
     }
 }
 
+/** @internal */
 export function getExportInfo(exportSymbol: ts.Symbol, exportKind: ExportKind, checker: ts.TypeChecker): ExportInfo | undefined {
     const moduleSymbol = exportSymbol.parent;
     if (!moduleSymbol) return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
@@ -681,5 +694,4 @@ function isAmbientModuleDeclaration(node: ts.Node): node is AmbientModuleDeclara
 
 function isExternalModuleImportEquals(eq: ts.ImportEqualsDeclaration): eq is ts.ImportEqualsDeclaration & { moduleReference: { expression: ts.StringLiteral } } {
     return eq.moduleReference.kind === ts.SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === ts.SyntaxKind.StringLiteral;
-}
 }

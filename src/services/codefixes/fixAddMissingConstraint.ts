@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addMissingConstraint";
 const errorCodes = [
     // We want errors this could be attached to:
@@ -105,5 +105,4 @@ function tryGetConstraintType(checker: ts.TypeChecker, node: ts.Node) {
     }
     const contextualType = ts.isExpression(node) ? checker.getContextualType(node) : undefined;
     return contextualType || checker.getTypeAtLocation(node);
-}
 }

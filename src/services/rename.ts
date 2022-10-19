@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.Rename {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function getRenameInfo(program: ts.Program, sourceFile: ts.SourceFile, position: number, preferences: ts.UserPreferences): ts.RenameInfo {
     const node = ts.getAdjustedRenameLocation(ts.getTouchingPropertyName(sourceFile, position));
     if (nodeIsEligibleForRename(node)) {
@@ -171,6 +172,7 @@ function createTriggerSpanForNode(node: ts.Node, sourceFile: ts.SourceFile) {
     return ts.createTextSpan(start, width);
 }
 
+/** @internal */
 export function nodeIsEligibleForRename(node: ts.Node): boolean {
     switch (node.kind) {
         case ts.SyntaxKind.Identifier:
@@ -184,5 +186,4 @@ export function nodeIsEligibleForRename(node: ts.Node): boolean {
         default:
             return false;
     }
-}
 }

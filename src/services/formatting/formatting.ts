@@ -1,23 +1,28 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export interface FormatContext {
     readonly options: ts.FormatCodeSettings;
     readonly getRules: ts.formatting.RulesMap;
     readonly host: ts.FormattingHost;
 }
 
+/** @internal */
 export interface TextRangeWithKind<T extends ts.SyntaxKind = ts.SyntaxKind> extends ts.TextRange {
     kind: T;
 }
 
+/** @internal */
 export type TextRangeWithTriviaKind = TextRangeWithKind<ts.TriviaSyntaxKind>;
 
+/** @internal */
 export interface TokenInfo {
     leadingTrivia: TextRangeWithTriviaKind[] | undefined;
     token: TextRangeWithKind;
     trailingTrivia: TextRangeWithTriviaKind[] | undefined;
 }
 
+/** @internal */
 export function createTextRangeWithKind<T extends ts.SyntaxKind>(pos: number, end: number, kind: T): TextRangeWithKind<T> {
     const textRangeWithKind: TextRangeWithKind<T> = { pos, end, kind };
     if (ts.Debug.isDebugging) {
@@ -74,6 +79,7 @@ interface DynamicIndentation {
     recomputeIndentation(lineAddedByFormatting: boolean, parent: ts.Node): void;
 }
 
+/** @internal */
 export function formatOnEnter(position: number, sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     const line = sourceFile.getLineAndCharacterOfPosition(position).line;
     if (line === 0) {
@@ -103,11 +109,13 @@ export function formatOnEnter(position: number, sourceFile: ts.SourceFile, forma
     return formatSpan(span, sourceFile, formatContext, ts.formatting.FormattingRequestKind.FormatOnEnter);
 }
 
+/** @internal */
 export function formatOnSemicolon(position: number, sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     const semicolon = findImmediatelyPrecedingTokenOfKind(position, ts.SyntaxKind.SemicolonToken, sourceFile);
     return formatNodeLines(findOutermostNodeWithinListLevel(semicolon), sourceFile, formatContext, ts.formatting.FormattingRequestKind.FormatOnSemicolon);
 }
 
+/** @internal */
 export function formatOnOpeningCurly(position: number, sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     const openingCurly = findImmediatelyPrecedingTokenOfKind(position, ts.SyntaxKind.OpenBraceToken, sourceFile);
     if (!openingCurly) {
@@ -136,11 +144,13 @@ export function formatOnOpeningCurly(position: number, sourceFile: ts.SourceFile
     return formatSpan(textRange, sourceFile, formatContext, ts.formatting.FormattingRequestKind.FormatOnOpeningCurlyBrace);
 }
 
+/** @internal */
 export function formatOnClosingCurly(position: number, sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     const precedingToken = findImmediatelyPrecedingTokenOfKind(position, ts.SyntaxKind.CloseBraceToken, sourceFile);
     return formatNodeLines(findOutermostNodeWithinListLevel(precedingToken), sourceFile, formatContext, ts.formatting.FormattingRequestKind.FormatOnClosingCurlyBrace);
 }
 
+/** @internal */
 export function formatDocument(sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     const span = {
         pos: 0,
@@ -149,6 +159,7 @@ export function formatDocument(sourceFile: ts.SourceFile, formatContext: FormatC
     return formatSpan(span, sourceFile, formatContext, ts.formatting.FormattingRequestKind.FormatDocument);
 }
 
+/** @internal */
 export function formatSelection(start: number, end: number, sourceFile: ts.SourceFile, formatContext: FormatContext): ts.TextChange[] {
     // format from the beginning of the line
     const span = {
@@ -343,6 +354,7 @@ function getOwnOrInheritedDelta(n: ts.Node, options: ts.FormatCodeSettings, sour
     return 0;
 }
 
+/** @internal */
 export function formatNodeGivenIndentation(node: ts.Node, sourceFileLike: ts.SourceFileLike, languageVariant: ts.LanguageVariant, initialIndentation: number, delta: number, formatContext: FormatContext): ts.TextChange[] {
     const range = { pos: node.pos, end: node.end };
     return ts.formatting.getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(
@@ -1288,6 +1300,7 @@ function formatSpanWorker(
 
 const enum LineAction { None, LineAdded, LineRemoved }
 
+/** @internal */
 /**
  * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
  */
@@ -1400,6 +1413,7 @@ let internedSizes: { tabSize: number; indentSize: number; };
 let internedTabsIndentation: string[] | undefined;
 let internedSpacesIndentation: string[] | undefined;
 
+/** @internal */
 export function getIndentationString(indentation: number, options: ts.EditorSettings): string {
     // reset interned strings if FormatCodeOptions were changed
     const resetInternedStrings =
@@ -1446,5 +1460,4 @@ export function getIndentationString(indentation: number, options: ts.EditorSett
 
         return remainder ? spacesString + ts.repeatString(" ", remainder) : spacesString;
     }
-}
 }

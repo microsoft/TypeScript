@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "invalidImportSyntax";
 
 function getCodeFixesForImportDeclaration(context: ts.CodeFixContext, node: ts.ImportDeclaration): ts.CodeFixAction[] {
@@ -91,5 +91,4 @@ function getImportCodeFixesForExpression(context: ts.CodeFixContext, expr: ts.No
         fixes.push(ts.codefix.createCodeFixActionWithoutFixAll(fixName, changes, ts.Diagnostics.Use_synthetic_default_member));
     }
     return fixes;
-}
 }

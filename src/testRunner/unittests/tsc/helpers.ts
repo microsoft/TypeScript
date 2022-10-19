@@ -1,4 +1,8 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+import * as Harness from "../../_namespaces/Harness";
+
 export type TscCompileSystem = fakes.System & {
     writtenFiles: ts.Set<ts.Path>;
     baseLine(): { file: string; text: string; };
@@ -239,5 +243,4 @@ export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (
  */
  export function verifyTsc(input: TestTscCompile) {
     verifyTscCompileLike(testTscCompile, input);
-}
 }

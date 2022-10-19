@@ -1,11 +1,13 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export interface RuleSpec {
     readonly leftTokenRange: ts.formatting.TokenRange;
     readonly rightTokenRange: ts.formatting.TokenRange;
     readonly rule: ts.formatting.Rule;
 }
 
+/** @internal */
 export function getAllRules(): RuleSpec[] {
     const allTokens: ts.SyntaxKind[] = [];
     for (let token = ts.SyntaxKind.FirstToken; token <= ts.SyntaxKind.LastToken; token++) {
@@ -899,5 +901,4 @@ function isNotPropertyAccessOnIntegerLiteral(context: ts.formatting.FormattingCo
     return !ts.isPropertyAccessExpression(context.contextNode)
         || !ts.isNumericLiteral(context.contextNode.expression)
         || context.contextNode.expression.getText().indexOf(".") !== -1;
-}
 }

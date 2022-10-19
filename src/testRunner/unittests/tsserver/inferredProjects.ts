@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Inferred projects", () => {
     it("create inferred project", () => {
         const appFile: ts.projectSystem.File = {
@@ -451,4 +452,3 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         host.checkTimeoutQueueLength(0);
     });
 });
-}

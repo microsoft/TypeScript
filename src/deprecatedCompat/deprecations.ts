@@ -1,3 +1,5 @@
+import * as ts from "./_namespaces/ts";
+
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
 // the `@deprecated` JSDoc tag as well as the `Debug.deprecate` API.
@@ -10,8 +12,6 @@
 //
 // Once we have determined enough time has passed after a deprecation has been marked as `"warn"` or `"error"`, it will be removed from the public API.
 
-/* @internal */
-namespace ts {
 /** Defines a list of overloads by ordinal */
 type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
 
@@ -38,6 +38,7 @@ type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: 
 /** Defines deprecations for specific overloads by ordinal. */
 type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: ts.DeprecationOptions; };
 
+/** @internal */
 export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
     Object.defineProperty(call, "name", { ...Object.getOwnPropertyDescriptor(call, "name"), value: name });
 
@@ -93,6 +94,7 @@ interface BoundOverloadBuilder<T extends OverloadDefinitions> extends Finishable
 // NOTE: We only use this "builder" because we don't infer correctly when calling `createOverload` directly in < TS 4.7,
 //       but lib is currently at TS 4.4. We can switch to directly calling `createOverload` when we update LKG in main.
 
+/** @internal */
 export function buildOverload(name: string): OverloadBuilder {
     return {
         overload: overloads => ({
@@ -104,5 +106,4 @@ export function buildOverload(name: string): OverloadBuilder {
             })
         })
     };
-}
 }

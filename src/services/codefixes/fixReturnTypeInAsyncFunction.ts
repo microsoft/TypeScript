@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [
     ts.Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0.code,
@@ -60,5 +60,4 @@ function getInfo(sourceFile: ts.SourceFile, checker: ts.TypeChecker, pos: number
 
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, returnTypeNode: ts.TypeNode, promisedTypeNode: ts.TypeNode): void {
     changes.replaceNode(sourceFile, returnTypeNode, ts.factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
-}
 }

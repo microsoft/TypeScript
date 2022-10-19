@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.GoToDefinition {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function getDefinitionAtPosition(program: ts.Program, sourceFile: ts.SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly ts.DefinitionInfo[] | undefined {
     const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
     const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || ts.emptyArray;
@@ -191,6 +192,7 @@ function getDefinitionFromOverriddenMember(typeChecker: ts.TypeChecker, node: ts
     return getDefinitionFromSymbol(typeChecker, symbol, node);
 }
 
+/** @internal */
 export function getReferenceAtPosition(sourceFile: ts.SourceFile, position: number, program: ts.Program): { reference: ts.FileReference, fileName: string, unverified: boolean, file?: ts.SourceFile } | undefined {
     const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
     if (referencePath) {
@@ -233,6 +235,7 @@ export function getReferenceAtPosition(sourceFile: ts.SourceFile, position: numb
 }
 
 /// Goto type
+/** @internal */
 export function getTypeDefinitionAtPosition(typeChecker: ts.TypeChecker, sourceFile: ts.SourceFile, position: number): readonly ts.DefinitionInfo[] | undefined {
     const node = ts.getTouchingPropertyName(sourceFile, position);
     if (node === sourceFile) {
@@ -273,6 +276,7 @@ function tryGetReturnTypeOfFunction(symbol: ts.Symbol, type: ts.Type, checker: t
     return undefined;
 }
 
+/** @internal */
 export function getDefinitionAndBoundSpan(program: ts.Program, sourceFile: ts.SourceFile, position: number): ts.DefinitionInfoAndBoundSpan | undefined {
     const definitions = getDefinitionAtPosition(program, sourceFile, position);
 
@@ -401,6 +405,7 @@ function getDefinitionFromSymbol(typeChecker: ts.TypeChecker, symbol: ts.Symbol,
     }
 }
 
+/** @internal */
 /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
 export function createDefinitionInfo(declaration: ts.Declaration, checker: ts.TypeChecker, symbol: ts.Symbol, node: ts.Node, unverified?: boolean, failedAliasResolution?: boolean): ts.DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
@@ -470,6 +475,7 @@ function createDefinitionFromSignatureDeclaration(typeChecker: ts.TypeChecker, d
     return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
 }
 
+/** @internal */
 export function findReferenceInPosition(refs: readonly ts.FileReference[], pos: number): ts.FileReference | undefined {
     return ts.find(refs, ref => ts.textRangeContainsPositionInclusive(ref, pos));
 }
@@ -509,5 +515,4 @@ function isConstructorLike(node: ts.Node): boolean {
         default:
             return false;
     }
-}
 }

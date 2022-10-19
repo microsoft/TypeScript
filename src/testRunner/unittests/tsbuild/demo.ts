@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: on demo project", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -46,4 +48,3 @@ describe("unittests:: tsbuild:: on demo project", () => {
         )
     });
 });
-}

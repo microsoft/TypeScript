@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [ts.Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
 ts.codefix.registerCodeFix({
@@ -29,6 +29,7 @@ type DeclarationWithType =
     | ts.PropertySignature
     | ts.PropertyDeclaration;
 
+/** @internal */
 export function parameterShouldGetTypeFromJSDoc(node: ts.Node): node is DeclarationWithType {
     return isDeclarationWithType(node) && hasUsableJSDoc(node);
 }
@@ -166,5 +167,4 @@ function transformJSDocIndexSignature(node: ts.TypeReferenceNode) {
     const indexSignature = ts.factory.createTypeLiteralNode([ts.factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
     ts.setEmitFlags(indexSignature, ts.EmitFlags.SingleLine);
     return indexSignature;
-}
 }

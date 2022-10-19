@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 /**
  * Associates a node with the current transformation, initializing
  * various transient transformation properties.
@@ -290,5 +291,4 @@ export function setTypeNode<T extends ts.Node>(node: T, type: ts.TypeNode): T {
 /* @internal */
 export function getTypeNode<T extends ts.Node>(node: T): ts.TypeNode | undefined {
     return node.emitNode?.typeNode;
-}
 }

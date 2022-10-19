@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 const caseInsensitiveBasePath = "c:/dev/";
 const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
 const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
@@ -1539,4 +1542,3 @@ describe("unittests:: config:: matchFiles", () => {
         validateMatches(expected, json, host, caseInsensitiveBasePath);
     });
 });
-}

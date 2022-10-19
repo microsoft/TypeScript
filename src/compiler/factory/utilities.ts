@@ -1,12 +1,13 @@
-/* @internal */
-namespace ts {
+import * as ts from "../_namespaces/ts";
 
 // Compound nodes
 
+/** @internal */
 export function createEmptyExports(factory: ts.NodeFactory) {
     return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
 }
 
+/** @internal */
 export function createMemberAccessForPropertyName(factory: ts.NodeFactory, target: ts.Expression, memberName: ts.PropertyName, location?: ts.TextRange): ts.MemberExpression {
     if (ts.isComputedPropertyName(memberName)) {
          return ts.setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
@@ -46,6 +47,7 @@ function createJsxFactoryExpressionFromEntityName(factory: ts.NodeFactory, jsxFa
     }
 }
 
+/** @internal */
 export function createJsxFactoryExpression(factory: ts.NodeFactory, jsxFactoryEntity: ts.EntityName | undefined, reactNamespace: string, parent: ts.JsxOpeningLikeElement | ts.JsxOpeningFragment): ts.Expression {
     return jsxFactoryEntity ?
         createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
@@ -64,6 +66,7 @@ function createJsxFragmentFactoryExpression(factory: ts.NodeFactory, jsxFragment
         );
 }
 
+/** @internal */
 export function createExpressionForJsxElement(factory: ts.NodeFactory, callee: ts.Expression, tagName: ts.Expression, props: ts.Expression | undefined, children: readonly ts.Expression[] | undefined, location: ts.TextRange): ts.LeftHandSideExpression {
     const argumentsList = [tagName];
     if (props) {
@@ -96,6 +99,7 @@ export function createExpressionForJsxElement(factory: ts.NodeFactory, callee: t
     );
 }
 
+/** @internal */
 export function createExpressionForJsxFragment(factory: ts.NodeFactory, jsxFactoryEntity: ts.EntityName | undefined, jsxFragmentFactoryEntity: ts.EntityName | undefined, reactNamespace: string, children: readonly ts.Expression[], parentElement: ts.JsxOpeningFragment, location: ts.TextRange): ts.LeftHandSideExpression {
     const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
     const argumentsList = [tagName, factory.createNull()];
@@ -124,6 +128,7 @@ export function createExpressionForJsxFragment(factory: ts.NodeFactory, jsxFacto
 
 // Utilities
 
+/** @internal */
 export function createForOfBindingStatement(factory: ts.NodeFactory, node: ts.ForInitializer, boundValue: ts.Expression): ts.Statement {
     if (ts.isVariableDeclarationList(node)) {
         const firstDeclaration = ts.first(node.declarations);
@@ -148,6 +153,7 @@ export function createForOfBindingStatement(factory: ts.NodeFactory, node: ts.Fo
     }
 }
 
+/** @internal */
 export function insertLeadingStatement(factory: ts.NodeFactory, dest: ts.Statement, source: ts.Statement) {
     if (ts.isBlock(dest)) {
         return factory.updateBlock(dest, ts.setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
@@ -157,6 +163,7 @@ export function insertLeadingStatement(factory: ts.NodeFactory, dest: ts.Stateme
     }
 }
 
+/** @internal */
 export function createExpressionFromEntityName(factory: ts.NodeFactory, node: ts.EntityName | ts.Expression): ts.Expression {
     if (ts.isQualifiedName(node)) {
         const left = createExpressionFromEntityName(factory, node.left);
@@ -170,6 +177,7 @@ export function createExpressionFromEntityName(factory: ts.NodeFactory, node: ts
     }
 }
 
+/** @internal */
 export function createExpressionForPropertyName(factory: ts.NodeFactory, memberName: Exclude<ts.PropertyName, ts.PrivateIdentifier>): ts.Expression {
     if (ts.isIdentifier(memberName)) {
         return factory.createStringLiteralFromNode(memberName);
@@ -286,6 +294,7 @@ function createExpressionForMethodDeclaration(factory: ts.NodeFactory, method: t
     );
 }
 
+/** @internal */
 export function createExpressionForObjectLiteralElementLike(factory: ts.NodeFactory, node: ts.ObjectLiteralExpression, property: ts.ObjectLiteralElementLike, receiver: ts.Expression): ts.Expression | undefined {
     if (property.name && ts.isPrivateIdentifier(property.name)) {
         ts.Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
@@ -303,6 +312,7 @@ export function createExpressionForObjectLiteralElementLike(factory: ts.NodeFact
     }
 }
 
+/** @internal */
 /**
  * Expand the read and increment/decrement operations a pre- or post-increment or pre- or post-decrement expression.
  *
@@ -364,6 +374,7 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: ts.Nod
     return expression;
 }
 
+/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its internal name.
  */
@@ -371,6 +382,7 @@ export function isInternalName(node: ts.Identifier) {
     return (ts.getEmitFlags(node) & ts.EmitFlags.InternalName) !== 0;
 }
 
+/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its local name.
  */
@@ -378,6 +390,7 @@ export function isLocalName(node: ts.Identifier) {
     return (ts.getEmitFlags(node) & ts.EmitFlags.LocalName) !== 0;
 }
 
+/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its export representation if the
  * name points to an exported symbol.
@@ -390,6 +403,7 @@ function isUseStrictPrologue(node: ts.ExpressionStatement): boolean {
     return ts.isStringLiteral(node.expression) && node.expression.text === "use strict";
 }
 
+/** @internal */
 export function findUseStrictPrologue(statements: readonly ts.Statement[]): ts.Statement | undefined {
     for (const statement of statements) {
         if (ts.isPrologueDirective(statement)) {
@@ -404,6 +418,7 @@ export function findUseStrictPrologue(statements: readonly ts.Statement[]): ts.S
     return undefined;
 }
 
+/** @internal */
 export function startsWithUseStrict(statements: readonly ts.Statement[]) {
     const firstStatement = ts.firstOrUndefined(statements);
     return firstStatement !== undefined
@@ -411,23 +426,27 @@ export function startsWithUseStrict(statements: readonly ts.Statement[]) {
         && isUseStrictPrologue(firstStatement);
 }
 
+/** @internal */
 export function isCommaSequence(node: ts.Expression): node is ts.BinaryExpression & {operatorToken: ts.Token<ts.SyntaxKind.CommaToken>} | ts.CommaListExpression {
     return node.kind === ts.SyntaxKind.BinaryExpression && (node as ts.BinaryExpression).operatorToken.kind === ts.SyntaxKind.CommaToken ||
         node.kind === ts.SyntaxKind.CommaListExpression;
 }
 
+/** @internal */
 export function isJSDocTypeAssertion(node: ts.Node): node is ts.JSDocTypeAssertion {
     return ts.isParenthesizedExpression(node)
         && ts.isInJSFile(node)
         && !!ts.getJSDocTypeTag(node);
 }
 
+/** @internal */
 export function getJSDocTypeAssertionType(node: ts.JSDocTypeAssertion) {
     const type = ts.getJSDocType(node);
     ts.Debug.assertIsDefined(type);
     return type;
 }
 
+/** @internal */
 export function isOuterExpression(node: ts.Node, kinds = ts.OuterExpressionKinds.All): node is ts.OuterExpression {
     switch (node.kind) {
         case ts.SyntaxKind.ParenthesizedExpression:
@@ -447,8 +466,11 @@ export function isOuterExpression(node: ts.Node, kinds = ts.OuterExpressionKinds
     return false;
 }
 
+/** @internal */
 export function skipOuterExpressions(node: ts.Expression, kinds?: ts.OuterExpressionKinds): ts.Expression;
+/** @internal */
 export function skipOuterExpressions(node: ts.Node, kinds?: ts.OuterExpressionKinds): ts.Node;
+/** @internal */
 export function skipOuterExpressions(node: ts.Node, kinds = ts.OuterExpressionKinds.All) {
     while (isOuterExpression(node, kinds)) {
         node = node.expression;
@@ -456,28 +478,35 @@ export function skipOuterExpressions(node: ts.Node, kinds = ts.OuterExpressionKi
     return node;
 }
 
+/** @internal */
 export function skipAssertions(node: ts.Expression): ts.Expression;
+/** @internal */
 export function skipAssertions(node: ts.Node): ts.Node;
+/** @internal */
 export function skipAssertions(node: ts.Node): ts.Node {
     return skipOuterExpressions(node, ts.OuterExpressionKinds.Assertions);
 }
 
+/** @internal */
 export function startOnNewLine<T extends ts.Node>(node: T): T {
     return ts.setStartsOnNewLine(node, /*newLine*/ true);
 }
 
+/** @internal */
 export function getExternalHelpersModuleName(node: ts.SourceFile) {
     const parseNode = ts.getOriginalNode(node, ts.isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return emitNode && emitNode.externalHelpersModuleName;
 }
 
+/** @internal */
 export function hasRecordedExternalHelpers(sourceFile: ts.SourceFile) {
     const parseNode = ts.getOriginalNode(sourceFile, ts.isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
 }
 
+/** @internal */
 export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: ts.NodeFactory, helperFactory: ts.EmitHelperFactory, sourceFile: ts.SourceFile, compilerOptions: ts.CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
     if (compilerOptions.importHelpers && ts.isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: ts.NamedImportBindings | undefined;
@@ -531,6 +560,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: ts.N
     }
 }
 
+/** @internal */
 export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: ts.NodeFactory, node: ts.SourceFile, compilerOptions: ts.CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
     if (compilerOptions.importHelpers && ts.isEffectiveExternalModule(node, compilerOptions)) {
         const externalHelpersModuleName = getExternalHelpersModuleName(node);
@@ -562,6 +592,7 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: ts.NodeFac
     }
 }
 
+/** @internal */
 /**
  * Get the name of that target module from an import or export declaration
  */
@@ -580,6 +611,7 @@ export function getLocalNameForExternalImport(factory: ts.NodeFactory, node: ts.
     return undefined;
 }
 
+/** @internal */
 /**
  * Get the name of a target module from an import/export declaration as should be written in the emitted output.
  * The emitted output name can be different from the input if:
@@ -608,6 +640,7 @@ function tryRenameExternalModule(factory: ts.NodeFactory, moduleName: ts.Literal
     return rename ? factory.createStringLiteral(rename) : undefined;
 }
 
+/** @internal */
 /**
  * Get the name of a module as should be written in the emitted output.
  * The emitted output name can be different from the input if:
@@ -632,6 +665,7 @@ function tryGetModuleNameFromDeclaration(declaration: ts.ImportEqualsDeclaration
     return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
 }
 
+/** @internal */
 /**
  * Gets the initializer of an BindingOrAssignmentElement.
  */
@@ -675,6 +709,7 @@ export function getInitializerOfBindingOrAssignmentElement(bindingElement: ts.Bi
     }
 }
 
+/** @internal */
 /**
  * Gets the name of an BindingOrAssignmentElement.
  */
@@ -750,6 +785,7 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: ts.Binding
     return bindingElement;
 }
 
+/** @internal */
 /**
  * Determines whether an BindingOrAssignmentElement is a rest element.
  */
@@ -769,6 +805,7 @@ export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: ts.
     return undefined;
 }
 
+/** @internal */
 /**
  * Gets the property name of a BindingOrAssignmentElement
  */
@@ -778,6 +815,7 @@ export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: ts.B
     return propertyName;
 }
 
+/** @internal */
 export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): Exclude<ts.PropertyName, ts.PrivateIdentifier> | undefined {
     switch (bindingElement.kind) {
         case ts.SyntaxKind.BindingElement:
@@ -834,6 +872,7 @@ function isStringOrNumericLiteral(node: ts.Node): node is ts.StringLiteral | ts.
         || kind === ts.SyntaxKind.NumericLiteral;
 }
 
+/** @internal */
 /**
  * Gets the elements of a BindingOrAssignmentPattern
  */
@@ -865,12 +904,14 @@ export function getJSDocTypeAliasName(fullName: ts.JSDocNamespaceBody | undefine
     }
 }
 
+/** @internal */
 export function canHaveIllegalType(node: ts.Node): node is ts.HasIllegalType {
     const kind = node.kind;
     return kind === ts.SyntaxKind.Constructor
         || kind === ts.SyntaxKind.SetAccessor;
 }
 
+/** @internal */
 export function canHaveIllegalTypeParameters(node: ts.Node): node is ts.HasIllegalTypeParameters {
     const kind = node.kind;
     return kind === ts.SyntaxKind.Constructor
@@ -878,6 +919,7 @@ export function canHaveIllegalTypeParameters(node: ts.Node): node is ts.HasIlleg
         || kind === ts.SyntaxKind.SetAccessor;
 }
 
+/** @internal */
 export function canHaveIllegalDecorators(node: ts.Node): node is ts.HasIllegalDecorators {
     const kind = node.kind;
     return kind === ts.SyntaxKind.PropertyAssignment
@@ -899,6 +941,7 @@ export function canHaveIllegalDecorators(node: ts.Node): node is ts.HasIllegalDe
         || kind === ts.SyntaxKind.ExportAssignment;
 }
 
+/** @internal */
 export function canHaveIllegalModifiers(node: ts.Node): node is ts.HasIllegalModifiers {
     const kind = node.kind;
     return kind === ts.SyntaxKind.ClassStaticBlockDeclaration
@@ -909,13 +952,20 @@ export function canHaveIllegalModifiers(node: ts.Node): node is ts.HasIllegalMod
         || kind === ts.SyntaxKind.NamespaceExportDeclaration;
 }
 
+/** @internal */
 export const isTypeNodeOrTypeParameterDeclaration = ts.or(ts.isTypeNode, ts.isTypeParameterDeclaration) as (node: ts.Node) => node is ts.TypeNode | ts.TypeParameterDeclaration;
+/** @internal */
 export const isQuestionOrExclamationToken = ts.or(ts.isQuestionToken, ts.isExclamationToken) as (node: ts.Node) => node is ts.QuestionToken | ts.ExclamationToken;
+/** @internal */
 export const isIdentifierOrThisTypeNode = ts.or(ts.isIdentifier, ts.isThisTypeNode) as (node: ts.Node) => node is ts.Identifier | ts.ThisTypeNode;
+/** @internal */
 export const isReadonlyKeywordOrPlusOrMinusToken = ts.or(ts.isReadonlyKeyword, ts.isPlusToken, ts.isMinusToken) as (node: ts.Node) => node is ts.ReadonlyKeyword | ts.PlusToken | ts.MinusToken;
+/** @internal */
 export const isQuestionOrPlusOrMinusToken = ts.or(ts.isQuestionToken, ts.isPlusToken, ts.isMinusToken) as (node: ts.Node) => node is ts.QuestionToken | ts.PlusToken | ts.MinusToken;
+/** @internal */
 export const isModuleName = ts.or(ts.isIdentifier, ts.isStringLiteral) as (node: ts.Node) => node is ts.ModuleName;
 
+/** @internal */
 export function isLiteralTypeLikeExpression(node: ts.Node): node is ts.NullLiteral | ts.BooleanLiteral | ts.LiteralExpression | ts.PrefixUnaryExpression {
     const kind = node.kind;
     return kind === ts.SyntaxKind.NullKeyword
@@ -1020,6 +1070,7 @@ function isBinaryOperator(kind: ts.SyntaxKind): kind is ts.BinaryOperator {
         || kind === ts.SyntaxKind.CommaToken;
 }
 
+/** @internal */
 export function isBinaryOperatorToken(node: ts.Node): node is ts.BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
@@ -1174,6 +1225,7 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     }
 }
 
+/** @internal */
 /**
  * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
  * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
@@ -1191,6 +1243,7 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
 ): (node: ts.BinaryExpression) => TResult;
+/** @internal */
 /**
  * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
  * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
@@ -1208,6 +1261,7 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
 ): (node: ts.BinaryExpression, outerState: TOuterState) => TResult;
+/** @internal */
 export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     onEnter: (node: ts.BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
     onLeft: ((left: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
@@ -1238,13 +1292,16 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
  * @internal
  */
 export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T>): ts.NodeArray<T>;
+/** @internal */
 export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined;
+/** @internal */
 export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined {
     if (nodes === undefined) return undefined;
     if (nodes.length === 0) return nodes;
     return ts.setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
 }
 
+/** @internal */
 /**
  * Gets the node from which a name should be generated.
  */
@@ -1271,14 +1328,17 @@ export function getNodeForGeneratedName(name: ts.GeneratedIdentifier | ts.Genera
     return name;
 }
 
+/** @internal */
 /**
  * Formats a prefix or suffix of a generated name.
  */
 export function formatGeneratedNamePart(part: string | undefined): string;
+/** @internal */
 /**
  * Formats a prefix or suffix of a generated name. If the part is a {@link GeneratedNamePart}, calls {@link generateName} to format the source node.
  */
 export function formatGeneratedNamePart(part: string | ts.GeneratedNamePart | undefined, generateName: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string;
+/** @internal */
 export function formatGeneratedNamePart(part: string | ts.GeneratedNamePart | undefined, generateName?: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string {
     return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
         typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === ts.CharacterCodes.hash ? part.slice(1) : part :
@@ -1297,6 +1357,7 @@ function formatIdentifierWorker(node: ts.Identifier | ts.PrivateIdentifier, gene
         ts.idText(node);
 }
 
+/** @internal */
 /**
  * Formats a generated name.
  * @param privateName When `true`, inserts a `#` character at the start of the result.
@@ -1305,6 +1366,7 @@ function formatIdentifierWorker(node: ts.Identifier | ts.PrivateIdentifier, gene
  * @param suffix The suffix (if any) to include after the base name.
  */
 export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
+/** @internal */
 /**
  * Formats a generated name.
  * @param privateName When `true`, inserts a `#` character at the start of the result.
@@ -1314,6 +1376,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | undef
  * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
  */
 export function formatGeneratedName(privateName: boolean, prefix: string | ts.GeneratedNamePart | undefined, baseName: string | ts.Identifier | ts.PrivateIdentifier, suffix: string | ts.GeneratedNamePart | undefined, generateName: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string;
+/** @internal */
 export function formatGeneratedName(privateName: boolean, prefix: string | ts.GeneratedNamePart | undefined, baseName: string | ts.Identifier | ts.PrivateIdentifier, suffix: string | ts.GeneratedNamePart | undefined, generateName?: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string) {
     prefix = formatGeneratedNamePart(prefix, generateName!);
     suffix = formatGeneratedNamePart(suffix, generateName!);
@@ -1322,6 +1385,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | ts.Ge
 }
 
 
+/** @internal */
 /**
  * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
  */
@@ -1336,6 +1400,7 @@ export function createAccessorPropertyBackingField(factory: ts.NodeFactory, node
     );
 }
 
+/** @internal */
 /**
  * Creates a {@link GetAccessorDeclaration} that reads from a private backing field.
  */
@@ -1356,6 +1421,7 @@ export function createAccessorPropertyGetRedirector(factory: ts.NodeFactory, nod
     );
 }
 
+/** @internal */
 /**
  * Creates a {@link SetAccessorDeclaration} that writes to a private backing field.
  */
@@ -1380,5 +1446,4 @@ export function createAccessorPropertySetRedirector(factory: ts.NodeFactory, nod
             )
         ])
     );
-}
 }

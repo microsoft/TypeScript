@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/services.js"
+        "outDir": "../../built/local"
     },
     "references": [
         { "path": "../compiler" },
@@ -136,6 +136,37 @@
         "transform.ts",
         "shims.ts",
         "globalThisShim.ts",
-        "exportAsModule.ts"
+        "exportAsModule.ts",
+        "_namespaces/ts.BreakpointResolver.ts",
+        "_namespaces/ts.ts",
+        "_namespaces/ts.CallHierarchy.ts",
+        "_namespaces/ts.classifier.v2020.ts",
+        "_namespaces/ts.classifier.ts",
+        "_namespaces/ts.codefix.ts",
+        "_namespaces/ts.Completions.ts",
+        "_namespaces/ts.FindAllReferences.ts",
+        "_namespaces/ts.GoToDefinition.ts",
+        "_namespaces/ts.InlayHints.ts",
+        "_namespaces/ts.JsDoc.ts",
+        "_namespaces/ts.NavigateTo.ts",
+        "_namespaces/ts.NavigationBar.ts",
+        "_namespaces/ts.OrganizeImports.ts",
+        "_namespaces/ts.OutliningElementsCollector.ts",
+        "_namespaces/ts.refactor.ts",
+        "_namespaces/ts.Rename.ts",
+        "_namespaces/ts.SignatureHelp.ts",
+        "_namespaces/ts.SmartSelectionRange.ts",
+        "_namespaces/ts.Completions.StringCompletions.ts",
+        "_namespaces/ts.SymbolDisplay.ts",
+        "_namespaces/ts.textChanges.ts",
+        "_namespaces/ts.formatting.ts",
+        "_namespaces/ts.refactor.addOrRemoveBracesToArrowFunction.ts",
+        "_namespaces/ts.refactor.convertArrowFunctionOrFunctionExpression.ts",
+        "_namespaces/ts.refactor.convertParamsToDestructuredObject.ts",
+        "_namespaces/ts.refactor.convertStringOrTemplateLiteral.ts",
+        "_namespaces/ts.refactor.convertToOptionalChainExpression.ts",
+        "_namespaces/ts.refactor.extractSymbol.ts",
+        "_namespaces/ts.refactor.generateGetAccessorAndSetAccessor.ts",
+        "_namespaces/ts.refactor.inferFunctionReturnType.ts"
     ]
 }

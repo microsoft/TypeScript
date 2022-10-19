@@ -1,9 +1,10 @@
+import * as ts from "../_namespaces/ts";
+
 // DEPRECATION: Renamed node tests
 // DEPRECATION PLAN:
 //     - soft: 4.2
 //     - warn: 4.3
 //     - error: 5.0
-namespace ts {
 /**
  * @deprecated Use `isMemberName` instead.
  */
@@ -14,4 +15,3 @@ export const isIdentifierOrPrivateIdentifier = ts.Debug.deprecate(function isIde
     warnAfter: "4.3",
     message: "Use `isMemberName` instead."
 });
-}

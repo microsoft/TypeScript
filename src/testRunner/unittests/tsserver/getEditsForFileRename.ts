@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
         const userTs: ts.projectSystem.File = {
@@ -102,4 +103,3 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         ]);
     });
 });
-}

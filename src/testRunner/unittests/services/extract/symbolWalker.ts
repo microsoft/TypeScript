@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../../_namespaces/ts";
+import * as Harness from "../../../_namespaces/Harness";
+
 describe("unittests:: services:: extract:: Symbol Walker", () => {
     function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void) {
         it(description, () => {
@@ -42,4 +44,3 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
         assert.equal(stdLibRefSymbols, 1); // Expect 1 stdlib entry symbol - the implicit Array referenced by Bar.history
     });
 });
-}

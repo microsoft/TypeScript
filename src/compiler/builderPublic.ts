@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export type AffectedFileResult<T> = { result: T; affected: ts.SourceFile | ts.Program; } | undefined;
 
 export interface BuilderProgramHost {
@@ -177,5 +178,4 @@ export function createAbstractBuilder(rootNames: readonly string[] | undefined, 
 export function createAbstractBuilder(newProgramOrRootNames: ts.Program | readonly string[] | undefined, hostOrOptions: BuilderProgramHost | ts.CompilerOptions | undefined, oldProgramOrHost?: ts.CompilerHost | BuilderProgram, configFileParsingDiagnosticsOrOldProgram?: readonly ts.Diagnostic[] | BuilderProgram, configFileParsingDiagnostics?: readonly ts.Diagnostic[], projectReferences?: readonly ts.ProjectReference[]): BuilderProgram {
     const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = ts.getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
     return ts.createRedirectedBuilderProgram(() => ({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }), newConfigFileParsingDiagnostics);
-}
 }

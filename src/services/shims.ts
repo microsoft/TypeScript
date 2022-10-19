@@ -1,3 +1,5 @@
+import * as ts from "./_namespaces/ts";
+
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -21,8 +23,6 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // esl
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable local/no-in-operator */
 
-/* @internal */
-namespace ts {
 interface DiscoverTypingsInfo {
     fileNames: string[];                            // The file names that belong to the same project.
     projectRootPath: string;                        // The path to the project root directory
@@ -34,6 +34,7 @@ interface DiscoverTypingsInfo {
     typesRegistry: ts.ReadonlyESMap<string, ts.MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
 }
 
+/** @internal */
 export interface ScriptSnapshotShim {
     /** Gets a portion of the script snapshot specified by [start, end). */
     getText(start: number, end: number): string;
@@ -53,12 +54,14 @@ export interface ScriptSnapshotShim {
     dispose?(): void;
 }
 
+/** @internal */
 export interface Logger {
     log(s: string): void;
     trace(s: string): void;
     error(s: string): void;
 }
 
+/** @internal */
 /** Public interface of the host of a language service shim instance. */
 export interface LanguageServiceShimHost extends Logger {
     getCompilationSettings(): string;
@@ -87,6 +90,7 @@ export interface LanguageServiceShimHost extends Logger {
     directoryExists(directoryName: string): boolean;
 }
 
+/** @internal */
 /** Public interface of the core-services host instance used in managed side */
 export interface CoreServicesShimHost extends Logger {
     directoryExists(directoryName: string): boolean;
@@ -116,22 +120,26 @@ export interface CoreServicesShimHost extends Logger {
 ///
 // Note: This is being using by the host (VS) and is marshaled back and forth.
 // When changing this make sure the changes are reflected in the managed side as well
+/** @internal */
 export interface ShimsFileReference {
     path: string;
     position: number;
     length: number;
 }
 
+/** @internal */
 /** Public interface of a language service instance shim. */
 export interface ShimFactory {
     registerShim(shim: Shim): void;
     unregisterShim(shim: Shim): void;
 }
 
+/** @internal */
 export interface Shim {
     dispose(_dummy: {}): void;
 }
 
+/** @internal */
 export interface LanguageServiceShim extends Shim {
     languageService: ts.LanguageService;
 
@@ -292,11 +300,13 @@ export interface LanguageServiceShim extends Shim {
     uncommentSelection(fileName: string, textChange: ts.TextRange): string;
 }
 
+/** @internal */
 export interface ClassifierShim extends Shim {
     getEncodedLexicalClassifications(text: string, lexState: ts.EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     getClassificationsForLine(text: string, lexState: ts.EndOfLineState, syntacticClassifierAbsent?: boolean): string;
 }
 
+/** @internal */
 export interface CoreServicesShim extends Shim {
     getAutomaticTypeDirectiveNames(compilerOptionsJson: string): string;
     getPreProcessedFileInfo(fileName: string, sourceText: ts.IScriptSnapshot): string;
@@ -346,6 +356,7 @@ class ScriptSnapshotShimAdapter implements ts.IScriptSnapshot {
     }
 }
 
+/** @internal */
 export class LanguageServiceShimHostAdapter implements ts.LanguageServiceHost {
     private loggingEnabled = false;
     private tracingEnabled = false;
@@ -505,6 +516,7 @@ export class LanguageServiceShimHostAdapter implements ts.LanguageServiceHost {
     }
 }
 
+/** @internal */
 export class CoreServicesShimHostAdapter implements ts.ParseConfigHost, ts.ModuleResolutionHost, ts.JsTyping.TypingResolutionHost {
 
     public directoryExists: (directoryName: string) => boolean;
@@ -607,6 +619,7 @@ class ShimBase implements Shim {
     }
 }
 
+/** @internal */
 export interface RealizedDiagnostic {
     message: string;
     start: number;
@@ -616,6 +629,7 @@ export interface RealizedDiagnostic {
     reportsUnnecessary?: {};
     reportsDeprecated?: {};
 }
+/** @internal */
 export function realizeDiagnostics(diagnostics: readonly ts.Diagnostic[], newLine: string): RealizedDiagnostic[] {
     return diagnostics.map(d => realizeDiagnostic(d, newLine));
 }
@@ -1287,6 +1301,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 }
 
+/** @internal */
 export class TypeScriptServicesFactory implements ShimFactory {
     private _shims: Shim[] = [];
     private documentRegistry: ts.DocumentRegistry | undefined;
@@ -1354,7 +1369,6 @@ export class TypeScriptServicesFactory implements ShimFactory {
 
         throw new Error("Invalid operation");
     }
-}
 }
 
 /* eslint-enable local/no-in-operator */

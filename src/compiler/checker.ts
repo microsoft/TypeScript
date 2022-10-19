@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as ts.__String & string;
 
@@ -61,6 +61,7 @@ const enum WideningKind {
     GeneratorYield,
 }
 
+/** @internal */
 export const enum TypeFacts {
     None = 0,
     TypeofEQString = 1 << 0,      // typeof x === "string"
@@ -169,6 +170,7 @@ const enum TypeSystemPropertyName {
     WriteType,
 }
 
+/** @internal */
 export const enum CheckMode {
     Normal = 0,                                     // Normal type checking
     Contextual = 1 << 0,                            // Explicitly assigned contextual type, therefore not cacheable
@@ -182,6 +184,7 @@ export const enum CheckMode {
                                                     //   we need to preserve generic types instead of substituting them for constraints
 }
 
+/** @internal */
 export const enum SignatureCheckMode {
     BivariantCallback = 1 << 0,
     StrictCallback    = 1 << 1,
@@ -276,6 +279,7 @@ function NodeLinks(this: ts.NodeLinks) {
     this.flags = 0;
 }
 
+/** @internal */
 export function getNodeId(node: ts.Node): number {
     if (!node.id) {
         node.id = nextNodeId;
@@ -284,6 +288,7 @@ export function getNodeId(node: ts.Node): number {
     return node.id;
 }
 
+/** @internal */
 export function getSymbolId(symbol: ts.Symbol): ts.SymbolId {
     if (!symbol.id) {
         symbol.id = nextSymbolId;
@@ -293,12 +298,14 @@ export function getSymbolId(symbol: ts.Symbol): ts.SymbolId {
     return symbol.id;
 }
 
+/** @internal */
 export function isInstantiatedModule(node: ts.ModuleDeclaration, preserveConstEnums: boolean) {
     const moduleState = ts.getModuleInstanceState(node);
     return moduleState === ts.ModuleInstanceState.Instantiated ||
         (preserveConstEnums && moduleState === ts.ModuleInstanceState.ConstEnumOnly);
 }
 
+/** @internal */
 export function createTypeChecker(host: ts.TypeCheckerHost): ts.TypeChecker {
     const getPackagesMap = ts.memoize(() => {
         // A package name maps to true when we detect it has .d.ts files.
@@ -46208,11 +46215,12 @@ function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) 
     }
 }
 
+/** @internal */
 export function signatureHasRestParameter(s: ts.Signature) {
     return !!(s.flags & ts.SignatureFlags.HasRestParameter);
 }
 
+/** @internal */
 export function signatureHasLiteralTypes(s: ts.Signature) {
     return !!(s.flags & ts.SignatureFlags.HasLiteralTypes);
-}
 }

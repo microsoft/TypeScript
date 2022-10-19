@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.CallHierarchy {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export type NamedExpression =
     | ts.ClassExpression & { name: ts.Identifier }
     | ts.FunctionExpression & { name: ts.Identifier }
@@ -10,6 +11,7 @@ function isNamedExpression(node: ts.Node): node is NamedExpression {
     return (ts.isFunctionExpression(node) || ts.isClassExpression(node)) && ts.isNamedDeclaration(node);
 }
 
+/** @internal */
 export type ConstNamedExpression =
     | ts.ClassExpression & { name: undefined, parent: ts.VariableDeclaration & { name: ts.Identifier } }
     | ts.FunctionExpression & { name: undefined, parent: ts.VariableDeclaration & { name: ts.Identifier } }
@@ -25,6 +27,7 @@ function isConstNamedExpression(node: ts.Node): node is ConstNamedExpression {
         && !!(ts.getCombinedNodeFlags(node.parent) & ts.NodeFlags.Const);
 }
 
+/** @internal */
 export type CallHierarchyDeclaration =
     | ts.SourceFile
     | ts.ModuleDeclaration & { name: ts.Identifier }
@@ -221,6 +224,7 @@ function findImplementationOrAllInitialDeclarations(typeChecker: ts.TypeChecker,
     return findAllInitialDeclarations(typeChecker, node) ?? node;
 }
 
+/** @internal */
 /** Resolves the call hierarchy declaration for a node. */
 export function resolveCallHierarchyDeclaration(program: ts.Program, location: ts.Node): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
     // A call hierarchy item must refer to either a SourceFile, Module Declaration, Class Static Block, or something intrinsically callable that has a name:
@@ -291,6 +295,7 @@ export function resolveCallHierarchyDeclaration(program: ts.Program, location: t
     }
 }
 
+/** @internal */
 /** Creates a `CallHierarchyItem` for a call hierarchy declaration. */
 export function createCallHierarchyItem(program: ts.Program, node: CallHierarchyDeclaration): ts.CallHierarchyItem {
     const sourceFile = node.getSourceFile();
@@ -340,6 +345,7 @@ function convertCallSiteGroupToIncomingCall(program: ts.Program, entries: readon
     return createCallHierarchyIncomingCall(createCallHierarchyItem(program, entries[0].declaration), ts.map(entries, entry => ts.createTextSpanFromRange(entry.range)));
 }
 
+/** @internal */
 /** Gets the call sites that call into the provided call hierarchy declaration. */
 export function getIncomingCalls(program: ts.Program, declaration: CallHierarchyDeclaration, cancellationToken: ts.CancellationToken): ts.CallHierarchyIncomingCall[] {
     // Source files and modules have no incoming calls.
@@ -549,11 +555,11 @@ function convertCallSiteGroupToOutgoingCall(program: ts.Program, entries: readon
     return createCallHierarchyOutgoingCall(createCallHierarchyItem(program, entries[0].declaration), ts.map(entries, entry => ts.createTextSpanFromRange(entry.range)));
 }
 
+/** @internal */
 /** Gets the call sites that call out of the provided call hierarchy declaration. */
 export function getOutgoingCalls(program: ts.Program, declaration: CallHierarchyDeclaration): ts.CallHierarchyOutgoingCall[] {
     if (declaration.flags & ts.NodeFlags.Ambient || ts.isMethodSignature(declaration)) {
         return [];
     }
     return ts.group(collectCallSites(program, declaration), getCallSiteGroupKey, entries => convertCallSiteGroupToOutgoingCall(program, entries));
-}
 }

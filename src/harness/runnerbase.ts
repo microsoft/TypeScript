@@ -1,4 +1,6 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+
 export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
@@ -59,5 +61,4 @@ export abstract class RunnerBase {
         fixedPath = fixedPath.replace(localHost, "");
         return fixedPath;
     }
-}
 }
