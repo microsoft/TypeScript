@@ -1,7 +1,7 @@
 namespace Harness {
-export class FourSlashRunner extends RunnerBase {
+export class FourSlashRunner extends Harness.RunnerBase {
     protected basePath: string;
-    protected testSuiteName: TestRunnerKind;
+    protected testSuiteName: Harness.TestRunnerKind;
 
     constructor(private testType: FourSlash.FourSlashTestType) {
         super();
@@ -38,7 +38,7 @@ export class FourSlashRunner extends RunnerBase {
 
     public initializeTests() {
         if (this.tests.length === 0) {
-            this.tests = IO.enumerateTestFiles(this);
+            this.tests = Harness.IO.enumerateTestFiles(this);
         }
 
         describe(this.testSuiteName + " tests", () => {

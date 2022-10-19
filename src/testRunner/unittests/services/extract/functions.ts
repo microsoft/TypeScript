@@ -564,6 +564,6 @@ function F() {
 });
 
 function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
-    testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
+    ts.testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function, includeLib);
 }
 }

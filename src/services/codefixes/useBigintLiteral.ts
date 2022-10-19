@@ -2,25 +2,25 @@
 namespace ts.codefix {
 const fixId = "useBigintLiteral";
 const errorCodes = [
-    Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers.code,
+    ts.Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers.code,
 ];
 
-registerCodeFix({
+ts.codefix.registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToUseBigintLiteral(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
+        const changes = ts.textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_a_bigint_numeric_literal, fixId, Diagnostics.Convert_all_to_bigint_numeric_literals)];
+            return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Convert_to_a_bigint_numeric_literal, fixId, ts.Diagnostics.Convert_all_to_bigint_numeric_literals)];
         }
     },
     fixIds: [fixId],
     getAllCodeActions: context => {
-        return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag));
+        return ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag));
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan) {
-    const numericLiteral = tryCast(getTokenAtPosition(sourceFile, span.start), isNumericLiteral);
+function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, span: ts.TextSpan) {
+    const numericLiteral = ts.tryCast(ts.getTokenAtPosition(sourceFile, span.start), ts.isNumericLiteral);
     if (!numericLiteral) {
         return;
     }
@@ -28,6 +28,6 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     // We use .getText to overcome parser inaccuracies: https://github.com/microsoft/TypeScript/issues/33298
     const newText = numericLiteral.getText(sourceFile) + "n";
 
-    changeTracker.replaceNode(sourceFile, numericLiteral, factory.createBigIntLiteral(newText));
+    changeTracker.replaceNode(sourceFile, numericLiteral, ts.factory.createBigIntLiteral(newText));
 }
 }

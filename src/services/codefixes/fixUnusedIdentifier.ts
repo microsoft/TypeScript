@@ -6,85 +6,85 @@ const fixIdDelete = "unusedIdentifier_delete";
 const fixIdDeleteImports = "unusedIdentifier_deleteImports";
 const fixIdInfer = "unusedIdentifier_infer";
 const errorCodes = [
-    Diagnostics._0_is_declared_but_its_value_is_never_read.code,
-    Diagnostics._0_is_declared_but_never_used.code,
-    Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
-    Diagnostics.All_imports_in_import_declaration_are_unused.code,
-    Diagnostics.All_destructured_elements_are_unused.code,
-    Diagnostics.All_variables_are_unused.code,
-    Diagnostics.All_type_parameters_are_unused.code,
+    ts.Diagnostics._0_is_declared_but_its_value_is_never_read.code,
+    ts.Diagnostics._0_is_declared_but_never_used.code,
+    ts.Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
+    ts.Diagnostics.All_imports_in_import_declaration_are_unused.code,
+    ts.Diagnostics.All_destructured_elements_are_unused.code,
+    ts.Diagnostics.All_variables_are_unused.code,
+    ts.Diagnostics.All_type_parameters_are_unused.code,
 ];
 
-registerCodeFix({
+ts.codefix.registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { errorCode, sourceFile, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
         const sourceFiles = program.getSourceFiles();
-        const token = getTokenAtPosition(sourceFile, context.span.start);
+        const token = ts.getTokenAtPosition(sourceFile, context.span.start);
 
-        if (isJSDocTemplateTag(token)) {
-            return [createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), Diagnostics.Remove_template_tag)];
+        if (ts.isJSDocTemplateTag(token)) {
+            return [createDeleteFix(ts.textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), ts.Diagnostics.Remove_template_tag)];
         }
-        if (token.kind === SyntaxKind.LessThanToken) {
-            const changes = textChanges.ChangeTracker.with(context, t => deleteTypeParameters(t, sourceFile, token));
-            return [createDeleteFix(changes, Diagnostics.Remove_type_parameters)];
+        if (token.kind === ts.SyntaxKind.LessThanToken) {
+            const changes = ts.textChanges.ChangeTracker.with(context, t => deleteTypeParameters(t, sourceFile, token));
+            return [createDeleteFix(changes, ts.Diagnostics.Remove_type_parameters)];
         }
         const importDecl = tryGetFullImport(token);
         if (importDecl) {
-            const changes = textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
-            return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+            const changes = ts.textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
+            return [ts.codefix.createCodeFixAction(fixName, changes, [ts.Diagnostics.Remove_import_from_0, ts.showModuleSpecifier(importDecl)], fixIdDeleteImports, ts.Diagnostics.Delete_all_unused_imports)];
         }
         else if (isImport(token)) {
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
+            const deletion = ts.textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
             if (deletion.length) {
-                return [createCodeFixAction(fixName, deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+                return [ts.codefix.createCodeFixAction(fixName, deletion, [ts.Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDeleteImports, ts.Diagnostics.Delete_all_unused_imports)];
             }
         }
 
-        if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
-            if (isParameter(token.parent.parent)) {
+        if (ts.isObjectBindingPattern(token.parent) || ts.isArrayBindingPattern(token.parent)) {
+            if (ts.isParameter(token.parent.parent)) {
                 const elements = token.parent.elements;
-                const diagnostic: [DiagnosticMessage, string] = [
-                    elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0 : Diagnostics.Remove_unused_declaration_for_Colon_0,
-                    map(elements, e => e.getText(sourceFile)).join(", ")
+                const diagnostic: [ts.DiagnosticMessage, string] = [
+                    elements.length > 1 ? ts.Diagnostics.Remove_unused_declarations_for_Colon_0 : ts.Diagnostics.Remove_unused_declaration_for_Colon_0,
+                    ts.map(elements, e => e.getText(sourceFile)).join(", ")
                 ];
                 return [
-                    createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                        deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic)
+                    createDeleteFix(ts.textChanges.ChangeTracker.with(context, t =>
+                        deleteDestructuringElements(t, sourceFile, token.parent as ts.ObjectBindingPattern | ts.ArrayBindingPattern)), diagnostic)
                 ];
             }
             return [
-                createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                    t.delete(sourceFile, token.parent.parent)), Diagnostics.Remove_unused_destructuring_declaration)
+                createDeleteFix(ts.textChanges.ChangeTracker.with(context, t =>
+                    t.delete(sourceFile, token.parent.parent)), ts.Diagnostics.Remove_unused_destructuring_declaration)
             ];
         }
 
         if (canDeleteEntireVariableStatement(sourceFile, token)) {
             return [
-                createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                    deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement)
+                createDeleteFix(ts.textChanges.ChangeTracker.with(context, t =>
+                    deleteEntireVariableStatement(t, sourceFile, token.parent as ts.VariableDeclarationList)), ts.Diagnostics.Remove_variable_statement)
             ];
         }
 
-        const result: CodeFixAction[] = [];
-        if (token.kind === SyntaxKind.InferKeyword) {
-            const changes = textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
-            const name = cast(token.parent, isInferTypeNode).typeParameter.name.text;
-            result.push(createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown));
+        const result: ts.CodeFixAction[] = [];
+        if (token.kind === ts.SyntaxKind.InferKeyword) {
+            const changes = ts.textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
+            const name = ts.cast(token.parent, ts.isInferTypeNode).typeParameter.name.text;
+            result.push(ts.codefix.createCodeFixAction(fixName, changes, [ts.Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, ts.Diagnostics.Replace_all_unused_infer_with_unknown));
         }
         else {
-            const deletion = textChanges.ChangeTracker.with(context, t =>
+            const deletion = ts.textChanges.ChangeTracker.with(context, t =>
                 tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
             if (deletion.length) {
-                const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
+                const name = ts.isComputedPropertyName(token.parent) ? token.parent : token;
+                result.push(createDeleteFix(deletion, [ts.Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
             }
         }
 
-        const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
+        const prefix = ts.textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
         if (prefix.length) {
-            result.push(createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
+            result.push(ts.codefix.createCodeFixAction(fixName, prefix, [ts.Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, ts.Diagnostics.Prefix_all_unused_declarations_with_where_possible));
         }
 
         return result;
@@ -94,8 +94,8 @@ registerCodeFix({
         const { sourceFile, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
         const sourceFiles = program.getSourceFiles();
-        return codeFixAll(context, errorCodes, (changes, diag) => {
-            const token = getTokenAtPosition(sourceFile, diag.start);
+        return ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+            const token = ts.getTokenAtPosition(sourceFile, diag.start);
             switch (context.fixId) {
                 case fixIdPrefix:
                     tryPrefixDeclaration(changes, diag.code, sourceFile, token);
@@ -111,28 +111,28 @@ registerCodeFix({
                     break;
                 }
                 case fixIdDelete: {
-                    if (token.kind === SyntaxKind.InferKeyword || isImport(token)) {
+                    if (token.kind === ts.SyntaxKind.InferKeyword || isImport(token)) {
                         break; // Can't delete
                     }
-                    else if (isJSDocTemplateTag(token)) {
+                    else if (ts.isJSDocTemplateTag(token)) {
                         changes.delete(sourceFile, token);
                     }
-                    else if (token.kind === SyntaxKind.LessThanToken) {
+                    else if (token.kind === ts.SyntaxKind.LessThanToken) {
                         deleteTypeParameters(changes, sourceFile, token);
                     }
-                    else if (isObjectBindingPattern(token.parent)) {
+                    else if (ts.isObjectBindingPattern(token.parent)) {
                         if (token.parent.parent.initializer) {
                             break;
                         }
-                        else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
+                        else if (!ts.isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                             changes.delete(sourceFile, token.parent.parent);
                         }
                     }
-                    else if (isArrayBindingPattern(token.parent.parent) && token.parent.parent.parent.initializer) {
+                    else if (ts.isArrayBindingPattern(token.parent.parent) && token.parent.parent.parent.initializer) {
                         break;
                     }
                     else if (canDeleteEntireVariableStatement(sourceFile, token)) {
-                        deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
+                        deleteEntireVariableStatement(changes, sourceFile, token.parent as ts.VariableDeclarationList);
                     }
                     else {
                         tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
@@ -140,79 +140,79 @@ registerCodeFix({
                     break;
                 }
                 case fixIdInfer:
-                    if (token.kind === SyntaxKind.InferKeyword) {
+                    if (token.kind === ts.SyntaxKind.InferKeyword) {
                         changeInferToUnknown(changes, sourceFile, token);
                     }
                     break;
                 default:
-                    Debug.fail(JSON.stringify(context.fixId));
+                    ts.Debug.fail(JSON.stringify(context.fixId));
             }
         });
     },
 });
 
-function changeInferToUnknown(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-    changes.replaceNode(sourceFile, token.parent, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+function changeInferToUnknown(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, token: ts.Node): void {
+    changes.replaceNode(sourceFile, token.parent, ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword));
 }
 
-function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticAndArguments): CodeFixAction {
-    return createCodeFixAction(fixName, changes, diag, fixIdDelete, Diagnostics.Delete_all_unused_declarations);
+function createDeleteFix(changes: ts.FileTextChanges[], diag: ts.DiagnosticAndArguments): ts.CodeFixAction {
+    return ts.codefix.createCodeFixAction(fixName, changes, diag, fixIdDelete, ts.Diagnostics.Delete_all_unused_declarations);
 }
 
-function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-    changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+function deleteTypeParameters(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, token: ts.Node): void {
+    changes.delete(sourceFile, ts.Debug.checkDefined(ts.cast(token.parent, ts.isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
 }
 
-function isImport(token: Node) {
-    return token.kind === SyntaxKind.ImportKeyword
-        || token.kind === SyntaxKind.Identifier && (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
+function isImport(token: ts.Node) {
+    return token.kind === ts.SyntaxKind.ImportKeyword
+        || token.kind === ts.SyntaxKind.Identifier && (token.parent.kind === ts.SyntaxKind.ImportSpecifier || token.parent.kind === ts.SyntaxKind.ImportClause);
 }
 
 /** Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing. */
-function tryGetFullImport(token: Node): ImportDeclaration | undefined {
-    return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
+function tryGetFullImport(token: ts.Node): ts.ImportDeclaration | undefined {
+    return token.kind === ts.SyntaxKind.ImportKeyword ? ts.tryCast(token.parent, ts.isImportDeclaration) : undefined;
 }
 
-function canDeleteEntireVariableStatement(sourceFile: SourceFile, token: Node): boolean {
-    return isVariableDeclarationList(token.parent) && first(token.parent.getChildren(sourceFile)) === token;
+function canDeleteEntireVariableStatement(sourceFile: ts.SourceFile, token: ts.Node): boolean {
+    return ts.isVariableDeclarationList(token.parent) && ts.first(token.parent.getChildren(sourceFile)) === token;
 }
 
-function deleteEntireVariableStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: VariableDeclarationList) {
-    changes.delete(sourceFile, node.parent.kind === SyntaxKind.VariableStatement ? node.parent : node);
+function deleteEntireVariableStatement(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, node: ts.VariableDeclarationList) {
+    changes.delete(sourceFile, node.parent.kind === ts.SyntaxKind.VariableStatement ? node.parent : node);
 }
 
-function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
-    forEach(node.elements, n => changes.delete(sourceFile, n));
+function deleteDestructuringElements(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, node: ts.ObjectBindingPattern | ts.ArrayBindingPattern) {
+    ts.forEach(node.elements, n => changes.delete(sourceFile, n));
 }
 
-function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
+function tryPrefixDeclaration(changes: ts.textChanges.ChangeTracker, errorCode: number, sourceFile: ts.SourceFile, token: ts.Node): void {
     // Don't offer to prefix a property.
-    if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
-    if (token.kind === SyntaxKind.InferKeyword) {
-        token = cast(token.parent, isInferTypeNode).typeParameter.name;
+    if (errorCode === ts.Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
+    if (token.kind === ts.SyntaxKind.InferKeyword) {
+        token = ts.cast(token.parent, ts.isInferTypeNode).typeParameter.name;
     }
-    if (isIdentifier(token) && canPrefix(token)) {
-        changes.replaceNode(sourceFile, token, factory.createIdentifier(`_${token.text}`));
-        if (isParameter(token.parent)) {
-            getJSDocParameterTags(token.parent).forEach((tag) => {
-                if (isIdentifier(tag.name)) {
-                    changes.replaceNode(sourceFile, tag.name, factory.createIdentifier(`_${tag.name.text}`));
+    if (ts.isIdentifier(token) && canPrefix(token)) {
+        changes.replaceNode(sourceFile, token, ts.factory.createIdentifier(`_${token.text}`));
+        if (ts.isParameter(token.parent)) {
+            ts.getJSDocParameterTags(token.parent).forEach((tag) => {
+                if (ts.isIdentifier(tag.name)) {
+                    changes.replaceNode(sourceFile, tag.name, ts.factory.createIdentifier(`_${tag.name.text}`));
                 }
             });
         }
     }
 }
 
-function canPrefix(token: Identifier): boolean {
+function canPrefix(token: ts.Identifier): boolean {
     switch (token.parent.kind) {
-        case SyntaxKind.Parameter:
-        case SyntaxKind.TypeParameter:
+        case ts.SyntaxKind.Parameter:
+        case ts.SyntaxKind.TypeParameter:
             return true;
-        case SyntaxKind.VariableDeclaration: {
-            const varDecl = token.parent as VariableDeclaration;
+        case ts.SyntaxKind.VariableDeclaration: {
+            const varDecl = token.parent as ts.VariableDeclaration;
             switch (varDecl.parent.parent.kind) {
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.ForInStatement:
+                case ts.SyntaxKind.ForOfStatement:
+                case ts.SyntaxKind.ForInStatement:
                     return true;
             }
         }
@@ -220,11 +220,11 @@ function canPrefix(token: Identifier): boolean {
     return false;
 }
 
-function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean) {
+function tryDeleteDeclaration(sourceFile: ts.SourceFile, token: ts.Node, changes: ts.textChanges.ChangeTracker, checker: ts.TypeChecker, sourceFiles: readonly ts.SourceFile[], program: ts.Program, cancellationToken: ts.CancellationToken, isFixAll: boolean) {
     tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, program, cancellationToken, isFixAll);
-    if (isIdentifier(token)) {
-        FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
-            if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
+    if (ts.isIdentifier(token)) {
+        ts.FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: ts.Node) => {
+            if (ts.isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
             if (!isFixAll && mayDeleteExpression(ref)) {
                 changes.delete(sourceFile, ref.parent.parent);
             }
@@ -232,32 +232,32 @@ function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: text
     }
 }
 
-function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): void {
+function tryDeleteDeclarationWorker(token: ts.Node, changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, checker: ts.TypeChecker, sourceFiles: readonly ts.SourceFile[], program: ts.Program, cancellationToken: ts.CancellationToken, isFixAll: boolean): void {
     const { parent } = token;
-    if (isParameter(parent)) {
+    if (ts.isParameter(parent)) {
         tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
     }
-    else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
-        const node = isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent;
-        Debug.assert(node !== sourceFile, "should not delete whole source file");
+    else if (!(isFixAll && ts.isIdentifier(token) && ts.FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
+        const node = ts.isImportClause(parent) ? token : ts.isComputedPropertyName(parent) ? parent.parent : parent;
+        ts.Debug.assert(node !== sourceFile, "should not delete whole source file");
         changes.delete(sourceFile, node);
     }
 }
 
 function tryDeleteParameter(
-    changes: textChanges.ChangeTracker,
-    sourceFile: SourceFile,
-    parameter: ParameterDeclaration,
-    checker: TypeChecker,
-    sourceFiles: readonly SourceFile[],
-    program: Program,
-    cancellationToken: CancellationToken,
+    changes: ts.textChanges.ChangeTracker,
+    sourceFile: ts.SourceFile,
+    parameter: ts.ParameterDeclaration,
+    checker: ts.TypeChecker,
+    sourceFiles: readonly ts.SourceFile[],
+    program: ts.Program,
+    cancellationToken: ts.CancellationToken,
     isFixAll = false): void {
     if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
         if (parameter.modifiers && parameter.modifiers.length > 0 &&
-            (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
+            (!ts.isIdentifier(parameter.name) || ts.FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
             for (const modifier of parameter.modifiers) {
-                if (isModifier(modifier)) {
+                if (ts.isModifier(modifier)) {
                     changes.deleteModifier(sourceFile, modifier);
                 }
             }
@@ -268,35 +268,35 @@ function tryDeleteParameter(
     }
 }
 
-function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
+function isNotProvidedArguments(parameter: ts.ParameterDeclaration, checker: ts.TypeChecker, sourceFiles: readonly ts.SourceFile[]) {
     const index = parameter.parent.parameters.indexOf(parameter);
     // Just in case the call didn't provide enough arguments.
-    return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
+    return !ts.FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
 }
 
-function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): boolean {
+function mayDeleteParameter(checker: ts.TypeChecker, sourceFile: ts.SourceFile, parameter: ts.ParameterDeclaration, sourceFiles: readonly ts.SourceFile[], program: ts.Program, cancellationToken: ts.CancellationToken, isFixAll: boolean): boolean {
     const { parent } = parameter;
     switch (parent.kind) {
-        case SyntaxKind.MethodDeclaration:
-        case SyntaxKind.Constructor:
+        case ts.SyntaxKind.MethodDeclaration:
+        case ts.SyntaxKind.Constructor:
             const index = parent.parameters.indexOf(parameter);
-            const referent = isMethodDeclaration(parent) ? parent.name : parent;
-            const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, referent, program, sourceFiles, cancellationToken);
+            const referent = ts.isMethodDeclaration(parent) ? parent.name : parent;
+            const entries = ts.FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, referent, program, sourceFiles, cancellationToken);
             if (entries) {
                 for (const entry of entries) {
                     for (const reference of entry.references) {
-                        if (reference.kind === FindAllReferences.EntryKind.Node) {
+                        if (reference.kind === ts.FindAllReferences.EntryKind.Node) {
                             // argument in super(...)
-                            const isSuperCall = isSuperKeyword(reference.node)
-                                && isCallExpression(reference.node.parent)
+                            const isSuperCall = ts.isSuperKeyword(reference.node)
+                                && ts.isCallExpression(reference.node.parent)
                                 && reference.node.parent.arguments.length > index;
                             // argument in super.m(...)
-                            const isSuperMethodCall = isPropertyAccessExpression(reference.node.parent)
-                                && isSuperKeyword(reference.node.parent.expression)
-                                && isCallExpression(reference.node.parent.parent)
+                            const isSuperMethodCall = ts.isPropertyAccessExpression(reference.node.parent)
+                                && ts.isSuperKeyword(reference.node.parent.expression)
+                                && ts.isCallExpression(reference.node.parent.parent)
                                 && reference.node.parent.parent.arguments.length > index;
                             // parameter in overridden or overriding method
-                            const isOverriddenMethod = (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
+                            const isOverriddenMethod = (ts.isMethodDeclaration(reference.node.parent) || ts.isMethodSignature(reference.node.parent))
                                 && reference.node.parent !== parameter.parent
                                 && reference.node.parent.parameters.length > index;
                             if (isSuperCall || isSuperMethodCall || isOverriddenMethod) return false;
@@ -305,46 +305,46 @@ function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parame
                 }
             }
             return true;
-        case SyntaxKind.FunctionDeclaration: {
+        case ts.SyntaxKind.FunctionDeclaration: {
             if (parent.name && isCallbackLike(checker, sourceFile, parent.name)) {
                 return isLastParameter(parent, parameter, isFixAll);
             }
             return true;
         }
-        case SyntaxKind.FunctionExpression:
-        case SyntaxKind.ArrowFunction:
+        case ts.SyntaxKind.FunctionExpression:
+        case ts.SyntaxKind.ArrowFunction:
             // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
             return isLastParameter(parent, parameter, isFixAll);
 
-        case SyntaxKind.SetAccessor:
+        case ts.SyntaxKind.SetAccessor:
             // Setter must have a parameter
             return false;
 
-        case SyntaxKind.GetAccessor:
+        case ts.SyntaxKind.GetAccessor:
             // Getter cannot have parameters
             return true;
 
         default:
-            return Debug.failBadSyntaxKind(parent);
+            return ts.Debug.failBadSyntaxKind(parent);
     }
 }
 
-function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {
-    return !!FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference =>
-        isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.indexOf(reference) >= 0);
+function isCallbackLike(checker: ts.TypeChecker, sourceFile: ts.SourceFile, name: ts.Identifier): boolean {
+    return !!ts.FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference =>
+        ts.isIdentifier(reference) && ts.isCallExpression(reference.parent) && reference.parent.arguments.indexOf(reference) >= 0);
 }
 
-function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, isFixAll: boolean): boolean {
+function isLastParameter(func: ts.FunctionLikeDeclaration, parameter: ts.ParameterDeclaration, isFixAll: boolean): boolean {
     const parameters = func.parameters;
     const index = parameters.indexOf(parameter);
-    Debug.assert(index !== -1, "The parameter should already be in the list");
+    ts.Debug.assert(index !== -1, "The parameter should already be in the list");
     return isFixAll ?
-        parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced) :
+        parameters.slice(index + 1).every(p => ts.isIdentifier(p.name) && !p.symbol.isReferenced) :
         index === parameters.length - 1;
 }
 
-function mayDeleteExpression(node: Node) {
-    return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
-        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+function mayDeleteExpression(node: ts.Node) {
+    return ((ts.isBinaryExpression(node.parent) && node.parent.left === node) ||
+        ((ts.isPostfixUnaryExpression(node.parent) || ts.isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && ts.isExpressionStatement(node.parent.parent);
 }
 }

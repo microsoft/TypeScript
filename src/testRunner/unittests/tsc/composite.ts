@@ -1,9 +1,9 @@
 namespace ts {
 describe("unittests:: tsc:: composite::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -20,10 +20,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite null on command line",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -40,10 +40,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "null", "--p", "src/project"],
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line but has tsbuild info in config",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -61,10 +61,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -82,10 +82,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
     });
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "composite",
         subScenario: "converting to modules",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/project/src/main.ts": "const x = 10;",
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
@@ -98,7 +98,7 @@ describe("unittests:: tsc:: composite::", () => {
         edits: [
             {
                 subScenario: "convert to modules",
-                modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
+                modifyFs: fs => ts.replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
             }
         ]
     });

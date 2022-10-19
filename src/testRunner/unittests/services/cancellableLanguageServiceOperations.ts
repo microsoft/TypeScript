@@ -8,7 +8,7 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
         `;
     it("can cancel signature help mid-request", () => {
         verifyOperationCancelledAfter(file, 4, service => // Two calls are top-level in services, one is the root type, and the second should be for the parameter type
-            service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"), emptyOptions)!, r => assert.exists(r.items[0])
+            service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"), ts.emptyOptions)!, r => assert.exists(r.items[0])
         );
     });
 
@@ -25,12 +25,12 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
     });
 
     it("can cancel completion entry details mid-request", () => {
-        const options: FormatCodeSettings = {
+        const options: ts.FormatCodeSettings = {
             indentSize: 4,
             tabSize: 4,
             newLineCharacter: "\n",
             convertTabsToSpaces: true,
-            indentStyle: IndentStyle.Smart,
+            indentStyle: ts.IndentStyle.Smart,
             insertSpaceAfterConstructor: false,
             insertSpaceAfterCommaDelimiter: true,
             insertSpaceAfterSemicolonInForStatements: true,
@@ -58,9 +58,9 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
     });
 });
 
-function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: LanguageService) => T, validator: (arg: T) => void, fileName?: string, fileContent?: string, options?: CompilerOptions) {
+function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: ts.LanguageService) => T, validator: (arg: T) => void, fileName?: string, fileContent?: string, options?: ts.CompilerOptions) {
     let checks = 0;
-    const token: HostCancellationToken = {
+    const token: ts.HostCancellationToken = {
         isCancellationRequested() {
             checks++;
             const result = checks >= cancelAfter;
@@ -90,6 +90,6 @@ function assertCancelled(cb: () => void) {
         caught = e;
     }
     assert.exists(caught, "Expected operation to be cancelled, but was not");
-    assert.instanceOf(caught, OperationCanceledException);
+    assert.instanceOf(caught, ts.OperationCanceledException);
 }
 }

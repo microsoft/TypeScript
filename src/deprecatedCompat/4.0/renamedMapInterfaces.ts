@@ -7,12 +7,12 @@ namespace ts {
 /**
  * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
  */
-export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+export interface ReadonlyMap<T> extends ts.ReadonlyESMap<string, T> {
 }
 
 /**
  * @deprecated Use `ts.ESMap<K, V>` instead.
  */
-export interface Map<T> extends ESMap<string, T> {
+export interface Map<T> extends ts.ESMap<string, T> {
 }
 }

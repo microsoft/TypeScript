@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
+import projectsLocation = ts.TestFSWithWatch.tsbuildProjectsLocation;
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {
         core = "core",
@@ -7,15 +7,15 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         tests = "tests",
         ui = "ui"
     }
-    type ReadonlyFile = Readonly<File>;
+    type ReadonlyFile = Readonly<ts.tscWatch.File>;
     /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
     type SubProjectFiles = [tsconfig: ReadonlyFile, index: ReadonlyFile] | [tsconfig: ReadonlyFile, index: ReadonlyFile, anotherModule: ReadonlyFile, someDecl: ReadonlyFile];
     function projectFilePath(subProject: SubProject, baseFileName: string) {
-        return `${TestFSWithWatch.getTsBuildProjectFilePath("sample1", subProject)}/${baseFileName.toLowerCase()}`;
+        return `${ts.TestFSWithWatch.getTsBuildProjectFilePath("sample1", subProject)}/${baseFileName.toLowerCase()}`;
     }
 
-    function projectFile(subProject: SubProject, baseFileName: string): File {
-        return TestFSWithWatch.getTsBuildProjectFile("sample1", `${subProject}/${baseFileName}`);
+    function projectFile(subProject: SubProject, baseFileName: string): ts.tscWatch.File {
+        return ts.TestFSWithWatch.getTsBuildProjectFile("sample1", `${subProject}/${baseFileName}`);
     }
 
     function subProjectFiles(subProject: SubProject, anotherModuleAndSomeDecl?: true): SubProjectFiles {
@@ -29,11 +29,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         return [tsconfig, index, anotherModule, someDecl];
     }
 
-    function changeFile(fileName: string | (() => string), content: string | (() => string), caption: string): TscWatchCompileChange {
+    function changeFile(fileName: string | (() => string), content: string | (() => string), caption: string): ts.tscWatch.TscWatchCompileChange {
         return {
             caption,
-            change: sys => sys.writeFile(isString(fileName) ? fileName : fileName(), isString(content) ? content : content()),
-            timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
+            change: sys => sys.writeFile(ts.isString(fileName) ? fileName : fileName(), ts.isString(content) ? content : content()),
+            timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // Builds core
         };
     }
 
@@ -45,14 +45,14 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     let logic: SubProjectFiles;
     let tests: SubProjectFiles;
     let ui: SubProjectFiles;
-    let allFiles: readonly File[];
+    let allFiles: readonly ts.tscWatch.File[];
 
     before(() => {
         core = subProjectFiles(SubProject.core, /*anotherModuleAndSomeDecl*/ true);
         logic = subProjectFiles(SubProject.logic);
         tests = subProjectFiles(SubProject.tests);
         ui = subProjectFiles(SubProject.ui);
-        allFiles = [libFile, ...core, ...logic, ...tests, ...ui];
+        allFiles = [ts.tscWatch.libFile, ...core, ...logic, ...tests, ...ui];
     });
 
     after(() => {
@@ -63,20 +63,20 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         allFiles = undefined!;
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "creates solution in watch mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-        sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
-        changes: emptyArray
+        sys: () => ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+        changes: ts.emptyArray
     });
 
     it("verify building references watches only those projects", () => {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(allFiles, { currentDirectory: projectsLocation }));
-        const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
-        const solutionBuilder = createSolutionBuilderWithWatch(host, [`sample1/${SubProject.tests}`], { watch: true });
+        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectsLocation }));
+        const host = ts.tscWatch.createSolutionBuilderWithWatchHostForBaseline(sys, cb);
+        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`sample1/${SubProject.tests}`], { watch: true });
         solutionBuilder.buildReferences(`sample1/${SubProject.tests}`);
-        runWatchBaseline({
+        ts.tscWatch.runWatchBaseline({
             scenario: "programUpdates",
             subScenario: "verify building references watches only those projects",
             commandLineArgs: ["--b", "--w"],
@@ -84,30 +84,30 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             baseline,
             oldSnap,
             getPrograms,
-            changes: emptyArray,
+            changes: ts.emptyArray,
             watchOrSolution: solutionBuilder
         });
     });
 
     describe("validates the changes and watched files", () => {
         const newFileWithoutExtension = "newFile";
-        const newFile: File = {
+        const newFile: ts.tscWatch.File = {
             path: projectFilePath(SubProject.core, `${newFileWithoutExtension}.ts`),
             content: `export const newFileConst = 30;`
         };
 
-        function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
-            const buildLogicAndTests: TscWatchCompileChange = {
+        function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly ts.tscWatch.File[]) {
+            const buildLogicAndTests: ts.tscWatch.TscWatchCompileChange = {
                 caption: "Build logic and tests",
-                change: noop,
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                change: ts.noop,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
             };
 
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/change builds changes and reports found errors message`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
+                sys: () => ts.tscWatch.createWatchedSystem(
                     allFilesGetter(),
                     { currentDirectory: projectsLocation }
                 ),
@@ -129,17 +129,17 @@ export class someClass { }`;
                             sys.writeFile(core[1].path, `${change1}
 export class someClass2 { }`);
                         },
-                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
+                        timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // Builds core
                     },
                     buildLogicAndTests,
                 ]
             });
 
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/non local change does not start build of referencing projects`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
+                sys: () => ts.tscWatch.createWatchedSystem(
                     allFilesGetter(),
                     { currentDirectory: projectsLocation }
                 ),
@@ -152,11 +152,11 @@ function foo() { }`, "Make local change to core"),
             function changeNewFile(newFileContent: string) {
                 return changeFile(newFile.path, newFileContent, "Change to new File and build core");
             }
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/builds when new file is added, and its subsequent updates`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
+                sys: () => ts.tscWatch.createWatchedSystem(
                     allFilesGetter(),
                     { currentDirectory: projectsLocation }
                 ),
@@ -182,44 +182,44 @@ export class someClass2 { }`),
                 "with circular project reference",
                 () => {
                     const [coreTsconfig, ...otherCoreFiles] = core;
-                    const circularCoreConfig: File = {
+                    const circularCoreConfig: ts.tscWatch.File = {
                         path: coreTsconfig.path,
                         content: JSON.stringify({
                             compilerOptions: { composite: true, declaration: true },
                             references: [{ path: "../tests", circular: true }]
                         })
                     };
-                    return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
+                    return [ts.tscWatch.libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
                 }
             );
         });
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "watches config files that are not present",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-        sys: () => createWatchedSystem(
-            [libFile, ...core, logic[1], ...tests],
+        sys: () => ts.tscWatch.createWatchedSystem(
+            [ts.tscWatch.libFile, ...core, logic[1], ...tests],
             { currentDirectory: projectsLocation }
         ),
         changes: [
             {
                 caption: "Write logic tsconfig and build logic",
                 change: sys => sys.writeFile(logic[0].path, logic[0].content),
-                timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // Builds logic
             },
             {
                 caption: "Build Tests",
-                change: noop,
+                change: ts.noop,
                 // Build tests
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
             }
         ]
     });
 
     describe("when referenced using prepend, builds referencing project even for non local change", () => {
-        let coreIndex: File;
+        let coreIndex: ts.tscWatch.File;
         before(() => {
             coreIndex = {
                 path: core[1].path,
@@ -229,35 +229,35 @@ export class someClass2 { }`),
         after(() => {
             coreIndex = undefined!;
         });
-        const buildLogic: TscWatchCompileChange = {
+        const buildLogic: ts.tscWatch.TscWatchCompileChange = {
             caption: "Build logic",
-            change: noop,
+            change: ts.noop,
             // Builds logic
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+            timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
         };
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario: "programUpdates",
             subScenario: "when referenced using prepend builds referencing project even for non local change",
             commandLineArgs: ["-b", "-w", `sample1/${SubProject.logic}`],
             sys: () => {
-                const coreTsConfig: File = {
+                const coreTsConfig: ts.tscWatch.File = {
                     path: core[0].path,
                     content: JSON.stringify({
                         compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
                     })
                 };
-                const logicTsConfig: File = {
+                const logicTsConfig: ts.tscWatch.File = {
                     path: logic[0].path,
                     content: JSON.stringify({
                         compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                         references: [{ path: "../core", prepend: true }]
                     })
                 };
-                const logicIndex: File = {
+                const logicIndex: ts.tscWatch.File = {
                     path: logic[1].path,
                     content: `function bar() { return foo() + 1 };`
                 };
-                return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: projectsLocation });
+                return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: projectsLocation });
             },
             changes: [
                 changeCore(() => `${coreIndex.content}
@@ -272,7 +272,7 @@ function myFunc() { return 100; }`, "Make local change and build core"),
 
     describe("when referenced project change introduces error in the down stream project and then fixes it", () => {
         const subProjectLibrary = `${projectsLocation}/sample1/Library`;
-        const libraryTs: File = {
+        const libraryTs: ts.tscWatch.File = {
             path: `${subProjectLibrary}/library.ts`,
             content: `
 interface SomeObject
@@ -287,28 +287,28 @@ export function createSomeObject(): SomeObject
     };
 }`
         };
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario: "programUpdates",
             subScenario: "when referenced project change introduces error in the down stream project and then fixes it",
             commandLineArgs: ["-b", "-w", "App"],
             sys: () => {
-                const libraryTsconfig: File = {
+                const libraryTsconfig: ts.tscWatch.File = {
                     path: `${subProjectLibrary}/tsconfig.json`,
                     content: JSON.stringify({ compilerOptions: { composite: true } })
                 };
                 const subProjectApp = `${projectsLocation}/sample1/App`;
-                const appTs: File = {
+                const appTs: ts.tscWatch.File = {
                     path: `${subProjectApp}/app.ts`,
                     content: `import { createSomeObject } from "../Library/library";
 createSomeObject().message;`
                 };
-                const appTsconfig: File = {
+                const appTsconfig: ts.tscWatch.File = {
                     path: `${subProjectApp}/tsconfig.json`,
                     content: JSON.stringify({ references: [{ path: "../Library" }] })
                 };
 
-                const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
-                return createWatchedSystem(files, { currentDirectory: `${projectsLocation}/sample1` });
+                const files = [ts.tscWatch.libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
+                return ts.tscWatch.createWatchedSystem(files, { currentDirectory: `${projectsLocation}/sample1` });
             },
             changes: [
                 {
@@ -336,80 +336,80 @@ createSomeObject().message;`
 
     describe("reports errors in all projects on incremental compile", () => {
         function verifyIncrementalErrors(subScenario: string, buildOptions: readonly string[]) {
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `reportErrors/${subScenario}`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, ...buildOptions],
-                sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+                sys: () => ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
                 changes: [
                     {
                         caption: "change logic",
                         change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 let y: string = 10;`),
                         // Builds logic
-                        timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                        timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                     },
                     {
                         caption: "change core",
                         change: sys => sys.writeFile(core[1].path, `${core[1].content}
 let x: string = 10;`),
                         // Builds core
-                        timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                        timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                     }
                 ]
             });
         }
-        verifyIncrementalErrors("when preserveWatchOutput is not used", emptyArray);
+        verifyIncrementalErrors("when preserveWatchOutput is not used", ts.emptyArray);
         verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
 
         describe("when declaration emit errors are present", () => {
             const solution = "solution";
             const subProject = "app";
             const subProjectLocation = `${projectsLocation}/${solution}/${subProject}`;
-            const fileWithError: File = {
+            const fileWithError: ts.tscWatch.File = {
                 path: `${subProjectLocation}/fileWithError.ts`,
                 content: `export var myClassWithError = class {
         tags() { }
         private p = 12
     };`
             };
-            const fileWithFixedError: File = {
+            const fileWithFixedError: ts.tscWatch.File = {
                 path: fileWithError.path,
                 content: fileWithError.content.replace("private p = 12", "")
             };
-            const fileWithoutError: File = {
+            const fileWithoutError: ts.tscWatch.File = {
                 path: `${subProjectLocation}/fileWithoutError.ts`,
                 content: `export class myClass { }`
             };
-            const tsconfig: File = {
+            const tsconfig: ts.tscWatch.File = {
                 path: `${subProjectLocation}/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { composite: true } })
             };
 
-            function incrementalBuild(sys: WatchedSystem) {
+            function incrementalBuild(sys: ts.tscWatch.WatchedSystem) {
                 sys.checkTimeoutQueueLengthAndRun(1); // Build the app
                 sys.checkTimeoutQueueLength(0);
             }
 
-            const fixError: TscWatchCompileChange = {
+            const fixError: ts.tscWatch.TscWatchCompileChange = {
                 caption: "Fix error in fileWithError",
                 // Fix error
                 change: sys => sys.writeFile(fileWithError.path, fileWithFixedError.content),
                 timeouts: incrementalBuild
             };
 
-            const changeFileWithoutError: TscWatchCompileChange = {
+            const changeFileWithoutError: ts.tscWatch.TscWatchCompileChange = {
                 caption: "Change fileWithoutError",
                 change: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
                 timeouts: incrementalBuild
             };
 
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: "reportErrors/declarationEmitErrors/when fixing error files all files are emitted",
                 commandLineArgs: ["-b", "-w", subProject],
-                sys: () => createWatchedSystem(
-                    [libFile, fileWithError, fileWithoutError, tsconfig],
+                sys: () => ts.tscWatch.createWatchedSystem(
+                    [ts.tscWatch.libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${projectsLocation}/${solution}` }
                 ),
                 changes: [
@@ -417,12 +417,12 @@ let x: string = 10;`),
                 ]
             });
 
-            verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: "reportErrors/declarationEmitErrors/when file with no error changes",
                 commandLineArgs: ["-b", "-w", subProject],
-                sys: () => createWatchedSystem(
-                    [libFile, fileWithError, fileWithoutError, tsconfig],
+                sys: () => ts.tscWatch.createWatchedSystem(
+                    [ts.tscWatch.libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${projectsLocation}/${solution}` }
                 ),
                 changes: [
@@ -431,18 +431,18 @@ let x: string = 10;`),
             });
 
             describe("when reporting errors on introducing error", () => {
-                const introduceError: TscWatchCompileChange = {
+                const introduceError: ts.tscWatch.TscWatchCompileChange = {
                     caption: "Introduce error",
                     change: sys => sys.writeFile(fileWithError.path, fileWithError.content),
                     timeouts: incrementalBuild,
                 };
 
-                verifyTscWatch({
+                ts.tscWatch.verifyTscWatch({
                     scenario: "programUpdates",
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
                     commandLineArgs: ["-b", "-w", subProject],
-                    sys: () => createWatchedSystem(
-                        [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                    sys: () => ts.tscWatch.createWatchedSystem(
+                        [ts.tscWatch.libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${projectsLocation}/${solution}` }
                     ),
                     changes: [
@@ -451,12 +451,12 @@ let x: string = 10;`),
                     ]
                 });
 
-                verifyTscWatch({
+                ts.tscWatch.verifyTscWatch({
                     scenario: "programUpdates",
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when file with no error changes",
                     commandLineArgs: ["-b", "-w", subProject],
-                    sys: () => createWatchedSystem(
-                        [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                    sys: () => ts.tscWatch.createWatchedSystem(
+                        [ts.tscWatch.libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${projectsLocation}/${solution}` }
                     ),
                     changes: [
@@ -468,11 +468,11 @@ let x: string = 10;`),
         });
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "incremental updates in verbose mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, "-verbose"],
-        sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+        sys: () => ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
         changes: [
             {
                 caption: "Make non dts change",
@@ -495,104 +495,104 @@ export function someFn() { }`),
         ],
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works when noUnusedParameters changes to false",
         commandLineArgs: ["-b", "-w"],
         sys: () => {
-            const index: File = {
-                path: `${projectRoot}/index.ts`,
+            const index: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/index.ts`,
                 content: `const fn = (a: string, b: string) => b;`
             };
-            const configFile: File = {
-                path: `${projectRoot}/tsconfig.json`,
+            const configFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         noUnusedParameters: true
                     }
                 })
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
+            return ts.tscWatch.createWatchedSystem([index, configFile, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
         },
         changes: [
             {
                 caption: "Change tsconfig to set noUnusedParameters to false",
-                change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({
                     compilerOptions: {
                         noUnusedParameters: false
                     }
                 })),
-                timeouts: runQueuedTimeoutCallbacks,
+                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
             },
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "should not trigger recompilation because of program emit",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
-        sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: projectsLocation }),
+        sys: () => ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, ...core], { currentDirectory: projectsLocation }),
         changes: [
-            noopChange,
+            ts.tscWatch.noopChange,
             {
                 caption: "Add new file",
                 change: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: checkSingleTimeoutQueueLengthAndRun
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun
             },
-            noopChange,
+            ts.tscWatch.noopChange,
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "should not trigger recompilation because of program emit with outDir specified",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
         sys: () => {
             const [coreConfig, ...rest] = core;
-            const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
-            return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: projectsLocation });
+            const newCoreConfig: ts.tscWatch.File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
+            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, newCoreConfig, ...rest], { currentDirectory: projectsLocation });
         },
         changes: [
-            noopChange,
+            ts.tscWatch.noopChange,
             {
                 caption: "Add new file",
                 change: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: checkSingleTimeoutQueueLengthAndRun
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun
             },
-            noopChange
+            ts.tscWatch.noopChange
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works with extended source files",
         commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
         sys: () => {
-            const alphaExtendedConfigFile: File = {
+            const alphaExtendedConfigFile: ts.tscWatch.File = {
                 path: "/a/b/alpha.tsconfig.json",
                 content: "{}"
             };
-            const project1Config: File = {
+            const project1Config: ts.tscWatch.File = {
                 path: "/a/b/project1.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [commonFile1.path, commonFile2.path]
+                    files: [ts.tscWatch.commonFile1.path, ts.tscWatch.commonFile2.path]
                 })
             };
-            const bravoExtendedConfigFile: File = {
+            const bravoExtendedConfigFile: ts.tscWatch.File = {
                 path: "/a/b/bravo.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./alpha.tsconfig.json"
                 })
             };
-            const otherFile: File = {
+            const otherFile: ts.tscWatch.File = {
                 path: "/a/b/other.ts",
                 content: "let z = 0;",
             };
-            const project2Config: File = {
+            const project2Config: ts.tscWatch.File = {
                 path: "/a/b/project2.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./bravo.tsconfig.json",
@@ -602,9 +602,9 @@ export function someFn() { }`),
                     files: [otherFile.path]
                 })
             };
-            return createWatchedSystem([
-                libFile,
-                alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+            return ts.tscWatch.createWatchedSystem([
+                ts.tscWatch.libFile,
+                alphaExtendedConfigFile, project1Config, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2,
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
@@ -614,12 +614,12 @@ export function someFn() { }`),
                 change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
                     compilerOptions: { strict: true }
                 })),
-                timeouts: checkSingleTimeoutQueueLengthAndRun // Build project1
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun // Build project1
             },
             {
                 caption: "Build project 2",
-                change: noop,
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                change: ts.noop,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
             },
             {
                 caption: "change bravo config",
@@ -627,34 +627,34 @@ export function someFn() { }`),
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: { strict: false }
                 })),
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
             },
             {
                 caption: "project 2 extends alpha",
                 change: sys => sys.writeFile("/a/b/project2.tsconfig.json", JSON.stringify({
                     extends: "./alpha.tsconfig.json",
                 })),
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
             },
             {
                 caption: "update aplha config",
                 change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
-                timeouts: checkSingleTimeoutQueueLengthAndRun, // build project1
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // build project1
             },
             {
                 caption: "Build project 2",
-                change: noop,
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                change: ts.noop,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
             },
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works correctly when project with extended config is removed",
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () => {
-            const alphaExtendedConfigFile: File = {
+            const alphaExtendedConfigFile: ts.tscWatch.File = {
                 path: "/a/b/alpha.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -662,17 +662,17 @@ export function someFn() { }`),
                     }
                 })
             };
-            const project1Config: File = {
+            const project1Config: ts.tscWatch.File = {
                 path: "/a/b/project1.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [commonFile1.path, commonFile2.path]
+                    files: [ts.tscWatch.commonFile1.path, ts.tscWatch.commonFile2.path]
                 })
             };
-            const bravoExtendedConfigFile: File = {
+            const bravoExtendedConfigFile: ts.tscWatch.File = {
                 path: "/a/b/bravo.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -680,11 +680,11 @@ export function someFn() { }`),
                     }
                 })
             };
-            const otherFile: File = {
+            const otherFile: ts.tscWatch.File = {
                 path: "/a/b/other.ts",
                 content: "let z = 0;",
             };
-            const project2Config: File = {
+            const project2Config: ts.tscWatch.File = {
                 path: "/a/b/project2.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./bravo.tsconfig.json",
@@ -694,7 +694,7 @@ export function someFn() { }`),
                     files: [otherFile.path]
                 })
             };
-            const configFile: File = {
+            const configFile: ts.tscWatch.File = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
                     references: [
@@ -708,9 +708,9 @@ export function someFn() { }`),
                     files: [],
                 })
             };
-            return createWatchedSystem([
-                libFile, configFile,
-                alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+            return ts.tscWatch.createWatchedSystem([
+                ts.tscWatch.libFile, configFile,
+                alphaExtendedConfigFile, project1Config, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2,
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
@@ -725,22 +725,22 @@ export function someFn() { }`),
                     ],
                     files: [],
                 })),
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
             }
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "tsbuildinfo has error",
-        sys: () => createWatchedSystem({
+        sys: () => ts.tscWatch.createWatchedSystem({
             "/src/project/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": "{}",
             "/src/project/tsconfig.tsbuildinfo": "Some random string",
-            [libFile.path]: libFile.content,
+            [ts.tscWatch.libFile.path]: ts.tscWatch.libFile.content,
         }),
         commandLineArgs: ["--b", "src/project", "-i", "-w"],
-        changes: emptyArray
+        changes: ts.emptyArray
     });
 });
 }

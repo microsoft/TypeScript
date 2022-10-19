@@ -1,11 +1,11 @@
 namespace ts {
 describe("unittests:: customTransforms", () => {
-    function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
+    function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
         it(name, () => {
-            const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
-            const fileMap = arrayToMap(roots, file => file.fileName);
-            const outputs = new Map<string, string>();
-            const host: CompilerHost = {
+            const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015));
+            const fileMap = ts.arrayToMap(roots, file => file.fileName);
+            const outputs = new ts.Map<string, string>();
+            const host: ts.CompilerHost = {
                 getSourceFile: (fileName) => fileMap.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
@@ -18,10 +18,10 @@ describe("unittests:: customTransforms", () => {
                 writeFile: (fileName, text) => outputs.set(fileName, text),
             };
 
-            const program = createProgram(arrayFrom(fileMap.keys()), { newLine: NewLineKind.LineFeed, ...options }, host);
+            const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
             program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
             let content = "";
-            for (const [file, text] of arrayFrom(outputs.entries())) {
+            for (const [file, text] of ts.arrayFrom(outputs.entries())) {
                 if (content) content += "\n\n";
                 content += `// [${file}]\n`;
                 content += text;
@@ -41,34 +41,34 @@ describe("unittests:: customTransforms", () => {
             `
     }];
 
-    const before: TransformerFactory<SourceFile> = context => {
-        return file => visitEachChild(file, visit, context);
-        function visit(node: Node): VisitResult<Node> {
+    const before: ts.TransformerFactory<ts.SourceFile> = context => {
+        return file => ts.visitEachChild(file, visit, context);
+        function visit(node: ts.Node): ts.VisitResult<ts.Node> {
             switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                    return visitFunction(node as FunctionDeclaration);
+                case ts.SyntaxKind.FunctionDeclaration:
+                    return visitFunction(node as ts.FunctionDeclaration);
                 default:
-                    return visitEachChild(node, visit, context);
+                    return ts.visitEachChild(node, visit, context);
             }
         }
-        function visitFunction(node: FunctionDeclaration) {
-            addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, "@before", /*hasTrailingNewLine*/ true);
+        function visitFunction(node: ts.FunctionDeclaration) {
+            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, "@before", /*hasTrailingNewLine*/ true);
             return node;
         }
     };
 
-    const after: TransformerFactory<SourceFile> = context => {
-        return file => visitEachChild(file, visit, context);
-        function visit(node: Node): VisitResult<Node> {
+    const after: ts.TransformerFactory<ts.SourceFile> = context => {
+        return file => ts.visitEachChild(file, visit, context);
+        function visit(node: ts.Node): ts.VisitResult<ts.Node> {
             switch (node.kind) {
-                case SyntaxKind.VariableStatement:
-                    return visitVariableStatement(node as VariableStatement);
+                case ts.SyntaxKind.VariableStatement:
+                    return visitVariableStatement(node as ts.VariableStatement);
                 default:
-                    return visitEachChild(node, visit, context);
+                    return ts.visitEachChild(node, visit, context);
             }
         }
-        function visitVariableStatement(node: VariableStatement) {
-            addSyntheticLeadingComment(node, SyntaxKind.SingleLineCommentTrivia, "@after");
+        function visitVariableStatement(node: ts.VariableStatement) {
+            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, "@after");
             return node;
         }
     };
@@ -86,13 +86,13 @@ describe("unittests:: customTransforms", () => {
                 'change'
             `
     }], {before: [
-        context => node => visitNode(node, function visitor(node: Node): Node {
-            if (isStringLiteral(node) && node.text === "change") return factory.createStringLiteral("changed");
-            return visitEachChild(node, visitor, context);
+        context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+            if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
+            return ts.visitEachChild(node, visitor, context);
         })
     ]}, {
-        target: ScriptTarget.ES5,
-        module: ModuleKind.ES2015,
+        target: ts.ScriptTarget.ES5,
+        module: ts.ModuleKind.ES2015,
         emitDecoratorMetadata: true,
         experimentalDecorators: true
     });
@@ -109,21 +109,21 @@ describe("unittests:: customTransforms", () => {
         ],
         {
             before: [
-                context => node => visitNode(node, function visitor(node: Node): Node {
-                    if (isStringLiteral(node) && node.text === "change") {
+                context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+                    if (ts.isStringLiteral(node) && node.text === "change") {
                         const text = "'changed'";
-                        const lineMap = computeLineStarts(text);
-                        setSourceMapRange(node, {
+                        const lineMap = ts.computeLineStarts(text);
+                        ts.setSourceMapRange(node, {
                             pos: 0, end: text.length, source: {
                                 text,
                                 fileName: "another.html",
                                 lineMap,
-                                getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
+                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos)
                             }
                         });
                         return node;
                     }
-                    return visitEachChild(node, visitor, context);
+                    return ts.visitEachChild(node, visitor, context);
                 })
             ]
         },
@@ -141,22 +141,22 @@ describe("unittests:: customTransforms", () => {
         {
             before: [
                 context => {
-                    const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
-                        if (isIdentifier(node) && node.text === "original") {
-                            const newNode = factory.createIdentifier("changed");
-                            setSourceMapRange(newNode, {
+                    const transformSourceFile: ts.Transformer<ts.SourceFile> = node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+                        if (ts.isIdentifier(node) && node.text === "original") {
+                            const newNode = ts.factory.createIdentifier("changed");
+                            ts.setSourceMapRange(newNode, {
                                 pos: 0,
                                 end: 7,
                                 // Do not provide a custom skipTrivia function for `source`.
-                                source: createSourceMapSource("another.html", "changed;")
+                                source: ts.createSourceMapSource("another.html", "changed;")
                             });
                             return newNode;
                         }
-                        return visitEachChild(node, visitor, context);
+                        return ts.visitEachChild(node, visitor, context);
                     });
                     return {
                         transformSourceFile,
-                        transformBundle: node => factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
+                        transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),
                     };
                 }
             ]

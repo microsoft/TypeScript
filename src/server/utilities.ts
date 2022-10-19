@@ -1,10 +1,10 @@
 /* @internal */
 namespace ts.server {
 export class ThrottledOperations {
-    private readonly pendingTimeouts = new Map<string, any>();
-    private readonly logger?: Logger | undefined;
-    constructor(private readonly host: ServerHost, logger: Logger) {
-        this.logger = logger.hasLevel(LogLevel.verbose) ? logger : undefined;
+    private readonly pendingTimeouts = new ts.Map<string, any>();
+    private readonly logger?: ts.server.Logger | undefined;
+    constructor(private readonly host: ts.server.ServerHost, logger: ts.server.Logger) {
+        this.logger = logger.hasLevel(ts.server.LogLevel.verbose) ? logger : undefined;
     }
 
     /**
@@ -34,19 +34,19 @@ export class ThrottledOperations {
     }
 
     private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-        perfLogger.logStartScheduledOperation(operationId);
+        ts.perfLogger.logStartScheduledOperation(operationId);
         self.pendingTimeouts.delete(operationId);
         if (self.logger) {
             self.logger.info(`Running: ${operationId}`);
         }
         cb();
-        perfLogger.logStopScheduledOperation();
+        ts.perfLogger.logStopScheduledOperation();
     }
 }
 
 export class GcTimer {
     private timerId: any;
-    constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
+    constructor(private readonly host: ts.server.ServerHost, private readonly delay: number, private readonly logger: ts.server.Logger) {
     }
 
     public scheduleCollect() {
@@ -60,8 +60,8 @@ export class GcTimer {
     private static run(self: GcTimer) {
         self.timerId = undefined;
 
-        perfLogger.logStartScheduledOperation("GC collect");
-        const log = self.logger.hasLevel(LogLevel.requestTime);
+        ts.perfLogger.logStartScheduledOperation("GC collect");
+        const log = self.logger.hasLevel(ts.server.LogLevel.requestTime);
         const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
         self.host.gc!(); // TODO: GH#18217
@@ -69,16 +69,16 @@ export class GcTimer {
             const after = self.host.getMemoryUsage!(); // TODO: GH#18217
             self.logger.perftrc(`GC::before ${before}, after ${after}`);
         }
-        perfLogger.logStopScheduledOperation();
+        ts.perfLogger.logStopScheduledOperation();
     }
 }
 
-export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
-    const base = getBaseFileName(configFilePath);
+export function getBaseConfigFileName(configFilePath: ts.server.NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+    const base = ts.getBaseFileName(configFilePath);
     return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
 }
 
-export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
+export function removeSorted<T>(array: ts.SortedArray<T>, remove: T, compare: ts.Comparer<T>): void {
     if (!array || array.length === 0) {
         return;
     }
@@ -88,7 +88,7 @@ export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Compa
         return;
     }
 
-    const removeIndex = binarySearch(array, remove, identity, compare);
+    const removeIndex = ts.binarySearch(array, remove, ts.identity, compare);
     if (removeIndex >= 0) {
         array.splice(removeIndex, 1);
     }

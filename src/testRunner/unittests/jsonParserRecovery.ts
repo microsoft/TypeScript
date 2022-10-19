@@ -2,7 +2,7 @@ namespace ts {
 describe("unittests:: jsonParserRecovery", () => {
     function parsesToValidSourceFileWithErrors(name: string, text: string) {
         it(name, () => {
-            const file = parseJsonText(name, text);
+            const file = ts.parseJsonText(name, text);
             assert(file.parseDiagnostics.length, "Should have parse errors");
             Harness.Baseline.runBaseline(
                 `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,

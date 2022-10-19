@@ -1,72 +1,72 @@
 namespace ts {
 describe("unittests:: TransformAPI", () => {
-    function replaceUndefinedWithVoid0(context: TransformationContext) {
+    function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
-        context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
             node = previousOnSubstituteNode(hint, node);
-            if (hint === EmitHint.Expression && isIdentifier(node) && node.escapedText === "undefined") {
-                node = factory.createPartiallyEmittedExpression(
-                    addSyntheticTrailingComment(
-                        setTextRange(
-                            factory.createVoidZero(),
+            if (hint === ts.EmitHint.Expression && ts.isIdentifier(node) && node.escapedText === "undefined") {
+                node = ts.factory.createPartiallyEmittedExpression(
+                    ts.addSyntheticTrailingComment(
+                        ts.setTextRange(
+                            ts.factory.createVoidZero(),
                             node),
-                        SyntaxKind.MultiLineCommentTrivia, "undefined"));
+                        ts.SyntaxKind.MultiLineCommentTrivia, "undefined"));
             }
             return node;
         };
-        return (file: SourceFile) => file;
+        return (file: ts.SourceFile) => file;
     }
-    function replaceNumberWith2(context: TransformationContext) {
-        function visitor(node: Node): Node {
-            if (isNumericLiteral(node)) {
-                return factory.createNumericLiteral("2");
+    function replaceNumberWith2(context: ts.TransformationContext) {
+        function visitor(node: ts.Node): ts.Node {
+            if (ts.isNumericLiteral(node)) {
+                return ts.factory.createNumericLiteral("2");
             }
-            return visitEachChild(node, visitor, context);
+            return ts.visitEachChild(node, visitor, context);
         }
-        return (file: SourceFile) => visitNode(file, visitor);
+        return (file: ts.SourceFile) => ts.visitNode(file, visitor);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName(context: TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
-        context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
             node = previousOnSubstituteNode(hint, node);
-            if (isIdentifier(node) && node.escapedText === "oldName") {
-                node = setTextRange(factory.createIdentifier("newName"), node);
+            if (ts.isIdentifier(node) && node.escapedText === "oldName") {
+                node = ts.setTextRange(ts.factory.createIdentifier("newName"), node);
             }
             return node;
         };
-        return (file: SourceFile) => file;
+        return (file: ts.SourceFile) => file;
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
-        const visitor: Visitor = (node) => {
-            if (isIdentifier(node) && node.text === "oldName") {
-                return factory.createIdentifier("newName");
+    function replaceIdentifiersNamedOldNameWithNewName2(context: ts.TransformationContext) {
+        const visitor: ts.Visitor = (node) => {
+            if (ts.isIdentifier(node) && node.text === "oldName") {
+                return ts.factory.createIdentifier("newName");
             }
-            return visitEachChild(node, visitor, context);
+            return ts.visitEachChild(node, visitor, context);
         };
-        return (node: SourceFile) => visitNode(node, visitor);
+        return (node: ts.SourceFile) => ts.visitNode(node, visitor);
     }
 
-    function createTaggedTemplateLiteral(): Transformer<SourceFile> {
-        return sourceFile => factory.updateSourceFile(sourceFile, [
-            factory.createExpressionStatement(
-                factory.createTaggedTemplateExpression(
-                    factory.createIdentifier("$tpl"),
+    function createTaggedTemplateLiteral(): ts.Transformer<ts.SourceFile> {
+        return sourceFile => ts.factory.updateSourceFile(sourceFile, [
+            ts.factory.createExpressionStatement(
+                ts.factory.createTaggedTemplateExpression(
+                    ts.factory.createIdentifier("$tpl"),
                     /*typeArguments*/ undefined,
-                    factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
+                    ts.factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
         ]);
     }
 
-    function transformSourceFile(sourceText: string, transformers: TransformerFactory<SourceFile>[]) {
-        const transformed = transform(createSourceFile("source.ts", sourceText, ScriptTarget.ES2015), transformers);
-        const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed }, {
+    function transformSourceFile(sourceText: string, transformers: ts.TransformerFactory<ts.SourceFile>[]) {
+        const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015), transformers);
+        const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed }, {
             onEmitNode: transformed.emitNodeWithNotification,
             substituteNode: transformed.substituteNode
         });
-        const result = printer.printBundle(factory.createBundle(transformed.transformed));
+        const result = printer.printBundle(ts.factory.createBundle(transformed.transformed));
         transformed.dispose();
         return result;
     }
@@ -101,55 +101,55 @@ describe("unittests:: TransformAPI", () => {
 
     testBaseline("types", () => {
         return transformSourceFile(`let a: () => void`, [
-            context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
-                return visitEachChild(node, visitor, context);
+            context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+                return ts.visitEachChild(node, visitor, context);
             })
         ]);
     });
 
     testBaseline("transformDefiniteAssignmentAssertions", () => {
         return transformSourceFile(`let a!: () => void`, [
-            context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
-                if (node.kind === SyntaxKind.VoidKeyword) {
-                    return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+            context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+                if (node.kind === ts.SyntaxKind.VoidKeyword) {
+                    return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
                 }
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
             })
         ]);
     });
 
     testBaseline("fromTranspileModule", () => {
-        return transpileModule(`var oldName = undefined;`, {
+        return ts.transpileModule(`var oldName = undefined;`, {
             transformers: {
                 before: [replaceUndefinedWithVoid0],
                 after: [replaceIdentifiersNamedOldNameWithNewName]
             },
             compilerOptions: {
-                newLine: NewLineKind.CarriageReturnLineFeed
+                newLine: ts.NewLineKind.CarriageReturnLineFeed
             }
         }).outputText;
     });
 
     testBaseline("transformTaggedTemplateLiteral", () => {
-        return transpileModule("", {
+        return ts.transpileModule("", {
             transformers: {
                 before: [createTaggedTemplateLiteral],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed
             }
         }).outputText;
     });
 
     testBaseline("issue27854", () => {
-        return transpileModule(`oldName<{ a: string; }>\` ... \`;`, {
+        return ts.transpileModule(`oldName<{ a: string; }>\` ... \`;`, {
             transformers: {
                 before: [replaceIdentifiersNamedOldNameWithNewName2]
             },
             compilerOptions: {
-                newLine: NewLineKind.CarriageReturnLineFeed,
-                target: ScriptTarget.Latest
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.Latest
             }
         }).outputText;
     });
@@ -160,10 +160,10 @@ describe("unittests:: TransformAPI", () => {
                 const SecondVar = null;
             `, [
             context => file => {
-                const firstVarName = (file.statements[0] as VariableStatement)
-                    .declarationList.declarations[0].name as Identifier;
-                const secondVarName = (file.statements[0] as VariableStatement)
-                    .declarationList.declarations[0].name as Identifier;
+                const firstVarName = (file.statements[0] as ts.VariableStatement)
+                    .declarationList.declarations[0].name as ts.Identifier;
+                const secondVarName = (file.statements[0] as ts.VariableStatement)
+                    .declarationList.declarations[0].name as ts.Identifier;
 
                 return context.factory.updateSourceFile(file, file.statements.concat([
                     context.factory.createExpressionStatement(
@@ -175,18 +175,18 @@ describe("unittests:: TransformAPI", () => {
     });
 
     testBaseline("rewrittenNamespace", () => {
-        return transpileModule(`namespace Reflect { const x = 1; }`, {
+        return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
             transformers: {
                 before: [forceNamespaceRewrite],
             },
             compilerOptions: {
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     testBaseline("rewrittenNamespaceFollowingClass", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
             `, {
@@ -194,46 +194,46 @@ describe("unittests:: TransformAPI", () => {
                 before: [forceNamespaceRewrite],
             },
             compilerOptions: {
-                target: ScriptTarget.ESNext,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ESNext,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
                 useDefineForClassFields: false,
             }
         }).outputText;
     });
 
     testBaseline("transformTypesInExportDefault", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
             export default (foo: string) => { return 1; }
             `, {
             transformers: {
                 before: [replaceNumberWith2],
             },
             compilerOptions: {
-                target: ScriptTarget.ESNext,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ESNext,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     testBaseline("synthesizedClassAndNamespaceCombination", () => {
-        return transpileModule("", {
+        return ts.transpileModule("", {
             transformers: {
                 before: [replaceWithClassAndNamespace],
             },
             compilerOptions: {
-                target: ScriptTarget.ESNext,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ESNext,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
         function replaceWithClassAndNamespace() {
-            return (sourceFile: SourceFile) => {
+            return (sourceFile: ts.SourceFile) => {
                 // TODO(rbuckton): Does this need to be parented?
-                const result = factory.updateSourceFile(
+                const result = ts.factory.updateSourceFile(
                     sourceFile,
-                    factory.createNodeArray([
-                        factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        factory.createModuleDeclaration(/*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
+                    ts.factory.createNodeArray([
+                        ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                        ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()]))
                     ])
                 );
                 return result;
@@ -241,47 +241,47 @@ describe("unittests:: TransformAPI", () => {
         }
     });
 
-    function forceNamespaceRewrite(context: TransformationContext) {
-        return (sourceFile: SourceFile): SourceFile => {
+    function forceNamespaceRewrite(context: ts.TransformationContext) {
+        return (sourceFile: ts.SourceFile): ts.SourceFile => {
             return visitNode(sourceFile);
 
-            function visitNode<T extends Node>(node: T): T {
-                if (node.kind === SyntaxKind.ModuleBlock) {
-                    const block = node as T & ModuleBlock;
-                    const statements = factory.createNodeArray([...block.statements]);
-                    return factory.updateModuleBlock(block, statements) as typeof block;
+            function visitNode<T extends ts.Node>(node: T): T {
+                if (node.kind === ts.SyntaxKind.ModuleBlock) {
+                    const block = node as T & ts.ModuleBlock;
+                    const statements = ts.factory.createNodeArray([...block.statements]);
+                    return ts.factory.updateModuleBlock(block, statements) as typeof block;
                 }
-                return visitEachChild(node, visitNode, context);
+                return ts.visitEachChild(node, visitNode, context);
             }
         };
     }
 
     testBaseline("transformAwayExportStar", () => {
-        return transpileModule("export * from './helper';", {
+        return ts.transpileModule("export * from './helper';", {
             transformers: {
                 before: [expandExportStar],
             },
             compilerOptions: {
-                target: ScriptTarget.ESNext,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ESNext,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
-        function expandExportStar(context: TransformationContext) {
-            return (sourceFile: SourceFile): SourceFile => {
+        function expandExportStar(context: ts.TransformationContext) {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
                 return visitNode(sourceFile);
 
-                function visitNode<T extends Node>(node: T): T {
-                    if (node.kind === SyntaxKind.ExportDeclaration) {
-                        const ed = node as Node as ExportDeclaration;
+                function visitNode<T extends ts.Node>(node: T): T {
+                    if (node.kind === ts.SyntaxKind.ExportDeclaration) {
+                        const ed = node as ts.Node as ts.ExportDeclaration;
                         const exports = [{ name: "x" }];
-                        const exportSpecifiers = exports.map(e => factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
-                        const exportClause = factory.createNamedExports(exportSpecifiers);
-                        const newEd = factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
+                        const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
+                        const exportClause = ts.factory.createNamedExports(exportSpecifiers);
+                        const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 
-                        return newEd as Node as T;
+                        return newEd as ts.Node as T;
                     }
-                    return visitEachChild(node, visitNode, context);
+                    return ts.visitEachChild(node, visitNode, context);
                 }
             };
         }
@@ -289,59 +289,59 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/Microsoft/TypeScript/issues/19618
     testBaseline("transformAddImportStar", () => {
-        return transpileModule("", {
+        return ts.transpileModule("", {
             transformers: {
                 before: [transformAddImportStar],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                module: ModuleKind.System,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                module: ts.ModuleKind.System,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
-        function transformAddImportStar(_context: TransformationContext) {
-            return (sourceFile: SourceFile): SourceFile => {
+        function transformAddImportStar(_context: ts.TransformationContext) {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
                 return visitNode(sourceFile);
             };
-            function visitNode(sf: SourceFile) {
+            function visitNode(sf: ts.SourceFile) {
                 // produce `import * as i0 from './comp';
-                const importStar = factory.createImportDeclaration(
+                const importStar = ts.factory.createImportDeclaration(
                     /*modifiers*/ undefined,
-                    /*importClause*/ factory.createImportClause(
+                    /*importClause*/ ts.factory.createImportClause(
                         /*isTypeOnly*/ false,
                         /*name*/ undefined,
-                        factory.createNamespaceImport(factory.createIdentifier("i0"))
+                        ts.factory.createNamespaceImport(ts.factory.createIdentifier("i0"))
                     ),
-                    /*moduleSpecifier*/ factory.createStringLiteral("./comp1"),
+                    /*moduleSpecifier*/ ts.factory.createStringLiteral("./comp1"),
                     /*assertClause*/ undefined);
-                return factory.updateSourceFile(sf, [importStar]);
+                return ts.factory.updateSourceFile(sf, [importStar]);
             }
         }
     });
 
     // https://github.com/Microsoft/TypeScript/issues/17384
     testBaseline("transformAddDecoratedNode", () => {
-        return transpileModule("", {
+        return ts.transpileModule("", {
             transformers: {
                 before: [transformAddDecoratedNode],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
-        function transformAddDecoratedNode(_context: TransformationContext) {
-            return (sourceFile: SourceFile): SourceFile => {
+        function transformAddDecoratedNode(_context: ts.TransformationContext) {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
                 return visitNode(sourceFile);
             };
-            function visitNode(sf: SourceFile) {
+            function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
-                const classDecl = factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    factory.createMethodDeclaration([factory.createDecorator(factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, factory.createBlock([]))
+                const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.factory.createBlock([]))
                 ]);
-                return factory.updateSourceFile(sf, [classDecl]);
+                return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
     });
@@ -352,7 +352,7 @@ describe("unittests:: TransformAPI", () => {
                 afterDeclarations: [replaceIdentifiersNamedOldNameWithNewName]
             },
             compilerOptions: {
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
                 declaration: true
             }
         });
@@ -360,89 +360,89 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/microsoft/TypeScript/issues/33295
     testBaseline("transformParameterProperty", () => {
-        return transpileModule("", {
+        return ts.transpileModule("", {
             transformers: {
                 before: [transformAddParameterProperty],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
-        function transformAddParameterProperty(_context: TransformationContext) {
-            return (sourceFile: SourceFile): SourceFile => {
+        function transformAddParameterProperty(_context: ts.TransformationContext) {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
                 return visitNode(sourceFile);
             };
-            function visitNode(sf: SourceFile) {
+            function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { constructor(@Dec private x) {} }`;
                 // The decorator is required to trigger ts.ts transformations.
-                const classDecl = factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    factory.createConstructorDeclaration(/*modifiers*/ undefined, [
-                        factory.createParameterDeclaration([factory.createDecorator(factory.createIdentifier("Dec")), factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
+                const classDecl = ts.factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                    ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
+                        ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], ts.factory.createBlock([]))
                 ]);
-                return factory.updateSourceFile(sf, [classDecl]);
+                return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
     });
 
-    function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
+    function baselineDeclarationTransform(text: string, opts: ts.TranspileOptions) {
         const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
-        const program = createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
+        const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
         program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
         return fs.readFileSync("/.src/index.d.ts").toString();
     }
 
-    function addSyntheticComment(nodeFilter: (node: Node) => boolean) {
-        return (context: TransformationContext) => {
-            return (sourceFile: SourceFile): SourceFile => {
-                return visitNode(sourceFile, rootTransform, isSourceFile);
+    function addSyntheticComment(nodeFilter: (node: ts.Node) => boolean) {
+        return (context: ts.TransformationContext) => {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                return ts.visitNode(sourceFile, rootTransform, ts.isSourceFile);
             };
-            function rootTransform<T extends Node>(node: T): VisitResult<T> {
+            function rootTransform<T extends ts.Node>(node: T): ts.VisitResult<T> {
                 if (nodeFilter(node)) {
-                    setEmitFlags(node, EmitFlags.NoLeadingComments);
-                    setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    ts.setEmitFlags(node, ts.EmitFlags.NoLeadingComments);
+                    ts.setSyntheticLeadingComments(node, [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
                 }
-                return visitEachChild(node, rootTransform, context);
+                return ts.visitEachChild(node, rootTransform, context);
             }
         };
     }
 
     // https://github.com/Microsoft/TypeScript/issues/24096
     testBaseline("transformAddCommentToArrowReturnValue", () => {
-        return transpileModule(`const foo = () =>
+        return ts.transpileModule(`const foo = () =>
     void 0
 `, {
             transformers: {
-                before: [addSyntheticComment(isVoidExpression)],
+                before: [addSyntheticComment(ts.isVoidExpression)],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     // https://github.com/Microsoft/TypeScript/issues/17594
     testBaseline("transformAddCommentToExportedVar", () => {
-        return transpileModule(`export const exportedDirectly = 1;
+        return ts.transpileModule(`export const exportedDirectly = 1;
 const exportedSeparately = 2;
 export {exportedSeparately};
 `, {
             transformers: {
-                before: [addSyntheticComment(isVariableStatement)],
+                before: [addSyntheticComment(ts.isVariableStatement)],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     // https://github.com/Microsoft/TypeScript/issues/17594
     testBaseline("transformAddCommentToImport", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 // Previous comment on import.
 import {Value} from 'somewhere';
 import * as X from 'somewhere';
@@ -452,18 +452,18 @@ export * from 'somewhere';
 export {Value};
 `, {
             transformers: {
-                before: [addSyntheticComment(n => isImportDeclaration(n) || isExportDeclaration(n) || isImportSpecifier(n) || isExportSpecifier(n))],
+                before: [addSyntheticComment(n => ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n))],
             },
             compilerOptions: {
-                target: ScriptTarget.ES5,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES5,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     // https://github.com/Microsoft/TypeScript/issues/17594
     testBaseline("transformAddCommentToProperties", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 // class comment.
 class Clazz {
     // original comment 1.
@@ -475,17 +475,17 @@ class Clazz {
 }
 `, {
             transformers: {
-                before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n, n.parent) || isClassDeclaration(n) || isConstructorDeclaration(n))],
+                before: [addSyntheticComment(n => ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n))],
             },
             compilerOptions: {
-                target: ScriptTarget.ES2015,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES2015,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     testBaseline("transformAddCommentToNamespace", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 // namespace comment.
 namespace Foo {
     export const x = 1;
@@ -496,17 +496,17 @@ namespace Foo {
 }
 `, {
             transformers: {
-                before: [addSyntheticComment(n => isModuleDeclaration(n))],
+                before: [addSyntheticComment(n => ts.isModuleDeclaration(n))],
             },
             compilerOptions: {
-                target: ScriptTarget.ES2015,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES2015,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     testBaseline("transformUpdateModuleMember", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 module MyModule {
     const myVariable = 1;
     function foo(param: string) {}
@@ -516,20 +516,20 @@ module MyModule {
                 before: [renameVariable],
             },
             compilerOptions: {
-                target: ScriptTarget.ES2015,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES2015,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
-        function renameVariable(context: TransformationContext) {
-                return (sourceFile: SourceFile): SourceFile => {
-                    return visitNode(sourceFile, rootTransform, isSourceFile);
+        function renameVariable(context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return ts.visitNode(sourceFile, rootTransform, ts.isSourceFile);
                 };
-                function rootTransform<T extends Node>(node: T): Node {
-                    if (isVariableDeclaration(node)) {
-                        return factory.updateVariableDeclaration(node, factory.createIdentifier("newName"), /*exclamationToken*/ undefined, /*type*/ undefined, node.initializer);
+                function rootTransform<T extends ts.Node>(node: T): ts.Node {
+                    if (ts.isVariableDeclaration(node)) {
+                        return ts.factory.updateVariableDeclaration(node, ts.factory.createIdentifier("newName"), /*exclamationToken*/ undefined, /*type*/ undefined, node.initializer);
                     }
-                    return visitEachChild(node, rootTransform, context);
+                    return ts.visitEachChild(node, rootTransform, context);
                 }
         }
     });
@@ -537,27 +537,27 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
-        const transformed = transform(createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ScriptTarget.ES3), [transformSourceFile]);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);
         host.getSourceFile = () => transformedSourceFile;
-        const program = createProgram(["source.ts"], {
-            target: ScriptTarget.ES3,
-            module: ModuleKind.None,
+        const program = ts.createProgram(["source.ts"], {
+            target: ts.ScriptTarget.ES3,
+            module: ts.ModuleKind.None,
             noLib: true
         }, host);
         program.emit(transformedSourceFile, (_p, s, b) => host.writeFile("source.js", s, b));
         return host.readFile("source.js")!.toString();
 
-        function transformSourceFile(context: TransformationContext) {
-            const visitor: Visitor = (node) => {
-                if (isMethodDeclaration(node)) {
-                    return factory.updateMethodDeclaration(
+        function transformSourceFile(context: ts.TransformationContext) {
+            const visitor: ts.Visitor = (node) => {
+                if (ts.isMethodDeclaration(node)) {
+                    return ts.factory.updateMethodDeclaration(
                         node,
                         node.modifiers,
                         node.asteriskToken,
-                        factory.createIdentifier("foobar"),
+                        ts.factory.createIdentifier("foobar"),
                         node.questionToken,
                         node.typeParameters,
                         node.parameters,
@@ -565,56 +565,56 @@ module MyModule {
                         node.body,
                     );
                 }
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
             };
-            return (node: SourceFile) => visitNode(node, visitor);
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor);
         }
 
     });
 
     testBaselineAndEvaluate("templateSpans", () => {
-        return transpileModule("const x = String.raw`\n\nhello`; exports.stringLength = x.trim().length;", {
+        return ts.transpileModule("const x = String.raw`\n\nhello`; exports.stringLength = x.trim().length;", {
             compilerOptions: {
-                target: ScriptTarget.ESNext,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ESNext,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             },
             transformers: {
                 before: [transformSourceFile]
             }
         }).outputText;
 
-        function transformSourceFile(context: TransformationContext): Transformer<SourceFile> {
-            function visitor(node: Node): VisitResult<Node> {
-                if (isNoSubstitutionTemplateLiteral(node)) {
-                    return factory.createNoSubstitutionTemplateLiteral(node.text, node.rawText);
+        function transformSourceFile(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
+            function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+                if (ts.isNoSubstitutionTemplateLiteral(node)) {
+                    return ts.factory.createNoSubstitutionTemplateLiteral(node.text, node.rawText);
                 }
                 else {
-                    return visitEachChild(node, visitor, context);
+                    return ts.visitEachChild(node, visitor, context);
                 }
             }
-            return sourceFile => visitNode(sourceFile, visitor, isSourceFile);
+            return sourceFile => ts.visitNode(sourceFile, visitor, ts.isSourceFile);
         }
     }, exports => {
         assert.equal(exports.stringLength, 5);
     });
 
-    function addStaticFieldWithComment(context: TransformationContext) {
-        return (sourceFile: SourceFile): SourceFile => {
-            return visitNode(sourceFile, rootTransform, isSourceFile);
+    function addStaticFieldWithComment(context: ts.TransformationContext) {
+        return (sourceFile: ts.SourceFile): ts.SourceFile => {
+            return ts.visitNode(sourceFile, rootTransform, ts.isSourceFile);
         };
-        function rootTransform<T extends Node>(node: T): Node {
-            if (isClassLike(node)) {
-                const newMembers = [factory.createPropertyDeclaration([factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
-                setSyntheticLeadingComments(newMembers[0], [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
-                return isClassDeclaration(node) ?
-                    factory.updateClassDeclaration(
+        function rootTransform<T extends ts.Node>(node: T): ts.Node {
+            if (ts.isClassLike(node)) {
+                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, ts.factory.createStringLiteral("x"))];
+                ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                return ts.isClassDeclaration(node) ?
+                    ts.factory.updateClassDeclaration(
                         node,
                         node.modifiers,
                         node.name,
                         node.typeParameters,
                         node.heritageClauses,
                         newMembers) :
-                    factory.updateClassExpression(
+                    ts.factory.updateClassExpression(
                         node,
                         node.modifiers,
                         node.name,
@@ -622,12 +622,12 @@ module MyModule {
                         node.heritageClauses,
                         newMembers);
             }
-            return visitEachChild(node, rootTransform, context);
+            return ts.visitEachChild(node, rootTransform, context);
         }
     }
 
     testBaseline("transformSyntheticCommentOnStaticFieldInClassDeclaration", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 declare const Decorator: any;
 @Decorator
 class MyClass {
@@ -637,14 +637,14 @@ class MyClass {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ScriptTarget.ES2015,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES2015,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
     testBaseline("transformSyntheticCommentOnStaticFieldInClassExpression", () => {
-        return transpileModule(`
+        return ts.transpileModule(`
 const MyClass = class {
 };
 `, {
@@ -652,8 +652,8 @@ const MyClass = class {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ScriptTarget.ES2015,
-                newLine: NewLineKind.CarriageReturnLineFeed,
+                target: ts.ScriptTarget.ES2015,
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
