@@ -155,7 +155,7 @@ import {
     mangleScopedPackageName, map, Map, mapDefined, MappedSymbol, MappedType, MappedTypeNode, MatchingKeys, maybeBind,
     MemberName, MemberOverrideStatus, memoize, MetaProperty, MethodDeclaration, MethodSignature, minAndMax, MinusToken,
     Modifier, ModifierFlags, modifiersToFlags, modifierToFlag, ModuleBlock, ModuleDeclaration, ModuleInstanceState,
-    ModuleKind, ModuleResolutionKind, moduleSpecifiers, NamedDeclaration, NamedExports, NamedImportsOrExports,
+    ModuleKind, ModuleResolutionKind, NamedDeclaration, NamedExports, NamedImportsOrExports,
     NamedTupleMember, NamespaceDeclaration, NamespaceExport, NamespaceExportDeclaration, NamespaceImport,
     needsScopeMarker, NewExpression, Node, NodeArray, NodeBuilderFlags, nodeCanBeDecorated, NodeCheckFlags, NodeFlags,
     nodeHasName, nodeIsDecorated, nodeIsMissing, nodeIsPresent, nodeIsSynthesized, NodeLinks,
@@ -198,6 +198,7 @@ import {
     walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
