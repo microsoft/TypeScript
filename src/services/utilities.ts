@@ -60,24 +60,6 @@ import {
     unescapeLeadingUnderscores, UserPreferences, VariableDeclaration, visitEachChild, VoidExpression, YieldExpression,
 } from "./_namespaces/ts";
 
-/** @internal */ // Don't expose that we use this
-// Based on lib.es6.d.ts
-declare global {
-    // Module transform: converted from ambient declaration
-    /** @internal */
-    interface PromiseConstructor {
-        new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
-        reject(reason: any): Promise<never>;
-        all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
-    }
-}
-/** @internal */
-declare global {
-    // Module transform: converted from ambient declaration
-    /** @internal */
-    var Promise: PromiseConstructor; // eslint-disable-line no-var
-}
-
 // These utilities are common to multiple language service features.
 //#region
 /** @internal */
