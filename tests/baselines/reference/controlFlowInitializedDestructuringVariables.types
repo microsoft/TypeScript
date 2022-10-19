@@ -12,7 +12,7 @@ const {
     b = +a,
 >b : number
 >+a : number
->a : string | undefined
+>a : string
 
 } = obj;
 >obj : { a?: string | undefined; b?: number | undefined; }

@@ -26095,7 +26095,7 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports ||
+            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
@@ -26117,12 +26117,19 @@ namespace ts {
                     return convertAutoToAny(flowType);
                 }
             }
-            else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType) && !(isBindingElement(declaration) && findAncestor(node, isBindingElement))) {
+            else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function isSameScopedBindingElement(node: Identifier, declaration: Declaration) {
+            if (isBindingElement(declaration)) {
+                const bindingElement = findAncestor(node, isBindingElement);
+                return bindingElement && getRootDeclaration(bindingElement) === getRootDeclaration(declaration);
+            }
         }
 
         function shouldMarkIdentifierAliasReferenced(node: Identifier): boolean {
