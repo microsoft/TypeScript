@@ -1,29 +1,33 @@
-import * as ts from "../_namespaces/ts";
+import {
+    cast, Diagnostics, factory, getTokenAtPosition, isCallExpression, Node, SourceFile, textChanges, TextSpan,
+    textSpanEnd,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "addMissingNewOperator";
-const errorCodes = [ts.Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
-ts.codefix.registerCodeFix({
+const errorCodes = [Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
+registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, span } = context;
-        const changes = ts.textChanges.ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, span));
-        return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Add_missing_new_operator_to_call, fixId, ts.Diagnostics.Add_missing_new_operator_to_all_calls)];
+        const changes = textChanges.ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, span));
+        return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_call, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) =>
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
         addMissingNewOperator(changes, context.sourceFile, diag)),
 });
 
-function addMissingNewOperator(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, span: ts.TextSpan): void {
-    const call = ts.cast(findAncestorMatchingSpan(sourceFile, span), ts.isCallExpression);
-    const newExpression = ts.factory.createNewExpression(call.expression, call.typeArguments, call.arguments);
+function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {
+    const call = cast(findAncestorMatchingSpan(sourceFile, span), isCallExpression);
+    const newExpression = factory.createNewExpression(call.expression, call.typeArguments, call.arguments);
 
     changes.replaceNode(sourceFile, call, newExpression);
 }
 
-function findAncestorMatchingSpan(sourceFile: ts.SourceFile, span: ts.TextSpan): ts.Node {
-    let token = ts.getTokenAtPosition(sourceFile, span.start);
-    const end = ts.textSpanEnd(span);
+function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {
+    let token = getTokenAtPosition(sourceFile, span.start);
+    const end = textSpanEnd(span);
     while (token.end < end) {
         token = token.parent;
     }

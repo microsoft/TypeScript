@@ -1,32 +1,36 @@
-import * as ts from "../_namespaces/ts";
+import {
+    CodeFixContextBase, Diagnostics, factory, getTokenAtPosition, ImportDeclaration, isImportDeclaration, SourceFile,
+    textChanges, TextSpan, tryCast,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
-const errorCodes = [ts.Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
+const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
 const fixId = "convertToTypeOnlyImport";
-ts.codefix.registerCodeFix({
+registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertToTypeOnlyImport(context) {
-        const changes = ts.textChanges.ChangeTracker.with(context, t => {
+        const changes = textChanges.ChangeTracker.with(context, t => {
             const importDeclaration = getImportDeclarationForDiagnosticSpan(context.span, context.sourceFile);
             fixSingleImportDeclaration(t, importDeclaration, context);
         });
         if (changes.length) {
-            return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Convert_to_type_only_import, fixId, ts.Diagnostics.Convert_all_imports_not_used_as_a_value_to_type_only_imports)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_type_only_import, fixId, Diagnostics.Convert_all_imports_not_used_as_a_value_to_type_only_imports)];
         }
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyImport(context) {
-        return ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+        return codeFixAll(context, errorCodes, (changes, diag) => {
             const importDeclaration = getImportDeclarationForDiagnosticSpan(diag, context.sourceFile);
             fixSingleImportDeclaration(changes, importDeclaration, context);
         });
     }
 });
 
-function getImportDeclarationForDiagnosticSpan(span: ts.TextSpan, sourceFile: ts.SourceFile) {
-    return ts.tryCast(ts.getTokenAtPosition(sourceFile, span.start).parent, ts.isImportDeclaration);
+function getImportDeclarationForDiagnosticSpan(span: TextSpan, sourceFile: SourceFile) {
+    return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isImportDeclaration);
 }
 
-function fixSingleImportDeclaration(changes: ts.textChanges.ChangeTracker, importDeclaration: ts.ImportDeclaration | undefined, context: ts.CodeFixContextBase) {
+function fixSingleImportDeclaration(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
     if (!importDeclaration?.importClause) {
         return;
     }
@@ -38,10 +42,10 @@ function fixSingleImportDeclaration(changes: ts.textChanges.ChangeTracker, impor
     // `import type foo, { Bar }` is not allowed, so move `foo` to new declaration
     if (importClause.name && importClause.namedBindings) {
         changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
-        changes.insertNodeBefore(context.sourceFile, importDeclaration, ts.factory.updateImportDeclaration(
+        changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
             importDeclaration,
             /*modifiers*/ undefined,
-            ts.factory.createImportClause(
+            factory.createImportClause(
                 /*isTypeOnly*/ true,
                 importClause.name,
                 /*namedBindings*/ undefined),

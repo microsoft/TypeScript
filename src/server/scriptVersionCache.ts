@@ -1,4 +1,8 @@
-import * as ts from "./_namespaces/ts";
+import {
+    collapseTextChangeRangesAcrossMultipleVersions, computeLineStarts, createTextChangeRange, createTextSpan, Debug,
+    IScriptSnapshot, TextChangeRange, TextSpan, unchangedTextChangeRange,
+} from "./_namespaces/ts";
+import { emptyArray, protocol } from "./_namespaces/ts.server";
 
 const lineCollectionCapacity = 4;
 
@@ -244,7 +248,7 @@ class TextChange {
     }
 
     getTextChangeRange() {
-        return ts.createTextChangeRange(ts.createTextSpan(this.pos, this.deleteLen),
+        return createTextChangeRange(createTextSpan(this.pos, this.deleteLen),
             this.insertedText ? this.insertedText.length : 0);
     }
 }
@@ -282,7 +286,7 @@ export class ScriptVersionCache {
         }
     }
 
-    getSnapshot(): ts.IScriptSnapshot { return this._getSnapshot(); }
+    getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }
 
     private _getSnapshot(): LineIndexSnapshot {
         let snap = this.versions[this.currentVersionToIndex()];
@@ -316,35 +320,35 @@ export class ScriptVersionCache {
         return this._getSnapshot().index.absolutePositionOfStartOfLine(line) + (column - 1);
     }
 
-    positionToLineOffset(position: number): ts.server.protocol.Location {
+    positionToLineOffset(position: number): protocol.Location {
         return this._getSnapshot().index.positionToLineOffset(position);
     }
 
-    lineToTextSpan(line: number): ts.TextSpan {
+    lineToTextSpan(line: number): TextSpan {
         const index = this._getSnapshot().index;
         const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
         const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
-        return ts.createTextSpan(absolutePosition, len);
+        return createTextSpan(absolutePosition, len);
     }
 
     getTextChangesBetweenVersions(oldVersion: number, newVersion: number) {
         if (oldVersion < newVersion) {
             if (oldVersion >= this.minVersion) {
-                const textChangeRanges: ts.TextChangeRange[] = [];
+                const textChangeRanges: TextChangeRange[] = [];
                 for (let i = oldVersion + 1; i <= newVersion; i++) {
                     const snap = this.versions[this.versionToIndex(i)!]; // TODO: GH#18217
                     for (const textChange of snap.changesSincePreviousVersion) {
                         textChangeRanges.push(textChange.getTextChangeRange());
                     }
                 }
-                return ts.collapseTextChangeRangesAcrossMultipleVersions(textChangeRanges);
+                return collapseTextChangeRangesAcrossMultipleVersions(textChangeRanges);
             }
             else {
                 return undefined;
             }
         }
         else {
-            return ts.unchangedTextChangeRange;
+            return unchangedTextChangeRange;
         }
     }
 
@@ -362,8 +366,8 @@ export class ScriptVersionCache {
     }
 }
 
-class LineIndexSnapshot implements ts.IScriptSnapshot {
-    constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: readonly TextChange[] = ts.server.emptyArray) {
+class LineIndexSnapshot implements IScriptSnapshot {
+    constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: readonly TextChange[] = emptyArray) {
     }
 
     getText(rangeStart: number, rangeEnd: number) {
@@ -374,10 +378,10 @@ class LineIndexSnapshot implements ts.IScriptSnapshot {
         return this.index.getLength();
     }
 
-    getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange | undefined {
+    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined {
         if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
             if (this.version <= oldSnapshot.version) {
-                return ts.unchangedTextChangeRange;
+                return unchangedTextChangeRange;
             }
             else {
                 return this.cache.getTextChangesBetweenVersions(oldSnapshot.version, this.version);
@@ -396,7 +400,7 @@ export class LineIndex {
         return this.lineNumberToInfo(oneBasedLine).absolutePosition;
     }
 
-    positionToLineOffset(position: number): ts.server.protocol.Location {
+    positionToLineOffset(position: number): protocol.Location {
         const { oneBasedLine, zeroBasedColumn } = this.root.charOffsetToLineInfo(1, position);
         return { line: oneBasedLine, offset: zeroBasedColumn + 1 };
     }
@@ -474,7 +478,7 @@ export class LineIndex {
 
     edit(pos: number, deleteLength: number, newText?: string): LineIndex {
         if (this.root.charCount() === 0) {
-            ts.Debug.assert(deleteLength === 0); // Can't delete from empty document
+            Debug.assert(deleteLength === 0); // Can't delete from empty document
             if (newText !== undefined) {
                 this.load(LineIndex.linesFromText(newText).lines);
                 return this;
@@ -519,7 +523,7 @@ export class LineIndex {
 
             if (this.checkEdits) {
                 const updatedText = walker.lineIndex.getText(0, walker.lineIndex.getLength());
-                ts.Debug.assert(checkText === updatedText, "buffer edit mismatch");
+                Debug.assert(checkText === updatedText, "buffer edit mismatch");
             }
 
             return walker.lineIndex;
@@ -542,7 +546,7 @@ export class LineIndex {
     }
 
     static linesFromText(text: string) {
-        const lineMap = ts.computeLineStarts(text);
+        const lineMap = computeLineStarts(text);
 
         if (lineMap.length === 0) {
             return { lines: [] as string[], lineMap };
@@ -688,7 +692,7 @@ class LineNode implements LineCollection {
         if (lineCount === 0) { // it's empty! (and lineNumberToInfo expects a one-based line)
             return { oneBasedLine: 1, zeroBasedColumn: 0, lineText: undefined };
         }
-        const leaf = ts.Debug.checkDefined(this.lineNumberToInfo(lineCount, 0).leaf);
+        const leaf = Debug.checkDefined(this.lineNumberToInfo(lineCount, 0).leaf);
         return { oneBasedLine: lineCount, zeroBasedColumn: leaf.charCount(), lineText: undefined };
     }
 
@@ -742,7 +746,7 @@ class LineNode implements LineCollection {
 
     private findChildIndex(child: LineCollection) {
         const childIndex = this.children.indexOf(child);
-        ts.Debug.assert(childIndex !== -1);
+        Debug.assert(childIndex !== -1);
         return childIndex;
     }
 
@@ -803,7 +807,7 @@ class LineNode implements LineCollection {
     // assume there is room for the item; return true if more room
     add(collection: LineCollection): void {
         this.children.push(collection);
-        ts.Debug.assert(this.children.length <= lineCollectionCapacity);
+        Debug.assert(this.children.length <= lineCollectionCapacity);
     }
 
     charCount() {

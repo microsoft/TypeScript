@@ -1,66 +1,73 @@
-import * as ts from "../_namespaces/ts";
+import {
+    AccessExpression, addEmitFlags, BinaryExpression, CallExpression, cast, chainBundle, Debug, DeleteExpression,
+    EmitFlags, Expression, isCallChain, isExpression, isGeneratedIdentifier, isIdentifier, isNonNullChain,
+    isOptionalChain, isParenthesizedExpression, isSimpleCopiableExpression, isSyntheticReference,
+    isTaggedTemplateExpression, Node, OptionalChain, OuterExpressionKinds, ParenthesizedExpression, setOriginalNode,
+    setTextRange, skipParentheses, skipPartiallyEmittedExpressions, SourceFile, SyntaxKind, TransformationContext,
+    TransformFlags, visitEachChild, visitNode, visitNodes, VisitResult,
+} from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2020(context: ts.TransformationContext) {
+export function transformES2020(context: TransformationContext) {
     const {
         factory,
         hoistVariableDeclaration,
     } = context;
 
-    return ts.chainBundle(context, transformSourceFile);
+    return chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: ts.SourceFile) {
+    function transformSourceFile(node: SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        if ((node.transformFlags & ts.TransformFlags.ContainsES2020) === 0) {
+    function visitor(node: Node): VisitResult<Node> {
+        if ((node.transformFlags & TransformFlags.ContainsES2020) === 0) {
             return node;
         }
         switch (node.kind) {
-            case ts.SyntaxKind.CallExpression: {
-                const updated = visitNonOptionalCallExpression(node as ts.CallExpression, /*captureThisArg*/ false);
-                ts.Debug.assertNotNode(updated, ts.isSyntheticReference);
+            case SyntaxKind.CallExpression: {
+                const updated = visitNonOptionalCallExpression(node as CallExpression, /*captureThisArg*/ false);
+                Debug.assertNotNode(updated, isSyntheticReference);
                 return updated;
             }
-            case ts.SyntaxKind.PropertyAccessExpression:
-            case ts.SyntaxKind.ElementAccessExpression:
-                if (ts.isOptionalChain(node)) {
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                if (isOptionalChain(node)) {
                     const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false);
-                    ts.Debug.assertNotNode(updated, ts.isSyntheticReference);
+                    Debug.assertNotNode(updated, isSyntheticReference);
                     return updated;
                 }
-                return ts.visitEachChild(node, visitor, context);
-            case ts.SyntaxKind.BinaryExpression:
-                if ((node as ts.BinaryExpression).operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken) {
-                    return transformNullishCoalescingExpression(node as ts.BinaryExpression);
+                return visitEachChild(node, visitor, context);
+            case SyntaxKind.BinaryExpression:
+                if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                    return transformNullishCoalescingExpression(node as BinaryExpression);
                 }
-                return ts.visitEachChild(node, visitor, context);
-            case ts.SyntaxKind.DeleteExpression:
-                return visitDeleteExpression(node as ts.DeleteExpression);
+                return visitEachChild(node, visitor, context);
+            case SyntaxKind.DeleteExpression:
+                return visitDeleteExpression(node as DeleteExpression);
             default:
-                return ts.visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
         }
     }
 
-    function flattenChain(chain: ts.OptionalChain) {
-        ts.Debug.assertNotNode(chain, ts.isNonNullChain);
-        const links: ts.OptionalChain[] = [chain];
-        while (!chain.questionDotToken && !ts.isTaggedTemplateExpression(chain)) {
-            chain = ts.cast(ts.skipPartiallyEmittedExpressions(chain.expression), ts.isOptionalChain);
-            ts.Debug.assertNotNode(chain, ts.isNonNullChain);
+    function flattenChain(chain: OptionalChain) {
+        Debug.assertNotNode(chain, isNonNullChain);
+        const links: OptionalChain[] = [chain];
+        while (!chain.questionDotToken && !isTaggedTemplateExpression(chain)) {
+            chain = cast(skipPartiallyEmittedExpressions(chain.expression), isOptionalChain);
+            Debug.assertNotNode(chain, isNonNullChain);
             links.unshift(chain);
         }
         return { expression: chain.expression, chain: links };
     }
 
-    function visitNonOptionalParenthesizedExpression(node: ts.ParenthesizedExpression, captureThisArg: boolean, isDelete: boolean): ts.Expression {
+    function visitNonOptionalParenthesizedExpression(node: ParenthesizedExpression, captureThisArg: boolean, isDelete: boolean): Expression {
         const expression = visitNonOptionalExpression(node.expression, captureThisArg, isDelete);
-        if (ts.isSyntheticReference(expression)) {
+        if (isSyntheticReference(expression)) {
             // `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
             // `(a[b])` -> { expression `((_a = a)[b])`, thisArg: `_a` }
             return factory.createSyntheticReferenceExpression(factory.updateParenthesizedExpression(node, expression.expression), expression.thisArg);
@@ -68,18 +75,18 @@ export function transformES2020(context: ts.TransformationContext) {
         return factory.updateParenthesizedExpression(node, expression);
     }
 
-    function visitNonOptionalPropertyOrElementAccessExpression(node: ts.AccessExpression, captureThisArg: boolean, isDelete: boolean): ts.Expression {
-        if (ts.isOptionalChain(node)) {
+    function visitNonOptionalPropertyOrElementAccessExpression(node: AccessExpression, captureThisArg: boolean, isDelete: boolean): Expression {
+        if (isOptionalChain(node)) {
             // If `node` is an optional chain, then it is the outermost chain of an optional expression.
             return visitOptionalExpression(node, captureThisArg, isDelete);
         }
 
-        let expression: ts.Expression = ts.visitNode(node.expression, visitor, ts.isExpression);
-        ts.Debug.assertNotNode(expression, ts.isSyntheticReference);
+        let expression: Expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assertNotNode(expression, isSyntheticReference);
 
-        let thisArg: ts.Expression | undefined;
+        let thisArg: Expression | undefined;
         if (captureThisArg) {
-            if (!ts.isSimpleCopiableExpression(expression)) {
+            if (!isSimpleCopiableExpression(expression)) {
                 thisArg = factory.createTempVariable(hoistVariableDeclaration);
                 expression = factory.createAssignment(thisArg, expression);
             }
@@ -88,58 +95,58 @@ export function transformES2020(context: ts.TransformationContext) {
             }
         }
 
-        expression = node.kind === ts.SyntaxKind.PropertyAccessExpression
-            ? factory.updatePropertyAccessExpression(node, expression, ts.visitNode(node.name, visitor, ts.isIdentifier))
-            : factory.updateElementAccessExpression(node, expression, ts.visitNode(node.argumentExpression, visitor, ts.isExpression));
+        expression = node.kind === SyntaxKind.PropertyAccessExpression
+            ? factory.updatePropertyAccessExpression(node, expression, visitNode(node.name, visitor, isIdentifier))
+            : factory.updateElementAccessExpression(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
         return thisArg ? factory.createSyntheticReferenceExpression(expression, thisArg) : expression;
     }
 
-    function visitNonOptionalCallExpression(node: ts.CallExpression, captureThisArg: boolean): ts.Expression {
-        if (ts.isOptionalChain(node)) {
+    function visitNonOptionalCallExpression(node: CallExpression, captureThisArg: boolean): Expression {
+        if (isOptionalChain(node)) {
             // If `node` is an optional chain, then it is the outermost chain of an optional expression.
             return visitOptionalExpression(node, captureThisArg, /*isDelete*/ false);
         }
-        if (ts.isParenthesizedExpression(node.expression) && ts.isOptionalChain(ts.skipParentheses(node.expression))) {
+        if (isParenthesizedExpression(node.expression) && isOptionalChain(skipParentheses(node.expression))) {
             // capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
             const expression = visitNonOptionalParenthesizedExpression(node.expression, /*captureThisArg*/ true, /*isDelete*/ false);
-            const args = ts.visitNodes(node.arguments, visitor, ts.isExpression);
-            if (ts.isSyntheticReference(expression)) {
-                return ts.setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
+            const args = visitNodes(node.arguments, visitor, isExpression);
+            if (isSyntheticReference(expression)) {
+                return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
             }
             return factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, args);
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitNonOptionalExpression(node: ts.Expression, captureThisArg: boolean, isDelete: boolean): ts.Expression {
+    function visitNonOptionalExpression(node: Expression, captureThisArg: boolean, isDelete: boolean): Expression {
         switch (node.kind) {
-            case ts.SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node as ts.ParenthesizedExpression, captureThisArg, isDelete);
-            case ts.SyntaxKind.PropertyAccessExpression:
-            case ts.SyntaxKind.ElementAccessExpression: return visitNonOptionalPropertyOrElementAccessExpression(node as ts.AccessExpression, captureThisArg, isDelete);
-            case ts.SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node as ts.CallExpression, captureThisArg);
-            default: return ts.visitNode(node, visitor, ts.isExpression);
+            case SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg, isDelete);
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression: return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg, isDelete);
+            case SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
+            default: return visitNode(node, visitor, isExpression);
         }
     }
 
-    function visitOptionalExpression(node: ts.OptionalChain, captureThisArg: boolean, isDelete: boolean): ts.Expression {
+    function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean): Expression {
         const { expression, chain } = flattenChain(node);
-        const left = visitNonOptionalExpression(ts.skipPartiallyEmittedExpressions(expression), ts.isCallChain(chain[0]), /*isDelete*/ false);
-        let leftThisArg = ts.isSyntheticReference(left) ? left.thisArg : undefined;
-        let capturedLeft = ts.isSyntheticReference(left) ? left.expression : left;
-        let leftExpression = factory.restoreOuterExpressions(expression, capturedLeft, ts.OuterExpressionKinds.PartiallyEmittedExpressions);
-        if (!ts.isSimpleCopiableExpression(capturedLeft)) {
+        const left = visitNonOptionalExpression(skipPartiallyEmittedExpressions(expression), isCallChain(chain[0]), /*isDelete*/ false);
+        let leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
+        let capturedLeft = isSyntheticReference(left) ? left.expression : left;
+        let leftExpression = factory.restoreOuterExpressions(expression, capturedLeft, OuterExpressionKinds.PartiallyEmittedExpressions);
+        if (!isSimpleCopiableExpression(capturedLeft)) {
             capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
             leftExpression = factory.createAssignment(capturedLeft, leftExpression);
         }
         let rightExpression = capturedLeft;
-        let thisArg: ts.Expression | undefined;
+        let thisArg: Expression | undefined;
         for (let i = 0; i < chain.length; i++) {
             const segment = chain[i];
             switch (segment.kind) {
-                case ts.SyntaxKind.PropertyAccessExpression:
-                case ts.SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     if (i === chain.length - 1 && captureThisArg) {
-                        if (!ts.isSimpleCopiableExpression(rightExpression)) {
+                        if (!isSimpleCopiableExpression(rightExpression)) {
                             thisArg = factory.createTempVariable(hoistVariableDeclaration);
                             rightExpression = factory.createAssignment(thisArg, rightExpression);
                         }
@@ -147,76 +154,76 @@ export function transformES2020(context: ts.TransformationContext) {
                             thisArg = rightExpression;
                         }
                     }
-                    rightExpression = segment.kind === ts.SyntaxKind.PropertyAccessExpression
-                        ? factory.createPropertyAccessExpression(rightExpression, ts.visitNode(segment.name, visitor, ts.isIdentifier))
-                        : factory.createElementAccessExpression(rightExpression, ts.visitNode(segment.argumentExpression, visitor, ts.isExpression));
+                    rightExpression = segment.kind === SyntaxKind.PropertyAccessExpression
+                        ? factory.createPropertyAccessExpression(rightExpression, visitNode(segment.name, visitor, isIdentifier))
+                        : factory.createElementAccessExpression(rightExpression, visitNode(segment.argumentExpression, visitor, isExpression));
                     break;
-                case ts.SyntaxKind.CallExpression:
+                case SyntaxKind.CallExpression:
                     if (i === 0 && leftThisArg) {
-                        if (!ts.isGeneratedIdentifier(leftThisArg)) {
+                        if (!isGeneratedIdentifier(leftThisArg)) {
                             leftThisArg = factory.cloneNode(leftThisArg);
-                            ts.addEmitFlags(leftThisArg, ts.EmitFlags.NoComments);
+                            addEmitFlags(leftThisArg, EmitFlags.NoComments);
                         }
                         rightExpression = factory.createFunctionCallCall(
                             rightExpression,
-                            leftThisArg.kind === ts.SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
-                            ts.visitNodes(segment.arguments, visitor, ts.isExpression)
+                            leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
+                            visitNodes(segment.arguments, visitor, isExpression)
                         );
                     }
                     else {
                         rightExpression = factory.createCallExpression(
                             rightExpression,
                             /*typeArguments*/ undefined,
-                            ts.visitNodes(segment.arguments, visitor, ts.isExpression)
+                            visitNodes(segment.arguments, visitor, isExpression)
                         );
                     }
                     break;
             }
-            ts.setOriginalNode(rightExpression, segment);
+            setOriginalNode(rightExpression, segment);
         }
 
         const target = isDelete
             ? factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDeleteExpression(rightExpression))
             : factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
-        ts.setTextRange(target, node);
+        setTextRange(target, node);
         return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;
     }
 
-    function createNotNullCondition(left: ts.Expression, right: ts.Expression, invert?: boolean) {
+    function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {
         return factory.createBinaryExpression(
             factory.createBinaryExpression(
                 left,
-                factory.createToken(invert ? ts.SyntaxKind.EqualsEqualsEqualsToken : ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                 factory.createNull()
             ),
-            factory.createToken(invert ? ts.SyntaxKind.BarBarToken : ts.SyntaxKind.AmpersandAmpersandToken),
+            factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
             factory.createBinaryExpression(
                 right,
-                factory.createToken(invert ? ts.SyntaxKind.EqualsEqualsEqualsToken : ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                 factory.createVoidZero()
             )
         );
     }
 
-    function transformNullishCoalescingExpression(node: ts.BinaryExpression) {
-        let left = ts.visitNode(node.left, visitor, ts.isExpression);
+    function transformNullishCoalescingExpression(node: BinaryExpression) {
+        let left = visitNode(node.left, visitor, isExpression);
         let right = left;
-        if (!ts.isSimpleCopiableExpression(left)) {
+        if (!isSimpleCopiableExpression(left)) {
             right = factory.createTempVariable(hoistVariableDeclaration);
             left = factory.createAssignment(right, left);
         }
-        return ts.setTextRange(factory.createConditionalExpression(
+        return setTextRange(factory.createConditionalExpression(
             createNotNullCondition(left, right),
             /*questionToken*/ undefined,
             right,
             /*colonToken*/ undefined,
-            ts.visitNode(node.right, visitor, ts.isExpression),
+            visitNode(node.right, visitor, isExpression),
         ), node);
     }
 
-    function visitDeleteExpression(node: ts.DeleteExpression) {
-        return ts.isOptionalChain(ts.skipParentheses(node.expression))
-            ? ts.setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
-            : factory.updateDeleteExpression(node, ts.visitNode(node.expression, visitor, ts.isExpression));
+    function visitDeleteExpression(node: DeleteExpression) {
+        return isOptionalChain(skipParentheses(node.expression))
+            ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
+            : factory.updateDeleteExpression(node, visitNode(node.expression, visitor, isExpression));
     }
 }

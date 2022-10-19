@@ -1,5 +1,3 @@
-import * as ts from "../_namespaces/ts";
-
 // DEPRECATION: Renamed `Map` and `ReadonlyMap` interfaces
 // DEPRECATION PLAN:
 //     - soft: 4.0
@@ -10,7 +8,7 @@ declare module "../../compiler/corePublic" {
     /**
      * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
      */
-    export interface ReadonlyMap<T> extends ts.ReadonlyESMap<string, T> {
+    export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
     }
 }
 
@@ -19,6 +17,8 @@ declare module "../../compiler/corePublic" {
     /**
      * @deprecated Use `ts.ESMap<K, V>` instead.
      */
-    export interface Map<T> extends ts.ESMap<string, T> {
+    export interface Map<T> extends ESMap<string, T> {
     }
 }
+
+export { };

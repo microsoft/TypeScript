@@ -1,4 +1,7 @@
-import * as ts from "../_namespaces/ts";
+import {
+    addNodeFactoryPatcher, buildOverload, factory, Identifier, isArray, Modifier, NodeFactory, TypeNode,
+    TypeParameterDeclaration,
+} from "../_namespaces/ts";
 
 // DEPRECATION: Overloads to createTypeParameter/updateTypeParameter that does not accept `modifiers`
 // DEPRECATION PLAN:
@@ -9,57 +12,57 @@ declare module "../../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface NodeFactory {
         /** @deprecated Use the overload that accepts 'modifiers' */
-        createTypeParameterDeclaration(name: string | ts.Identifier, constraint?: ts.TypeNode, defaultType?: ts.TypeNode): ts.TypeParameterDeclaration;
+        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
 
         /** @deprecated Use the overload that accepts 'modifiers' */
-        updateTypeParameterDeclaration(node: ts.TypeParameterDeclaration, name: ts.Identifier, constraint: ts.TypeNode | undefined, defaultType: ts.TypeNode | undefined): ts.TypeParameterDeclaration;
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
     }
 }
 
-function patchNodeFactory(factory: ts.NodeFactory) {
+function patchNodeFactory(factory: NodeFactory) {
     const {
         createTypeParameterDeclaration,
         updateTypeParameterDeclaration,
     } = factory;
 
-    factory.createTypeParameterDeclaration = ts.buildOverload("createTypeParameterDeclaration")
+    factory.createTypeParameterDeclaration = buildOverload("createTypeParameterDeclaration")
         .overload({
-            0(modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, constraint?: ts.TypeNode, defaultType?: ts.TypeNode): ts.TypeParameterDeclaration {
+            0(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
                 return createTypeParameterDeclaration(modifiers, name, constraint, defaultType);
             },
 
-            1(name: string | ts.Identifier, constraint?: ts.TypeNode, defaultType?: ts.TypeNode): ts.TypeParameterDeclaration {
+            1(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
                 return createTypeParameterDeclaration(/*modifiers*/ undefined, name, constraint, defaultType);
             },
         })
         .bind({
             0: ([modifiers]) =>
-                (modifiers === undefined || ts.isArray(modifiers)),
+                (modifiers === undefined || isArray(modifiers)),
 
             1: ([name]) =>
-                (name !== undefined && !ts.isArray(name)),
+                (name !== undefined && !isArray(name)),
         })
         .deprecate({
             1: { since: "4.7", warnAfter: "4.8", message: "Use the overload that accepts 'modifiers'" }
         })
         .finish();
 
-    factory.updateTypeParameterDeclaration = ts.buildOverload("updateTypeParameterDeclaration")
+    factory.updateTypeParameterDeclaration = buildOverload("updateTypeParameterDeclaration")
         .overload({
-            0(node: ts.TypeParameterDeclaration, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, constraint: ts.TypeNode | undefined, defaultType: ts.TypeNode | undefined): ts.TypeParameterDeclaration {
+            0(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration {
                 return updateTypeParameterDeclaration(node, modifiers, name, constraint, defaultType);
             },
 
-            1(node: ts.TypeParameterDeclaration, name: ts.Identifier, constraint: ts.TypeNode | undefined, defaultType: ts.TypeNode | undefined): ts.TypeParameterDeclaration {
+            1(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration {
                 return updateTypeParameterDeclaration(node, node.modifiers, name, constraint, defaultType);
             },
         })
         .bind({
             0: ([, modifiers]) =>
-                (modifiers === undefined || ts.isArray(modifiers)),
+                (modifiers === undefined || isArray(modifiers)),
 
             1: ([, name]) =>
-                (name !== undefined && !ts.isArray(name)),
+                (name !== undefined && !isArray(name)),
         })
         .deprecate({
             1: { since: "4.7", warnAfter: "4.8", message: "Use the overload that accepts 'modifiers'" }
@@ -69,7 +72,7 @@ function patchNodeFactory(factory: ts.NodeFactory) {
 
 // Patch `createNodeFactory` because it creates the factories that are provided to transformers
 // in the public API.
-ts.addNodeFactoryPatcher(patchNodeFactory);
+addNodeFactoryPatcher(patchNodeFactory);
 
 // Patch `ts.factory` because its public
-patchNodeFactory(ts.factory);
+patchNodeFactory(factory);
