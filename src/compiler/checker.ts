@@ -36985,7 +36985,7 @@ namespace ts {
             }
 
             // primitives with a `{ then() }` won't be unwrapped/adopted.
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 return undefined;
             }
 
@@ -37060,7 +37060,7 @@ namespace ts {
          * Determines whether a type is an object with a callable `then` member.
          */
         function isThenableType(type: Type): boolean {
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 // primitive types cannot be considered "thenable" since they are not objects.
                 return false;
             }
