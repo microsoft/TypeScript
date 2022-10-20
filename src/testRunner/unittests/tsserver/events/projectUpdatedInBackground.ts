@@ -3,7 +3,7 @@ import * as ts from "../../../_namespaces/ts";
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
         assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
-        const seen = new ts.Map<string, true>();
+        const seen = new Map<string, true>();
         ts.forEach(actual, f => {
             assert.isFalse(seen.has(f), `${caption}: Found duplicate ${f}. Actual: ${actual} Expected: ${expected}`);
             seen.set(f, true);

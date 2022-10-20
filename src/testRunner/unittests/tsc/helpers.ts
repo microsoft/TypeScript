@@ -4,7 +4,7 @@ import * as vfs from "../../_namespaces/vfs";
 import * as Harness from "../../_namespaces/Harness";
 
 export type TscCompileSystem = fakes.System & {
-    writtenFiles: ts.Set<ts.Path>;
+    writtenFiles: Set<ts.Path>;
     baseLine(): { file: string; text: string; };
     disableUseFileVersionAsSignature?: boolean;
     storeFilesChangingSignatureDuringEmit?: boolean;
@@ -133,7 +133,7 @@ function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: stri
     else {
         fakes.patchHostForBuildInfoReadWrite(sys);
     }
-    const writtenFiles = sys.writtenFiles = new ts.Set();
+    const writtenFiles = sys.writtenFiles = new Set();
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (fileName, content, writeByteOrderMark) => {
         const path = ts.toPathWithSystem(sys, fileName);

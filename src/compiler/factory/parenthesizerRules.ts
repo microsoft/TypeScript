@@ -1,11 +1,11 @@
 import {
-    Associativity, BinaryExpression, BinaryOperator, cast, compareValues, Comparison, ConciseBody, ESMap, Expression,
+    Associativity, BinaryExpression, BinaryOperator, cast, compareValues, Comparison, ConciseBody, Expression,
     getExpressionAssociativity, getExpressionPrecedence, getLeftmostExpression, getOperatorAssociativity,
     getOperatorPrecedence, identity, isBinaryExpression, isBlock, isCallExpression, isCommaSequence,
     isConditionalTypeNode, isConstructorTypeNode, isFunctionOrConstructorTypeNode, isFunctionTypeNode, isInferTypeNode,
     isIntersectionTypeNode, isJSDocNullableType, isLeftHandSideExpression, isLiteralKind, isNamedTupleMember,
     isNodeArray, isOptionalChain, isTypeOperatorNode, isUnaryExpression, isUnionTypeNode, last, LeftHandSideExpression,
-    Map, NamedTupleMember, NewExpression, NodeArray, NodeFactory, OperatorPrecedence, OuterExpressionKinds,
+    NamedTupleMember, NewExpression, NodeArray, NodeFactory, OperatorPrecedence, OuterExpressionKinds,
     ParenthesizerRules, sameMap, setTextRange, skipPartiallyEmittedExpressions, some, SyntaxKind, TypeNode,
     UnaryExpression,
 } from "../_namespaces/ts";
@@ -16,8 +16,8 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         cachedLiteralKind: SyntaxKind;
     }
 
-    let binaryLeftOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
-    let binaryRightOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
+    let binaryLeftOperandParenthesizerCache: Map<BinaryOperator, (node: Expression) => Expression> | undefined;
+    let binaryRightOperandParenthesizerCache: Map<BinaryOperator, (node: Expression) => Expression> | undefined;
 
     return {
         getParenthesizeLeftSideOfBinaryForOperator,

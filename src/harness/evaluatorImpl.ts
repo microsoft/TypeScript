@@ -72,7 +72,7 @@ abstract class Loader<TModule> {
     protected readonly fs: vfs.FileSystem;
     protected readonly globals: Record<string, any>;
 
-    private moduleCache = new ts.Map<string, TModule>();
+    private moduleCache = new Map<string, TModule>();
 
     constructor(fs: vfs.FileSystem, globals: Record<string, any>) {
         this.fs = fs;

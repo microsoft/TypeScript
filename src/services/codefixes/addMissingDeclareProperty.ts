@@ -1,5 +1,5 @@
 import {
-    Diagnostics, getTokenAtPosition, isIdentifier, Node, Set, SourceFile, SyntaxKind, textChanges, tryAddToSet,
+    Diagnostics, getTokenAtPosition, isIdentifier, Node, SourceFile, SyntaxKind, textChanges, tryAddToSet,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 

@@ -155,7 +155,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: ts.CompilerOptions = { target };
 
         const program1 = newProgram(files, ["a.ts"], options);
-        checkResolvedModulesCache(program1, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["a.ts"], options, files => {
@@ -164,7 +164,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, ts.StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedModulesCache(program1, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         // imports has changed - program is not reused
@@ -181,7 +181,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateImportsAndExports(newImports);
         });
         assert.equal(program4.structureIsReused, ts.StructureIsReused.SafeModules);
-        checkResolvedModulesCache(program4, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts"), c: undefined })));
+        checkResolvedModulesCache(program4, "a.ts", new Map(ts.getEntries({ b: ts.createResolvedModule("b.ts"), c: undefined })));
     });
 
     it("set the resolvedImports after re-using an ambient external module declaration", () => {
@@ -229,7 +229,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
 
         const program1 = newProgram(files, ["/a.ts"], options);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["/a.ts"], options, files => {
@@ -238,7 +238,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, ts.StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         // type reference directives has changed - program is not reused
@@ -256,7 +256,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateReferences(newReferences);
         });
         assert.equal(program4.structureIsReused, ts.StructureIsReused.SafeModules);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
     });
 
     it("fetches imports after npm install", () => {

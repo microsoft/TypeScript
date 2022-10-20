@@ -6,9 +6,9 @@ import {
     DiagnosticWithLocation, DocCommentTemplateOptions, DocumentHighlights, DocumentSpan, EditorOptions, EmitOutput,
     FileTextChanges, firstDefined, FormatCodeOptions, FormatCodeSettings, getSnapshotText, identity,
     ImplementationLocation, InlayHint, InlayHintKind, isString, JSDocTagInfo, LanguageService, LanguageServiceHost, map,
-    Map, mapOneOrMany, NavigateToItem, NavigationBarItem, NavigationTree, notImplemented, OrganizeImportsArgs,
+    mapOneOrMany, NavigateToItem, NavigationBarItem, NavigationTree, notImplemented, OrganizeImportsArgs,
     OutliningSpan, PatternMatchKind, Program, QuickInfo, RefactorEditInfo, ReferencedSymbol, ReferenceEntry, RenameInfo,
-    RenameInfoFailure, RenameInfoSuccess, RenameLocation, ScriptElementKind, SemanticClassificationFormat, Set,
+    RenameInfoFailure, RenameInfoSuccess, RenameLocation, ScriptElementKind, SemanticClassificationFormat,
     SignatureHelpItem, SignatureHelpItems, SourceFile, Symbol, TextChange, TextInsertion, textPart, TextRange, TextSpan,
     TodoComment, TodoCommentDescriptor, UserPreferences,
 } from "./_namespaces/ts";

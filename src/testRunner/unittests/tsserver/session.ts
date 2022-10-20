@@ -631,7 +631,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         private server: InProcSession | undefined;
         private seq = 0;
         private callbacks: ((resp: ts.server.protocol.Response) => void)[] = [];
-        private eventHandlers = new ts.Map<string, (args: any) => void>();
+        private eventHandlers = new Map<string, (args: any) => void>();
 
         handle(msg: ts.server.protocol.Message): void {
             if (msg.type === "response") {

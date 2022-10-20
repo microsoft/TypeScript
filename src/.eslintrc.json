@@ -14,12 +14,7 @@
             { "name": "clearInterval" },
             { "name": "setImmediate" },
             { "name": "clearImmediate" },
-            { "name": "performance" },
-            { "name": "Iterator" },
-            { "name": "Map" },
-            { "name": "ReadonlyMap" },
-            { "name": "Set" },
-            { "name": "ReadonlySet" }
+            { "name": "performance" }
         ]
     },
     "overrides": [

@@ -356,8 +356,8 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         const projectService = ts.projectSystem.createProjectService(host);
         const originalSet = projectService.configuredProjects.set;
         const originalDelete = projectService.configuredProjects.delete;
-        const configuredCreated = new ts.Map<string, true>();
-        const configuredRemoved = new ts.Map<string, true>();
+        const configuredCreated = new Map<string, true>();
+        const configuredRemoved = new Map<string, true>();
         projectService.configuredProjects.set = (key, value) => {
             assert.isFalse(configuredCreated.has(key));
             configuredCreated.set(key, true);

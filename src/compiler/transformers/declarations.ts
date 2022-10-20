@@ -6,7 +6,7 @@ import {
     createEmptyExports, createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName, createSymbolTable, createUnparsedSourceFile, Debug, Declaration,
     DeclarationDiagnosticProducing, DeclarationName, declarationNameToString, Diagnostics, DiagnosticWithLocation,
-    EmitFlags, EmitHost, EmitResolver, emptyArray, EntityNameOrEntityNameExpression, EnumDeclaration, ESMap,
+    EmitFlags, EmitHost, EmitResolver, emptyArray, EntityNameOrEntityNameExpression, EnumDeclaration,
     ExportAssignment, ExportDeclaration, ExpressionWithTypeArguments, factory, FileReference, filter, flatMap, flatten,
     forEach, FunctionDeclaration, FunctionTypeNode, GeneratedIdentifierFlags, GetAccessorDeclaration, getCommentRange,
     getDirectoryPath, getEffectiveBaseTypeNode, getEffectiveModifierFlags,
@@ -27,11 +27,11 @@ import {
     isSemicolonClassElement, isSetAccessorDeclaration, isSourceFile, isSourceFileJS, isSourceFileNotJson,
     isStringANonContextualKeyword, isStringLiteral, isStringLiteralLike, isTupleTypeNode, isTypeAliasDeclaration,
     isTypeNode, isTypeParameterDeclaration, isTypeQueryNode, isUnparsedSource, last, LateBoundDeclaration,
-    LateVisibilityPaintedStatement, length, map, Map, mapDefined, MethodDeclaration, MethodSignature, Modifier,
+    LateVisibilityPaintedStatement, length, map, mapDefined, MethodDeclaration, MethodSignature, Modifier,
     ModifierFlags, ModuleBody, ModuleDeclaration, NamedDeclaration, NamespaceDeclaration,
     needsScopeMarker, Node, NodeArray, NodeBuilderFlags, NodeFlags, NodeId, normalizeSlashes, OmittedExpression,
     orderedRemoveItem, ParameterDeclaration, parseNodeFactory, pathContainsNodeModules, pathIsRelative,
-    PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, Set, SetAccessorDeclaration,
+    PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, SetAccessorDeclaration,
     setCommentRange, setEmitFlags, setOriginalNode, setParent, setTextRange, SignatureDeclaration, skipTrivia, some,
     SourceFile, startsWith, Statement, stringContains, StringLiteral, Symbol, SymbolAccessibility,
     SymbolAccessibilityResult, SymbolFlags, SymbolTracker, SyntaxKind, toFileNameLowerCase, toPath,
@@ -105,7 +105,7 @@ export function transformDeclarations(context: TransformationContext) {
     let enclosingDeclaration: Node;
     let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-    let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+    let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -130,8 +130,8 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let refs: ESMap<NodeId, SourceFile>;
-    let libs: ESMap<string, boolean>;
+    let refs: Map<NodeId, SourceFile>;
+    let libs: Map<string, boolean>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
@@ -477,7 +477,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<NodeId, SourceFile>) {
+    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<NodeId, SourceFile>) {
         if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
         forEach(sourceFile.referencedFiles, f => {
             const elem = host.getSourceFileFromReference(sourceFile, f);
@@ -488,7 +488,7 @@ export function transformDeclarations(context: TransformationContext) {
         return ret;
     }
 
-    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: ESMap<string, boolean>) {
+    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
         forEach(sourceFile.libReferenceDirectives, ref => {
             const lib = host.getLibFileFromReference(ref);
             if (lib) {

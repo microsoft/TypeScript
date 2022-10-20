@@ -41,7 +41,7 @@ export function f22() { } // trailing`,
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        const writtenFiles = sys.writtenFiles = new ts.Set();
+        const writtenFiles = sys.writtenFiles = new Set();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
             const path = ts.toPathWithSystem(sys, fileName);

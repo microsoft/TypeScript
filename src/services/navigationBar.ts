@@ -3,7 +3,7 @@ import {
     BindableObjectDefinePropertyCall, BindableStaticNameExpression, BindingElement, CallExpression, CancellationToken,
     ClassElement, ClassExpression, ClassLikeDeclaration, compareStringsCaseSensitiveUI, compareValues, concatenate,
     ConstructorDeclaration, contains, createTextSpanFromNode, createTextSpanFromRange, Debug, Declaration,
-    DeclarationName, declarationNameToString, EntityNameExpression, EnumDeclaration, EnumMember, escapeString, ESMap,
+    DeclarationName, declarationNameToString, EntityNameExpression, EnumDeclaration, EnumMember, escapeString,
     ExportAssignment, Expression, factory, filterMutate, forEach, forEachChild, FunctionDeclaration, FunctionExpression,
     FunctionLikeDeclaration, getAssignmentDeclarationKind, getBaseFileName, getElementOrPropertyAccessName,
     getFullWidth, getNameOfDeclaration, getNameOrArgument, getNodeKind, getNodeModifiers,
@@ -14,7 +14,7 @@ import {
     isExpression, isExternalModule, isFunctionDeclaration, isFunctionExpression, isIdentifier, isJSDocTypeAlias,
     isModuleBlock, isModuleDeclaration, isObjectLiteralExpression, isParameterPropertyDeclaration, isPrivateIdentifier,
     isPropertyAccessExpression, isPropertyAssignment, isPropertyName, isPropertyNameLiteral, isStatic,
-    isStringLiteralLike, isToken, isVariableDeclaration, lastOrUndefined, map, Map, mapDefined, ModifierFlags,
+    isStringLiteralLike, isToken, isVariableDeclaration, lastOrUndefined, map, mapDefined, ModifierFlags,
     ModuleDeclaration, NavigationBarItem, NavigationTree, Node, NodeFlags, normalizePath, PropertyAccessExpression,
     PropertyAssignment, PropertyDeclaration, PropertyNameLiteral, removeFileExtension, setTextRange,
     ShorthandPropertyAssignment, SourceFile, SpreadAssignment, SyntaxKind, TextSpan, TypeElement,
@@ -54,8 +54,8 @@ let curSourceFile: SourceFile;
 let parentsStack: NavigationBarNode[] = [];
 let parent: NavigationBarNode;
 
-const trackedEs5ClassesStack: (ESMap<string, boolean> | undefined)[] = [];
-let trackedEs5Classes: ESMap<string, boolean> | undefined;
+const trackedEs5ClassesStack: (Map<string, boolean> | undefined)[] = [];
+let trackedEs5Classes: Map<string, boolean> | undefined;
 
 // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
 let emptyChildItemArray: NavigationBarItem[] = [];

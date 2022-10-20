@@ -2,7 +2,7 @@ import {
     AnyImportOrRequire, AnyImportOrRequireStatement, AnyImportSyntax, arrayFrom, CancellationToken, cast, CodeAction,
     CodeFixAction, CodeFixContextBase, combine, compareBooleans, compareNumberOfDirectorySeparators, compareValues,
     Comparison, CompilerOptions, createModuleSpecifierResolutionHost, createMultiMap, createPackageJsonImportFilter,
-    Debug, DiagnosticAndArguments, Diagnostics, DiagnosticWithLocation, emptyArray, escapeLeadingUnderscores, ESMap,
+    Debug, DiagnosticAndArguments, Diagnostics, DiagnosticWithLocation, emptyArray, escapeLeadingUnderscores,
     every, ExportKind, factory, first, firstDefined, flatMap, flatMapIterator, forEachExternalModuleToImportFrom,
     formatting, getAllowSyntheticDefaultImports, getBaseFileName, getDefaultLikeExportInfo, getDirectoryPath,
     getEmitModuleKind, getEmitModuleResolutionKind, getEmitScriptTarget, getExportInfoMap, getMeaningFromDeclaration,
@@ -15,10 +15,10 @@ import {
     isNamedImports, isNamespaceImport, isSourceFileJS, isStringANonContextualKeyword, isStringLiteral,
     isStringLiteralLike, isTypeOnlyImportOrExportDeclaration, isUMDExportSymbol, isValidTypeOnlyAliasUseSite,
     isVariableDeclarationInitializedToRequire, jsxModeNeedsExplicitImport, LanguageServiceHost, last, makeImport,
-    makeStringLiteral, Map, mapDefined, memoizeOne, ModuleKind, ModuleResolutionKind, moduleResolutionUsesNodeModules,
+    makeStringLiteral, mapDefined, memoizeOne, ModuleKind, ModuleResolutionKind, moduleResolutionUsesNodeModules,
     moduleSpecifiers, MultiMap, Mutable, NamedImports, Node, NodeFlags, nodeIsMissing, ObjectBindingPattern,
     OrganizeImports, PackageJsonImportFilter, Path, pathContainsNodeModules, pathIsBareSpecifier, Program,
-    QuotePreference, ReadonlyESMap, removeFileExtension, removeSuffix, RequireVariableStatement, ScriptTarget,
+    QuotePreference, removeFileExtension, removeSuffix, RequireVariableStatement, ScriptTarget,
     SemanticMeaning, shouldUseUriStyleNodeCoreModules, single, skipAlias, some, sort, SourceFile, stableSort,
     startsWith, StringLiteral, stripQuotes, Symbol, SymbolExportInfo, SymbolFlags, SymbolId, SyntaxKind, textChanges,
     toPath, tryCast, tryGetModuleSpecifierFromDeclaration, TypeChecker, TypeOnlyAliasDeclaration, UserPreferences,
@@ -87,7 +87,7 @@ export function createImportAdder(sourceFile: SourceFile, program: Program, pref
 interface AddToExistingState {
     readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
     defaultImport: Import | undefined;
-    readonly namedImports: ESMap<string, AddAsTypeOnly>;
+    readonly namedImports: Map<string, AddAsTypeOnly>;
 }
 
 function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAutoImportProvider: boolean, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken: CancellationToken | undefined): ImportAdder {
@@ -993,7 +993,7 @@ function getExportInfos(
     useAutoImportProvider: boolean,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-): ReadonlyESMap<string, readonly SymbolExportInfo[]> {
+): ReadonlyMap<string, readonly SymbolExportInfo[]> {
     // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
     // Maps symbol id to info for modules providing that symbol (original export + re-exports).
     const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
@@ -1286,7 +1286,7 @@ interface Import {
 
 interface ImportsCollection {
     readonly defaultImport?: Import;
-    readonly namedImports?: ESMap<string, AddAsTypeOnly>;
+    readonly namedImports?: Map<string, AddAsTypeOnly>;
     readonly namespaceLikeImport?: {
         readonly importKind: ImportKind.CommonJS | ImportKind.Namespace;
         readonly name: string;

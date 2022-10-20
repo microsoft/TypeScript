@@ -509,8 +509,8 @@ function verifyTscEditDiscrepancies({
     function verifyMapLike<T>(incremental: ts.MapLike<T> | undefined, clean: ts.MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => string[] | undefined, message: string) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
-        const incrementalMap = new ts.Map(ts.getEntries(incremental));
-        const cleanMap = new ts.Map(ts.getEntries(clean));
+        const incrementalMap = new Map(ts.getEntries(incremental));
+        const cleanMap = new Map(ts.getEntries(clean));
         if (incrementalMap.size !== cleanMap.size) {
             addBaseline(
                 `Incremental and clean size of maps do not match:: ${message}`,

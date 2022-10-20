@@ -1,9 +1,9 @@
 import {
     arrayFrom, CancellationToken, computeSignatureWithDiagnostics, CustomTransformers, Debug, EmitOutput, emptyArray,
-    ESMap, ExportedModulesFromDeclarationEmit, GetCanonicalFileName, getDirectoryPath, getSourceFileOfNode,
+    ExportedModulesFromDeclarationEmit, GetCanonicalFileName, getDirectoryPath, getSourceFileOfNode,
     isDeclarationFileName, isExternalOrCommonJsModule, isGlobalScopeAugmentation, isJsonSourceFile,
-    isModuleWithStringLiteralName, isStringLiteral, Iterator, Map, mapDefined, mapDefinedIterator, ModuleDeclaration,
-    ModuleKind, outFile, OutputFile, Path, Program, ReadonlySet, Set, some, SourceFile, StringLiteralLike, Symbol,
+    isModuleWithStringLiteralName, isStringLiteral, mapDefined, mapDefinedIterator, ModuleDeclaration,
+    ModuleKind, outFile, OutputFile, Path, Program, some, SourceFile, StringLiteralLike, Symbol,
     toPath, TypeChecker,
 } from "./_namespaces/ts";
 
@@ -23,7 +23,7 @@ export interface BuilderState {
     /**
      * Information of the file eg. its version, signature etc
      */
-    fileInfos: ESMap<Path, BuilderState.FileInfo>;
+    fileInfos: Map<Path, BuilderState.FileInfo>;
     /**
      * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
      * Otherwise undefined
@@ -52,11 +52,11 @@ export interface BuilderState {
     /**
      * Stores signatures before before the update till affected file is commited
      */
-    oldSignatures?: ESMap<Path, string | false>;
+    oldSignatures?: Map<Path, string | false>;
     /**
      * Stores exportedModulesMap before the update till affected file is commited
      */
-    oldExportedModulesMap?: ESMap<Path, ReadonlySet<Path> | false>;
+    oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**
      * Cache of all files excluding default library file for the current program
      */
@@ -90,7 +90,7 @@ export namespace BuilderState {
     }
 
     export function createManyToManyPathMap(): ManyToManyPathMap {
-        function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+        function create(forward: Map<Path, ReadonlySet<Path>>, reverse: Map<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
             const map: ManyToManyPathMap = {
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
@@ -136,7 +136,7 @@ export namespace BuilderState {
         return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>(), /*deleted*/ undefined);
     }
 
-    function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
+    function addToMultimap<K, V>(map: Map<K, Set<V>>, k: K, v: V): void {
         let set = map.get(k);
         if (!set) {
             set = new Set<V>();
@@ -145,7 +145,7 @@ export namespace BuilderState {
         set.add(v);
     }
 
-    function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): boolean {
+    function deleteFromMultimap<K, V>(map: Map<K, Set<V>>, k: K, v: V): boolean {
         const set = map.get(k);
 
         if (set?.delete(v)) {

@@ -9,7 +9,7 @@ interface Range {
 
 interface Test {
     source: string;
-    ranges: ts.ESMap<string, Range>;
+    ranges: Map<string, Range>;
 }
 
 export function extractTest(source: string): Test {
@@ -17,7 +17,7 @@ export function extractTest(source: string): Test {
     let text = "";
     let lastPos = 0;
     let pos = 0;
-    const ranges = new ts.Map<string, Range>();
+    const ranges = new Map<string, Range>();
 
     while (pos < source.length) {
         if (source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&

@@ -13,7 +13,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 path: `${projectFolder}/typescript.ts`,
                 content: "var z = 10;"
             };
-            const environmentVariables = new ts.Map<string, string>();
+            const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHFILE", ts.TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
             return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile], { environmentVariables });
         },
@@ -143,7 +143,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 commandLineArgs: ["--w", "-p", configFile.path],
                 sys: () => {
                     const files = [file, configFile, ts.tscWatch.libFile];
-                    const environmentVariables = new ts.Map<string, string>();
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                     return ts.tscWatch.createWatchedSystem(files, { environmentVariables });
                 },
@@ -211,7 +211,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     symLink: `${cwd}/node_modules/a`
                 };
                 const files = [ts.tscWatch.libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                const environmentVariables = new ts.Map<string, string>();
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                 return ts.tscWatch.createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
             },

@@ -1,5 +1,5 @@
 import {
-    getNormalizedAbsolutePath, isRootedDiskPath, Map, normalizePath, Path, SortedArray, SortedReadonlyArray,
+    getNormalizedAbsolutePath, isRootedDiskPath, normalizePath, Path, SortedArray, SortedReadonlyArray,
     TypeAcquisition,
 } from "./_namespaces/ts";
 import { DiscoverTypings, Project } from "./_namespaces/ts.server";

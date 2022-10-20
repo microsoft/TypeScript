@@ -46,7 +46,7 @@ function moduleImporting(...names: string[]) {
 }
 
 function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: ts.Program, host: fakes.CompilerHost) => void) {
-    const files = new ts.Map<string, string>();
+    const files = new Map<string, string>();
     for (const key in spec) {
         const sp = spec[key];
         const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");

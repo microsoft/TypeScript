@@ -2,7 +2,7 @@ import {
     canHaveExportModifier, Declaration, Diagnostics, ExportDeclaration, factory, find, findAncestor, findLast,
     firstOrUndefined, getResolvedModule, getTokenAtPosition, Identifier, isExportDeclaration, isIdentifier,
     isImportDeclaration, isNamedExports, isSourceFileFromLibrary, isStringLiteral, isTypeDeclaration,
-    isVariableDeclaration, isVariableStatement, length, map, Map, Node, Program, SourceFile, Symbol, textChanges,
+    isVariableDeclaration, isVariableStatement, length, map, Node, Program, SourceFile, Symbol, textChanges,
     tryCast, VariableStatement,
 } from "../_namespaces/ts";
 import {

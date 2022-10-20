@@ -180,7 +180,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.serv
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
         installTypingHost: ts.server.ServerHost,
-        readonly typesRegistry = new ts.Map<string, ts.MapLike<string>>(),
+        readonly typesRegistry = new Map<string, ts.MapLike<string>>(),
         log?: TI.Log) {
         super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
     }
@@ -244,7 +244,7 @@ function createNpmPackageJsonString(installedTypings: string[]): string {
     return JSON.stringify({ dependencies });
 }
 
-export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapLike<string>> {
+export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<string>> {
     const versionMap = {
         "latest": "1.3.0",
         "ts2.0": "1.0.0",
@@ -256,7 +256,7 @@ export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapL
         "ts2.6": "1.3.0",
         "ts2.7": "1.3.0"
     };
-    const map = new ts.Map<string, ts.MapLike<string>>();
+    const map = new Map<string, ts.MapLike<string>>();
     for (const l of list) {
         map.set(l, versionMap);
     }
