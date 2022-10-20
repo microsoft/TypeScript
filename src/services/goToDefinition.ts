@@ -26,10 +26,22 @@ namespace ts.GoToDefinition {
             return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
-        if (node.kind === SyntaxKind.ReturnKeyword) {
-            const functionDeclaration = findAncestor(node.parent, n =>
-                isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-            return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+        switch (node.kind) {
+            case SyntaxKind.ReturnKeyword:
+                const functionDeclaration = findAncestor(node.parent, n =>
+                  isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+                return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+            case SyntaxKind.DefaultKeyword:
+                if (!isDefaultClause(node.parent)) {
+                    break;
+                }
+                // falls through
+            case SyntaxKind.CaseKeyword:
+                const switchStatement = findAncestor(node.parent, isSwitchStatement);
+                if (switchStatement) {
+                    return [createDefinitionInfoFromStatement(switchStatement, SyntaxKind.SwitchKeyword, sourceFile, "switch")];
+                }
+                break;
         }
 
         if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
@@ -509,5 +521,26 @@ namespace ts.GoToDefinition {
             default:
                 return false;
         }
+    }
+
+    interface StatementWithExpression extends Statement {
+        readonly expression: Expression
+    }
+
+    function createDefinitionInfoFromStatement(statement: StatementWithExpression, keywordKind: KeywordSyntaxKind, sourceFile: SourceFile, name: string): DefinitionInfo {
+        const keyword = find(statement.getChildren(sourceFile), (node) => node.kind === keywordKind)!;
+        return {
+            fileName: sourceFile.fileName,
+            textSpan: createTextSpanFromNode(keyword, sourceFile),
+            kind: ScriptElementKind.keyword,
+            name,
+            containerKind: undefined!,
+            containerName: "",
+            contextSpan: createTextSpanFromNode(statement.expression, sourceFile),
+            isLocal: true,
+            isAmbient: false,
+            unverified: false,
+            failedAliasResolution: undefined,
+        };
     }
 }
