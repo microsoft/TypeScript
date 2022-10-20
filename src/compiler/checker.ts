@@ -45080,7 +45080,7 @@ namespace ts {
                 }
 
                 if (!inDestructuring) {
-                    const effectiveName = getEffectivePropertyNameForPropertyName(name);
+                    const effectiveName = getEffectivePropertyNameForPropertyNameNode(name);
                     if (effectiveName === undefined) {
                         continue;
                     }
@@ -46101,7 +46101,7 @@ namespace ts {
             return undefined;
         }
 
-        function getEffectivePropertyNameForPropertyName(node: PropertyName) {
+        function getEffectivePropertyNameForPropertyNameNode(node: PropertyName) {
             const name = getPropertyNameForPropertyNameNode(node);
             return name ? name :
                 isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
