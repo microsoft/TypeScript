@@ -1807,6 +1807,7 @@ namespace ts.server {
 
             if (!simplifiedResult) return references;
 
+            const preferences = this.getPreferences(file);
             const defaultProject = this.getDefaultProject(args);
             const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
             const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
@@ -1815,7 +1816,7 @@ namespace ts.server {
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
-                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
@@ -1823,6 +1824,7 @@ namespace ts.server {
         private getFileReferences(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.FileReferencesResponseBody | readonly ReferenceEntry[] {
             const projects = this.getProjects(args);
             const fileName = args.file;
+            const preferences = this.getPreferences(toNormalizedPath(fileName));
 
             const references: ReferenceEntry[] = [];
             const seen = createDocumentSpanSet();
@@ -1842,7 +1844,7 @@ namespace ts.server {
             });
 
             if (!simplifiedResult) return references;
-            const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+            const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
             return {
                 refs,
                 symbolName: `"${args.file}"`
@@ -3516,11 +3518,10 @@ namespace ts.server {
         return text;
     }
 
-    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
+    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry, { disableLineTextInReferences }: protocol.UserPreferences): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
-        const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
-        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+        const lineText = disableLineTextInReferences ? undefined : getLineText(scriptInfo, span);
         return {
             file: fileName,
             ...span,
@@ -3528,6 +3529,11 @@ namespace ts.server {
             isWriteAccess,
             isDefinition
         };
+    }
+
+    function getLineText(scriptInfo: ScriptInfo, span: protocol.TextSpanWithContext) {
+        const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
+        return scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
     }
 
     function isCompletionEntryData(data: any): data is CompletionEntryData {

@@ -178,7 +178,7 @@ namespace ts.codefix {
             const argIndex = findIndex(parent.parent.arguments, arg => arg === parent);
             if (argIndex < 0) return undefined;
 
-            const signature = singleOrUndefined(checker.getSignaturesOfType(checker.getTypeAtLocation(parent.parent.expression), SignatureKind.Call));
+            const signature = checker.getResolvedSignature(parent.parent);
             if (!(signature && signature.declaration && signature.parameters[argIndex])) return undefined;
 
             const param = signature.parameters[argIndex].valueDeclaration;
@@ -262,10 +262,6 @@ namespace ts.codefix {
         }
 
         return undefined;
-    }
-
-    function isSourceFileFromLibrary(program: Program, node: SourceFile) {
-        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
     }
 
     function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: TypeLikeDeclarationInfo): CodeFixAction[] | undefined {

@@ -790,6 +790,8 @@ namespace ts {
     }
 
     export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+        if (node.flags & (NodeFlags.JSDoc & ~NodeFlags.JavaScriptFile)) return undefined;
+
         const contextualType = getContextualTypeFromParent(node, checker);
         if (contextualType) return contextualType;
 
@@ -3419,6 +3421,10 @@ namespace ts {
 
     export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
+    }
+
+    export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
     }
 
     // #endregion
