@@ -28,14 +28,13 @@ tests/cases/compiler/inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' do
 tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
 tests/cases/compiler/inKeywordTypeguard.ts(90,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
-tests/cases/compiler/inKeywordTypeguard.ts(150,16): error TS2339: Property 'ontouchstart' does not exist on type 'never'.
 tests/cases/compiler/inKeywordTypeguard.ts(155,16): error TS18046: 'x' is of type 'unknown'.
 tests/cases/compiler/inKeywordTypeguard.ts(158,21): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 tests/cases/compiler/inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
 tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNullable<T>' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (29 errors) ====
+==== tests/cases/compiler/inKeywordTypeguard.ts (28 errors) ====
     class A { a: string; }
               ~
 !!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
@@ -240,8 +239,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNulla
             window.ontouchstart
         } else {
             window.ontouchstart
-                   ~~~~~~~~~~~~
-!!! error TS2339: Property 'ontouchstart' does not exist on type 'never'.
         }
     }
     
@@ -373,6 +370,64 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNulla
         }
     }
     
+    function f10(x: { a: unknown }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f11(x: { a: any }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f12(x: { a: string }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f13(x: { a?: string }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f14(x: { a: string | undefined }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f15(x: { a?: string | undefined }) {
+        if ("a" in x) {
+            x;
+        }
+        else {
+            x;
+        }
+    }
+    
+    function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+        x = y;
+    }
+    
     // Repro from #50639
     
     function foo<A>(value: A) {
@@ -380,4 +435,9 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNulla
             value;  // A & object & Record<"prop", unknown>
         }
     }
+    
+    // Repro from #50954
+    
+    const checkIsTouchDevice = () =>
+        "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
     

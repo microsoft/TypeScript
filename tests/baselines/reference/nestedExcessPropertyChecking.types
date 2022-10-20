@@ -1,0 +1,108 @@
+=== tests/cases/compiler/nestedExcessPropertyChecking.ts ===
+type A1 = { x: { a?: string } };
+>A1 : { x: {    a?: string;}; }
+>x : { a?: string | undefined; }
+>a : string | undefined
+
+type B1 = { x: { b?: string } };
+>B1 : { x: {    b?: string;}; }
+>x : { b?: string | undefined; }
+>b : string | undefined
+
+type C1 = { x: { c: string } };
+>C1 : { x: {    c: string;}; }
+>x : { c: string; }
+>c : string
+
+const ab1: A1 & B1 = {} as C1;  // Error
+>ab1 : A1 & B1
+>{} as C1 : C1
+>{} : {}
+
+type A2 = { a?: string };
+>A2 : { a?: string | undefined; }
+>a : string | undefined
+
+type B2 = { b?: string };
+>B2 : { b?: string | undefined; }
+>b : string | undefined
+
+type C2 = { c: string };
+>C2 : { c: string; }
+>c : string
+
+const ab2: A2 & B2 = {} as C2;  // Error
+>ab2 : A2 & B2
+>{} as C2 : C2
+>{} : {}
+
+enum E { A = "A" }
+>E : E
+>A : E.A
+>"A" : "A"
+
+let x: { nope?: any } = E.A;  // Error
+>x : { nope?: any; }
+>nope : any
+>E.A : E
+>E : typeof E
+>A : E
+
+let y: { nope?: any } = "A";  // Error
+>y : { nope?: any; }
+>nope : any
+>"A" : "A"
+
+// Repros from #51043
+
+type OverridesInput = {
+>OverridesInput : { someProp?: "A" | "B" | undefined; }
+
+    someProp?: 'A' | 'B'
+>someProp : "A" | "B" | undefined
+}
+
+const foo1: Partial<{ something: any }> & { variables: {
+>foo1 : Partial<{ something: any; }> & { variables: {    overrides?: OverridesInput;} & Partial<{    overrides?: OverridesInput;}>; }
+>something : any
+>variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
+
+    overrides?: OverridesInput;
+>overrides : OverridesInput | undefined
+
+} & Partial<{
+    overrides?: OverridesInput;
+>overrides : OverridesInput | undefined
+
+}>} = { variables: { overrides: false } };  // Error
+>{ variables: { overrides: false } } : { variables: { overrides: boolean; }; }
+>variables : { overrides: boolean; }
+>{ overrides: false } : { overrides: boolean; }
+>overrides : boolean
+>false : false
+
+
+interface Unrelated { _?: any }
+>_ : any
+
+interface VariablesA { overrides?: OverridesInput; }
+>overrides : OverridesInput | undefined
+
+interface VariablesB { overrides?: OverridesInput; }
+>overrides : OverridesInput | undefined
+
+const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
+>foo2 : Unrelated & { variables: VariablesA & VariablesB; }
+>variables : VariablesA & VariablesB
+>{    variables: {        overrides: false  // Error    }} : { variables: { overrides: boolean; }; }
+
+    variables: {
+>variables : { overrides: boolean; }
+>{        overrides: false  // Error    } : { overrides: boolean; }
+
+        overrides: false  // Error
+>overrides : boolean
+>false : false
+    }
+};
+
