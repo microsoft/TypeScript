@@ -371,7 +371,9 @@ function negativeIntersectionTest() {
 
     } else {
         window.ontouchstart
+>window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
     }
 }
 
@@ -707,21 +709,147 @@ function f9(x: object) {
     }
 }
 
+function f10(x: { a: unknown }) {
+>f10 : Symbol(f10, Decl(inKeywordTypeguard.ts, 270, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 272, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+    }
+}
+
+function f11(x: { a: any }) {
+>f11 : Symbol(f11, Decl(inKeywordTypeguard.ts, 279, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 281, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+    }
+}
+
+function f12(x: { a: string }) {
+>f12 : Symbol(f12, Decl(inKeywordTypeguard.ts, 288, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 290, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+    }
+}
+
+function f13(x: { a?: string }) {
+>f13 : Symbol(f13, Decl(inKeywordTypeguard.ts, 297, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 299, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+    }
+}
+
+function f14(x: { a: string | undefined }) {
+>f14 : Symbol(f14, Decl(inKeywordTypeguard.ts, 306, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 308, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+    }
+}
+
+function f15(x: { a?: string | undefined }) {
+>f15 : Symbol(f15, Decl(inKeywordTypeguard.ts, 315, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 317, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+    }
+}
+
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+>f16 : Symbol(f16, Decl(inKeywordTypeguard.ts, 324, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>globalThis : Symbol(globalThis)
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+
+    x = y;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
->foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 270, 1))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 274, 13))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 274, 13))
+>foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 328, 1))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
 
     if (typeof value === "object" && value !== null && "prop" in value) {
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
 
         value;  // A & object & Record<"prop", unknown>
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
     }
 }
+
+// Repro from #50954
+
+const checkIsTouchDevice = () =>
+>checkIsTouchDevice : Symbol(checkIsTouchDevice, Decl(inKeywordTypeguard.ts, 340, 5))
+
+    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>window.navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 

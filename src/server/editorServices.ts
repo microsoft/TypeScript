@@ -1167,20 +1167,22 @@ namespace ts.server {
         }
 
         /* @internal */
-        tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined {
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+        tryGetDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project | undefined {
+            const scriptInfo = isString(fileNameOrScriptInfo) ? this.getScriptInfoForNormalizedPath(fileNameOrScriptInfo) : fileNameOrScriptInfo;
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
         }
 
         /* @internal */
-        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
-            return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        ensureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
+            return this.tryGetDefaultProjectForFile(fileNameOrScriptInfo) || this.doEnsureDefaultProjectForFile(fileNameOrScriptInfo);
         }
 
-        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
+        private doEnsureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
             this.ensureProjectStructuresUptoDate();
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo ? scriptInfo.getDefaultProject() : (this.logErrorForScriptInfoNotFound(fileName), Errors.ThrowNoProject());
+            const scriptInfo = isString(fileNameOrScriptInfo) ? this.getScriptInfoForNormalizedPath(fileNameOrScriptInfo) : fileNameOrScriptInfo;
+            return scriptInfo ?
+                scriptInfo.getDefaultProject() :
+                (this.logErrorForScriptInfoNotFound(isString(fileNameOrScriptInfo) ? fileNameOrScriptInfo : fileNameOrScriptInfo.fileName), Errors.ThrowNoProject());
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -3648,7 +3650,7 @@ namespace ts.server {
                 return;
             }
 
-            const project = scriptInfo.getDefaultProject();
+            const project = this.ensureDefaultProjectForFile(scriptInfo);
             if (!project.languageServiceEnabled) {
                 return;
             }
