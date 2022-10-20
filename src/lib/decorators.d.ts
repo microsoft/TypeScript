@@ -123,7 +123,7 @@ type ClassGetterDecoratorFunction = <
     In,
     Out = In,
     Value = Out,
->(target: { get(this: This): In }, context: ClassGetterDecoratorContext<This, Value>) => { get(this: This): Out; } | void;
+>(target: (this: This) => In, context: ClassGetterDecoratorContext<This, Value>) => ((this: This) => Out) | void;
 
 /**
  * Context provided to a class `set` method decorator.
@@ -159,7 +159,7 @@ type ClassSetterDecoratorFunction = <
     In,
     Out = In,
     Value = Out
->(target: { set(this: This, value: In): void; }, context: ClassSetterDecoratorContext<This, Value>) => { set(this: This, value: Out): void; } | void;
+>(target: (this: This, value: In) => void, context: ClassSetterDecoratorContext<This, Value>) => ((this: This, value: Out) => void) | void;
 
 /**
  * Context provided to a class `accessor` field decorator.
