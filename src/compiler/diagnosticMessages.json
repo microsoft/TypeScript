@@ -4225,7 +4225,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'minimal' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'hybrid' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -5438,9 +5438,21 @@
         "category": "Message",
         "code": 6406
     },
-    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution minimal' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution hybrid' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
         "category": "Message",
         "code": 6407
+    },
+    "Use the package.json 'exports' field when resolving package imports.": {
+        "category": "Message",
+        "code": 6408
+    },
+    "Use the package.json 'imports' field when resolving imports.": {
+        "category": "Message",
+        "code": 6409
+    },
+    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'hybrid'; otherwise `false`.": {
+        "category": "Message",
+        "code": 6410
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

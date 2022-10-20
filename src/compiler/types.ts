@@ -6494,6 +6494,8 @@ namespace ts {
         // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
         Node16   = 3,
         NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+
+        Hybrid = 100,
     }
 
     export enum ModuleDetectionKind {
@@ -6570,6 +6572,7 @@ namespace ts {
         /* @internal */ configFilePath?: string;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: TsConfigSourceFile;
+        customConditions?: string[];
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -6652,6 +6655,8 @@ namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
+        resolvePackageJsonExports?: boolean;
+        resolvePackageJsonImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;

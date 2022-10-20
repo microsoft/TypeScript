@@ -841,6 +841,7 @@ namespace ts {
                 classic: ModuleResolutionKind.Classic,
                 node16: ModuleResolutionKind.Node16,
                 nodenext: ModuleResolutionKind.NodeNext,
+                hybrid: ModuleResolutionKind.Hybrid,
             })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
@@ -957,14 +958,30 @@ namespace ts {
             category: Diagnostics.Modules,
             description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
         },
-        // {
-        //     name: "allowImportingTsExtensions",
-        //     type: "boolean",
-        //     affectsModuleResolution: true,
-        //     category: Diagnostics.Modules,
-        //     description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_minimal_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
-        //     defaultValueDescription: false,
-        // },
+        {
+            name: "allowImportingTsExtensions",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_hybrid_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
+            defaultValueDescription: false,
+        },
+        {
+            name: "resolvePackageJsonExports",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Use_the_package_json_exports_field_when_resolving_package_imports,
+            defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+        },
+        {
+            name: "resolvePackageJsonImports",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Use_the_package_json_imports_field_when_resolving_imports,
+            defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+        },
 
         // Source Maps
         {

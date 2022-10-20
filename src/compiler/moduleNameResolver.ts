@@ -365,7 +365,7 @@ namespace ts {
 
         const failedLookupLocations: string[] = [];
         const affectingLocations: string[] = [];
-        let features = getDefaultNodeResolutionFeatures(options);
+        let features = getNodeResolutionFeatures(options);
         // Unlike `import` statements, whose mode-calculating APIs are all guaranteed to return `undefined` if we're in an un-mode-ed module resolution
         // setting, type references will return their target mode regardless of options because of how the parser works, so we guard against the mode being
         // set in a non-modal module resolution setting here. Do note that our behavior is not particularly well defined when these mode-overriding imports
@@ -480,10 +480,36 @@ namespace ts {
         }
     }
 
-    function getDefaultNodeResolutionFeatures(options: CompilerOptions) {
-        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 ? NodeResolutionFeatures.Node16Default :
-            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
-                NodeResolutionFeatures.None;
+    function getNodeResolutionFeatures(options: CompilerOptions) {
+        let features = NodeResolutionFeatures.None;
+        switch (getEmitModuleResolutionKind(options)) {
+            case ModuleResolutionKind.Node16:
+                features = NodeResolutionFeatures.Node16Default;
+                break;
+            case ModuleResolutionKind.NodeNext:
+                features = NodeResolutionFeatures.NodeNextDefault;
+                break;
+            case ModuleResolutionKind.Hybrid:
+                features = NodeResolutionFeatures.HybridDefault;
+                break;
+        }
+        if (options.resolvePackageJsonExports) {
+            features |= NodeResolutionFeatures.Exports;
+        }
+        else if (options.resolvePackageJsonExports === false) {
+            features &= ~NodeResolutionFeatures.Exports;
+        }
+        if (options.resolvePackageJsonImports) {
+            features |= NodeResolutionFeatures.Imports;
+        }
+        else if (options.resolvePackageJsonImports === false) {
+            features &= ~NodeResolutionFeatures.Imports;
+        }
+        return features;
+    }
+
+    function getConditions(options: CompilerOptions, esmMode: boolean | undefined) {
+        const conditions = esmMode ? ["node", "import", "types"] : ["node", "require", "types"];
     }
 
     /**
@@ -1038,6 +1064,9 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                     break;
+                case ModuleResolutionKind.Hybrid:
+                    result = hybridModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                    break;
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
@@ -1293,6 +1322,8 @@ namespace ts {
 
         NodeNextDefault = AllFeatures,
 
+        HybridDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
+
         EsmMode = 1 << 5,
     }
 
@@ -1344,6 +1375,10 @@ namespace ts {
 
     function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, jsOnlyExtensions, /*redirectedReferences*/ undefined);
+    }
+
+    export function hybridModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
+
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
@@ -1732,7 +1767,7 @@ namespace ts {
 
         let entrypoints: string[] | undefined;
         const extensions = resolveJs ? Extensions.JavaScript : Extensions.TypeScript;
-        const features = getDefaultNodeResolutionFeatures(options);
+        const features = getNodeResolutionFeatures(options);
         const requireState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
         requireState.conditions = ["node", "require", "types"];
         requireState.requestContainingDirectory = packageJsonInfo.packageDirectory;
@@ -2691,8 +2726,8 @@ namespace ts {
         }
     }
 
-    export function moduleResolutionSupportsResolvingTsExtensions(_compilerOptions: CompilerOptions) {
-      return false;
+    export function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions) {
+      return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
     }
 
     // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,

@@ -6448,6 +6448,32 @@ namespace ts {
             moduleKind === ModuleKind.System;
     }
 
+    export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
+        if (compilerOptions.resolvePackageJsonExports !== undefined) {
+            return compilerOptions.resolvePackageJsonExports;
+        }
+        switch (getEmitModuleResolutionKind(compilerOptions)) {
+            case ModuleResolutionKind.Node16:
+            case ModuleResolutionKind.NodeNext:
+            case ModuleResolutionKind.Hybrid:
+                return true;
+        }
+        return false;
+    }
+
+    export function getResolvePackageJsonImports(compilerOptions: CompilerOptions) {
+        if (compilerOptions.resolvePackageJsonImports !== undefined) {
+            return compilerOptions.resolvePackageJsonImports;
+        }
+        switch (getEmitModuleResolutionKind(compilerOptions)) {
+            case ModuleResolutionKind.Node16:
+            case ModuleResolutionKind.NodeNext:
+            case ModuleResolutionKind.Hybrid:
+                return true;
+        }
+        return false;
+    }
+
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
