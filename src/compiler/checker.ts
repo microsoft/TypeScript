@@ -15720,7 +15720,7 @@ namespace ts {
                 type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
                 // Mapping<Mapping<T>> === Mapping<T>
                 type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-                type.flags & (TypeFlags.Any | TypeFlags.String || type.flags & TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+                type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
                 // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
                 isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
                 type;
@@ -19674,7 +19674,7 @@ namespace ts {
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
                     if (!result && (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union)) {
                         const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                        if (constraint && !(constraint.flags & TypeFlags.Never) && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                        if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                         }
@@ -21644,8 +21644,7 @@ namespace ts {
         }
 
         function isUnitLikeType(type: Type): boolean {
-            return type.flags & TypeFlags.Intersection ? some((type as IntersectionType).types, isUnitType) :
-                !!(type.flags & TypeFlags.Unit);
+            return isUnitType(getBaseConstraintOrType(type));
         }
 
         function extractUnitType(type: Type) {
@@ -26049,13 +26048,13 @@ namespace ts {
         function markAliasReferenced(symbol: Symbol, location: Node) {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                 const target = resolveAlias(symbol);
-                if (getAllSymbolFlags(target) & SymbolFlags.Value) {
+                if (getAllSymbolFlags(target) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                     // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                     // (because the const enum value will not be inlined), or if (2) the alias is an export
                     // of a const enum declaration that will be preserved.
                     if (compilerOptions.isolatedModules ||
                         shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
-                        !isConstEnumOrConstEnumOnlyModule(target)
+                        !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
                     ) {
                         markAliasSymbolAsReferenced(symbol);
                     }
@@ -26304,7 +26303,7 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isBindingElement(declaration) ||
+            const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
@@ -26332,6 +26331,13 @@ namespace ts {
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function isSameScopedBindingElement(node: Identifier, declaration: Declaration) {
+            if (isBindingElement(declaration)) {
+                const bindingElement = findAncestor(node, isBindingElement);
+                return bindingElement && getRootDeclaration(bindingElement) === getRootDeclaration(declaration);
+            }
         }
 
         function shouldMarkIdentifierAliasReferenced(node: Identifier): boolean {
@@ -26714,13 +26720,16 @@ namespace ts {
             const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
             let container = immediateContainer;
             let needToCaptureLexicalThis = false;
+            let inAsyncFunction = false;
 
             // adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
             if (!isCallExpression) {
                 while (container && container.kind === SyntaxKind.ArrowFunction) {
+                    if (hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
                     container = getSuperContainer(container, /*stopOnFunctions*/ true);
                     needToCaptureLexicalThis = languageVersion < ScriptTarget.ES2015;
                 }
+                if (container && hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
             }
 
             const canUseSuperExpression = isLegalUsageOfSuperExpression(container);
@@ -26832,12 +26841,12 @@ namespace ts {
             // as a call expression cannot be used as the target of a destructuring assignment while a property access can.
             //
             // For element access expressions (`super[x]`), we emit a generic helper that forwards the element access in both situations.
-            if (container.kind === SyntaxKind.MethodDeclaration && hasSyntacticModifier(container, ModifierFlags.Async)) {
+            if (container.kind === SyntaxKind.MethodDeclaration && inAsyncFunction) {
                 if (isSuperProperty(node.parent) && isAssignmentTarget(node.parent)) {
-                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
+                    getNodeLinks(container).flags |= NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync;
                 }
                 else {
-                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                    getNodeLinks(container).flags |= NodeCheckFlags.MethodWithSuperPropertyAccessInAsync;
                 }
             }
 
@@ -36999,7 +37008,7 @@ namespace ts {
             }
 
             // primitives with a `{ then() }` won't be unwrapped/adopted.
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 return undefined;
             }
 
@@ -37074,7 +37083,7 @@ namespace ts {
          * Determines whether a type is an object with a callable `then` member.
          */
         function isThenableType(type: Type): boolean {
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 // primitive types cannot be considered "thenable" since they are not objects.
                 return false;
             }
