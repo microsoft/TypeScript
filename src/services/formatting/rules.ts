@@ -725,17 +725,7 @@ namespace ts.formatting {
     }
 
     function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
-        return context.TokensAreOnSameLine() &&
-            hasDecorators(context.contextNode) &&
-            nodeIsInDecoratorContext(context.currentTokenParent) &&
-            !nodeIsInDecoratorContext(context.nextTokenParent);
-    }
-
-    function nodeIsInDecoratorContext(node: Node): boolean {
-        while (isExpressionNode(node)) {
-            node = node.parent;
-        }
-        return node.kind === SyntaxKind.Decorator;
+        return context.TokensAreOnSameLine() && hasDecorators(context.contextNode) && isDecorator(context.currentTokenParent);
     }
 
     function isStartOfVariableDeclarationList(context: FormattingContext): boolean {
