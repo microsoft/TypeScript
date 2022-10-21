@@ -1888,7 +1888,12 @@ namespace ts {
             return false;
         }
 
-        const viableKeywordSuggestions = Object.keys(textToKeywordObj).filter(keyword => keyword.length > 2);
+        let viableKeywordSuggestions: () => string[] = () => {
+            const result = Object.keys(textToKeywordObj()).filter(keyword => keyword.length > 2);
+            // Reassign the function, so we do not have an if statement in this lazy evaluation.
+            viableKeywordSuggestions = () => result;
+            return result;
+        }
 
         /**
          * Provides a better error message than the generic "';' expected" if possible for
@@ -1945,7 +1950,7 @@ namespace ts {
             }
 
             // The user alternatively might have misspelled or forgotten to add a space after a common keyword.
-            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) ?? getSpaceSuggestion(expressionText);
+            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions(), n => n) ?? getSpaceSuggestion(expressionText);
             if (suggestion) {
                 parseErrorAt(pos, node.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
                 return;
@@ -1977,7 +1982,7 @@ namespace ts {
         }
 
         function getSpaceSuggestion(expressionText: string) {
-            for (const keyword of viableKeywordSuggestions) {
+            for (const keyword of viableKeywordSuggestions()) {
                 if (expressionText.length > keyword.length + 2 && startsWith(expressionText, keyword)) {
                     return `${keyword} ${expressionText.slice(keyword.length)}`;
                 }
