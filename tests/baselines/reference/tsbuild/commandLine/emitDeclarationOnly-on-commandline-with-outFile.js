@@ -103,7 +103,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -161,13 +161,14 @@ declare module "d" {
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1132
+  "size": 1159
 }
 
 //// [/src/project2/outFile.d.ts]
@@ -183,7 +184,7 @@ declare module "g" {
 
 
 //// [/src/project2/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/e.ts","./src/f.ts","./src/g.ts"],"dts":{"sections":[{"pos":0,"end":153,"kind":"text"}],"hash":"-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":["-13789510868-export const e = 10;","-4849089835-import { a } from \"a\"; export const f = a;","-18341999015-import { b } from \"b\"; export const g = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/e.ts","./src/f.ts","./src/g.ts"],"dts":{"sections":[{"pos":0,"end":153,"kind":"text"}],"hash":"-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":["-13789510868-export const e = 10;","-4849089835-import { a } from \"a\"; export const f = a;","-18341999015-import { b } from \"b\"; export const g = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project2/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -235,13 +236,14 @@ declare module "g" {
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 916
+  "size": 943
 }
 
 
@@ -303,7 +305,7 @@ No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt] file written with same contents
 //// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt]
@@ -342,13 +344,14 @@ No shapes updated in the builder::
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1146
+  "size": 1173
 }
 
 //// [/src/project2/outFile.tsbuildinfo] file changed its modified time
@@ -422,7 +425,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -481,13 +484,14 @@ declare module "d" {
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1225
+  "size": 1252
 }
 
 //// [/src/project2/outFile.tsbuildinfo] file written with same contents
@@ -757,7 +761,7 @@ No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -816,13 +820,14 @@ declare module "d" {
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1259
+  "size": 1286
 }
 
 //// [/src/project2/outFile.tsbuildinfo] file changed its modified time
@@ -897,7 +902,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":262,"kind":"text"}],"hash":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"outFile":"./outFile.js"},"outSignature":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":262,"kind":"text"}],"hash":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"composite":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"},"outSignature":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -957,13 +962,14 @@ declare module "d" {
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1347
+  "size": 1374
 }
 
 //// [/src/project2/outFile.tsbuildinfo] file written with same contents

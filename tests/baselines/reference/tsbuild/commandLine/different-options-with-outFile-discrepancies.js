@@ -104,7 +104,8 @@ CleanBuild:
     },
     "options": {
       "composite": true,
-      "outFile": "./outFile.js"
+      "outFile": "./outFile.js",
+      "sourceMap": true
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "FakeFileName"
@@ -161,7 +162,102 @@ IncrementalBuild:
 2:: with declaration should not emit anything
 Clean build tsbuildinfo will have compilerOptions with composite and declaration
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-*** Supplied discrepancy explanation but didnt file any difference
+TsBuild info text without affectedFilesPendingEmit:: /src/outfile.tsbuildinfo.readable.baseline.txt::
+CleanBuild:
+{
+  "bundle": {
+    "commonSourceDirectory": "./project",
+    "sourceFiles": [
+      "./project/a.ts",
+      "./project/b.ts",
+      "./project/c.ts",
+      "./project/d.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 746,
+          "kind": "text"
+        }
+      ],
+      "hash": "73318240-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 204,
+          "kind": "text"
+        }
+      ],
+      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./project/a.ts": "-18487752940-export const a = 10;const aLocal = 10;",
+      "./project/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./outFile.js"
+    },
+    "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
+    "latestChangedDtsFile": "FakeFileName"
+  },
+  "version": "FakeTSVersion"
+}
+IncrementalBuild:
+{
+  "bundle": {
+    "commonSourceDirectory": "./project",
+    "sourceFiles": [
+      "./project/a.ts",
+      "./project/b.ts",
+      "./project/c.ts",
+      "./project/d.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 746,
+          "kind": "text"
+        }
+      ],
+      "hash": "73318240-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 204,
+          "kind": "text"
+        }
+      ],
+      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./project/a.ts": "-18487752940-export const a = 10;const aLocal = 10;",
+      "./project/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./outFile.js"
+    },
+    "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
+    "latestChangedDtsFile": "FakeFileName"
+  },
+  "version": "FakeTSVersion"
+}
 4:: with declaration and declarationMap
 *** Needs explanation
 File: /src/outfile.d.ts.map
@@ -240,6 +336,8 @@ CleanBuild:
     },
     "options": {
       "composite": true,
+      "declaration": true,
+      "declarationMap": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
@@ -330,6 +428,7 @@ CleanBuild:
     },
     "options": {
       "composite": true,
+      "emitDeclarationOnly": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
@@ -458,7 +557,102 @@ declare module "d" {
 9:: with declaration should not emit anything
 Clean build tsbuildinfo will have compilerOptions with composite and declaration
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-*** Supplied discrepancy explanation but didnt file any difference
+TsBuild info text without affectedFilesPendingEmit:: /src/outfile.tsbuildinfo.readable.baseline.txt::
+CleanBuild:
+{
+  "bundle": {
+    "commonSourceDirectory": "./project",
+    "sourceFiles": [
+      "./project/a.ts",
+      "./project/b.ts",
+      "./project/c.ts",
+      "./project/d.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 747,
+          "kind": "text"
+        }
+      ],
+      "hash": "15496582544-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 100;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 204,
+          "kind": "text"
+        }
+      ],
+      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./project/a.ts": "-17390360476-export const a = 10;const aLocal = 100;",
+      "./project/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./outFile.js"
+    },
+    "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
+    "latestChangedDtsFile": "FakeFileName"
+  },
+  "version": "FakeTSVersion"
+}
+IncrementalBuild:
+{
+  "bundle": {
+    "commonSourceDirectory": "./project",
+    "sourceFiles": [
+      "./project/a.ts",
+      "./project/b.ts",
+      "./project/c.ts",
+      "./project/d.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 747,
+          "kind": "text"
+        }
+      ],
+      "hash": "15496582544-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 100;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 204,
+          "kind": "text"
+        }
+      ],
+      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./project/a.ts": "-17390360476-export const a = 10;const aLocal = 100;",
+      "./project/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "composite": true,
+      "outFile": "./outFile.js"
+    },
+    "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
+    "latestChangedDtsFile": "FakeFileName"
+  },
+  "version": "FakeTSVersion"
+}
 10:: with inlineSourceMap
 *** Needs explanation
 File: /src/outfile.js
@@ -559,6 +753,7 @@ CleanBuild:
     },
     "options": {
       "composite": true,
+      "inlineSourceMap": true,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
@@ -719,7 +914,8 @@ CleanBuild:
     },
     "options": {
       "composite": true,
-      "outFile": "./outFile.js"
+      "outFile": "./outFile.js",
+      "sourceMap": true
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
     "latestChangedDtsFile": "FakeFileName"
