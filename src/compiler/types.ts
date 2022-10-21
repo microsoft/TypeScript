@@ -5527,8 +5527,8 @@ namespace ts {
         SuperInstance                            = 0x00000100,  // Instance 'super' reference
         SuperStatic                              = 0x00000200,  // Static 'super' reference
         ContextChecked                           = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper                     = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding              = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        MethodWithSuperPropertyAccessInAsync     = 0x00000800,  // A method that contains a SuperProperty access in an async context.
+        MethodWithSuperPropertyAssignmentInAsync = 0x00001000,  // A method that contains a SuperProperty assignment in an async context.
         CaptureArguments                         = 0x00002000,  // Lexical 'arguments' used in body
         EnumValuesComputed                       = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass             = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
