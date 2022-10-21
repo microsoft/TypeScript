@@ -40125,9 +40125,10 @@ namespace ts {
 
             const containsArguments = containsArgumentsReference(node);
             if (containsArguments) {
-                const lastJSDocParam = lastOrUndefined(jsdocParameters);
+                const lastJSDocParamIndex = jsdocParameters.length - 1;
+                const lastJSDocParam = jsdocParameters[lastJSDocParamIndex];
                 if (isJs && lastJSDocParam && isIdentifier(lastJSDocParam.name) && lastJSDocParam.typeExpression &&
-                    lastJSDocParam.typeExpression.type && !parameters.has(lastJSDocParam.name.escapedText) && !isArrayType(getTypeFromTypeNode(lastJSDocParam.typeExpression.type))) {
+                    lastJSDocParam.typeExpression.type && !parameters.has(lastJSDocParam.name.escapedText) && !excludedParameters.has(lastJSDocParamIndex) && !isArrayType(getTypeFromTypeNode(lastJSDocParam.typeExpression.type))) {
                     error(lastJSDocParam.name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type, idText(lastJSDocParam.name));
                 }
             }
