@@ -1,4 +1,6 @@
 name : CodeQL Configuration
 
 paths:
-  - './src' 
+  - src
+paths-ignore:
+  - src/lib
