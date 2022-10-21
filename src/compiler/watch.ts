@@ -659,13 +659,49 @@ namespace ts {
         }
     }
 
+    export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+        if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
+            let lineEnd = text.length;
+            let lineStart = lineEnd;
+            for (let pos = lineEnd - 1; pos >= 0; pos--) {
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.lineFeed:
+                        if (pos && text.charCodeAt(pos - 1) === CharacterCodes.carriageReturn) {
+                            pos--;
+                        }
+                    // falls through
+                    case CharacterCodes.carriageReturn:
+                        break;
+                    default:
+                        if (ch < CharacterCodes.maxAsciiCharacter || !isLineBreak(ch)) {
+                            lineStart = pos;
+                            continue;
+                        }
+                        break;
+                }
+                // This is start of the line
+                const line = text.substring(lineStart, lineEnd);
+                if (line.match(sourceMapCommentRegExp)) {
+                    text = text.substring(0, lineStart);
+                    break;
+                }
+                // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!line.match(whitespaceOrMapCommentRegExp)){
+                    break;
+                }
+                lineEnd = lineStart;
+            }
+        }
+        return (host.createHash || generateDjb2Hash)(text);
+    }
+
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
-                result.version = computeHash(result.text);
+                result.version = getSourceFileVersionAsHashFromText(host, result.text);
             }
             return result;
         };
