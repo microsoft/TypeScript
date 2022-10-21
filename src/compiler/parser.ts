@@ -1893,7 +1893,7 @@ namespace ts {
             // Reassign the function, so we do not have an if statement in this lazy evaluation.
             viableKeywordSuggestions = () => result;
             return result;
-        }
+        };
 
         /**
          * Provides a better error message than the generic "';' expected" if possible for
