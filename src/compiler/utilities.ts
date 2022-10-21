@@ -6448,11 +6448,20 @@ namespace ts {
             moduleKind === ModuleKind.System;
     }
 
+    export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+            || moduleResolution === ModuleResolutionKind.Hybrid;
+    }
+
     export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
+        const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+        if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            return false;
+        }
         if (compilerOptions.resolvePackageJsonExports !== undefined) {
             return compilerOptions.resolvePackageJsonExports;
         }
-        switch (getEmitModuleResolutionKind(compilerOptions)) {
+        switch (moduleResolution) {
             case ModuleResolutionKind.Node16:
             case ModuleResolutionKind.NodeNext:
             case ModuleResolutionKind.Hybrid:
@@ -6462,16 +6471,27 @@ namespace ts {
     }
 
     export function getResolvePackageJsonImports(compilerOptions: CompilerOptions) {
-        if (compilerOptions.resolvePackageJsonImports !== undefined) {
-            return compilerOptions.resolvePackageJsonImports;
+        const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+        if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            return false;
         }
-        switch (getEmitModuleResolutionKind(compilerOptions)) {
+        if (compilerOptions.resolvePackageJsonExports !== undefined) {
+            return compilerOptions.resolvePackageJsonExports;
+        }
+        switch (moduleResolution) {
             case ModuleResolutionKind.Node16:
             case ModuleResolutionKind.NodeNext:
             case ModuleResolutionKind.Hybrid:
                 return true;
         }
         return false;
+    }
+
+    export function getResolveJsonModule(compilerOptions: CompilerOptions) {
+        if (compilerOptions.resolveJsonModule !== undefined) {
+            return compilerOptions.resolveJsonModule;
+        }
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
     }
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
@@ -7055,7 +7075,7 @@ namespace ts {
     export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly Extension[][]): readonly Extension[][];
     export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][];
     export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][] {
-        if (!options || !options.resolveJsonModule) return supportedExtensions;
+        if (!options || !getResolveJsonModule(options)) return supportedExtensions;
         if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
         if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
         return [...supportedExtensions, [Extension.Json]];

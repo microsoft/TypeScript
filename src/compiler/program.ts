@@ -3602,7 +3602,7 @@ namespace ts {
                 }
             }
 
-            if (options.resolveJsonModule) {
+            if (getResolveJsonModule(options)) {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
                     getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
                     getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
@@ -3697,7 +3697,18 @@ namespace ts {
             }
 
             if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
-                createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_minimal_and_either_noEmit_or_emitDeclarationOnly_is_set);
+                createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_hybrid_and_either_noEmit_or_emitDeclarationOnly_is_set);
+            }
+
+            const moduleResolution = getEmitModuleResolutionKind(options);
+            if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "resolvePackageJsonExports");
+            }
+            if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "resolvePackageJsonExports");
+            }
+            if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "customConditions");
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -4394,7 +4405,7 @@ namespace ts {
             return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
         function needResolveJsonModule() {
-            return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
+            return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
         }
     }
 

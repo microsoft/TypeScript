@@ -674,7 +674,7 @@ namespace ts.Completions.StringCompletions {
                         getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                     }
                 };
-                if (fragmentDirectory && moduleResolutionRespectsExports(moduleResolution)) {
+                if (fragmentDirectory && getResolvePackageJsonExports(compilerOptions)) {
                     const nodeModulesDirectoryLookup = ancestorLookup;
                     ancestorLookup = ancestor => {
                         const components = getPathComponents(fragment);

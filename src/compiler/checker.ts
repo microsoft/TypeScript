@@ -3808,7 +3808,7 @@ namespace ts {
                     if (tsExtension) {
                         errorOnTSExtensionImport(tsExtension);
                     }
-                    else if (!compilerOptions.resolveJsonModule &&
+                    else if (!getResolveJsonModule(compilerOptions) &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
                         moduleResolutionKind !== ModuleResolutionKind.Classic &&
                         hasJsonModuleEmitEnabled(compilerOptions)) {

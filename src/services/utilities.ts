@@ -1943,10 +1943,6 @@ namespace ts {
         };
     }
 
-    export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-        return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
-    }
-
     export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
         return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
     }

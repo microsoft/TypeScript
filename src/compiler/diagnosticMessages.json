@@ -4233,6 +4233,10 @@
         "category": "Error",
         "code": 5097
     },
+    "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'hybrid'.": {
+        "category": "Error",
+        "code": 5098
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -5450,9 +5454,13 @@
         "category": "Message",
         "code": 6409
     },
-    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'hybrid'; otherwise `false`.": {
+    "Conditions to set in addition to the resolver-specific defaults when resolving imports.": {
         "category": "Message",
         "code": 6410
+    },
+    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'hybrid'; otherwise `false`.": {
+        "category": "Message",
+        "code": 6411
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

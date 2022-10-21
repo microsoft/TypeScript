@@ -509,7 +509,13 @@ namespace ts {
     }
 
     function getConditions(options: CompilerOptions, esmMode: boolean | undefined) {
-        const conditions = esmMode ? ["node", "import", "types"] : ["node", "require", "types"];
+        // conditions are only used by the node16/nodenext/hybrid resolvers - there's no priority order in the list,
+        // it's essentially a set (priority is determined by object insertion order in the object we look at).
+        const conditions = esmMode ? ["node", "import"] : ["node", "require"];
+        if (!options.noDtsResolution) {
+            conditions.push("types");
+        }
+        return concatenate(conditions, options.customConditions);
     }
 
     /**
@@ -1367,7 +1373,7 @@ namespace ts {
         // es module file or cjs-like input file, use a variant of the legacy cjs resolver that supports the selected modern features
         const esmMode = resolutionMode === ModuleKind.ESNext ? NodeResolutionFeatures.EsmMode : 0;
         let extensions = compilerOptions.noDtsResolution ? [Extensions.TsOnly, Extensions.JavaScript] : tsExtensions;
-        if (compilerOptions.resolveJsonModule) {
+        if (getResolveJsonModule(compilerOptions)) {
             extensions = [...extensions, Extensions.Json];
         }
         return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, redirectedReference);
@@ -1378,7 +1384,12 @@ namespace ts {
     }
 
     export function hybridModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
-
+        const containingDirectory = getDirectoryPath(containingFile);
+        let extensions = compilerOptions.noDtsResolution ? [Extensions.TsOnly, Extensions.JavaScript] : tsExtensions;
+        if (getResolveJsonModule(compilerOptions)) {
+            extensions = [...extensions, Extensions.Json];
+        }
+        return nodeModuleNameResolverWorker(NodeResolutionFeatures.HybridDefault, moduleName, containingDirectory, compilerOptions, host, cache, extensions, redirectedReference);
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
@@ -1391,10 +1402,10 @@ namespace ts {
         else if (compilerOptions.noDtsResolution) {
             extensions = [Extensions.TsOnly];
             if (compilerOptions.allowJs) extensions.push(Extensions.JavaScript);
-            if (compilerOptions.resolveJsonModule) extensions.push(Extensions.Json);
+            if (getResolveJsonModule(compilerOptions)) extensions.push(Extensions.Json);
         }
         else {
-            extensions = compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions;
+            extensions = getResolveJsonModule(compilerOptions) ? tsPlusJsonExtensions : tsExtensions;
         }
         return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, redirectedReference);
     }
@@ -1404,12 +1415,7 @@ namespace ts {
 
         const failedLookupLocations: string[] = [];
         const affectingLocations: string[] = [];
-        // conditions are only used by the node16/nodenext resolver - there's no priority order in the list,
-        //it's essentially a set (priority is determined by object insertion order in the object we look at).
-        const conditions = features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"];
-        if (compilerOptions.noDtsResolution) {
-            conditions.pop();
-        }
+        const conditions = getConditions(compilerOptions, !!(features & NodeResolutionFeatures.EsmMode));
 
         const diagnostics: Diagnostic[] = [];
         const state: ModuleResolutionState = {
@@ -1617,7 +1623,7 @@ namespace ts {
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         if (hasJSFileExtension(candidate) ||
-            (state.compilerOptions.resolveJsonModule && fileExtensionIs(candidate, Extension.Json)) ||
+            (getResolveJsonModule(state.compilerOptions) && fileExtensionIs(candidate, Extension.Json)) ||
             (moduleResolutionSupportsResolvingTsExtensions(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat))
         ) {
             const extensionless = removeFileExtension(candidate);

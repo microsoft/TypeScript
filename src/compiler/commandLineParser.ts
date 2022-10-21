@@ -982,6 +982,17 @@ namespace ts {
             description: Diagnostics.Use_the_package_json_imports_field_when_resolving_imports,
             defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
         },
+        {
+            name: "customConditions",
+            type: "list",
+            element: {
+                name: "condition",
+                type: "string",
+            },
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
+        },
 
         // Source Maps
         {
