@@ -14820,7 +14820,7 @@ namespace ts {
             if (types.length < 2) {
                 return types;
             }
-            console.log(`Types: ${types.length}\n`);
+            // console.log(`Types: ${types.length}\n`); // >>
             const id = getTypeListId(types);
             const match = subtypeReductionCache.get(id);
             if (match) {
@@ -20676,7 +20676,7 @@ namespace ts {
                     if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length")) {
                         const sourceProp = getPropertyOfType(source, name);
                         if (sourceProp && sourceProp !== targetProp) {
-                            if ((sourceProp.flags & targetProp.flags & SymbolFlags.Transient) && (sourceProp as TransientSymbol).type && (sourceProp as TransientSymbol).type === (targetProp as TransientSymbol).type) {
+                            if ((sourceProp as TransientSymbol).type && (sourceProp as TransientSymbol).type === (targetProp as TransientSymbol).type) {
                                 continue;
                             }
                             const related = propertyRelatedTo(source, target, sourceProp, targetProp, getNonMissingTypeOfSymbol, reportErrors, intersectionState, relation === comparableRelation);
