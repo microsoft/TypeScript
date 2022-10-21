@@ -1587,6 +1587,11 @@ type Extract<T, U> = T extends U ? T : never;
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 /**
+ * Construct a union type from T and null.
+ */
+type Nullable<T> = null | { [P in keyof T]: null | T[P] };
+
+/**
  * Exclude null and undefined from T
  */
 type NonNullable<T> = T & {};
