@@ -21,16 +21,16 @@ jobs:
         DATE=$(date --date="7 days ago" --iso-8601)
         gh issue list --repo microsoft/typescript --search "[NewErrors] created:>=$DATE" --state all --json number --jq ".[].number" \
         | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No [NewErrors] issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=48)."
+        || gh issue create --repo ${{ github.repository }} --title "No NewErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=48)."
     - name: ServerErrors TS
       run: |
         DATE=$(date --date="7 days ago" --iso-8601)
         gh issue list --repo microsoft/typescript --search "[ServerErrors][TypeScript] created:>=$DATE" --state all --json number --jq ".[].number" \
         | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No [ServerErrors][TypeScript] issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=59)."
+        || gh issue create --repo ${{ github.repository }} --title "No TypeScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=59)."
     - name: ServerErrors JS
       run: |
         DATE=$(date --date="7 days ago" --iso-8601)
         gh issue list --repo microsoft/typescript --search "[ServerErrors][JavaScript] created:>=$DATE" --state all --json number --jq ".[].number" \
         | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No [ServerErrors][JavaScript] issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=58)."
+        || gh issue create --repo ${{ github.repository }} --title "No JavaScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=58)."
