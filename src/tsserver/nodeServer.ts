@@ -783,6 +783,10 @@ namespace ts.server {
                 process.on("message", (e: any) => {
                     this.onMessage(e);
                 });
+
+                process.on("disconnect", () => {
+                    this.exit();
+                });
             }
         }
 

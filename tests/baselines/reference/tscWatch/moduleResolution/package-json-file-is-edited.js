@@ -45,6 +45,7 @@ Found 'package.json' at '/user/username/projects/myproject/package.json'.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
@@ -169,6 +170,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
@@ -271,6 +273,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
@@ -474,6 +477,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
@@ -582,6 +586,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.

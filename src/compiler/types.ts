@@ -5527,8 +5527,8 @@ namespace ts {
         SuperInstance                            = 0x00000100,  // Instance 'super' reference
         SuperStatic                              = 0x00000200,  // Static 'super' reference
         ContextChecked                           = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper                     = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding              = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        MethodWithSuperPropertyAccessInAsync     = 0x00000800,  // A method that contains a SuperProperty access in an async context.
+        MethodWithSuperPropertyAssignmentInAsync = 0x00001000,  // A method that contains a SuperProperty assignment in an async context.
         CaptureArguments                         = 0x00002000,  // Lexical 'arguments' used in body
         EnumValuesComputed                       = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass             = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
@@ -5571,7 +5571,7 @@ namespace ts {
         deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-        isExhaustive?: boolean;             // Is node an exhaustive switch statement
+        isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
         serializedTypes?: ESMap<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location

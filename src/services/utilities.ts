@@ -3425,5 +3425,9 @@ namespace ts {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
     }
 
+    export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
+    }
+
     // #endregion
 }
