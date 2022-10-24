@@ -14820,7 +14820,7 @@ namespace ts {
             if (types.length < 2) {
                 return types;
             }
-
+            console.log(`Types: ${types.length}\n`);
             const id = getTypeListId(types);
             const match = subtypeReductionCache.get(id);
             if (match) {
@@ -14845,7 +14845,14 @@ namespace ts {
                         find(getPropertiesOfType(source), p => isUnitType(getTypeOfSymbol(p))) :
                         undefined;
                     const keyPropertyType = keyProperty && getRegularTypeOfLiteralType(getTypeOfSymbol(keyProperty));
-                    for (const target of types) {
+                    // console.log(i); // >>
+                    // const comp = []; // >>
+                    // let R = -1;
+                    // for (const target of types) {
+                    for (let j = 0; j < types.length; j++) { // >>
+                        const target = types[j];
+                        // comp.push(`${j}`);
+                        // console.log(`${i} , ${j}`);
                         if (source !== target) {
                             if (count === 100000) {
                                 // After 100000 subtype checks we estimate the remaining amount of work by assuming the
@@ -14871,10 +14878,14 @@ namespace ts {
                                 !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                                 isTypeDerivedFrom(source, target))) {
                                 orderedRemoveItemAt(types, i);
+                                // R = j;
                                 break;
                             }
                         }
                     }
+                    // R;
+                    // console.log(`${i} , ${comp.length}`);
+                    // console.log(`${comp.join(", ")}${R >= 0 ? " R" : ""}`);
                 }
             }
             subtypeReductionCache.set(id, types);
@@ -20665,6 +20676,9 @@ namespace ts {
                     if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length")) {
                         const sourceProp = getPropertyOfType(source, name);
                         if (sourceProp && sourceProp !== targetProp) {
+                            if ((sourceProp.flags & targetProp.flags & SymbolFlags.Transient) && (sourceProp as TransientSymbol).type && (sourceProp as TransientSymbol).type === (targetProp as TransientSymbol).type) {
+                                continue;
+                            }
                             const related = propertyRelatedTo(source, target, sourceProp, targetProp, getNonMissingTypeOfSymbol, reportErrors, intersectionState, relation === comparableRelation);
                             if (!related) {
                                 return Ternary.False;
