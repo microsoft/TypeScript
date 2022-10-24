@@ -1812,14 +1812,17 @@ namespace ts {
     }
 
     export function memoize<T>(callback: () => T): () => T {
-        let value: T;
-        return () => {
-            if (callback) {
-                value = callback();
-                callback = undefined!;
+        // Instead of using a branched memoize approach, this branch-less approach reassigns
+        // a function with the captured result. Using an object with the get() method
+        // allows the V8 to inline the memoize calls efficiently.
+        const cache = {
+            get() {
+                const result = callback();
+                cache.get = () => result;
+                return result;
             }
-            return value;
         };
+        return () => cache.get();
     }
 
     /** A version of `memoize` that supports a single primitive argument */

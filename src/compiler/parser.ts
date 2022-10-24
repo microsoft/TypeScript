@@ -1888,12 +1888,7 @@ namespace ts {
             return false;
         }
 
-        let viableKeywordSuggestions: () => string[] = () => {
-            const result = Object.keys(textToKeywordObj()).filter(keyword => keyword.length > 2);
-            // Reassign the function, so we do not have an if statement in this lazy evaluation.
-            viableKeywordSuggestions = () => result;
-            return result;
-        };
+        const viableKeywordSuggestions = memoize(() => Object.keys(textToKeywordObj()).filter(keyword => keyword.length > 2));
 
         /**
          * Provides a better error message than the generic "';' expected" if possible for
