@@ -1,0 +1,19 @@
+=== /main.ts ===
+import {} from "./a";
+import _ = require("./a"); // Error
+>_ : typeof _
+
+export = {}; // Error
+>{} : {}
+
+export {};
+
+=== /node_modules/@types/node/index.d.ts ===
+declare var require: (...args: any[]) => any;
+>require : (...args: any[]) => any
+>args : any[]
+
+=== /a.ts ===
+export {};
+No type information for this code.
+No type information for this code.

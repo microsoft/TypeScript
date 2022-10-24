@@ -1,0 +1,24 @@
+/main.ts(2,1): error TS5099: Import assignment is not allowed when 'moduleResolution' is set to 'hybrid'. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+/main.ts(3,1): error TS5100: Export assignment cannot be used when 'moduleResolution' is set to 'hybrid'. Consider using 'export default' or another module format instead.
+
+
+==== /main.ts (2 errors) ====
+    import {} from "./a";
+    import _ = require("./a"); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5099: Import assignment is not allowed when 'moduleResolution' is set to 'hybrid'. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    export = {}; // Error
+    ~~~~~~~~~~~~
+!!! error TS5100: Export assignment cannot be used when 'moduleResolution' is set to 'hybrid'. Consider using 'export default' or another module format instead.
+    export {};
+    
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    declare var require: (...args: any[]) => any;
+    
+==== /a.ts (0 errors) ====
+    export {};
+    
+==== /mainJs.js (0 errors) ====
+    import {} from "./a";
+    const _ = require("./a"); // No resolution
+    

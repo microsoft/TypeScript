@@ -1,0 +1,17 @@
+=== /main.ts ===
+import {} from "./a";
+import _ = require("./a"); // Error
+>_ : Symbol(_, Decl(main.ts, 0, 21))
+
+export = {}; // Error
+export {};
+
+=== /node_modules/@types/node/index.d.ts ===
+declare var require: (...args: any[]) => any;
+>require : Symbol(require, Decl(index.d.ts, 0, 11))
+>args : Symbol(args, Decl(index.d.ts, 0, 22))
+
+=== /a.ts ===
+export {};
+No type information for this code.
+No type information for this code.

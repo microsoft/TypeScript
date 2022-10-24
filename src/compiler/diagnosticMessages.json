@@ -4237,6 +4237,14 @@
         "category": "Error",
         "code": 5098
     },
+    "Import assignment is not allowed when 'moduleResolution' is set to 'hybrid'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+        "category": "Error",
+        "code": 5099
+    },
+    "Export assignment cannot be used when 'moduleResolution' is set to 'hybrid'. Consider using 'export default' or another module format instead.": {
+        "category": "Error",
+        "code": 5100
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
