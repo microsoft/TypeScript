@@ -1516,7 +1516,6 @@ namespace ts {
         }
 
         function transformAndEmitForInStatement(node: ForInStatement) {
-            // TODO(rbuckton): Source map locations
             if (containsYield(node)) {
                 // [source]
                 //      for (var p in o) {
@@ -1524,32 +1523,37 @@ namespace ts {
                 //      }
                 //
                 // [intermediate]
-                //  .local _a, _b, _i
-                //      _a = [];
-                //      for (_b in o) _a.push(_b);
+                //  .local _b, _a, _c, _i
+                //      _b = [];
+                //      _a = o;
+                //      for (_c in _a) _b.push(_c);
                 //      _i = 0;
                 //  .loop incrementLabel, endLoopLabel
                 //  .mark conditionLabel
-                //  .brfalse endLoopLabel, (_i < _a.length)
-                //      p = _a[_i];
+                //  .brfalse endLoopLabel, (_i < _b.length)
+                //      _c = _b[_i];
+                //  .brfalse incrementLabel, (_c in _a)
+                //      p = _c;
                 //      /*body*/
                 //  .mark incrementLabel
-                //      _b++;
+                //      _c++;
                 //  .br conditionLabel
                 //  .endloop
                 //  .mark endLoopLabel
 
-                const keysArray = declareLocal(); // _a
-                const key = declareLocal(); // _b
+                const obj = declareLocal(); // _a
+                const keysArray = declareLocal(); // _b
+                const key = declareLocal(); // _c
                 const keysIndex = factory.createLoopVariable(); // _i
                 const initializer = node.initializer;
                 hoistVariableDeclaration(keysIndex);
+                emitAssignment(obj, visitNode(node.expression, visitor, isExpression));
                 emitAssignment(keysArray, factory.createArrayLiteralExpression());
 
                 emitStatement(
                     factory.createForInStatement(
                         key,
-                        visitNode(node.expression, visitor, isExpression),
+                        obj,
                         factory.createExpressionStatement(
                             factory.createCallExpression(
                                 factory.createPropertyAccessExpression(keysArray, "push"),
@@ -1564,10 +1568,13 @@ namespace ts {
 
                 const conditionLabel = defineLabel();
                 const incrementLabel = defineLabel();
-                const endLabel = beginLoopBlock(incrementLabel);
+                const endLoopLabel = beginLoopBlock(incrementLabel);
 
                 markLabel(conditionLabel);
-                emitBreakWhenFalse(endLabel, factory.createLessThan(keysIndex, factory.createPropertyAccessExpression(keysArray, "length")));
+                emitBreakWhenFalse(endLoopLabel, factory.createLessThan(keysIndex, factory.createPropertyAccessExpression(keysArray, "length")));
+
+                emitAssignment(key, factory.createElementAccessExpression(keysArray, keysIndex));
+                emitBreakWhenFalse(incrementLabel, factory.createBinaryExpression(key, SyntaxKind.InKeyword, obj));
 
                 let variable: Expression;
                 if (isVariableDeclarationList(initializer)) {
@@ -1582,7 +1589,7 @@ namespace ts {
                     Debug.assert(isLeftHandSideExpression(variable));
                 }
 
-                emitAssignment(variable, factory.createElementAccessExpression(keysArray, keysIndex));
+                emitAssignment(variable, key);
                 transformAndEmitEmbeddedStatement(node.statement);
 
                 markLabel(incrementLabel);
