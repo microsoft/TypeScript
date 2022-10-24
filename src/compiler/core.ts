@@ -1937,8 +1937,10 @@ namespace ts {
         return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
     }
 
-    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
-        return compare(a, b) === Comparison.LessThan ? a : b;
+    export function min<T>(items: readonly [T, ...T[]], compare: Comparer<T>): T;
+    export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined;
+    export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined {
+        return reduceLeft(items, (x, y) => compare(x, y) === Comparison.LessThan ? x : y);
     }
 
     /**

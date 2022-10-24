@@ -2582,12 +2582,21 @@ namespace ts {
 
         function writeConfigurations() {
             // Filter applicable options to place in the file
-            const categorizedOptions = createMultiMap<CommandLineOption>();
+            const categorizedOptions = new Map<DiagnosticMessage, CommandLineOption[]>();
+            // Set allowed categories in order
+            categorizedOptions.set(Diagnostics.Projects, []);
+            categorizedOptions.set(Diagnostics.Language_and_Environment, []);
+            categorizedOptions.set(Diagnostics.Modules, []);
+            categorizedOptions.set(Diagnostics.JavaScript_Support, []);
+            categorizedOptions.set(Diagnostics.Emit, []);
+            categorizedOptions.set(Diagnostics.Interop_Constraints, []);
+            categorizedOptions.set(Diagnostics.Type_Checking, []);
+            categorizedOptions.set(Diagnostics.Completeness, []);
             for (const option of optionDeclarations) {
-                const { category } = option;
-
                 if (isAllowedOptionForOutput(option)) {
-                    categorizedOptions.add(getLocaleSpecificMessage(category!), option);
+                    let listForCategory = categorizedOptions.get(option.category!);
+                    if (!listForCategory) categorizedOptions.set(option.category!, listForCategory = []);
+                    listForCategory.push(option);
                 }
             }
 
@@ -2599,7 +2608,7 @@ namespace ts {
                 if (entries.length !== 0) {
                     entries.push({ value: "" });
                 }
-                entries.push({ value: `/* ${category} */` });
+                entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
                 for (const option of options) {
                     let optionName;
                     if (compilerOptionsMap.has(option.name)) {
