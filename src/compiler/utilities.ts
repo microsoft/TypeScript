@@ -6441,11 +6441,12 @@ namespace ts {
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
-        const moduleKind = getEmitModuleKind(compilerOptions);
-        return compilerOptions.allowSyntheticDefaultImports !== undefined
-            ? compilerOptions.allowSyntheticDefaultImports
-            : getESModuleInterop(compilerOptions) ||
-            moduleKind === ModuleKind.System;
+        if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
+            return compilerOptions.allowSyntheticDefaultImports;
+        }
+        return getESModuleInterop(compilerOptions)
+            || getEmitModuleKind(compilerOptions) === ModuleKind.System
+            || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
     }
 
     export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {

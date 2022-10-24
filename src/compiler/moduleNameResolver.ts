@@ -376,7 +376,7 @@ namespace ts {
         if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
             features |= NodeResolutionFeatures.EsmMode;
         }
-        const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
+        const conditions = features & NodeResolutionFeatures.Exports ? getConditions(options, !!(features & NodeResolutionFeatures.EsmMode)) : [];
         const diagnostics: Diagnostic[] = [];
         const moduleResolutionState: ModuleResolutionState = {
             compilerOptions: options,
@@ -508,10 +508,12 @@ namespace ts {
         return features;
     }
 
-    function getConditions(options: CompilerOptions, esmMode: boolean | undefined) {
+    function getConditions(options: CompilerOptions, esmMode?: boolean) {
         // conditions are only used by the node16/nodenext/hybrid resolvers - there's no priority order in the list,
         // it's essentially a set (priority is determined by object insertion order in the object we look at).
-        const conditions = esmMode ? ["node", "import"] : ["node", "require"];
+        const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Hybrid
+            ? ["node", "import"]
+            : ["node", "require"];
         if (!options.noDtsResolution) {
             conditions.push("types");
         }
@@ -1546,7 +1548,7 @@ namespace ts {
             }
         }
         // esm mode relative imports shouldn't do any directory lookups (either inside `package.json`
-        // files or implicit `index.js`es). This is a notable depature from cjs norms, where `./foo/pkg`
+        // files or implicit `index.js`es). This is a notable departure from cjs norms, where `./foo/pkg`
         // could have been redirected by `./foo/pkg/package.json` to an arbitrary location!
         if (!(state.features & NodeResolutionFeatures.EsmMode)) {
             return loadNodeModuleFromDirectory(extensions, candidate, onlyRecordFailures, state, considerPackageJson);
@@ -1774,25 +1776,29 @@ namespace ts {
         let entrypoints: string[] | undefined;
         const extensions = resolveJs ? Extensions.JavaScript : Extensions.TypeScript;
         const features = getNodeResolutionFeatures(options);
-        const requireState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
-        requireState.conditions = ["node", "require", "types"];
-        requireState.requestContainingDirectory = packageJsonInfo.packageDirectory;
-        const requireResolution = loadNodeModuleFromDirectoryWorker(
+        const loadPackageJsonMainState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
+        loadPackageJsonMainState.conditions = getConditions(options);
+        loadPackageJsonMainState.requestContainingDirectory = packageJsonInfo.packageDirectory;
+        const mainResolution = loadNodeModuleFromDirectoryWorker(
             extensions,
             packageJsonInfo.packageDirectory,
             /*onlyRecordFailures*/ false,
-            requireState,
+            loadPackageJsonMainState,
             packageJsonInfo.contents.packageJsonContent,
             packageJsonInfo.contents.versionPaths);
-        entrypoints = append(entrypoints, requireResolution?.path);
+        entrypoints = append(entrypoints, mainResolution?.path);
 
         if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
-            for (const conditions of [["node", "import", "types"], ["node", "require", "types"]]) {
-                const exportState = { ...requireState, failedLookupLocations: [], conditions };
+            const conditionSets = deduplicate(
+                [getConditions(options, /*esmMode*/ true), getConditions(options, /*esmMode*/ false)],
+                arrayIsEqualTo
+            );
+            for (const conditions of conditionSets) {
+                const loadPackageJsonExportsState = { ...loadPackageJsonMainState, failedLookupLocations: [], conditions };
                 const exportResolutions = loadEntrypointsFromExportMap(
                     packageJsonInfo,
                     packageJsonInfo.contents.packageJsonContent.exports,
-                    exportState,
+                    loadPackageJsonExportsState,
                     extensions);
                 if (exportResolutions) {
                     for (const resolution of exportResolutions) {
