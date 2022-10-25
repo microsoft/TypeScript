@@ -104,56 +104,63 @@ function gen() {
 }
 var log = console.log;
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var _loop_1, _a, _b, e_1_1;
+    var _loop_1, _a, _b, _c, e_1_1;
     var _this = this;
-    var e_1, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _d, e_1, _e, _f;
+    return __generator(this, function (_g) {
+        switch (_g.label) {
             case 0:
-                _d.trys.push([0, 5, 6, 11]);
+                _g.trys.push([0, 5, 6, 11]);
                 _loop_1 = function () {
-                    var outer = _b.value;
-                    log("I'm loop ".concat(outer));
-                    (function () { return __awaiter(_this, void 0, void 0, function () {
-                        var inner;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    inner = outer;
-                                    return [4 /*yield*/, sleep(2000)];
-                                case 1:
-                                    _a.sent();
-                                    if (inner === outer) {
-                                        log("I'm loop ".concat(inner, " and I know I'm loop ").concat(outer));
-                                    }
-                                    else {
-                                        log("I'm loop ".concat(inner, ", but I think I'm loop ").concat(outer));
-                                    }
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); })();
+                    _f = _c.value;
+                    _a = false;
+                    try {
+                        var outer = _f;
+                        log("I'm loop ".concat(outer));
+                        (function () { return __awaiter(_this, void 0, void 0, function () {
+                            var inner;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        inner = outer;
+                                        return [4 /*yield*/, sleep(2000)];
+                                    case 1:
+                                        _a.sent();
+                                        if (inner === outer) {
+                                            log("I'm loop ".concat(inner, " and I know I'm loop ").concat(outer));
+                                        }
+                                        else {
+                                            log("I'm loop ".concat(inner, ", but I think I'm loop ").concat(outer));
+                                        }
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); })();
+                    }
+                    finally {
+                        _a = true;
+                    }
                 };
-                _a = __asyncValues(gen());
-                _d.label = 1;
-            case 1: return [4 /*yield*/, _a.next()];
+                _a = true, _b = __asyncValues(gen());
+                _g.label = 1;
+            case 1: return [4 /*yield*/, _b.next()];
             case 2:
-                if (!(_b = _d.sent(), !_b.done)) return [3 /*break*/, 4];
+                if (!(_c = _g.sent(), _d = _c.done, !_d)) return [3 /*break*/, 4];
                 _loop_1();
-                _d.label = 3;
+                _g.label = 3;
             case 3: return [3 /*break*/, 1];
             case 4: return [3 /*break*/, 11];
             case 5:
-                e_1_1 = _d.sent();
+                e_1_1 = _g.sent();
                 e_1 = { error: e_1_1 };
                 return [3 /*break*/, 11];
             case 6:
-                _d.trys.push([6, , 9, 10]);
-                if (!(_b && !_b.done && (_c = _a.return))) return [3 /*break*/, 8];
-                return [4 /*yield*/, _c.call(_a)];
+                _g.trys.push([6, , 9, 10]);
+                if (!(!_a && !_d && (_e = _b.return))) return [3 /*break*/, 8];
+                return [4 /*yield*/, _e.call(_b)];
             case 7:
-                _d.sent();
-                _d.label = 8;
+                _g.sent();
+                _g.label = 8;
             case 8: return [3 /*break*/, 10];
             case 9:
                 if (e_1) throw e_1.error;
