@@ -133,7 +133,7 @@ namespace ts.refactor {
     ) {
         const checker = program.getTypeChecker();
         const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-        if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
+        if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size() === 0) {
             deleteMovedStatements(oldFile, toMove.ranges, changes);
             return [...prologueDirectives, ...toMove.all];
         }
@@ -647,10 +647,12 @@ namespace ts.refactor {
     }
 
     interface ReadonlySymbolSet {
+        size(): number;
         has(symbol: Symbol): boolean;
         forEach(cb: (symbol: Symbol) => void): void;
         forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
     }
+
     class SymbolSet implements ReadonlySymbolSet {
         private map = new Map<string, Symbol>();
         add(symbol: Symbol): void {
@@ -672,6 +674,9 @@ namespace ts.refactor {
             const clone = new SymbolSet();
             copyEntries(this.map, clone.map);
             return clone;
+        }
+        size() {
+            return this.map.size;
         }
     }
 
@@ -781,7 +786,8 @@ namespace ts.refactor {
         if (useEs6Exports) {
             return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol.exports?.has(name.escapedText));
         }
-        return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
+        return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
+            getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
     }
 
     function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): readonly Statement[] | undefined {
