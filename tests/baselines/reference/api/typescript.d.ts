@@ -3088,7 +3088,6 @@ declare namespace ts {
         typeRoots?: string[];
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
-        annotateTransforms?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface WatchOptions {

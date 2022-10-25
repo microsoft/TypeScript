@@ -885,7 +885,6 @@ namespace ts {
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
-        /* @internal */ transformer?: TransformerFactory<Node>; // Source transformer that created the node
     }
 
     export interface JSDocContainer {
@@ -6675,7 +6674,6 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
-        annotateTransforms?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -8804,7 +8802,6 @@ namespace ts {
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
         /*@internal*/ terminateUnterminatedLiterals?: boolean;
-        /*@internal*/ annotateTransforms?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 

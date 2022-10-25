@@ -384,7 +384,7 @@ namespace ts {
                 return;
             }
             // Transform the source files
-            const transform = transformNodes(resolver, host, /*factory*/ undefined, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+            const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
@@ -398,7 +398,6 @@ namespace ts {
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 writeBundleFileInfo: !!bundleBuildInfo,
                 relativeToBuildInfo,
-                annotateTransforms: compilerOptions.annotateTransforms
             };
 
             // Create a printer to print the nodes
@@ -439,7 +438,7 @@ namespace ts {
                 // Do that here when emitting only dts files
                 filesForEmit.forEach(collectLinkedAliases);
             }
-            const declarationTransform = transformNodes(resolver, host, /*factory*/ undefined, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
+            const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
                     emitterDiagnostics.add(diagnostic);
@@ -459,7 +458,6 @@ namespace ts {
                 writeBundleFileInfo: !!bundleBuildInfo,
                 recordInternalSection: !!bundleBuildInfo,
                 relativeToBuildInfo,
-                annotateTransforms: compilerOptions.annotateTransforms
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -900,7 +898,6 @@ namespace ts {
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = new Map<string, boolean>();
-        const annotateTransforms = printerOptions.annotateTransforms;
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -1316,15 +1313,6 @@ namespace ts {
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
             onBeforeEmitNode?.(node);
-            let wroteAnnotation = false;
-            if (annotateTransforms) {
-                const transformerNames = getTransformerNames(node);
-                if (transformerNames) {
-                    transformerNames.reverse();
-                    writeComment(`/*tx: ${transformerNames.join("->")}(*/`);
-                    wroteAnnotation = true;
-                }
-            }
             if (preserveSourceNewlines) {
                 const savedPreserveSourceNewlines = preserveSourceNewlines;
                 beforeEmitNode(node);
@@ -1333,9 +1321,6 @@ namespace ts {
             }
             else {
                 pipelineEmitWithHintWorker(hint, node);
-            }
-            if (wroteAnnotation) {
-                writeComment(`/*)*/`);
             }
             onAfterEmitNode?.(node);
             // clear the parenthesizer rule as we ascend
@@ -6091,46 +6076,5 @@ namespace ts {
         return emit.length === 1 ? emitListItemNoParenthesizer :
             typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
             emitListItemWithParenthesizerRule;
-    }
-
-    function getTransformerNames(node: Node | undefined) {
-        let transformerNames: string[] | undefined;
-        let lastTransformerName: string | undefined;
-        while (node) {
-            const transformerName = getTransformerName(node.transformer);
-            if (transformerName && transformerName !== lastTransformerName) {
-                transformerNames = append(transformerNames, transformerName);
-                lastTransformerName = transformerName;
-            }
-            node = node.original;
-        }
-        return transformerNames;
-    }
-
-    function getTransformerName(transformer: TransformerFactory<Node> | undefined) {
-        switch (transformer) {
-            case transformTypeScript: return "ts";
-            case transformESNext: return "esnext";
-            case transformES2021: return "es2021";
-            case transformES2020: return "es2020";
-            case transformES2019: return "es2019";
-            case transformES2018: return "es2018";
-            case transformES2017: return "es2017";
-            case transformES2016: return "es2016";
-            case transformES2015: return "es2015";
-            case transformES5: return "es5";
-            case transformClassFields: return "classFields";
-            case transformESDecorators: return "esDecorators";
-            case transformLegacyDecorators: return "legacyDecorators";
-            case transformGenerators: return "generators";
-            case transformJsx: return "jsx";
-            case transformECMAScriptModule: return "esmodule";
-            case transformModule: return "module";
-            case transformSystemModule: return "system";
-            case transformNodeModule: return "node";
-            case transformDeclarations: return "declarations";
-            case undefined: return;
-            default: return transformer.name;
-        }
     }
 }
