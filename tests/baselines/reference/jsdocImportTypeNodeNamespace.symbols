@@ -12,7 +12,10 @@ export default _default;
 
 === tests/cases/compiler/Main.js ===
 export default function () {
-No type information for this code.  return /** @type {import('./GeometryType.js').default} */ ('Point');
-No type information for this code.}
 No type information for this code.
+  return /** @type {import('./GeometryType.js').default} */ ('Point');
+No type information for this code.
+}
+No type information for this code.
+
 No type information for this code.

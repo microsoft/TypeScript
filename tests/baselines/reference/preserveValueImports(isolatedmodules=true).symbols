@@ -23,7 +23,9 @@ import * as a from "./a";
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===
 export = {};
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+
+No type information for this code.
+=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
 import D = require("./d");
 >D : Symbol(D, Decl(e.ts, 0, 0))
 

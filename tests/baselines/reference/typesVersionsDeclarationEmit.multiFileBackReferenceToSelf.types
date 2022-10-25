@@ -11,10 +11,14 @@ export function fb(): B;
 === tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
 export * from "../";
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts ===
+
+No type information for this code.
+=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts ===
 export * from "../other";
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/declarationEmit/main.ts ===
+
+No type information for this code.
+=== tests/cases/conformance/declarationEmit/main.ts ===
 import { fa } from "ext";
 >fa : any
 

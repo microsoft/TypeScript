@@ -15,4 +15,5 @@ export interface D<T extends F = F> {}
 === tests/cases/compiler/other.js ===
 /** @typedef {import("./types").D} E */
 No type information for this code.
+
 No type information for this code.

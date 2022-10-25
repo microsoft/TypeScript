@@ -16,4 +16,5 @@ module B {
 === tests/cases/compiler/A.ts ===
 module A { export interface I {} }
 No type information for this code.
+
 No type information for this code.

@@ -18,11 +18,17 @@ module.exports = ns; // We refuse to bind cjs module exports assignments in the 
 
 === tests/cases/conformance/jsdoc/declarations/globalNs.js ===
 export * from "./cls";
-No type information for this code.export as namespace GLO; // TS Only
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+export as namespace GLO; // TS Only
+No type information for this code.
+
+No type information for this code.
+=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
 import "./bar";
-No type information for this code.import "./bin";
-No type information for this code.import "./globalNs";
 No type information for this code.
+import "./bin";
+No type information for this code.
+import "./globalNs";
+No type information for this code.
+
 No type information for this code.

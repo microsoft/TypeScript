@@ -1,7 +1,9 @@
 === tests/cases/compiler/model/index.ts ===
 export * from "./account";
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/model/account.ts ===
+
+No type information for this code.
+=== tests/cases/compiler/model/account.ts ===
 export interface Account {
 >Account : Symbol(Account, Decl(account.ts, 0, 0))
 

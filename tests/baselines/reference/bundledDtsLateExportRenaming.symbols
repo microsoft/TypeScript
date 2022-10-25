@@ -1,7 +1,9 @@
 === tests/cases/compiler/index.ts ===
 export * from "./nested";
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/nested/base.ts ===
+
+No type information for this code.
+=== tests/cases/compiler/nested/base.ts ===
 import { B } from "./shared";
 >B : Symbol(B, Decl(base.ts, 0, 8))
 
@@ -26,10 +28,15 @@ export function g() {
 === tests/cases/compiler/nested/index.ts ===
 export * from "./base";
 No type information for this code.
-No type information for this code.export * from "./derived";
-No type information for this code.export * from "./shared";
+
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/nested/shared.ts ===
+export * from "./derived";
+No type information for this code.
+export * from "./shared";
+No type information for this code.
+
+No type information for this code.
+=== tests/cases/compiler/nested/shared.ts ===
 export class B {}
 >B : Symbol(B, Decl(shared.ts, 0, 0))
 

@@ -811,7 +811,7 @@ namespace Harness {
                     // Preserve legacy behavior
                     if (lastIndexWritten === undefined) {
                         for (const codeLine of codeLines) {
-                            typeLines += codeLine + "\r\nNo type information for this code.";
+                            typeLines += codeLine + "\r\nNo type information for this code.\r\n";
                         }
                     }
                     else {

@@ -1,6 +1,7 @@
 === tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.js ===
 
-No type information for this code.=== tests/cases/conformance/classes/members/privateNames/a.js ===
+No type information for this code.
+=== tests/cases/conformance/classes/members/privateNames/a.js ===
 class C {
 >C : C
 

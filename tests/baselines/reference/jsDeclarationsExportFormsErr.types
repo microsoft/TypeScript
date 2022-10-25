@@ -27,7 +27,10 @@ export as namespace GLO; // TS Only
 
 === tests/cases/conformance/jsdoc/declarations/includeAll.js ===
 import "./bar";
-No type information for this code.import "./bin";
-No type information for this code.import "./globalNs";
 No type information for this code.
+import "./bin";
+No type information for this code.
+import "./globalNs";
+No type information for this code.
+
 No type information for this code.

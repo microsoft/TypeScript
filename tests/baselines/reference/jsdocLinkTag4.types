@@ -1,7 +1,9 @@
 === /a.ts ===
 export interface A {}
 No type information for this code.
-No type information for this code.=== /b.ts ===
+
+No type information for this code.
+=== /b.ts ===
 import * as a from "./a";
 >a : typeof a
 

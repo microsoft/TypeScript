@@ -1,7 +1,9 @@
 === tests/cases/compiler/bar.ts ===
 export interface IEventSourcedEntity { }
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/test.ts ===
+
+No type information for this code.
+=== tests/cases/compiler/test.ts ===
 import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : any
 

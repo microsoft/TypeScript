@@ -10,7 +10,9 @@ export = typeof x; // Ok
 === tests/cases/conformance/externalModules/foo2.ts ===
 export = "sausages"; // Ok
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/foo3.ts ===
+
+No type information for this code.
+=== tests/cases/conformance/externalModules/foo3.ts ===
 export = class Foo3 {}; // Error, not an expression
 >class Foo3 {} : typeof Foo3
 >Foo3 : typeof Foo3

@@ -9,7 +9,9 @@ export type { A } from './a';
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
 export * from './b';
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+
+No type information for this code.
+=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
 import { A } from './c';
 >A : typeof A
 

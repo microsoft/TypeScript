@@ -9,7 +9,9 @@ export class A {
 === tests/cases/compiler/exportStarFromEmptyModule_module2.ts ===
 // empty
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/exportStarFromEmptyModule_module3.ts ===
+
+No type information for this code.
+=== tests/cases/compiler/exportStarFromEmptyModule_module3.ts ===
 export * from "./exportStarFromEmptyModule_module2";
 export * from "./exportStarFromEmptyModule_module1";
 

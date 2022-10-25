@@ -156,7 +156,9 @@ console.log(h);
 === /j.ts ===
 import H = require('./h'); // noUnusedLocals error only
 No type information for this code.
-No type information for this code.=== /k.ts ===
+
+No type information for this code.
+=== /k.ts ===
 const enum K { One, Two }
 >K : Symbol(K, Decl(k.ts, 0, 0))
 >One : Symbol(K.One, Decl(k.ts, 0, 14))

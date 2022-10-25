@@ -10,7 +10,8 @@ export enum A {
 }
 === /cache/typescript-fsa/index.d.ts ===
 export * from "./src/impl";
-No type information for this code.=== /p1/index.ts ===
+No type information for this code.
+=== /p1/index.ts ===
 import * as _whatever from "p2";
 >_whatever : typeof _whatever
 

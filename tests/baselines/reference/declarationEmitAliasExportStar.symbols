@@ -4,7 +4,8 @@ export interface ThingB { }
 
 === tests/cases/compiler/things.ts ===
 export * from "./thingB";
-No type information for this code.=== tests/cases/compiler/index.ts ===
+No type information for this code.
+=== tests/cases/compiler/index.ts ===
 import * as things from "./things";
 >things : Symbol(things, Decl(index.ts, 0, 6))
 

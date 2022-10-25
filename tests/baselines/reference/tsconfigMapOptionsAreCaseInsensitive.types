@@ -1,7 +1,9 @@
 === tests/cases/compiler/other.ts ===
 export default 42;
 No type information for this code.
-No type information for this code.=== tests/cases/compiler/index.ts ===
+
+No type information for this code.
+=== tests/cases/compiler/index.ts ===
 import Answer from "./other.js";
 >Answer : 42
 
