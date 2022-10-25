@@ -1,8 +1,7 @@
 === tests/cases/conformance/declarationEmit/a.ts ===
-export interface Foo {}
-No type information for this code.
 
-No type information for this code.
+export interface Foo {}
+
 === tests/cases/conformance/declarationEmit/b.ts ===
 import * as a from "./a";
 >a : typeof a

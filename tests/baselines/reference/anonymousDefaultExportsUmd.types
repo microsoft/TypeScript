@@ -1,8 +1,7 @@
 === tests/cases/conformance/es6/moduleExportsUmd/a.ts ===
-export default class {}
-No type information for this code.
 
-No type information for this code.
+export default class {}
+
 === tests/cases/conformance/es6/moduleExportsUmd/b.ts ===
+
 export default function() {}
-No type information for this code.

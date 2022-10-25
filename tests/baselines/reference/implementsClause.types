@@ -1,8 +1,7 @@
 === tests/cases/conformance/externalModules/typeOnly/types.ts ===
-export interface Component {}
-No type information for this code.
 
-No type information for this code.
+export interface Component {}
+
 === tests/cases/conformance/externalModules/typeOnly/ns.ts ===
 import type * as types from './types';
 >types : typeof types

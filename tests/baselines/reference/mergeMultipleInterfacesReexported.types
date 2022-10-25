@@ -1,8 +1,7 @@
 === tests/cases/compiler/index.ts ===
-export * from './eventList';
-No type information for this code.
 
-No type information for this code.
+export * from './eventList';
+
 === tests/cases/compiler/test.ts ===
 import { EventList } from "./eventList";
 >EventList : any

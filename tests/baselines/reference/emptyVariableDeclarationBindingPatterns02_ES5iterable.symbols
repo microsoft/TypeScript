@@ -1,19 +1,11 @@
 === tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts ===
-(function () {
-No type information for this code.
-    var {};
-No type information for this code.
-    let {};
-No type information for this code.
-    const {};
-No type information for this code.
 
-No type information for this code.
+(function () {
+    var {};
+    let {};
+    const {};
+
     var [];
-No type information for this code.
     let [];
-No type information for this code.
     const [];
-No type information for this code.
 })();
-No type information for this code.

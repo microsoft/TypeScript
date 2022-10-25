@@ -1,8 +1,7 @@
 === /a.ts ===
-export default abstract class {}
-No type information for this code.
 
-No type information for this code.
+export default abstract class {}
+
 === /b.ts ===
 import A from "./a";
 >A : typeof A

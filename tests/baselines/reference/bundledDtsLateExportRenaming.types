@@ -1,8 +1,7 @@
 === tests/cases/compiler/index.ts ===
-export * from "./nested";
-No type information for this code.
 
-No type information for this code.
+export * from "./nested";
+
 === tests/cases/compiler/nested/base.ts ===
 import { B } from "./shared";
 >B : typeof B
@@ -28,16 +27,12 @@ export function g() {
 }
 
 === tests/cases/compiler/nested/index.ts ===
+
 export * from "./base";
-No type information for this code.
 
-No type information for this code.
 export * from "./derived";
-No type information for this code.
 export * from "./shared";
-No type information for this code.
 
-No type information for this code.
 === tests/cases/compiler/nested/shared.ts ===
 export class B {}
 >B : B

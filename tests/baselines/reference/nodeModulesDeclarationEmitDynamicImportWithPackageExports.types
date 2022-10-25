@@ -1,18 +1,15 @@
 === tests/cases/conformance/node/index.ts ===
+
 // esm format file
-No type information for this code.
 export {};
-No type information for this code.
 === tests/cases/conformance/node/index.mts ===
+
 // esm format file
-No type information for this code.
 export {};
-No type information for this code.
 === tests/cases/conformance/node/index.cts ===
+
 // cjs format file
-No type information for this code.
 export {};
-No type information for this code.
 === tests/cases/conformance/node/other.ts ===
 // esm format file
 export const a = await import("package/cjs");

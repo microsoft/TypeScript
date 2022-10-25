@@ -1,8 +1,7 @@
 === tests/cases/compiler/a.ts ===
-export default class { }
-No type information for this code.
 
-No type information for this code.
+export default class { }
+
 === tests/cases/compiler/b.ts ===
 export { default } from "./a";
 >default : typeof b

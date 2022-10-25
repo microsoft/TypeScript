@@ -1,10 +1,8 @@
 === /app.ts ===
-/// <reference types="library-a" />
-No type information for this code.
-/// <reference types="library-b" />
-No type information for this code.
 
-No type information for this code.
+/// <reference types="library-a" />
+/// <reference types="library-b" />
+
 === /node_modules/@types/library-a/index.d.ts ===
 // Symlinks are always resolved for type reference directives.
 // NOTE: This test would still compile without errors even if they were not,
@@ -17,7 +15,6 @@ declare class MyClass { private x: number; }
 >x : number
 
 === /node_modules/@types/library-b/index.d.ts ===
-/// <reference types="library-a" />
-No type information for this code.
 
-No type information for this code.
+/// <reference types="library-a" />
+

@@ -1,8 +1,7 @@
 === /a.ts ===
-import { } from "augmenter";
-No type information for this code.
 
-No type information for this code.
+import { } from "augmenter";
+
 === /node_modules/augmenter/index.d.ts ===
 // This tests that augmenting an untyped module is forbidden even in an ambient context. Contrast with `moduleAugmentationInDependency.ts`.
 
