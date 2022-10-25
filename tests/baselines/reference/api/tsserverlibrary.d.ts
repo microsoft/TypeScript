@@ -3088,6 +3088,7 @@ declare namespace ts {
         typeRoots?: string[];
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
+        annotateTransforms?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface WatchOptions {
@@ -4051,6 +4052,10 @@ declare namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
+    }
+    export interface SourceMapAnnotation {
+        name: string;
+        value: unknown;
     }
     export interface GetEffectiveTypeRootsHost {
         directoryExists?(directoryName: string): boolean;
@@ -5140,6 +5145,17 @@ declare namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+}
+declare namespace ts {
+    interface DecodedSourceMapAnnotation {
+        generatedLine: number;
+        generatedCharacter: number;
+        annotations: SourceMapAnnotation[];
+    }
+    /**
+     * Decodes the custom `x_ms_ts_annotations` field of a SourceMap.
+     */
+    function decodeSourceMapAnnotations(annotations: string, names: readonly string[]): Iterator<DecodedSourceMapAnnotation>;
 }
 declare namespace ts {
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;

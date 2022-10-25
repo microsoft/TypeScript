@@ -318,6 +318,13 @@ namespace ts {
             description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
             defaultValueDescription: Diagnostics.Platform_specific
         },
+        {
+            name: "annotateTransforms",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Compiler_Diagnostics,
+            defaultValueDescription: false
+        }
     ];
 
     /* @internal */

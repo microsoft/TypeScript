@@ -384,7 +384,7 @@ namespace ts {
                 return;
             }
             // Transform the source files
-            const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+            const transform = transformNodes(resolver, host, /*factoryIn*/ undefined, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
@@ -397,7 +397,8 @@ namespace ts {
                 inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 writeBundleFileInfo: !!bundleBuildInfo,
-                relativeToBuildInfo
+                relativeToBuildInfo,
+                annotateTransforms: compilerOptions.annotateTransforms
             };
 
             // Create a printer to print the nodes
@@ -457,7 +458,8 @@ namespace ts {
                 onlyPrintJsDocStyle: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
                 recordInternalSection: !!bundleBuildInfo,
-                relativeToBuildInfo
+                relativeToBuildInfo,
+                annotateTransforms: compilerOptions.annotateTransforms
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -877,6 +879,7 @@ namespace ts {
         Substitution,
         Comments,
         SourceMaps,
+        TransformerAnnotations,
         Emit,
     }
 
@@ -897,6 +900,7 @@ namespace ts {
         const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
+        const annotateTransforms = printerOptions.annotateTransforms;
         const bundledHelpers = new Map<string, boolean>();
 
         let currentSourceFile: SourceFile | undefined;
@@ -1291,6 +1295,11 @@ namespace ts {
                 case PipelinePhase.SourceMaps:
                     if (shouldEmitSourceMaps(node)) {
                         return pipelineEmitWithSourceMaps;
+                    }
+                    // falls through
+                case PipelinePhase.TransformerAnnotations:
+                    if (annotateTransforms && sourceMapGenerator) {
+                        return pipelineEmitWithTransformerAnnotations;
                     }
                     // falls through
                 case PipelinePhase.Emit:
@@ -5885,6 +5894,22 @@ namespace ts {
             }
         }
 
+        function pipelineEmitWithTransformerAnnotations(hint: EmitHint, node: Node) {
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.TransformerAnnotations, hint, node);
+            const transformerNames = annotateTransforms && sourceMapGenerator && getTransformerNames(node);
+            if (transformerNames) {
+                // Add leading and trailing annotations for the node. While this only emits transformer annotations
+                // currently, the format for annotations is intentionally generic to allow for other kinds of annotations
+                // in the future
+                sourceMapGenerator!.addAnnotation(writer.getLine(), writer.getColumn(), "typescript.transformers", { kind: "start", transformers: transformerNames });
+                pipelinePhase(hint, node);
+                sourceMapGenerator!.addAnnotation(writer.getLine(), writer.getColumn(), "typescript.transformers", { kind: "end" });
+            }
+            else {
+                pipelinePhase(hint, node);
+            }
+        }
+
         /**
          * Skips trivia such as comments and white-space that can be optionally overridden by the source-map source
          */
@@ -6046,5 +6071,45 @@ namespace ts {
         return emit.length === 1 ? emitListItemNoParenthesizer :
             typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
             emitListItemWithParenthesizerRule;
+    }
+
+    function getTransformerNames(node: Node | undefined) {
+        let transformerNames: string[] | undefined;
+        let lastTransformerName: string | undefined;
+        while (node) {
+            const transformerName = getTransformerName(node.transformer);
+            if (transformerName && transformerName !== lastTransformerName) {
+                transformerNames = append(transformerNames, transformerName);
+                lastTransformerName = transformerName;
+            }
+            node = node.original;
+        }
+        return transformerNames;
+    }
+
+    function getTransformerName(transformer: TransformerFactory<Node> | undefined) {
+        switch (transformer) {
+            case transformTypeScript: return "ts";
+            case transformESNext: return "esnext";
+            case transformES2021: return "es2021";
+            case transformES2020: return "es2020";
+            case transformES2019: return "es2019";
+            case transformES2018: return "es2018";
+            case transformES2017: return "es2017";
+            case transformES2016: return "es2016";
+            case transformES2015: return "es2015";
+            case transformES5: return "es5";
+            case transformClassFields: return "classFields";
+            case transformLegacyDecorators: return "legacyDecorators";
+            case transformGenerators: return "generators";
+            case transformJsx: return "jsx";
+            case transformECMAScriptModule: return "esmodule";
+            case transformModule: return "module";
+            case transformSystemModule: return "system";
+            case transformNodeModule: return "node";
+            case transformDeclarations: return "declarations";
+            case undefined: return;
+            default: return transformer.name;
+        }
     }
 }

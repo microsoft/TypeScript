@@ -39,12 +39,27 @@ namespace ts {
         let hasPendingSource = false;
         let hasPendingName = false;
 
+        const singleAnnotationCharCodes: number[] = [];
+        let singleAnnotation = "";
+        const annotationsCharCodes: number[] = [];
+        let annotations = "";
+        let lastAnnotatedGeneratedLine = 0;
+        let lastAnnotatedGeneratedCharacter = 0;
+        let lastAnnotationsNameIndex = 0;
+        let lastAnnotations: SourceMapAnnotation[] | undefined;
+        let hasLastAnnotation = false;
+        let pendingAnnotatedGeneratedLine = 0;
+        let pendingAnnotatedGeneratedCharacter = 0;
+        let pendingAnnotations: SourceMapAnnotation[] | undefined;
+        let hasPendingAnnotation = false;
+
         return {
             getSources: () => rawSources,
             addSource,
             setSourceContent,
             addName,
             addMapping,
+            addAnnotation,
             appendSourceMap,
             toJSON,
             toString: () => JSON.stringify(toJSON())
@@ -138,6 +153,186 @@ namespace ts {
                     pendingNameIndex = nameIndex;
                     hasPendingName = true;
                 }
+            }
+            exit();
+        }
+
+        function canEncodeAnnotation(annotation: unknown) {
+            switch (typeof annotation) {
+                case "number": return isFinite(annotation);
+                case "string": return true;
+                case "boolean": return true;
+                case "object": return true;
+                default: return false;
+            }
+        }
+
+        function encodeSingleAnnotation(annotation: unknown) {
+            let lastNameIndex = 0;
+            return encodeSingleAnnotationWorker(annotation);
+
+            function encodeSingleAnnotationWorker(annotation: unknown) {
+                switch (typeof annotation) {
+                    case "number":
+                        appendSingleAnnotationCharCode(CharacterCodes.hash);
+                        appendBase64VLQ(appendSingleAnnotationCharCode, annotation);
+                        break;
+                    case "string":
+                        appendSingleAnnotationCharCode(CharacterCodes.at);
+                        const nameIndex = addName(annotation);
+                        appendBase64VLQ(appendSingleAnnotationCharCode, nameIndex - lastNameIndex);
+                        lastNameIndex = nameIndex;
+                        break;
+                    case "boolean":
+                        appendSingleAnnotationCharCode(annotation ? CharacterCodes.t : CharacterCodes.f);
+                        break;
+                    case "object":
+                        if (!annotation) {
+                            appendSingleAnnotationCharCode(CharacterCodes.exclamation);
+                            break;
+                        }
+                        if (isArray(annotation)) {
+                            appendSingleAnnotationCharCode(CharacterCodes.openBracket);
+                            for (let i = 0; i < annotation.length; i++) {
+                                if (i > 0) {
+                                    appendSingleAnnotationCharCode(CharacterCodes.comma);
+                                }
+                                if (canEncodeAnnotation(annotation[i])) {
+                                    encodeSingleAnnotationWorker(annotation[i]);
+                                }
+                            }
+                            appendSingleAnnotationCharCode(CharacterCodes.closeBracket);
+                            break;
+                        }
+                        appendSingleAnnotationCharCode(CharacterCodes.openBrace);
+                        let hasWrittenProperty = false;
+                        for (const key in annotation) {
+                            const value = (annotation as any)[key];
+                            if (canEncodeAnnotation(key) && canEncodeAnnotation(value)) {
+                                if (hasWrittenProperty) {
+                                    appendSingleAnnotationCharCode(CharacterCodes.comma);
+                                }
+                                encodeSingleAnnotationWorker(key);
+                                appendSingleAnnotationCharCode(CharacterCodes.colon);
+                                encodeSingleAnnotationWorker(value);
+                                hasWrittenProperty = true;
+                            }
+                        }
+                        appendSingleAnnotationCharCode(CharacterCodes.closeBrace);
+                        break;
+                }
+            }
+        }
+
+        function isNewAnnotatedGeneratedPosition(generatedLine: number, generatedCharacter: number) {
+            return !hasPendingAnnotation
+                || pendingAnnotatedGeneratedLine !== generatedLine
+                || pendingAnnotatedGeneratedCharacter !== generatedCharacter;
+        }
+
+        function shouldCommitPendingAnnotation() {
+            return !hasLastAnnotation
+                || lastAnnotatedGeneratedLine !== pendingAnnotatedGeneratedLine
+                || lastAnnotatedGeneratedCharacter !== pendingAnnotatedGeneratedCharacter
+                || lastAnnotations !== pendingAnnotations;
+        }
+
+        function flushSingleAnnotationBuffer(): void {
+            if (singleAnnotationCharCodes.length > 0) {
+                singleAnnotation += String.fromCharCode.apply(undefined, singleAnnotationCharCodes);
+                singleAnnotationCharCodes.length = 0;
+            }
+        }
+
+        function appendSingleAnnotationCharCode(charCode: number) {
+            singleAnnotationCharCodes.push(charCode);
+            // String.fromCharCode accepts its arguments on the stack, so we have to chunk the input,
+            // otherwise we can get stack overflows for large source maps
+            if (singleAnnotationCharCodes.length >= 1024) {
+                flushSingleAnnotationBuffer();
+            }
+        }
+
+        function flushAnnotationsBuffer(): void {
+            if (annotationsCharCodes.length > 0) {
+                annotations += String.fromCharCode.apply(undefined, annotationsCharCodes);
+                annotationsCharCodes.length = 0;
+            }
+        }
+
+        function appendAnnotationsCharCode(charCode: number) {
+            annotationsCharCodes.push(charCode);
+            // String.fromCharCode accepts its arguments on the stack, so we have to chunk the input,
+            // otherwise we can get stack overflows for large source maps
+            if (annotationsCharCodes.length >= 1024) {
+                flushAnnotationsBuffer();
+            }
+        }
+
+        function commitPendingAnnotations() {
+            if (!hasPendingAnnotation || !shouldCommitPendingAnnotation()) {
+                return;
+            }
+
+            enter();
+
+            // Line/Comma delimiters
+            if (lastAnnotatedGeneratedLine < pendingAnnotatedGeneratedLine) {
+                // Emit line delimiters
+                do {
+                    appendAnnotationsCharCode(CharacterCodes.semicolon);
+                    lastAnnotatedGeneratedLine++;
+                }
+                while (lastAnnotatedGeneratedLine < pendingAnnotatedGeneratedLine);
+                // Only need to set this once
+                lastAnnotatedGeneratedCharacter = 0;
+            }
+            else {
+                Debug.assertEqual(lastAnnotatedGeneratedLine, pendingAnnotatedGeneratedLine, "generatedLine cannot backtrack");
+                // Emit comma to separate the entry
+                if (hasLast) {
+                    appendAnnotationsCharCode(CharacterCodes.comma);
+                }
+            }
+
+            // 1. Relative generated character
+            appendBase64VLQ(appendAnnotationsCharCode, pendingAnnotatedGeneratedCharacter - lastAnnotatedGeneratedCharacter);
+            lastAnnotatedGeneratedCharacter = pendingAnnotatedGeneratedCharacter;
+
+            // 2. Annotations
+            if (canEncodeAnnotation(pendingAnnotations)) {
+                encodeSingleAnnotation(pendingAnnotations);
+                flushSingleAnnotationBuffer();
+
+                const annotationsNameIndex = addName(singleAnnotation);
+                singleAnnotation = "";
+
+                appendBase64VLQ(appendAnnotationsCharCode, annotationsNameIndex - lastAnnotationsNameIndex);
+                lastAnnotationsNameIndex = annotationsNameIndex;
+            }
+
+            lastAnnotations = pendingAnnotations;
+            pendingAnnotations = undefined;
+
+            hasLastAnnotation = false;
+            exit();
+        }
+
+        function addAnnotation(generatedLine: number, generatedCharacter: number, annotationName: string, annotationValue: unknown) {
+            Debug.assert(generatedLine >= pendingAnnotatedGeneratedLine, "generatedLine cannot backtrack");
+            Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
+            enter();
+            const annotation: SourceMapAnnotation = { name: annotationName, value: annotationValue };
+            if (isNewAnnotatedGeneratedPosition(generatedLine, generatedCharacter)) {
+                commitPendingAnnotations();
+                pendingAnnotatedGeneratedLine = generatedLine;
+                pendingAnnotatedGeneratedCharacter = generatedCharacter;
+                pendingAnnotations = [annotation];
+                hasPendingAnnotation = true;
+            }
+            else {
+                pendingAnnotations ??= [];
+                pendingAnnotations.push(annotation);
             }
             exit();
         }
@@ -247,25 +442,25 @@ namespace ts {
             }
 
             // 1. Relative generated character
-            appendBase64VLQ(pendingGeneratedCharacter - lastGeneratedCharacter);
+            appendBase64VLQ(appendMappingCharCode, pendingGeneratedCharacter - lastGeneratedCharacter);
             lastGeneratedCharacter = pendingGeneratedCharacter;
 
             if (hasPendingSource) {
                 // 2. Relative sourceIndex
-                appendBase64VLQ(pendingSourceIndex - lastSourceIndex);
+                appendBase64VLQ(appendMappingCharCode, pendingSourceIndex - lastSourceIndex);
                 lastSourceIndex = pendingSourceIndex;
 
                 // 3. Relative source line
-                appendBase64VLQ(pendingSourceLine - lastSourceLine);
+                appendBase64VLQ(appendMappingCharCode, pendingSourceLine - lastSourceLine);
                 lastSourceLine = pendingSourceLine;
 
                 // 4. Relative source character
-                appendBase64VLQ(pendingSourceCharacter - lastSourceCharacter);
+                appendBase64VLQ(appendMappingCharCode, pendingSourceCharacter - lastSourceCharacter);
                 lastSourceCharacter = pendingSourceCharacter;
 
                 if (hasPendingName) {
                     // 5. Relative nameIndex
-                    appendBase64VLQ(pendingNameIndex - lastNameIndex);
+                    appendBase64VLQ(appendMappingCharCode, pendingNameIndex - lastNameIndex);
                     lastNameIndex = pendingNameIndex;
                 }
             }
@@ -284,7 +479,7 @@ namespace ts {
         function toJSON(): RawSourceMap {
             commitPendingMapping();
             flushMappingBuffer();
-            return {
+            const sourceMap: RawSourceMap = {
                 version: 3,
                 file,
                 sourceRoot,
@@ -293,9 +488,15 @@ namespace ts {
                 mappings,
                 sourcesContent,
             };
+            if (hasPendingAnnotation || hasLastAnnotation) {
+                commitPendingAnnotations();
+                flushAnnotationsBuffer();
+                sourceMap.x_ms_ts_annotations = annotations;
+            }
+            return sourceMap;
         }
 
-        function appendBase64VLQ(inValue: number): void {
+        function appendBase64VLQ(appendCharCode: (charCode: number) => void, inValue: number): void {
             // Add a new least significant bit that has the sign of the value.
             // if negative number the least significant bit that gets added to the number has value 1
             // else least significant bit value that gets added is 0
@@ -316,7 +517,7 @@ namespace ts {
                     // There are still more digits to decode, set the msb (6th bit)
                     currentDigit = currentDigit | 32;
                 }
-                appendMappingCharCode(base64FormatEncode(currentDigit));
+                appendCharCode(base64FormatEncode(currentDigit));
             } while (inValue > 0);
         }
     }
@@ -408,9 +609,37 @@ namespace ts {
         sourceCharacter: number;
     }
 
+    export interface CharCodeReader {
+        readonly length: number;
+        pos: number;
+        peek(): number;
+        read(): number;
+    }
+
+    export function createCharCodeReader(text: string): CharCodeReader {
+        const length = text.length;
+        return {
+            length,
+            pos: 0,
+            peek() {
+                const pos = this.pos;
+                return pos < length ? text.charCodeAt(pos) : -1;
+            },
+            read() {
+                const pos = this.pos;
+                if (pos < length) {
+                    const ch = text.charCodeAt(pos);
+                    this.pos++;
+                    return ch;
+                }
+                return -1;
+            }
+        };
+    }
+
     export function decodeMappings(mappings: string): MappingsDecoder {
+        const reader = createCharCodeReader(mappings);
         let done = false;
-        let pos = 0;
         let generatedLine = 0;
         let generatedCharacter = 0;
         let sourceIndex = 0;
@@ -420,53 +649,53 @@ namespace ts {
         let error: string | undefined;
 
         return {
-            get pos() { return pos; },
+            get pos() { return reader.pos; },
             get error() { return error; },
             get state() { return captureMapping(/*hasSource*/ true, /*hasName*/ true); },
             next() {
-                while (!done && pos < mappings.length) {
-                    const ch = mappings.charCodeAt(pos);
+                while (!done && reader.pos < reader.length) {
+                    const ch = reader.peek();
                     if (ch === CharacterCodes.semicolon) {
                         // new line
                         generatedLine++;
                         generatedCharacter = 0;
-                        pos++;
+                        reader.read();
                         continue;
                     }
 
                     if (ch === CharacterCodes.comma) {
                         // Next entry is on same line - no action needed
-                        pos++;
+                        reader.read();
                         continue;
                     }
 
                     let hasSource = false;
                     let hasName = false;
 
-                    generatedCharacter += base64VLQFormatDecode();
+                    generatedCharacter += base64VLQFormatDecode(reader, setError);
                     if (hasReportedError()) return stopIterating();
                     if (generatedCharacter < 0) return setErrorAndStopIterating("Invalid generatedCharacter found");
 
                     if (!isSourceMappingSegmentEnd()) {
                         hasSource = true;
 
-                        sourceIndex += base64VLQFormatDecode();
+                        sourceIndex += base64VLQFormatDecode(reader, setError);
                         if (hasReportedError()) return stopIterating();
                         if (sourceIndex < 0) return setErrorAndStopIterating("Invalid sourceIndex found");
                         if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceIndex");
 
-                        sourceLine += base64VLQFormatDecode();
+                        sourceLine += base64VLQFormatDecode(reader, setError);
                         if (hasReportedError()) return stopIterating();
                         if (sourceLine < 0) return setErrorAndStopIterating("Invalid sourceLine found");
                         if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceLine");
 
-                        sourceCharacter += base64VLQFormatDecode();
+                        sourceCharacter += base64VLQFormatDecode(reader, setError);
                         if (hasReportedError()) return stopIterating();
                         if (sourceCharacter < 0) return setErrorAndStopIterating("Invalid sourceCharacter found");
 
                         if (!isSourceMappingSegmentEnd()) {
                             hasName = true;
-                            nameIndex += base64VLQFormatDecode();
+                            nameIndex += base64VLQFormatDecode(reader, setError);
                             if (hasReportedError()) return stopIterating();
                             if (nameIndex < 0) return setErrorAndStopIterating("Invalid nameIndex found");
 
@@ -515,44 +744,45 @@ namespace ts {
         }
 
         function isSourceMappingSegmentEnd() {
-            return (pos === mappings.length ||
-                mappings.charCodeAt(pos) === CharacterCodes.comma ||
-                mappings.charCodeAt(pos) === CharacterCodes.semicolon);
+            return (reader.pos === reader.length ||
+                reader.peek() === CharacterCodes.comma ||
+                reader.peek() === CharacterCodes.semicolon);
         }
 
-        function base64VLQFormatDecode(): number {
-            let moreDigits = true;
-            let shiftCount = 0;
-            let value = 0;
+    }
 
-            for (; moreDigits; pos++) {
-                if (pos >= mappings.length) return setError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
+    export function base64VLQFormatDecode(reader: CharCodeReader, reportError: (error: string) => void): number {
+        let moreDigits = true;
+        let shiftCount = 0;
+        let value = 0;
 
-                // 6 digit number
-                const currentByte = base64FormatDecode(mappings.charCodeAt(pos));
-                if (currentByte === -1) return setError("Invalid character in VLQ"), -1;
+        for (; moreDigits; reader.read()) {
+            if (reader.pos >= reader.length) return reportError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
 
-                // If msb is set, we still have more bits to continue
-                moreDigits = (currentByte & 32) !== 0;
+            // 6 digit number
+            const currentByte = base64FormatDecode(reader.peek());
+            if (currentByte === -1) return reportError("Invalid character in VLQ"), -1;
 
-                // least significant 5 bits are the next msbs in the final value.
-                value = value | ((currentByte & 31) << shiftCount);
-                shiftCount += 5;
-            }
+            // If msb is set, we still have more bits to continue
+            moreDigits = (currentByte & 32) !== 0;
 
-            // Least significant bit if 1 represents negative and rest of the msb is actual absolute value
-            if ((value & 1) === 0) {
-                // + number
-                value = value >> 1;
-            }
-            else {
-                // - number
-                value = value >> 1;
-                value = -value;
-            }
-
-            return value;
+            // least significant 5 bits are the next msbs in the final value.
+            value = value | ((currentByte & 31) << shiftCount);
+            shiftCount += 5;
         }
+
+        // Least significant bit if 1 represents negative and rest of the msb is actual absolute value
+        if ((value & 1) === 0) {
+            // + number
+            value = value >> 1;
+        }
+        else {
+            // - number
+            value = value >> 1;
+            value = -value;
+        }
+
+        return value;
     }
 
     export function sameMapping<T extends Mapping>(left: T, right: T) {

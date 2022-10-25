@@ -147,12 +147,13 @@ namespace ts {
      *
      * @param resolver The emit resolver provided by the checker.
      * @param host The emit host object used to interact with the file system.
+     * @param factoryIn The `NodeFactory` to use to create new nodes.
      * @param options Compiler options to surface in the `TransformationContext`.
      * @param nodes An array of nodes to transform.
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factoryIn: NodeFactory | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -171,12 +172,13 @@ namespace ts {
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = noEmitSubstitution;
         let onEmitNode: TransformationContext["onEmitNode"] = noEmitNotification;
         let state = TransformationState.Uninitialized;
+        const shouldAttachTransformer = options.annotateTransforms || Debug.isDebugging;
         const diagnostics: DiagnosticWithLocation[] = [];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
-            factory,
+            factory: factoryIn ?? factory,
             getCompilerOptions: () => options,
             getEmitResolver: () => resolver!, // TODO: GH#18217
             getEmitHost: () => host!, // TODO: GH#18217
@@ -224,7 +226,7 @@ namespace ts {
         performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
-        const transformersWithContext = transformers.map(t => t(context));
+        const transformersWithContext = transformers.map(createTransformerWithContext);
         const transformation = (node: T): T => {
             for (const transform of transformersWithContext) {
                 node = transform(node);
@@ -257,6 +259,41 @@ namespace ts {
             dispose,
             diagnostics
         };
+
+        function createTransformerWithContext(t: TransformerFactory<T>) {
+            if (factoryIn || !shouldAttachTransformer) {
+                return t(context);
+            }
+
+            const baseFactory = factory.baseFactory;
+            const perTransformerBaseFactory: BaseNodeFactory = {
+                createBaseSourceFileNode: kind => attachTransformer(baseFactory.createBaseSourceFileNode(kind), t),
+                createBaseIdentifierNode: kind => attachTransformer(baseFactory.createBaseIdentifierNode(kind), t),
+                createBasePrivateIdentifierNode: kind => attachTransformer(baseFactory.createBasePrivateIdentifierNode(kind), t),
+                createBaseTokenNode: kind => attachTransformer(baseFactory.createBaseTokenNode(kind), t),
+                createBaseNode: kind => attachTransformer(baseFactory.createBaseNode(kind), t),
+            };
+
+            const perTransformerFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, perTransformerBaseFactory);
+            const perTransformerContext: TransformationContext = Object.create(context, {
+                factory: {
+                    configurable: true,
+                    writable: true,
+                    value: perTransformerFactory
+                },
+                getEmitHelperFactory: {
+                    configurable: true,
+                    writable: true,
+                    value: memoize(() => createEmitHelperFactory(perTransformerContext))
+                }
+            });
+            return t(perTransformerContext);
+        }
+
+        function attachTransformer<TNode extends Node>(node: TNode, transformer: TransformerFactory<T>) {
+            node.transformer = transformer;
+            return node;
+        }
 
         function transformRoot(node: T) {
             return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;

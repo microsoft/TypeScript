@@ -885,6 +885,7 @@ namespace ts {
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
+        /* @internal */ transformer?: TransformerFactory<Node>; // Source transformer that created the node
     }
 
     export interface JSDocContainer {
@@ -6669,6 +6670,7 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
+        annotateTransforms?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -8786,6 +8788,7 @@ namespace ts {
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
         /*@internal*/ terminateUnterminatedLiterals?: boolean;
+        /*@internal*/ annotateTransforms?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
@@ -8798,6 +8801,8 @@ namespace ts {
         sourcesContent?: (string | null)[] | null;
         mappings: string;
         names?: string[] | null;
+        [key: `x_${string}`]: unknown;
+        x_ms_ts_annotations?: string;
     }
 
     /**
@@ -8831,6 +8836,10 @@ namespace ts {
          */
         appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter): void;
         /**
+         * Adds a JSON annotation at the specified line and character.
+         */
+        addAnnotation(generatedLine: number, generatedCharacter: number, annotationName: string, annotationValue: unknown): void;
+        /**
          * Gets the source map as a `RawSourceMap` object.
          */
         toJSON(): RawSourceMap;
@@ -8838,6 +8847,11 @@ namespace ts {
          * Gets the string representation of the source map.
          */
         toString(): string;
+    }
+
+    export interface SourceMapAnnotation {
+        name: string;
+        value: unknown;
     }
 
     /* @internal */
