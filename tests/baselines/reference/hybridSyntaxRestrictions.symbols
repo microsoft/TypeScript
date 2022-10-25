@@ -12,6 +12,6 @@ declare var require: (...args: any[]) => any;
 >args : Symbol(args, Decl(index.d.ts, 0, 22))
 
 === /a.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.
+

@@ -2944,7 +2944,8 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
         Node16 = 3,
-        NodeNext = 99
+        NodeNext = 99,
+        Hybrid = 100
     }
     export enum ModuleDetectionKind {
         /**
@@ -3005,6 +3006,7 @@ declare namespace ts {
         baseUrl?: string;
         charset?: string;
         checkJs?: boolean;
+        customConditions?: string[];
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -3069,6 +3071,8 @@ declare namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
+        resolvePackageJsonExports?: boolean;
+        resolvePackageJsonImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -5064,9 +5068,10 @@ declare namespace ts {
     export function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
     export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations;
+    export function hybridModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    export function moduleResolutionSupportsResolvingTsExtensions(_compilerOptions: CompilerOptions): boolean;
+    export function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions): boolean;
     export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     export {};
 }

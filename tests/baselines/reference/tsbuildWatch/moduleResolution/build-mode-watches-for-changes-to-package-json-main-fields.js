@@ -55,9 +55,6 @@ Output::
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/packages/pkg2/const.js.ts' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/const.js.tsx' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/const.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
@@ -81,9 +78,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' exist - use it as a name resolution result.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has an unsupported extension, so skipping it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -94,9 +88,6 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.ts' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.tsx' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
@@ -318,9 +309,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' exist - use it as a name resolution result.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has an unsupported extension, so skipping it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/other.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
@@ -410,9 +398,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' exist - use it as a name resolution result.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has an unsupported extension, so skipping it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -423,9 +408,6 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.ts' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.tsx' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.js.d.ts' does not exist.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.

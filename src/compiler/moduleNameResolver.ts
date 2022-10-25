@@ -1609,7 +1609,13 @@ namespace ts {
             return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, extension, onlyRecordFailures, state);
         }
 
-        // esm mode resolutions don't include automatic extension lookup (without additional flags, at least)
+        // ./foo.js -> ./foo.ts
+        const resolvedByReplacingExtension = loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
+        if (resolvedByReplacingExtension) {
+            return resolvedByReplacingExtension;
+        }
+
+        // ./foo -> ./foo.ts
         if (!(state.features & NodeResolutionFeatures.EsmMode)) {
             // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
             const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, "", onlyRecordFailures, state);
@@ -1617,8 +1623,6 @@ namespace ts {
                 return resolvedByAddingExtension;
             }
         }
-
-        return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
     }
 
     function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {

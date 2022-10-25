@@ -47,18 +47,18 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -275,18 +275,18 @@ File '/user/username/projects/myproject/package.json' exists according to earlie
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -588,18 +588,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
-File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
