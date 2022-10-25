@@ -26,6 +26,12 @@ namespace ts.GoToDefinition {
             return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
+        if (node.kind === SyntaxKind.ReturnKeyword) {
+            const functionDeclaration = findAncestor(node.parent, n =>
+                isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+            return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+        }
+
         if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
             const classDecl = node.parent.parent;
             const { symbol, failedAliasResolution } = getSymbol(classDecl, typeChecker, stopAtAlias);
