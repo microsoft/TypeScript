@@ -44,9 +44,6 @@
       "smartStep": true,
       "preLaunchTask": "npm: build:tests",
       "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceRoot}/built/local/run.js"
-      ],
       "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     },
     {
