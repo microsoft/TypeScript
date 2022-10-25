@@ -96,6 +96,7 @@
         "unittests/evaluation/externalModules.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",
+        "unittests/evaluation/generator.ts",
         "unittests/evaluation/optionalCall.ts",
         "unittests/evaluation/objectRest.ts",
         "unittests/evaluation/superInStaticInitializer.ts",

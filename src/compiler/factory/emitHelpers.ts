@@ -705,6 +705,8 @@ namespace ts {
     //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
     //            of a `yield*`.
     //          - The result of evaluating the verb delegated to the expression of a `yield*`.
+    //  g       A temporary variable that holds onto the generator object until the generator
+    //          is started, allowing it to also act as the `suspendedStart` state.
     //
     // functions:
     //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
@@ -750,7 +752,7 @@ namespace ts {
                 function verb(n) { return function (v) { return step([n, v]); }; }
                 function step(op) {
                     if (f) throw new TypeError("Generator is already executing.");
-                    while (_) try {
+                    while (g && (g = 0, op[0] && (_ = 0)), _) try {
                         if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
                         if (y = 0, t) op = [op[0] & 2, t.value];
                         switch (op[0]) {
