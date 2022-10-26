@@ -1,0 +1,35 @@
+tests/cases/compiler/src/core/foo.ts(4,1): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/compiler/src/other/bar.ts(4,1): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+
+
+==== tests/cases/compiler/src/core/_namespaces/ts.ts (0 errors) ====
+    import * as Debug from "../debug";
+    export { Debug };
+    
+==== tests/cases/compiler/src/core/debug.ts (0 errors) ====
+    export declare function assert(expression: unknown): asserts expression;
+    
+    
+==== tests/cases/compiler/src/core/foo.ts (1 errors) ====
+    import * as ts from "./_namespaces/ts";
+    import { Debug } from "./_namespaces/ts";
+    
+    ts.Debug.assert(true);
+    ~~~~~~~~~~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+    Debug.assert(true);
+    
+    
+==== tests/cases/compiler/src/other/_namespaces/ts.ts (0 errors) ====
+    export * from "../../core/_namespaces/ts"
+    
+    
+==== tests/cases/compiler/src/other/bar.ts (1 errors) ====
+    import * as ts from "./_namespaces/ts";
+    import { Debug } from "./_namespaces/ts";
+    
+    ts.Debug.assert(true);
+    ~~~~~~~~~~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+    Debug.assert(true);
+    
