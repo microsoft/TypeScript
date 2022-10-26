@@ -1945,11 +1945,12 @@ namespace ts {
                 // TODO(rbuckton): Is there a way to support parameter decorators or should we wait until it is standardized?
                 if (!useLegacyDecorators) return false;
                 // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target.
-                return (parent as FunctionLikeDeclaration).body !== undefined
-                    && parent !== undefined
+                return parent !== undefined
+                    && (parent as FunctionLikeDeclaration).body !== undefined
                     && (parent.kind === SyntaxKind.Constructor
                         || parent.kind === SyntaxKind.MethodDeclaration
                         || parent.kind === SyntaxKind.SetAccessor)
+                    && getThisParameter(parent as FunctionLikeDeclaration) !== node
                     && grandparent !== undefined
                     && grandparent.kind === SyntaxKind.ClassDeclaration;
         }

@@ -1273,11 +1273,22 @@ namespace ts {
             return addDeprecatedSuggestionWorker(declaration, diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags, type?: Type) {
+        function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
             symbolCount++;
             const symbol = (new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol);
             symbol.checkFlags = checkFlags || 0;
-            if (type) symbol.type = type;
+            return symbol;
+        }
+
+        function createParameter(name: __String, type: Type) {
+            const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name);
+            symbol.type = type;
+            return symbol;
+        }
+
+        function createProperty(name: __String, type: Type) {
+            const symbol = createSymbol(SymbolFlags.Property, name);
+            symbol.type = type;
             return symbol;
         }
 
@@ -13758,6 +13769,14 @@ namespace ts {
                 }
             }
             return result & ObjectFlags.PropagatingFlags;
+        }
+
+        function tryCreateTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): Type {
+            if (some(typeArguments) && target === emptyGenericType) {
+                return unknownType;
+            }
+
+            return createTypeReference(target, typeArguments);
         }
 
         function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference {
@@ -27260,8 +27279,7 @@ namespace ts {
         }
 
         function getContextualTypeForDecorator(decorator: Decorator): Type | undefined {
-            if (legacyDecorators) return undefined;
-            const signature = getESDecoratorCallSignature(decorator);
+            const signature = getDecoratorCallSignature(decorator);
             return signature ? getOrCreateTypeFromSignature(signature) : undefined;
         }
 
@@ -30997,57 +31015,8 @@ namespace ts {
          * Returns the synthetic argument list for a decorator invocation.
          */
         function getEffectiveDecoratorArguments(node: Decorator): readonly Expression[] {
-            return compilerOptions.experimentalDecorators ?
-                getEffectiveLegacyDecoratorArguments(node) :
-                getEffectiveESDecoratorArguments(node);
-        }
-
-        /**
-         * Returns the synthetic argument list for a decorator invocation.
-         */
-        function getEffectiveLegacyDecoratorArguments(node: Decorator): readonly Expression[] {
-            const parent = node.parent;
             const expr = node.expression;
-            switch (parent.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // For a class decorator, the `target` is the type of the class (e.g. the
-                    // "static" or "constructor" side of the class).
-                    return [
-                        createSyntheticExpression(expr, getTypeOfSymbol(getSymbolOfNode(parent)))
-                    ];
-                case SyntaxKind.Parameter:
-                    // A parameter declaration decorator will have three arguments (see
-                    // `ParameterDecorator` in core.d.ts).
-                    const func = parent.parent as FunctionLikeDeclaration;
-                    return [
-                        createSyntheticExpression(expr, parent.parent.kind === SyntaxKind.Constructor ? getTypeOfSymbol(getSymbolOfNode(func)) : errorType),
-                        createSyntheticExpression(expr, anyType),
-                        createSyntheticExpression(expr, numberType)
-                    ];
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // A method or accessor declaration decorator will have two or three arguments (see
-                    // `PropertyDecorator` and `MethodDecorator` in core.d.ts). If we are emitting decorators
-                    // for ES3, we will only pass two arguments.
-                    const hasPropDesc = languageVersion !== ScriptTarget.ES3 && (!isPropertyDeclaration(parent) || hasAccessorModifier(parent));
-                    return [
-                        createSyntheticExpression(expr, getParentTypeOfClassElement(parent as ClassElement)),
-                        createSyntheticExpression(expr, getClassElementPropertyKeyType(parent as ClassElement)),
-                        createSyntheticExpression(expr, hasPropDesc ? createTypedPropertyDescriptorType(getTypeOfNode(parent)) : anyType)
-                    ];
-            }
-            return Debug.fail();
-        }
-
-        /**
-         * Returns the synthetic argument list for a decorator invocation.
-         */
-        function getEffectiveESDecoratorArguments(node: Decorator): readonly Expression[] {
-            const expr = node.expression;
-            const signature = getESDecoratorCallSignature(node);
+            const signature = getDecoratorCallSignature(node);
             if (signature) {
                 const args: Expression[] = [];
                 for (const param of signature.parameters) {
@@ -33166,51 +33135,44 @@ namespace ts {
             }
         }
 
-        function createClassESDecoratorContextType(classType: Type) {
-            const globalClassDecoratorContextType = getGlobalClassDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassDecoratorContextType !== emptyGenericType) {
-                return createTypeReference(globalClassDecoratorContextType, [classType]);
-            }
-            return unknownType;
+        function createClassDecoratorContextType(classType: Type) {
+            return tryCreateTypeReference(getGlobalClassDecoratorContextType(/*reportErrors*/ true), [classType]);
         }
 
-        function createClassMethodESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            return createESDecoratorContextTypeReference(getGlobalClassMethodDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        function createClassMethodDecoratorContextType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassMethodDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
         }
 
-        function createClassGetterESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            return createESDecoratorContextTypeReference(getGlobalClassGetterDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        function createClassGetterDecoratorContextType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassGetterDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
         }
 
-        function createClassSetterESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            return createESDecoratorContextTypeReference(getGlobalClassSetterDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        function createClassSetterDecoratorContextType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassSetterDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
         }
 
-        function createClassAccessorESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            return createESDecoratorContextTypeReference(getGlobalClassAccessorDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        function createClassAccessorDecoratorContextType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassAccessorDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
         }
 
-        function createClassFieldESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            return createESDecoratorContextTypeReference(getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        function createClassFieldDecoratorContextType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
         }
 
-        function tryCreateESDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+        function tryCreateClassMemberDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
             let members: SymbolTable | undefined;
             if (nameType !== undefined) {
-                const symbol = createSymbol(SymbolFlags.Property, "name" as __String);
-                symbol.type = nameType;
+                const symbol = createProperty("name" as __String, nameType);
                 members ??= createSymbolTable();
                 members.set(symbol.escapedName, symbol);
             }
             if (isPrivate !== undefined) {
-                const symbol = createSymbol(SymbolFlags.Property, "private" as __String);
-                symbol.type = isPrivate ? trueType : falseType;
+                const symbol = createProperty("private" as __String, isPrivate ? trueType : falseType);
                 members ??= createSymbolTable();
                 members.set(symbol.escapedName, symbol);
             }
             if (isStatic !== undefined) {
-                const symbol = createSymbol(SymbolFlags.Property, "static" as __String);
-                symbol.type = isStatic ? trueType : falseType;
+                const symbol = createProperty("static" as __String, isStatic ? trueType : falseType);
                 members ??= createSymbolTable();
                 members.set(symbol.escapedName, symbol);
             }
@@ -33219,44 +33181,136 @@ namespace ts {
             }
         }
 
-        function createESDecoratorContextTypeReference(decoratorContextType: GenericType, thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            if (decoratorContextType !== emptyGenericType) {
-                const contextType = createTypeReference(decoratorContextType, [thisType, valueType]);
-                const overrideType = tryCreateESDecoratorContextOverrideType(nameType, isStatic, isPrivate);
-                return overrideType ? getIntersectionType([contextType, overrideType]) : contextType;
-            }
-            return unknownType;
+        function createClassMemberDecoratorContextTypeForNode(node: MethodDeclaration | AccessorDeclaration | PropertyDeclaration, thisType: Type, valueType: Type) {
+            const isStatic = hasStaticModifier(node);
+            const isPrivate = isPrivateIdentifier(node.name);
+            const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+            const contextType =
+                isMethodDeclaration(node) ? createClassMethodDecoratorContextType(thisType, valueType) :
+                isGetAccessorDeclaration(node) ? createClassGetterDecoratorContextType(thisType, valueType) :
+                isSetAccessorDeclaration(node) ? createClassSetterDecoratorContextType(thisType, valueType) :
+                isAutoAccessorPropertyDeclaration(node) ? createClassAccessorDecoratorContextType(thisType, valueType) :
+                isPropertyDeclaration(node) ? createClassFieldDecoratorContextType(thisType, valueType) :
+                Debug.failBadSyntaxKind(node);
+            const overrideType = tryCreateClassMemberDecoratorContextOverrideType(nameType, isStatic, isPrivate);
+            return overrideType ? getIntersectionType([contextType, overrideType]) : contextType;
+
         }
 
-        function createClassDecoratorReturnType(node: ClassDeclaration | ClassExpression) {
-            const classSymbol = getSymbolOfNode(node);
-            const classConstructorType = getTypeOfSymbol(classSymbol);
-            return getUnionType([classConstructorType, voidType]);
+        function createClassAccessorDecoratorTargetType(thisType: Type, valueType: Type) {
+            return tryCreateTypeReference(getGlobalClassAccessorDecoratorTargetType(/*reportError*/ true), [thisType, valueType]);
         }
 
-        function createClassAccessorESDecoratorTargetType(thisType: Type, valueType: Type) {
-            const globalClassAccessorDecoratorTargetType = getGlobalClassAccessorDecoratorTargetType(/*reportError*/ true);
-            if (globalClassAccessorDecoratorTargetType !== emptyGenericType) {
-                return createTypeReference(globalClassAccessorDecoratorTargetType, [thisType, valueType]);
-            }
-            return unknownType;
+        function createClassAccessorDecoratorResultType(thisType: Type, inputType: Type, outputType: Type) {
+            return tryCreateTypeReference(getGlobalClassAccessorDecoratorResultType(/*reportError*/ true), [thisType, inputType, outputType]);
         }
 
-        function createClassAccessorESDecoratorResultType(thisType: Type, valueInType: Type, valueOutType: Type) {
-            const globalClassAccessorDecoratorResultType = getGlobalClassAccessorDecoratorResultType(/*reportError*/ true);
-            const resultType = globalClassAccessorDecoratorResultType !== emptyGenericType ?
-                createTypeReference(globalClassAccessorDecoratorResultType, [thisType, valueInType, valueOutType]) :
-                unknownType;
-            return getUnionType([resultType, voidType]);
+        function createClassFieldDecoratorInitializerMutatorType(thisType: Type, inputType: Type, outputType: Type) {
+            const thisParam = createParameter("this" as __String, thisType);
+            const valueParam = createParameter("value" as __String, outputType);
+            return createFunctionType(/*typeParameters*/ undefined, thisParam, [valueParam], inputType, /*typePredicate*/ undefined, 1);
         }
 
-        function createClassFieldESDecoratorReturnType(valueInType: Type, valueOutType: Type) {
-            const param = createSymbol(SymbolFlags.FunctionScopedVariable, "value" as __String, /*checkFlags*/ undefined, valueOutType);
-            const initializerSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], valueInType);
-            return getUnionType([initializerSignatureType, voidType]);
+        /**
+         * Creates a call signature for an ES Decorator. This method is used by the semantics of
+         * `getESDecoratorCallSignature`, which you should probably be using instead.
+         */
+        function createESDecoratorCallSignature(targetType: Type, contextType: Type, nonOptionalReturnType: Type) {
+            const targetParam = createParameter("target" as __String, targetType);
+            const contextParam = createParameter("context" as __String, contextType);
+            const returnType = getUnionType([nonOptionalReturnType, voidType]);
+            return createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType);
         }
 
+        /**
+         * Gets a call signature that should be used when resolving `decorator` as a call. This does not use the value
+         * of the decorator itself, but instead uses the declaration on which it is placed along with its relative
+         * position amongst other decorators on the same declaration to determine the applicable signature. The
+         * resulting signature can be used for call resolution, inference, and contextual typing.
+         */
         function getESDecoratorCallSignature(decorator: Decorator) {
+            // In the future we are considering allowing the types of decorators to affect the type of the class and its
+            // members, such as a `@Stringify` decorator changing the type of a `number` field to `string`, or a
+            // `@Callable` decorator adding a call signature to a `class`. For now, the type arguments for the various
+            // context types that will eventually change to reflect such mutations will be stubbed out with fixed
+            // types so that we have a convenient place to apply these mutations.
+            //
+            // In some cases we describe such potential mutations as coming from a "prior decorator application". It is
+            // important to note that, while decorators are *evaluated* left to right, they are *applied* right to left
+            // to preserve f ৹ g -> f(g(x)) application order. In these cases, a "prior" decorator usually means the
+            // next decorator following this one in document order.
+            //
+            // The "original type" of a class or member is the type it was declared as, or the type we infer from
+            // initializers, before _any_ decorators are applied.
+            //
+            // The type of a class or member that is a result of a prior decorator application represents the
+            // "current type", i.e., the type for the declaration at the time the decorator is _applied_.
+            //
+            // The type of a class or member that is the result of the application of *all* relevant decorators is the
+            // "final type".
+            //
+            // Any decorator that allows mutation or replacement will also refer to an "input type" and an
+            // "output type". The "input type" corresponds to the "current type" of the declaration, while the
+            // "output type" will become either the "input type/current type" for a subsequent decorator application,
+            // or the "final type" for the decorated declaration.
+            //
+            // It is important to understand decorator application order as it relates to how the "current", "input",
+            // "output", and "final" types will be determined:
+            //
+            //  @E2 @E1 class SomeClass {
+            //      @A2 @A1 static f() {}
+            //      @B2 @B1 g() {}
+            //      @C2 @C1 static x;
+            //      @D2 @D1 y;
+            //  }
+            //
+            // Per [the specification][1], decorators are applied in the following order:
+            //
+            // 1. For each static method (incl. get/set methods), in document order:
+            //    a. Apply each decorator for that method, in reverse order (`A1`, `A2`).
+            // 2. For each instance method (incl. get/set methods), in document order:
+            //    a. Apply each decorator for that method, in reverse order (`B1`, `B2`).
+            // 3. For each static field (incl. auto-accessors), in document order:
+            //    a. Apply each decorator for that field, in reverse order (`C1`, `C2`).
+            // 4. For each instance field (incl. auto-accessors), in document order:
+            //    a. Apply each decorator for that field, in reverse order (`D1`, `D2`).
+            // 5. Apply each decorator for the class, in reverse order (`E1`, `E2`).
+            //
+            // As a result, "current" types at each decorator application are as follows:
+            // - For `A1`, the "current" types of the class and method their "original" types.
+            // - For `A2`, the "current type" of the method is the "output type" of `A1`, and the "current type" of the
+            //   class is the type of `SomeClass` where `f` is the "output type" of `A1`. This becomes the "final type"
+            //   of `f`.
+            // - For `B1`, the "current type" of the method is its "original type", and the "current type" of the
+            //   class is the type of `SomeClass` where `f` now has its "final type".
+            // - etc.
+            //
+            // [1]: https://arai-a.github.io/ecma262-compare/?pr=2417&id=sec-runtime-semantics-classdefinitionevaluation
+            //
+            // This seems complicated at first glance, but is not unlike our existing inference for functions:
+            //
+            //  declare function pipe<Original, A1, A2, B1, B2, C1, C2, D1, D2, E1, E2>(
+            //      original: Original,
+            //      a1: (input: Original, context: Context<E2>) => A1,
+            //      a2: (input: A1, context: Context<E2>) => A2,
+            //      b1: (input: A2, context: Context<E2>) => B1,
+            //      b2: (input: B1, context: Context<E2>) => B2,
+            //      c1: (input: B2, context: Context<E2>) => C1,
+            //      c2: (input: C1, context: Context<E2>) => C2,
+            //      d1: (input: C2, context: Context<E2>) => D1,
+            //      d2: (input: D1, context: Context<E2>) => D2,
+            //      e1: (input: D2, context: Context<E2>) => E1,
+            //      e2: (input: E1, context: Context<E2>) => E2,
+            //  ): E2;
+
+            // When a decorator is applied, it is passed two arguments: The "target", which is a value representing
+            // the thing being decorated (constructors for classes, functions for methods/accessors, `undefined` for
+            // fields, and a `{ get, set }` object for auto-accessors), and a "context", which is an object that
+            // provides reflection information about the decorated element, as well as the ability to add additional
+            // "extra" initializers. In most cases, the "target" argument corresponds to the "input type" in some way,
+            // and the return value similarly corresponds to the "output type" (though if the "output type" is `void`
+            // or `undefined` then the "output type" is the "input type").
+
             const { parent } = decorator;
             const links = getNodeLinks(parent);
             if (!links.decoratorSignature) {
@@ -33264,89 +33318,253 @@ namespace ts {
                 switch (parent.kind) {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression: {
-                        const node = decorator.parent as ClassDeclaration | ClassExpression;
-                        const targetType = getTypeOfSymbol(getSymbolOfNode(node));
+                        // Class decorators have a `context` of `ClassDecoratorContext<Class>`, where the `Class` type
+                        // argument will be the "final type" of the class after all decorators are applied.
 
-                        // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
-                        //                 evaluating all decorators.
-                        const finalType = targetType;
+                        const node = parent as ClassDeclaration | ClassExpression;
 
-                        const contextType = createClassESDecoratorContextType(finalType);
-                        const returnType = getUnionType([targetType, voidType]);
-                        const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
-                        const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
-                        links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
+                        // TODO: This should eventually correspond with the "output type" of any prior decorator, or
+                        //       the type of the class after all member decorator type mutations have been applied.
+                        const inputType = getTypeOfSymbol(getSymbolOfNode(node));
+
+                        // TODO: This should eventually be a type variable that is allowed to be any valid `function`
+                        //       type, and whose type will be inferred from decorator application and used as either
+                        //       the "input type" of the next decorator, or the "final type" of the class.
+                        const outputType = inputType;
+
+                        // TODO: This should eventually be a type variable that is the result of the type mutations from
+                        //       all decorators.
+                        const finalType = outputType;
+
+                        const contextType = createClassDecoratorContextType(finalType);
+                        links.decoratorSignature = createESDecoratorCallSignature(inputType, contextType, outputType);
                         break;
                     }
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor: {
-                        const node = decorator.parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
-                        if (isClassLike(node.parent)) {
-                            const targetType = getOrCreateTypeFromSignature(getSignatureFromDeclaration(node));
+                        const node = parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+                        if (!isClassLike(node.parent)) break;
 
-                            // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
-                            //                 evaluating all decorators.
-                            const valueFinalType = isMethodDeclaration(node) ? targetType : getTypeOfNode(node);
-                            const thisFinalType = hasStaticModifier(node) ?
-                                getTypeOfSymbol(getSymbolOfNode(node.parent)) :
-                                getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
+                        // Method decorators have a `context` of `ClassMethodDecoratorContext<This, Value>`, where the
+                        // `Value` type argument corresponds to the "final type" of the method.
+                        //
+                        // Getter decorators have a `context` of `ClassGetterDecoratorContext<This, Value>`, where the
+                        // `Value` type argument corresponds to the "final type" of the value returned by the getter.
+                        //
+                        // Setter decorators have a `context` of `ClassSetterDecoratorContext<This, Value>`, where the
+                        // `Value` type argument corresponds to the "final type" of the parameter of the setter.
+                        //
+                        // In all three cases, the `This` type argument is the "final type" of either the class or
+                        // instance, depending on whether the member was `static`.
 
-                            const isStatic = hasStaticModifier(node);
-                            const isPrivate = isPrivateIdentifier(node.name);
-                            const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+                        // TODO: This should eventually correspond with either the "output type" of any prior decorator
+                        //       or the "original type" of the member.
+                        const inputType =
+                            isMethodDeclaration(node) ? getOrCreateTypeFromSignature(getSignatureFromDeclaration(node)) :
+                            getTypeOfNode(node);
 
-                            const contextType =
-                                isGetAccessorDeclaration(node) ? createClassGetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
-                                isSetAccessorDeclaration(node) ? createClassSetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
-                                createClassMethodESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
+                        // TODO: This should eventually be a type variable whose type will be inferred from decorator
+                        //       application and used as either the "input type" of the next decorator, or the
+                        //       "final type" of the member.
+                        const outputType = inputType;
 
-                            const returnType = getUnionType([targetType, voidType]);
-                            const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
-                            const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
-                            links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
-                        }
+                        // TODO: This should eventually be a type variable that is the result of the type mutations from
+                        //       all decorators of the member.
+                        const finalType = outputType;
+
+                        // TODO: This should eventually be a type variable that is the result of the type mutations from
+                        //       all decorators applied to the class and its members.
+                        const finalThisType = hasStaticModifier(node) ?
+                            getTypeOfSymbol(getSymbolOfNode(node.parent)) :
+                            getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
+
+                        // We wrap the "input type", if necessary, to match the decoration target. For getters this is
+                        // something like `() => inputType`, for setters it's `(value: inputType) => void` and for
+                        // methods it is just the input type.
+                        const targetType =
+                            isGetAccessorDeclaration(node) ? createGetterFunctionType(inputType) :
+                            isSetAccessorDeclaration(node) ? createSetterFunctionType(inputType) :
+                            inputType;
+
+                        const contextType = createClassMemberDecoratorContextTypeForNode(node, finalThisType, finalType);
+
+                        // We also wrap the "output type", as needed.
+                        const returnType =
+                            isGetAccessorDeclaration(node) ? createGetterFunctionType(outputType) :
+                            isSetAccessorDeclaration(node) ? createSetterFunctionType(outputType) :
+                            outputType;
+
+                        links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, returnType);
                         break;
                     }
 
                     case SyntaxKind.PropertyDeclaration: {
-                        const node = decorator.parent as PropertyDeclaration;
-                        if (isClassLike(node.parent)) {
-                            const initializerType = getTypeOfNode(node);
+                        const node = parent as PropertyDeclaration;
+                        if (!isClassLike(node.parent)) break;
 
-                            // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
-                            //                 evaluating all decorators.
-                            const valueFinalType = initializerType;
-                            const thisFinalType = hasStaticModifier(node) ?
-                                getTypeOfSymbol(getSymbolOfNode(node.parent)) :
-                                getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
+                        // Field decorators have a `context` of `ClassFieldDecoratorContext<This, Value>` and
+                        // auto-accessor decorators have a `context` of `ClassAccessorDecoratorContext<This, Value>. In
+                        // both cases, the `This` type argument is the "final type" of either the class or instance,
+                        // depending on whether the member was `static`, and the `Value` type argument corresponds to
+                        // the "final type" of the value stored in the field.
 
-                            const targetType =
-                                hasAccessorModifier(node) ? createClassAccessorESDecoratorTargetType(thisFinalType, initializerType) :
-                                undefinedType;
+                        // TODO: This should eventually correspond with either the "output type" of any prior decorator
+                        //       or the "original type" of the member.
+                        const inputType = getTypeOfNode(node);
 
-                            const isStatic = hasStaticModifier(node);
-                            const isPrivate = isPrivateIdentifier(node.name);
-                            const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+                        // TODO: This should eventually be a type variable whose type will be inferred from decorator
+                        //       application and used as either the "input type" of the next decorator, or the
+                        //       "final type" of the member.
+                        const outputType = inputType;
 
-                            const contextType =
-                                hasAccessorModifier(node) ? createClassAccessorESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
-                                createClassFieldESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
+                        // TODO: This should eventually be a type variable that is the result of the type mutations from
+                        //       all decorators of the member.
+                        const finalType = outputType;
 
-                            const returnType =
-                                hasAccessorModifier(node) ? createClassAccessorESDecoratorResultType(thisFinalType, initializerType, valueFinalType) :
-                                createClassFieldESDecoratorReturnType(initializerType, valueFinalType);
+                        // TODO: This should eventually be a type variable that is the result of the type mutations from
+                        //       all decorators applied to the class and its members.
+                        const finalThisType = hasStaticModifier(node) ?
+                            getTypeOfSymbol(getSymbolOfNode(node.parent)) :
+                            getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
 
-                            const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
-                            const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
-                            links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
+                        // The `target` of an auto-accessor decorator is a `{ get, set }` object, representing the
+                        // runtime-generated getter and setter that are added to the class/prototype. The `target` of a
+                        // regular field decorator is always `undefined` as it isn't installed until it is initialized.
+                        const targetType =
+                            hasAccessorModifier(node) ? createClassAccessorDecoratorTargetType(finalThisType, inputType) :
+                            undefinedType;
+
+                        const contextType = createClassMemberDecoratorContextTypeForNode(node, finalThisType, finalType);
+
+                        // We wrap the "output type" depending on the declaration. For auto-accessors, we wrap the
+                        // "output type" in a `ClassAccessorDecoratorResult<This, In, Out>` type, which allows for
+                        // mutation of the runtime-generated getter and setter, as well as the injection of an
+                        // initializer mutator. For regular fields, we wrap the "output type" in an initializer mutator.
+                        const returnType =
+                            hasAccessorModifier(node) ? createClassAccessorDecoratorResultType(finalThisType, inputType, finalType) :
+                            createClassFieldDecoratorInitializerMutatorType(finalThisType, inputType, finalType);
+
+                        links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, returnType);
+                        break;
+                    }
+                }
+            }
+            return links.decoratorSignature === anySignature ? undefined : links.decoratorSignature;
+        }
+
+        function getLegacyDecoratorCallSignature(decorator: Decorator) {
+            const { parent } = decorator;
+            const links = getNodeLinks(parent);
+            if (!links.decoratorSignature) {
+                links.decoratorSignature = anySignature;
+                switch (parent.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression: {
+                        const node = parent as ClassDeclaration | ClassExpression;
+                        // For a class decorator, the `target` is the type of the class (e.g. the
+                        // "static" or "constructor" side of the class).
+                        const targetType = getTypeOfSymbol(getSymbolOfNode(node));
+                        const targetParam = createParameter("target" as __String, targetType);
+                        links.decoratorSignature = createCallSignature(
+                            /*typeParameters*/ undefined,
+                            /*thisParameter*/ undefined,
+                            [targetParam],
+                            getUnionType([targetType, voidType])
+                        );
+                        break;
+                    }
+                    case SyntaxKind.Parameter: {
+                        const node = parent as ParameterDeclaration;
+                        if (!isConstructorDeclaration(node.parent) &&
+                            !((isMethodDeclaration(node.parent) || isSetAccessorDeclaration(node.parent) && isClassLike(node.parent.parent)))) {
+                            break;
+                        }
+
+                        if (getThisParameter(node.parent) === node) {
+                            break;
+                        }
+
+                        const index = getThisParameter(node.parent) ?
+                            node.parent.parameters.indexOf(node) - 1 :
+                            node.parent.parameters.indexOf(node);
+                        Debug.assert(index >= 0);
+
+                        // A parameter declaration decorator will have three arguments (see `ParameterDecorator` in
+                        // core.d.ts).
+
+                        const targetType =
+                            isConstructorDeclaration(node.parent) ? getTypeOfSymbol(getSymbolOfNode(node.parent.parent)) :
+                            getParentTypeOfClassElement(node.parent);
+
+                        const keyType =
+                            isConstructorDeclaration(node.parent) ? undefinedType :
+                            getClassElementPropertyKeyType(node.parent);
+
+                        const indexType = getNumberLiteralType(index);
+
+                        const targetParam = createParameter("target" as __String, targetType);
+                        const keyParam = createParameter("propertyKey" as __String, keyType);
+                        const indexParam = createParameter("parameterIndex" as __String, indexType);
+                        links.decoratorSignature = createCallSignature(
+                            /*typeParameters*/ undefined,
+                            /*thisParameter*/ undefined,
+                            [targetParam, keyParam, indexParam],
+                            voidType
+                        );
+                        break;
+                    }
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration: {
+                        const node = parent as MethodDeclaration | AccessorDeclaration | PropertyDeclaration;
+                        if (!isClassLike(node.parent)) break;
+
+                        // A method or accessor declaration decorator will have either two or three arguments (see
+                        // `PropertyDecorator` and `MethodDecorator` in core.d.ts). If we are emitting decorators for
+                        // ES3, we will only pass two arguments.
+
+                        const targetType = getParentTypeOfClassElement(node);
+                        const targetParam = createParameter("target" as __String, targetType);
+
+                        const keyType = getClassElementPropertyKeyType(node);
+                        const keyParam = createParameter("propertyKey" as __String, keyType);
+
+                        const returnType =
+                            isPropertyDeclaration(node) ? voidType :
+                            createTypedPropertyDescriptorType(getTypeOfNode(node));
+
+                        const hasPropDesc = languageVersion !== ScriptTarget.ES3 && (!isPropertyDeclaration(parent) || hasAccessorModifier(parent));
+                        if (hasPropDesc) {
+                            const descriptorType = createTypedPropertyDescriptorType(getTypeOfNode(node));
+                            const descriptorParam = createParameter("descriptor" as __String, descriptorType);
+                            links.decoratorSignature = createCallSignature(
+                                /*typeParameters*/ undefined,
+                                /*thisParameter*/ undefined,
+                                [targetParam, keyParam, descriptorParam],
+                                getUnionType([returnType, voidType])
+                            );
+                        }
+                        else {
+                            links.decoratorSignature = createCallSignature(
+                                /*typeParameters*/ undefined,
+                                /*thisParameter*/ undefined,
+                                [targetParam, keyParam],
+                                getUnionType([returnType, voidType])
+                            );
                         }
                         break;
                     }
                 }
             }
             return links.decoratorSignature === anySignature ? undefined : links.decoratorSignature;
+        }
+
+        function getDecoratorCallSignature(decorator: Decorator) {
+            return legacyDecorators ? getLegacyDecoratorCallSignature(decorator) :
+                getESDecoratorCallSignature(decorator);
         }
 
         function createPromiseType(promisedType: Type): Type {
@@ -37672,45 +37890,33 @@ namespace ts {
                 return;
             }
 
+            // if we fail to get a signature and return type here, we will have already reported a grammar error in `checkDecorators`.
+            const decoratorSignature = getDecoratorCallSignature(node);
+            if (!decoratorSignature?.resolvedReturnType) return;
+
             let headMessage: DiagnosticMessage;
-            let expectedReturnType: Type;
+            const expectedReturnType = decoratorSignature.resolvedReturnType;
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
-                    expectedReturnType = createClassDecoratorReturnType(node.parent as ClassDeclaration | ClassExpression);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
                     if (!legacyDecorators) {
                         headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
-                        const thisType = hasStaticModifier(node.parent) ?
-                            getTypeOfSymbol(getSymbolOfNode((node.parent as PropertyDeclaration).parent)) :
-                            getDeclaredTypeOfClassOrInterface(getSymbolOfNode((node.parent as PropertyDeclaration).parent));
-                        const expectedType = getTypeOfNode(node.parent);
-                        if (hasAccessorModifier(node.parent)) {
-                            expectedReturnType = createClassAccessorESDecoratorResultType(thisType, expectedType, expectedType);
-                        }
-                        else {
-                            expectedReturnType = createClassFieldESDecoratorReturnType(expectedType, expectedType);
-                        }
                         break;
                     }
                     // falls through
 
                 case SyntaxKind.Parameter:
                     headMessage = Diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any;
-                    expectedReturnType = voidType;
                     break;
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
-                    const expectedType = legacyDecorators ?
-                        createTypedPropertyDescriptorType(getTypeOfNode(node.parent)) :
-                        getOrCreateTypeFromSignature(getSignatureFromDeclaration(node.parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration));
-                    expectedReturnType = getUnionType([expectedType, voidType]);
                     break;
 
                 default:
@@ -37720,6 +37926,9 @@ namespace ts {
             checkTypeAssignableTo(returnType, expectedReturnType, node, headMessage);
         }
 
+        /**
+         * Creates a synthetic `Signature` corresponding to a call signature.
+         */
         function createCallSignature(
             typeParameters: readonly TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
@@ -37733,17 +37942,29 @@ namespace ts {
             return createSignature(decl, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
         }
 
+        /**
+         * Creates a synthetic `FunctionType`
+         */
         function createFunctionType(
             typeParameters: readonly TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
             parameters: readonly Symbol[],
             returnType: Type,
             typePredicate?: TypePredicate,
-            minArgumentCount: number = parameters.length,
-            flags: SignatureFlags = SignatureFlags.None
+            minArgumentCount?: number,
+            flags?: SignatureFlags
         ) {
             const signature = createCallSignature(typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
             return getOrCreateTypeFromSignature(signature);
+        }
+
+        function createGetterFunctionType(type: Type) {
+            return createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, type);
+        }
+
+        function createSetterFunctionType(type: Type) {
+            const valueParam = createParameter("value" as __String, type);
+            return createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [valueParam], voidType);
         }
 
         /**
@@ -44692,7 +44913,7 @@ namespace ts {
             }
 
             if (isParameter(node) && parameterIsThisKeyword(node)) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Decorators_and_modifiers_may_not_be_applied_to_this_parameters);
+                return grammarErrorOnFirstToken(node, Diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters);
             }
 
             let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined, firstDecorator: Decorator | undefined;

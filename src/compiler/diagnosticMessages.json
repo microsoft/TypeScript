@@ -1384,7 +1384,7 @@
         "category": "Error",
         "code": 1432
     },
-    "Decorators and modifiers may not be applied to 'this' parameters.": {
+    "Neither decorators nor modifiers may be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
     },

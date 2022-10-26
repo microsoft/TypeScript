@@ -3525,7 +3525,7 @@ namespace ts {
 
                 const modifier = firstOrUndefined(modifiers);
                 if (modifier) {
-                    parseErrorAtRange(modifier, Diagnostics.Decorators_and_modifiers_may_not_be_applied_to_this_parameters);
+                    parseErrorAtRange(modifier, Diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters);
                 }
 
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -6043,7 +6043,7 @@ namespace ts {
 
                     return parseFunctionExpression();
                 case SyntaxKind.AtToken:
-                    return parseDecoratoratedExpression();
+                    return parseDecoratedExpression();
                 case SyntaxKind.ClassKeyword:
                     return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
@@ -7429,7 +7429,7 @@ namespace ts {
             return Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
-        function parseDecoratoratedExpression(): PrimaryExpression {
+        function parseDecoratedExpression(): PrimaryExpression {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers(/*allowDecorators*/ true);
