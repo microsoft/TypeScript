@@ -993,6 +993,19 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
+    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, nextNode: Node): number {
+        const end = startPositionToDeleteNodeInList(sourceFile, nextNode);
+        if (positionsAreOnSameLine(getAdjustedEndPosition(sourceFile, node, {}), end, sourceFile)) {
+            return end;
+        }
+        const token = findPrecedingToken(nextNode.getStart(sourceFile), sourceFile);
+        if (token) {
+            const pos = skipTrivia(sourceFile.text, token.getEnd(), /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+            return isLineBreak(sourceFile.text.charCodeAt(pos - 1)) ? pos - 1 : pos;
+        }
+        return end;
+    }
+
     function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
         const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
         const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
@@ -1589,9 +1602,10 @@ namespace ts.textChanges {
         // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
         Debug.assert(!deletedNodesInLists.has(node), "Deleting a node twice");
         deletedNodesInLists.add(node);
+
         changes.deleteRange(sourceFile, {
             pos: startPositionToDeleteNodeInList(sourceFile, node),
-            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index + 1]),
         });
     }
 }
