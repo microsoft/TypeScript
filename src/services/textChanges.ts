@@ -993,9 +993,9 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, nextNode: Node): number {
+    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, nextNode: Node, preserveLineBreak: boolean): number {
         const end = startPositionToDeleteNodeInList(sourceFile, nextNode);
-        if (positionsAreOnSameLine(getAdjustedEndPosition(sourceFile, node, {}), end, sourceFile)) {
+        if (!preserveLineBreak || positionsAreOnSameLine(getAdjustedEndPosition(sourceFile, node, {}), end, sourceFile)) {
             return end;
         }
         const token = findPrecedingToken(nextNode.getStart(sourceFile), sourceFile);
@@ -1471,7 +1471,7 @@ namespace ts.textChanges {
                         deleteImportBinding(changes, sourceFile, namedImports);
                     }
                     else {
-                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node, /*preserveLineBreak*/ true);
                     }
                     break;
 
@@ -1589,7 +1589,7 @@ namespace ts.textChanges {
         changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
-    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
+    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node, preserveLineBreak = false): void {
         const containingList = Debug.checkDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
         const index = indexOfNode(containingList, node);
         Debug.assert(index !== -1);
@@ -1605,7 +1605,7 @@ namespace ts.textChanges {
 
         changes.deleteRange(sourceFile, {
             pos: startPositionToDeleteNodeInList(sourceFile, node),
-            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index + 1]),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index + 1], preserveLineBreak),
         });
     }
 }
