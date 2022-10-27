@@ -284,7 +284,7 @@ namespace ts {
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
             return factory.updateConstructorDeclaration(
                 node,
-                visitNodes(node.modifiers, visitor, isModifierLike),
+                visitNodes(node.modifiers, visitor, isModifier),
                 visitParameterList(node.parameters, visitor, context),
                 transformMethodBody(node)
             );
