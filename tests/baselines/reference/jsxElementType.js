@@ -20,11 +20,11 @@ type NewReactJSXElementConstructor<P> =
 
 declare global {
   namespace JSX {
-    type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+    type ElementType<Props extends object> = string | NewReactJSXElementConstructor<Props>;
   }
 }
 
-let Component: JSX.ElementType;
+let Component: JSX.ElementType<{ title: string }>;
 
 const RenderString = ({ title }: { title: string }) => title;
 Component = RenderString;

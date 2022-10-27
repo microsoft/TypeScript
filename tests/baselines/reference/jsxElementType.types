@@ -39,14 +39,15 @@ declare global {
 >global : any
 
   namespace JSX {
-    type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+    type ElementType<Props extends object> = string | NewReactJSXElementConstructor<Props>;
 >ElementType : ElementType<Props>
   }
 }
 
-let Component: JSX.ElementType;
->Component : JSX.ElementType<any>
+let Component: JSX.ElementType<{ title: string }>;
+>Component : JSX.ElementType<{ title: string; }>
 >JSX : any
+>title : string
 
 const RenderString = ({ title }: { title: string }) => title;
 >RenderString : ({ title }: { title: string; }) => string
@@ -57,7 +58,7 @@ const RenderString = ({ title }: { title: string }) => title;
 
 Component = RenderString;
 >Component = RenderString : ({ title }: { title: string; }) => string
->Component : JSX.ElementType<any>
+>Component : JSX.ElementType<{ title: string; }>
 >RenderString : ({ title }: { title: string; }) => string
 
 <RenderString />;
@@ -85,7 +86,7 @@ const RenderNumber = ({ title }: { title: string }) => title.length;
 
 Component = RenderNumber;
 >Component = RenderNumber : ({ title }: { title: string; }) => number
->Component : JSX.ElementType<any>
+>Component : JSX.ElementType<{ title: string; }>
 >RenderNumber : ({ title }: { title: string; }) => number
 
 <RenderNumber />;
@@ -112,7 +113,7 @@ const RenderArray = ({ title }: { title: string }) => [title];
 
 Component = RenderArray;
 >Component = RenderArray : ({ title }: { title: string; }) => string[]
->Component : JSX.ElementType<any>
+>Component : JSX.ElementType<{ title: string; }>
 >RenderArray : ({ title }: { title: string; }) => string[]
 
 <RenderArray />;
@@ -140,7 +141,7 @@ const RenderPromise = async ({ title }: { title: string }) => "react";
 
 Component = RenderPromise;
 >Component = RenderPromise : ({ title }: { title: string; }) => Promise<string>
->Component : JSX.ElementType<any>
+>Component : JSX.ElementType<{ title: string; }>
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
 
 <RenderPromise />;

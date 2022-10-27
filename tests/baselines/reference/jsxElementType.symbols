@@ -51,7 +51,7 @@ declare global {
   namespace JSX {
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 19, 16))
 
-    type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+    type ElementType<Props extends object> = string | NewReactJSXElementConstructor<Props>;
 >ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 20, 17))
 >Props : Symbol(Props, Decl(jsxElementType.tsx, 21, 21))
 >NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 12, 14))
@@ -59,10 +59,11 @@ declare global {
   }
 }
 
-let Component: JSX.ElementType;
+let Component: JSX.ElementType<{ title: string }>;
 >Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 19, 16))
 >ElementType : Symbol(JSX.ElementType, Decl(jsxElementType.tsx, 20, 17))
+>title : Symbol(title, Decl(jsxElementType.tsx, 25, 32))
 
 const RenderString = ({ title }: { title: string }) => title;
 >RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
