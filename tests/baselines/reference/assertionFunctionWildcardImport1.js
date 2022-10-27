@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/issue35004.ts] ////
+//// [tests/cases/compiler/assertionFunctionWildcardImport1.ts] ////
 
 //// [ts.ts]
 import * as Debug from "../debug";
