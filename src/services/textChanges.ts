@@ -993,15 +993,23 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, nextNode: Node, preserveLineBreak: boolean): number {
+    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, prevNode: Node | undefined, nextNode: Node, preserveLineBreak: boolean): number {
         const end = startPositionToDeleteNodeInList(sourceFile, nextNode);
         if (!preserveLineBreak || positionsAreOnSameLine(getAdjustedEndPosition(sourceFile, node, {}), end, sourceFile)) {
             return end;
         }
         const token = findPrecedingToken(nextNode.getStart(sourceFile), sourceFile);
-        if (token) {
-            const pos = skipTrivia(sourceFile.text, token.getEnd(), /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
-            return isLineBreak(sourceFile.text.charCodeAt(pos - 1)) ? pos - 1 : pos;
+        if (prevNode && isSeparator(node, token)) {
+            const prevToken = findPrecedingToken(node.getStart(sourceFile), sourceFile);
+            if (isSeparator(prevNode, prevToken)) {
+                const pos = skipTrivia(sourceFile.text, token.getEnd(), /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+                if (positionsAreOnSameLine(prevToken.getStart(sourceFile), token.getStart(sourceFile), sourceFile)) {
+                    return isLineBreak(sourceFile.text.charCodeAt(pos - 1)) ? pos - 1 : pos;
+                }
+                if (isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                    return pos;
+                }
+            }
         }
         return end;
     }
@@ -1432,7 +1440,7 @@ namespace ts.textChanges {
                         changes.replaceNodeWithText(sourceFile, node, "()");
                     }
                     else {
-                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node, /*preserveLineBreak*/ true);
                     }
                     break;
                 }
@@ -1453,7 +1461,7 @@ namespace ts.textChanges {
                         deleteNode(changes, sourceFile, node);
                     }
                     else {
-                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node, /*preserveLineBreak*/ true);
                     }
                     break;
 
@@ -1605,7 +1613,7 @@ namespace ts.textChanges {
 
         changes.deleteRange(sourceFile, {
             pos: startPositionToDeleteNodeInList(sourceFile, node),
-            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index + 1], preserveLineBreak),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index - 1], containingList[index + 1], preserveLineBreak),
         });
     }
 }
