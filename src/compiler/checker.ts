@@ -24548,7 +24548,7 @@ namespace ts {
                             else {
                                 prop = getPropertyOfType(type, name.escapedText);
                             }
-                            return prop && getExplicitTypeOfSymbol(prop, diagnostic);
+                            return prop && getExplicitTypeOfSymbol(prop.flags & SymbolFlags.Alias ? resolveAlias(prop) : prop, diagnostic);
                         }
                         return undefined;
                     }
