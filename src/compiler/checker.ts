@@ -30445,6 +30445,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getJsxElementTypeTypeAt(location: Node): Type | undefined {
+        const type = getJsxType(JsxNames.ElementType, location);
+        if (isErrorType(type)) return undefined;
+        return type;
+    }
+
     /**
      * Returns all the properties of the Jsx.IntrinsicElements interface
      */
@@ -30513,7 +30519,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxOpeningLikeNode = node ;
             const sig = getResolvedSignature(jsxOpeningLikeNode);
             checkDeprecatedSignature(sig, node);
-            checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+
+            const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
+            if (elementTypeConstraint !== undefined) {
+                const tagType = getApparentType(checkExpression(jsxOpeningLikeNode.tagName));
+                // TODO: error message
+                checkTypeRelatedTo(tagType, elementTypeConstraint, comparableRelation, jsxOpeningLikeNode.tagName, Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element, () => {
+                    const componentName = getTextOfNode(jsxOpeningLikeNode.tagName);
+                    return chainDiagnosticMessages(/* details */ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
+                });
+            }
+            else {
+                checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+            }
         }
     }
 
@@ -48361,6 +48379,7 @@ namespace JsxNames {
     export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String; // TODO: Deprecate and remove support
     export const ElementChildrenAttributeNameContainer = "ElementChildrenAttribute" as __String;
     export const Element = "Element" as __String;
+    export const ElementType = "ElementType" as __String;
     export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
     export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
     export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;

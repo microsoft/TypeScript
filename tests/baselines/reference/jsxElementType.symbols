@@ -1,0 +1,153 @@
+=== tests/cases/compiler/jsxElementType.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+
+type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+>React18ReactFragment : Symbol(React18ReactFragment, Decl(jsxElementType.tsx, 1, 31))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+type React18ReactNode =
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+  | React.ReactElement<any>
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+  | string
+  | number
+  | React18ReactFragment
+>React18ReactFragment : Symbol(React18ReactFragment, Decl(jsxElementType.tsx, 1, 31))
+
+  | React.ReactPortal
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactPortal : Symbol(React.ReactPortal, Decl(react16.d.ts, 172, 9))
+
+  | boolean
+  | null
+  | undefined;
+
+// // React.JSXElementConstructor but it now can return React nodes from function components.
+type NewReactJSXElementConstructor<P> =
+>NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 12, 14))
+>P : Symbol(P, Decl(jsxElementType.tsx, 15, 35))
+
+  | ((props: P) => React18ReactNode)
+>props : Symbol(props, Decl(jsxElementType.tsx, 16, 6))
+>P : Symbol(P, Decl(jsxElementType.tsx, 15, 35))
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+  | (new (props: P) => React.Component<P, any>);
+>props : Symbol(props, Decl(jsxElementType.tsx, 17, 10))
+>P : Symbol(P, Decl(jsxElementType.tsx, 15, 35))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(jsxElementType.tsx, 15, 35))
+
+declare global {
+>global : Symbol(global, Decl(jsxElementType.tsx, 17, 48))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 19, 16))
+
+    type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+>ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 20, 17))
+>Props : Symbol(Props, Decl(jsxElementType.tsx, 21, 21))
+>NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 12, 14))
+>Props : Symbol(Props, Decl(jsxElementType.tsx, 21, 21))
+  }
+}
+
+let Component: JSX.ElementType;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 19, 16))
+>ElementType : Symbol(JSX.ElementType, Decl(jsxElementType.tsx, 20, 17))
+
+const RenderString = ({ title }: { title: string }) => title;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 27, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 27, 34))
+>title : Symbol(title, Decl(jsxElementType.tsx, 27, 23))
+
+Component = RenderString;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+
+<RenderString />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+
+<RenderString title="react" />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 30, 13))
+
+<RenderString excessProp />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 31, 13))
+
+const RenderNumber = ({ title }: { title: string }) => title.length;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 33, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 33, 34))
+>title.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>title : Symbol(title, Decl(jsxElementType.tsx, 33, 23))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+Component = RenderNumber;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+
+<RenderNumber />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+
+<RenderNumber title="react" />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 36, 13))
+
+<RenderNumber excessProp />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 37, 13))
+
+const RenderArray = ({ title }: { title: string }) => [title];
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 39, 22))
+>title : Symbol(title, Decl(jsxElementType.tsx, 39, 33))
+>title : Symbol(title, Decl(jsxElementType.tsx, 39, 22))
+
+Component = RenderArray;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+
+<RenderArray />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+
+<RenderArray title="react" />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 42, 12))
+
+<RenderArray excessProp />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 43, 12))
+
+// Future ReactNode can be Promises.
+// But they should be rejected in React 18.0.
+const RenderPromise = async ({ title }: { title: string }) => "react";
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 47, 30))
+>title : Symbol(title, Decl(jsxElementType.tsx, 47, 41))
+
+Component = RenderPromise;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+
+<RenderPromise />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+
+<RenderPromise title="react" />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 50, 14))
+
+<RenderPromise excessProp />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 51, 14))
+

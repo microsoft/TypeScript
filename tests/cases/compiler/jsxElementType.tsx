@@ -1,0 +1,54 @@
+// @strict: true
+// @jsx: react
+/// <reference path="/.lib/react16.d.ts" />
+import * as React from "react";
+
+type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+type React18ReactNode =
+  | React.ReactElement<any>
+  | string
+  | number
+  | React18ReactFragment
+  | React.ReactPortal
+  | boolean
+  | null
+  | undefined;
+
+// // React.JSXElementConstructor but it now can return React nodes from function components.
+type NewReactJSXElementConstructor<P> =
+  | ((props: P) => React18ReactNode)
+  | (new (props: P) => React.Component<P, any>);
+
+declare global {
+  namespace JSX {
+    type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+  }
+}
+
+let Component: JSX.ElementType;
+
+const RenderString = ({ title }: { title: string }) => title;
+Component = RenderString;
+<RenderString />;
+<RenderString title="react" />;
+<RenderString excessProp />;
+
+const RenderNumber = ({ title }: { title: string }) => title.length;
+Component = RenderNumber;
+<RenderNumber />;
+<RenderNumber title="react" />;
+<RenderNumber excessProp />;
+
+const RenderArray = ({ title }: { title: string }) => [title];
+Component = RenderArray;
+<RenderArray />;
+<RenderArray title="react" />;
+<RenderArray excessProp />;
+
+// Future ReactNode can be Promises.
+// But they should be rejected in React 18.0.
+const RenderPromise = async ({ title }: { title: string }) => "react";
+Component = RenderPromise;
+<RenderPromise />;
+<RenderPromise title="react" />;
+<RenderPromise excessProp />;

@@ -1,0 +1,118 @@
+tests/cases/compiler/jsxElementType.tsx(30,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(32,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(36,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(38,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(42,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(44,14): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(49,1): error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'ElementType<any>'.
+  Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: any) => React18ReactNode'.
+    Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
+tests/cases/compiler/jsxElementType.tsx(50,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(50,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
+  Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+    Type '({ title }: { title: string; }) => Promise<string>' is not comparable to type '(props: Props) => React18ReactNode'.
+      Type 'Promise<string>' is not comparable to type 'React18ReactNode'.
+tests/cases/compiler/jsxElementType.tsx(51,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
+  Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+tests/cases/compiler/jsxElementType.tsx(52,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
+  Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+
+
+==== tests/cases/compiler/jsxElementType.tsx (12 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+    type React18ReactNode =
+      | React.ReactElement<any>
+      | string
+      | number
+      | React18ReactFragment
+      | React.ReactPortal
+      | boolean
+      | null
+      | undefined;
+    
+    // // React.JSXElementConstructor but it now can return React nodes from function components.
+    type NewReactJSXElementConstructor<P> =
+      | ((props: P) => React18ReactNode)
+      | (new (props: P) => React.Component<P, any>);
+    
+    declare global {
+      namespace JSX {
+        type ElementType<Props extends object = any> = string | NewReactJSXElementConstructor<Props>;
+      }
+    }
+    
+    let Component: JSX.ElementType;
+    
+    const RenderString = ({ title }: { title: string }) => title;
+    Component = RenderString;
+    <RenderString />;
+     ~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:28:36: 'title' is declared here.
+    <RenderString title="react" />;
+    <RenderString excessProp />;
+                  ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    const RenderNumber = ({ title }: { title: string }) => title.length;
+    Component = RenderNumber;
+    <RenderNumber />;
+     ~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:34:36: 'title' is declared here.
+    <RenderNumber title="react" />;
+    <RenderNumber excessProp />;
+                  ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    const RenderArray = ({ title }: { title: string }) => [title];
+    Component = RenderArray;
+    <RenderArray />;
+     ~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:40:35: 'title' is declared here.
+    <RenderArray title="react" />;
+    <RenderArray excessProp />;
+                 ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    // Future ReactNode can be Promises.
+    // But they should be rejected in React 18.0.
+    const RenderPromise = async ({ title }: { title: string }) => "react";
+    Component = RenderPromise;
+    ~~~~~~~~~
+!!! error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'ElementType<any>'.
+!!! error TS2322:   Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: any) => React18ReactNode'.
+!!! error TS2322:     Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
+    <RenderPromise />;
+     ~~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:48:43: 'title' is declared here.
+     ~~~~~~~~~~~~~
+!!! error TS2786: 'RenderPromise' cannot be used as a JSX component.
+!!! error TS2786:   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+!!! error TS2786:     Type '({ title }: { title: string; }) => Promise<string>' is not comparable to type '(props: Props) => React18ReactNode'.
+!!! error TS2786:       Type 'Promise<string>' is not comparable to type 'React18ReactNode'.
+    <RenderPromise title="react" />;
+     ~~~~~~~~~~~~~
+!!! error TS2786: 'RenderPromise' cannot be used as a JSX component.
+!!! error TS2786:   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+    <RenderPromise excessProp />;
+     ~~~~~~~~~~~~~
+!!! error TS2786: 'RenderPromise' cannot be used as a JSX component.
+!!! error TS2786:   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
+                   ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
