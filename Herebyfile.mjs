@@ -18,7 +18,7 @@ const glob = util.promisify(_glob);
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
-const copyrightFilename = "CopyrightNotice.txt";
+const copyrightFilename = "./scripts/CopyrightNotice.txt";
 const copyright = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
