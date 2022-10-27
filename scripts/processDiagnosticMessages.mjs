@@ -104,19 +104,15 @@ function buildInfoFileOutput(messageTable, inputFilePathRel, thisFilePathRel) {
  * @returns {string}
  */
 function buildDiagnosticMessageOutput(messageTable) {
-    let result = "{";
+    /** @type {Record<string, string>} */
+    const result = {};
+
     messageTable.forEach(({ code }, name) => {
         const propName = convertPropertyName(name);
-        result += `\r\n  "${createKey(propName, code)}" : "${name.replace(/[\"]/g, '\\"')}",`;
+        result[createKey(propName, code)] = name;
     });
 
-    // Shave trailing comma, then add newline and ending brace
-    result = result.slice(0, result.length - 1) + "\r\n}";
-
-    // Assert that we generated valid JSON
-    JSON.parse(result);
-
-    return result;
+    return JSON.stringify(result, undefined, 2).replace(/\r?\n/g, "\r\n");
 }
 
 /**

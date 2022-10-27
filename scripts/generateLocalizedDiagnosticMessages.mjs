@@ -171,7 +171,7 @@ function main() {
          */
         function getItemXML(key, value) {
             // escape entrt value
-            value = value.replace(/]/, "]5D;");
+            value = value.replace(/]/g, "]5D;");
 
             return `
             <Item ItemId=";${key}" ItemType="0" PsrId="306" Leaf="true">
