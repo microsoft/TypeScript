@@ -7762,4 +7762,30 @@ namespace ts {
     export function getTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): string {
         return isIdentifier(node) ? idText(node) : getTextOfJsxAttributeName(node.namespace) + ":" + getTextOfJsxAttributeName(node.name);
     }
+
+    export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocEnumTag:
+                return true;
+            case SyntaxKind.ImportClause:
+                return (node as ImportClause).isTypeOnly;
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            default:
+                return false;
+        }
+    }
+
+    export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
+        return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
+            || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+    }
 }

@@ -71,6 +71,7 @@
         "codefixes/fixOverrideModifier.ts",
         "codefixes/fixNoPropertyAccessFromIndexSignature.ts",
         "codefixes/fixImplicitThis.ts",
+        "codefixes/fixImportNonExportedMember.ts",
         "codefixes/fixIncorrectNamedTupleSyntax.ts",
         "codefixes/fixSpelling.ts",
         "codefixes/returnValueCorrect.ts",

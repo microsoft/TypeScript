@@ -56,6 +56,6 @@ export const obj = {
 >getComp : () => import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>
 }
 === tests/cases/compiler/src/some-other-file.ts ===
+
 export * from '@emotion/core';
-No type information for this code.
-No type information for this code.
+

@@ -126,7 +126,7 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            return isJsxText(node);
+            return isJsxText(node) || isJsxElement(node) && lastTokenInfo?.token.kind === SyntaxKind.JsxText;
         }
 
         function shouldRescanSlashToken(container: Node): boolean {

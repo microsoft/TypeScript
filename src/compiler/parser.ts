@@ -1031,13 +1031,11 @@ namespace ts {
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
-        // tslint:disable variable-name
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        // tslint:enable variable-name
 
         function countNode(node: Node) {
             nodeCount++;
@@ -2191,8 +2189,9 @@ namespace ts {
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
+                const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
                 nextTokenWithoutCheck();
-                return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind), pos);
+                return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind, hasExtendedUnicodeEscape), pos);
             }
 
             if (token() === SyntaxKind.PrivateIdentifier) {

@@ -14,7 +14,7 @@ namespace ts {
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
-        createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
+        createHasInvalidatedResolutions(customHasInvalidatedResolutions: HasInvalidatedResolutions): HasInvalidatedResolutions;
         hasChangedAutomaticTypeDirectiveNames(): boolean;
         isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
 
@@ -127,7 +127,7 @@ namespace ts {
         const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
         if (isNonDirectorySeparatorRoot &&
             dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
-            pathPartForUserCheck.search(/[a-zA-z]\$\//) === 0) { // Dos style nextPart
+            pathPartForUserCheck.search(/[a-zA-Z]\$\//) === 0) { // Dos style nextPart
             nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
             if (nextDirectorySeparator === -1) {
                 // ignore "//vda1cs4850/c$/folderAtRoot"
@@ -236,7 +236,7 @@ namespace ts {
             invalidateResolutionOfFile,
             invalidateResolutionsOfFailedLookupLocations,
             setFilesWithInvalidatedNonRelativeUnresolvedImports,
-            createHasInvalidatedResolution,
+            createHasInvalidatedResolutions,
             isFileWithInvalidatedNonRelativeUnresolvedImports,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
@@ -300,17 +300,13 @@ namespace ts {
             return !!value && !!value.length;
         }
 
-        function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
+        function createHasInvalidatedResolutions(customHasInvalidatedResolutions: HasInvalidatedResolutions): HasInvalidatedResolutions {
             // Ensure pending resolutions are applied
             invalidateResolutionsOfFailedLookupLocations();
-            if (forceAllFilesAsInvalidated) {
-                // Any file asked would have invalidated resolution
-                filesWithInvalidatedResolutions = undefined;
-                return returnTrue;
-            }
             const collected = filesWithInvalidatedResolutions;
             filesWithInvalidatedResolutions = undefined;
-            return path => (!!collected && collected.has(path)) ||
+            return path => customHasInvalidatedResolutions(path) ||
+                !!collected?.has(path) ||
                 isFileWithInvalidatedNonRelativeUnresolvedImports(path);
         }
 

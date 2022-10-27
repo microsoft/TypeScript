@@ -1486,7 +1486,7 @@ namespace ts {
 
 
         function peekExtendedUnicodeEscape(): number {
-            if (languageVersion >= ScriptTarget.ES2015 && codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
+            if (codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
                 const start = pos;
                 pos += 3;
                 const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);

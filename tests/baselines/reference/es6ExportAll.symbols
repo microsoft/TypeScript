@@ -19,5 +19,5 @@ export module uninstantiated {
 }
 
 === tests/cases/compiler/client.ts ===
+
 export * from "server";
-No type information for this code.

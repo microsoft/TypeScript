@@ -577,7 +577,7 @@ namespace ts.projectSystem {
                 content: "let zz = 1;"
             };
             host.writeFile(file5.path, file5.content);
-            projectService.baselineHost("File5 written");
+            projectService.testhost.baselineHost("File5 written");
             projectService.openClientFile(file5.path);
 
             baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", projectService);

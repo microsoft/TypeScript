@@ -1013,7 +1013,7 @@ namespace ts {
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
-            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuperBinding | NodeCheckFlags.AsyncMethodWithSuper);
+            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
 
             if (emitSuperHelpers) {
                 enableSubstitutionForAsyncMethodsWithSuper();
@@ -1028,10 +1028,10 @@ namespace ts {
             const block = factory.updateBlock(node.body!, statements);
 
             if (emitSuperHelpers && hasSuperElementAccess) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
                     addEmitHelper(block, advancedAsyncSuperHelper);
                 }
-                else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
                     addEmitHelper(block, asyncSuperHelper);
                 }
             }
@@ -1185,7 +1185,7 @@ namespace ts {
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
                 if (superContainerFlags !== enclosingSuperContainerFlags) {
                     const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                     enclosingSuperContainerFlags = superContainerFlags;
@@ -1282,7 +1282,7 @@ namespace ts {
         }
 
         function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
-            if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+            if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
                 return setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createCallExpression(
