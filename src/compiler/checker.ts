@@ -33229,11 +33229,11 @@ namespace ts {
          * resulting signature can be used for call resolution, inference, and contextual typing.
          */
         function getESDecoratorCallSignature(decorator: Decorator) {
-            // In the future we are considering allowing the types of decorators to affect the type of the class and its
-            // members, such as a `@Stringify` decorator changing the type of a `number` field to `string`, or a
-            // `@Callable` decorator adding a call signature to a `class`. For now, the type arguments for the various
-            // context types that will eventually change to reflect such mutations will be stubbed out with fixed
-            // types so that we have a convenient place to apply these mutations.
+            // We are considering a future change that would allow the type of a decorator to affect the type of the
+            // class and its members, such as a `@Stringify` decorator changing the type of a `number` field to
+            // `string`, or a `@Callable` decorator adding a call signature to a `class`. For now, the type arguments
+            // for the various context types that will eventually change to reflect such mutations will be stubbed out
+            // with fixed types so that we have a convenient place to apply these mutations.
             //
             // In some cases we describe such potential mutations as coming from a "prior decorator application". It is
             // important to note that, while decorators are *evaluated* left to right, they are *applied* right to left
@@ -33281,8 +33281,8 @@ namespace ts {
             // - For `A2`, the "current type" of the method is the "output type" of `A1`, and the "current type" of the
             //   class is the type of `SomeClass` where `f` is the "output type" of `A1`. This becomes the "final type"
             //   of `f`.
-            // - For `B1`, the "current type" of the method is its "original type", and the "current type" of the
-            //   class is the type of `SomeClass` where `f` now has its "final type".
+            // - For `B1`, the "current type" of the method is its "original type", and the "current type" of the class
+            //   is the type of `SomeClass` where `f` now has its "final type".
             // - etc.
             //
             // [1]: https://arai-a.github.io/ecma262-compare/?pr=2417&id=sec-runtime-semantics-classdefinitionevaluation
@@ -33303,13 +33303,13 @@ namespace ts {
             //      e2: (input: E1, context: Context<E2>) => E2,
             //  ): E2;
 
-            // When a decorator is applied, it is passed two arguments: The "target", which is a value representing
-            // the thing being decorated (constructors for classes, functions for methods/accessors, `undefined` for
-            // fields, and a `{ get, set }` object for auto-accessors), and a "context", which is an object that
-            // provides reflection information about the decorated element, as well as the ability to add additional
-            // "extra" initializers. In most cases, the "target" argument corresponds to the "input type" in some way,
-            // and the return value similarly corresponds to the "output type" (though if the "output type" is `void`
-            // or `undefined` then the "output type" is the "input type").
+            // When a decorator is applied, it is passed two arguments: "target", which is a value representing the
+            // thing being decorated (constructors for classes, functions for methods/accessors, `undefined` for fields,
+            // and a `{ get, set }` object for auto-accessors), and "context", which is an object that provides
+            // reflection information about the decorated element, as well as the ability to add additional "extra"
+            // initializers. In most cases, the "target" argument corresponds to the "input type" in some way, and the
+            // return value similarly corresponds to the "output type" (though if the "output type" is `void` or
+            // `undefined` then the "output type" is the "input type").
 
             const { parent } = decorator;
             const links = getNodeLinks(parent);
@@ -45249,12 +45249,19 @@ namespace ts {
          * undefined: Need to do full checking on the modifiers.
          */
         function reportObviousModifierErrors(node: HasModifiers | HasIllegalModifiers): boolean | undefined {
-            if (canHaveModifiers(node) ? node.modifiers === undefined : node.decoratorsAndModifiers === undefined) return false;
-            const modifier = shouldReportBadModifier(node);
+            const unmodified = canHaveModifiers(node) ? !node.modifiers : !node.decoratorsAndModifiers;
+            if (unmodified) return false;
+
+            const modifier = findFirstIllegalModifier(node);
             return modifier && grammarErrorOnFirstToken(modifier, Diagnostics.Modifiers_cannot_appear_here);
         }
 
-        function shouldReportBadModifier(node: HasModifiers | HasIllegalModifiers): Modifier | undefined {
+        function findFirstModifierExcept(node: HasModifiers, allowedModifier: SyntaxKind): Modifier | undefined {
+            const modifier = find(node.modifiers, isModifier);
+            return modifier && modifier.kind !== allowedModifier ? modifier : undefined;
+        }
+
+        function findFirstIllegalModifier(node: HasModifiers | HasIllegalModifiers): Modifier | undefined {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -45304,17 +45311,12 @@ namespace ts {
             }
         }
 
-        function findFirstModifierExcept(node: HasModifiers, allowedModifier: SyntaxKind): Modifier | undefined {
-            const modifier = find(node.modifiers, isModifier);
-            return modifier && modifier.kind !== allowedModifier ? modifier : undefined;
-        }
-
         function reportObviousDecoratorErrors(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators) {
-            const decorator = shouldReportBadDecorator(node);
+            const decorator = findFirstIllegalDecorator(node);
             return decorator && grammarErrorOnFirstToken(decorator, Diagnostics.Decorators_are_not_valid_here);
         }
 
-        function shouldReportBadDecorator(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): Decorator | undefined {
+        function findFirstIllegalDecorator(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): Decorator | undefined {
             if (canHaveIllegalDecorators(node)) return find(node.decoratorsAndModifiers, isDecorator);
         }
 

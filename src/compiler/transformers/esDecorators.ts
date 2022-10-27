@@ -1388,9 +1388,9 @@ namespace ts {
                     case SyntaxKind.QuestionQuestionEqualsToken:
                         if (isIdentifier(node.left) &&
                             isDecoratedAnonymousClassExpression(node.right)) {
-                            const referencedName = factory.createStringLiteralFromNode(node.left);
+                            const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
                             const left = visitNode(node.left, visitor, isExpression);
-                            const right = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                            const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
                             return factory.updateBinaryExpression(node, left, node.operatorToken, right);
                         }
                         break;
@@ -1581,9 +1581,9 @@ namespace ts {
 
             if (isIdentifier(node.name) && node.initializer &&
                 isDecoratedAnonymousClassExpression(node.initializer)) {
-                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
                 const name = visitNode(node.name, visitor, isBindingName);
-                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
                 return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
             }
 
@@ -1610,10 +1610,10 @@ namespace ts {
             if (!node.dotDotDotToken &&
                 isIdentifier(node.name) && node.initializer &&
                 isDecoratedAnonymousClassExpression(node.initializer)) {
-                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
                 const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
                 const name = visitNode(node.name, visitor, isBindingName);
-                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
                 return factory.updateBindingElement(node, /*dotDotDotToken*/ undefined, propertyName, name, initializer);
             }
 
@@ -1664,8 +1664,8 @@ namespace ts {
                 let initializer: Expression;
                 if (isIdentifier(node.left) &&
                     isDecoratedAnonymousClassExpression(node.right)) {
-                    const referencedName = factory.createStringLiteralFromNode(node.left);
-                    initializer = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                    const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+                    initializer = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
                 }
                 else {
                     initializer = visitNode(node.right, visitor, isExpression);
@@ -1731,9 +1731,9 @@ namespace ts {
 
             if (node.objectAssignmentInitializer &&
                 isDecoratedAnonymousClassExpression(node.objectAssignmentInitializer)) {
+                const assignedName = getAssignedNameOfIdentifier(node.name, node.objectAssignmentInitializer);
                 const name = visitNode(node.name, visitor, isIdentifier);
-                const referencedName = factory.createStringLiteralFromNode(node.name);
-                const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
                 return factory.updateShorthandPropertyAssignment(node, name, objectAssignmentInitializer);
             }
 
@@ -1815,10 +1815,12 @@ namespace ts {
         function injectPendingExpressions(expression: Expression) {
             if (some(pendingExpressions)) {
                 if (isParenthesizedExpression(expression)) {
-                    expression = factory.updateParenthesizedExpression(expression, factory.inlineExpressions([...pendingExpressions, expression.expression]));
+                    pendingExpressions.push(expression.expression);
+                    expression = factory.updateParenthesizedExpression(expression, factory.inlineExpressions(pendingExpressions));
                 }
                 else {
-                    expression = factory.inlineExpressions([...pendingExpressions, expression]);
+                    pendingExpressions.push(expression);
+                    expression = factory.inlineExpressions(pendingExpressions);
                 }
                 pendingExpressions = undefined;
             }
@@ -2068,6 +2070,13 @@ namespace ts {
                     )
                 ])
             );
+        }
+
+        function getAssignedNameOfIdentifier(name: Identifier, initializer: Expression) {
+            const originalClass = getOriginalNode(initializer, isClassLike);
+            return originalClass && !originalClass.name && hasSyntacticModifier(originalClass, ModifierFlags.Default) ?
+                factory.createStringLiteral("default") :
+                factory.createStringLiteralFromNode(name);
         }
     }
 }
