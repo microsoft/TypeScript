@@ -259,7 +259,7 @@ namespace ts {
     }
 
     function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch | undefined {
-        return min(a, b, compareMatches);
+        return min([a, b], compareMatches);
     }
     function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): Comparison {
         return a === undefined ? Comparison.GreaterThan : b === undefined ? Comparison.LessThan

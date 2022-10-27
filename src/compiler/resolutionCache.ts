@@ -127,7 +127,7 @@ namespace ts {
         const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
         if (isNonDirectorySeparatorRoot &&
             dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
-            pathPartForUserCheck.search(/[a-zA-z]\$\//) === 0) { // Dos style nextPart
+            pathPartForUserCheck.search(/[a-zA-Z]\$\//) === 0) { // Dos style nextPart
             nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
             if (nextDirectorySeparator === -1) {
                 // ignore "//vda1cs4850/c$/folderAtRoot"

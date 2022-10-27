@@ -15714,7 +15714,7 @@ namespace ts {
                 type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
                 // Mapping<Mapping<T>> === Mapping<T>
                 type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-                type.flags & (TypeFlags.Any | TypeFlags.String || type.flags & TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+                type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
                 // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
                 isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
                 type;
@@ -26711,13 +26711,16 @@ namespace ts {
             const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
             let container = immediateContainer;
             let needToCaptureLexicalThis = false;
+            let inAsyncFunction = false;
 
             // adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
             if (!isCallExpression) {
                 while (container && container.kind === SyntaxKind.ArrowFunction) {
+                    if (hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
                     container = getSuperContainer(container, /*stopOnFunctions*/ true);
                     needToCaptureLexicalThis = languageVersion < ScriptTarget.ES2015;
                 }
+                if (container && hasSyntacticModifier(container, ModifierFlags.Async)) inAsyncFunction = true;
             }
 
             const canUseSuperExpression = isLegalUsageOfSuperExpression(container);
@@ -26829,12 +26832,12 @@ namespace ts {
             // as a call expression cannot be used as the target of a destructuring assignment while a property access can.
             //
             // For element access expressions (`super[x]`), we emit a generic helper that forwards the element access in both situations.
-            if (container.kind === SyntaxKind.MethodDeclaration && hasSyntacticModifier(container, ModifierFlags.Async)) {
+            if (container.kind === SyntaxKind.MethodDeclaration && inAsyncFunction) {
                 if (isSuperProperty(node.parent) && isAssignmentTarget(node.parent)) {
-                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
+                    getNodeLinks(container).flags |= NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync;
                 }
                 else {
-                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                    getNodeLinks(container).flags |= NodeCheckFlags.MethodWithSuperPropertyAccessInAsync;
                 }
             }
 
@@ -36996,7 +36999,7 @@ namespace ts {
             }
 
             // primitives with a `{ then() }` won't be unwrapped/adopted.
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 return undefined;
             }
 
@@ -37071,7 +37074,7 @@ namespace ts {
          * Determines whether a type is an object with a callable `then` member.
          */
         function isThenableType(type: Type): boolean {
-            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+            if (allTypesAssignableToKind(getBaseConstraintOrType(type), TypeFlags.Primitive | TypeFlags.Never)) {
                 // primitive types cannot be considered "thenable" since they are not objects.
                 return false;
             }
