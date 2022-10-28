@@ -993,6 +993,27 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
+    function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, prevNode: Node | undefined, nextNode: Node): number {
+        const end = startPositionToDeleteNodeInList(sourceFile, nextNode);
+        if (prevNode === undefined || positionsAreOnSameLine(getAdjustedEndPosition(sourceFile, node, {}), end, sourceFile)) {
+            return end;
+        }
+        const token = findPrecedingToken(nextNode.getStart(sourceFile), sourceFile);
+        if (isSeparator(node, token)) {
+            const prevToken = findPrecedingToken(node.getStart(sourceFile), sourceFile);
+            if (isSeparator(prevNode, prevToken)) {
+                const pos = skipTrivia(sourceFile.text, token.getEnd(), /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+                if (positionsAreOnSameLine(prevToken.getStart(sourceFile), token.getStart(sourceFile), sourceFile)) {
+                    return isLineBreak(sourceFile.text.charCodeAt(pos - 1)) ? pos - 1 : pos;
+                }
+                if (isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                    return pos;
+                }
+            }
+        }
+        return end;
+    }
+
     function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
         const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
         const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
@@ -1589,9 +1610,10 @@ namespace ts.textChanges {
         // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
         Debug.assert(!deletedNodesInLists.has(node), "Deleting a node twice");
         deletedNodesInLists.add(node);
+
         changes.deleteRange(sourceFile, {
             pos: startPositionToDeleteNodeInList(sourceFile, node),
-            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index - 1], containingList[index + 1]),
         });
     }
 }
