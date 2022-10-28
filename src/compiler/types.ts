@@ -8773,7 +8773,8 @@ namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
-        indentation?: number | "\t"; /** number of spaces per indentation level or single tab per level */
+        /** number of spaces or single tab*/
+        indentation?: number | "\t";
         /*@internal*/ module?: CompilerOptions["module"];
         /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;

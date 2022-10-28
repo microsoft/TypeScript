@@ -1,25 +1,9 @@
-=== tests/cases/compiler/node_modules/typescript/index.d.ts ===
-declare module "typescript" {
->"typescript" : typeof import("tests/cases/compiler/node_modules/typescript/index")
-
-    export = ts;
->ts : typeof ts
-}
-
-import { writer } from "repl";
->writer : any
-
 === tests/cases/compiler/writerOptionalIndentation.ts ===
-import * as ts from "typescript";
+import ts = require("typescript");
 >ts : typeof ts
 
-const nl = ts.sys.newLine;
->nl : string
->ts.sys.newLine : string
->ts.sys : ts.System
->ts : typeof ts
->sys : ts.System
->newLine : string
+declare var process: any;
+>process : any
 
 type ExpectedResults = {
 >ExpectedResults : { [indentation: string]: { expected: string; writer?: ts.Printer | undefined; }; [indentation: number]: { expected: string; writer?: ts.Printer | undefined; }; }
@@ -35,6 +19,14 @@ type ExpectedResults = {
 >ts : any
     }
 }
+
+const nl = ts.sys.newLine;
+>nl : string
+>ts.sys.newLine : string
+>ts.sys : ts.System
+>ts : typeof ts
+>sys : ts.System
+>newLine : string
 
 const expectedResults: ExpectedResults = {
 >expectedResults : ExpectedResults
@@ -152,77 +144,18 @@ const expectedResults: ExpectedResults = {
 
 };
 
-let sourceFile = ts.createSourceFile(
->sourceFile : ts.SourceFile
->ts.createSourceFile(    "writerOptionalIndentationTest.ts",    `      export   function abc (   )    :        string        {          let abc :   string   =    "abc";      return     abc        }    `,    ts.ScriptTarget.ESNext) : ts.SourceFile
->ts.createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
->ts : typeof ts
->createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
+export function testWriterOptionalIndentation(): void {
+>testWriterOptionalIndentation : () => void
 
-    "writerOptionalIndentationTest.ts",
->"writerOptionalIndentationTest.ts" : "writerOptionalIndentationTest.ts"
-
-    `
->`      export   function abc (   )    :        string        {          let abc :   string   =    "abc";      return     abc        }    ` : "\n      export \n  function abc (   )    :\n        string\n        {\n          let abc :   string   =    \"abc\";\n      return     abc\n        }\n    "
-
-      export 
-  function abc (   )    :
-        string
-        {
-          let abc :   string   =    "abc";
-      return     abc
-        }
-    `,
-    ts.ScriptTarget.ESNext
->ts.ScriptTarget.ESNext : ts.ScriptTarget.ESNext
->ts.ScriptTarget : typeof ts.ScriptTarget
->ts : typeof ts
->ScriptTarget : typeof ts.ScriptTarget
->ESNext : ts.ScriptTarget.ESNext
-
-);
-
-for (let indentation in expectedResults) {
->indentation : string
->expectedResults : ExpectedResults
-
-    let test = parseInt(indentation + 1);
->test : number
->parseInt(indentation + 1) : number
->parseInt : (string: string, radix?: number | undefined) => number
->indentation + 1 : string
->indentation : string
->1 : 1
-
-    if (test > 0) {
->test > 0 : boolean
->test : number
+    let exitCode = 0;
+>exitCode : number
 >0 : 0
 
-        createPrinterInstance(test - 1);
->createPrinterInstance(test - 1) : void
->createPrinterInstance : (indentation: number | "\t") => void
->test - 1 : number
->test : number
->1 : 1
-    }
-    else if (indentation === "\t") {
->indentation === "\t" : boolean
->indentation : string
->"\t" : "\t"
-
-        createPrinterInstance(indentation);
->createPrinterInstance(indentation) : void
->createPrinterInstance : (indentation: number | "\t") => void
->indentation : "\t"
-    }
-}
-
-function createPrinterInstance(indentation: number | "\t"): void {
+    function createPrinterInstance(indentation: number | "\t"): void {
 >createPrinterInstance : (indentation: number | "\t") => void
 >indentation : number | "\t"
 
-    expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
+        expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
 >expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions) : ts.Printer
 >expectedResults[indentation].writer : ts.Printer | undefined
 >expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
@@ -237,74 +170,34 @@ function createPrinterInstance(indentation: number | "\t"): void {
 >{ indentation } : { indentation: number | "\t"; }
 >indentation : number | "\t"
 >ts : any
-}
-
-testIndentation(); //... testing with no indentation set - should use default of 4 spaces
->testIndentation() : void
->testIndentation : (indentation?: number | "\t" | undefined) => void
-
-for (let indentation in expectedResults) {
->indentation : string
->expectedResults : ExpectedResults
-
-    let test = parseInt(indentation + 1);
->test : number
->parseInt(indentation + 1) : number
->parseInt : (string: string, radix?: number | undefined) => number
->indentation + 1 : string
->indentation : string
->1 : 1
-
-    if (test > 0) {
->test > 0 : boolean
->test : number
->0 : 0
-
-        testIndentation(test - 1);
->testIndentation(test - 1) : void
->testIndentation : (indentation?: number | "\t" | undefined) => void
->test - 1 : number
->test : number
->1 : 1
     }
-    else if (indentation === "\t") {
->indentation === "\t" : boolean
->indentation : string
->"\t" : "\t"
 
-        testIndentation(indentation);
->testIndentation(indentation) : void
->testIndentation : (indentation?: number | "\t" | undefined) => void
->indentation : "\t"
-    }
-}
-
-function testIndentation(indentation?: number | "\t"): void {
+    function testIndentation(indentation?: number | "\t"): void {
 >testIndentation : (indentation?: number | "\t") => void
 >indentation : number | "\t" | undefined
 
-    let workIndentationSize: string = "" + indentation;
+        let workIndentationSize: string = "" + indentation;
 >workIndentationSize : string
 >"" + indentation : string
 >"" : ""
 >indentation : number | "\t" | undefined
 
-    if (indentation === undefined) {
+        if (indentation === undefined) {
 >indentation === undefined : boolean
 >indentation : number | "\t" | undefined
 >undefined : undefined
 
-        indentation = 4;
+            indentation = 4;
 >indentation = 4 : 4
 >indentation : number | "\t" | undefined
 >4 : 4
 
-        workIndentationSize = "<default>";
+            workIndentationSize = "<default>";
 >workIndentationSize = "<default>" : "<default>"
 >workIndentationSize : string
 >"<default>" : "<default>"
-    }
-    let printer = expectedResults[indentation].writer;
+        }
+        let printer = expectedResults[indentation].writer;
 >printer : ts.Printer | undefined
 >expectedResults[indentation].writer : ts.Printer | undefined
 >expectedResults[indentation] : { expected: string; writer?: ts.Printer | undefined; }
@@ -312,13 +205,15 @@ function testIndentation(indentation?: number | "\t"): void {
 >indentation : number | "\t"
 >writer : ts.Printer | undefined
 
-    if (!printer) {
+        if (!printer) {
 >!printer : boolean
 >printer : ts.Printer | undefined
 
-        throw new Error("Unable to find a writer for:" + typeof indentation + " " + indentation);
->new Error("Unable to find a writer for:" + typeof indentation + " " + indentation) : Error
->Error : ErrorConstructor
+            console.error("Unable to find a writer for:" + typeof indentation + " " + indentation);
+>console.error("Unable to find a writer for:" + typeof indentation + " " + indentation) : void
+>console.error : (...data: any[]) => void
+>console : Console
+>error : (...data: any[]) => void
 >"Unable to find a writer for:" + typeof indentation + " " + indentation : string
 >"Unable to find a writer for:" + typeof indentation + " " : string
 >"Unable to find a writer for:" + typeof indentation : string
@@ -327,8 +222,15 @@ function testIndentation(indentation?: number | "\t"): void {
 >indentation : number | "\t"
 >" " : " "
 >indentation : number | "\t"
-    }
-    let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
+
+            exitCode = 9;
+>exitCode = 9 : 9
+>exitCode : number
+>9 : 9
+
+            return;
+        }
+        let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
 >result : string
 >printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile) : string
 >printer.printNode : (hint: ts.EmitHint, node: ts.Node, sourceFile: ts.SourceFile) => string
@@ -342,7 +244,7 @@ function testIndentation(indentation?: number | "\t"): void {
 >sourceFile : ts.SourceFile
 >sourceFile : ts.SourceFile
 
-    if (result !== expectedResults[indentation].expected) {
+        if (result !== expectedResults[indentation].expected) {
 >result !== expectedResults[indentation].expected : boolean
 >result : string
 >expectedResults[indentation].expected : string
@@ -351,20 +253,25 @@ function testIndentation(indentation?: number | "\t"): void {
 >indentation : number | "\t"
 >expected : string
 
-        let workIndentationSize = indentation === undefined ? "<default>" : indentation;
->workIndentationSize : string | number
->indentation === undefined ? "<default>" : indentation : number | "\t" | "<default>"
+            workIndentationSize = indentation === undefined ? "<default>" : "" + indentation;
+>workIndentationSize = indentation === undefined ? "<default>" : "" + indentation : string
+>workIndentationSize : string
+>indentation === undefined ? "<default>" : "" + indentation : string
 >indentation === undefined : boolean
 >indentation : number | "\t"
 >undefined : undefined
 >"<default>" : "<default>"
+>"" + indentation : string
+>"" : ""
 >indentation : number | "\t"
 
-        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
->new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`) : Error
->Error : ErrorConstructor
+            console.error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
+>console.error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`) : void
+>console.error : (...data: any[]) => void
+>console : Console
+>error : (...data: any[]) => void
 >`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}` : string
->workIndentationSize : string | number
+>workIndentationSize : string
 >nl : string
 >nl : string
 >expectedResults[indentation].expected : string
@@ -375,6 +282,138 @@ function testIndentation(indentation?: number | "\t"): void {
 >nl : string
 >nl : string
 >result : string
+
+            exitCode = 9;
+>exitCode = 9 : 9
+>exitCode : number
+>9 : 9
+
+            return;
+        }
     }
+
+    let sourceFile = ts.createSourceFile(
+>sourceFile : ts.SourceFile
+>ts.createSourceFile(        "writerOptionalIndentationTest.ts",        `        export     function abc (   )    :            string            {            let abc :   string   =    "abc";        return     abc            }        `,        ts.ScriptTarget.ESNext    ) : ts.SourceFile
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
+>ts : typeof ts
+>createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
+
+        "writerOptionalIndentationTest.ts",
+>"writerOptionalIndentationTest.ts" : "writerOptionalIndentationTest.ts"
+
+        `
+>`        export     function abc (   )    :            string            {            let abc :   string   =    "abc";        return     abc            }        ` : "\n        export \n    function abc (   )    :\n            string\n            {\n            let abc :   string   =    \"abc\";\n        return     abc\n            }\n        "
+
+        export 
+    function abc (   )    :
+            string
+            {
+            let abc :   string   =    "abc";
+        return     abc
+            }
+        `,
+        ts.ScriptTarget.ESNext
+>ts.ScriptTarget.ESNext : ts.ScriptTarget.ESNext
+>ts.ScriptTarget : typeof ts.ScriptTarget
+>ts : typeof ts
+>ScriptTarget : typeof ts.ScriptTarget
+>ESNext : ts.ScriptTarget.ESNext
+
+    );
+
+    for (let indentation in expectedResults) {
+>indentation : string
+>expectedResults : ExpectedResults
+
+        let test = parseInt(indentation + 1);
+>test : number
+>parseInt(indentation + 1) : number
+>parseInt : (string: string, radix?: number | undefined) => number
+>indentation + 1 : string
+>indentation : string
+>1 : 1
+
+        if (test > 0) {
+>test > 0 : boolean
+>test : number
+>0 : 0
+
+            createPrinterInstance(test - 1);
+>createPrinterInstance(test - 1) : void
+>createPrinterInstance : (indentation: number | "\t") => void
+>test - 1 : number
+>test : number
+>1 : 1
+        }
+        else if (indentation === "\t") {
+>indentation === "\t" : boolean
+>indentation : string
+>"\t" : "\t"
+
+            createPrinterInstance(indentation);
+>createPrinterInstance(indentation) : void
+>createPrinterInstance : (indentation: number | "\t") => void
+>indentation : "\t"
+        }
+    }
+
+    testIndentation(); //... testing with no indentation set - should use default of 4 spaces
+>testIndentation() : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+
+    for (let indentation in expectedResults) {
+>indentation : string
+>expectedResults : ExpectedResults
+
+        let test = parseInt(indentation + 1);
+>test : number
+>parseInt(indentation + 1) : number
+>parseInt : (string: string, radix?: number | undefined) => number
+>indentation + 1 : string
+>indentation : string
+>1 : 1
+
+        if (test > 0) {
+>test > 0 : boolean
+>test : number
+>0 : 0
+
+            testIndentation(test - 1);
+>testIndentation(test - 1) : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+>test - 1 : number
+>test : number
+>1 : 1
+        }
+        else if (indentation === "\t") {
+>indentation === "\t" : boolean
+>indentation : string
+>"\t" : "\t"
+
+            testIndentation(indentation);
+>testIndentation(indentation) : void
+>testIndentation : (indentation?: number | "\t" | undefined) => void
+>indentation : "\t"
+        }
+    }
+    console.log(`Process exiting with code '${exitCode}'.`);
+>console.log(`Process exiting with code '${exitCode}'.`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`Process exiting with code '${exitCode}'.` : string
+>exitCode : number
+
+    process.exit(exitCode);
+>process.exit(exitCode) : any
+>process.exit : any
+>process : any
+>exit : any
+>exitCode : number
 }
+
+testWriterOptionalIndentation();
+>testWriterOptionalIndentation() : void
+>testWriterOptionalIndentation : () => void
 

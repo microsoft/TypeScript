@@ -1,28 +1,12 @@
-=== tests/cases/compiler/node_modules/typescript/index.d.ts ===
-declare module "typescript" {
->"typescript" : Symbol("tests/cases/compiler/node_modules/typescript/index", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
-
-    export = ts;
->ts : Symbol(ts, Decl(typescriptServices.d.ts, 0, 0), Decl(typescriptServices.d.ts, 91, 1), Decl(typescriptServices.d.ts, 4180, 49), Decl(typescriptServices.d.ts, 4237, 1), Decl(typescriptServices.d.ts, 4300, 1) ... and 32 more)
-}
-
-import { writer } from "repl";
->writer : Symbol(writer, Decl(index.d.ts, 4, 8))
-
 === tests/cases/compiler/writerOptionalIndentation.ts ===
-import * as ts from "typescript";
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
+import ts = require("typescript");
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
 
-const nl = ts.sys.newLine;
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->ts.sys.newLine : Symbol(ts.System.newLine, Decl(typescriptServices.d.ts, 4190, 23))
->ts.sys : Symbol(ts.sys, Decl(typescriptServices.d.ts, 4235, 14))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->sys : Symbol(ts.sys, Decl(typescriptServices.d.ts, 4235, 14))
->newLine : Symbol(ts.System.newLine, Decl(typescriptServices.d.ts, 4190, 23))
+declare var process: any;
+>process : Symbol(process, Decl(writerOptionalIndentation.ts, 2, 11))
 
 type ExpectedResults = {
->ExpectedResults : Symbol(ExpectedResults, Decl(writerOptionalIndentation.ts, 2, 26))
+>ExpectedResults : Symbol(ExpectedResults, Decl(writerOptionalIndentation.ts, 2, 25))
 
     [indentation: string | number]: {
 >indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 5, 5))
@@ -32,271 +16,312 @@ type ExpectedResults = {
 
         writer?: ts.Printer;
 >writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->Printer : Symbol(ts.Printer, Decl(typescriptServices.d.ts, 3971, 75))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>Printer : Symbol(ts.Printer, Decl(typescript.d.ts, 3971, 75))
     }
 }
 
+const nl = ts.sys.newLine;
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>ts.sys.newLine : Symbol(ts.System.newLine, Decl(typescript.d.ts, 4191, 23))
+>ts.sys : Symbol(ts.sys, Decl(typescript.d.ts, 4236, 14))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>sys : Symbol(ts.sys, Decl(typescript.d.ts, 4236, 14))
+>newLine : Symbol(ts.System.newLine, Decl(typescript.d.ts, 4191, 23))
+
 const expectedResults: ExpectedResults = {
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
->ExpectedResults : Symbol(ExpectedResults, Decl(writerOptionalIndentation.ts, 2, 26))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+>ExpectedResults : Symbol(ExpectedResults, Decl(writerOptionalIndentation.ts, 2, 25))
 
     0: {expected: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`},
->0 : Symbol(0, Decl(writerOptionalIndentation.ts, 11, 42))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 12, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>0 : Symbol(0, Decl(writerOptionalIndentation.ts, 12, 42))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 13, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     1: {expected: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`},
->1 : Symbol(1, Decl(writerOptionalIndentation.ts, 12, 111))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 13, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>1 : Symbol(1, Decl(writerOptionalIndentation.ts, 13, 111))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 14, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     2: {expected: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`},
->2 : Symbol(2, Decl(writerOptionalIndentation.ts, 13, 113))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 14, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>2 : Symbol(2, Decl(writerOptionalIndentation.ts, 14, 113))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 15, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     3: {expected: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`},
->3 : Symbol(3, Decl(writerOptionalIndentation.ts, 14, 115))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 15, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>3 : Symbol(3, Decl(writerOptionalIndentation.ts, 15, 115))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 16, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     4: {expected: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`},
->4 : Symbol(4, Decl(writerOptionalIndentation.ts, 15, 117))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 16, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>4 : Symbol(4, Decl(writerOptionalIndentation.ts, 16, 117))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 17, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     5: {expected: `export function abc(): string {${nl}     let abc: string = \"abc\";${nl}     return abc;${nl}}${nl}`},
->5 : Symbol(5, Decl(writerOptionalIndentation.ts, 16, 119))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 17, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>5 : Symbol(5, Decl(writerOptionalIndentation.ts, 17, 119))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 18, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     6: {expected: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`},
->6 : Symbol(6, Decl(writerOptionalIndentation.ts, 17, 121))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 18, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>6 : Symbol(6, Decl(writerOptionalIndentation.ts, 18, 121))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 19, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     7: {expected: `export function abc(): string {${nl}       let abc: string = \"abc\";${nl}       return abc;${nl}}${nl}`},
->7 : Symbol(7, Decl(writerOptionalIndentation.ts, 18, 123))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 19, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>7 : Symbol(7, Decl(writerOptionalIndentation.ts, 19, 123))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 20, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     8: {expected: `export function abc(): string {${nl}        let abc: string = \"abc\";${nl}        return abc;${nl}}${nl}`},
->8 : Symbol(8, Decl(writerOptionalIndentation.ts, 19, 125))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 20, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>8 : Symbol(8, Decl(writerOptionalIndentation.ts, 20, 125))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 21, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     9: {expected: `export function abc(): string {${nl}         let abc: string = \"abc\";${nl}         return abc;${nl}}${nl}`},
->9 : Symbol(9, Decl(writerOptionalIndentation.ts, 20, 127))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 21, 8))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>9 : Symbol(9, Decl(writerOptionalIndentation.ts, 21, 127))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 22, 8))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
     "\t": {expected: `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`}
->"\t" : Symbol("\t", Decl(writerOptionalIndentation.ts, 21, 129))
->expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 22, 11))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+>"\t" : Symbol("\t", Decl(writerOptionalIndentation.ts, 22, 129))
+>expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 23, 11))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 
 };
 
-let sourceFile = ts.createSourceFile(
->sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 25, 3))
->ts.createSourceFile : Symbol(ts.createSourceFile, Decl(typescriptServices.d.ts, 4892, 5))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->createSourceFile : Symbol(ts.createSourceFile, Decl(typescriptServices.d.ts, 4892, 5))
+export function testWriterOptionalIndentation(): void {
+>testWriterOptionalIndentation : Symbol(testWriterOptionalIndentation, Decl(writerOptionalIndentation.ts, 24, 2))
 
-    "writerOptionalIndentationTest.ts",
-    `
-      export 
-  function abc (   )    :
-        string
-        {
-          let abc :   string   =    "abc";
-      return     abc
+    let exitCode = 0;
+>exitCode : Symbol(exitCode, Decl(writerOptionalIndentation.ts, 28, 7))
+
+    function createPrinterInstance(indentation: number | "\t"): void {
+>createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 28, 21))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 30, 35))
+
+        expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
+>expectedResults[indentation].writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 30, 35))
+>writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
+>ts.createPrinter : Symbol(ts.createPrinter, Decl(typescript.d.ts, 5147, 127))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>createPrinter : Symbol(ts.createPrinter, Decl(typescript.d.ts, 5147, 127))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 31, 64))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>PrinterOptions : Symbol(ts.PrinterOptions, Decl(typescript.d.ts, 4047, 5))
+    }
+
+    function testIndentation(indentation?: number | "\t"): void {
+>testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 32, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
+
+        let workIndentationSize: string = "" + indentation;
+>workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 35, 11))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
+
+        if (indentation === undefined) {
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
+>undefined : Symbol(undefined)
+
+            indentation = 4;
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
+
+            workIndentationSize = "<default>";
+>workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 35, 11))
         }
-    `,
-    ts.ScriptTarget.ESNext
->ts.ScriptTarget.ESNext : Symbol(ts.ScriptTarget.ESNext, Decl(typescriptServices.d.ts, 3172, 19))
->ts.ScriptTarget : Symbol(ts.ScriptTarget, Decl(typescriptServices.d.ts, 3161, 5))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->ScriptTarget : Symbol(ts.ScriptTarget, Decl(typescriptServices.d.ts, 3161, 5))
->ESNext : Symbol(ts.ScriptTarget.ESNext, Decl(typescriptServices.d.ts, 3172, 19))
-
-);
-
-for (let indentation in expectedResults) {
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 39, 8))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
-
-    let test = parseInt(indentation + 1);
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 40, 7))
->parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 39, 8))
-
-    if (test > 0) {
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 40, 7))
-
-        createPrinterInstance(test - 1);
->createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 47, 1))
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 40, 7))
-    }
-    else if (indentation === "\t") {
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 39, 8))
-
-        createPrinterInstance(indentation);
->createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 47, 1))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 39, 8))
-    }
-}
-
-function createPrinterInstance(indentation: number | "\t"): void {
->createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 47, 1))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 49, 31))
-
-    expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
+        let printer = expectedResults[indentation].writer;
+>printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 40, 11))
 >expectedResults[indentation].writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 49, 31))
->writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
->ts.createPrinter : Symbol(ts.createPrinter, Decl(typescriptServices.d.ts, 5146, 127))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->createPrinter : Symbol(ts.createPrinter, Decl(typescriptServices.d.ts, 5146, 127))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 50, 60))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->PrinterOptions : Symbol(ts.PrinterOptions, Decl(typescriptServices.d.ts, 4047, 5))
-}
-
-testIndentation(); //... testing with no indentation set - should use default of 4 spaces
->testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 62, 1))
-
-for (let indentation in expectedResults) {
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 54, 8))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
-
-    let test = parseInt(indentation + 1);
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 55, 7))
->parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 54, 8))
-
-    if (test > 0) {
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 55, 7))
-
-        testIndentation(test - 1);
->testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 62, 1))
->test : Symbol(test, Decl(writerOptionalIndentation.ts, 55, 7))
-    }
-    else if (indentation === "\t") {
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 54, 8))
-
-        testIndentation(indentation);
->testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 62, 1))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 54, 8))
-    }
-}
-
-function testIndentation(indentation?: number | "\t"): void {
->testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 62, 1))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
-
-    let workIndentationSize: string = "" + indentation;
->workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 65, 7))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
-
-    if (indentation === undefined) {
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
->undefined : Symbol(undefined)
-
-        indentation = 4;
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
-
-        workIndentationSize = "<default>";
->workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 65, 7))
-    }
-    let printer = expectedResults[indentation].writer;
->printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 70, 7))
->expectedResults[indentation].writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 >writer : Symbol(writer, Decl(writerOptionalIndentation.ts, 6, 25))
 
-    if (!printer) {
->printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 70, 7))
+        if (!printer) {
+>printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 40, 11))
 
-        throw new Error("Unable to find a writer for:" + typeof indentation + " " + indentation);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
-    }
-    let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
->result : Symbol(result, Decl(writerOptionalIndentation.ts, 74, 7))
->printer.printNode : Symbol(ts.Printer.printNode, Decl(typescriptServices.d.ts, 3972, 30))
->printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 70, 7))
->printNode : Symbol(ts.Printer.printNode, Decl(typescriptServices.d.ts, 3972, 30))
->ts.EmitHint.Unspecified : Symbol(ts.EmitHint.Unspecified, Decl(typescriptServices.d.ts, 3386, 32))
->ts.EmitHint : Symbol(ts.EmitHint, Decl(typescriptServices.d.ts, 3381, 72))
->ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 6))
->EmitHint : Symbol(ts.EmitHint, Decl(typescriptServices.d.ts, 3381, 72))
->Unspecified : Symbol(ts.EmitHint.Unspecified, Decl(typescriptServices.d.ts, 3386, 32))
->sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 25, 3))
->sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 25, 3))
+            console.error("Unable to find a writer for:" + typeof indentation + " " + indentation);
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 
-    if (result !== expectedResults[indentation].expected) {
->result : Symbol(result, Decl(writerOptionalIndentation.ts, 74, 7))
+            exitCode = 9;
+>exitCode : Symbol(exitCode, Decl(writerOptionalIndentation.ts, 28, 7))
+
+            return;
+        }
+        let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
+>result : Symbol(result, Decl(writerOptionalIndentation.ts, 46, 11))
+>printer.printNode : Symbol(ts.Printer.printNode, Decl(typescript.d.ts, 3972, 30))
+>printer : Symbol(printer, Decl(writerOptionalIndentation.ts, 40, 11))
+>printNode : Symbol(ts.Printer.printNode, Decl(typescript.d.ts, 3972, 30))
+>ts.EmitHint.Unspecified : Symbol(ts.EmitHint.Unspecified, Decl(typescript.d.ts, 3386, 32))
+>ts.EmitHint : Symbol(ts.EmitHint, Decl(typescript.d.ts, 3381, 72))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>EmitHint : Symbol(ts.EmitHint, Decl(typescript.d.ts, 3381, 72))
+>Unspecified : Symbol(ts.EmitHint.Unspecified, Decl(typescript.d.ts, 3386, 32))
+>sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 55, 7))
+>sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 55, 7))
+
+        if (result !== expectedResults[indentation].expected) {
+>result : Symbol(result, Decl(writerOptionalIndentation.ts, 46, 11))
 >expectedResults[indentation].expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 5, 37))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 >expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 5, 37))
 
-        let workIndentationSize = indentation === undefined ? "<default>" : indentation;
->workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 76, 11))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
+            workIndentationSize = indentation === undefined ? "<default>" : "" + indentation;
+>workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 35, 11))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 >undefined : Symbol(undefined)
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 
-        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 76, 11))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
+            console.error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>workIndentationSize : Symbol(workIndentationSize, Decl(writerOptionalIndentation.ts, 35, 11))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
 >expectedResults[indentation].expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 5, 37))
->expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 11, 5))
->indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 64, 25))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 34, 29))
 >expected : Symbol(expected, Decl(writerOptionalIndentation.ts, 5, 37))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 2, 5))
->result : Symbol(result, Decl(writerOptionalIndentation.ts, 74, 7))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>nl : Symbol(nl, Decl(writerOptionalIndentation.ts, 11, 5))
+>result : Symbol(result, Decl(writerOptionalIndentation.ts, 46, 11))
+
+            exitCode = 9;
+>exitCode : Symbol(exitCode, Decl(writerOptionalIndentation.ts, 28, 7))
+
+            return;
+        }
     }
+
+    let sourceFile = ts.createSourceFile(
+>sourceFile : Symbol(sourceFile, Decl(writerOptionalIndentation.ts, 55, 7))
+>ts.createSourceFile : Symbol(ts.createSourceFile, Decl(typescript.d.ts, 4893, 5))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>createSourceFile : Symbol(ts.createSourceFile, Decl(typescript.d.ts, 4893, 5))
+
+        "writerOptionalIndentationTest.ts",
+        `
+        export 
+    function abc (   )    :
+            string
+            {
+            let abc :   string   =    "abc";
+        return     abc
+            }
+        `,
+        ts.ScriptTarget.ESNext
+>ts.ScriptTarget.ESNext : Symbol(ts.ScriptTarget.ESNext, Decl(typescript.d.ts, 3172, 19))
+>ts.ScriptTarget : Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 3161, 5))
+>ts : Symbol(ts, Decl(writerOptionalIndentation.ts, 0, 0))
+>ScriptTarget : Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 3161, 5))
+>ESNext : Symbol(ts.ScriptTarget.ESNext, Decl(typescript.d.ts, 3172, 19))
+
+    );
+
+    for (let indentation in expectedResults) {
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 69, 12))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+
+        let test = parseInt(indentation + 1);
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 70, 11))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 69, 12))
+
+        if (test > 0) {
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 70, 11))
+
+            createPrinterInstance(test - 1);
+>createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 28, 21))
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 70, 11))
+        }
+        else if (indentation === "\t") {
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 69, 12))
+
+            createPrinterInstance(indentation);
+>createPrinterInstance : Symbol(createPrinterInstance, Decl(writerOptionalIndentation.ts, 28, 21))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 69, 12))
+        }
+    }
+
+    testIndentation(); //... testing with no indentation set - should use default of 4 spaces
+>testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 32, 5))
+
+    for (let indentation in expectedResults) {
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 80, 12))
+>expectedResults : Symbol(expectedResults, Decl(writerOptionalIndentation.ts, 12, 5))
+
+        let test = parseInt(indentation + 1);
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 81, 11))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 80, 12))
+
+        if (test > 0) {
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 81, 11))
+
+            testIndentation(test - 1);
+>testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 32, 5))
+>test : Symbol(test, Decl(writerOptionalIndentation.ts, 81, 11))
+        }
+        else if (indentation === "\t") {
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 80, 12))
+
+            testIndentation(indentation);
+>testIndentation : Symbol(testIndentation, Decl(writerOptionalIndentation.ts, 32, 5))
+>indentation : Symbol(indentation, Decl(writerOptionalIndentation.ts, 80, 12))
+        }
+    }
+    console.log(`Process exiting with code '${exitCode}'.`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>exitCode : Symbol(exitCode, Decl(writerOptionalIndentation.ts, 28, 7))
+
+    process.exit(exitCode);
+>process : Symbol(process, Decl(writerOptionalIndentation.ts, 2, 11))
+>exitCode : Symbol(exitCode, Decl(writerOptionalIndentation.ts, 28, 7))
 }
+
+testWriterOptionalIndentation();
+>testWriterOptionalIndentation : Symbol(testWriterOptionalIndentation, Decl(writerOptionalIndentation.ts, 24, 2))
 

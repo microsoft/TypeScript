@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/writerOptionalIndentation.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
-import { writer } from "repl";
 //// [writerOptionalIndentation.ts]
-import * as ts from "typescript";
+import ts = require("typescript");
 
-const nl = ts.sys.newLine;
+declare var process: any;
 
 type ExpectedResults = {
     [indentation: string | number]: {
@@ -18,6 +18,7 @@ type ExpectedResults = {
     }
 }
 
+const nl = ts.sys.newLine;
 const expectedResults: ExpectedResults = {
     0: {expected: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`},
     1: {expected: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`},
@@ -32,66 +33,80 @@ const expectedResults: ExpectedResults = {
     "\t": {expected: `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`}
 };
 
-let sourceFile = ts.createSourceFile(
-    "writerOptionalIndentationTest.ts",
-    `
-      export 
-  function abc (   )    :
-        string
-        {
-          let abc :   string   =    "abc";
-      return     abc
+export function testWriterOptionalIndentation(): void {
+
+    let exitCode = 0;
+
+    function createPrinterInstance(indentation: number | "\t"): void {
+        expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
+    }
+
+    function testIndentation(indentation?: number | "\t"): void {
+        let workIndentationSize: string = "" + indentation;
+        if (indentation === undefined) {
+            indentation = 4;
+            workIndentationSize = "<default>";
         }
-    `,
-    ts.ScriptTarget.ESNext
-);
+        let printer = expectedResults[indentation].writer;
+        if (!printer) {
+            console.error("Unable to find a writer for:" + typeof indentation + " " + indentation);
+            exitCode = 9;
+            return;
+        }
+        let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
+        if (result !== expectedResults[indentation].expected) {
+            workIndentationSize = indentation === undefined ? "<default>" : "" + indentation;
+            console.error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
+            exitCode = 9;
+            return;
+        }
+    }
 
-for (let indentation in expectedResults) {
-    let test = parseInt(indentation + 1);
-    if (test > 0) {
-        createPrinterInstance(test - 1);
+    let sourceFile = ts.createSourceFile(
+        "writerOptionalIndentationTest.ts",
+        `
+        export 
+    function abc (   )    :
+            string
+            {
+            let abc :   string   =    "abc";
+        return     abc
+            }
+        `,
+        ts.ScriptTarget.ESNext
+    );
+
+    for (let indentation in expectedResults) {
+        let test = parseInt(indentation + 1);
+        if (test > 0) {
+            createPrinterInstance(test - 1);
+        }
+        else if (indentation === "\t") {
+            createPrinterInstance(indentation);
+        }
     }
-    else if (indentation === "\t") {
-        createPrinterInstance(indentation);
+
+    testIndentation(); //... testing with no indentation set - should use default of 4 spaces
+    for (let indentation in expectedResults) {
+        let test = parseInt(indentation + 1);
+        if (test > 0) {
+            testIndentation(test - 1);
+        }
+        else if (indentation === "\t") {
+            testIndentation(indentation);
+        }
     }
+    console.log(`Process exiting with code '${exitCode}'.`);
+    process.exit(exitCode);
 }
 
-function createPrinterInstance(indentation: number | "\t"): void {
-    expectedResults[indentation].writer = ts.createPrinter({ indentation } as ts.PrinterOptions);
-}
-
-testIndentation(); //... testing with no indentation set - should use default of 4 spaces
-for (let indentation in expectedResults) {
-    let test = parseInt(indentation + 1);
-    if (test > 0) {
-        testIndentation(test - 1);
-    }
-    else if (indentation === "\t") {
-        testIndentation(indentation);
-    }
-}
-
-function testIndentation(indentation?: number | "\t"): void {
-    let workIndentationSize: string = "" + indentation;
-    if (indentation === undefined) {
-        indentation = 4;
-        workIndentationSize = "<default>";
-    }
-    let printer = expectedResults[indentation].writer;
-    if (!printer) {
-        throw new Error("Unable to find a writer for:" + typeof indentation + " " + indentation);
-    }
-    let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
-    if (result !== expectedResults[indentation].expected) {
-        let workIndentationSize = indentation === undefined ? "<default>" : indentation;
-        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation].expected}${nl}Have:-${nl}${result}`);
-    }
-}
+testWriterOptionalIndentation();
 
 
 //// [writerOptionalIndentation.js]
 "use strict";
 exports.__esModule = true;
+exports.testWriterOptionalIndentation = void 0;
 var ts = require("typescript");
 var nl = ts.sys.newLine;
 var expectedResults = {
@@ -107,42 +122,53 @@ var expectedResults = {
     9: { expected: "export function abc(): string {".concat(nl, "         let abc: string = \"abc\";").concat(nl, "         return abc;").concat(nl, "}").concat(nl) },
     "\t": { expected: "export function abc(): string {".concat(nl, "\tlet abc: string = \"abc\";").concat(nl, "\treturn abc;").concat(nl, "}").concat(nl) }
 };
-var sourceFile = ts.createSourceFile("writerOptionalIndentationTest.ts", "\n      export \n  function abc (   )    :\n        string\n        {\n          let abc :   string   =    \"abc\";\n      return     abc\n        }\n    ", ts.ScriptTarget.ESNext);
-for (var indentation in expectedResults) {
-    var test = parseInt(indentation + 1);
-    if (test > 0) {
-        createPrinterInstance(test - 1);
+function testWriterOptionalIndentation() {
+    var exitCode = 0;
+    function createPrinterInstance(indentation) {
+        expectedResults[indentation].writer = ts.createPrinter({ indentation: indentation });
     }
-    else if (indentation === "\t") {
-        createPrinterInstance(indentation);
+    function testIndentation(indentation) {
+        var workIndentationSize = "" + indentation;
+        if (indentation === undefined) {
+            indentation = 4;
+            workIndentationSize = "<default>";
+        }
+        var printer = expectedResults[indentation].writer;
+        if (!printer) {
+            console.error("Unable to find a writer for:" + typeof indentation + " " + indentation);
+            exitCode = 9;
+            return;
+        }
+        var result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
+        if (result !== expectedResults[indentation].expected) {
+            workIndentationSize = indentation === undefined ? "<default>" : "" + indentation;
+            console.error("writerOptionalIndentation - Failed indentation for >>".concat(workIndentationSize, "<<").concat(nl, "Expected:-").concat(nl).concat(expectedResults[indentation].expected).concat(nl, "Have:-").concat(nl).concat(result));
+            exitCode = 9;
+            return;
+        }
     }
+    var sourceFile = ts.createSourceFile("writerOptionalIndentationTest.ts", "\n        export \n    function abc (   )    :\n            string\n            {\n            let abc :   string   =    \"abc\";\n        return     abc\n            }\n        ", ts.ScriptTarget.ESNext);
+    for (var indentation in expectedResults) {
+        var test = parseInt(indentation + 1);
+        if (test > 0) {
+            createPrinterInstance(test - 1);
+        }
+        else if (indentation === "\t") {
+            createPrinterInstance(indentation);
+        }
+    }
+    testIndentation(); //... testing with no indentation set - should use default of 4 spaces
+    for (var indentation in expectedResults) {
+        var test = parseInt(indentation + 1);
+        if (test > 0) {
+            testIndentation(test - 1);
+        }
+        else if (indentation === "\t") {
+            testIndentation(indentation);
+        }
+    }
+    console.log("Process exiting with code '".concat(exitCode, "'."));
+    process.exit(exitCode);
 }
-function createPrinterInstance(indentation) {
-    expectedResults[indentation].writer = ts.createPrinter({ indentation: indentation });
-}
-testIndentation(); //... testing with no indentation set - should use default of 4 spaces
-for (var indentation in expectedResults) {
-    var test = parseInt(indentation + 1);
-    if (test > 0) {
-        testIndentation(test - 1);
-    }
-    else if (indentation === "\t") {
-        testIndentation(indentation);
-    }
-}
-function testIndentation(indentation) {
-    var workIndentationSize = "" + indentation;
-    if (indentation === undefined) {
-        indentation = 4;
-        workIndentationSize = "<default>";
-    }
-    var printer = expectedResults[indentation].writer;
-    if (!printer) {
-        throw new Error("Unable to find a writer for:" + typeof indentation + " " + indentation);
-    }
-    var result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
-    if (result !== expectedResults[indentation].expected) {
-        var workIndentationSize_1 = indentation === undefined ? "<default>" : indentation;
-        throw new Error("writerOptionalIndentation - Failed indentation for >>".concat(workIndentationSize_1, "<<").concat(nl, "Expected:-").concat(nl).concat(expectedResults[indentation].expected).concat(nl, "Have:-").concat(nl).concat(result));
-    }
-}
+exports.testWriterOptionalIndentation = testWriterOptionalIndentation;
+testWriterOptionalIndentation();

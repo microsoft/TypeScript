@@ -4113,7 +4113,7 @@ namespace ts {
         return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
-    /** @deprecated @internal*/
+    /** @deprecated */
     const indentStrings: string[] = ["", "    "];
     /** @deprecated Use <writerInstance>.getIndentString*/
     export function getIndentString(level: number) {
