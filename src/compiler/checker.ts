@@ -24490,6 +24490,7 @@ namespace ts {
         }
 
         function getExplicitTypeOfSymbol(symbol: Symbol, diagnostic?: Diagnostic) {
+            symbol = resolveSymbol(symbol);
             if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule)) {
                 return getTypeOfSymbol(symbol);
             }
@@ -24529,7 +24530,7 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(node as Identifier));
-                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol, diagnostic);
+                        return getExplicitTypeOfSymbol(symbol, diagnostic);
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
                     case SyntaxKind.SuperKeyword:
