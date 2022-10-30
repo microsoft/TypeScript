@@ -55,6 +55,7 @@ namespace ts {
         hasStaticInitializers: boolean;
         hasNonAmbientInstanceFields: boolean;
         hasInjectedInstanceInitializers?: boolean;
+        hasStaticPrivateClassElements: boolean;
     }
 
     interface ClassLexicalEnvironmentStackEntry {
@@ -376,6 +377,7 @@ namespace ts {
             let staticExtraInitializersName: Identifier | undefined;
             let hasStaticInitializers = false;
             let hasNonAmbientInstanceFields = false;
+            let hasStaticPrivateClassElements = false;
 
             // Before visiting we perform a first pass to collect information we'll need
             // as we descend.
@@ -401,11 +403,16 @@ namespace ts {
                     }
                 }
 
+                if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
+                    hasStaticPrivateClassElements = true;
+                }
+
                 // exit early if possible
                 if (staticExtraInitializersName &&
                     instanceExtraInitializersName &&
                     hasStaticInitializers &&
-                    hasNonAmbientInstanceFields) {
+                    hasNonAmbientInstanceFields &&
+                    hasStaticPrivateClassElements) {
                     break;
                 }
             }
@@ -416,6 +423,7 @@ namespace ts {
                 staticExtraInitializersName,
                 hasStaticInitializers,
                 hasNonAmbientInstanceFields,
+                hasStaticPrivateClassElements,
             };
         }
 
@@ -463,12 +471,9 @@ namespace ts {
                     createLet(classInfo.classThis),
                 );
 
-                for (const member of node.members) {
-                    if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
-                        shouldTransformPrivateStaticElementsInClass = true;
-                        shouldTransformPrivateStaticElementsInFile = true;
-                        break;
-                    }
+                if (classInfo.hasStaticPrivateClassElements) {
+                    shouldTransformPrivateStaticElementsInClass = true;
+                    shouldTransformPrivateStaticElementsInFile = true;
                 }
             }
 
