@@ -62,18 +62,17 @@ Info 7    [00:00:38.000] FileWatcher:: Close:: WatchInfo: /user/username/project
 Info 8    [00:00:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info 9    [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 10   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 11   [00:00:42.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 12   [00:00:43.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 13   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 14   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 15   [00:00:46.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 16   [00:00:47.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 18   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 19   [00:00:50.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 20   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 21   [00:00:52.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 22   [00:00:53.000] 	Files (4)
+Info 11   [00:00:42.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 12   [00:00:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 13   [00:00:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 14   [00:00:45.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 15   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 16   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 17   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 18   [00:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 19   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 20   [00:00:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 21   [00:00:52.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts
 	/user/username/projects/myproject/node_modules/bar/index.d.ts
@@ -89,14 +88,14 @@ Info 22   [00:00:53.000] 	Files (4)
 	src/main.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 23   [00:00:54.000] -----------------------------------------------
-Info 24   [00:00:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 24   [00:00:56.000] 	Files (4)
+Info 22   [00:00:53.000] -----------------------------------------------
+Info 23   [00:00:54.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 23   [00:00:55.000] 	Files (4)
 
-Info 24   [00:00:57.000] -----------------------------------------------
-Info 24   [00:00:58.000] Open files: 
-Info 24   [00:00:59.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 24   [00:01:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 23   [00:00:56.000] -----------------------------------------------
+Info 23   [00:00:57.000] Open files: 
+Info 23   [00:00:58.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 23   [00:00:59.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -113,7 +112,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 24   [00:01:01.000] response:
+Info 23   [00:01:00.000] response:
     {
       "responseRequired": false
     }

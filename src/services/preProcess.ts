@@ -347,8 +347,8 @@ namespace ts {
 
                 if (scanner.getToken() === SyntaxKind.TemplateHead) {
                     const stack = [scanner.getToken()];
-                    let token = scanner.scan();
                     loop: while (length(stack)) {
+                        const token = scanner.scan();
                         switch (token) {
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
@@ -376,7 +376,6 @@ namespace ts {
                                 }
                                 break;
                         }
-                        token = scanner.scan();
                     }
                     nextToken();
                 }

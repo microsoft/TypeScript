@@ -874,7 +874,7 @@ namespace ts {
         }
 
         // @api
-        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier {
+        function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
             const node = createBaseIdentifier(text, originalKeywordKind);
             if (typeArguments) {
                 // NOTE: we do not use `setChildren` here because typeArguments in an identifier do not contribute to transformations
@@ -882,6 +882,10 @@ namespace ts {
             }
             if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
+            }
+            if (hasExtendedUnicodeEscape) {
+                node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+                node.transformFlags |= TransformFlags.ContainsES2015;
             }
             return node;
         }
@@ -6403,11 +6407,9 @@ namespace ts {
                 rawTextScanner.setText("`" + rawText + "`");
                 break;
             case SyntaxKind.TemplateHead:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("`" + rawText + "${");
                 break;
             case SyntaxKind.TemplateMiddle:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("}" + rawText + "${");
                 break;
             case SyntaxKind.TemplateTail:
@@ -6836,7 +6838,6 @@ namespace ts {
         return node;
     }
 
-    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**

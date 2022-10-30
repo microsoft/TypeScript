@@ -854,7 +854,6 @@ namespace ts {
         tscWatchFile: string | undefined;
         useNonPollingWatchers?: boolean;
         tscWatchDirectory: string | undefined;
-        defaultWatchFileKind: System["defaultWatchFileKind"];
         inodeWatching: boolean;
         sysLog: (s: string) => void;
     }
@@ -875,7 +874,6 @@ namespace ts {
         tscWatchFile,
         useNonPollingWatchers,
         tscWatchDirectory,
-        defaultWatchFileKind,
         inodeWatching,
         sysLog,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
@@ -953,8 +951,8 @@ namespace ts {
                     return useNonPollingWatchers ?
                         // Use notifications from FS to watch with falling back to fs.watchFile
                         generateWatchFileOptions(WatchFileKind.UseFsEventsOnParentDirectory, PollingWatchKind.PriorityInterval, options) :
-                        // Default to do not use fixed polling interval
-                        { watchFile: defaultWatchFileKind?.() || WatchFileKind.UseFsEvents };
+                        // Default to using fs events
+                        { watchFile: WatchFileKind.UseFsEvents };
             }
         }
 
@@ -1380,7 +1378,6 @@ namespace ts {
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
-        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
 
         // For testing
         /*@internal*/ now?(): Date;
@@ -1473,7 +1470,6 @@ namespace ts {
                 tscWatchFile: process.env.TSC_WATCHFILE,
                 useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
                 tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
-                defaultWatchFileKind: () => sys!.defaultWatchFileKind?.(),
                 inodeWatching: isLinuxOrMacOs,
                 sysLog,
             });

@@ -17,13 +17,11 @@ namespace ts {
      * Creates a `BaseNodeFactory` which can be used to create `Node` instances from the constructors provided by the object allocator.
      */
     export function createBaseNodeFactory(): BaseNodeFactory {
-        // tslint:disable variable-name
         let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        // tslint:enable variable-name
 
         return {
             createBaseSourceFileNode,

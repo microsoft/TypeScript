@@ -1048,7 +1048,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to search for.",
+                  "text": "A string or regular expression to search for.",
                   "kind": "text"
                 }
               ]
@@ -1065,7 +1065,53 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string containing the text to replace for every successful match of searchValue in this string.",
+                  "text": "A string containing the text to replace. When the ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": 18880,
+                      "length": 28
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of ",
+                  "kind": "text"
+                },
+                {
+                  "text": "{@linkcode ",
+                  "kind": "link"
+                },
+                {
+                  "text": "searchValue",
+                  "kind": "linkName",
+                  "target": {
+                    "fileName": "lib.d.ts",
+                    "textSpan": {
+                      "start": 18880,
+                      "length": 28
+                    }
+                  }
+                },
+                {
+                  "text": "}",
+                  "kind": "link"
+                },
+                {
+                  "text": " is replaced.",
                   "kind": "text"
                 }
               ]
