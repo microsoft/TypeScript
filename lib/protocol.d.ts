@@ -501,9 +501,16 @@ declare namespace ts.server.protocol {
         arguments: OrganizeImportsRequestArgs;
     }
     type OrganizeImportsScope = GetCombinedCodeFixScope;
+    const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused"
+    }
     interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
@@ -853,12 +860,14 @@ declare namespace ts.server.protocol {
         command: CommandTypes.References;
     }
     interface ReferencesResponseItem extends FileSpanWithContext {
-        /** Text of line containing the reference.  Including this
-         *  with the response avoids latency of editor loading files
-         * to show text of reference line (the server already has
-         * loaded the referencing files).
+        /**
+         * Text of line containing the reference. Including this
+         * with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has loaded the referencing files).
+         *
+         * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
          */
-        lineText: string;
+        lineText?: string;
         /**
          * True if reference is a write location, false otherwise.
          */
@@ -2704,6 +2713,10 @@ declare namespace ts.server.protocol {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        /**
+         * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
+         */
+        readonly disableLineTextInReferences?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
