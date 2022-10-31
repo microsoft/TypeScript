@@ -8,9 +8,10 @@ namespace ts {
         resolveModuleNames(
             moduleNames: string[],
             containingFile: string,
+            reusedNames: string[] | undefined,
             redirectedReference: ResolvedProjectReference | undefined,
             containingSourceFile: SourceFile | undefined,
-            partialResolutionInfo: PartialResolutionInfo | undefined
+            resolutionInfo: ModuleResolutionInfo | undefined
         ): (ResolvedModuleFull | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[];
@@ -414,7 +415,8 @@ namespace ts {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => T;
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
-            partialResolutionInfo?: PartialResolutionInfo;
+            reusedNames?: readonly string[];
+            resolutionInfo?: ModuleResolutionInfo;
             logChanges?: boolean;
             containingSourceFile?: SourceFile;
             containingSourceFileMode?: SourceFile["impliedNodeFormat"];
@@ -423,7 +425,7 @@ namespace ts {
             names, containingFile, redirectedReference,
             cache, perDirectoryCacheWithRedirects,
             loader, getResolutionWithResolvedFileName,
-            shouldRetryResolution, partialResolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
+            shouldRetryResolution, reusedNames, resolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
         }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
             const path = resolutionHost.toPath(containingFile);
             const resolutionsInFile = cache.get(path) || cache.set(path, createModeAwareCache()).get(path)!;
@@ -447,15 +449,20 @@ namespace ts {
 
             const seenNamesInFile = createModeAwareCache<true>();
             let i = 0;
-            for (const entry of names) {
-                const name = isString(entry) ? entry : entry.fileName.toLowerCase();
+            for (const entry of containingSourceFile && resolutionInfo ? resolutionInfo.names : names) {
+                const name = !isString(entry) ? getResolutionName(entry) : entry;
                 // Imports supply a `containingSourceFile` but no `containingSourceFileMode` - it would be redundant
                 // they require calculating the mode for a given import from it's position in the resolution table, since a given
                 // import's syntax may override the file's default mode.
                 // Type references instead supply a `containingSourceFileMode` and a non-string entry which contains
                 // a default file mode override if applicable.
-                const mode = !isString(entry) ? getModeForFileReference(entry, containingSourceFileMode) :
-                    containingSourceFile ? getModeForResolutionAtIndex(containingSourceFile, partialResolutionInfo?.namesIndex[i] ?? i) : undefined;
+                const mode = !isString(entry) ?
+                    isStringLiteralLike(entry) ?
+                        getModeForUsageLocation(containingSourceFile!, entry) :
+                        getModeForFileReference(entry, containingSourceFileMode) :
+                    containingSourceFile ?
+                        getModeForResolutionAtIndex(containingSourceFile, i) :
+                        undefined;
                 i++;
                 let resolution = resolutionsInFile.get(name, mode);
                 // Resolution is valid if it is present and not invalidated
@@ -539,11 +546,14 @@ namespace ts {
                 resolvedModules.push(getResolutionWithResolvedFileName(resolution));
             }
 
-            partialResolutionInfo?.reusedNames?.forEach(({ name, mode }) => seenNamesInFile.set(name, mode, true));
+            if (containingSourceFile && resolutionInfo) {
+                resolutionInfo.reusedNames?.forEach(literal => seenNamesInFile.set(literal.text, getModeForUsageLocation(containingSourceFile, literal), true));
+                reusedNames = undefined;
+            }
             if (resolutionsInFile.size() !== seenNamesInFile.size()) {
                 // Stop watching and remove the unused name
                 resolutionsInFile.forEach((resolution, name, mode) => {
-                    if (!seenNamesInFile.has(name, mode)) {
+                    if (!seenNamesInFile.has(name, mode) && !contains(reusedNames, name)) {
                         stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
                         resolutionsInFile.delete(name, mode);
                     }
@@ -588,9 +598,10 @@ namespace ts {
         function resolveModuleNames(
             moduleNames: string[],
             containingFile: string,
+            reusedNames: string[] | undefined,
             redirectedReference?: ResolvedProjectReference,
             containingSourceFile?: SourceFile,
-            partialResolutionInfo?: PartialResolutionInfo
+            resolutionInfo?: ModuleResolutionInfo
         ): (ResolvedModuleFull | undefined)[] {
             return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>({
                 names: moduleNames,
@@ -601,7 +612,8 @@ namespace ts {
                 loader: resolveModuleName,
                 getResolutionWithResolvedFileName: getResolvedModule,
                 shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
-                partialResolutionInfo,
+                reusedNames,
+                resolutionInfo,
                 logChanges: logChangesWhenResolvingModule,
                 containingSourceFile,
             });

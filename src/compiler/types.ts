@@ -7185,9 +7185,9 @@ namespace ts {
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
-    export interface PartialResolutionInfo {
-        reusedNames: { name: string; mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined; }[] | undefined;
-        namesIndex: readonly number[];
+    export interface ModuleResolutionInfo {
+        names: readonly StringLiteralLike[];
+        reusedNames: readonly StringLiteralLike[] | undefined;
     }
 
     export interface CompilerHost extends ModuleResolutionHost {
@@ -7210,7 +7210,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, partialResolutionInfo?: PartialResolutionInfo): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
