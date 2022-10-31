@@ -168,10 +168,10 @@ namespace ts {
         const originalDirectoryExists = host.directoryExists;
         const originalCreateDirectory = host.createDirectory;
         const originalWriteFile = host.writeFile;
-        const readFileCache = new Map<string, string | false>();
-        const fileExistsCache = new Map<string, boolean>();
-        const directoryExistsCache = new Map<string, boolean>();
-        const sourceFileCache = new Map<string, ESMap<SourceFile["impliedNodeFormat"], SourceFile>>();
+        const readFileCache = new Map<Path, string | false>();
+        const fileExistsCache = new Map<Path, boolean>();
+        const directoryExistsCache = new Map<Path, boolean>();
+        const sourceFileCache = new Map<SourceFile["impliedNodeFormat"], ESMap<Path, SourceFile>>();
 
         const readFileWithCache = (fileName: string): string | undefined => {
             const key = toPath(fileName);
@@ -199,13 +199,13 @@ namespace ts {
         const getSourceFileWithCache: CompilerHost["getSourceFile"] | undefined = getSourceFile ? (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
             const key = toPath(fileName);
             const impliedNodeFormat: SourceFile["impliedNodeFormat"] = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
-            const forPath = sourceFileCache.get(key);
-            const value = forPath?.get(impliedNodeFormat);
+            const forImpliedNodeFormat = sourceFileCache.get(impliedNodeFormat);
+            const value = forImpliedNodeFormat?.get(key);
             if (value) return value;
 
             const sourceFile = getSourceFile(fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
             if (sourceFile && (isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json))) {
-                sourceFileCache.set(key, (forPath || new Map()).set(impliedNodeFormat, sourceFile));
+                sourceFileCache.set(impliedNodeFormat, (forImpliedNodeFormat || new Map()).set(key, sourceFile));
             }
             return sourceFile;
         } : undefined;
@@ -227,14 +227,15 @@ namespace ts {
                 const value = readFileCache.get(key);
                 if (value !== undefined && value !== data) {
                     readFileCache.delete(key);
-                    sourceFileCache.delete(key);
+                    sourceFileCache.forEach(map => map.delete(key));
                 }
                 else if (getSourceFileWithCache) {
-                    const sourceFileMap = sourceFileCache.get(key);
-                    const sourceFile = sourceFileMap && firstDefinedIterator(sourceFileMap.values(), identity);
-                    if (sourceFile && sourceFile.text !== data) {
-                        sourceFileCache.delete(key);
-                    }
+                    sourceFileCache.forEach(map => {
+                        const sourceFile = map.get(key);
+                        if (sourceFile && sourceFile.text !== data) {
+                            map.delete(key);
+                        }
+                    });
                 }
                 originalWriteFile.call(host, fileName, data, ...rest);
             };
