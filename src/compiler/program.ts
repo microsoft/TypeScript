@@ -1734,7 +1734,6 @@ namespace ts {
                 if (!newSourceFile) {
                     return StructureIsReused.Not;
                 }
-                newSourceFile.impliedNodeFormat = sourceFileOptions.impliedNodeFormat;
                 newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
                 newSourceFile.packageJsonScope = sourceFileOptions.packageJsonScope;
 
@@ -2969,7 +2968,6 @@ namespace ts {
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
-                file.impliedNodeFormat = sourceFileOptions.impliedNodeFormat;
                 file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
                 file.packageJsonScope = sourceFileOptions.packageJsonScope;
                 addFileIncludeReason(file, reason);
