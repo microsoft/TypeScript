@@ -41,6 +41,7 @@ namespace fakes {
         }
 
         public write(message: string) {
+            if (ts.Debug.isDebugging) console.log(message);
             this.output.push(message);
         }
 

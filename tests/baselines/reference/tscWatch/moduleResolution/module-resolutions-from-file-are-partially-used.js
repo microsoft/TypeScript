@@ -58,6 +58,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -66,6 +67,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file type 'TypeScript'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
 'package.json' does not have a 'typesVersions' field.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
@@ -74,6 +77,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg/impo
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 ======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -82,6 +86,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
+Saw non-matching condition 'import'.
+Matched 'exports' condition 'require'.
+Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg1/require.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.tsx' does not exist.
@@ -98,6 +105,9 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg1' from 'node_modules' folder, target file type 'JavaScript'.
 File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
+Saw non-matching condition 'import'.
+Matched 'exports' condition 'require'.
+Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg1/require.js' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.jsx' does not exist.
@@ -108,6 +118,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module './a' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file type 'TypeScript'.
 File '/user/username/projects/myproject/a.ts' exist - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
@@ -225,6 +236,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -232,6 +244,8 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file type 'TypeScript'.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.

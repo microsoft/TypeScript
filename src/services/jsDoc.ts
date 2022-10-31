@@ -439,11 +439,17 @@ namespace ts.JsDoc {
 
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.PropertySignature:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
             case SyntaxKind.TypeAliasDeclaration:
                 return { commentOwner };
+
+            case SyntaxKind.PropertySignature: {
+                const host = commentOwner as PropertySignature;
+                return host.type && isFunctionTypeNode(host.type)
+                    ? { commentOwner, parameters: host.type.parameters, hasReturn: hasReturn(host.type, options) }
+                    : { commentOwner };
+            }
 
             case SyntaxKind.VariableStatement: {
                 const varStatement = commentOwner as VariableStatement;
@@ -486,7 +492,7 @@ namespace ts.JsDoc {
 
     function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
         return !!options?.generateReturnInDocTemplate &&
-            (isArrowFunction(node) && isExpression(node.body)
+            (isFunctionTypeNode(node) || isArrowFunction(node) && isExpression(node.body)
                 || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n));
     }
 

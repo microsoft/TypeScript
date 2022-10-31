@@ -6,8 +6,9 @@ export class Foo {
 >member : string
 }
 === tests/cases/compiler/reexport.ts ===
+
 export * from "./file";
-No type information for this code.=== tests/cases/compiler/augment.ts ===
+=== tests/cases/compiler/augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
 

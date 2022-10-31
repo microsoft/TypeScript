@@ -24,7 +24,7 @@ tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17)
                 err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
                     ~~~~~~~
 !!! error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1053:5: 'message' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1054:5: 'message' is declared here.
             }
     
             else {
