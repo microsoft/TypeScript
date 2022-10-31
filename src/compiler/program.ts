@@ -171,7 +171,7 @@ namespace ts {
         const readFileCache = new Map<string, string | false>();
         const fileExistsCache = new Map<string, boolean>();
         const directoryExistsCache = new Map<string, boolean>();
-        const sourceFileCache = new Map<string, SourceFile>();
+        const sourceFileCache = new Map<string, ESMap<SourceFile["impliedNodeFormat"], SourceFile>>();
 
         const readFileWithCache = (fileName: string): string | undefined => {
             const key = toPath(fileName);
@@ -196,14 +196,16 @@ namespace ts {
             return setReadFileCache(key, fileName);
         };
 
-        const getSourceFileWithCache: CompilerHost["getSourceFile"] | undefined = getSourceFile ? (fileName, languageVersion, onError, shouldCreateNewSourceFile) => {
+        const getSourceFileWithCache: CompilerHost["getSourceFile"] | undefined = getSourceFile ? (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
             const key = toPath(fileName);
-            const value = sourceFileCache.get(key);
+            const impliedNodeFormat: SourceFile["impliedNodeFormat"] = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
+            const forPath = sourceFileCache.get(key);
+            const value = forPath?.get(impliedNodeFormat);
             if (value) return value;
 
-            const sourceFile = getSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile);
+            const sourceFile = getSourceFile(fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
             if (sourceFile && (isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json))) {
-                sourceFileCache.set(key, sourceFile);
+                sourceFileCache.set(key, (forPath || new Map()).set(impliedNodeFormat, sourceFile));
             }
             return sourceFile;
         } : undefined;
@@ -228,7 +230,8 @@ namespace ts {
                     sourceFileCache.delete(key);
                 }
                 else if (getSourceFileWithCache) {
-                    const sourceFile = sourceFileCache.get(key);
+                    const sourceFileMap = sourceFileCache.get(key);
+                    const sourceFile = sourceFileMap && firstDefinedIterator(sourceFileMap.values(), identity);
                     if (sourceFile && sourceFile.text !== data) {
                         sourceFileCache.delete(key);
                     }
