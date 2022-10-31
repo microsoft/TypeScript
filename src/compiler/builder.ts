@@ -770,7 +770,7 @@ namespace ts {
     export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
     export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
     export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+    export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId];
     export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
     export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
         /**
@@ -923,7 +923,10 @@ namespace ts {
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
-                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                    const fileId = toFileId(path), emitKind = state.affectedFilesPendingEmitKind!.get(path)!;
+                    (affectedFilesPendingEmit ||= []).push(
+                        emitKind === BuilderFileEmit.Full ? fileId : [fileId]
+                    );
                 }
             }
         }
@@ -1475,6 +1478,10 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
+    export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit): BuilderFileEmit{
+        return isNumber(value) ? BuilderFileEmit.Full : BuilderFileEmit.DtsOnly;
+    }
+
     export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -1513,8 +1520,8 @@ namespace ts {
                 exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
                 semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
                 hasReusableDiagnostic: true,
-                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
-                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
+                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0])),
+                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), toBuilderFileEmit),
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
                 latestChangedDtsFile,
