@@ -18923,6 +18923,7 @@ namespace ts {
                     generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
                 }
 
+                // If `target` is of indexed access type (And `source` it is not), we use the object type of `target` for better error reporting
                 const targetFlags = target.flags & TypeFlags.IndexedAccess && !(source.flags & TypeFlags.IndexedAccess) ?
                     (target as IndexedAccessType).objectType.flags :
                     target.flags;
