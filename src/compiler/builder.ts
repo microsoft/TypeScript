@@ -173,10 +173,16 @@ namespace ts {
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
+        // We can only reuse emit signatures (i.e. .d.ts signatures) if the .d.ts file is unchanged,
+        // which will eg be depedent on change in options like declarationDir and outDir options are unchanged.
+        // We need to look in oldState.compilerOptions, rather than oldCompilerOptions (i.e.we need to disregard useOldState) because
+        // oldCompilerOptions can be undefined if there was change in say module from None to some other option
+        // which would make useOldState as false since we can now use reference maps that are needed to track what to emit, what to check etc
+        // but that option change does not affect d.ts file name so emitSignatures should still be reused.
         const canCopyEmitSignatures = compilerOptions.composite &&
             oldState?.emitSignatures &&
             !outFilePath &&
-            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions!);
+            !compilerOptionsAffectDeclarationPath(compilerOptions, oldState.compilerOptions);
         if (useOldState) {
             // Copy old state's changed files set
             oldState!.changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
@@ -764,7 +770,7 @@ namespace ts {
     export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
     export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
     export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+    export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId];
     export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
     export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
         /**
@@ -917,7 +923,10 @@ namespace ts {
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
-                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                    const fileId = toFileId(path), emitKind = state.affectedFilesPendingEmitKind!.get(path)!;
+                    (affectedFilesPendingEmit ||= []).push(
+                        emitKind === BuilderFileEmit.Full ? fileId : [fileId]
+                    );
                 }
             }
         }
@@ -1469,6 +1478,10 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
+    export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit): BuilderFileEmit{
+        return isNumber(value) ? BuilderFileEmit.Full : BuilderFileEmit.DtsOnly;
+    }
+
     export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -1507,8 +1520,8 @@ namespace ts {
                 exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
                 semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
                 hasReusableDiagnostic: true,
-                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
-                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
+                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0])),
+                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), toBuilderFileEmit),
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
                 latestChangedDtsFile,

@@ -681,9 +681,17 @@ namespace ts.server.protocol {
 
     export type OrganizeImportsScope = GetCombinedCodeFixScope;
 
+    export const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused",
+    }
+
     export interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
 
     export interface OrganizeImportsResponse extends Response {
@@ -1150,12 +1158,14 @@ namespace ts.server.protocol {
     }
 
     export interface ReferencesResponseItem extends FileSpanWithContext {
-        /** Text of line containing the reference.  Including this
-         *  with the response avoids latency of editor loading files
-         * to show text of reference line (the server already has
-         * loaded the referencing files).
+        /**
+         * Text of line containing the reference. Including this
+         * with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has loaded the referencing files).
+         *
+         * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
          */
-        lineText: string;
+        lineText?: string;
 
         /**
          * True if reference is a write location, false otherwise.
@@ -3470,6 +3480,11 @@ namespace ts.server.protocol {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+
+        /**
+         * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
+         */
+        readonly disableLineTextInReferences?: boolean;
     }
 
     export interface CompilerOptions {

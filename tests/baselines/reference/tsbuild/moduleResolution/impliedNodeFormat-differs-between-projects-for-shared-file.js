@@ -86,6 +86,7 @@ Found 'package.json' at '/src/projects/b/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pg' from '/src/projects/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/b/package.json' exists according to earlier cached lookups.
 Loading module 'pg' from 'node_modules' folder, target file type 'TypeScript'.

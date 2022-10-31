@@ -732,10 +732,10 @@ namespace ts.formatting {
     }
 
     function nodeIsInDecoratorContext(node: Node): boolean {
-        while (isExpressionNode(node)) {
+        while (node && isExpression(node)) {
             node = node.parent;
         }
-        return node.kind === SyntaxKind.Decorator;
+        return node && node.kind === SyntaxKind.Decorator;
     }
 
     function isStartOfVariableDeclarationList(context: FormattingContext): boolean {

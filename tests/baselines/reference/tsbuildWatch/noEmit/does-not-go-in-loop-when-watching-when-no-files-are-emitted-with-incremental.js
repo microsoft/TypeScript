@@ -75,7 +75,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"5381-","5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"5381-","5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -119,7 +119,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 730
+  "size": 722
 }
 
 
@@ -222,7 +222,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3042032780-declare const x: 10;\n","affectsGlobalScope":true},"5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3042032780-declare const x: 10;\n","affectsGlobalScope":true},"5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -267,6 +267,6 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 836
+  "size": 828
 }
 
