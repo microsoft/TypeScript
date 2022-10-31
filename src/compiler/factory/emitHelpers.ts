@@ -465,12 +465,12 @@ namespace ts {
             );
         }
 
-        function createSetFunctionNameHelper(f: Expression, name: Expression): Expression {
+        function createSetFunctionNameHelper(f: Expression, name: Expression, prefix?: string): Expression {
             context.requestEmitHelper(setFunctionNameHelper);
-            return factory.createCallExpression(
+            return context.factory.createCallExpression(
                 getUnscopedHelperName("__setFunctionName"),
                 /*typeArguments*/ undefined,
-                [f, name]
+                prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name]
             );
         }
 
@@ -902,9 +902,9 @@ namespace ts {
         importName: "__setFunctionName",
         scoped: false,
         text: `
-            var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
+            var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
                 if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
-                return Object.defineProperty(f, "name", { configurable: true, value: name });
+                return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
             };`
     };
 

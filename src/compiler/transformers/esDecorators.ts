@@ -368,10 +368,6 @@ namespace ts {
             );
         }
 
-        function createAssign(left: Expression, right: Expression) {
-            return factory.createExpressionStatement(factory.createAssignment(left, right));
-        }
-
         function createClassInfo(node: ClassLikeDeclaration): ClassInfo {
             let instanceExtraInitializersName: Identifier | undefined;
             let staticExtraInitializersName: Identifier | undefined;
@@ -620,7 +616,7 @@ namespace ts {
             if (classInfo.classDescriptorName && classInfo.classDecoratorsName && classInfo.classExtraInitializersName && classInfo.classThis) {
                 leadingBlockStatements ??= [];
 
-                //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: "C" }, _classExtraInitializers);
+                //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, _classExtraInitializers);
                 const valueProperty = factory.createPropertyAssignment("value", factory.createThis());
                 const classDescriptor = factory.createObjectLiteralExpression([valueProperty]);
                 const classDescriptorAssignment = factory.createAssignment(classInfo.classDescriptorName, classDescriptor);
@@ -821,7 +817,11 @@ namespace ts {
             }
         }
 
-        function prepareConstructor(parent: ClassLikeDeclaration, classInfo: ClassInfo) {
+        function prepareConstructor(_parent: ClassLikeDeclaration, classInfo: ClassInfo) {
+            // Decorated instance members can add "extra" initializers to the instance. If a class contains any instance
+            // fields, we'll inject the `__runInitializers()` call for these extra initializers into the initializer of
+            // the first class member that will be initialized. However, if the class does not contain any fields that
+            // we can piggyback on, we need to synthesize a `__runInitializers()` call in the constructor instead.
             if (classInfo.instanceExtraInitializersName && !classInfo.hasNonAmbientInstanceFields) {
                 // If there are instance extra initializers we need to add them to the body along with any
                 // field initializers
@@ -836,40 +836,6 @@ namespace ts {
                     )
                 );
 
-                for (const member of parent.members) {
-                    if (isPropertyDeclaration(member) && !isStatic(member)) {
-                        // TODO(rbuckton)
-                        Debug.assertNotNode(member.name, isComputedPropertyName, "Not yet implemented.");
-
-                        let initializer = member.initializer;
-                        const initializers = classInfo.memberInfos?.get(member)?.memberInitializersName;
-                        if (initializer || initializers) {
-                            initializer ??= factory.createVoidZero();
-                            if (initializers) {
-                                initializer = emitHelpers().createRunInitializersHelper(
-                                    factory.createThis(),
-                                    initializers,
-                                    initializer
-                                );
-                            }
-                            statements.push(
-                                createAssign(
-                                    isIdentifier(member.name) || isPrivateIdentifier(member.name) ?
-                                        factory.createPropertyAccessExpression(
-                                            factory.createThis(),
-                                            member.name
-                                        ) :
-                                        factory.createElementAccessExpression(
-                                            factory.createThis(),
-                                            member.name
-                                        ),
-                                    initializer
-                                )
-                            );
-                        }
-                    }
-                }
-
                 return statements;
             }
         }
@@ -879,7 +845,7 @@ namespace ts {
             const modifiers = visitNodes(node.modifiers, node => tryCast(node, isModifier));
             const parameters = visitNodes(node.parameters, visitor, isParameterDeclaration);
             let body: Block | undefined;
-            if (node.body && classInfo?.instanceExtraInitializersName) {
+            if (node.body && classInfo) {
                 // If there are instance extra initializers we need to add them to the body along with any
                 // field initializers
                 const initializerStatements = prepareConstructor(classInfo.class, classInfo);
@@ -909,7 +875,14 @@ namespace ts {
             return updated;
         }
 
-        function partialTransformClassElement<TNode extends MethodDeclaration | PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration>(member: TNode, useNamedEvaluation: boolean, classInfo: ClassInfo | undefined, createDescriptor?: (node: TNode, modifiers: ModifiersArray | undefined) => Expression) {
+        function partialTransformClassElement<
+            TNode extends MethodDeclaration | PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration
+        >(
+            member: TNode,
+            useNamedEvaluation: boolean,
+            classInfo: ClassInfo | undefined,
+            createDescriptor?: (node: TNode, modifiers: ModifiersArray | undefined) => Expression
+        ) {
             let referencedName: Expression | undefined;
             let name: PropertyName | undefined;
             let initializersName: Identifier | undefined;
@@ -1075,6 +1048,8 @@ namespace ts {
             }
 
             if (!some(modifiers) && (isMethodDeclaration(member) || isPropertyDeclaration(member))) {
+                // Don't emit leading comments on the name for methods and properties without modifiers, otherwise we
+                // will end up printing duplicate comments.
                 setEmitFlags(name, EmitFlags.NoLeadingComments);
             }
 
@@ -1194,65 +1169,63 @@ namespace ts {
 
             exitClassElement();
 
-            if (hasAccessorModifier(node)) {
-                if (descriptorName) {
-                    // given:
-                    //  accessor #x = 1;
-                    //
-                    // emits:
-                    //  static {
-                    //      _esDecorate(null, _private_x_descriptor = { get() { return this.#x_1; }, set(value) { this.#x_1 = value; } }, ...)
-                    //  }
-                    //  ...
-                    //  #x_1 = 1;
-                    //  get #x() { return _private_x_descriptor.get.call(this); }
-                    //  set #x(value) { _private_x_descriptor.set.call(this, value); }
+            if (hasAccessorModifier(node) && descriptorName) {
+                // given:
+                //  accessor #x = 1;
+                //
+                // emits:
+                //  static {
+                //      _esDecorate(null, _private_x_descriptor = { get() { return this.#x_1; }, set(value) { this.#x_1 = value; } }, ...)
+                //  }
+                //  ...
+                //  #x_1 = 1;
+                //  get #x() { return _private_x_descriptor.get.call(this); }
+                //  set #x(value) { _private_x_descriptor.set.call(this, value); }
 
-                    const commentRange = getCommentRange(node);
-                    const sourceMapRange = getSourceMapRange(node);
+                const commentRange = getCommentRange(node);
+                const sourceMapRange = getSourceMapRange(node);
 
-                    // Since we're creating two declarations where there was previously one, cache
-                    // the expression for any computed property names.
-                    const name = node.name;
-                    let getterName = name;
-                    let setterName = name;
-                    if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
-                        const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
-                        if (cacheAssignment) {
-                            getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
-                            setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
-                        }
-                        else {
-                            const temp = factory.createTempVariable(hoistVariableDeclaration);
-                            setSourceMapRange(temp, name.expression);
-                            const expression = visitNode(name.expression, visitor, isExpression);
-                            const assignment = factory.createAssignment(temp, expression);
-                            setSourceMapRange(assignment, name.expression);
-                            getterName = factory.updateComputedPropertyName(name, assignment);
-                            setterName = factory.updateComputedPropertyName(name, temp);
-                        }
+                // Since we're creating two declarations where there was previously one, cache
+                // the expression for any computed property names.
+                const name = node.name;
+                let getterName = name;
+                let setterName = name;
+                if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
+                    const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
+                    if (cacheAssignment) {
+                        getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
+                        setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
                     }
-
-                    const modifiersWithoutAccessor = visitNodes(modifiers, node => node.kind !== SyntaxKind.AccessorKeyword ? node : undefined);
-
-                    const backingField = createAccessorPropertyBackingField(factory, node, modifiersWithoutAccessor, initializer);
-                    setOriginalNode(backingField, node);
-                    setEmitFlags(backingField, EmitFlags.NoComments);
-                    setSourceMapRange(backingField, sourceMapRange);
-                    setSourceMapRange(backingField.name, node.name);
-
-                    const getter = createGetAccessorDescriptorForwarder(modifiersWithoutAccessor, getterName, descriptorName);
-                    setOriginalNode(getter, node);
-                    setCommentRange(getter, commentRange);
-                    setSourceMapRange(getter, sourceMapRange);
-
-                    const setter = createSetAccessorDescriptorForwarder(modifiersWithoutAccessor, setterName, descriptorName);
-                    setOriginalNode(setter, node);
-                    setEmitFlags(setter, EmitFlags.NoComments);
-                    setSourceMapRange(setter, sourceMapRange);
-
-                    return [backingField, getter, setter];
+                    else {
+                        const temp = factory.createTempVariable(hoistVariableDeclaration);
+                        setSourceMapRange(temp, name.expression);
+                        const expression = visitNode(name.expression, visitor, isExpression);
+                        const assignment = factory.createAssignment(temp, expression);
+                        setSourceMapRange(assignment, name.expression);
+                        getterName = factory.updateComputedPropertyName(name, assignment);
+                        setterName = factory.updateComputedPropertyName(name, temp);
+                    }
                 }
+
+                const modifiersWithoutAccessor = visitNodes(modifiers, node => node.kind !== SyntaxKind.AccessorKeyword ? node : undefined);
+
+                const backingField = createAccessorPropertyBackingField(factory, node, modifiersWithoutAccessor, initializer);
+                setOriginalNode(backingField, node);
+                setEmitFlags(backingField, EmitFlags.NoComments);
+                setSourceMapRange(backingField, sourceMapRange);
+                setSourceMapRange(backingField.name, node.name);
+
+                const getter = createGetAccessorDescriptorForwarder(modifiersWithoutAccessor, getterName, descriptorName);
+                setOriginalNode(getter, node);
+                setCommentRange(getter, commentRange);
+                setSourceMapRange(getter, sourceMapRange);
+
+                const setter = createSetAccessorDescriptorForwarder(modifiersWithoutAccessor, setterName, descriptorName);
+                setOriginalNode(setter, node);
+                setEmitFlags(setter, EmitFlags.NoComments);
+                setSourceMapRange(setter, sourceMapRange);
+
+                return [backingField, getter, setter];
             }
 
             return finishClassElement(factory.updatePropertyDeclaration(node, modifiers, name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, initializer), node);
@@ -1487,6 +1460,27 @@ namespace ts {
                         let expression: Expression = factory.createReflectGetCall(classSuper, getterName, classThis);
                         setOriginalNode(expression, node);
                         setTextRange(expression, node);
+
+                        // If the result of this expression is discarded (i.e., it's in a position where the result
+                        // will be otherwise unused, such as in an expression statement or the left side of a comma), we
+                        // don't need to create an extra temp variable to hold the result:
+                        //
+                        //  source (discarded):
+                        //    super.x++;
+                        //  generated:
+                        //    _a = Reflect.get(_super, "x"), _a++, Reflect.set(_super, "x", _a);
+                        //
+                        // Above, the temp variable `_a` is used to perform the correct coercion (i.e., number or
+                        // bigint). Since the result of the postfix unary is discarded, we don't need to capture the
+                        // result of the expression.
+                        //
+                        //  source (not discarded):
+                        //    y = super.x++;
+                        //  generated:
+                        //    y = (_a = Reflect.get(_super, "x"), _b = _a++, Reflect.set(_super, "x", _a), _b);
+                        //
+                        // When the result isn't discarded, we introduce a new temp variable (`_b`) to capture the
+                        // result of the operation so that we can provide it to `y` when the assignment is complete.
 
                         const temp = discarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                         expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);
@@ -1859,9 +1853,9 @@ namespace ts {
         }
 
         /**
-         * Creates a `value`, `get`, or `set` method for a pseudo-{@link PropertyDescriptor} object.
+         * Creates a `value`, `get`, or `set` method for a pseudo-{@link PropertyDescriptor} object created for a private element.
          */
-        function createDescriptorMethod(original: Node, _name: PropertyName, modifiers: ModifiersArray | undefined, asteriskToken: AsteriskToken | undefined, kind: "value" | "get" | "set", parameters: readonly ParameterDeclaration[], body: Block | undefined) {
+        function createDescriptorMethod(original: Node, name: PrivateIdentifier, modifiers: ModifiersArray | undefined, asteriskToken: AsteriskToken | undefined, kind: "value" | "get" | "set", parameters: readonly ParameterDeclaration[], body: Block | undefined) {
             const func = factory.createFunctionExpression(
                 modifiers,
                 asteriskToken,
@@ -1875,14 +1869,9 @@ namespace ts {
             setSourceMapRange(func, moveRangePastDecorators(original));
             setEmitFlags(func, EmitFlags.NoComments);
 
-            // TODO(rbuckton): handle computed property names
-            const functionName = isPropertyNameLiteral(_name) || isPrivateIdentifier(_name) ?
-                factory.createStringLiteralFromNode(_name) :
-                undefined;
-
-            const namedFunction = functionName ?
-                emitHelpers().createSetFunctionNameHelper(func, functionName) :
-                func;
+            const prefix = kind === "get" || kind === "set" ? kind : undefined;
+            const functionName = factory.createStringLiteralFromNode(name, /*isSingleQuote*/ undefined);
+            const namedFunction = emitHelpers().createSetFunctionNameHelper(func, functionName, prefix);
 
             const method = factory.createPropertyAssignment(factory.createIdentifier(kind), namedFunction);
             setOriginalNode(method, original);
@@ -1894,7 +1883,7 @@ namespace ts {
         /**
          * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link MethodDeclaration}.
          */
-        function createMethodDescriptorObject(node: MethodDeclaration, modifiers: ModifiersArray | undefined) {
+        function createMethodDescriptorObject(node: PrivateIdentifierMethodDeclaration, modifiers: ModifiersArray | undefined) {
             return factory.createObjectLiteralExpression([
                 createDescriptorMethod(
                     node,
@@ -1910,7 +1899,7 @@ namespace ts {
         /**
          * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link GetAccessorDeclaration}.
          */
-        function createGetAccessorDescriptorObject(node: GetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
+        function createGetAccessorDescriptorObject(node: PrivateIdentifierGetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
             return factory.createObjectLiteralExpression([
                 createDescriptorMethod(
                     node,
@@ -1926,7 +1915,7 @@ namespace ts {
         /**
          * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link SetAccessorDeclaration}.
          */
-        function createSetAccessorDescriptorObject(node: SetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
+        function createSetAccessorDescriptorObject(node: PrivateIdentifierSetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
             return factory.createObjectLiteralExpression([
                 createDescriptorMethod(
                     node,
@@ -1942,7 +1931,7 @@ namespace ts {
         /**
          * Creates a pseudo-{@link PropertyDescriptor} object used when decorating an `accessor` {@link PropertyDeclaration} with a private name.
          */
-        function createAccessorPropertyDescriptorObject(node: PropertyDeclaration, modifiers: ModifiersArray | undefined) {
+        function createAccessorPropertyDescriptorObject(node: PrivateIdentifierPropertyDeclaration, modifiers: ModifiersArray | undefined) {
             //  {
             //      get() { return this.${privateName}; },
             //      set(value) { this.${privateName} = value; },

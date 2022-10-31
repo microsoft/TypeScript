@@ -27,9 +27,9 @@ let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a
 
 
 //// [staticFieldWithInterfaceContext.js]
-var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
-    return Object.defineProperty(f, "name", { configurable: true, value: name });
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
 var c = (_a = /** @class */ (function () {

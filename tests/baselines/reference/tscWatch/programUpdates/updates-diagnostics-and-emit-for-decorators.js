@@ -38,10 +38,11 @@ Output::
 [7m1[0m import {B} from './b'
 [7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
 
-[96ma.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1238: [0mUnable to resolve signature of class decorator when called as an expression.
+[96ma.ts[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS1238: [0mUnable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
 
 [7m2[0m @((_) => {})
-[7m [0m [91m~~~~~~~~~~~~[0m
+[7m [0m [91m ~~~~~~~~~~~[0m
 
 [[90m12:00:20 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -123,9 +124,9 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     }
     return useValue ? value : void 0;
 };
-var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
-    return Object.defineProperty(f, "name", { configurable: true, value: name });
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 import './b';
 export let A = (() => {

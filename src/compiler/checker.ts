@@ -31076,13 +31076,20 @@ namespace ts {
             }
             return { start, length, sourceFile };
         }
-        function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
+
+        function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
             if (isCallExpression(node)) {
                 const { sourceFile, start, length } = getDiagnosticSpanForCallNode(node);
-                return createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2, arg3);
+                if ("message" in message) { // eslint-disable-line local/no-in-operator
+                    return createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2, arg3);
+                }
+                return createDiagnosticForFileFromMessageChain(sourceFile, message);
             }
             else {
-                return createDiagnosticForNode(node, message, arg0, arg1, arg2, arg3);
+                if ("message" in message) { // eslint-disable-line local/no-in-operator
+                    return createDiagnosticForNode(node, message, arg0, arg1, arg2, arg3);
+                }
+                return createDiagnosticForNodeFromMessageChain(node, message);
             }
         }
 
@@ -31102,7 +31109,7 @@ namespace ts {
             return constructorSymbol === globalPromiseSymbol;
         }
 
-        function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[]) {
+        function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[], headMessage?: DiagnosticMessage) {
             const spreadIndex = getSpreadArgumentIndex(args);
             if (spreadIndex > -1) {
                 return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_argument_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
@@ -31134,18 +31141,34 @@ namespace ts {
             if (isVoidPromiseError && isInJSFile(node)) {
                 return getDiagnosticForCallNode(node, Diagnostics.Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_without_arguments);
             }
-            const error = hasRestParameter
-                ? Diagnostics.Expected_at_least_0_arguments_but_got_1
-                : isVoidPromiseError
-                    ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
-                    : Diagnostics.Expected_0_arguments_but_got_1;
+            const error =
+                isDecorator(node) ?
+                    hasRestParameter ? Diagnostics.The_runtime_will_invoke_the_decorator_with_1_arguments_but_the_decorator_expects_at_least_0 :
+                    Diagnostics.The_runtime_will_invoke_the_decorator_with_1_arguments_but_the_decorator_expects_0 :
+                hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                isVoidPromiseError ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise :
+                Diagnostics.Expected_0_arguments_but_got_1;
+
             if (min < args.length && args.length < max) {
                 // between min and max, but with no matching overload
+                if (headMessage) {
+                    let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
+                    chain = chainDiagnosticMessages(chain, headMessage);
+                    return getDiagnosticForCallNode(node, chain);
+                }
                 return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
             }
             else if (args.length < min) {
                 // too short: put the error span on the call expression, not any of the args
-                const diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length);
+                let diagnostic: Diagnostic;
+                if (headMessage) {
+                    let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
+                    chain = chainDiagnosticMessages(chain, headMessage);
+                    diagnostic = getDiagnosticForCallNode(node, chain);
+                }
+                else {
+                    diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length);
+                }
                 const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
                 if (parameter) {
                     const parameterError = createDiagnosticForNode(
@@ -31168,17 +31191,27 @@ namespace ts {
                     end++;
                 }
                 setTextRangePosEnd(errorSpan, pos, end);
+                if (headMessage) {
+                    let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
+                    chain = chainDiagnosticMessages(chain, headMessage);
+                    return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), errorSpan, chain);
+                }
                 return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, args.length);
             }
         }
 
-        function getTypeArgumentArityError(node: Node, signatures: readonly Signature[], typeArguments: NodeArray<TypeNode>) {
+        function getTypeArgumentArityError(node: Node, signatures: readonly Signature[], typeArguments: NodeArray<TypeNode>, headMessage?: DiagnosticMessage) {
             const argCount = typeArguments.length;
             // No overloads exist
             if (signatures.length === 1) {
                 const sig = signatures[0];
                 const min = getMinTypeArgumentCount(sig.typeParameters);
                 const max = length(sig.typeParameters);
+                if (headMessage) {
+                    let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min , argCount);
+                    chain = chainDiagnosticMessages(chain, headMessage);
+                    return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
+                }
                 return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min , argCount);
             }
             // Overloads exist
@@ -31195,12 +31228,22 @@ namespace ts {
                 }
             }
             if (belowArgCount !== -Infinity && aboveArgCount !== Infinity) {
+                if (headMessage) {
+                    let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
+                    chain = chainDiagnosticMessages(chain, headMessage);
+                    return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
+                }
                 return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
+            }
+            if (headMessage) {
+                let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
+                chain = chainDiagnosticMessages(chain, headMessage);
+                return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), typeArguments, chain);
             }
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -31319,6 +31362,9 @@ namespace ts {
                             chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                             chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                         }
+                        if (headMessage) {
+                            chain = chainDiagnosticMessages(chain, headMessage);
+                        }
                         const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                         if (diags) {
                             for (const d of diags) {
@@ -31358,9 +31404,12 @@ namespace ts {
 
                         const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
                         Debug.assert(diags.length > 0, "No errors reported for 3 or fewer overload signatures");
-                        const chain = chainDiagnosticMessages(
+                        let chain = chainDiagnosticMessages(
                             map(diags, createDiagnosticMessageChainFromDiagnostic),
                             Diagnostics.No_overload_matches_this_call);
+                        if (headMessage) {
+                            chain = chainDiagnosticMessages(chain, headMessage);
+                        }
                         // The below is a spread to guarantee we get a new (mutable) array - our `flatMap` helper tries to do "smart" optimizations where it reuses input
                         // arrays and the emptyArray singleton where possible, which is decidedly not what we want while we're still constructing this diagnostic
                         const related = [...flatMap(diags, d => (d as Diagnostic).relatedInformation) as DiagnosticRelatedInformation[]];
@@ -31377,21 +31426,18 @@ namespace ts {
                     }
                 }
                 else if (candidateForArgumentArityError) {
-                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
+                    diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
                 }
                 else if (candidateForTypeArgumentError) {
-                    checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, fallbackError);
+                    checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
                 }
                 else {
                     const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                     if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                        diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
                     }
-                    else if (!isDecorator) {
-                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
-                    }
-                    else if (fallbackError) {
-                        diagnostics.add(getDiagnosticForCallNode(node, fallbackError));
+                    else {
+                        diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessage));
                     }
                 }
             }
@@ -32103,7 +32149,7 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            if (isPotentiallyUncalledDecorator(node, callSignatures)) {
+            if (isPotentiallyUncalledDecorator(node, callSignatures) && !isParenthesizedExpression(node.expression)) {
                 const nodeStr = getTextOfNode(node.expression, /*includeTrivia*/ false);
                 error(node, Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0, nodeStr);
                 return resolveErrorCall(node);
@@ -37923,7 +37969,7 @@ namespace ts {
                     return Debug.failBadSyntaxKind(node.parent);
             }
 
-            checkTypeAssignableTo(returnType, expectedReturnType, node, headMessage);
+            checkTypeAssignableTo(returnType, expectedReturnType, node.expression, headMessage);
         }
 
         /**
