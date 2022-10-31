@@ -64,6 +64,19 @@ CleanBuild:
       "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileInfos": {
+      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -85,6 +98,19 @@ IncrementalBuild:
         }
       ],
       "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
     }
   },
   "version": "FakeTSVersion"
@@ -231,6 +257,19 @@ CleanBuild:
       "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileInfos": {
+      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -252,6 +291,19 @@ IncrementalBuild:
         }
       ],
       "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileInfos": {
+      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
     }
   },
   "version": "FakeTSVersion"

@@ -111,7 +111,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -154,8 +154,27 @@ declare module "d" {
       "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-18487752940-export const a = 10;const aLocal = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 452
+  "size": 854
 }
 
 
@@ -262,9 +281,54 @@ No shapes updated in the builder::
 
 
 //// [/src/project1/outFile.d.ts] file written with same contents
-//// [/src/project1/outFile.tsbuildinfo] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt] file written with same contents
-//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./src",
+    "sourceFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 204,
+          "kind": "text"
+        }
+      ],
+      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+    }
+  },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 868
+}
+
 
 
 Change:: non local change
@@ -343,7 +407,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -387,8 +451,27 @@ declare module "d" {
       "hash": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 481
+  "size": 918
 }
 
 
@@ -570,7 +653,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":823,"kind":"text"}],"hash":"9191455833-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.aaa = exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n    exports.aaa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var alocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":823,"kind":"text"}],"hash":"9191455833-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.aaa = exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n    exports.aaa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var alocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -659,8 +742,26 @@ declare module "d" {
       "hash": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+      "./src/b.ts": "-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 1473
+  "size": 1901
 }
 
 
@@ -726,7 +827,7 @@ No shapes updated in the builder::
 
 //// [/src/project1/outFile.d.ts] file written with same contents
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":232,"kind":"text"}],"hash":"18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -770,8 +871,27 @@ declare module "d" {
       "hash": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+      "./src/b.ts": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 481
+  "size": 952
 }
 
 
@@ -853,7 +973,7 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":262,"kind":"text"}],"hash":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":262,"kind":"text"}],"hash":"-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -898,8 +1018,27 @@ declare module "d" {
       "hash": "-2431696425-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+      "./src/b.ts": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 513
+  "size": 1008
 }
 
 
@@ -1017,7 +1156,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":919,"kind":"text"}],"hash":"-5114307412-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.aaa = exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n    exports.aaa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a2 = exports.aaaaa = exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var alocal = 10;\r\n    var aaaa = 10;\r\n    exports.aaaaa = 10;\r\n    exports.a2 = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":289,"kind":"text"}],"hash":"1359716995-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n    export const a2 = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":919,"kind":"text"}],"hash":"-5114307412-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.aaa = exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n    exports.aaa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a2 = exports.aaaaa = exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var alocal = 10;\r\n    var aaaa = 10;\r\n    exports.aaaaa = 10;\r\n    exports.a2 = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":289,"kind":"text"}],"hash":"1359716995-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n    export const a2 = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1111,7 +1250,25 @@ declare module "d" {
       "hash": "1359716995-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n    export const aaaaa = 10;\r\n    export const a2 = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/d.ts"
+    ],
+    "fileInfos": {
+      "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
+      "./src/b.ts": "-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;",
+      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
+      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+    },
+    "options": {
+      "declaration": true,
+      "outFile": "./outFile.js"
+    }
+  },
   "version": "FakeTSVersion",
-  "size": 1636
+  "size": 2126
 }
 
