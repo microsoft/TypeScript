@@ -821,6 +821,15 @@ namespace ts {
             defaultValueDescription: false,
         },
         {
+            name: "noImplicitAbstractOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsMultiFileEmitBuildInfo: true,
+            category: Diagnostics.Type_Checking,
+            description: Diagnostics.Ensure_overriding_abstract_members_in_derived_classes_are_marked_with_an_override_modifier,
+            defaultValueDescription: false,
+        },
+        {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
             affectsSemanticDiagnostics: true,

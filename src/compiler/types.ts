@@ -6629,6 +6629,7 @@ namespace ts {
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
+        noImplicitAbstractOverride?: boolean;
         preserveSymlinks?: boolean;
         preserveValueImports?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;

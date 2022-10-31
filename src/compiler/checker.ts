@@ -40572,9 +40572,9 @@ namespace ts {
                         }
                         return MemberOverrideStatus.NeedsOverride;
                     }
-                    else if (memberHasAbstractModifier && baseHasAbstract) {
+                    else if ((memberHasAbstractModifier || compilerOptions.noImplicitAbstractOverride) && baseHasAbstract) {
                         if (errorNode) {
-                            error(errorNode, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0, baseClassName);
+                            error(errorNode, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0_and_noImplicitAbstractOverride_option_is_enabled, baseClassName);
                         }
                         return MemberOverrideStatus.NeedsOverride;
                     }

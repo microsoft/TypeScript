@@ -4000,6 +4000,10 @@
         "category": "Error",
         "code": 4125
     },
+    "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}' and 'noImplicitAbstractOverride' option is enabled.": {
+        "category": "Error",
+        "code": 4126
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -5834,6 +5838,10 @@
     "Specify the root path for debuggers to find the reference source code.": {
         "category": "Message",
         "code": 6695
+    },
+    "Ensure overriding abstract members in derived classes are marked with an override modifier.": {
+        "category": "Message",
+        "code": 6696
     },
     "Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.": {
         "category": "Message",
