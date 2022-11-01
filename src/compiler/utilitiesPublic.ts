@@ -260,11 +260,7 @@ namespace ts {
     export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
 
     export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
-        return isParameter(node) &&
-            !!node.name && // NOTE: JSDoc parameters may not have names
-            isIdentifier(node.name) &&
-            isConstructorDeclaration(parent) &&
-            hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier);
+        return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
