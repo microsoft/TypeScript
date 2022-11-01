@@ -495,16 +495,14 @@ Info 53   [00:02:22.000] response:
         {
           "projectFileName": "/user/username/projects/myproject/app1/tsconfig.json",
           "fileNames": [
-            "/user/username/projects/myproject/core/core.ts",
-            "/user/username/projects/myproject/app1/app.ts"
+            "/user/username/projects/myproject/core/core.ts"
           ],
           "projectUsesOutFile": true
         },
         {
           "projectFileName": "/user/username/projects/myproject/app2/tsconfig.json",
           "fileNames": [
-            "/user/username/projects/myproject/core/core.ts",
-            "/user/username/projects/myproject/app2/app.ts"
+            "/user/username/projects/myproject/core/core.ts"
           ],
           "projectUsesOutFile": true
         }

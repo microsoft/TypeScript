@@ -155,8 +155,7 @@ Info 22   [00:00:51.000] response:
         {
           "projectFileName": "/a/tsconfig.json",
           "fileNames": [
-            "/a/a.ts",
-            "/a/b.ts"
+            "/a/a.ts"
           ],
           "projectUsesOutFile": true
         }
