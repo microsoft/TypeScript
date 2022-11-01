@@ -158,7 +158,7 @@ namespace ts {
             pos = nodes.end;
         };
         // jsDocComments need to be the first children
-        forEach((node as JSDocContainer).jsDoc, processNode);
+        forEach(getJSDocExtraFields(node)?.jsDoc, processNode);
         // For syntactic classifications, all trivia are classified together, including jsdoc comments.
         // For that to work, the jsdoc comments should still be the leading trivia of the first child.
         // Restoring the scanner position ensures that.
@@ -269,7 +269,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? getJSDocExtraFields(this as unknown as EndOfFileToken)?.jsDoc || emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -2764,7 +2764,7 @@ namespace ts {
 
             forEachChild(node, walk);
             if (hasJSDocNodes(node)) {
-                for (const jsDoc of node.jsDoc!) {
+                for (const jsDoc of getJSDocExtraFields(node)!.jsDoc!) {
                     forEachChild(jsDoc, walk);
                 }
             }

@@ -572,6 +572,7 @@ namespace ts {
             const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = !!hasTrailingComma;
+            array.transformFlags = 0;
             aggregateChildrenFlags(array);
             Debug.attachNodeArrayDebugInfo(array);
             return array;
@@ -584,14 +585,7 @@ namespace ts {
         function createBaseDeclaration<T extends Declaration | VariableStatement | ImportDeclaration>(
             kind: T["kind"],
         ) {
-            const node = createBaseNode(kind);
-            // NOTE: The following properties are commonly set by the binder and are added here to
-            // ensure declarations have a stable shape.
-            node.symbol = undefined!; // initialized by binder
-            node.localSymbol = undefined; // initialized by binder
-            node.locals = undefined; // initialized by binder
-            node.nextContainer = undefined; // initialized by binder
-            return node;
+            return createBaseNode(kind);
         }
 
         function createBaseNamedDeclaration<T extends NamedDeclaration>(
@@ -860,15 +854,19 @@ namespace ts {
             const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
             node.originalKeywordKind = originalKeywordKind;
             node.escapedText = escapeLeadingUnderscores(text);
+            node.isInJSDocNamespace = undefined;
+            node.idExtra = undefined;
             return node;
         }
 
         function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
             const node = createBaseIdentifier(text, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
-            node.autoGenerateFlags = autoGenerateFlags;
-            node.autoGenerateId = nextAutoGenerateId;
-            node.autoGeneratePrefix = prefix;
-            node.autoGenerateSuffix = suffix;
+            node.idExtra = {
+                autoGenerateFlags,
+                autoGenerateId: nextAutoGenerateId,
+                autoGeneratePrefix: prefix,
+                autoGenerateSuffix: suffix,
+            };
             nextAutoGenerateId++;
             return node;
         }
@@ -941,6 +939,7 @@ namespace ts {
             const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
             node.escapedText = escapeLeadingUnderscores(text);
             node.transformFlags |= TransformFlags.ContainsClassFields;
+            node.idExtra = undefined;
             return node;
         }
 
@@ -951,11 +950,13 @@ namespace ts {
         }
 
         function createBaseGeneratedPrivateIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
-            const node = createBasePrivateIdentifier(text);
-            node.autoGenerateFlags = autoGenerateFlags;
-            node.autoGenerateId = nextAutoGenerateId;
-            node.autoGeneratePrefix = prefix;
-            node.autoGenerateSuffix = suffix;
+            const node = createBasePrivateIdentifier(text) as Mutable<GeneratedPrivateIdentifier>;
+            node.idExtra = {
+                autoGenerateFlags,
+                autoGenerateId: nextAutoGenerateId,
+                autoGeneratePrefix: prefix,
+                autoGenerateSuffix: suffix,
+            };
             nextAutoGenerateId++;
             return node;
         }
@@ -997,7 +998,8 @@ namespace ts {
         function createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
         function createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         function createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-        function createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
+        function createToken<TKind extends SyntaxKind.EndOfFileToken>(token: TKind): EndOfFileToken;
+        function createToken<TKind extends SyntaxKind.Unknown>(token: TKind): Token<TKind>;
         function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
         function createToken<TKind extends SyntaxKind>(token: TKind) {
             Debug.assert(token >= SyntaxKind.FirstToken && token <= SyntaxKind.LastToken, "Invalid token");
@@ -1171,6 +1173,8 @@ namespace ts {
             node.constraint = constraint;
             node.default = defaultType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            node.expression = undefined;
             return node;
         }
 
@@ -1438,6 +1442,7 @@ namespace ts {
 
             // The following properties are used only to report grammar errors
             node.exclamationToken = undefined;
+
             return node;
         }
 
@@ -1730,6 +1735,7 @@ namespace ts {
                 type
             );
             node.transformFlags = TransformFlags.ContainsTypeScript;
+            node.illegalDecorators = undefined;
             return node;
         }
 
@@ -2373,16 +2379,26 @@ namespace ts {
                 : node;
         }
 
-        // @api
-        function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier) {
-            const node = createBaseExpression<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
-            node.name = asName(name);
+        function createBasePropertyAccessExpression<T extends PropertyAccessExpression>(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, name: MemberName) {
+            const node = createBaseExpression<T>(SyntaxKind.PropertyAccessExpression);
+            node.expression = expression;
+            node.questionDotToken = questionDotToken;
+            node.name = name;
             node.transformFlags =
                 propagateChildFlags(node.expression) |
+                propagateChildFlags(node.questionDotToken) |
                 (isIdentifier(node.name) ?
                     propagateIdentifierNameFlags(node.name) :
                     propagateChildFlags(node.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
+            return node;
+        }
+        // @api
+        function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier) {
+            const node = createBasePropertyAccessExpression<PropertyAccessExpression>(
+                parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false),
+                /*questionDotToken*/ undefined,
+                asName(name)
+            );
             if (isSuperKeyword(expression)) {
                 // super method calls require a lexical 'this'
                 // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
@@ -2406,18 +2422,13 @@ namespace ts {
 
         // @api
         function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) {
-            const node = createBaseExpression<PropertyAccessChain>(SyntaxKind.PropertyAccessExpression);
+            const node = createBasePropertyAccessExpression<PropertyAccessChain>(
+                parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true),
+                questionDotToken,
+                asName(name)
+            );
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
-            node.questionDotToken = questionDotToken;
-            node.name = asName(name);
-            node.transformFlags |=
-                TransformFlags.ContainsES2020 |
-                propagateChildFlags(node.expression) |
-                propagateChildFlags(node.questionDotToken) |
-                (isIdentifier(node.name) ?
-                    propagateIdentifierNameFlags(node.name) :
-                    propagateChildFlags(node.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
+            node.transformFlags |= TransformFlags.ContainsES2020;
             return node;
         }
 
@@ -2433,14 +2444,26 @@ namespace ts {
                 : node;
         }
 
-        // @api
-        function createElementAccessExpression(expression: Expression, index: number | Expression) {
-            const node = createBaseExpression<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
-            node.argumentExpression = asExpression(index);
+        function createBaseElementAccessExpression<T extends ElementAccessExpression>(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, index: Expression) {
+            const node = createBaseExpression<T>(SyntaxKind.ElementAccessExpression);
+            node.expression = expression;
+            node.questionDotToken = questionDotToken;
+            node.argumentExpression = index;
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
+                propagateChildFlags(node.questionDotToken) |
                 propagateChildFlags(node.argumentExpression);
+            return node;
+        }
+
+
+        // @api
+        function createElementAccessExpression(expression: Expression, index: number | Expression) {
+            const node = createBaseElementAccessExpression<ElementAccessExpression>(
+                parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false),
+                /*questionDotToken*/ undefined,
+                asExpression(index)
+            );
             if (isSuperKeyword(expression)) {
                 // super method calls require a lexical 'this'
                 // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
@@ -2464,16 +2487,13 @@ namespace ts {
 
         // @api
         function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression) {
-            const node = createBaseExpression<ElementAccessChain>(SyntaxKind.ElementAccessExpression);
+            const node = createBaseElementAccessExpression<ElementAccessChain>(
+                parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true),
+                questionDotToken,
+                asExpression(index)
+            );
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
-            node.questionDotToken = questionDotToken;
-            node.argumentExpression = asExpression(index);
-            node.transformFlags |=
-                propagateChildFlags(node.expression) |
-                propagateChildFlags(node.questionDotToken) |
-                propagateChildFlags(node.argumentExpression) |
-                TransformFlags.ContainsES2020;
+            node.transformFlags |= TransformFlags.ContainsES2020;
             return node;
         }
 
@@ -2732,6 +2752,7 @@ namespace ts {
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
                 node.transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis;
             }
+
             return node;
         }
 
@@ -3320,6 +3341,7 @@ namespace ts {
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
             }
+            node.illegalDecorators = undefined;
             return node;
         }
 
@@ -3729,6 +3751,8 @@ namespace ts {
 
             // The following properties are used only to report grammar errors
             node.illegalDecorators = undefined;
+
+
             return node;
         }
 
@@ -5233,10 +5257,10 @@ namespace ts {
                 propagateChildFlags(node.initializer);
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
-            node.modifiers = undefined;
-            node.questionToken = undefined;
-            node.exclamationToken = undefined;
+            node.illegalDecorators = undefined; // added by parser
+            node.modifiers = undefined; // added by parser
+            node.questionToken = undefined; // added by parser
+            node.exclamationToken = undefined; // added by parser
             return node;
         }
 
@@ -5380,10 +5404,17 @@ namespace ts {
         ) {
             const node = (source.redirectInfo ? Object.create(source.redirectInfo.redirectTarget) : baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile)) as Mutable<SourceFile>;
             for (const p in source) {
-                if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
+                if (p === "extra" || hasProperty(node, p) || !hasProperty(source, p)) continue;
                 (node as any)[p] = (source as any)[p];
             }
             node.flags |= source.flags;
+            if (source.extra) {
+                const extra = getOrCreateNodeExtraFields(source);
+                extra.bindExtraFields = source.extra.bindExtraFields;
+                extra.flowExtraFields = source.extra.flowExtraFields;
+                extra.checkExtraFields = source.extra.checkExtraFields;
+                extra.jsDocExtraFields = source.extra.jsDocExtraFields;
+            }
             node.statements = createNodeArray(statements);
             node.endOfFileToken = source.endOfFileToken;
             node.isDeclarationFile = isDeclarationFile;
@@ -5552,7 +5583,7 @@ namespace ts {
         }
 
         function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
-            if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+            if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.extra?.emitExtraFields && !node.id) {
                 if (isCommaListExpression(node)) {
                     return node.elements;
                 }
@@ -5585,7 +5616,7 @@ namespace ts {
         // @api
         function createEndOfDeclarationMarker(original: Node) {
             const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
-            node.emitNode = {} as EmitNode;
+            getOrCreateNodeExtraFields(node).emitExtraFields = {} as EmitNode;
             node.original = original;
             return node;
         }
@@ -5597,7 +5628,7 @@ namespace ts {
         // @api
         function createMergeDeclarationMarker(original: Node) {
             const node = createBaseNode<MergeDeclarationMarker>(SyntaxKind.MergeDeclarationMarker);
-            node.emitNode = {} as EmitNode;
+            getOrCreateNodeExtraFields(node).emitExtraFields = {} as EmitNode;
             node.original = original;
             return node;
         }
@@ -5640,6 +5671,26 @@ namespace ts {
 
             (clone as Mutable<T>).flags |= (node.flags & ~NodeFlags.Synthesized);
             (clone as Mutable<T>).transformFlags = node.transformFlags;
+
+            // clone extra fields
+            if (node.extra) {
+                const extra = getOrCreateNodeExtraFields(clone);
+                extra.bindExtraFields = node.extra.bindExtraFields;
+                extra.checkExtraFields = node.extra.checkExtraFields;
+                extra.flowExtraFields = node.extra.flowExtraFields;
+                extra.jsDocExtraFields = node.extra.jsDocExtraFields;
+                extra.emitExtraFields = undefined;
+            }
+
+            if (isMemberName(node) && node.idExtra) {
+                (clone as Node as MemberName).idExtra = {
+                    autoGenerateFlags: node.idExtra.autoGenerateFlags,
+                    autoGenerateId: node.idExtra.autoGenerateId,
+                    autoGeneratePrefix: node.idExtra.autoGeneratePrefix,
+                    autoGenerateSuffix: node.idExtra.autoGenerateSuffix,
+                };
+            }
+
             setOriginalNode(clone, node);
 
             for (const key in node) {
@@ -6852,8 +6903,8 @@ namespace ts {
     export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
         node.original = original;
         if (original) {
-            const emitNode = original.emitNode;
-            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+            const emitNode = original.extra?.emitExtraFields;
+            if (emitNode) getOrCreateNodeExtraFields(node).emitExtraFields = mergeEmitNode(emitNode, node.extra?.emitExtraFields);
         }
         return node;
     }

@@ -190,8 +190,6 @@ namespace Utils {
                 switch (propertyName) {
                     case "parent":
                     case "symbol":
-                    case "locals":
-                    case "localSymbol":
                     case "kind":
                     case "id":
                     case "nodeCount":
@@ -219,9 +217,14 @@ namespace Utils {
                         o[propertyName] = convertDiagnostics((n as any)[propertyName]);
                         break;
 
-                    case "nextContainer":
-                        if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                    case "extra":
+                        const nextContainer = ts.getBindExtraFields(n)?.nextContainer;
+                        if (nextContainer) {
+                            o.nextContainer = { kind: nextContainer.kind, pos: nextContainer.pos, end: nextContainer.end } as ts.Node;
+                        }
+                        const jsDocDotPos = ts.getJSDocExtraFields(n)?.jsDocDotPos;
+                        if (jsDocDotPos !== undefined) {
+                            o.jsdocDotPos = jsDocDotPos;
                         }
                         break;
 

@@ -357,7 +357,7 @@ namespace ts.JsDoc {
         }
 
         const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
-        const commentOwnerJsDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? commentOwner.jsDoc : undefined;
+        const commentOwnerJsDoc = hasJSDocNodes(commentOwner) ? getJSDocExtraFields(commentOwner)!.jsDoc : undefined;
         const lastJsDoc = lastOrUndefined(commentOwnerJsDoc);
         if (commentOwner.getStart(sourceFile) < position
             || lastJsDoc

@@ -60,8 +60,8 @@ namespace ts.SmartSelectionRange {
                     let start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
                     const end = isBetweenMultiLineBookends ? nextNode.getStart() : getEndPos(sourceFile, node);
 
-                    if (hasJSDocNodes(node) && node.jsDoc?.length) {
-                        pushSelectionRange(first(node.jsDoc).getStart(), end);
+                    if (hasJSDocNodes(node)) {
+                        pushSelectionRange(first(getJSDocExtraFields(node)!.jsDoc!).getStart(), end);
                     }
 
                     // (#39618 & #49807)
@@ -71,8 +71,8 @@ namespace ts.SmartSelectionRange {
                     // covering the JSDoc comment before diving further.
                     if (isSyntaxList(node)) {
                         const firstChild = node.getChildren()[0];
-                        if (firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos) {
-                            start = Math.min(start, first(firstChild.jsDoc).getStart());
+                        if (firstChild && hasJSDocNodes(firstChild) && firstChild.getStart() !== node.pos) {
+                            start = Math.min(start, first(getJSDocExtraFields(firstChild)!.jsDoc!).getStart());
                         }
                     }
                     pushSelectionRange(start, end);

@@ -88,7 +88,7 @@ namespace ts.codefix {
             if (moduleSourceFile === undefined || isSourceFileFromLibrary(program, moduleSourceFile)) return undefined;
 
             const moduleSymbol = moduleSourceFile.symbol;
-            const locals = moduleSymbol.valueDeclaration?.locals;
+            const locals = moduleSymbol.valueDeclaration && getBindExtraFields(moduleSymbol.valueDeclaration)?.locals;
             if (locals === undefined) return undefined;
 
             const localSymbol = locals.get(token.escapedText);

@@ -3193,7 +3193,7 @@ namespace ts.Completions {
             const localsContainer = findAncestor(namedExports, or(isSourceFile, isModuleDeclaration))!;
             completionKind = CompletionKind.None;
             isNewIdentifierLocation = false;
-            localsContainer.locals?.forEach((symbol, name) => {
+            getBindExtraFields(localsContainer)?.locals?.forEach((symbol, name) => {
                 symbols.push(symbol);
                 if (localsContainer.symbol?.exports?.has(name)) {
                     symbolToSortTextMap[getSymbolId(symbol)] = SortText.OptionalMember;

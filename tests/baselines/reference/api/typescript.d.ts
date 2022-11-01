@@ -582,6 +582,7 @@ declare namespace ts {
         readonly parent: Node;
     }
     export interface JSDocContainer {
+        _jsdocContainerBrand: any;
     }
     export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ClassStaticBlockDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | EmptyStatement | DebuggerStatement | Block | VariableStatement | ExpressionStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | LabeledStatement | ThrowStatement | TryStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | ExportSpecifier | CaseClause | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
@@ -1266,7 +1267,7 @@ declare namespace ts {
     export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<T>;
     }
-    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
         readonly kind: SyntaxKind.ObjectLiteralExpression;
     }
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
@@ -1466,7 +1467,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;
     }
-    export interface VariableStatement extends Statement {
+    export interface VariableStatement extends Statement, JSDocContainer {
         readonly kind: SyntaxKind.VariableStatement;
         readonly modifiers?: NodeArray<Modifier>;
         readonly declarationList: VariableDeclarationList;
@@ -3440,7 +3441,8 @@ declare namespace ts {
         createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
         createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-        createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
+        createToken<TKind extends SyntaxKind.EndOfFileToken>(token: TKind): EndOfFileToken;
+        createToken<TKind extends SyntaxKind.Unknown>(token: TKind): Token<TKind>;
         createSuper(): SuperExpression;
         createThis(): ThisExpression;
         createNull(): NullLiteral;

@@ -452,7 +452,7 @@ namespace ts.NavigationBar {
 
             default:
                 if (hasJSDocNodes(node)) {
-                    forEach(node.jsDoc, jsDoc => {
+                    forEach(getJSDocExtraFields(node)!.jsDoc, jsDoc => {
                         forEach(jsDoc.tags, tag => {
                             if (isJSDocTypeAlias(tag)) {
                                 addLeafNode(tag);

@@ -1561,7 +1561,7 @@ namespace ts {
             const constructorDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 
-            const parameterSymbol = getSymbol(constructorDeclaration.locals!, parameterName, SymbolFlags.Value);
+            const parameterSymbol = getSymbol(getBindExtraFields(constructorDeclaration)!.locals!, parameterName, SymbolFlags.Value);
             const propertySymbol = getSymbol(getMembersOfSymbol(classDeclaration.symbol), parameterName, SymbolFlags.Value);
 
             if (parameterSymbol && propertySymbol) {
@@ -1880,8 +1880,9 @@ namespace ts {
                     return undefined;
                 }
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = lookup(location.locals, name, meaning)) {
+                const locationBindNode = getBindExtraFields(location);
+                if (locationBindNode?.locals && !isGlobalSourceFile(location)) {
+                    if (result = lookup(locationBindNode.locals, name, meaning)) {
                         let useResult = true;
                         if (isFunctionLike(location) && lastLocation && lastLocation !== (location as FunctionLikeDeclaration).body) {
                             // symbol lookup restrictions for function-like declarations
@@ -1997,8 +1998,9 @@ namespace ts {
                         // in initializer expressions for instance member variables.
                         if (!isStatic(location)) {
                             const ctor = findConstructorDeclaration(location.parent as ClassLikeDeclaration);
-                            if (ctor && ctor.locals) {
-                                if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
+                            const ctorBindNode = ctor && getBindExtraFields(ctor);
+                            if (ctorBindNode?.locals) {
+                                if (lookup(ctorBindNode.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
                                     Debug.assertNode(location, isPropertyDeclaration);
                                     propertyWithInvalidInitializer = location;
@@ -2318,8 +2320,11 @@ namespace ts {
                             error(errorLocation, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name));
                         }
                         // And it cannot refer to any declarations which come after it
-                        else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializerOrBindingName.pos && root.parent.locals && lookup(root.parent.locals, candidate.escapedName, meaning) === candidate) {
-                            error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
+                        else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializerOrBindingName.pos) {
+                            const parentBindNode = getBindExtraFields(root.parent);
+                            if (parentBindNode?.locals && lookup(parentBindNode.locals, candidate.escapedName, meaning) === candidate) {
+                                error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
+                            }
                         }
                     }
                     if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
@@ -3043,7 +3048,7 @@ namespace ts {
         }
 
         function reportNonExportedMember(node: Node, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
-            const localSymbol = moduleSymbol.valueDeclaration?.locals?.get(name.escapedText);
+            const localSymbol = moduleSymbol.valueDeclaration?.extra?.bindExtraFields?.locals?.get(name.escapedText);
             const exports = moduleSymbol.exports;
             if (localSymbol) {
                 const exportedEqualsSymbol = exports?.get(InternalSymbolName.ExportEquals);
@@ -4429,8 +4434,9 @@ namespace ts {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true, location)) {
+                const locationBindNode = getBindExtraFields(location);
+                if (locationBindNode?.locals && !isGlobalSourceFile(location)) {
+                    if (result = callback(locationBindNode.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true, location)) {
                         return result;
                     }
                 }
@@ -5526,7 +5532,7 @@ namespace ts {
                             context.truncating = true;
                         }
                         context.approximateLength += cachedResult.addedLength;
-                        return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
+                        return deepCloneOrReuseNode(cachedResult.node) as TypeNode as T;
                     }
 
                     let depth: number | undefined;
@@ -5542,11 +5548,12 @@ namespace ts {
                     const result = transform(type);
                     const addedLength = context.approximateLength - startLength;
                     if (!context.reportedDiagnostic && !context.encounteredError) {
-                        if (context.truncating) {
-                            (result as any).truncating = true;
-                        }
-                        (result as any).addedLength = addedLength;
-                        links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
+                        const entry: SerializedTypeEntry = {
+                            node: result,
+                            truncating: !!context.truncating,
+                            addedLength
+                        };
+                        links?.serializedTypes?.set(key, entry);
                     }
                     context.visitedTypes.delete(typeId);
                     if (id) {
@@ -7684,7 +7691,7 @@ namespace ts {
                         // Create namespace as non-synthetic so it is usable as an enclosing declaration
                         let fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
                         setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
-                        fakespace.locals = createSymbolTable(props);
+                        getOrCreateBindExtraFields(fakespace).locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
 
                         const oldResults = results;
@@ -8956,7 +8963,8 @@ namespace ts {
 
         function getSyntheticElementAccess(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression): ElementAccessExpression | undefined {
             const parentAccess = getParentElementAccess(node);
-            if (parentAccess && parentAccess.flowNode) {
+            const flowNode = parentAccess && getFlowNode(parentAccess);
+            if (flowNode) {
                 const propName = getDestructuringPropertyName(node);
                 if (propName) {
                     const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
@@ -8967,7 +8975,7 @@ namespace ts {
                     if (lhsExpr !== parentAccess) {
                         setParent(lhsExpr, result);
                     }
-                    result.flowNode = parentAccess.flowNode;
+                    setFlowNode(result, flowNode);
                     return result;
                 }
             }
@@ -9286,7 +9294,7 @@ namespace ts {
             }
             setParent(reference.expression, reference);
             setParent(reference, file);
-            reference.flowNode = file.endFlowNode;
+            setFlowNode(reference, file.endFlowNode);
             return getFlowTypeOfReference(reference, autoType, undefinedType);
         }
 
@@ -9298,7 +9306,7 @@ namespace ts {
                 const reference = factory.createPropertyAccessExpression(factory.createThis(), accessName);
                 setParent(reference.expression, reference);
                 setParent(reference, staticBlock);
-                reference.flowNode = staticBlock.returnFlowNode;
+                setFlowNode(reference, getReturnFlowNode(staticBlock));
                 const flowType = getFlowTypeOfProperty(reference, symbol);
                 if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
                     error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
@@ -9318,7 +9326,7 @@ namespace ts {
             const reference = factory.createPropertyAccessExpression(factory.createThis(), accessName);
             setParent(reference.expression, reference);
             setParent(reference, constructor);
-            reference.flowNode = constructor.returnFlowNode;
+            setFlowNode(reference, getReturnFlowNode(constructor));
             const flowType = getFlowTypeOfProperty(reference, symbol);
             if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
                 error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
@@ -16489,13 +16497,11 @@ namespace ts {
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] | undefined {
             let result: TypeParameter[] | undefined;
-            if (node.locals) {
-                node.locals.forEach(symbol => {
-                    if (symbol.flags & SymbolFlags.TypeParameter) {
-                        result = append(result, getDeclaredTypeOfSymbol(symbol));
-                    }
-                });
-            }
+            getBindExtraFields(node)?.locals?.forEach(symbol => {
+                if (symbol.flags & SymbolFlags.TypeParameter) {
+                    result = append(result, getDeclaredTypeOfSymbol(symbol));
+                }
+            });
             return result;
         }
 
@@ -17991,12 +17997,13 @@ namespace ts {
         }
 
         function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
-            next.contextualType = sourcePropType;
+            const checkNode = getOrCreateCheckExtraFields(next);
+            checkNode.contextualType = sourcePropType;
             try {
                 return checkExpressionForMutableLocation(next, CheckMode.Contextual, sourcePropType);
             }
             finally {
-                next.contextualType = undefined;
+                checkNode.contextualType = undefined;
             }
         }
 
@@ -18239,18 +18246,19 @@ namespace ts {
             }
             // recreate a tuple from the elements, if possible
             // Since we're re-doing the expression type, we need to reapply the contextual type
-            const oldContext = node.contextualType;
-            node.contextualType = target;
+            const checkNode = getOrCreateCheckExtraFields(node);
+            const oldContext = checkNode.contextualType;
+            checkNode.contextualType = target;
             try {
                 const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
-                node.contextualType = oldContext;
+                checkNode.contextualType = oldContext;
                 if (isTupleLikeType(tupleizedType)) {
                     return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
                 }
                 return false;
             }
             finally {
-                node.contextualType = oldContext;
+                checkNode.contextualType = oldContext;
             }
         }
 
@@ -24770,7 +24778,7 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = reference.flowNode) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = getFlowNode(reference)) {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
@@ -24879,7 +24887,7 @@ namespace ts {
                             reference.kind !== SyntaxKind.PropertyAccessExpression &&
                             reference.kind !== SyntaxKind.ElementAccessExpression &&
                             reference.kind !== SyntaxKind.ThisKeyword) {
-                            flow = container.flowNode!;
+                            flow = getFlowNode(container)!;
                             continue;
                         }
                         // At the top of the flow we have the initial type.
@@ -26106,7 +26114,7 @@ namespace ts {
                             links.flags &= ~NodeCheckFlags.InCheckIdentifier;
                             if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
-                                const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
+                                const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, getFlowNode(location));
                                 if (narrowedType.flags & TypeFlags.Never) {
                                     return neverType;
                                 }
@@ -26142,7 +26150,7 @@ namespace ts {
                         if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
                             const restType = getReducedApparentType(getTypeOfSymbol(contextualSignature.parameters[0]));
                             if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
-                                const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
+                                const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, getFlowNode(location));
                                 const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
                                 return getIndexedAccessType(narrowedType, getNumberLiteralType(index));
                             }
@@ -26507,7 +26515,8 @@ namespace ts {
             // If a containing class does not have extends clause or the class extends null
             // skip checking whether super statement is called before "this" accessing.
             if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
-                if (node.flowNode && !isPostSuperFlowNode(node.flowNode, /*noCacheCheck*/ false)) {
+                const flowNode = getFlowNode(node);
+                if (flowNode && !isPostSuperFlowNode(flowNode, /*noCacheCheck*/ false)) {
                     error(node, diagnosticMessage);
                 }
             }
@@ -27687,8 +27696,9 @@ namespace ts {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
-            if (node.contextualType) {
-                return node.contextualType;
+            const contextualType = getCheckExtraFields(node)?.contextualType;
+            if (contextualType) {
+                return contextualType;
             }
             const { parent } = node;
             switch (parent.kind) {
@@ -27758,16 +27768,18 @@ namespace ts {
         }
 
         function getInferenceContext(node: Node) {
-            const ancestor = findAncestor(node, n => !!n.inferenceContext);
-            return ancestor && ancestor.inferenceContext!;
+            return forEachAncestor(node, n => getCheckExtraFields(n)?.inferenceContext);
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
-            if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.Completions) {
-                // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
-                // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
-                // (as below) instead!
-                return node.parent.contextualType;
+            if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
+                const contextualType = getCheckExtraFields(node.parent)?.contextualType;
+                if (contextualType) {
+                    // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
+                    // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
+                    // (as below) instead!
+                    return contextualType;
+                }
             }
             return getContextualTypeForArgumentAtIndex(node, 0);
         }
@@ -33378,7 +33390,8 @@ namespace ts {
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            return func.endFlowNode && isReachableFlowNode(func.endFlowNode);
+            const endFlowNode = getEndFlowNode(func);
+            return endFlowNode && isReachableFlowNode(endFlowNode);
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
@@ -35010,11 +35023,12 @@ namespace ts {
 
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
             const context = getContextNode(node);
-            const saveContextualType = context.contextualType;
-            const saveInferenceContext = context.inferenceContext;
+            const checkNode = getOrCreateCheckExtraFields(context);
+            const saveContextualType = checkNode.contextualType;
+            const saveInferenceContext = checkNode.inferenceContext;
             try {
-                context.contextualType = contextualType;
-                context.inferenceContext = inferenceContext;
+                checkNode.contextualType = contextualType;
+                checkNode.inferenceContext = inferenceContext;
                 const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
                 // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
                 // parameters. This information is no longer needed after the call to checkExpression.
@@ -35032,8 +35046,8 @@ namespace ts {
                 // In the event our operation is canceled or some other exception occurs, reset the contextual type
                 // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
                 // may hold onto the checker that created it.
-                context.contextualType = saveContextualType;
-                context.inferenceContext = saveInferenceContext;
+                checkNode.contextualType = saveContextualType;
+                checkNode.inferenceContext = saveInferenceContext;
             }
         }
 
@@ -35398,8 +35412,9 @@ namespace ts {
             if (links.contextFreeType) {
                 return links.contextFreeType;
             }
-            const saveContextualType = node.contextualType;
-            node.contextualType = anyType;
+            const checkNode = getOrCreateCheckExtraFields(node);
+            const saveContextualType = checkNode.contextualType;
+            checkNode.contextualType = anyType;
             try {
                 const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
                 return type;
@@ -35408,7 +35423,7 @@ namespace ts {
                 // In the event our operation is canceled or some other exception occurs, reset the contextual type
                 // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
                 // may hold onto the checker that created it.
-                node.contextualType = saveContextualType;
+                checkNode.contextualType = saveContextualType;
             }
         }
 
@@ -36325,8 +36340,11 @@ namespace ts {
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
-            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
-                grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            if (node.kind === SyntaxKind.TypeReference) {
+                const jsDocDotPos = getJSDocExtraFields(node.typeName)?.jsDocDotPos;
+                if (jsDocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
+                    grammarErrorAtPos(node, jsDocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+                }
             }
             forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
@@ -36858,7 +36876,7 @@ namespace ts {
 
         function checkExportsOnMergedDeclarationsWorker(node: Declaration): void {
             // if localSymbol is defined on node then node itself is exported - check is required
-            let symbol = node.localSymbol;
+            let symbol = getBindExtraFields(node)?.localSymbol;
             if (!symbol) {
                 // local symbol is undefined => this declaration is non-exported.
                 // however symbol might contain other declarations that are exported
@@ -37410,7 +37428,7 @@ namespace ts {
 
                 // Verify there is no local declaration that could collide with the promise constructor.
                 const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
-                const collidingSymbol = getSymbol(node.locals!, rootName.escapedText, SymbolFlags.Value);
+                const collidingSymbol = getSymbol(getBindExtraFields(node)!.locals!, rootName.escapedText, SymbolFlags.Value);
                 if (collidingSymbol) {
                     error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
                         idText(rootName),
@@ -37775,7 +37793,7 @@ namespace ts {
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
                 const symbol = getSymbolOfNode(node);
-                const localSymbol = node.localSymbol || symbol;
+                const localSymbol = getBindExtraFields(node)?.localSymbol || symbol;
 
                 // Since the javascript won't do semantic analysis like typescript,
                 // if the javascript file comes before the typescript file and both contain same name functions,
@@ -38024,7 +38042,7 @@ namespace ts {
             const unusedImports = new Map<string, [ImportClause, ImportedDeclaration[]]>();
             const unusedDestructures = new Map<string, [BindingPattern, BindingElement[]]>();
             const unusedVariables = new Map<string, [VariableDeclarationList, VariableDeclaration[]]>();
-            nodeWithLocals.locals!.forEach(local => {
+            getBindExtraFields(nodeWithLocals)!.locals!.forEach(local => {
                 // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
                 // If it's a type parameter merged with a parameter, check if the parameter-side is used.
                 if (local.flags & SymbolFlags.TypeParameter ? !(local.flags & SymbolFlags.Variable && !(local.isReferenced! & SymbolFlags.Variable)) : local.isReferenced || local.exportSymbol) {
@@ -38168,7 +38186,7 @@ namespace ts {
             else {
                 forEach(node.statements, checkSourceElement);
             }
-            if (node.locals) {
+            if (getBindExtraFields(node)?.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
         }
@@ -38850,7 +38868,7 @@ namespace ts {
             if (node.condition) checkTruthinessExpression(node.condition);
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
-            if (node.locals) {
+            if (getBindExtraFields(node)?.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
         }
@@ -38913,7 +38931,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            if (node.locals) {
+            if (getBindExtraFields(node)?.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
         }
@@ -38964,7 +38982,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            if (node.locals) {
+            if (getBindExtraFields(node)?.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
         }
@@ -39922,8 +39940,11 @@ namespace ts {
                     addLazyDiagnostic(createLazyCaseClauseDiagnostics(clause));
                 }
                 forEach(clause.statements, checkSourceElement);
-                if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
-                    error(clause, Diagnostics.Fallthrough_case_in_switch);
+                if (compilerOptions.noFallthroughCasesInSwitch) {
+                    const fallthroughFlowNode = getFallthroughFlowNode(clause);
+                    if (fallthroughFlowNode && isReachableFlowNode(fallthroughFlowNode)) {
+                        error(clause, Diagnostics.Fallthrough_case_in_switch);
+                    }
                 }
 
                 function createLazyCaseClauseDiagnostics(clause: CaseClause) {
@@ -39945,7 +39966,7 @@ namespace ts {
                     };
                 }
             });
-            if (node.caseBlock.locals) {
+            if (getBindExtraFields(node.caseBlock)?.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
             }
         }
@@ -40003,9 +40024,9 @@ namespace ts {
                         grammarErrorOnFirstToken(declaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
                     }
                     else {
-                        const blockLocals = catchClause.block.locals;
+                        const blockLocals = getBindExtraFields(catchClause.block)?.locals;
                         if (blockLocals) {
-                            forEachKey(catchClause.locals!, caughtName => {
+                            forEachKey(getBindExtraFields(catchClause)!.locals!, caughtName => {
                                 const blockLocal = blockLocals.get(caughtName);
                                 if (blockLocal?.valueDeclaration && (blockLocal.flags & SymbolFlags.BlockScopedVariable) !== 0) {
                                     grammarErrorOnNode(blockLocal.valueDeclaration, Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, caughtName);
@@ -40955,7 +40976,7 @@ namespace ts {
                     const reference = factory.createPropertyAccessExpression(factory.createThis(), propName);
                     setParent(reference.expression, reference);
                     setParent(reference, staticBlock);
-                    reference.flowNode = staticBlock.returnFlowNode;
+                    setFlowNode(reference, getReturnFlowNode(staticBlock));
                     const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
                     if (!containsUndefinedType(flowType)) {
                         return true;
@@ -40971,7 +40992,7 @@ namespace ts {
                 : factory.createPropertyAccessExpression(factory.createThis(), propName);
             setParent(reference.expression, reference);
             setParent(reference, constructor);
-            reference.flowNode = constructor.returnFlowNode;
+            setFlowNode(reference, getReturnFlowNode(constructor));
             const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
             return !containsUndefinedType(flowType);
         }
@@ -42060,7 +42081,7 @@ namespace ts {
         }
 
         function checkSourceElementWorker(node: Node): void {
-            forEach((node as JSDocContainer).jsDoc, ({ comment, tags }) => {
+            forEach(getJSDocExtraFields(node)?.jsDoc, ({ comment, tags }) => {
                 checkJSDocCommentWorker(comment);
                 forEach(tags, tag => {
                     checkJSDocCommentWorker(tag.comment);
@@ -42082,8 +42103,11 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
-            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && node.flowNode && !isReachableFlowNode(node.flowNode)) {
-                errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement) {
+                const flowNode = getFlowNode(node);
+                if (flowNode && !isReachableFlowNode(flowNode)) {
+                    errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+                }
             }
 
             switch (kind) {
@@ -42599,8 +42623,9 @@ namespace ts {
 
             function populateSymbols() {
                 while (location) {
-                    if (location.locals && !isGlobalSourceFile(location)) {
-                        copySymbols(location.locals, meaning);
+                    const locationBindNode = getBindExtraFields(location);
+                    if (locationBindNode?.locals && !isGlobalSourceFile(location)) {
+                        copySymbols(locationBindNode.locals, meaning);
                     }
 
                     switch (location.kind) {
@@ -43444,8 +43469,9 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(nodeIn: Identifier): Declaration | undefined {
-            if (nodeIn.generatedImportReference) {
-                return nodeIn.generatedImportReference;
+            const generatedImportReference = getEmitNode(nodeIn)?.generatedImportReference;
+            if (generatedImportReference) {
+                return generatedImportReference;
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
@@ -44043,7 +44069,8 @@ namespace ts {
                     Debug.assert(n && n.kind === SyntaxKind.SourceFile, "Non-sourcefile node passed into getDeclarationsForSourceFile");
                     const sym = getSymbolOfNode(node);
                     if (!sym) {
-                        return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker, bundled);
+                        const bindNode = getBindExtraFields(node);
+                        return !bindNode?.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(bindNode.locals, node, flags, tracker, bundled);
                     }
                     return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
                 },
@@ -44199,13 +44226,13 @@ namespace ts {
                 if (!isExternalOrCommonJsModule(file)) {
                     // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
                     // We can't use `builtinGlobals` for this due to synthetic expando-namespace generation in JS files.
-                    const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
+                    const fileGlobalThisSymbol = getBindExtraFields(file)!.locals!.get("globalThis" as __String);
                     if (fileGlobalThisSymbol?.declarations) {
                         for (const declaration of fileGlobalThisSymbol.declarations) {
                             diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"));
                         }
                     }
-                    mergeSymbolTable(globals, file.locals!);
+                    mergeSymbolTable(globals, getBindExtraFields(file)!.locals!);
                 }
                 if (file.jsGlobalAugmentations) {
                     mergeSymbolTable(globals, file.jsGlobalAugmentations);

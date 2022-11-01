@@ -2700,7 +2700,7 @@ namespace ts {
                     }
                 };
                 while (true) {
-                    const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+                    const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(getJSDocExtraFields(current)?.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
                     if (!child) {
                         return current;
                     }

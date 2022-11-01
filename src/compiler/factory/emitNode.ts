@@ -4,26 +4,36 @@ namespace ts {
      * various transient transformation properties.
      * @internal
      */
+    export function getEmitNode(node: Node): EmitNode | undefined {
+        return node.extra?.emitExtraFields;
+    }
+
+    /**
+     * Associates a node with the current transformation, initializing
+     * various transient transformation properties.
+     * @internal
+     */
     export function getOrCreateEmitNode(node: Node): EmitNode {
-        if (!node.emitNode) {
+        const extra = getOrCreateNodeExtraFields(node);
+        if (!extra.emitExtraFields) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
                 // parse tree node we are annotating. This allows us to clean them up after
                 // all transformations have completed.
                 if (node.kind === SyntaxKind.SourceFile) {
-                    return node.emitNode = { annotatedNodes: [node] } as EmitNode;
+                    return extra.emitExtraFields = { annotatedNodes: [node] } as EmitNode;
                 }
 
                 const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
-            node.emitNode = {} as EmitNode;
+            extra.emitExtraFields = {} as EmitNode;
         }
         else {
-            Debug.assert(!(node.emitNode.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+            Debug.assert(!(extra.emitExtraFields.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
         }
-        return node.emitNode;
+        return extra.emitExtraFields;
     }
 
     /**
@@ -37,10 +47,12 @@ namespace ts {
         // from these nodes to ensure we do not hold onto entire subtrees just for position
         // information. We also need to reset these nodes to a pre-transformation state
         // for incremental parsing scenarios so that we do not impact later emit.
-        const annotatedNodes = getSourceFileOfNode(getParseTreeNode(sourceFile))?.emitNode?.annotatedNodes;
+        const annotatedNodes = getSourceFileOfNode(getParseTreeNode(sourceFile))?.extra?.emitExtraFields?.annotatedNodes;
         if (annotatedNodes) {
             for (const node of annotatedNodes) {
-                node.emitNode = undefined;
+                if (node.extra) {
+                    node.extra.emitExtraFields = undefined;
+                }
             }
         }
     }
@@ -79,7 +91,7 @@ namespace ts {
      * Gets a custom text range to use when emitting source maps.
      */
     export function getSourceMapRange(node: Node): SourceMapRange {
-        return node.emitNode?.sourceMapRange ?? node;
+        return node.extra?.emitExtraFields?.sourceMapRange ?? node;
     }
 
     /**
@@ -94,7 +106,7 @@ namespace ts {
      * Gets the TextRange to use for source maps for a token of a node.
      */
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
-        return node.emitNode?.tokenSourceMapRanges?.[token];
+        return node.extra?.emitExtraFields?.tokenSourceMapRanges?.[token];
     }
 
     /**
@@ -112,7 +124,7 @@ namespace ts {
      */
     /*@internal*/
     export function getStartsOnNewLine(node: Node) {
-        return node.emitNode?.startsOnNewLine;
+        return node.extra?.emitExtraFields?.startsOnNewLine;
     }
 
     /**
@@ -128,7 +140,7 @@ namespace ts {
      * Gets a custom text range to use when emitting comments.
      */
     export function getCommentRange(node: Node): TextRange {
-        return node.emitNode?.commentRange ?? node;
+        return node.extra?.emitExtraFields?.commentRange ?? node;
     }
 
     /**
@@ -140,7 +152,7 @@ namespace ts {
     }
 
     export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
-        return node.emitNode?.leadingComments;
+        return node.extra?.emitExtraFields?.leadingComments;
     }
 
     export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -153,7 +165,7 @@ namespace ts {
     }
 
     export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
-        return node.emitNode?.trailingComments;
+        return node.extra?.emitExtraFields?.trailingComments;
     }
 
     export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -178,7 +190,7 @@ namespace ts {
      * Gets the constant value to emit for an expression representing an enum.
      */
     export function getConstantValue(node: AccessExpression): string | number | undefined {
-        return node.emitNode?.constantValue;
+        return node.extra?.emitExtraFields?.constantValue;
     }
 
     /**
@@ -216,7 +228,7 @@ namespace ts {
      * Removes an EmitHelper from a node.
      */
     export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
-        const helpers = node.emitNode?.helpers;
+        const helpers = node.extra?.emitExtraFields?.helpers;
         if (helpers) {
             return orderedRemoveItem(helpers, helper);
         }
@@ -227,14 +239,14 @@ namespace ts {
      * Gets the EmitHelpers of a node.
      */
     export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
-        return node.emitNode?.helpers;
+        return node.extra?.emitExtraFields?.helpers;
     }
 
     /**
      * Moves matching emit helpers from a source node to a target node.
      */
     export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
-        const sourceEmitNode = source.emitNode;
+        const sourceEmitNode = source.extra?.emitExtraFields;
         const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
         if (!some(sourceEmitHelpers)) return;
 
@@ -261,7 +273,7 @@ namespace ts {
      */
     /* @internal */
     export function getSnippetElement(node: Node): SnippetElement | undefined {
-        return node.emitNode?.snippetElement;
+        return node.extra?.emitExtraFields?.snippetElement;
     }
 
     /**
@@ -289,6 +301,6 @@ namespace ts {
 
     /* @internal */
     export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
-        return node.emitNode?.typeNode;
+        return node.extra?.emitExtraFields?.typeNode;
     }
 }

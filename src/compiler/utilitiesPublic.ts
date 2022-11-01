@@ -876,14 +876,14 @@ namespace ts {
     }
 
     function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
-        let tags = (node as JSDocContainer).jsDocCache;
+        let tags = getJSDocExtraFields(node)?.jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined || noCache) {
             const comments = getJSDocCommentsAndTags(node, noCache);
             Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
             tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
             if (!noCache) {
-                (node as JSDocContainer).jsDocCache = tags;
+                getOrCreateJSDocExtraFields(node).jsDocCache = tags;
             }
         }
         return tags;
@@ -1196,12 +1196,12 @@ namespace ts {
 
     /* @internal */
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-        return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+        return isIdentifier(node) && (getIdentifierExtraFields(node)?.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
     }
 
     /* @internal */
     export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-        return isPrivateIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+        return isPrivateIdentifier(node) && (getIdentifierExtraFields(node)?.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
     }
 
     // Private Identifiers
@@ -2008,8 +2008,7 @@ namespace ts {
     /* @internal */
     // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
-        const { jsDoc } = node as JSDocContainer;
-        return !!jsDoc && jsDoc.length > 0;
+        return some(getJSDocExtraFields(node)?.jsDoc);
     }
 
     /** True if has type node attached to it. */

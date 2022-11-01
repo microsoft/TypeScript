@@ -161,7 +161,7 @@ namespace ts {
             context.requestEmitHelper(asyncGeneratorHelper);
 
             // Mark this node as originally an async function
-            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+            getOrCreateEmitNode(generatorFunc).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
             return factory.createCallExpression(
                 getUnscopedHelperName("__asyncGenerator"),
@@ -253,7 +253,7 @@ namespace ts {
             );
 
             // Mark this node as originally an async function
-            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+            getOrCreateEmitNode(generatorFunc).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
             return factory.createCallExpression(
                 getUnscopedHelperName("__awaiter"),

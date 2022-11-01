@@ -478,8 +478,9 @@ namespace ts.textChanges {
 
         public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc): void {
             const fnStart = node.getStart(sourceFile);
-            if (node.jsDoc) {
-                for (const jsdoc of node.jsDoc) {
+            const jsDoc = getJSDocExtraFields(node)?.jsDoc;
+            if (jsDoc) {
+                for (const jsdoc of jsDoc) {
                     this.deleteRange(sourceFile, {
                         pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
                         end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
@@ -492,9 +493,10 @@ namespace ts.textChanges {
         }
 
         private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
-            const comments = flatMap(node.jsDoc, jsDoc =>
+            const jsDocArray = getJSDocExtraFields(node)?.jsDoc;
+            const comments = flatMap(jsDocArray, jsDoc =>
                 isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
-            const jsDoc = singleOrUndefined(node.jsDoc);
+            const jsDoc = singleOrUndefined(jsDocArray);
             return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
                 factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
         }
@@ -504,7 +506,7 @@ namespace ts.textChanges {
         }
 
         public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const oldTags = flatMapToMutable(getJSDocExtraFields(parent)?.jsDoc, j => j.tags);
             const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
                 const merged = tryMergeJsdocTags(tag, newTag);
                 if (merged) oldTags[i] = merged;
@@ -514,7 +516,7 @@ namespace ts.textChanges {
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
-            this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate));
+            this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(getJSDocExtraFields(parent)?.jsDoc, j => j.tags), predicate));
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
@@ -964,8 +966,12 @@ namespace ts.textChanges {
         const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
             parent.parent as HasJSDoc :
             parent.parent.parent as HasJSDoc;
-        jsDocNode.jsDoc = parent.jsDoc;
-        jsDocNode.jsDocCache = parent.jsDocCache;
+        const parentJSDocFields = getJSDocExtraFields(parent);
+        if (parentJSDocFields) {
+            const hostJSDocFields = getOrCreateJSDocExtraFields(jsDocNode);
+            hostJSDocFields.jsDoc = parentJSDocFields.jsDoc;
+            hostJSDocFields.jsDocCache = parentJSDocFields.jsDocCache;
+        }
         return jsDocNode;
     }
 

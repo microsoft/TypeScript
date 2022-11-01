@@ -468,13 +468,13 @@ namespace ts {
 
     export function getExternalHelpersModuleName(node: SourceFile) {
         const parseNode = getOriginalNode(node, isSourceFile);
-        const emitNode = parseNode && parseNode.emitNode;
+        const emitNode = parseNode?.extra?.emitExtraFields;
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
     export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
         const parseNode = getOriginalNode(sourceFile, isSourceFile);
-        const emitNode = parseNode && parseNode.emitNode;
+        const emitNode = parseNode?.extra?.emitExtraFields;
         return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
     }
 
@@ -1249,18 +1249,22 @@ namespace ts {
      * Gets the node from which a name should be generated.
      */
     export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-        if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
-            const autoGenerateId = name.autoGenerateId;
+        const idFields = getIdentifierExtraFields(name);
+        if (idFields.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
+            const autoGenerateId = idFields.autoGenerateId;
             let node = name as Node;
             let original = node.original;
             while (original) {
                 node = original;
 
                 // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
-                if (isMemberName(node)
-                    && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
-                    && node.autoGenerateId !== autoGenerateId) {
-                    break;
+                if (isMemberName(node)) {
+                    const idFields = getIdentifierExtraFields(node);
+                    if (idFields
+                        && !!(idFields.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
+                        && idFields.autoGenerateId !== autoGenerateId) {
+                        break;
+                    }
                 }
 
                 original = node.original;

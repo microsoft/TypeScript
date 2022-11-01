@@ -878,18 +878,48 @@ namespace ts {
         readonly parent: Node;                                // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
+        /* @internal */ extra?: NodeExtraFields;
+    }
+
+    /* @internal */
+    export interface NodeExtraFields {
+        bindExtraFields?: BindExtraFields;
+        flowExtraFields?: FlowExtraFields;
+        emitExtraFields?: EmitNode;
+        checkExtraFields?: CheckExtraFields;
+        jsDocExtraFields?: JSDocExtraFields;
+    }
+
+    /* @internal */
+    export interface BindExtraFields {
+        locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
+        nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
+        localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
+    }
+
+    /* @internal */
+    export interface FlowExtraFields {
+        flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
+        endFlowNode?: FlowNode;               // Functions/Methods and Class Static Blocks
+        returnFlowNode?: FlowNode;            // Functions/Methods and Class Static Blocks
+        fallthroughFlowNode?: FlowNode;       // Case and Default Clauses
+    }
+
+    /* @internal */
+    export interface CheckExtraFields {
+        contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
+        inferenceContext?: InferenceContext;  // Inference context for contextual type
+    }
+
+    /* @internal */
+    export interface JSDocExtraFields {
+        jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
+        jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
+        jsDocDotPos?: number;                 // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
     export interface JSDocContainer {
-        /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
+        _jsdocContainerBrand: any;
     }
 
     // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
@@ -1419,15 +1449,18 @@ namespace ts {
          */
         readonly escapedText: __String;
         readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-        /*@internal*/ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-        /*@internal*/ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-        /*@internal*/ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-        /*@internal*/ readonly autoGenerateSuffix?: string;
-        /*@internal*/ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
+        /*@internal*/ readonly hasExtendedUnicodeEscape?: boolean;
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
-        /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-        /*@internal*/ hasExtendedUnicodeEscape?: boolean;
+        /*@internal*/ idExtra?: IdentifierExtraFields;
+    }
+
+    /* @internal */
+    export interface IdentifierExtraFields {
+        autoGenerateFlags?: GeneratedIdentifierFlags;  // Specifies whether to auto-generate the text for an identifier.
+        autoGenerateId?: number;                       // Ensures unique generated identifiers get unique names, but clones get the same name.
+        autoGeneratePrefix?: string | GeneratedNamePart;
+        autoGenerateSuffix?: string;
     }
 
     // Transient identifier node (marked by id === -1)
@@ -1437,6 +1470,11 @@ namespace ts {
 
     /*@internal*/
     export interface GeneratedIdentifier extends Identifier {
+        readonly idExtra: GeneratedIdentifierExtraFields;
+    }
+
+    /* @internal */
+    export interface GeneratedIdentifierExtraFields extends IdentifierExtraFields {
         autoGenerateFlags: GeneratedIdentifierFlags;
     }
 
@@ -1513,10 +1551,7 @@ namespace ts {
         // escaping not strictly necessary
         // avoids gotchas in transforms and utils
         readonly escapedText: __String;
-        /*@internal*/ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-        /*@internal*/ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-        /*@internal*/ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-        /*@internal*/ readonly autoGenerateSuffix?: string;
+        /*@internal*/ idExtra?: IdentifierExtraFields;
     }
 
     /*@internal*/
@@ -1780,8 +1815,6 @@ namespace ts {
         readonly questionToken?: QuestionToken | undefined;
         readonly exclamationToken?: ExclamationToken | undefined;
         readonly body?: Block | Expression | undefined;
-        /* @internal */ endFlowNode?: FlowNode;
-        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     export type FunctionLikeDeclaration =
@@ -1893,9 +1926,6 @@ namespace ts {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
         readonly parent: ClassDeclaration | ClassExpression;
         readonly body: Block;
-
-        /* @internal */ endFlowNode?: FlowNode;
-        /* @internal */ returnFlowNode?: FlowNode;
 
         // The following properties are used only to report grammar errors
         /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
@@ -2653,7 +2683,7 @@ namespace ts {
     }
 
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
-    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
         readonly kind: SyntaxKind.ObjectLiteralExpression;
         /* @internal */
         multiLine?: boolean;
@@ -3071,7 +3101,7 @@ namespace ts {
         /*@internal*/ multiLine?: boolean;
     }
 
-    export interface VariableStatement extends Statement {
+    export interface VariableStatement extends Statement, JSDocContainer {
         readonly kind: SyntaxKind.VariableStatement;
         readonly modifiers?: NodeArray<Modifier>;
         readonly declarationList: VariableDeclarationList;
@@ -3185,14 +3215,12 @@ namespace ts {
         readonly parent: CaseBlock;
         readonly expression: Expression;
         readonly statements: NodeArray<Statement>;
-        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export interface DefaultClause extends Node {
         readonly kind: SyntaxKind.DefaultClause;
         readonly parent: CaseBlock;
         readonly statements: NodeArray<Statement>;
-        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export type CaseOrDefaultClause =
@@ -5574,7 +5602,14 @@ namespace ts {
         isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-        serializedTypes?: ESMap<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
+        serializedTypes?: ESMap<string, SerializedTypeEntry>; // Collection of types serialized at this location
+    }
+
+    /* @internal */
+    export interface SerializedTypeEntry {
+        node: TypeNode;
+        truncating: boolean;
+        addedLength: number;
     }
 
     export const enum TypeFlags {
@@ -7357,7 +7392,8 @@ namespace ts {
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
         snippetElement?: SnippetElement;         // Snippet element of the node
-        typeNode?: TypeNode;                         // VariableDeclaration type
+        typeNode?: TypeNode;                     // VariableDeclaration type
+        generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     }
 
     /* @internal */
@@ -7704,7 +7740,8 @@ namespace ts {
         createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
         createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-        createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
+        createToken<TKind extends SyntaxKind.EndOfFileToken>(token: TKind): EndOfFileToken;
+        createToken<TKind extends SyntaxKind.Unknown>(token: TKind): Token<TKind>;
         /*@internal*/ createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
 
         //

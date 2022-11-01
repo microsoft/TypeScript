@@ -1676,7 +1676,7 @@ namespace ts {
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
+        return n.kind === SyntaxKind.EndOfFileToken ? !!getJSDocExtraFields(n as EndOfFileToken)?.jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {

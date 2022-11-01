@@ -1250,7 +1250,7 @@ namespace ts {
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
                 statements = createNodeArray([statement], pos);
-                endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+                endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
             }
 
             // Set source file so that errors will be reported with this file name
@@ -1385,9 +1385,10 @@ namespace ts {
 
         let hasDeprecatedTag = false;
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
-            Debug.assert(!node.jsDoc); // Should only be called once per node
+            const jsDocFields = getOrCreateJSDocExtraFields(node);
+            Debug.assert(!jsDocFields.jsDoc); // Should only be called once per node
             const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
-            if (jsDoc.length) node.jsDoc = jsDoc;
+            if (jsDoc.length) jsDocFields.jsDoc = jsDoc;
             if (hasDeprecatedTag) {
                 hasDeprecatedTag = false;
                 (node as Mutable<T>).flags |= NodeFlags.Deprecated;
@@ -2677,9 +2678,10 @@ namespace ts {
                 return undefined;
             }
 
-            if ((node as JSDocContainer).jsDocCache) {
+            const jsDocFields = getJSDocExtraFields(node);
+            if (jsDocFields?.jsDocCache) {
                 // jsDocCache may include tags from parent nodes, which might have been modified.
-                (node as JSDocContainer).jsDocCache = undefined;
+                jsDocFields.jsDocCache = undefined;
             }
 
             return node;
@@ -3075,7 +3077,7 @@ namespace ts {
             while (parseOptional(SyntaxKind.DotToken)) {
                 if (token() === SyntaxKind.LessThanToken) {
                     // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                    entity.jsdocDotPos = dotPos;
+                    getOrCreateJSDocExtraFields(entity).jsDocDotPos = dotPos;
                     break;
                 }
                 dotPos = getNodePos();
@@ -9246,7 +9248,7 @@ namespace ts {
 
                 forEachChild(node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
-                    for (const jsDocComment of node.jsDoc!) {
+                    for (const jsDocComment of getJSDocExtraFields(node)!.jsDoc!) {
                         visitNode(jsDocComment as Node as IncrementalNode);
                     }
                 }
@@ -9356,7 +9358,7 @@ namespace ts {
                     pos = child.end;
                 };
                 if (hasJSDocNodes(node)) {
-                    for (const jsDocComment of node.jsDoc!) {
+                    for (const jsDocComment of getJSDocExtraFields(node)!.jsDoc!) {
                         visitNode(jsDocComment);
                     }
                 }
@@ -9399,7 +9401,7 @@ namespace ts {
                     adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                     forEachChild(child, visitNode, visitArray);
                     if (hasJSDocNodes(child)) {
-                        for (const jsDocComment of child.jsDoc!) {
+                        for (const jsDocComment of getJSDocExtraFields(child)!.jsDoc!) {
                             visitNode(jsDocComment as Node as IncrementalNode);
                         }
                     }

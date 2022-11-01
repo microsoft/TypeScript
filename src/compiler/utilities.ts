@@ -482,7 +482,7 @@ namespace ts {
         }
 
         if (includeJsDoc && hasJSDocNodes(node)) {
-            return getTokenPosOfNode(node.jsDoc![0], sourceFile);
+            return getTokenPosOfNode(getJSDocExtraFields(node)!.jsDoc![0], sourceFile);
         }
 
         // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
@@ -557,7 +557,7 @@ namespace ts {
      * Gets flags that control emit behavior of a node.
      */
     export function getEmitFlags(node: Node): EmitFlags {
-        const emitNode = node.emitNode;
+        const emitNode = node.extra?.emitExtraFields;
         return emitNode && emitNode.flags || 0;
     }
 
@@ -1000,7 +1000,7 @@ namespace ts {
         switch (name.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
-                return name.autoGenerateFlags ? undefined : name.escapedText;
+                return getIdentifierExtraFields(name)?.autoGenerateFlags ? undefined : name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -2728,13 +2728,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
+            result = addRange(result, filterOwnedJSDocTags(hostNode, last(getJSDocExtraFields(hostNode.initializer)!.jsDoc!)));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
+                result = addRange(result, filterOwnedJSDocTags(hostNode, last(getJSDocExtraFields(node)!.jsDoc!)));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2858,8 +2858,11 @@ namespace ts {
         }
 
         const host = jsDoc.parent;
-        if (host && host.jsDoc && jsDoc === lastOrUndefined(host.jsDoc)) {
-            return host;
+        if (host) {
+            const jsDocFields = getJSDocExtraFields(host);
+            if (jsDocFields?.jsDoc && jsDoc === lastOrUndefined(jsDocFields.jsDoc)) {
+                return host;
+            }
         }
     }
 
@@ -5205,7 +5208,8 @@ namespace ts {
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         if (!isExportDefaultSymbol(symbol) || !symbol.declarations) return undefined;
         for (const decl of symbol.declarations) {
-            if (decl.localSymbol) return decl.localSymbol;
+            const localSymbol = getBindExtraFields(decl)?.localSymbol;
+            if (localSymbol) return localSymbol;
         }
         return undefined;
     }
@@ -5995,7 +5999,9 @@ namespace ts {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
         this.original = undefined;
-    }
+        this.symbol = undefined!;
+        this.extra = undefined;
+    };
 
     function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
@@ -6005,6 +6011,7 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
+        this.extra = undefined;
     }
 
     function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -6016,7 +6023,8 @@ namespace ts {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
         this.original = undefined;
-        this.flowNode = undefined;
+        this.symbol = undefined!;
+        this.extra = undefined;
     }
 
     function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
@@ -7473,7 +7481,7 @@ namespace ts {
 
         function bindJSDoc(child: Node) {
             if (hasJSDocNodes(child)) {
-                for (const doc of child.jsDoc!) {
+                for (const doc of getJSDocExtraFields(child)!.jsDoc!) {
                     bindParentToChildIgnoringJSDoc(doc, child);
                     forEachChildRecursively(doc, bindParentToChildIgnoringJSDoc);
                 }
@@ -7777,5 +7785,103 @@ namespace ts {
     export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
         return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
             || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+    }
+
+    export function getOrCreateNodeExtraFields(node: Node) {
+        return node.extra ??= {
+            bindExtraFields: undefined,
+            flowExtraFields: undefined,
+            emitExtraFields: undefined,
+            checkExtraFields: undefined,
+            jsDocExtraFields: undefined,
+        };
+    }
+
+    export function getBindExtraFields(node: Node) {
+        return node.extra?.bindExtraFields;
+    }
+
+    export function getOrCreateBindExtraFields(node: Node) {
+        return getOrCreateNodeExtraFields(node).bindExtraFields ??= {
+            locals: undefined,
+            nextContainer: undefined,
+            localSymbol: undefined
+        };
+    }
+
+    export function getCheckExtraFields(node: Node) {
+        return node.extra?.checkExtraFields;
+    }
+
+    export function getOrCreateCheckExtraFields(node: Node) {
+        return getOrCreateNodeExtraFields(node).checkExtraFields ??= {
+            contextualType: undefined,
+            inferenceContext: undefined
+        };
+    }
+
+    export function getFlowExtraFields(node: Node) {
+        return node.extra?.flowExtraFields;
+    }
+
+    export function getOrCreateFlowExtraFields(node: Node) {
+        return getOrCreateNodeExtraFields(node).flowExtraFields ??= {
+            flowNode: undefined,
+            endFlowNode: undefined,
+            returnFlowNode: undefined
+        };
+    }
+
+    export function setFlowNode<T extends FlowNode | undefined>(node: Node, flowNode: T) {
+        getOrCreateFlowExtraFields(node).flowNode = flowNode;
+        return flowNode;
+    }
+
+    export function getFlowNode(node: Node) {
+        return getFlowExtraFields(node)?.flowNode;
+    }
+
+    export function getEndFlowNode(node: FunctionLikeDeclarationBase | ClassStaticBlockDeclaration) {
+        return getFlowExtraFields(node)?.endFlowNode;
+    }
+
+    export function setEndFlowNode<T extends FlowNode | undefined>(node: FunctionLikeDeclarationBase | ClassStaticBlockDeclaration, flowNode: T) {
+        getOrCreateFlowExtraFields(node).endFlowNode = flowNode;
+        return flowNode;
+    }
+
+    export function getReturnFlowNode(node: FunctionLikeDeclarationBase | ClassStaticBlockDeclaration) {
+        return getFlowExtraFields(node)?.returnFlowNode;
+    }
+
+    export function setReturnFlowNode<T extends FlowNode | undefined>(node: FunctionLikeDeclarationBase | ClassStaticBlockDeclaration, flowNode: T) {
+        getOrCreateFlowExtraFields(node).returnFlowNode = flowNode;
+        return flowNode;
+    }
+
+    export function setFallthroughFlowNode<T extends FlowNode | undefined>(node: CaseOrDefaultClause, flowNode: T) {
+        getOrCreateFlowExtraFields(node).fallthroughFlowNode = flowNode;
+        return flowNode;
+    }
+
+    export function getFallthroughFlowNode(node: CaseOrDefaultClause) {
+        return getFlowExtraFields(node)?.fallthroughFlowNode;
+    }
+
+    export function getJSDocExtraFields(node: Node) {
+        return node.extra?.jsDocExtraFields;
+    }
+
+    export function getOrCreateJSDocExtraFields(node: Node) {
+        return getOrCreateNodeExtraFields(node).jsDocExtraFields ??= {
+            jsDoc: undefined,
+            jsDocCache: undefined
+        };
+    }
+
+    export function getIdentifierExtraFields(node: GeneratedIdentifier | GeneratedPrivateIdentifier): GeneratedIdentifierExtraFields;
+    export function getIdentifierExtraFields(node: Identifier | PrivateIdentifier): IdentifierExtraFields | undefined;
+    export function getIdentifierExtraFields(node: Identifier | PrivateIdentifier) {
+        return node.idExtra;
     }
 }

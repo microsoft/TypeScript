@@ -696,7 +696,7 @@ namespace ts {
 
         function preserveJsDoc<T extends Node>(updated: T, original: Node): T {
             if (hasJSDocNodes(updated) && hasJSDocNodes(original)) {
-                updated.jsDoc = original.jsDoc;
+                getOrCreateJSDocExtraFields(updated).jsDoc = getJSDocExtraFields(original)!.jsDoc;
             }
             return setCommentRange(updated, getCommentRange(original));
         }
@@ -1256,7 +1256,7 @@ namespace ts {
                         // Use parseNodeFactory so it is usable as an enclosing declaration
                         const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                         setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
-                        fakespace.locals = createSymbolTable(props);
+                        getOrCreateBindExtraFields(fakespace).locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
                         const exportMappings: [Identifier, string][] = [];
                         let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {

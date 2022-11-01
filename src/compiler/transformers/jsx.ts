@@ -57,7 +57,7 @@ namespace ts {
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
             const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
-            generatedName.generatedImportReference = specifier;
+            getOrCreateEmitNode(generatedName).generatedImportReference = specifier;
             specifierSourceImports.set(name, specifier);
             return generatedName;
         }

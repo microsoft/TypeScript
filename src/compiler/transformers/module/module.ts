@@ -1904,7 +1904,7 @@ namespace ts {
                 }
                 return node;
             }
-            else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
+            else if (!(isGeneratedIdentifier(node) && !(getIdentifierExtraFields(node).autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
