@@ -79,8 +79,9 @@ interface Int8Array {
    * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
    * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
    * ```ts
-   * const myNums = Uint8ClampedArray.from([11, 2, 22, 1]);
-   * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray(4) [1, 2, 11, 22]
+   * const myNums = Int8Array.from([11, 2, -22, 1]);
+   * myNums.toSorted((a, b) => a - b) // Int8Array(4) [-22, 1, 2, 11]
+
    * ```
    */
   toSorted(compareFn?: (a: number, b: number) => number): Int8Array;
