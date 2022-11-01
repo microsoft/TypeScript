@@ -81,7 +81,6 @@ interface Int8Array {
    * ```ts
    * const myNums = Int8Array.from([11, 2, -22, 1]);
    * myNums.toSorted((a, b) => a - b) // Int8Array(4) [-22, 1, 2, 11]
-
    * ```
    */
   toSorted(compareFn?: (a: number, b: number) => number): Int8Array;
