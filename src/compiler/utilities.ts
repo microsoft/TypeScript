@@ -7778,4 +7778,12 @@ namespace ts {
         return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
             || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
     }
+
+    export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+        if (!isJSDocPropertyLikeTag(node)) {
+            return false;
+        }
+        const { isBracketed, typeExpression } = node;
+        return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+    }
 }

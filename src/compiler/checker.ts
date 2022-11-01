@@ -13044,14 +13044,6 @@ namespace ts {
             return isPropertyDeclaration(node) && !hasAccessorModifier(node) && node.questionToken;
         }
 
-        function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
-            if (!isJSDocPropertyLikeTag(node)) {
-                return false;
-            }
-            const { isBracketed, typeExpression } = node;
-            return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-        }
-
         function createTypePredicate(kind: TypePredicateKind, parameterName: string | undefined, parameterIndex: number | undefined, type: Type | undefined): TypePredicate {
             return { kind, parameterName, parameterIndex, type } as TypePredicate;
         }
