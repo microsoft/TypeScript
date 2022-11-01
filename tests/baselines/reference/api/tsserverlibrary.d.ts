@@ -3054,6 +3054,7 @@ declare namespace ts {
         paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
+        noImplicitAbstractOverride?: boolean;
         preserveSymlinks?: boolean;
         preserveValueImports?: boolean;
         project?: string;
