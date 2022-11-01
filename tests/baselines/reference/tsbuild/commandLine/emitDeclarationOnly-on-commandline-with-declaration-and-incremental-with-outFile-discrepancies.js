@@ -25,6 +25,7 @@ CleanBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
       "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
@@ -33,6 +34,7 @@ CleanBuild:
     "options": {
       "declaration": true,
       "emitDeclarationOnly": true,
+      "module": 2,
       "outFile": "./outFile.js"
     }
   },
@@ -71,6 +73,7 @@ IncrementalBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "./src/a.ts": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
       "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
@@ -78,6 +81,7 @@ IncrementalBuild:
     },
     "options": {
       "declaration": true,
+      "module": 2,
       "outFile": "./outFile.js"
     }
   },

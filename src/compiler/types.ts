@@ -6857,8 +6857,7 @@ namespace ts {
         affectsEmit?: true;                                     // true if the options affects emit
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
         affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
-        affectsMultiFileEmitBuildInfo?: true;                   // true if this options should be emitted in buildInfo without --out
-        affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
+        affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }

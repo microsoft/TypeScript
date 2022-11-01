@@ -281,7 +281,7 @@ namespace ts {
         });
 
         // If the global file is removed, add all files as changed
-        if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => info.affectsGlobalScope && !state.fileInfos.has(sourceFilePath))) {
+        if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => (outFilePath || info.affectsGlobalScope) && !state.fileInfos.has(sourceFilePath))) {
             BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
                 .forEach(file => addFileToChangeSet(state, file.resolvedPath));
         }
@@ -311,6 +311,10 @@ namespace ts {
                         pendingEmitKind;
                 }
             }
+        }
+        // If this program has prepend references, always emit since we wont know if files on disk are correct unless we check file hash for correctness
+        if (outFilePath && !state.changedFilesSet.size && some(newProgram.getProjectReferences(), ref => !!ref.prepend)) {
+            state.programEmitPending = getBuilderFileEmit(compilerOptions);
         }
         return state;
     }
@@ -849,7 +853,7 @@ namespace ts {
      */
     export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId] | [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
     export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
-    export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
+    export type ProgramMultiFileEmitBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
         /**
          * Signature is
          * - undefined if FileInfo.version === FileInfo.signature
@@ -864,12 +868,12 @@ namespace ts {
      */
     export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: string];
     /**
-     * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+     * ProgramMultiFileEmitBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
      */
-    export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
+    export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmitBuildInfoBuilderStateFileInfo;
     export interface ProgramMultiFileEmitBuildInfo {
         fileNames: readonly string[];
-        fileInfos: readonly ProgramBuildInfoFileInfo[];
+        fileInfos: readonly ProgramMultiFileEmitBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
         fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
         referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -883,13 +887,17 @@ namespace ts {
         latestChangedDtsFile?: string | undefined;
     }
     /**
+     * ProgramBundleEmitBuildInfoFileInfo is string if !FileInfo.impliedFormat otherwise encoded FileInfo
+     */
+    export type ProgramBundleEmitBuildInfoFileInfo = string | BuilderState.FileInfo;
+    /**
      * false if it is the emit corresponding to compilerOptions
      * value otherwise
      */
     export type ProgramBuildInfoBundlePendingEmit = BuilderFileEmit | false;
     export interface ProgramBundleEmitBuildInfo {
         fileNames: readonly string[];
-        fileInfos: readonly string[];
+        fileInfos: readonly ProgramBundleEmitBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
         outSignature: string | undefined;
         outSignatureDtsMapDiffers: true | undefined;
@@ -911,19 +919,20 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
         const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
+        const fileNames: string[] = [];
+        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
         if (outFile(state.compilerOptions)) {
-            const fileNames: string[] = [];
-            const fileInfos: string[] = [];
-            state.program!.getRootFileNames().forEach(f => {
-                const sourceFile = state.program!.getSourceFile(f);
-                if (!sourceFile) return;
-                fileNames.push(relativeToBuildInfo(sourceFile.resolvedPath));
-                fileInfos.push(sourceFile.version);
+            const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBundleEmitBuildInfoFileInfo => {
+                // Ensure fileId
+                toFileId(key);
+                return value.impliedFormat ?
+                    { version: value.version, impliedFormat: value.impliedFormat, signature: undefined, affectsGlobalScope: undefined } :
+                    value.version;
             });
             const result: ProgramBundleEmitBuildInfo = {
                 fileNames,
                 fileInfos,
-                options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
+                options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
                 outSignature: state.outSignature,
                 outSignatureDtsMapDiffers: state.outSignatureDtsMapDiffers,
                 latestChangedDtsFile,
@@ -936,13 +945,11 @@ namespace ts {
             return result;
         }
 
-        const fileNames: string[] = [];
-        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
         let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
         let emitSignatureDtsMapDiffers: ProgramBuildInfoFileId[] | undefined;
-        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
+        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
             Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
@@ -1038,7 +1045,7 @@ namespace ts {
         const result: ProgramMultiFileEmitBuildInfo = {
             fileNames,
             fileInfos,
-            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsMultiFileEmitBuildInfo"),
+            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
             fileIdsList,
             referencedMap,
             exportedModulesMap,
@@ -1082,12 +1089,12 @@ namespace ts {
         /**
          * @param optionKey key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
          */
-        function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
+        function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions) {
             let result: CompilerOptions | undefined;
             const { optionsNameMap } = getOptionsNameMap();
             for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
                 const optionInfo = optionsNameMap.get(name.toLowerCase());
-                if (optionInfo?.[optionKey]) {
+                if (optionInfo?.affectsBuildInfo) {
                     (result ||= {})[name] = convertToReusableCompilerOptionValue(
                         optionInfo,
                         options[name] as CompilerOptionsValue,
@@ -1294,7 +1301,8 @@ namespace ts {
         function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
             let affected = getNextAffectedFile(state, cancellationToken, computeHash, getCanonicalFileName, host);
             const programEmitKind = getBuilderFileEmit(state.compilerOptions);
-            let emitKind = emitOnlyDtsFiles ? programEmitKind & BuilderFileEmit.AllDts : programEmitKind;
+            let emitKind = emitOnlyDtsFiles ?
+                programEmitKind & BuilderFileEmit.AllDts : programEmitKind;
             if (!affected) {
                 if (!outFile(state.compilerOptions)) {
                     const pendingAffectedFile = getNextAffectedFilePendingEmit(state, emitOnlyDtsFiles);
@@ -1325,7 +1333,6 @@ namespace ts {
                     affected = state.program!;
                 }
             }
-
             if (affected === state.program) {
                 state.programEmitPending = state.changedFilesSet.size ?
                     getPendingEmitKind(programEmitKind, emitKind) :
@@ -1333,7 +1340,6 @@ namespace ts {
                         getPendingEmitKind(state.programEmitPending, emitKind) :
                         undefined;
             }
-
             return toAffectedFileEmitResult(
                 state,
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
@@ -1565,7 +1571,7 @@ namespace ts {
         (state.affectedFilesPendingEmit ??= new Map()).set(affectedFilePendingEmit, existingKind | kind);
     }
 
-    export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
+    export function toBuilderStateFileInfoForMultiEmit(fileInfo: ProgramMultiFileEmitBuildInfoFileInfo): BuilderState.FileInfo {
         return isString(fileInfo) ?
             { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
             isString(fileInfo.signature) ?
@@ -1586,12 +1592,17 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
         let state: ReusableBuilderProgramState;
-        let filePaths: Path[] | undefined;
+        const filePaths = program.fileNames?.map(toPath);
         let filePathsSetList: Set<Path>[] | undefined;
         const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
+            const fileInfos = new Map<Path, BuilderState.FileInfo>();
+            program.fileInfos.forEach((fileInfo, index) => {
+                const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
+                fileInfos.set(path, isString(fileInfo) ? { version: fileInfo, signature: undefined, affectsGlobalScope: undefined, impliedFormat: undefined } : fileInfo);
+            });
             state = {
-                fileInfos: new Map(),
+                fileInfos,
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
                 latestChangedDtsFile,
                 outSignature: program.outSignature,
@@ -1600,13 +1611,12 @@ namespace ts {
             };
         }
         else {
-            filePaths = program.fileNames?.map(toPath);
             filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
             const fileInfos = new Map<Path, BuilderState.FileInfo>();
             const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, string>() : undefined;
             program.fileInfos.forEach((fileInfo, index) => {
                 const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
-                const stateFileInfo = toBuilderStateFileInfo(fileInfo);
+                const stateFileInfo = toBuilderStateFileInfoForMultiEmit(fileInfo);
                 fileInfos.set(path, stateFileInfo);
                 if (emitSignatures && stateFileInfo.signature) emitSignatures.set(path, stateFileInfo.signature);
             });
@@ -1665,7 +1675,7 @@ namespace ts {
         }
 
         function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths![fileId - 1];
+            return filePaths[fileId - 1];
         }
 
         function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
@@ -1695,7 +1705,7 @@ namespace ts {
         const fileInfos = new Map<Path, string>();
         program.fileInfos.forEach((fileInfo, index) => {
             const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
-            const version = isString(fileInfo) ? fileInfo : (fileInfo as ProgramBuildInfoBuilderStateFileInfo).version; // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
+            const version = isString(fileInfo) ? fileInfo : fileInfo.version;
             fileInfos.set(path, version);
         });
         return fileInfos;

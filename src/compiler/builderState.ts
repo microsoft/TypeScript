@@ -265,7 +265,8 @@ namespace ts {
         export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const options = newProgram.getCompilerOptions();
-            const referencedMap = options.module !== ModuleKind.None && !outFile(options) ?
+            const isOutFile = outFile(options);
+            const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
                 createManyToManyPathMap() : undefined;
             const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
             const useOldState = canReuseOldState(referencedMap, oldState);
@@ -299,7 +300,7 @@ namespace ts {
                 fileInfos.set(sourceFile.resolvedPath, {
                     version,
                     signature,
-                    affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined,
+                    affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
                     impliedFormat: sourceFile.impliedNodeFormat
                 });
             }

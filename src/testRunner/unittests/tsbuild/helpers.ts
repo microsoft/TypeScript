@@ -201,9 +201,9 @@ interface Symbol {
     type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
     type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
-    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & {
+    type ReadableProgramBuildInfoFileInfo<T> = Omit<BuilderState.FileInfo, "impliedFormat"> & {
         impliedFormat: string | undefined;
-        original: ProgramBuildInfoBuilderStateFileInfo | undefined;
+        original: T | undefined;
     };
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
@@ -211,7 +211,7 @@ interface Symbol {
         "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures" | "emitSignatureDtsMapDiffers"
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
-        fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
+        fileInfos: MapLike<ReadableProgramBuildInfoFileInfo<ProgramMultiFileEmitBuildInfoFileInfo>>;
         referencedMap: MapLike<string[]> | undefined;
         exportedModulesMap: MapLike<string[]> | undefined;
         semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
@@ -222,7 +222,7 @@ interface Symbol {
     };
     type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ProgramBuildInfoBundlePendingEmit];
     type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
-        fileInfos: MapLike<string>;
+        fileInfos: MapLike<string | ReadableProgramBuildInfoFileInfo<BuilderState.FileInfo>>;
         pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
     };
 
@@ -237,7 +237,11 @@ interface Symbol {
         let fileNamesList: string[][] | undefined;
         if (buildInfo.program && isProgramBundleEmitBuildInfo(buildInfo.program)) {
             const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
-            buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = fileInfo);
+            buildInfo.program?.fileInfos?.forEach((fileInfo, index) =>
+                fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = isString(fileInfo) ?
+                    fileInfo :
+                    toReadableFileInfo(fileInfo, identity)
+            );
             const pendingEmit = buildInfo.program.pendingEmit;
             program = {
                 ...buildInfo.program,
@@ -252,7 +256,7 @@ interface Symbol {
         }
         else if (buildInfo.program) {
             const fileInfos: ReadableProgramMultiFileEmitBuildInfo["fileInfos"] = {};
-            buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
+            buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo, toBuilderStateFileInfoForMultiEmit));
             fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
             const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? getBuilderFileEmit(buildInfo.program.options || {}) : undefined;
             program = buildInfo.program && {
@@ -311,10 +315,10 @@ interface Symbol {
             return fileNamesList![fileIdsListId - 1];
         }
 
-        function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableProgramBuildInfoFileInfo {
-            const info = toBuilderStateFileInfo(fileInfo);
+        function toReadableFileInfo<T>(original: T, toFileInfo: (fileInfo: T) => BuilderState.FileInfo): ReadableProgramBuildInfoFileInfo<T> {
+            const info = toFileInfo(original);
             return {
-                original: isString(fileInfo) ? undefined : fileInfo,
+                original: isString(original) ? undefined : original,
                 ...info,
                 impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
             };
@@ -563,7 +567,7 @@ interface Symbol {
     } {
         if (!text) return { buildInfo: text };
         const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-        let sanitizedFileInfos: MapLike<ReadableProgramBuildInfoFileInfo | string> | undefined;
+        let sanitizedFileInfos: MapLike<string | Omit<ReadableProgramBuildInfoFileInfo<ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<BuilderState.FileInfo>, "signature" | "original"> & { signature: undefined; original: undefined; }> | undefined;
         if (readableBuildInfo.program?.fileInfos) {
             sanitizedFileInfos = {};
             for (const id in readableBuildInfo.program.fileInfos) {

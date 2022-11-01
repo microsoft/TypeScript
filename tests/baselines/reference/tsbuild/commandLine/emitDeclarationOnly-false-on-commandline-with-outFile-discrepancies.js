@@ -25,6 +25,7 @@ CleanBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
       "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
@@ -33,6 +34,7 @@ CleanBuild:
     "options": {
       "composite": true,
       "emitDeclarationOnly": true,
+      "module": 2,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
@@ -73,6 +75,7 @@ IncrementalBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
       "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
@@ -81,6 +84,7 @@ IncrementalBuild:
     "options": {
       "composite": true,
       "emitDeclarationOnly": false,
+      "module": 2,
       "outFile": "./outFile.js"
     },
     "outSignature": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
@@ -183,6 +187,8 @@ CleanBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../project1/outfile.d.ts": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
       "./src/e.ts": "-13789510868-export const e = 10;",
       "./src/f.ts": "-4849089835-import { a } from \"a\"; export const f = a;",
       "./src/g.ts": "-18341999015-import { b } from \"b\"; export const g = b;"
@@ -190,6 +196,7 @@ CleanBuild:
     "options": {
       "composite": true,
       "emitDeclarationOnly": true,
+      "module": 2,
       "outFile": "./outFile.js"
     },
     "outSignature": "-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n",
@@ -229,6 +236,8 @@ IncrementalBuild:
   },
   "program": {
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../project1/outfile.d.ts": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n",
       "./src/e.ts": "-13789510868-export const e = 10;",
       "./src/f.ts": "-4849089835-import { a } from \"a\"; export const f = a;",
       "./src/g.ts": "-18341999015-import { b } from \"b\"; export const g = b;"
@@ -236,6 +245,7 @@ IncrementalBuild:
     "options": {
       "composite": true,
       "emitDeclarationOnly": false,
+      "module": 2,
       "outFile": "./outFile.js"
     },
     "outSignature": "-13732890156-declare module \"e\" {\r\n    export const e = 10;\r\n}\r\ndeclare module \"f\" {\r\n    export const f = 10;\r\n}\r\ndeclare module \"g\" {\r\n    export const g = 10;\r\n}\r\n",
