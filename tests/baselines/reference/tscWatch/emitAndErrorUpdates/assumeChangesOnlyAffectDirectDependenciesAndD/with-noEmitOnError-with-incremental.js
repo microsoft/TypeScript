@@ -115,6 +115,10 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -302,19 +306,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
@@ -453,19 +473,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
@@ -638,19 +674,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
