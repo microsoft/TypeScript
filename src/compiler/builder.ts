@@ -794,23 +794,23 @@ namespace ts {
         fileNames: readonly string[];
         fileInfos: readonly ProgramBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
-        fileIdsList?: readonly (readonly ProgramBuildInfoFileId[])[];
-        referencedMap?: ProgramBuildInfoReferencedMap;
-        exportedModulesMap?: ProgramBuildInfoReferencedMap;
-        semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
-        affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
-        changeFileSet?: readonly ProgramBuildInfoFileId[];
-        emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
+        fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
+        referencedMap: ProgramBuildInfoReferencedMap | undefined;
+        exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
+        semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
+        affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
+        changeFileSet: readonly ProgramBuildInfoFileId[] | undefined;
+        emitSignatures: readonly ProgramBuildInfoEmitSignature[] | undefined;
         // Because this is only output file in the program, we dont need fileId to deduplicate name
-        latestChangedDtsFile?: string;
+        latestChangedDtsFile?: string | undefined;
     }
 
     export interface ProgramBundleEmitBuildInfo {
         fileNames: readonly string[];
         fileInfos: readonly string[];
         options: CompilerOptions | undefined;
-        outSignature?: string;
-        latestChangedDtsFile?: string;
+        outSignature: string | undefined;
+        latestChangedDtsFile: string | undefined;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
