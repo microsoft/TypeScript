@@ -214,17 +214,32 @@ export type { TheNum } from './const.cjs';
     ],
     "fileInfos": {
       "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../const.cts": {
+        "original": {
+          "version": "-11202312776-export type TheNum = 42;",
+          "signature": "-13194036030-export type TheNum = 42;\n",
+          "impliedFormat": 1
+        },
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
         "impliedFormat": "commonjs"
       },
       "../index.ts": {
+        "original": {
+          "version": "-9668872159-export type { TheNum } from './const.cjs';",
+          "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
+          "impliedFormat": 99
+        },
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
         "impliedFormat": "esnext"
@@ -773,17 +788,32 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../const.cts": {
+        "original": {
+          "version": "-11202312776-export type TheNum = 42;",
+          "signature": "-13194036030-export type TheNum = 42;\n",
+          "impliedFormat": 1
+        },
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
         "impliedFormat": "commonjs"
       },
       "../index.cts": {
+        "original": {
+          "version": "-9668872159-export type { TheNum } from './const.cjs';",
+          "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
+          "impliedFormat": 1
+        },
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
         "impliedFormat": "commonjs"

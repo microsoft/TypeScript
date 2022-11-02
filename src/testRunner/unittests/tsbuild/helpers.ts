@@ -198,9 +198,12 @@ interface Symbol {
     }
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-    type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+    type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
-    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
+    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & {
+        impliedFormat: string | undefined;
+        original: ProgramBuildInfoBuilderStateFileInfo | undefined;
+    };
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
         "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
@@ -208,12 +211,12 @@ interface Symbol {
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
-        referencedMap?: MapLike<string[]>;
-        exportedModulesMap?: MapLike<string[]>;
-        semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
-        affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
-        changeFileSet?: readonly string[];
-        emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+        referencedMap: MapLike<string[]> | undefined;
+        exportedModulesMap: MapLike<string[]> | undefined;
+        semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
+        changeFileSet: readonly string[] | undefined;
+        emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
     };
     type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos"> & {
         fileInfos: MapLike<string>;
@@ -252,12 +255,7 @@ interface Symbol {
                         toFileName(d) :
                         [toFileName(d[0]), d[1]]
                 ),
-                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
-                    toFileName(fileId),
-                    emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
-                        emitKind === BuilderFileEmit.Full ? "Full" :
-                            Debug.assertNever(emitKind)
-                ]),
+                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(toReadableProgramBuilderInfoFilePendingEmit),
                 changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
                 emitSignatures: buildInfo.program.emitSignatures?.map(s =>
                     isNumber(s) ?
@@ -303,6 +301,7 @@ interface Symbol {
         function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableProgramBuildInfoFileInfo {
             const info = toBuilderStateFileInfo(fileInfo);
             return {
+                original: isString(fileInfo) ? undefined : fileInfo,
                 ...info,
                 impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
             };
@@ -315,6 +314,16 @@ interface Symbol {
                 result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
             }
             return result;
+        }
+
+        function toReadableProgramBuilderInfoFilePendingEmit(value: ProgramBuilderInfoFilePendingEmit): ReadableProgramBuilderInfoFilePendingEmit {
+            const emitKind = toBuilderFileEmit(value);
+            return [
+                isNumber(value) ? toFileName(value) : [toFileName(value[0])],
+                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
+                    emitKind === BuilderFileEmit.Full ? "Full" :
+                        Debug.assertNever(emitKind),
+            ];
         }
     }
 
@@ -438,8 +447,13 @@ interface Symbol {
                             );
                         }
                         let expectedIndex = 0;
-                        incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
-                            expectedIndex = findIndex((cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                        incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFileOrArray]) => {
+                            const actualFile = isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
+                            expectedIndex = findIndex(
+                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
+                                ([expectedFileOrArray]) => actualFile === (isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                                expectedIndex
+                            );
                             if (expectedIndex === -1) {
                                 addBaseline(
                                     `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
@@ -530,7 +544,7 @@ interface Symbol {
             for (const id in readableBuildInfo.program.fileInfos) {
                 if (hasProperty(readableBuildInfo.program.fileInfos, id)) {
                     const info = readableBuildInfo.program.fileInfos[id];
-                    sanitizedFileInfos[id] = isString(info) ? info : { ...info, signature: undefined };
+                    sanitizedFileInfos[id] = isString(info) ? info : { ...info, signature: undefined, original: undefined };
                 }
             }
         }

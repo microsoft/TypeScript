@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.9";
+    const versionMajorMinor = "5.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -2781,8 +2781,11 @@ declare namespace ts {
     }
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
+        /** Number of required or variadic elements */
         minLength: number;
+        /** Number of initial required or optional elements */
         fixedLength: number;
+        /** True if tuple has any rest or variadic elements */
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;

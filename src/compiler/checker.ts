@@ -2648,7 +2648,7 @@ namespace ts {
          */
         function isSameScopeDescendentOf(initial: Node, parent: Node | undefined, stopAt: Node): boolean {
             return !!parent && !!findAncestor(initial, n => n === parent
-                || (n === stopAt || isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n) ? "quit" : false));
+                || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || isAsyncFunction(n)) ? "quit" : false));
         }
 
         function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
@@ -9751,16 +9751,33 @@ namespace ts {
             }
         }
 
+        function isParameterOfContextSensitiveSignature(symbol: Symbol) {
+            let decl = symbol.valueDeclaration;
+            if (!decl) {
+                return false;
+            }
+            if (isBindingElement(decl)) {
+                decl = walkUpBindingElementsAndPatterns(decl);
+            }
+            if (isParameter(decl)) {
+                return isContextSensitiveFunctionOrObjectLiteralMethod(decl.parent);
+            }
+            return false;
+        }
+
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
                 // For a contextually typed parameter it is possible that a type has already
                 // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
-                // to preserve this type.
-                if (!links.type) {
+                // to preserve this type. In fact, we need to _prefer_ that type, but it won't
+                // be assigned until contextual typing is complete, so we need to defer in
+                // cases where contextual typing may take place.
+                if (!links.type && !isParameterOfContextSensitiveSignature(symbol)) {
                     links.type = type;
                 }
+                return type;
             }
             return links.type;
         }
@@ -20580,28 +20597,35 @@ namespace ts {
                         }
                         const sourceTypeArguments = getTypeArguments(source);
                         const targetTypeArguments = getTypeArguments(target);
-                        const startCount = Math.min(isTupleType(source) ? getStartElementCount(source.target, ElementFlags.NonRest) : 0, getStartElementCount(target.target, ElementFlags.NonRest));
-                        const endCount = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.NonRest) : 0, targetRestFlag ? getEndElementCount(target.target, ElementFlags.NonRest) : 0);
+                        const targetStartCount = getStartElementCount(target.target, ElementFlags.NonRest);
+                        const targetEndCount = getEndElementCount(target.target, ElementFlags.NonRest);
+                        const targetHasRestElement = target.target.hasRestElement;
                         let canExcludeDiscriminants = !!excludedProperties;
-                        for (let i = 0; i < targetArity; i++) {
-                            const sourceIndex = i < targetArity - endCount ? i : i + sourceArity - targetArity;
-                            const sourceFlags = isTupleType(source) && (i < startCount || i >= targetArity - endCount) ? source.target.elementFlags[sourceIndex] : ElementFlags.Rest;
-                            const targetFlags = target.target.elementFlags[i];
+                        for (let sourcePosition = 0; sourcePosition < sourceArity; sourcePosition++) {
+                            const sourceFlags = isTupleType(source) ? source.target.elementFlags[sourcePosition] : ElementFlags.Rest;
+                            const sourcePositionFromEnd = sourceArity - 1 - sourcePosition;
+
+                            const targetPosition = targetHasRestElement && sourcePosition >= targetStartCount
+                                ? targetArity - 1 - Math.min(sourcePositionFromEnd, targetEndCount)
+                                : sourcePosition;
+
+                            const targetFlags = target.target.elementFlags[targetPosition];
+
                             if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Source_provides_no_match_for_variadic_element_at_position_0_in_target, i);
+                                    reportError(Diagnostics.Source_provides_no_match_for_variadic_element_at_position_0_in_target, targetPosition);
                                 }
                                 return Ternary.False;
                             }
                             if (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Variadic_element_at_position_0_in_source_does_not_match_element_at_position_1_in_target, sourceIndex, i);
+                                    reportError(Diagnostics.Variadic_element_at_position_0_in_source_does_not_match_element_at_position_1_in_target, sourcePosition, targetPosition);
                                 }
                                 return Ternary.False;
                             }
                             if (targetFlags & ElementFlags.Required && !(sourceFlags & ElementFlags.Required)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Source_provides_no_match_for_required_element_at_position_0_in_target, i);
+                                    reportError(Diagnostics.Source_provides_no_match_for_required_element_at_position_0_in_target, targetPosition);
                                 }
                                 return Ternary.False;
                             }
@@ -20610,24 +20634,24 @@ namespace ts {
                                 if (sourceFlags & ElementFlags.Variable || targetFlags & ElementFlags.Variable) {
                                     canExcludeDiscriminants = false;
                                 }
-                                if (canExcludeDiscriminants && excludedProperties?.has(("" + i) as __String)) {
+                                if (canExcludeDiscriminants && excludedProperties?.has(("" + sourcePosition) as __String)) {
                                     continue;
                                 }
                             }
-                            const sourceType = !isTupleType(source) ? sourceTypeArguments[0] :
-                                i < startCount || i >= targetArity - endCount ? removeMissingType(sourceTypeArguments[sourceIndex], !!(sourceFlags & targetFlags & ElementFlags.Optional)) :
-                                getElementTypeOfSliceOfTupleType(source, startCount, endCount) || neverType;
-                            const targetType = targetTypeArguments[i];
+
+                            const sourceType = removeMissingType(sourceTypeArguments[sourcePosition], !!(sourceFlags & targetFlags & ElementFlags.Optional));
+                            const targetType = targetTypeArguments[targetPosition];
+
                             const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) :
                                 removeMissingType(targetType, !!(targetFlags & ElementFlags.Optional));
                             const related = isRelatedTo(sourceType, targetCheckType, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                             if (!related) {
                                 if (reportErrors && (targetArity > 1 || sourceArity > 1)) {
-                                    if (i < startCount || i >= targetArity - endCount || sourceArity - startCount - endCount === 1) {
-                                        reportIncompatibleError(Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target, sourceIndex, i);
+                                    if (targetHasRestElement && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
+                                        reportIncompatibleError(Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, targetStartCount, sourceArity - targetEndCount - 1, targetPosition);
                                     }
                                     else {
-                                        reportIncompatibleError(Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, startCount, sourceArity - endCount - 1, i);
+                                        reportIncompatibleError(Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target, sourcePosition, targetPosition);
                                     }
                                 }
                                 return Ternary.False;
@@ -24495,6 +24519,7 @@ namespace ts {
         }
 
         function getExplicitTypeOfSymbol(symbol: Symbol, diagnostic?: Diagnostic) {
+            symbol = resolveSymbol(symbol);
             if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule)) {
                 return getTypeOfSymbol(symbol);
             }
@@ -24534,7 +24559,7 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(node as Identifier));
-                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol, diagnostic);
+                        return getExplicitTypeOfSymbol(symbol, diagnostic);
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
                     case SyntaxKind.SuperKeyword:

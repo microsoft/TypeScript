@@ -643,12 +643,26 @@ namespace ts {
             return node;
         }
 
-        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
-            const binding = createForOfBindingStatement(factory, node.initializer, boundValue);
+        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, nonUserCode: Identifier) {
+            const value = factory.createTempVariable(hoistVariableDeclaration);
+            const iteratorValueExpression = factory.createAssignment(value, boundValue);
+            const iteratorValueStatement = factory.createExpressionStatement(iteratorValueExpression);
+            setSourceMapRange(iteratorValueStatement, node.expression);
+
+            const exitNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createFalse());
+            const exitNonUserCodeStatement = factory.createExpressionStatement(exitNonUserCodeExpression);
+            setSourceMapRange(exitNonUserCodeStatement, node.expression);
+
+            const enterNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createTrue());
+            const enterNonUserCodeStatement = factory.createExpressionStatement(enterNonUserCodeExpression);
+            setSourceMapRange(exitNonUserCodeStatement, node.expression);
+
+            const statements: Statement[] = [];
+            const binding = createForOfBindingStatement(factory, node.initializer, value);
+            statements.push(visitNode(binding, visitor, isStatement));
 
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;
-            const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
             const statement = visitIterationBody(node.statement, visitor, context);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
@@ -659,7 +673,7 @@ namespace ts {
                 statements.push(statement);
             }
 
-            return setEmitFlags(
+            const body = setEmitFlags(
                 setTextRange(
                     factory.createBlock(
                         setTextRange(factory.createNodeArray(statements), statementsLocation),
@@ -669,6 +683,18 @@ namespace ts {
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
+
+            return factory.createBlock([
+                iteratorValueStatement,
+                exitNonUserCodeStatement,
+                factory.createTryStatement(
+                    body,
+                    /*catchClause*/ undefined,
+                    factory.createBlock([
+                        enterNonUserCodeStatement
+                    ])
+                )
+            ]);
         }
 
         function createDownlevelAwait(expression: Expression) {
@@ -681,6 +707,8 @@ namespace ts {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+            const nonUserCode = factory.createTempVariable(/*recordTempVariable*/ undefined);
+            const done = factory.createTempVariable(hoistVariableDeclaration);
             const errorRecord = factory.createUniqueName("e");
             const catchVariable = factory.getGeneratedNameForNode(errorRecord);
             const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
@@ -704,6 +732,7 @@ namespace ts {
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 factory.createVariableDeclarationList([
+                                    factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
                                     setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
                                     factory.createVariableDeclaration(result)
                                 ]),
@@ -711,12 +740,13 @@ namespace ts {
                             ),
                             EmitFlags.NoHoisting
                         ),
-                        /*condition*/ factory.createComma(
+                        /*condition*/ factory.inlineExpressions([
                             factory.createAssignment(result, createDownlevelAwait(callNext)),
-                            factory.createLogicalNot(getDone)
-                        ),
+                            factory.createAssignment(done, getDone),
+                            factory.createLogicalNot(done)
+                        ]),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, getValue)
+                        /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
                     ),
                     /*location*/ node
                 ),
@@ -754,8 +784,8 @@ namespace ts {
                                 factory.createIfStatement(
                                     factory.createLogicalAnd(
                                         factory.createLogicalAnd(
-                                            result,
-                                            factory.createLogicalNot(getDone)
+                                            factory.createLogicalNot(nonUserCode),
+                                            factory.createLogicalNot(done),
                                         ),
                                         factory.createAssignment(
                                             returnMethod,

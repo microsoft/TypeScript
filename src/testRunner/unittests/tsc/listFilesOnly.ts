@@ -19,5 +19,26 @@ namespace ts {
             }),
             commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
         });
+
+        verifyTscWithEdits({
+            scenario: "listFilesOnly",
+            subScenario: "combined with incremental",
+            fs: () => loadProjectFromFiles({
+                "/src/test.ts": `export const x = 1;`,
+                "/src/tsconfig.json": "{}"
+            }),
+            commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
+            edits: [
+                {
+                    ...noChangeRun,
+                    commandLineArgs: ["-p", "/src", "--incremental"],
+                },
+                noChangeRun,
+                {
+                    ...noChangeRun,
+                    commandLineArgs: ["-p", "/src", "--incremental"],
+                }
+            ]
+        });
     });
 }
