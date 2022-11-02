@@ -2400,7 +2400,9 @@ namespace ts {
             while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
             return text.slice(pos);
         }
-        return text;
+        return text.indexOf("://") === 0 ?
+            text.replace("|", " ") :
+            text;
     }
 
     function findLinkNameEnd(text: string) {
