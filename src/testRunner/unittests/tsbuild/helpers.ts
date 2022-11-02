@@ -200,7 +200,10 @@ interface Symbol {
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
-    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
+    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & {
+        impliedFormat: string | undefined;
+        original: ProgramBuildInfoBuilderStateFileInfo | undefined;
+    };
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
         "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
@@ -208,12 +211,12 @@ interface Symbol {
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
-        referencedMap?: MapLike<string[]>;
-        exportedModulesMap?: MapLike<string[]>;
-        semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
-        affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
-        changeFileSet?: readonly string[];
-        emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+        referencedMap: MapLike<string[]> | undefined;
+        exportedModulesMap: MapLike<string[]> | undefined;
+        semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
+        changeFileSet: readonly string[] | undefined;
+        emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
     };
     type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos"> & {
         fileInfos: MapLike<string>;
@@ -298,6 +301,7 @@ interface Symbol {
         function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableProgramBuildInfoFileInfo {
             const info = toBuilderStateFileInfo(fileInfo);
             return {
+                original: isString(fileInfo) ? undefined : fileInfo,
                 ...info,
                 impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
             };
@@ -540,7 +544,7 @@ interface Symbol {
             for (const id in readableBuildInfo.program.fileInfos) {
                 if (hasProperty(readableBuildInfo.program.fileInfos, id)) {
                     const info = readableBuildInfo.program.fileInfos[id];
-                    sanitizedFileInfos[id] = isString(info) ? info : { ...info, signature: undefined };
+                    sanitizedFileInfos[id] = isString(info) ? info : { ...info, signature: undefined, original: undefined };
                 }
             }
         }
