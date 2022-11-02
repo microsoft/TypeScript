@@ -424,7 +424,7 @@ namespace ts {
             const seenEmittedFiles = (state.seenEmittedFiles || (state.seenEmittedFiles = new Map()));
             for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
                 const affectedFile = Debug.checkDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
-                if (affectedFile) {
+                if (affectedFile && sourceFileMayBeEmitted(affectedFile, state.program!)) {
                     const seenKind = seenEmittedFiles.get(affectedFile.resolvedPath);
                     const emitKind = Debug.checkDefined(Debug.checkDefined(state.affectedFilesPendingEmitKind).get(affectedFile.resolvedPath));
                     if (seenKind === undefined || seenKind < emitKind) {
@@ -923,6 +923,8 @@ namespace ts {
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
+                    const file = state.program!.getSourceFileByPath(path)!;
+                    if (!sourceFileMayBeEmitted(file, state.program!)) continue;
                     const fileId = toFileId(path), emitKind = state.affectedFilesPendingEmitKind!.get(path)!;
                     (affectedFilesPendingEmit ||= []).push(
                         emitKind === BuilderFileEmit.Full ? fileId : [fileId]
