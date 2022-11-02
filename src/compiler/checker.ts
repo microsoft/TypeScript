@@ -2648,7 +2648,7 @@ namespace ts {
          */
         function isSameScopeDescendentOf(initial: Node, parent: Node | undefined, stopAt: Node): boolean {
             return !!parent && !!findAncestor(initial, n => n === parent
-                || (n === stopAt || isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n) ? "quit" : false));
+                || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || isAsyncFunction(n)) ? "quit" : false));
         }
 
         function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
