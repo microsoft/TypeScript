@@ -4469,7 +4469,7 @@ namespace ts {
         /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
+        /*@internal*/ getBuildInfo?(bundle: BundleBuildInfo | undefined): BuildInfo;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /**
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
@@ -7533,7 +7533,7 @@ namespace ts {
         getPrependNodes(): readonly (InputFiles | UnparsedSource)[];
 
         writeFile: WriteFileCallback;
-        getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getBuildInfo(bundle: BundleBuildInfo | undefined): BuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
         createHash?(data: string): string;

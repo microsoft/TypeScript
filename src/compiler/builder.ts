@@ -69,6 +69,7 @@ namespace ts {
          * Name of the file whose dts was the latest to change
          */
         latestChangedDtsFile: string | undefined;
+        bundle?: BundleBuildInfo;
     }
 
     export const enum BuilderFileEmit {
@@ -312,9 +313,10 @@ namespace ts {
                 }
             }
         }
-        // If this program has prepend references, always emit since we wont know if files on disk are correct unless we check file hash for correctness
-        if (outFilePath && !state.changedFilesSet.size && some(newProgram.getProjectReferences(), ref => !!ref.prepend)) {
-            state.programEmitPending = getBuilderFileEmit(compilerOptions);
+        if (outFilePath && !state.changedFilesSet.size) {
+            if (useOldState) state.bundle = oldState!.bundle;
+            // If this program has prepend references, always emit since we wont know if files on disk are correct unless we check file hash for correctness
+            if (some(newProgram.getProjectReferences(), ref => !!ref.prepend)) state.programEmitPending = getBuilderFileEmit(compilerOptions);
         }
         return state;
     }
@@ -914,7 +916,7 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
+    function getBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName, bundle: BundleBuildInfo | undefined): BuildInfo {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
@@ -929,7 +931,7 @@ namespace ts {
                     { version: value.version, impliedFormat: value.impliedFormat, signature: undefined, affectsGlobalScope: undefined } :
                     value.version;
             });
-            const result: ProgramBundleEmitBuildInfo = {
+            const program: ProgramBundleEmitBuildInfo = {
                 fileNames,
                 fileInfos,
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
@@ -942,7 +944,14 @@ namespace ts {
                         false :
                         state.programEmitPending,
             };
-            return result;
+            const { js, dts, commonSourceDirectory, sourceFiles } = bundle!;
+            state.bundle = bundle = {
+                commonSourceDirectory,
+                sourceFiles,
+                js: js || (!state.compilerOptions.emitDeclarationOnly ? state.bundle?.js : undefined),
+                dts: dts || (getEmitDeclarations(state.compilerOptions) ? state.bundle?.dts : undefined),
+            };
+            return createBuildInfo(program, bundle);
         }
 
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
@@ -1042,7 +1051,7 @@ namespace ts {
             }
         }
 
-        const result: ProgramMultiFileEmitBuildInfo = {
+        const program: ProgramMultiFileEmitBuildInfo = {
             fileNames,
             fileInfos,
             options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
@@ -1056,7 +1065,7 @@ namespace ts {
             emitSignatureDtsMapDiffers,
             latestChangedDtsFile,
         };
-        return result;
+        return createBuildInfo(program, bundle);
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
             return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
@@ -1252,7 +1261,7 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
+        newProgram.getBuildInfo = bundle => getBuildInfo(state, getCanonicalFileName, bundle);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1587,7 +1596,8 @@ namespace ts {
         return !value ? getBuilderFileEmit(options || {}) : value;
     }
 
-    export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+    export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+        const program = buildInfo.program!;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
@@ -1608,6 +1618,7 @@ namespace ts {
                 outSignature: program.outSignature,
                 outSignatureDtsMapDiffers: program.outSignatureDtsMapDiffers,
                 programEmitPending: program.pendingEmit === undefined ? undefined : toProgramEmitPending(program.pendingEmit, program.options),
+                bundle: buildInfo.bundle,
             };
         }
         else {

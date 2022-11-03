@@ -358,13 +358,11 @@ namespace ts {
         function emitBuildInfo(bundle: BundleBuildInfo | undefined, buildInfoPath: string | undefined) {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
-            const program = host.getProgramBuildInfo();
             if (host.isEmitBlocked(buildInfoPath)) {
                 emitSkipped = true;
                 return;
             }
-            const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            const buildInfo: BuildInfo = { bundle, program, version };
+            const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
             // Pass buildinfo as additional data to avoid having to reparse
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
@@ -647,6 +645,12 @@ namespace ts {
     }
 
     /*@internal*/
+    export function createBuildInfo(program: ProgramBuildInfo | undefined, bundle: BundleBuildInfo | undefined): BuildInfo {
+        const version = ts.version; // Extracted into a const so the form is stable between namespace and module
+        return { bundle, program, version };
+    }
+
+    /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
         return JSON.stringify(buildInfo);
     }
@@ -825,21 +829,7 @@ namespace ts {
                         if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        const newBuildInfo = data!.buildInfo!;
-                        newBuildInfo.program = buildInfo!.program;
-                        if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
-                            // Update the output signature
-                            (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
-                        }
-                        // Update sourceFileInfo
-                        const { js, dts, sourceFiles } = buildInfo!.bundle!;
-                        newBuildInfo.bundle!.js!.sources = js!.sources;
-                        if (dts) {
-                            newBuildInfo.bundle!.dts!.sources = dts.sources;
-                        }
-                        newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, data: { buildInfo: newBuildInfo } });
-                        return;
+                        break;
                     case declarationFilePath:
                         if (declarationText === text) return;
                         changedDtsText = text;
@@ -851,13 +841,27 @@ namespace ts {
                     default:
                         Debug.fail(`Unexpected path: ${name}`);
                 }
-                outputFiles.push({ name, text, writeByteOrderMark });
+                outputFiles.push({ name, text, writeByteOrderMark, data });
             },
             isEmitBlocked: returnFalse,
             readFile: f => host.readFile(f),
             fileExists: f => host.fileExists(f),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getProgramBuildInfo: returnUndefined,
+            getBuildInfo: bundle => {
+                const program = buildInfo!.program;
+                if (program && changedDtsText !== undefined && config.options.composite) {
+                    // Update the output signature
+                    (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
+                }
+                // Update sourceFileInfo
+                const { js, dts, sourceFiles } = buildInfo!.bundle!;
+                bundle!.js!.sources = js!.sources;
+                if (dts) {
+                    bundle!.dts!.sources = dts.sources;
+                }
+                bundle!.sourceFiles = sourceFiles;
+                return createBuildInfo(program, bundle);
+            },
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,

@@ -1948,7 +1948,7 @@ namespace ts {
                     return host.fileExists(f);
                 },
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
+                getBuildInfo: bundle => program.getBuildInfo?.(bundle),
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
