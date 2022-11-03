@@ -264,7 +264,9 @@ namespace ts {
          */
         export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
-            const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
+            const options = newProgram.getCompilerOptions();
+            const referencedMap = options.module !== ModuleKind.None && !outFile(options) ?
+                createManyToManyPathMap() : undefined;
             const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
             const useOldState = canReuseOldState(referencedMap, oldState);
 
