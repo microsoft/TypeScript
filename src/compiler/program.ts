@@ -2038,9 +2038,9 @@ namespace ts {
             return typeChecker || (typeChecker = createTypeChecker(program));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             tracing?.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
-            const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
+            const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnly, transformers, forceDtsEmit));
             tracing?.pop();
             return result;
         }
@@ -2049,7 +2049,7 @@ namespace ts {
             return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             if (!forceDtsEmit) {
                 const result = handleNoEmitOptions(program, sourceFile, writeFileCallback, cancellationToken);
                 if (result) return result;
@@ -2071,8 +2071,8 @@ namespace ts {
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
-                getTransformers(options, customTransformers, emitOnlyDtsFiles),
-                emitOnlyDtsFiles,
+                getTransformers(options, customTransformers, emitOnly),
+                emitOnly,
                 /*onlyBuildInfo*/ false,
                 forceDtsEmit
             );

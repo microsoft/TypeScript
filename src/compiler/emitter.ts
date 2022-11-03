@@ -278,7 +278,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -331,7 +331,7 @@ namespace ts {
             tracing?.pop();
 
             if (!emitSkipped && emittedFilesList) {
-                if (!emitOnlyDtsFiles) {
+                if (!emitOnly) {
                     if (jsFilePath) {
                         emittedFilesList.push(jsFilePath);
                     }
@@ -342,11 +342,13 @@ namespace ts {
                         emittedFilesList.push(buildInfoPath);
                     }
                 }
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-                if (declarationMapPath) {
-                    emittedFilesList.push(declarationMapPath);
+                if (emitOnly !== EmitOnly.Js) {
+                    if (declarationFilePath) {
+                        emittedFilesList.push(declarationFilePath);
+                    }
+                    if (declarationMapPath) {
+                        emittedFilesList.push(declarationMapPath);
+                    }
                 }
             }
 
@@ -372,7 +374,7 @@ namespace ts {
             jsFilePath: string | undefined,
             sourceMapFilePath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle || emitOnlyDtsFiles || !jsFilePath) {
+            if (!sourceFileOrBundle || emitOnly || !jsFilePath) {
                 return;
             }
 
@@ -422,16 +424,16 @@ namespace ts {
             declarationFilePath: string | undefined,
             declarationMapPath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle) return;
+            if (!sourceFileOrBundle || emitOnly === EmitOnly.Js) return;
             if (!declarationFilePath) {
-                if (emitOnlyDtsFiles || compilerOptions.emitDeclarationOnly) emitSkipped = true;
+                if (emitOnly || compilerOptions.emitDeclarationOnly) emitSkipped = true;
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
             const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
-            if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
+            if (emitOnly && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
                 filesForEmit.forEach(collectLinkedAliases);

@@ -1508,7 +1508,6 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 
-//// [/src/project/a.d.ts.map] file written with same contents
 //// [/src/project/a.js]
 "use strict";
 exports.__esModule = true;
@@ -1518,7 +1517,6 @@ var aLocal = 100;
 //# sourceMappingURL=a.js.map
 
 //// [/src/project/a.js.map] file written with same contents
-//// [/src/project/b.d.ts.map] file written with same contents
 //// [/src/project/b.js]
 "use strict";
 exports.__esModule = true;
@@ -1528,7 +1526,6 @@ var bLocal = 10;
 //# sourceMappingURL=b.js.map
 
 //// [/src/project/b.js.map] file written with same contents
-//// [/src/project/c.d.ts.map] file written with same contents
 //// [/src/project/c.js]
 "use strict";
 exports.__esModule = true;
@@ -1538,7 +1535,6 @@ exports.c = a_1.a;
 //# sourceMappingURL=c.js.map
 
 //// [/src/project/c.js.map] file written with same contents
-//// [/src/project/d.d.ts.map] file written with same contents
 //// [/src/project/d.js]
 "use strict";
 exports.__esModule = true;

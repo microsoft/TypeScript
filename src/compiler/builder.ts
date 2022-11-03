@@ -1349,6 +1349,13 @@ namespace ts {
                         getPendingEmitKind(state.programEmitPending, emitKind) :
                         undefined;
             }
+            let emitOnly: EmitOnly | undefined;
+            if (emitKind & BuilderFileEmit.AllJs) {
+                emitOnly = EmitOnly.Js;
+            }
+            if (emitKind & BuilderFileEmit.AllDts) {
+                emitOnly = emitOnly === undefined ? EmitOnly.Dts : undefined;
+            }
             return toAffectedFileEmitResult(
                 state,
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
@@ -1359,7 +1366,7 @@ namespace ts {
                         getWriteFileCallback(writeFile, customTransformers) :
                         writeFile || maybeBind(host, host.writeFile),
                     cancellationToken,
-                    emitOnlyDtsFiles || !(emitKind & BuilderFileEmit.AllJs),
+                    emitOnly,
                     customTransformers
                 ),
                 affected,

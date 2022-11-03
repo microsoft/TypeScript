@@ -1334,7 +1334,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/src/outFile.d.ts.map] file written with same contents
 //// [/src/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
