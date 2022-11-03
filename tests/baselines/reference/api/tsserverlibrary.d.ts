@@ -2063,7 +2063,7 @@ declare namespace ts {
     }
     export type FlowType = Type | IncompleteType;
     export interface IncompleteType {
-        flags: TypeFlags;
+        flags: TypeFlags | 0;
         type: Type;
     }
     export interface AmdDependency {
