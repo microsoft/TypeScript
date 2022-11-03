@@ -2256,7 +2256,7 @@
         "category": "Error",
         "code": 2473
     },
-    "const enum member initializers can only contain literal values and other computed enum values.": {
+    "const enum member initializers must be constant expressions.": {
         "category": "Error",
         "code": 2474
     },

@@ -41018,7 +41018,7 @@ namespace ts {
                 }
             }
             else if (isConstEnum) {
-                error(initializer, Diagnostics.const_enum_member_initializers_can_only_contain_literal_values_and_other_computed_enum_values);
+                error(initializer, Diagnostics.const_enum_member_initializers_must_be_constant_expressions);
             }
             else if (member.parent.flags & NodeFlags.Ambient) {
                 error(initializer, Diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression);
@@ -41201,6 +41201,9 @@ namespace ts {
         function checkEnumMember(node: EnumMember) {
             if (isPrivateIdentifier(node.name)) {
                 error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
+            }
+            if (node.initializer) {
+                checkExpression(node.initializer);
             }
         }
 
