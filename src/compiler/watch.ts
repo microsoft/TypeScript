@@ -660,6 +660,7 @@ namespace ts {
     }
 
     export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+        // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
         if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
             let lineEnd = text.length;
             let lineStart = lineEnd;

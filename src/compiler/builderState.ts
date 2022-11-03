@@ -300,6 +300,7 @@ namespace ts {
                 fileInfos.set(sourceFile.resolvedPath, {
                     version,
                     signature,
+                    // No need to calculate affectsGlobalScope with --out since its not used at all
                     affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
                     impliedFormat: sourceFile.impliedNodeFormat
                 });

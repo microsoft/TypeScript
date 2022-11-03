@@ -200,7 +200,7 @@ interface Symbol {
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
     type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
-    type ReadableProgramBuildInfoEmitSignature = string | [string, string];
+    type ReadableProgramBuildInfoEmitSignature = string | [string, EmitSignature | []];
     type ReadableProgramBuildInfoFileInfo<T> = Omit<BuilderState.FileInfo, "impliedFormat"> & {
         impliedFormat: string | undefined;
         original: T | undefined;
@@ -208,7 +208,7 @@ interface Symbol {
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
         "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures" | "emitSignatureDtsMapDiffers"
+        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<ReadableProgramBuildInfoFileInfo<ProgramMultiFileEmitBuildInfoFileInfo>>;
@@ -218,7 +218,6 @@ interface Symbol {
         affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
         changeFileSet: readonly string[] | undefined;
         emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
-        emitSignatureDtsMapDiffers: readonly string[] | undefined;
     };
     type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ProgramBuildInfoBundlePendingEmit];
     type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
@@ -278,7 +277,6 @@ interface Symbol {
                         toFileName(s) :
                         [toFileName(s[0]), s[1]]
                 ),
-                emitSignatureDtsMapDiffers: buildInfo.program.emitSignatureDtsMapDiffers?.map(toFileName),
                 latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
             };
         }

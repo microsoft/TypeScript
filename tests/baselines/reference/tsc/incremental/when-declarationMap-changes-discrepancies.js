@@ -95,12 +95,14 @@ IncrementalBuild:
     "emitSignatures": [
       [
         "./a.ts",
-        "-3198459068-declare const x = 10;\r\n"
+        [
+          "-3198459068-declare const x = 10;\r\n"
+        ]
+      ],
+      [
+        "./b.ts",
+        []
       ]
-    ],
-    "emitSignatureDtsMapDiffers": [
-      "./a.ts",
-      "./b.ts"
     ],
     "latestChangedDtsFile": "FakeFileName"
   },
