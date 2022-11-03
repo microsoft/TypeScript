@@ -752,15 +752,20 @@ namespace ts {
             const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
             updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
             const onWatchStatusChange = buildHost.onWatchStatusChange;
+            let reportBuildStatistics = false;
             buildHost.onWatchStatusChange = (d, newLine, options, errorCount) => {
                 onWatchStatusChange?.(d, newLine, options, errorCount);
-                if (d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
-                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code) {
+                if (reportBuildStatistics && (
+                    d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
+                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code
+                )) {
                     reportSolutionBuilderTimes(builder, solutionPerformance);
                 }
             };
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
+            reportSolutionBuilderTimes(builder, solutionPerformance);
+            reportBuildStatistics = true;
             return builder;
         }
 
@@ -1001,6 +1006,7 @@ namespace ts {
         });
         performance.disable();
         performance.enable();
+        solutionPerformance.clear();
 
         reportAllStatistics(sys, statistics);
 
