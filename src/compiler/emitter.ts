@@ -780,15 +780,15 @@ namespace ts {
         if (declarationMapPath && computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
-        const ownPrependInput = createInputFiles(
+        const ownPrependInput = createInputFilesWithFileTexts(
+            jsFilePath,
             jsFileText,
-            declarationText!,
             sourceMapFilePath,
             sourceMapText,
+            declarationFilePath,
+            declarationText!,
             declarationMapPath,
             declarationMapText,
-            jsFilePath,
-            declarationFilePath,
             buildInfoPath,
             buildInfo,
             /*onlyOwnText*/ true
