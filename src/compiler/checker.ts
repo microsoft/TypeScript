@@ -33323,7 +33323,7 @@ namespace ts {
             // 5. Apply each decorator for the class, in reverse order (`E1`, `E2`).
             //
             // As a result, "current" types at each decorator application are as follows:
-            // - For `A1`, the "current" types of the class and method their "original" types.
+            // - For `A1`, the "current" types of the class and method are their "original" types.
             // - For `A2`, the "current type" of the method is the "output type" of `A1`, and the "current type" of the
             //   class is the type of `SomeClass` where `f` is the "output type" of `A1`. This becomes the "final type"
             //   of `f`.

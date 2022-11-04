@@ -4506,7 +4506,6 @@ namespace ts {
 
             // Emit each child.
             let previousSibling: Node | undefined;
-            let previousSiblingEmitFlags: EmitFlags | undefined;
             let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
             let shouldDecreaseIndentAfterEmit = false;
             for (let i = 0; i < count; i++) {
@@ -4526,7 +4525,7 @@ namespace ts {
                     //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                     //          ,
                     if (format & ListFormat.DelimitersMask && previousSibling.end !== (parentNode ? parentNode.end : -1)) {
-                        previousSiblingEmitFlags = getEmitFlags(previousSibling);
+                        const previousSiblingEmitFlags = getEmitFlags(previousSibling);
                         if (!(previousSiblingEmitFlags & EmitFlags.NoTrailingComments)) {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
@@ -4572,11 +4571,10 @@ namespace ts {
                 }
 
                 previousSibling = child;
-                previousSiblingEmitFlags = undefined;
             }
 
             // Write a trailing comma, if requested.
-            const emitFlags = previousSibling ? previousSiblingEmitFlags ?? getEmitFlags(previousSibling) : 0;
+            const emitFlags = previousSibling ? getEmitFlags(previousSibling) : 0;
             const skipTrailingComments = commentsDisabled || !!(emitFlags & EmitFlags.NoTrailingComments);
             const emitTrailingComma = hasTrailingComma && (format & ListFormat.AllowTrailingComma) && (format & ListFormat.CommaDelimited);
             if (emitTrailingComma) {

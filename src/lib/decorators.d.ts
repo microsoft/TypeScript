@@ -1,3 +1,6 @@
+/**
+ * The decorator context types provided to class member decorators.
+ */
 type ClassMemberDecoratorContext =
     | ClassMethodDecoratorContext
     | ClassGetterDecoratorContext
@@ -6,6 +9,9 @@ type ClassMemberDecoratorContext =
     | ClassAccessorDecoratorContext
     ;
 
+/**
+ * The decorator context types provided to any decorator.
+ */
 type DecoratorContext =
     | ClassDecoratorContext
     | ClassMemberDecoratorContext
@@ -14,8 +20,13 @@ type DecoratorContext =
 /**
  * Context provided to a class decorator.
  */
-interface ClassDecoratorContext<Class extends abstract new (...args: any) => any = abstract new (...args: any) => any> {
+interface ClassDecoratorContext<
+    Class extends abstract new (...args: any) => any = abstract new (...args: any) => any
+> {
+    /** The kind of element that was decorated. */
     readonly kind: "class";
+
+    /** The name of the decorated class. */
     readonly name: string | undefined;
 
     /**
@@ -38,27 +49,39 @@ interface ClassDecoratorContext<Class extends abstract new (...args: any) => any
     addInitializer(initializer: (this: Class) => void): void;
 }
 
-// #region type ClassDecoratorFunction
-
 /**
- * Describes a function that can be used to decorate a class.
+ * Describes the call signature of a generic function that can be used to decorate a class.
+ * @param target The decorated class constructor.
+ * @param context Additional context about the decorated class.
+ * @returns A replacement class constructor, or `undefined`.
  */
-type ClassDecoratorFunction = <
-    In extends abstract new (...args: any[]) => any,
-    Out extends abstract new (...args: any[]) => any = In,
-    Class extends abstract new (...args: any[]) => any = Out
->(target: In, context: ClassDecoratorContext<Class>) => Out | void;
-
-// #endregion
+type ClassDecoratorFunction<Overrides extends { name?: string | undefined } = {}> = <
+    Class extends abstract new (...args: any) => any,
+>(
+    target: Class,
+    context: ClassDecoratorContext<Class> & Overrides
+) => Class | void;
 
 /**
  * Context provided to a class method decorator.
  */
-interface ClassMethodDecoratorContext<This = unknown, Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any> {
+interface ClassMethodDecoratorContext<
+    This = unknown,
+    Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any,
+> {
+    /** The kind of class member that was decorated. */
     readonly kind: "method";
+
+    /** The name of the decorated class member. */
     readonly name: string | symbol;
+
+    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
     readonly static: boolean;
+
+    /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
+
+    /** An object that can be used to access the current value of the class member at runtime. */
     readonly access: {
         /**
          * Gets the current value of the method from the provided receiver.
@@ -96,26 +119,37 @@ interface ClassMethodDecoratorContext<This = unknown, Value extends (this: This,
     addInitializer(initializer: (this: This) => void): void;
 }
 
-// #region type ClassMethodDecoratorFunction
 /**
- * Describes a function that can be used to decorate a class method.
+ * Describes a generic function that can be used to decorate a class method.
+ * @param target The function for the decorated class method.
+ * @param context Additional context about the decorated class method.
+ * @returns A replacement function, or `undefined`.
  */
-type ClassMethodDecoratorFunction<Traits extends { name?: string | symbol, static?: boolean, private?: boolean } = {}> = <
+type ClassMethodDecoratorFunction<Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {}> = <
     This,
-    In extends (this: This, ...args: any[]) => any,
-    Out extends (this: This, ...args: any[]) => any = In,
-    Value extends (this: This, ...args: any[]) => any = Out
->(target: In, context: ClassMethodDecoratorContext<This, Value> & Readonly<Pick<Traits, "name" | "static" | "private">>) => Out | void;
-// #endregion
+    Value extends (this: This, ...args: any) => any
+>(target: Value, context: ClassMethodDecoratorContext<This, Value> & Overrides) => Value | void;
 
 /**
  * Context provided to a class `get` method decorator.
  */
-interface ClassGetterDecoratorContext<This = unknown, Value = unknown> {
+interface ClassGetterDecoratorContext<
+    This = unknown,
+    Value = unknown,
+> {
+    /** The kind of class member that was decorated. */
     readonly kind: "getter";
+
+    /** The name of the decorated class member. */
     readonly name: string | symbol;
+
+    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
     readonly static: boolean;
+
+    /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
+
+    /** An object that can be used to access the current value of the class member at runtime. */
     readonly access: {
         /**
          * Invokes the getter on the provided receiver.
@@ -134,26 +168,40 @@ interface ClassGetterDecoratorContext<This = unknown, Value = unknown> {
     addInitializer(initializer: (this: This) => void): void;
 }
 
-// #region type ClassGetterDecoratorFunction
 /**
- * Describes a function that can be used to decorate a class `get` method.
+ * Describes a generic function that can be used to decorate a class `get` method.
+ * @param target The getter function for the decorated class `get` method.
+ * @param context Additional context about the decorated class `get` method.
+ * @returns A replacement getter function, or `undefined`.
  */
-type ClassGetterDecoratorFunction = <
+type ClassGetterDecoratorFunction<Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {}> = <
     This,
-    In,
-    Out = In,
-    Value = Out,
->(target: (this: This) => In, context: ClassGetterDecoratorContext<This, Value>) => ((this: This) => Out) | void;
-// #endregion
+    Value,
+>(
+    target: (this: This) => Value,
+    context: ClassGetterDecoratorContext<This, Value> & Overrides
+) => ((this: This) => Value) | void;
 
 /**
  * Context provided to a class `set` method decorator.
  */
-interface ClassSetterDecoratorContext<This = unknown, Value = unknown> {
+interface ClassSetterDecoratorContext<
+    This = unknown,
+    Value = unknown,
+> {
+    /** The kind of class member that was decorated. */
     readonly kind: "setter";
+
+    /** The name of the decorated class member. */
     readonly name: string | symbol;
+
+    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
     readonly static: boolean;
+
+    /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
+
+    /** An object that can be used to access the current value of the class member at runtime. */
     readonly access: {
         /**
          * Invokes the setter on the provided receiver.
@@ -172,26 +220,40 @@ interface ClassSetterDecoratorContext<This = unknown, Value = unknown> {
     addInitializer(initializer: (this: This) => void): void;
 }
 
-// #region type ClassSetterDecoratorFunction
 /**
- * Describes a function that can be used to decorate a class `set` method.
+ * Describes a generic function that can be used to decorate a class `set` method.
+ * @param target The setter function for the decorated class `set` method.
+ * @param context Additional context about the decorated class `set` method.
+ * @returns A replacement setter function, or `undefined`.
  */
-type ClassSetterDecoratorFunction = <
+type ClassSetterDecoratorFunction<Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {}> = <
     This,
-    In,
-    Out = In,
-    Value = Out
->(target: (this: This, value: In) => void, context: ClassSetterDecoratorContext<This, Value>) => ((this: This, value: Out) => void) | void;
-// #endregion
+    Value,
+>(
+    target: (this: This, value: Value) => void,
+    context: ClassSetterDecoratorContext<This, Value> & Overrides
+) => ((this: This, value: Value) => void) | void;
 
 /**
  * Context provided to a class `accessor` field decorator.
  */
-interface ClassAccessorDecoratorContext<This = unknown, Value = unknown> {
+interface ClassAccessorDecoratorContext<
+    This = unknown,
+    Value = unknown,
+> {
+    /** The kind of class member that was decorated. */
     readonly kind: "accessor";
+
+    /** The name of the decorated class member. */
     readonly name: string | symbol;
+
+    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
     readonly static: boolean;
+
+    /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
+
+    /** An object that can be used to access the current value of the class member at runtime. */
     readonly access: {
         /**
          * Invokes the getter on the provided receiver.
@@ -218,40 +280,83 @@ interface ClassAccessorDecoratorContext<This = unknown, Value = unknown> {
     addInitializer(initializer: (this: This) => void): void;
 }
 
-interface ClassAccessorDecoratorTarget<This, In> {
-    get(this: This): In;
-    set(this: This, value: In): void;
-}
-
-interface ClassAccessorDecoratorResult<This, In, Out> {
-    get?(this: This): Out;
-    set?(this: This, value: Out): void;
-    init?(this: This, value: In): Out
-}
-
-// #region type ClassAccessorDecoratorFunction
 /**
- * Describes a function that can be used to decorate a class `accessor` field.
+ * Describes the target provided to class `accessor` field decorators.
  */
-type ClassAccessorDecoratorFunction = <
+interface ClassAccessorDecoratorTarget<This, Value> {
+    /**
+     * Invokes the getter that was defined prior to decorator application.
+     *
+     * @example
+     * let value = target.get.call(instance);
+     */
+    get(this: This): Value;
+
+    /**
+     * Invokes the setter that was defined prior to decorator application.
+     *
+     * @example
+     * target.set.call(instance, value);
+     */
+    set(this: This, value: Value): void;
+}
+
+/**
+ * Describes the allowed return value from a class `accessor` field decorator.
+ */
+interface ClassAccessorDecoratorResult<This, Value> {
+    /**
+     * An optional replacement getter function. If not provided, the existing getter function is used instead.
+     */
+    get?(this: This): Value;
+
+    /**
+     * An optional replacement setter function. If not provided, the existing setter function is used instead.
+     */
+    set?(this: This, value: Value): void;
+
+    /**
+     * An optional initializer mutator that is invoked when the underlying field initializer is evaluated.
+     * @param value The incoming initializer value.
+     * @returns The replacement initializer value.
+     */
+    init?(this: This, value: Value): Value;
+}
+
+/**
+ * Describes a generic function that can be used to decorate a class `accessor` field.
+ * @param target The {@link ClassAccessorDecoratorTarget} the decorated class `accessor` field.
+ * @param context Additional context about the decorated class `accessor` field.
+ * @returns A {@link ClassAccessorDecoratorResult} that is used to replace the getter or setter or to inject an initializer mutator, or `undefined` to use the existing getter and setter.
+ */
+type ClassAccessorDecoratorFunction<Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {}> = <
     This,
-    In,
-    Out = In,
-    Value = Out
+    Value,
 >(
-    target: ClassAccessorDecoratorTarget<This, In>,
-    context: ClassAccessorDecoratorContext<This, Value>
-) => ClassAccessorDecoratorResult<This, In, Out> | void;
-// #endregion
+    target: ClassAccessorDecoratorTarget<This, Value>,
+    context: ClassAccessorDecoratorContext<This, Value> & Overrides
+) => ClassAccessorDecoratorResult<This, Value> | void;
 
 /**
  * Context provided to a class field decorator.
  */
-interface ClassFieldDecoratorContext<This = unknown, Value = unknown> {
+interface ClassFieldDecoratorContext<
+    This = unknown,
+    Value = unknown,
+> {
+    /** The kind of class member that was decorated. */
     readonly kind: "field";
+
+    /** The name of the decorated class member. */
     readonly name: string | symbol;
+
+    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
     readonly static: boolean;
+
+    /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
+
+    /** An object that can be used to access the current value of the class member at runtime. */
     readonly access: {
         /**
          * Gets the value of the field on the provided receiver.
@@ -272,14 +377,16 @@ interface ClassFieldDecoratorContext<This = unknown, Value = unknown> {
     addInitializer(initializer: (this: This) => void): void;
 }
 
-// #region type ClassFieldDecoratorFunction
 /**
- * Describes a function that can be used to decorate a class field.
+ * Describes a generic function that can be used to decorate a class field.
+ * @param target Class field decorators always receive `undefined`.
+ * @param context Additional context about the decorated class field.
+ * @returns An initializer mutator function, or `undefined`.
  */
-type ClassFieldDecoratorFunction = <
+type ClassFieldDecoratorFunction<Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {}> = <
     This,
-    In,
-    Out = In,
-    Value = Out
->(target: undefined, context: ClassAccessorDecoratorContext<This, Value>) => ((this: This, initialValue: In) => Out) | void;
-// #endregion
+    Value,
+>(
+    target: undefined,
+    context: ClassFieldDecoratorContext<This, Value> & Overrides
+) => ((this: This, initialValue: Value) => Value) | void;
