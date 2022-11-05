@@ -6440,11 +6440,9 @@ namespace ts {
                 rawTextScanner.setText("`" + rawText + "`");
                 break;
             case SyntaxKind.TemplateHead:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("`" + rawText + "${");
                 break;
             case SyntaxKind.TemplateMiddle:
-                // tslint:disable-next-line no-invalid-template-strings
                 rawTextScanner.setText("}" + rawText + "${");
                 break;
             case SyntaxKind.TemplateTail:
@@ -6873,7 +6871,6 @@ namespace ts {
         return node;
     }
 
-    // tslint:disable-next-line variable-name
     let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**

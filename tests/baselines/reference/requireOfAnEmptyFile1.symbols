@@ -6,4 +6,3 @@ import fs = require('./requireOfAnEmptyFile1_b');
 
 === tests/cases/compiler/requireOfAnEmptyFile1_b.ts ===
 
-No type information for this code.

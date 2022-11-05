@@ -140,8 +140,11 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
 
                 case SyntaxKind.GetAccessor:
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node as GetAccessorDeclaration);
                 case SyntaxKind.SetAccessor:
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node as SetAccessorDeclaration);
                 case SyntaxKind.Constructor:
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node as ConstructorDeclaration);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
@@ -278,6 +281,15 @@ namespace ts {
             );
         }
 
+        function visitConstructorDeclaration(node: ConstructorDeclaration) {
+            return factory.updateConstructorDeclaration(
+                node,
+                visitNodes(node.modifiers, visitor, isModifierLike),
+                visitParameterList(node.parameters, visitor, context),
+                transformMethodBody(node)
+            );
+        }
+
         /**
          * Visits a MethodDeclaration node.
          *
@@ -298,7 +310,28 @@ namespace ts {
                 /*type*/ undefined,
                 getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
-                    : visitFunctionBody(node.body, visitor, context)
+                    : transformMethodBody(node)
+            );
+        }
+
+        function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+            return factory.updateGetAccessorDeclaration(
+                node,
+                visitNodes(node.modifiers, visitor, isModifierLike),
+                node.name,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformMethodBody(node)
+            );
+        }
+
+        function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+            return factory.updateSetAccessorDeclaration(
+                node,
+                visitNodes(node.modifiers, visitor, isModifierLike),
+                node.name,
+                visitParameterList(node.parameters, visitor, context),
+                transformMethodBody(node)
             );
         }
 
@@ -446,6 +479,50 @@ namespace ts {
             return false;
         }
 
+        function transformMethodBody(node: MethodDeclaration | AccessorDeclaration | ConstructorDeclaration): FunctionBody | undefined {
+            Debug.assertIsDefined(node.body);
+
+            const savedCapturedSuperProperties = capturedSuperProperties;
+            const savedHasSuperElementAccess = hasSuperElementAccess;
+            capturedSuperProperties = new Set();
+            hasSuperElementAccess = false;
+
+            let updated = visitFunctionBody(node.body, visitor, context);
+
+            // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
+            // This step isn't needed if we eventually transform this to ES5.
+            const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
+            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
+                resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
+                (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
+
+            if (emitSuperHelpers) {
+                enableSubstitutionForAsyncMethodsWithSuper();
+                if (capturedSuperProperties.size) {
+                    const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
+                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+
+                    const statements = updated.statements.slice();
+                    insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    updated = factory.updateBlock(updated, statements);
+                }
+
+                if (hasSuperElementAccess) {
+                    // Emit helpers for super element access expressions (`super[x]`).
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+                        addEmitHelper(updated, advancedAsyncSuperHelper);
+                    }
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
+                        addEmitHelper(updated, asyncSuperHelper);
+                    }
+                }
+            }
+
+            capturedSuperProperties = savedCapturedSuperProperties;
+            hasSuperElementAccess = savedHasSuperElementAccess;
+            return updated;
+        }
+
         function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
@@ -495,7 +572,7 @@ namespace ts {
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
-                const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuperBinding | NodeCheckFlags.AsyncMethodWithSuper);
+                const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
@@ -511,10 +588,10 @@ namespace ts {
 
                 if (emitSuperHelpers && hasSuperElementAccess) {
                     // Emit helpers for super element access expressions (`super[x]`).
-                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
                         addEmitHelper(block, advancedAsyncSuperHelper);
                     }
-                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
                         addEmitHelper(block, asyncSuperHelper);
                     }
                 }
@@ -601,7 +678,7 @@ namespace ts {
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
                 if (superContainerFlags !== enclosingSuperContainerFlags) {
                     const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                     enclosingSuperContainerFlags = superContainerFlags;
@@ -698,7 +775,7 @@ namespace ts {
         }
 
         function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
-            if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+            if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
                 return setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createCallExpression(
@@ -728,7 +805,7 @@ namespace ts {
     export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>) {
         // Create a variable declaration with a getter/setter (if binding) definition for each name:
         //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
-        const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) !== 0;
+        const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;
         const accessors: PropertyAssignment[] = [];
         names.forEach((_, key) => {
             const name = unescapeLeadingUnderscores(key);

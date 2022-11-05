@@ -439,9 +439,6 @@ namespace ts {
             name: "listFilesOnly",
             type: "boolean",
             category: Diagnostics.Command_line_Options,
-            affectsSemanticDiagnostics: true,
-            affectsEmit: true,
-            affectsMultiFileEmitBuildInfo: true,
             isCommandLineOnly: true,
             description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
             defaultValueDescription: false,
@@ -2414,7 +2411,8 @@ namespace ts {
         return config;
     }
 
-    function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
+    /*@internal*/
+    export function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
         return {
             ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
         };
@@ -2467,7 +2465,8 @@ namespace ts {
         });
     }
 
-    function serializeCompilerOptions(
+    /* @internal */
+    export function serializeCompilerOptions(
         options: CompilerOptions,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
     ): ESMap<string, CompilerOptionsValue> {
@@ -2585,12 +2584,21 @@ namespace ts {
 
         function writeConfigurations() {
             // Filter applicable options to place in the file
-            const categorizedOptions = createMultiMap<CommandLineOption>();
+            const categorizedOptions = new Map<DiagnosticMessage, CommandLineOption[]>();
+            // Set allowed categories in order
+            categorizedOptions.set(Diagnostics.Projects, []);
+            categorizedOptions.set(Diagnostics.Language_and_Environment, []);
+            categorizedOptions.set(Diagnostics.Modules, []);
+            categorizedOptions.set(Diagnostics.JavaScript_Support, []);
+            categorizedOptions.set(Diagnostics.Emit, []);
+            categorizedOptions.set(Diagnostics.Interop_Constraints, []);
+            categorizedOptions.set(Diagnostics.Type_Checking, []);
+            categorizedOptions.set(Diagnostics.Completeness, []);
             for (const option of optionDeclarations) {
-                const { category } = option;
-
                 if (isAllowedOptionForOutput(option)) {
-                    categorizedOptions.add(getLocaleSpecificMessage(category!), option);
+                    let listForCategory = categorizedOptions.get(option.category!);
+                    if (!listForCategory) categorizedOptions.set(option.category!, listForCategory = []);
+                    listForCategory.push(option);
                 }
             }
 
@@ -2602,7 +2610,7 @@ namespace ts {
                 if (entries.length !== 0) {
                     entries.push({ value: "" });
                 }
-                entries.push({ value: `/* ${category} */` });
+                entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
                 for (const option of options) {
                     let optionName;
                     if (compilerOptionsMap.has(option.name)) {

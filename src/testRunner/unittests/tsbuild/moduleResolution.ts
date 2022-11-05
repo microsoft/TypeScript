@@ -86,4 +86,36 @@ namespace ts.tscWatch {
             commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
         });
     });
+
+    describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {
+        verifyTscWithEdits({
+            scenario: "moduleResolution",
+            subScenario: "impliedNodeFormat differs between projects for shared file",
+            fs: () => loadProjectFromFiles({
+                "/src/projects/a/src/index.ts": "",
+                "/src/projects/a/tsconfig.json": JSON.stringify({
+                    compilerOptions: { strict: true }
+                }),
+                "/src/projects/b/src/index.ts": Utils.dedent`
+                    import pg from "pg";
+                    pg.foo();
+                `,
+                "/src/projects/b/tsconfig.json": JSON.stringify({
+                    compilerOptions: { strict: true, module: "node16" }
+                }),
+                "/src/projects/b/package.json": JSON.stringify({
+                    name: "b",
+                    type: "module"
+                }),
+                "/src/projects/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
+                "/src/projects/node_modules/@types/pg/package.json": JSON.stringify({
+                    name: "@types/pg",
+                    types: "index.d.ts",
+                }),
+            }),
+            modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
+            commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
+            edits: noChangeOnlyRuns
+        });
+    });
 }
