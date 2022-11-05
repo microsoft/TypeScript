@@ -7234,6 +7234,7 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
+        /*@internal*/ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
 
     /** true if --out otherwise source file name */
