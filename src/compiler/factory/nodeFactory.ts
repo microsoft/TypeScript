@@ -6743,6 +6743,14 @@ namespace ts {
         declarationText: string
     ): InputFiles;
     export function createInputFiles(
+        javascriptText: string,
+        declarationText: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined
+    ): InputFiles;
+    export function createInputFiles(
         readFileText: (path: string) => string | undefined,
         javascriptPath: string,
         javascriptMapPath: string | undefined,
@@ -6751,90 +6759,112 @@ namespace ts {
         buildInfoPath: string | undefined
     ): InputFiles;
     export function createInputFiles(
-        javascriptText: string,
-        declarationText: string,
-        javascriptMapPath: string | undefined,
-        javascriptMapText: string | undefined,
-        declarationMapPath: string | undefined,
-        declarationMapText: string | undefined
-    ): InputFiles;
-    /*@internal*/
-    export function createInputFiles(
-        javascriptText: string,
-        declarationText: string,
-        javascriptMapPath: string | undefined,
-        javascriptMapText: string | undefined,
-        declarationMapPath: string | undefined,
-        declarationMapText: string | undefined,
-        javascriptPath: string | undefined,
-        declarationPath: string | undefined,
-        buildInfoPath?: string | undefined,
-        buildInfo?: BuildInfo,
-        oldFileOfCurrentEmit?: boolean
-    ): InputFiles;
-    export function createInputFiles(
         javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
         declarationTextOrJavascriptPath: string,
         javascriptMapPath?: string,
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
         declarationMapTextOrBuildInfoPath?: string,
-        javascriptPath?: string | undefined,
-        declarationPath?: string | undefined,
-        buildInfoPath?: string | undefined,
-        buildInfo?: BuildInfo,
-        oldFileOfCurrentEmit?: boolean
+    ): InputFiles {
+        return !isString(javascriptTextOrReadFileText) ?
+            createInputFilesWithFilePaths(
+                javascriptTextOrReadFileText,
+                declarationTextOrJavascriptPath,
+                javascriptMapPath,
+                javascriptMapTextOrDeclarationPath!,
+                declarationMapPath,
+                declarationMapTextOrBuildInfoPath,
+            ) :
+            createInputFilesWithFileTexts(
+                /*javascriptPath*/ undefined,
+                javascriptTextOrReadFileText,
+                javascriptMapPath,
+                javascriptMapTextOrDeclarationPath,
+                /*declarationPath*/ undefined,
+                declarationTextOrJavascriptPath,
+                declarationMapPath,
+                declarationMapTextOrBuildInfoPath,
+            );
+    }
+    /*@internal*/
+    export function createInputFilesWithFilePaths(
+        readFileText: (path: string) => string | undefined,
+        javascriptPath: string,
+        javascriptMapPath: string | undefined,
+        declarationPath: string,
+        declarationMapPath: string | undefined,
+        buildInfoPath: string | undefined,
+        host?: CompilerHost,
+        options?: CompilerOptions,
     ): InputFiles {
         const node = parseNodeFactory.createInputFiles();
-        if (!isString(javascriptTextOrReadFileText)) {
-            const cache = new Map<string, string | false>();
-            const textGetter = (path: string | undefined) => {
-                if (path === undefined) return undefined;
-                let value = cache.get(path);
-                if (value === undefined) {
-                    value = javascriptTextOrReadFileText(path);
-                    cache.set(path, value !== undefined ? value : false);
+        node.javascriptPath = javascriptPath;
+        node.javascriptMapPath = javascriptMapPath;
+        node.declarationPath = declarationPath;
+        node.declarationMapPath = declarationMapPath;
+        node.buildInfoPath = buildInfoPath;
+        const cache = new Map<string, string | false>();
+        const textGetter = (path: string | undefined) => {
+            if (path === undefined) return undefined;
+            let value = cache.get(path);
+            if (value === undefined) {
+                value = readFileText(path);
+                cache.set(path, value !== undefined ? value : false);
+            }
+            return value !== false ? value as string : undefined;
+        };
+        const definedTextGetter = (path: string) => {
+            const result = textGetter(path);
+            return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
+        };
+        let buildInfo: BuildInfo | false;
+        const getAndCacheBuildInfo = () => {
+            if (buildInfo === undefined && buildInfoPath) {
+                if (host?.getBuildInfo) {
+                    buildInfo = host.getBuildInfo(buildInfoPath, options!.configFilePath) ?? false;
                 }
-                return value !== false ? value as string : undefined;
-            };
-            const definedTextGetter = (path: string) => {
-                const result = textGetter(path);
-                return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
-            };
-            let buildInfo: BuildInfo | false;
-            const getAndCacheBuildInfo = (getText: () => string | undefined) => {
-                if (buildInfo === undefined) {
-                    const result = getText();
-                    buildInfo = result !== undefined ? getBuildInfo(node.buildInfoPath!, result) ?? false : false;
+                else {
+                    const result = textGetter(buildInfoPath);
+                    buildInfo = result !== undefined ? getBuildInfo(buildInfoPath, result) ?? false : false;
                 }
-                return buildInfo || undefined;
-            };
-            node.javascriptPath = declarationTextOrJavascriptPath;
-            node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
-            node.declarationMapPath = declarationMapPath;
-            node.buildInfoPath = declarationMapTextOrBuildInfoPath;
-            Object.defineProperties(node, {
-                javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
-                javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
-                declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
-                buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
-            });
-        }
-        else {
-            node.javascriptText = javascriptTextOrReadFileText;
-            node.javascriptMapPath = javascriptMapPath;
-            node.javascriptMapText = javascriptMapTextOrDeclarationPath;
-            node.declarationText = declarationTextOrJavascriptPath;
-            node.declarationMapPath = declarationMapPath;
-            node.declarationMapText = declarationMapTextOrBuildInfoPath;
-            node.javascriptPath = javascriptPath;
-            node.declarationPath = declarationPath;
-            node.buildInfoPath = buildInfoPath;
-            node.buildInfo = buildInfo;
-            node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
-        }
+            }
+            return buildInfo || undefined;
+        };
+        Object.defineProperties(node, {
+            javascriptText: { get: () => definedTextGetter(javascriptPath) },
+            javascriptMapText: { get: () => textGetter(javascriptMapPath) }, // TODO:: if there is inline sourceMap in jsFile, use that
+            declarationText: { get: () => definedTextGetter(Debug.checkDefined(declarationPath)) },
+            declarationMapText: { get: () => textGetter(declarationMapPath) }, // TODO:: if there is inline sourceMap in dtsFile, use that
+            buildInfo: { get: getAndCacheBuildInfo },
+        });
+        return node;
+    }
+    /*@internal*/
+    export function createInputFilesWithFileTexts(
+        javascriptPath: string | undefined,
+        javascriptText: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationPath: string | undefined,
+        declarationText: string,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined,
+        buildInfoPath?: string,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean,
+    ): InputFiles {
+        const node = parseNodeFactory.createInputFiles();
+        node.javascriptPath = javascriptPath;
+        node.javascriptText = javascriptText;
+        node.javascriptMapPath = javascriptMapPath;
+        node.javascriptMapText = javascriptMapText;
+        node.declarationPath = declarationPath;
+        node.declarationText = declarationText;
+        node.declarationMapPath = declarationMapPath;
+        node.declarationMapText = declarationMapText;
+        node.buildInfoPath = buildInfoPath;
+        node.buildInfo = buildInfo;
+        node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
         return node;
     }
 
