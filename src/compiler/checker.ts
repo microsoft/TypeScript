@@ -21482,7 +21482,7 @@ namespace ts {
         }
 
         function getCombinedTypeFlags(types: Type[]): TypeFlags {
-            return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
+            return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0 as TypeFlags);
         }
 
         function getCommonSupertype(types: Type[]): Type {
