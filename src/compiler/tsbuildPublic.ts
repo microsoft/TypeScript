@@ -101,6 +101,7 @@ namespace ts {
         // TODO: To do better with watch mode and normal build mode api that creates program and emits files
         // This currently helps enable --diagnostics and --extendedDiagnostics
         afterProgramEmitAndDiagnostics?(program: T): void;
+        /*@internal*/ beforeEmitBundle?(config: ParsedCommandLine): void;
         /*@internal*/ afterEmitBundle?(config: ParsedCommandLine): void;
 
         // For testing
@@ -253,7 +254,7 @@ namespace ts {
         readonly projectPendingBuild: ESMap<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
         readonly projectErrorsReported: ESMap<ResolvedConfigFilePath, true>;
 
-        readonly compilerHost: CompilerHost;
+        readonly compilerHost: CompilerHost & ReadBuildProgramHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
         readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
 
@@ -1087,6 +1088,7 @@ namespace ts {
             // Update js, and source map
             const { compilerHost } = state;
             state.projectCompilerOptions = config.options;
+            state.host.beforeEmitBundle?.(config);
             const outputFiles = emitUsingBuildInfo(
                 config,
                 compilerHost,
