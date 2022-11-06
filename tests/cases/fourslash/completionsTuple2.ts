@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-////declare const x: [{ t: "a" }, "b"] | [{ t: "b" }, "c"]  = [{ t: a }, "/**/"]
+////declare const x: ["a", "b"]  = ["x", "/**/"]
 
 verify.completions({ marker: "", exact: ["b"] });
