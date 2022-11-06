@@ -27667,7 +27667,19 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression: {
                     const arrayLiteral = parent as ArrayLiteralExpression;
                     const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
-                    return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
+                    if (!type) return undefined;
+                    const nodeIndex = indexOfNode(arrayLiteral.elements, node);
+                    let filteredType = type;
+                    for(let i = 0; i < nodeIndex; i++) {
+                        const expectedType = getTypeOfExpression(arrayLiteral.elements[i]);
+                        if (getObjectFlags(expectedType) & ObjectFlags.ContainsObjectOrArrayLiteral) continue;
+                        filteredType = filterType(filteredType, (t) => {
+                            const indexType = getTypeOfPropertyOfContextualType(t, "" + i as __String);
+                            if (!indexType) return false;
+                            return checkTypeRelatedTo(expectedType, indexType, comparableRelation, /** errorNode */ undefined);
+                        });
+                    }
+                    return getContextualTypeForElementExpression(filteredType, nodeIndex);
                 }
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node, contextFlags);
