@@ -117,6 +117,7 @@
         "codefixes/convertConstToLet.ts",
         "codefixes/fixExpectedComma.ts",
         "codefixes/fixAddVoidToPromise.ts",
+        "codefixes/convertTypedefToType.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/convertToOptionalChainExpression.ts",

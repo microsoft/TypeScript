@@ -54,6 +54,11 @@ namespace ts {
                     }
                 }
 
+                if (codefix._containsJSDocTypedef(node)) {
+                    const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+                    diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.Convert_typedef_to_type));
+                }
+
                 if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
                     diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
                 }

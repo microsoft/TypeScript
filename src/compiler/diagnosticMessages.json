@@ -7544,5 +7544,13 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Convert typedef to type": {
+        "category": "Message",
+        "code": 18051
+    },
+    "Convert all typedefs to types": {
+        "category": "Message",
+        "code": 18052
     }
 }
