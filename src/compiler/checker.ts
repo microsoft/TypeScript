@@ -27670,14 +27670,16 @@ namespace ts {
                     if (!type) return undefined;
                     const nodeIndex = indexOfNode(arrayLiteral.elements, node);
                     let filteredType = type;
-                    for(let i = 0; i < nodeIndex; i++) {
-                        const expectedType = getTypeOfExpression(arrayLiteral.elements[i]);
-                        if (getObjectFlags(expectedType) & ObjectFlags.ContainsObjectOrArrayLiteral) continue;
-                        filteredType = filterType(filteredType, (t) => {
-                            const indexType = getTypeOfPropertyOfContextualType(t, "" + i as __String);
-                            if (!indexType) return false;
-                            return checkTypeRelatedTo(expectedType, indexType, comparableRelation, /** errorNode */ undefined);
-                        });
+                    if (type.flags & TypeFlags.Union) {
+                        for(let i = 0; i < nodeIndex; i++) {
+                            const expType = getTypeOfExpression(arrayLiteral.elements[i]);
+                            if (getObjectFlags(expType) & ObjectFlags.ArrayLiteral) continue;
+                            filteredType = filterType(filteredType, (t) => {
+                                const branchType = getTypeOfPropertyOfContextualType(t, "" + i as __String);
+                                if (!branchType) return false;
+                                return isTypeComparableTo(branchType, expType);
+                            });
+                        }
                     }
                     return getContextualTypeForElementExpression(filteredType, nodeIndex);
                 }
