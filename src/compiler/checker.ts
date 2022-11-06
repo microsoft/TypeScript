@@ -27671,15 +27671,15 @@ namespace ts {
                     const nodeIndex = indexOfNode(arrayLiteral.elements, node);
                     let filteredType = type;
                     if (type.flags & TypeFlags.Union) {
-                        // If there is a union of tuples, filter down to only valid members of the union
+                        // If there is a union of tuples, filter down to only valid variants of the union
                         // based on previous elements in the tuple
                         for(let i = 0; i < nodeIndex; i++) {
-                            const expType = getTypeOfExpression(arrayLiteral.elements[i]);
-                            if (getObjectFlags(expType) & ObjectFlags.ArrayLiteral) continue;
+                            const observedType = getTypeOfExpression(arrayLiteral.elements[i]);
+                            if (getObjectFlags(observedType) & ObjectFlags.ArrayLiteral) continue;
                             filteredType = filterType(filteredType, (t) => {
-                                const branchType = getTypeOfPropertyOfContextualType(t, "" + i as __String);
-                                if (!branchType) return false;
-                                return isTypeComparableTo(branchType, expType);
+                                const variantType = getTypeOfPropertyOfContextualType(t, "" + i as __String);
+                                if (!variantType) return false;
+                                return areTypesComparable(variantType, observedType);
                             });
                         }
                     }
