@@ -78,7 +78,7 @@ Shape signatures in builder refreshed for::
     "affectedFilesPendingEmit": [
       [
         "./class1.ts",
-        "Full"
+        "Js"
       ]
     ]
   },

@@ -112,11 +112,11 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "./main.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./other.ts",
-        "Full"
+        "Js | Dts"
       ]
     ],
     "emitSignatures": [
@@ -363,7 +363,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "./main.ts",
-        "Full"
+        "Js | Dts"
       ]
     ],
     "latestChangedDtsFile": "./other.d.ts"

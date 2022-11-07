@@ -164,27 +164,27 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./src/directuse.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./src/indirectclass.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./src/indirectuse.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./src/nochangefile.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "./src/nochangefilewithemitspecificerror.ts",
-        "Full"
+        "Js | Dts"
       ]
     ],
     "emitSignatures": [
@@ -823,23 +823,23 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         [
           "./src/directuse.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ],
       [
         "./src/indirectclass.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         [
           "./src/indirectuse.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ]
     ],
     "emitSignatures": [

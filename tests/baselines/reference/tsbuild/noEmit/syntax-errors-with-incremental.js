@@ -204,7 +204,7 @@ Shape signatures in builder refreshed for::
     "affectedFilesPendingEmit": [
       [
         "./a.ts",
-        "Full"
+        "Js"
       ]
     ]
   },

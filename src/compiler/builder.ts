@@ -20,6 +20,9 @@ namespace ts {
 
     export type ReusableDiagnosticMessageChain = DiagnosticMessageChain;
 
+    /** Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string */
+    export type EmitSignature = string | [signature: string];
+
     export interface ReusableBuilderProgramState extends BuilderState {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
@@ -40,15 +43,11 @@ namespace ts {
         /**
          * Files pending to be emitted
          */
-        affectedFilesPendingEmit?: readonly Path[] | undefined;
+        affectedFilesPendingEmit?: ReadonlyESMap<Path, BuilderFileEmit>;
         /**
-         * Files pending to be emitted kind.
+         * emitKind pending for a program with --out
          */
-        affectedFilesPendingEmitKind?: ESMap<Path, BuilderFileEmit> | undefined;
-        /**
-         * Current index to retrieve pending affected file
-         */
-        affectedFilesPendingEmitIndex?: number | undefined;
+        programEmitPending?: BuilderFileEmit;
         /*
          * true if semantic diagnostics are ReusableDiagnostic instead of Diagnostic
          */
@@ -56,20 +55,32 @@ namespace ts {
         /**
          * Hash of d.ts emitted for the file, use to track when emit of d.ts changes
          */
-        emitSignatures?: ESMap<Path, string>;
+        emitSignatures?: ESMap<Path, EmitSignature>;
         /**
          * Hash of d.ts emit with --out
          */
-        outSignature?: string;
+        outSignature?: EmitSignature;
         /**
          * Name of the file whose dts was the latest to change
          */
         latestChangedDtsFile: string | undefined;
+        /**
+         * Bundle information either from oldState or current one so it can be used to complete the information in buildInfo when emitting only js or dts files
+         */
+        bundle?: BundleBuildInfo;
     }
 
     export const enum BuilderFileEmit {
-        DtsOnly,
-        Full
+        None                = 0,
+        Js                  = 1 << 0,                       // emit js file
+        JsMap               = 1 << 1,                       // emit js.map file
+        JsInlineMap         = 1 << 2,                       // emit inline source map in js file
+        Dts                 = 1 << 3,                       // emit d.ts file
+        DtsMap              = 1 << 4,                       // emit d.ts.map file
+
+        AllJs               = Js | JsMap | JsInlineMap,
+        AllDts              = Dts | DtsMap,
+        All                 = AllJs | AllDts,
     }
 
     /**
@@ -116,7 +127,7 @@ namespace ts {
         /**
          * Files pending to be emitted
          */
-        affectedFilesPendingEmit: Path[] | undefined;
+        affectedFilesPendingEmit?: ESMap<Path, BuilderFileEmit>;
         /**
          * true if build info is emitted
          */
@@ -125,25 +136,45 @@ namespace ts {
          * Already seen emitted files
          */
         seenEmittedFiles: ESMap<Path, BuilderFileEmit> | undefined;
-        /**
-         * true if program has been emitted
-         */
-        programEmitComplete?: true;
         /** Stores list of files that change signature during emit - test only */
         filesChangingSignature?: Set<Path>;
     }
 
     export type SavedBuildProgramEmitState = Pick<BuilderProgramState,
         "affectedFilesPendingEmit" |
-        "affectedFilesPendingEmitIndex" |
-        "affectedFilesPendingEmitKind" |
         "seenEmittedFiles" |
-        "programEmitComplete" |
+        "programEmitPending" |
         "emitSignatures" |
         "outSignature" |
         "latestChangedDtsFile" |
         "hasChangedEmitSignature"
     > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
+
+    /** Get flags determining what all needs to be emitted */
+    export function getBuilderFileEmit(options: CompilerOptions) {
+        let result = BuilderFileEmit.Js;
+        if (options.sourceMap) result = result | BuilderFileEmit.JsMap;
+        if (options.inlineSourceMap) result = result | BuilderFileEmit.JsInlineMap;
+        if (getEmitDeclarations(options)) result = result | BuilderFileEmit.Dts;
+        if (options.declarationMap) result = result | BuilderFileEmit.DtsMap;
+        if (options.emitDeclarationOnly) result = result & BuilderFileEmit.AllDts;
+        return result;
+    }
+
+    /** Determing what all is pending to be emitted based on previous options or previous file emit flags */
+    export function getPendingEmitKind(optionsOrEmitKind: CompilerOptions | BuilderFileEmit, oldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined): BuilderFileEmit {
+        const oldEmitKind = oldOptionsOrEmitKind && (isNumber(oldOptionsOrEmitKind) ? oldOptionsOrEmitKind : getBuilderFileEmit(oldOptionsOrEmitKind));
+        const emitKind = isNumber(optionsOrEmitKind) ? optionsOrEmitKind : getBuilderFileEmit(optionsOrEmitKind);
+        if (oldEmitKind === emitKind) return BuilderFileEmit.None;
+        if (!oldEmitKind || !emitKind) return emitKind;
+        const diff = oldEmitKind ^ emitKind;
+        let result = BuilderFileEmit.None;
+        // If there is diff in Js emit, pending emit is js emit flags
+        if (diff & BuilderFileEmit.AllJs) result = emitKind & BuilderFileEmit.AllJs;
+        // If there is diff in Dts emit, pending emit is dts emit flags
+        if (diff & BuilderFileEmit.AllDts) result = result | (emitKind & BuilderFileEmit.AllDts);
+        return result;
+    }
 
     function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: ReadonlyCollection<string> | undefined): boolean {
         // Has same size and every key is present in both maps
@@ -164,7 +195,7 @@ namespace ts {
             state.semanticDiagnosticsPerFile = new Map();
         }
         else if (compilerOptions.composite && oldState?.outSignature && outFilePath === outFile(oldState?.compilerOptions)) {
-            state.outSignature = oldState?.outSignature;
+            state.outSignature = oldState.outSignature && getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldState.outSignature);
         }
         state.changedFilesSet = new Set();
         state.latestChangedDtsFile = compilerOptions.composite ? oldState?.latestChangedDtsFile : undefined;
@@ -186,12 +217,15 @@ namespace ts {
         if (useOldState) {
             // Copy old state's changed files set
             oldState!.changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
-            if (!outFilePath && oldState!.affectedFilesPendingEmit) {
-                state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
-                state.affectedFilesPendingEmitKind = oldState!.affectedFilesPendingEmitKind && new Map(oldState!.affectedFilesPendingEmitKind);
-                state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
+            if (!outFilePath && oldState!.affectedFilesPendingEmit?.size) {
+                state.affectedFilesPendingEmit = new Map(oldState!.affectedFilesPendingEmit);
                 state.seenAffectedFiles = new Set();
             }
+            state.programEmitPending = oldState!.programEmitPending;
+        }
+        else {
+            // We arent using old state, so atleast emit buildInfo with current information
+            state.buildInfoEmitPending = true;
         }
 
         // Update changed files and copy semantic diagnostics if we can
@@ -216,7 +250,7 @@ namespace ts {
                 // Referenced file was deleted in the new program
                 newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))) {
                 // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
-                state.changedFilesSet.add(sourceFilePath);
+                addFileToChangeSet(state, sourceFilePath);
             }
             else if (canCopySemanticDiagnostics) {
                 const sourceFile = newProgram.getSourceFileByPath(sourceFilePath)!;
@@ -236,24 +270,73 @@ namespace ts {
             }
             if (canCopyEmitSignatures) {
                 const oldEmitSignature = oldState.emitSignatures.get(sourceFilePath);
-                if (oldEmitSignature) (state.emitSignatures ||= new Map()).set(sourceFilePath, oldEmitSignature);
+                if (oldEmitSignature) {
+                    (state.emitSignatures ??= new Map()).set(sourceFilePath, getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldEmitSignature));
+                }
             }
         });
 
         // If the global file is removed, add all files as changed
-        if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => info.affectsGlobalScope && !state.fileInfos.has(sourceFilePath))) {
+        if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => (outFilePath || info.affectsGlobalScope) && !state.fileInfos.has(sourceFilePath))) {
             BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
-                .forEach(file => state.changedFilesSet.add(file.resolvedPath));
+                .forEach(file => addFileToChangeSet(state, file.resolvedPath));
         }
-        else if (oldCompilerOptions && !outFilePath && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
-            // Add all files to affectedFilesPendingEmit since emit changed
-            newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
-            Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
-            state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+        else if (oldCompilerOptions) {
+            // If options affect emit, then we need to do complete emit per compiler options
+            // otherwise only the js or dts that needs to emitted because its different from previously emitted options
+            const pendingEmitKind = compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions) ?
+                getBuilderFileEmit(compilerOptions) :
+                getPendingEmitKind(compilerOptions, oldCompilerOptions);
+            if (pendingEmitKind !== BuilderFileEmit.None) {
+                if (!outFilePath) {
+                    // Add all files to affectedFilesPendingEmit since emit changed
+                    newProgram.getSourceFiles().forEach(f => {
+                        // Add to affectedFilesPending emit only if not changed since any changed file will do full emit
+                        if (!state.changedFilesSet.has(f.resolvedPath)) {
+                            addToAffectedFilesPendingEmit(
+                                state,
+                                f.resolvedPath,
+                                pendingEmitKind
+                            );
+                        }
+                    });
+                    Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
+                    state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+                    state.buildInfoEmitPending = true;
+                }
+                else {
+                    state.programEmitPending = state.programEmitPending ?
+                        state.programEmitPending | pendingEmitKind :
+                        pendingEmitKind;
+                }
+            }
         }
-        // Since old states change files set is copied, any additional change means we would need to emit build info
-        state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== (oldState!.changedFilesSet?.size || 0);
+        if (outFilePath && !state.changedFilesSet.size) {
+            // Copy the bundle information from old state so we can patch it later if we are doing partial emit
+            if (useOldState) state.bundle = oldState!.bundle;
+            // If this program has prepend references, always emit since we wont know if files on disk are correct unless we check file hash for correctness
+            if (some(newProgram.getProjectReferences(), ref => !!ref.prepend)) state.programEmitPending = getBuilderFileEmit(compilerOptions);
+        }
         return state;
+    }
+
+    function addFileToChangeSet(state: BuilderProgramState, path: Path) {
+        state.changedFilesSet.add(path);
+        state.buildInfoEmitPending = true;
+        // Setting this to undefined as changed files means full emit so no need to track emit explicitly
+        state.programEmitPending = undefined;
+    }
+
+    /**
+     * Covert to Emit signature based on oldOptions and EmitSignature format
+     * If d.ts map options differ then swap the format, otherwise use as is
+     */
+    function getEmitSignatureFromOldSignature(options: CompilerOptions, oldOptions: CompilerOptions, oldEmitSignature: EmitSignature): EmitSignature {
+        return !!options.declarationMap === !!oldOptions.declarationMap ?
+            // Use same format of signature
+            oldEmitSignature :
+            // Convert to different format
+            isString(oldEmitSignature) ? [oldEmitSignature] : oldEmitSignature[0];
     }
 
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
@@ -300,11 +383,9 @@ namespace ts {
         // Only in --out changeFileSet is kept around till emit
         Debug.assert(!state.changedFilesSet.size || outFilePath);
         return {
-            affectedFilesPendingEmit: state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice(),
-            affectedFilesPendingEmitKind: state.affectedFilesPendingEmitKind && new Map(state.affectedFilesPendingEmitKind),
-            affectedFilesPendingEmitIndex: state.affectedFilesPendingEmitIndex,
+            affectedFilesPendingEmit: state.affectedFilesPendingEmit && new Map(state.affectedFilesPendingEmit),
             seenEmittedFiles: state.seenEmittedFiles && new Map(state.seenEmittedFiles),
-            programEmitComplete: state.programEmitComplete,
+            programEmitPending: state.programEmitPending,
             emitSignatures: state.emitSignatures && new Map(state.emitSignatures),
             outSignature: state.outSignature,
             latestChangedDtsFile: state.latestChangedDtsFile,
@@ -315,10 +396,8 @@ namespace ts {
 
     function restoreBuilderProgramEmitState(state: BuilderProgramState, savedEmitState: SavedBuildProgramEmitState) {
         state.affectedFilesPendingEmit = savedEmitState.affectedFilesPendingEmit;
-        state.affectedFilesPendingEmitKind = savedEmitState.affectedFilesPendingEmitKind;
-        state.affectedFilesPendingEmitIndex = savedEmitState.affectedFilesPendingEmitIndex;
         state.seenEmittedFiles = savedEmitState.seenEmittedFiles;
-        state.programEmitComplete = savedEmitState.programEmitComplete;
+        state.programEmitPending = savedEmitState.programEmitPending;
         state.emitSignatures = savedEmitState.emitSignatures;
         state.outSignature = savedEmitState.outSignature;
         state.latestChangedDtsFile = savedEmitState.latestChangedDtsFile;
@@ -356,6 +435,7 @@ namespace ts {
                     if (!seenAffectedFiles.has(affectedFile.resolvedPath)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
+                        addToAffectedFilesPendingEmit(state, affectedFile.resolvedPath, getBuilderFileEmit(state.compilerOptions));
                         handleDtsMayChangeOfAffectedFile(
                             state,
                             affectedFile,
@@ -409,34 +489,33 @@ namespace ts {
         }
     }
 
-    function clearAffectedFilesPendingEmit(state: BuilderProgramState) {
-        state.affectedFilesPendingEmit = undefined;
-        state.affectedFilesPendingEmitKind = undefined;
-        state.affectedFilesPendingEmitIndex = undefined;
+    function clearAffectedFilesPendingEmit(state: BuilderProgramState, emitOnlyDtsFiles: boolean | undefined) {
+        if (!state.affectedFilesPendingEmit?.size) return;
+        if (!emitOnlyDtsFiles) return state.affectedFilesPendingEmit = undefined;
+        state.affectedFilesPendingEmit.forEach((emitKind, path) => {
+            // Mark the files as pending only if they are pending on js files, remove the dts emit pending flag
+            const pending = emitKind & BuilderFileEmit.AllJs;
+            if (!pending) state.affectedFilesPendingEmit!.delete(path);
+            else state.affectedFilesPendingEmit!.set(path, pending);
+        });
     }
 
     /**
      * Returns next file to be emitted from files that retrieved semantic diagnostics but did not emit yet
      */
-    function getNextAffectedFilePendingEmit(state: BuilderProgramState) {
-        const { affectedFilesPendingEmit } = state;
-        if (affectedFilesPendingEmit) {
-            const seenEmittedFiles = (state.seenEmittedFiles || (state.seenEmittedFiles = new Map()));
-            for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
-                const affectedFile = Debug.checkDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
-                if (affectedFile && sourceFileMayBeEmitted(affectedFile, state.program!)) {
-                    const seenKind = seenEmittedFiles.get(affectedFile.resolvedPath);
-                    const emitKind = Debug.checkDefined(Debug.checkDefined(state.affectedFilesPendingEmitKind).get(affectedFile.resolvedPath));
-                    if (seenKind === undefined || seenKind < emitKind) {
-                        // emit this file
-                        state.affectedFilesPendingEmitIndex = i;
-                        return { affectedFile, emitKind };
-                    }
-                }
+    function getNextAffectedFilePendingEmit(state: BuilderProgramState, emitOnlyDtsFiles: boolean | undefined) {
+        if (!state.affectedFilesPendingEmit?.size) return undefined;
+        return forEachEntry(state.affectedFilesPendingEmit, (emitKind, path) => {
+            const affectedFile = state.program!.getSourceFileByPath(path);
+            if (!affectedFile || !sourceFileMayBeEmitted(affectedFile, state.program!)) {
+                state.affectedFilesPendingEmit!.delete(path);
+                return undefined;
             }
-            clearAffectedFilesPendingEmit(state);
-        }
-        return undefined;
+            const seenKind = state.seenEmittedFiles?.get(affectedFile.resolvedPath);
+            let pendingKind = getPendingEmitKind(emitKind, seenKind);
+            if (emitOnlyDtsFiles) pendingKind = pendingKind & BuilderFileEmit.AllDts;
+            if (pendingKind) return { affectedFile, emitKind: pendingKind };
+        });
     }
 
     function removeDiagnosticsOfLibraryFiles(state: BuilderProgramState) {
@@ -527,7 +606,7 @@ namespace ts {
                 );
                 // If not dts emit, nothing more to do
                 if (getEmitDeclarations(state.compilerOptions)) {
-                    addToAffectedFilesPendingEmit(state, path, BuilderFileEmit.DtsOnly);
+                    addToAffectedFilesPendingEmit(state, path, state.compilerOptions.declarationMap ? BuilderFileEmit.AllDts : BuilderFileEmit.Dts);
                 }
             }
         }
@@ -678,63 +757,6 @@ namespace ts {
     }
 
     /**
-     * This is called after completing operation on the next affected file.
-     * The operations here are postponed to ensure that cancellation during the iteration is handled correctly
-     */
-    function doneWithAffectedFile(
-        state: BuilderProgramState,
-        affected: SourceFile | Program,
-        emitKind?: BuilderFileEmit,
-        isPendingEmit?: boolean,
-        isBuildInfoEmit?: boolean
-    ) {
-        if (isBuildInfoEmit) {
-            state.buildInfoEmitPending = false;
-        }
-        else if (affected === state.program) {
-            state.changedFilesSet.clear();
-            state.programEmitComplete = true;
-        }
-        else {
-            state.seenAffectedFiles!.add((affected as SourceFile).resolvedPath);
-            // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
-            state.buildInfoEmitPending = true;
-            if (emitKind !== undefined) {
-                (state.seenEmittedFiles || (state.seenEmittedFiles = new Map())).set((affected as SourceFile).resolvedPath, emitKind);
-            }
-            if (isPendingEmit) {
-                state.affectedFilesPendingEmitIndex!++;
-            }
-            else {
-                state.affectedFilesIndex!++;
-            }
-        }
-    }
-
-    /**
-     * Returns the result with affected file
-     */
-    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program): AffectedFileResult<T> {
-        doneWithAffectedFile(state, affected);
-        return { result, affected };
-    }
-
-    /**
-     * Returns the result with affected file
-     */
-    function toAffectedFileEmitResult(
-        state: BuilderProgramState,
-        result: EmitResult,
-        affected: SourceFile | Program,
-        emitKind: BuilderFileEmit,
-        isPendingEmit?: boolean,
-        isBuildInfoEmit?: boolean
-    ): AffectedFileResult<EmitResult> {
-        doneWithAffectedFile(state, affected, emitKind, isPendingEmit, isBuildInfoEmit);
-        return { result, affected };
-    }
-
-    /**
      * Gets semantic diagnostics for the file which are
      * bindAndCheckDiagnostics (from cache) and program diagnostics
      */
@@ -770,9 +792,14 @@ namespace ts {
     export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
     export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
     export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId];
+    /**
+     * fileId if pending emit is same as what compilerOptions suggest
+     * [fileId] if pending emit is only dts file emit
+     * [fileId, emitKind] if any other type emit is pending
+     */
+    export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId] | [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
     export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
-    export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
+    export type ProgramMultiFileEmitBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
         /**
          * Signature is
          * - undefined if FileInfo.version === FileInfo.signature
@@ -785,14 +812,14 @@ namespace ts {
      * [fileId, signature] if different from file's signature
      * fileId if file wasnt emitted
      */
-    export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: string];
+    export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: EmitSignature | []];
     /**
-     * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+     * ProgramMultiFileEmitBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
      */
-    export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
+    export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmitBuildInfoBuilderStateFileInfo;
     export interface ProgramMultiFileEmitBuildInfo {
         fileNames: readonly string[];
-        fileInfos: readonly ProgramBuildInfoFileInfo[];
+        fileInfos: readonly ProgramMultiFileEmitBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
         fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
         referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -804,13 +831,22 @@ namespace ts {
         // Because this is only output file in the program, we dont need fileId to deduplicate name
         latestChangedDtsFile?: string | undefined;
     }
-
+    /**
+     * ProgramBundleEmitBuildInfoFileInfo is string if !FileInfo.impliedFormat otherwise encoded FileInfo
+     */
+    export type ProgramBundleEmitBuildInfoFileInfo = string | BuilderState.FileInfo;
+    /**
+     * false if it is the emit corresponding to compilerOptions
+     * value otherwise
+     */
+    export type ProgramBuildInfoBundlePendingEmit = BuilderFileEmit | false;
     export interface ProgramBundleEmitBuildInfo {
         fileNames: readonly string[];
-        fileInfos: readonly string[];
+        fileInfos: readonly ProgramBundleEmitBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
-        outSignature: string | undefined;
+        outSignature: EmitSignature | undefined;
         latestChangedDtsFile: string | undefined;
+        pendingEmit: ProgramBuildInfoBundlePendingEmit | undefined;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
@@ -822,38 +858,50 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
-        const outFilePath = outFile(state.compilerOptions);
-        if (outFilePath && !state.compilerOptions.composite) return;
+    function getBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName, bundle: BundleBuildInfo | undefined): BuildInfo {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
         const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
-        if (outFilePath) {
-            const fileNames: string[] = [];
-            const fileInfos: string[] = [];
-            state.program!.getRootFileNames().forEach(f => {
-                const sourceFile = state.program!.getSourceFile(f);
-                if (!sourceFile) return;
-                fileNames.push(relativeToBuildInfo(sourceFile.resolvedPath));
-                fileInfos.push(sourceFile.version);
-            });
-            const result: ProgramBundleEmitBuildInfo = {
-                fileNames,
-                fileInfos,
-                options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
-                outSignature: state.outSignature,
-                latestChangedDtsFile,
-            };
-            return result;
-        }
-
         const fileNames: string[] = [];
         const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+        if (outFile(state.compilerOptions)) {
+            // Copy all fileInfo, version and impliedFormat
+            // Affects global scope and signature doesnt matter because with --out they arent calculated or needed to determine upto date ness
+            const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBundleEmitBuildInfoFileInfo => {
+                // Ensure fileId
+                toFileId(key);
+                return value.impliedFormat ?
+                    { version: value.version, impliedFormat: value.impliedFormat, signature: undefined, affectsGlobalScope: undefined } :
+                    value.version;
+            });
+            const program: ProgramBundleEmitBuildInfo = {
+                fileNames,
+                fileInfos,
+                options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
+                outSignature: state.outSignature,
+                latestChangedDtsFile,
+                pendingEmit: !state.programEmitPending ?
+                    undefined :  // Pending is undefined or None is encoded as undefined
+                    state.programEmitPending === getBuilderFileEmit(state.compilerOptions) ?
+                        false : // Pending emit is same as deteremined by compilerOptions
+                        state.programEmitPending, // Actual value
+            };
+            // Complete the bundle information if we are doing partial emit (only js or only dts)
+            const { js, dts, commonSourceDirectory, sourceFiles } = bundle!;
+            state.bundle = bundle = {
+                commonSourceDirectory,
+                sourceFiles,
+                js: js || (!state.compilerOptions.emitDeclarationOnly ? state.bundle?.js : undefined),
+                dts: dts || (getEmitDeclarations(state.compilerOptions) ? state.bundle?.dts : undefined),
+            };
+            return createBuildInfo(program, bundle);
+        }
+
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
         let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
-        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
+        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
             Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
@@ -864,7 +912,10 @@ namespace ts {
                 if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
                     const emitSignature = state.emitSignatures?.get(key);
                     if (emitSignature !== actualSignature) {
-                        (emitSignatures ||= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
+                        (emitSignatures ||= []).push(emitSignature === undefined ?
+                            fileId : // There is no emit, encode as false
+                            // fileId, signature: emptyArray if signature only differs in dtsMap option than our own compilerOptions otherwise EmitSignature
+                            [fileId, !isString(emitSignature) && emitSignature[0] === actualSignature ? emptyArray as [] : emitSignature]);
                     }
                 }
             }
@@ -919,15 +970,20 @@ namespace ts {
         }
 
         let affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
-        if (state.affectedFilesPendingEmit) {
+        if (state.affectedFilesPendingEmit?.size) {
+            const fullEmitForOptions = getBuilderFileEmit(state.compilerOptions);
             const seenFiles = new Set<Path>();
-            for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
+            for (const path of arrayFrom(state.affectedFilesPendingEmit.keys()).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
                     const file = state.program!.getSourceFileByPath(path)!;
                     if (!sourceFileMayBeEmitted(file, state.program!)) continue;
-                    const fileId = toFileId(path), emitKind = state.affectedFilesPendingEmitKind!.get(path)!;
+                    const fileId = toFileId(path), pendingEmit = state.affectedFilesPendingEmit.get(path)!;
                     (affectedFilesPendingEmit ||= []).push(
-                        emitKind === BuilderFileEmit.Full ? fileId : [fileId]
+                        pendingEmit === fullEmitForOptions ?
+                            fileId :  // Pending full emit per options
+                            pendingEmit === BuilderFileEmit.Dts ?
+                                [fileId] : // Pending on Dts only
+                                [fileId, pendingEmit] // Anything else
                     );
                 }
             }
@@ -940,10 +996,10 @@ namespace ts {
             }
         }
 
-        const result: ProgramMultiFileEmitBuildInfo = {
+        const program: ProgramMultiFileEmitBuildInfo = {
             fileNames,
             fileInfos,
-            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsMultiFileEmitBuildInfo"),
+            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
             fileIdsList,
             referencedMap,
             exportedModulesMap,
@@ -953,7 +1009,7 @@ namespace ts {
             emitSignatures,
             latestChangedDtsFile,
         };
-        return result;
+        return createBuildInfo(program, bundle);
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
             return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
@@ -986,12 +1042,12 @@ namespace ts {
         /**
          * @param optionKey key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
          */
-        function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
+        function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions) {
             let result: CompilerOptions | undefined;
             const { optionsNameMap } = getOptionsNameMap();
             for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
                 const optionInfo = optionsNameMap.get(name.toLowerCase());
-                if (optionInfo?.[optionKey]) {
+                if (optionInfo?.affectsBuildInfo) {
                     (result ||= {})[name] = convertToReusableCompilerOptionValue(
                         optionInfo,
                         options[name] as CompilerOptionsValue,
@@ -1149,7 +1205,7 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
+        newProgram.getBuildInfo = bundle => getBuildInfo(state, getCanonicalFileName, bundle);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1197,58 +1253,76 @@ namespace ts {
          */
         function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
             let affected = getNextAffectedFile(state, cancellationToken, computeHash, getCanonicalFileName, host);
-            let emitKind = BuilderFileEmit.Full;
-            let isPendingEmitFile = false;
+            const programEmitKind = getBuilderFileEmit(state.compilerOptions);
+            let emitKind: BuilderFileEmit = emitOnlyDtsFiles ?
+                programEmitKind & BuilderFileEmit.AllDts : programEmitKind;
             if (!affected) {
                 if (!outFile(state.compilerOptions)) {
-                    const pendingAffectedFile = getNextAffectedFilePendingEmit(state);
+                    const pendingAffectedFile = getNextAffectedFilePendingEmit(state, emitOnlyDtsFiles);
                     if (!pendingAffectedFile) {
-                        if (!state.buildInfoEmitPending) {
-                            return undefined;
-                        }
-
-                        const affected = Debug.checkDefined(state.program);
-                        return toAffectedFileEmitResult(
-                            state,
-                            // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
-                            // Otherwise just affected file
-                            affected.emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken),
-                            affected,
-                            /*emitKind*/ BuilderFileEmit.Full,
-                            /*isPendingEmitFile*/ false,
-                            /*isBuildInfoEmit*/ true
-                        );
+                        // Emit buildinfo if pending
+                        if (!state.buildInfoEmitPending) return undefined;
+                        const affected = state.program!;
+                        const result = affected.emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken);
+                        state.buildInfoEmitPending = false;
+                        return { result, affected };
                     }
+                    // Emit pending affected file
                     ({ affectedFile: affected, emitKind } = pendingAffectedFile);
-                    isPendingEmitFile = true;
                 }
                 else {
-                    const program = Debug.checkDefined(state.program);
-                    if (state.programEmitComplete) return undefined;
-                    affected = program;
+                    // Emit program if it was pending emit
+                    if (!state.programEmitPending) return undefined;
+                    emitKind = state.programEmitPending;
+                    if (emitOnlyDtsFiles) emitKind = emitKind & BuilderFileEmit.AllDts;
+                    if (!emitKind) return undefined;
+                    affected = state.program!;
                 }
             }
-
-            return toAffectedFileEmitResult(
-                state,
-                // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
-                // Otherwise just affected file
-                Debug.checkDefined(state.program).emit(
-                    affected === state.program ? undefined : affected as SourceFile,
-                    getEmitDeclarations(state.compilerOptions) ?
-                        getWriteFileCallback(writeFile, customTransformers) :
-                        writeFile || maybeBind(host, host.writeFile),
-                    cancellationToken,
-                    emitOnlyDtsFiles || emitKind === BuilderFileEmit.DtsOnly,
-                    customTransformers
-                ),
-                affected,
-                emitKind,
-                isPendingEmitFile,
+            // Determine if we can do partial emit
+            let emitOnly: EmitOnly | undefined;
+            if (emitKind & BuilderFileEmit.AllJs) emitOnly = EmitOnly.Js;
+            if (emitKind & BuilderFileEmit.AllDts) emitOnly = emitOnly === undefined ? EmitOnly.Dts : undefined;
+            if (affected === state.program) {
+                // Set up programEmit before calling emit so that its set in buildInfo
+                state.programEmitPending = state.changedFilesSet.size ?
+                    getPendingEmitKind(programEmitKind, emitKind) :
+                    state.programEmitPending ?
+                        getPendingEmitKind(state.programEmitPending, emitKind) :
+                        undefined;
+            }
+            // Actual emit
+            const result = state.program!.emit(
+                affected === state.program ? undefined : affected as SourceFile,
+                getWriteFileCallback(writeFile, customTransformers),
+                cancellationToken,
+                emitOnly,
+                customTransformers
             );
+            if (affected !== state.program) {
+                // update affected files
+                const affectedSourceFile = affected as SourceFile;
+                state.seenAffectedFiles!.add(affectedSourceFile.resolvedPath);
+                if (state.affectedFilesIndex !== undefined) state.affectedFilesIndex++;
+                // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
+                state.buildInfoEmitPending = true;
+                // Update the pendingEmit for the file
+                const existing = state.seenEmittedFiles?.get(affectedSourceFile.resolvedPath) || BuilderFileEmit.None;
+                (state.seenEmittedFiles ??= new Map()).set(affectedSourceFile.resolvedPath, emitKind | existing);
+                const existingPending = state.affectedFilesPendingEmit?.get(affectedSourceFile.resolvedPath) || programEmitKind;
+                const pendingKind = getPendingEmitKind(existingPending, emitKind | existing);
+                if (pendingKind) (state.affectedFilesPendingEmit ??= new Map()).set(affectedSourceFile.resolvedPath, pendingKind);
+                else state.affectedFilesPendingEmit?.delete(affectedSourceFile.resolvedPath);
+            }
+            else {
+                // In program clear our changed files since any emit handles all changes
+                state.changedFilesSet.clear();
+            }
+            return { result, affected };
         }
 
-        function getWriteFileCallback(writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined): WriteFileCallback {
+        function getWriteFileCallback(writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined): WriteFileCallback | undefined {
+            if (!getEmitDeclarations(state.compilerOptions)) return writeFile || maybeBind(host, host.writeFile);
             return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
                 if (isDeclarationFileName(fileName)) {
                     if (!outFile(state.compilerOptions)) {
@@ -1290,27 +1364,43 @@ namespace ts {
                         // and would need their d.ts change time in --build mode
                         if (state.compilerOptions.composite) {
                             const filePath = sourceFiles[0].resolvedPath;
-                            const oldSignature = state.emitSignatures?.get(filePath);
-                            emitSignature ??= computeSignature(text, computeHash, data);
-                            // Dont write dts files if they didn't change
-                            if (emitSignature === oldSignature) return;
+                            emitSignature = handleNewSignature(state.emitSignatures?.get(filePath), emitSignature);
+                            if (!emitSignature) return;
                             (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
-                            state.hasChangedEmitSignature = true;
-                            state.latestChangedDtsFile = fileName;
                         }
                     }
                     else if (state.compilerOptions.composite) {
-                        const newSignature = computeSignature(text, computeHash, data);
-                        // Dont write dts files if they didn't change
-                        if (newSignature === state.outSignature) return;
+                        const newSignature = handleNewSignature(state.outSignature, /*newSignature*/ undefined);
+                        if (!newSignature) return;
                         state.outSignature = newSignature;
-                        state.hasChangedEmitSignature = true;
-                        state.latestChangedDtsFile = fileName;
                     }
                 }
                 if (writeFile) writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
                 else if (host.writeFile) host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
                 else state.program!.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
+
+                /**
+                 * Compare to existing computed signature and store it or handle the changes in d.ts map option from before
+                 * returning undefined means that, we dont need to emit this d.ts file since its contents didnt change
+                 */
+                function handleNewSignature(oldSignatureFormat: EmitSignature | undefined, newSignature: string | undefined) {
+                    const oldSignature = !oldSignatureFormat || isString(oldSignatureFormat) ? oldSignatureFormat : oldSignatureFormat[0];
+                    newSignature ??= computeSignature(text, computeHash, data);
+                    // Dont write dts files if they didn't change
+                    if (newSignature === oldSignature) {
+                        // If the signature was encoded as string the dts map options match so nothing to do
+                        if (oldSignatureFormat === oldSignature) return undefined;
+                        // Mark as differsOnlyInMap so that --build can reverse the timestamp so that
+                        // the downstream projects dont detect this as change in d.ts file
+                        else if (data) data.differsOnlyInMap = true;
+                        else data = { differsOnlyInMap: true };
+                    }
+                    else {
+                        state.hasChangedEmitSignature = true;
+                        state.latestChangedDtsFile = fileName;
+                    }
+                    return newSignature;
+                }
             };
         }
 
@@ -1356,23 +1446,13 @@ namespace ts {
                     };
                 }
                 // In non Emit builder, clear affected files pending emit
-                else if (state.affectedFilesPendingEmitKind?.size) {
-                    Debug.assert(kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram);
-                    // State can clear affected files pending emit if
-                    if (!emitOnlyDtsFiles // If we are doing complete emit, affected files pending emit can be cleared
-                        // If every file pending emit is pending on only dts emit
-                        || every(state.affectedFilesPendingEmit, (path, index) =>
-                            index < state.affectedFilesPendingEmitIndex! ||
-                            state.affectedFilesPendingEmitKind!.get(path) === BuilderFileEmit.DtsOnly)) {
-                        clearAffectedFilesPendingEmit(state);
-                    }
+                else {
+                    clearAffectedFilesPendingEmit(state, emitOnlyDtsFiles);
                 }
             }
             return Debug.checkDefined(state.program).emit(
                 targetSourceFile,
-                getEmitDeclarations(state.compilerOptions) ?
-                    getWriteFileCallback(writeFile, customTransformers) :
-                    writeFile || maybeBind(host, host.writeFile),
+                getWriteFileCallback(writeFile, customTransformers),
                 cancellationToken,
                 emitOnlyDtsFiles,
                 customTransformers
@@ -1386,37 +1466,27 @@ namespace ts {
         function getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]> {
             while (true) {
                 const affected = getNextAffectedFile(state, cancellationToken, computeHash, getCanonicalFileName, host);
-                if (!affected) {
-                    // Done
-                    return undefined;
+                let result;
+                if (!affected) return undefined; // Done
+                else if (affected !== state.program) {
+                    // Get diagnostics for the affected file if its not ignored
+                    const affectedSourceFile = affected as SourceFile;
+                    if (!ignoreSourceFile || !ignoreSourceFile(affectedSourceFile)) {
+                        result = getSemanticDiagnosticsOfFile(state, affectedSourceFile, cancellationToken);
+                    }
+                    state.seenAffectedFiles!.add(affectedSourceFile.resolvedPath);
+                    state.affectedFilesIndex!++;
+                    // Change in changeSet, buildInfo needs to be emitted
+                    state.buildInfoEmitPending = true;
+                    if (!result) continue;
                 }
-                else if (affected === state.program) {
+                else {
                     // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
-                    return toAffectedFileResult(
-                        state,
-                        state.program.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken),
-                        affected
-                    );
+                    result = state.program.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken);
+                    state.changedFilesSet.clear();
+                    state.programEmitPending = getBuilderFileEmit(state.compilerOptions);
                 }
-
-                // Add file to affected file pending emit to handle for later emit time
-                // Apart for emit builder do this for tsbuildinfo, do this for non emit builder when noEmit is set as tsbuildinfo is written and reused between emitters
-                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram || state.compilerOptions.noEmit || state.compilerOptions.noEmitOnError) {
-                    addToAffectedFilesPendingEmit(state, (affected as SourceFile).resolvedPath, BuilderFileEmit.Full);
-                }
-
-                // Get diagnostics for the affected file if its not ignored
-                if (ignoreSourceFile && ignoreSourceFile(affected as SourceFile)) {
-                    // Get next affected file
-                    doneWithAffectedFile(state, affected);
-                    continue;
-                }
-
-                return toAffectedFileResult(
-                    state,
-                    getSemanticDiagnosticsOfFile(state, affected as SourceFile, cancellationToken),
-                    affected
-                );
+                return { result, affected };
             }
         }
 
@@ -1456,23 +1526,11 @@ namespace ts {
     }
 
     function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilePendingEmit: Path, kind: BuilderFileEmit) {
-        if (!state.affectedFilesPendingEmit) state.affectedFilesPendingEmit = [];
-        if (!state.affectedFilesPendingEmitKind) state.affectedFilesPendingEmitKind = new Map();
-
-        const existingKind = state.affectedFilesPendingEmitKind.get(affectedFilePendingEmit);
-        state.affectedFilesPendingEmit.push(affectedFilePendingEmit);
-        state.affectedFilesPendingEmitKind.set(affectedFilePendingEmit, existingKind || kind);
-
-        // affectedFilesPendingEmitIndex === undefined
-        // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files
-        //   so start from 0 as array would be affectedFilesPendingEmit
-        // else, continue to iterate from existing index, the current set is appended to existing files
-        if (state.affectedFilesPendingEmitIndex === undefined) {
-            state.affectedFilesPendingEmitIndex = 0;
-        }
+        const existingKind = state.affectedFilesPendingEmit?.get(affectedFilePendingEmit) || BuilderFileEmit.None;
+        (state.affectedFilesPendingEmit ??= new Map()).set(affectedFilePendingEmit, existingKind | kind);
     }
 
-    export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
+    export function toBuilderStateFileInfoForMultiEmit(fileInfo: ProgramMultiFileEmitBuildInfoFileInfo): BuilderState.FileInfo {
         return isString(fileInfo) ?
             { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
             isString(fileInfo.signature) ?
@@ -1480,41 +1538,60 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
-    export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit): BuilderFileEmit{
-        return isNumber(value) ? BuilderFileEmit.Full : BuilderFileEmit.DtsOnly;
+    export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit, fullEmitForOptions: BuilderFileEmit): BuilderFileEmit{
+        return isNumber(value) ? fullEmitForOptions : value[1] || BuilderFileEmit.Dts;
     }
 
-    export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+    export function toProgramEmitPending(value: ProgramBuildInfoBundlePendingEmit, options: CompilerOptions | undefined): BuilderFileEmit | undefined {
+        return !value ? getBuilderFileEmit(options || {}) : value;
+    }
+
+    export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+        const program = buildInfo.program!;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
         let state: ReusableBuilderProgramState;
-        let filePaths: Path[] | undefined;
+        const filePaths = program.fileNames?.map(toPath);
         let filePathsSetList: Set<Path>[] | undefined;
         const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
+            const fileInfos = new Map<Path, BuilderState.FileInfo>();
+            program.fileInfos.forEach((fileInfo, index) => {
+                const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
+                fileInfos.set(path, isString(fileInfo) ? { version: fileInfo, signature: undefined, affectsGlobalScope: undefined, impliedFormat: undefined } : fileInfo);
+            });
             state = {
-                fileInfos: new Map(),
+                fileInfos,
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
                 latestChangedDtsFile,
                 outSignature: program.outSignature,
+                programEmitPending: program.pendingEmit === undefined ? undefined : toProgramEmitPending(program.pendingEmit, program.options),
+                bundle: buildInfo.bundle,
             };
         }
         else {
-            filePaths = program.fileNames?.map(toPath);
             filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
             const fileInfos = new Map<Path, BuilderState.FileInfo>();
-            const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, string>() : undefined;
+            const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, EmitSignature>() : undefined;
             program.fileInfos.forEach((fileInfo, index) => {
                 const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
-                const stateFileInfo = toBuilderStateFileInfo(fileInfo);
+                const stateFileInfo = toBuilderStateFileInfoForMultiEmit(fileInfo);
                 fileInfos.set(path, stateFileInfo);
                 if (emitSignatures && stateFileInfo.signature) emitSignatures.set(path, stateFileInfo.signature);
             });
             program.emitSignatures?.forEach(value => {
                 if (isNumber(value)) emitSignatures!.delete(toFilePath(value));
-                else emitSignatures!.set(toFilePath(value[0]), value[1]);
+                else {
+                    const key = toFilePath(value[0]);
+                    emitSignatures!.set(key, !isString(value[1]) && !value[1].length ?
+                        // File signature is emit signature but differs in map
+                        [emitSignatures!.get(key)! as string] :
+                        value[1]
+                    );
+                }
             });
+            const fullEmitForOptions = program.affectedFilesPendingEmit ? getBuilderFileEmit(program.options || {}) : undefined;
             state = {
                 fileInfos,
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
@@ -1522,9 +1599,7 @@ namespace ts {
                 exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
                 semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
                 hasReusableDiagnostic: true,
-                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0])),
-                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), toBuilderFileEmit),
-                affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
+                affectedFilesPendingEmit: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), value => toBuilderFileEmit(value, fullEmitForOptions!)),
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
                 latestChangedDtsFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
@@ -1566,7 +1641,7 @@ namespace ts {
         }
 
         function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths![fileId - 1];
+            return filePaths[fileId - 1];
         }
 
         function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
@@ -1596,7 +1671,7 @@ namespace ts {
         const fileInfos = new Map<Path, string>();
         program.fileInfos.forEach((fileInfo, index) => {
             const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
-            const version = isString(fileInfo) ? fileInfo : (fileInfo as ProgramBuildInfoBuilderStateFileInfo).version; // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
+            const version = isString(fileInfo) ? fileInfo : fileInfo.version;
             fileInfos.set(path, version);
         });
         return fileInfos;

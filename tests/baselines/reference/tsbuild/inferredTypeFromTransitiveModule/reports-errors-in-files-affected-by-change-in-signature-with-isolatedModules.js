@@ -416,19 +416,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "../bar.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         [
           "../index.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ],
       [
         [
           "../lazyindex.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ]
     ]
   },
@@ -730,19 +730,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "../bar.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         [
           "../index.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ],
       [
         [
           "../lazyindex.ts"
         ],
-        "DtsOnly"
+        "Dts"
       ]
     ]
   },

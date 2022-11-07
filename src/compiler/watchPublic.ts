@@ -20,7 +20,7 @@ namespace ts {
             buildInfo = getBuildInfo(buildInfoPath, content);
         }
         if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
-        return createBuilderProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
+        return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
