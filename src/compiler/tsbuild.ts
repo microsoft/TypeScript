@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import { combinePaths, Extension, fileExtensionIs, ResolvedConfigFileName } from "./_namespaces/ts";
 
 /** @internal */
 export enum UpToDateStatusType {
@@ -169,10 +169,10 @@ export namespace Status {
 }
 
 /** @internal */
-export function resolveConfigFileProjectName(project: string): ts.ResolvedConfigFileName {
-    if (ts.fileExtensionIs(project, ts.Extension.Json)) {
-        return project as ts.ResolvedConfigFileName;
+export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
+    if (fileExtensionIs(project, Extension.Json)) {
+        return project as ResolvedConfigFileName;
     }
 
-    return ts.combinePaths(project, "tsconfig.json") as ts.ResolvedConfigFileName;
+    return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
 }

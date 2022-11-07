@@ -1,21 +1,25 @@
-import * as Harness from "./_namespaces/Harness";
 import * as vpath from "./_namespaces/vpath";
 import * as ts from "./_namespaces/ts";
 import * as FourSlash from "./_namespaces/FourSlash";
 import * as project from "./_namespaces/project";
 import * as RWC from "./_namespaces/RWC";
+import {
+    CompilerBaselineRunner, CompilerTestType, DefinitelyTypedRunner, DockerfileRunner, FourSlashRunner,
+    GeneratedFourslashRunner, IO, Parallel, RunnerBase, setLightMode, setShardId, setShards, Test262BaselineRunner,
+    TestRunnerKind, UserCodeRunner,
+} from "./_namespaces/Harness";
 
 /* eslint-disable prefer-const */
-export let runners: Harness.RunnerBase[] = [];
+export let runners: RunnerBase[] = [];
 export let iterations = 1;
 /* eslint-enable prefer-const */
 
-function runTests(runners: Harness.RunnerBase[]) {
+function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
         const seen = new Map<string, string>();
         const dupes: [string, string][] = [];
         for (const runner of runners) {
-            if (runner instanceof Harness.CompilerBaselineRunner || runner instanceof Harness.FourSlashRunner) {
+            if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
                 for (const sf of runner.enumerateTestFiles()) {
                     const full = typeof sf === "string" ? sf : sf.file;
                     const base = vpath.basename(full).toLowerCase();
@@ -44,32 +48,32 @@ function tryGetConfig(args: string[]) {
     return configPath && configPath.replace(/(^[\"'])|([\"']$)/g, "");
 }
 
-export function createRunner(kind: Harness.TestRunnerKind): Harness.RunnerBase {
+export function createRunner(kind: TestRunnerKind): RunnerBase {
     switch (kind) {
         case "conformance":
-            return new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Conformance);
+            return new CompilerBaselineRunner(CompilerTestType.Conformance);
         case "compiler":
-            return new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Regressions);
+            return new CompilerBaselineRunner(CompilerTestType.Regressions);
         case "fourslash":
-            return new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Native);
+            return new FourSlashRunner(FourSlash.FourSlashTestType.Native);
         case "fourslash-shims":
-            return new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Shims);
+            return new FourSlashRunner(FourSlash.FourSlashTestType.Shims);
         case "fourslash-shims-pp":
-            return new Harness.FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess);
+            return new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess);
         case "fourslash-server":
-            return new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Server);
+            return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
         case "rwc":
             return new RWC.RWCRunner();
         case "test262":
-            return new Harness.Test262BaselineRunner();
+            return new Test262BaselineRunner();
         case "user":
-            return new Harness.UserCodeRunner();
+            return new UserCodeRunner();
         case "dt":
-            return new Harness.DefinitelyTypedRunner();
+            return new DefinitelyTypedRunner();
         case "docker":
-            return new Harness.DockerfileRunner();
+            return new DockerfileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -79,13 +83,13 @@ export function createRunner(kind: Harness.TestRunnerKind): Harness.RunnerBase {
 const mytestconfigFileName = "mytest.config";
 const testconfigFileName = "test.config";
 
-const customConfig = tryGetConfig(Harness.IO.args());
+const customConfig = tryGetConfig(IO.args());
 const testConfigContent =
-    customConfig && Harness.IO.fileExists(customConfig)
-        ? Harness.IO.readFile(customConfig)!
-        : Harness.IO.fileExists(mytestconfigFileName)
-            ? Harness.IO.readFile(mytestconfigFileName)!
-            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName)! : "";
+    customConfig && IO.fileExists(customConfig)
+        ? IO.readFile(customConfig)!
+        : IO.fileExists(mytestconfigFileName)
+            ? IO.readFile(mytestconfigFileName)!
+            : IO.fileExists(testconfigFileName) ? IO.readFile(testconfigFileName)! : "";
 
 export let taskConfigsFolder: string;
 export let workerCount: number;
@@ -111,7 +115,7 @@ export interface TestConfig {
 }
 
 export interface TaskSet {
-    runner: Harness.TestRunnerKind;
+    runner: TestRunnerKind;
     files: string[];
 }
 
@@ -121,7 +125,7 @@ function handleTestConfig() {
     if (testConfigContent !== "") {
         const testConfig = JSON.parse(testConfigContent) as TestConfig;
         if (testConfig.light) {
-            Harness.setLightMode(true);
+            setLightMode(true);
         }
         if (testConfig.timeout) {
             globalTimeout = testConfig.timeout;
@@ -140,10 +144,10 @@ function handleTestConfig() {
             keepFailed = true;
         }
         if (testConfig.shardId) {
-            Harness.setShardId(testConfig.shardId);
+            setShardId(testConfig.shardId);
         }
         if (testConfig.shards) {
-            Harness.setShards(testConfig.shards);
+            setShards(testConfig.shards);
         }
 
         if (testConfig.stackTraceLimit === "full") {
@@ -177,44 +181,44 @@ function handleTestConfig() {
 
                 switch (option) {
                     case "compiler":
-                        runners.push(new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Conformance));
-                        runners.push(new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Regressions));
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
                         break;
                     case "conformance":
-                        runners.push(new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Conformance));
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         break;
                     case "project":
                         runners.push(new project.ProjectRunner());
                         break;
                     case "fourslash":
-                        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Native));
+                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
                         break;
                     case "fourslash-shims":
-                        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Shims));
+                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
                         break;
                     case "fourslash-shims-pp":
-                        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
+                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
                         break;
                     case "fourslash-server":
-                        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Server));
+                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
                         break;
                     case "fourslash-generated":
-                        runners.push(new Harness.GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
+                        runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
                     case "rwc":
                         runners.push(new RWC.RWCRunner());
                         break;
                     case "test262":
-                        runners.push(new Harness.Test262BaselineRunner());
+                        runners.push(new Test262BaselineRunner());
                         break;
                     case "user":
-                        runners.push(new Harness.UserCodeRunner());
+                        runners.push(new UserCodeRunner());
                         break;
                     case "dt":
-                        runners.push(new Harness.DefinitelyTypedRunner());
+                        runners.push(new DefinitelyTypedRunner());
                         break;
                     case "docker":
-                        runners.push(new Harness.DockerfileRunner());
+                        runners.push(new DockerfileRunner());
                         break;
                 }
             }
@@ -223,22 +227,22 @@ function handleTestConfig() {
 
     if (runners.length === 0) {
         // compiler
-        runners.push(new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Conformance));
-        runners.push(new Harness.CompilerBaselineRunner(Harness.CompilerTestType.Regressions));
+        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+        runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
 
         runners.push(new project.ProjectRunner());
 
         // language services
-        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Native));
-        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
-        runners.push(new Harness.FourSlashRunner(FourSlash.FourSlashTestType.Server));
+        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
+        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
+        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
+        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
 
         // CRON-only tests
         if (process.env.TRAVIS_EVENT_TYPE === "cron") {
-            runners.push(new Harness.UserCodeRunner());
-            runners.push(new Harness.DockerfileRunner());
+            runners.push(new UserCodeRunner());
+            runners.push(new DockerfileRunner());
         }
     }
     if (runUnitTests === undefined) {
@@ -278,10 +282,10 @@ export let isWorker: boolean;
 function startTestEnvironment() {
     isWorker = handleTestConfig();
     if (isWorker) {
-        return Harness.Parallel.Worker.start();
+        return Parallel.Worker.start();
     }
     else if (taskConfigsFolder && workerCount && workerCount > 1) {
-        return Harness.Parallel.Host.start();
+        return Parallel.Host.start();
     }
     beginTests();
 }

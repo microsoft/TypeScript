@@ -1,4 +1,3 @@
-import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vpath from "./_namespaces/vpath";
@@ -6,6 +5,7 @@ import * as vfs from "./_namespaces/vfs";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
+import { RunnerBase, TypeWriterResult, TypeWriterWalker } from "./_namespaces/Harness";
 
 export interface IO {
     newLine(): string;
@@ -21,7 +21,7 @@ export interface IO {
     fileExists(fileName: string): boolean;
     directoryExists(path: string): boolean;
     deleteFile(fileName: string): void;
-    enumerateTestFiles(runner: Harness.RunnerBase): (string | FileBasedTest)[];
+    enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
     listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
     log(text: string): void;
     args(): string[];
@@ -76,7 +76,7 @@ function createNodeIO(): IO {
         return pathModule.join(...components);
     }
 
-    function enumerateTestFiles(runner: Harness.RunnerBase) {
+    function enumerateTestFiles(runner: RunnerBase) {
         return runner.getTestFiles();
     }
 
@@ -723,7 +723,7 @@ export namespace Compiler {
         // These types are equivalent, but depend on what order the compiler observed
         // certain parts of the program.
 
-        const fullWalker = new Harness.TypeWriterWalker(program, !!hasErrorBaseline);
+        const fullWalker = new TypeWriterWalker(program, !!hasErrorBaseline);
 
         // Produce baselines.  The first gives the types for all expressions.
         // The second gives symbols for all identifiers.
@@ -795,7 +795,7 @@ export namespace Compiler {
                 const { unitName } = file;
                 let typeLines = "=== " + unitName + " ===\r\n";
                 const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
-                const gen: IterableIterator<Harness.TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                 let lastIndexWritten: number | undefined;
                 for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
                     if (isSymbolBaseline && !result.symbol) {

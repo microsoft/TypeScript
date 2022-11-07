@@ -1,54 +1,85 @@
-import * as ts from "../_namespaces/ts";
+import {
+    AccessorDeclaration, addEmitFlags, AdditiveOperator, AdditiveOperatorOrHigher, AssertionLevel,
+    AssignmentOperatorOrHigher, BinaryExpression, BinaryOperator, BinaryOperatorToken, BindingOrAssignmentElement,
+    BindingOrAssignmentElementRestIndicator, BindingOrAssignmentElementTarget, BindingOrAssignmentPattern,
+    BitwiseOperator, BitwiseOperatorOrHigher, BooleanLiteral, CharacterCodes, CommaListExpression,
+    compareStringsCaseSensitive, CompilerOptions, Debug, Declaration, EmitFlags, EmitHelperFactory, EmitHost,
+    EmitResolver, EntityName, EqualityOperator, EqualityOperatorOrHigher, ExclamationToken, ExponentiationOperator,
+    ExportDeclaration, Expression, ExpressionStatement, externalHelpersModuleNameText, first, firstOrUndefined,
+    ForInitializer, GeneratedIdentifier, GeneratedIdentifierFlags, GeneratedNamePart, GeneratedPrivateIdentifier,
+    getAllAccessorDeclarations, getEmitFlags, getEmitHelpers, getEmitModuleKind, getESModuleInterop,
+    getExternalModuleName, getExternalModuleNameFromPath, getJSDocType, getJSDocTypeTag, getModifiers,
+    getNamespaceDeclarationNode, getOrCreateEmitNode, getOriginalNode, getParseTreeNode,
+    getSourceTextOfNodeFromSourceFile, HasIllegalDecorators, HasIllegalModifiers, HasIllegalType,
+    HasIllegalTypeParameters, Identifier, idText, ImportCall, ImportDeclaration, ImportEqualsDeclaration,
+    isAssignmentExpression, isAssignmentOperator, isBlock, isComputedPropertyName, isDeclarationBindingElement,
+    isDefaultImport, isEffectiveExternalModule, isExclamationToken, isExportNamespaceAsDefaultDeclaration,
+    isFileLevelUniqueName, isGeneratedIdentifier, isGeneratedPrivateIdentifier, isIdentifier, isInJSFile,
+    isLiteralExpression, isMemberName, isMinusToken, isObjectLiteralElementLike, isParenthesizedExpression, isPlusToken,
+    isPostfixUnaryExpression, isPrefixUnaryExpression, isPrivateIdentifier, isPrologueDirective, isPropertyAssignment,
+    isPropertyName, isQualifiedName, isQuestionToken, isReadonlyKeyword, isShorthandPropertyAssignment, isSourceFile,
+    isSpreadAssignment, isSpreadElement, isStringLiteral, isThisTypeNode, isTypeNode, isTypeParameterDeclaration,
+    isVariableDeclarationList, JSDocNamespaceBody, JSDocTypeAssertion, JsxOpeningFragment, JsxOpeningLikeElement,
+    LeftHandSideExpression, LiteralExpression, LogicalOperator, LogicalOperatorOrHigher, map, MemberExpression,
+    MethodDeclaration, MinusToken, ModifiersArray, ModuleKind, ModuleName, MultiplicativeOperator,
+    MultiplicativeOperatorOrHigher, Mutable, NamedImportBindings, Node, NodeArray, NodeFactory, NullLiteral,
+    NumericLiteral, ObjectLiteralElementLike, ObjectLiteralExpression, or, OuterExpression, OuterExpressionKinds,
+    outFile, parseNodeFactory, PlusToken, PostfixUnaryExpression, PrefixUnaryExpression, PrivateIdentifier,
+    PropertyAssignment, PropertyDeclaration, PropertyName, pushIfUnique, QuestionToken, ReadonlyKeyword,
+    RelationalOperator, RelationalOperatorOrHigher, setOriginalNode, setParent, setStartsOnNewLine, setTextRange,
+    ShiftOperator, ShiftOperatorOrHigher, ShorthandPropertyAssignment, some, SourceFile, Statement, StringLiteral,
+    SyntaxKind, TextRange, ThisTypeNode, Token, TypeNode, TypeParameterDeclaration,
+} from "../_namespaces/ts";
 
 // Compound nodes
 
 /** @internal */
-export function createEmptyExports(factory: ts.NodeFactory) {
+export function createEmptyExports(factory: NodeFactory) {
     return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
 }
 
 /** @internal */
-export function createMemberAccessForPropertyName(factory: ts.NodeFactory, target: ts.Expression, memberName: ts.PropertyName, location?: ts.TextRange): ts.MemberExpression {
-    if (ts.isComputedPropertyName(memberName)) {
-         return ts.setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
+export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+    if (isComputedPropertyName(memberName)) {
+         return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
     }
     else {
-        const expression = ts.setTextRange(
-            ts.isMemberName(memberName)
+        const expression = setTextRange(
+            isMemberName(memberName)
                 ? factory.createPropertyAccessExpression(target, memberName)
                 : factory.createElementAccessExpression(target, memberName),
             memberName
         );
-        ts.getOrCreateEmitNode(expression).flags |= ts.EmitFlags.NoNestedSourceMaps;
+        getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
         return expression;
     }
 }
 
-function createReactNamespace(reactNamespace: string, parent: ts.JsxOpeningLikeElement | ts.JsxOpeningFragment) {
+function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
     // To ensure the emit resolver can properly resolve the namespace, we need to
     // treat this identifier as if it were a source tree node by clearing the `Synthesized`
     // flag and setting a parent node.
-    const react = ts.parseNodeFactory.createIdentifier(reactNamespace || "React");
+    const react = parseNodeFactory.createIdentifier(reactNamespace || "React");
     // Set the parent that is in parse tree
     // this makes sure that parent chain is intact for checker to traverse complete scope tree
-    ts.setParent(react, ts.getParseTreeNode(parent));
+    setParent(react, getParseTreeNode(parent));
     return react;
 }
 
-function createJsxFactoryExpressionFromEntityName(factory: ts.NodeFactory, jsxFactory: ts.EntityName, parent: ts.JsxOpeningLikeElement | ts.JsxOpeningFragment): ts.Expression {
-    if (ts.isQualifiedName(jsxFactory)) {
+function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+    if (isQualifiedName(jsxFactory)) {
         const left = createJsxFactoryExpressionFromEntityName(factory, jsxFactory.left, parent);
-        const right = factory.createIdentifier(ts.idText(jsxFactory.right)) as ts.Mutable<ts.Identifier>;
+        const right = factory.createIdentifier(idText(jsxFactory.right)) as Mutable<Identifier>;
         right.escapedText = jsxFactory.right.escapedText;
         return factory.createPropertyAccessExpression(left, right);
     }
     else {
-        return createReactNamespace(ts.idText(jsxFactory), parent);
+        return createReactNamespace(idText(jsxFactory), parent);
     }
 }
 
 /** @internal */
-export function createJsxFactoryExpression(factory: ts.NodeFactory, jsxFactoryEntity: ts.EntityName | undefined, reactNamespace: string, parent: ts.JsxOpeningLikeElement | ts.JsxOpeningFragment): ts.Expression {
+export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
     return jsxFactoryEntity ?
         createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
@@ -57,7 +88,7 @@ export function createJsxFactoryExpression(factory: ts.NodeFactory, jsxFactoryEn
         );
 }
 
-function createJsxFragmentFactoryExpression(factory: ts.NodeFactory, jsxFragmentFactoryEntity: ts.EntityName | undefined, reactNamespace: string, parent: ts.JsxOpeningLikeElement | ts.JsxOpeningFragment): ts.Expression {
+function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
     return jsxFragmentFactoryEntity ?
         createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
@@ -67,7 +98,7 @@ function createJsxFragmentFactoryExpression(factory: ts.NodeFactory, jsxFragment
 }
 
 /** @internal */
-export function createExpressionForJsxElement(factory: ts.NodeFactory, callee: ts.Expression, tagName: ts.Expression, props: ts.Expression | undefined, children: readonly ts.Expression[] | undefined, location: ts.TextRange): ts.LeftHandSideExpression {
+export function createExpressionForJsxElement(factory: NodeFactory, callee: Expression, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, location: TextRange): LeftHandSideExpression {
     const argumentsList = [tagName];
     if (props) {
         argumentsList.push(props);
@@ -89,7 +120,7 @@ export function createExpressionForJsxElement(factory: ts.NodeFactory, callee: t
         }
     }
 
-    return ts.setTextRange(
+    return setTextRange(
         factory.createCallExpression(
             callee,
             /*typeArguments*/ undefined,
@@ -100,7 +131,7 @@ export function createExpressionForJsxElement(factory: ts.NodeFactory, callee: t
 }
 
 /** @internal */
-export function createExpressionForJsxFragment(factory: ts.NodeFactory, jsxFactoryEntity: ts.EntityName | undefined, jsxFragmentFactoryEntity: ts.EntityName | undefined, reactNamespace: string, children: readonly ts.Expression[], parentElement: ts.JsxOpeningFragment, location: ts.TextRange): ts.LeftHandSideExpression {
+export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
     const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
     const argumentsList = [tagName, factory.createNull()];
 
@@ -116,7 +147,7 @@ export function createExpressionForJsxFragment(factory: ts.NodeFactory, jsxFacto
         }
     }
 
-    return ts.setTextRange(
+    return setTextRange(
         factory.createCallExpression(
             createJsxFactoryExpression(factory, jsxFactoryEntity, reactNamespace, parentElement),
             /*typeArguments*/ undefined,
@@ -129,9 +160,9 @@ export function createExpressionForJsxFragment(factory: ts.NodeFactory, jsxFacto
 // Utilities
 
 /** @internal */
-export function createForOfBindingStatement(factory: ts.NodeFactory, node: ts.ForInitializer, boundValue: ts.Expression): ts.Statement {
-    if (ts.isVariableDeclarationList(node)) {
-        const firstDeclaration = ts.first(node.declarations);
+export function createForOfBindingStatement(factory: NodeFactory, node: ForInitializer, boundValue: Expression): Statement {
+    if (isVariableDeclarationList(node)) {
+        const firstDeclaration = first(node.declarations);
         const updatedDeclaration = factory.updateVariableDeclaration(
             firstDeclaration,
             firstDeclaration.name,
@@ -139,7 +170,7 @@ export function createForOfBindingStatement(factory: ts.NodeFactory, node: ts.Fo
             /*type*/ undefined,
             boundValue
         );
-        return ts.setTextRange(
+        return setTextRange(
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.updateVariableDeclarationList(node, [updatedDeclaration])
@@ -148,15 +179,15 @@ export function createForOfBindingStatement(factory: ts.NodeFactory, node: ts.Fo
         );
     }
     else {
-        const updatedExpression = ts.setTextRange(factory.createAssignment(node, boundValue), /*location*/ node);
-        return ts.setTextRange(factory.createExpressionStatement(updatedExpression), /*location*/ node);
+        const updatedExpression = setTextRange(factory.createAssignment(node, boundValue), /*location*/ node);
+        return setTextRange(factory.createExpressionStatement(updatedExpression), /*location*/ node);
     }
 }
 
 /** @internal */
-export function insertLeadingStatement(factory: ts.NodeFactory, dest: ts.Statement, source: ts.Statement) {
-    if (ts.isBlock(dest)) {
-        return factory.updateBlock(dest, ts.setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
+export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement) {
+    if (isBlock(dest)) {
+        return factory.updateBlock(dest, setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
     }
     else {
         return factory.createBlock(factory.createNodeArray([dest, source]), /*multiLine*/ true);
@@ -164,48 +195,48 @@ export function insertLeadingStatement(factory: ts.NodeFactory, dest: ts.Stateme
 }
 
 /** @internal */
-export function createExpressionFromEntityName(factory: ts.NodeFactory, node: ts.EntityName | ts.Expression): ts.Expression {
-    if (ts.isQualifiedName(node)) {
+export function createExpressionFromEntityName(factory: NodeFactory, node: EntityName | Expression): Expression {
+    if (isQualifiedName(node)) {
         const left = createExpressionFromEntityName(factory, node.left);
         // TODO(rbuckton): Does this need to be parented?
-        const right = ts.setParent(ts.setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
-        return ts.setTextRange(factory.createPropertyAccessExpression(left, right), node);
+        const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
+        return setTextRange(factory.createPropertyAccessExpression(left, right), node);
     }
     else {
         // TODO(rbuckton): Does this need to be parented?
-        return ts.setParent(ts.setTextRange(factory.cloneNode(node), node), node.parent);
+        return setParent(setTextRange(factory.cloneNode(node), node), node.parent);
     }
 }
 
 /** @internal */
-export function createExpressionForPropertyName(factory: ts.NodeFactory, memberName: Exclude<ts.PropertyName, ts.PrivateIdentifier>): ts.Expression {
-    if (ts.isIdentifier(memberName)) {
+export function createExpressionForPropertyName(factory: NodeFactory, memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
+    if (isIdentifier(memberName)) {
         return factory.createStringLiteralFromNode(memberName);
     }
-    else if (ts.isComputedPropertyName(memberName)) {
+    else if (isComputedPropertyName(memberName)) {
         // TODO(rbuckton): Does this need to be parented?
-        return ts.setParent(ts.setTextRange(factory.cloneNode(memberName.expression), memberName.expression), memberName.expression.parent);
+        return setParent(setTextRange(factory.cloneNode(memberName.expression), memberName.expression), memberName.expression.parent);
     }
     else {
         // TODO(rbuckton): Does this need to be parented?
-        return ts.setParent(ts.setTextRange(factory.cloneNode(memberName), memberName), memberName.parent);
+        return setParent(setTextRange(factory.cloneNode(memberName), memberName), memberName.parent);
     }
 }
 
-function createExpressionForAccessorDeclaration(factory: ts.NodeFactory, properties: ts.NodeArray<ts.Declaration>, property: ts.AccessorDeclaration & { readonly name: Exclude<ts.PropertyName, ts.PrivateIdentifier>; }, receiver: ts.Expression, multiLine: boolean) {
-    const { firstAccessor, getAccessor, setAccessor } = ts.getAllAccessorDeclarations(properties, property);
+function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
+    const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
     if (property === firstAccessor) {
-        return ts.setTextRange(
+        return setTextRange(
             factory.createObjectDefinePropertyCall(
                 receiver,
                 createExpressionForPropertyName(factory, property.name),
                 factory.createPropertyDescriptor({
                     enumerable: factory.createFalse(),
                     configurable: true,
-                    get: getAccessor && ts.setTextRange(
-                        ts.setOriginalNode(
+                    get: getAccessor && setTextRange(
+                        setOriginalNode(
                             factory.createFunctionExpression(
-                                ts.getModifiers(getAccessor),
+                                getModifiers(getAccessor),
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -217,10 +248,10 @@ function createExpressionForAccessorDeclaration(factory: ts.NodeFactory, propert
                         ),
                         getAccessor
                     ),
-                    set: setAccessor && ts.setTextRange(
-                        ts.setOriginalNode(
+                    set: setAccessor && setTextRange(
+                        setOriginalNode(
                             factory.createFunctionExpression(
-                                ts.getModifiers(setAccessor),
+                                getModifiers(setAccessor),
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -241,9 +272,9 @@ function createExpressionForAccessorDeclaration(factory: ts.NodeFactory, propert
     return undefined;
 }
 
-function createExpressionForPropertyAssignment(factory: ts.NodeFactory, property: ts.PropertyAssignment, receiver: ts.Expression) {
-    return ts.setOriginalNode(
-        ts.setTextRange(
+function createExpressionForPropertyAssignment(factory: NodeFactory, property: PropertyAssignment, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
             factory.createAssignment(
                 createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
                 property.initializer
@@ -254,9 +285,9 @@ function createExpressionForPropertyAssignment(factory: ts.NodeFactory, property
     );
 }
 
-function createExpressionForShorthandPropertyAssignment(factory: ts.NodeFactory, property: ts.ShorthandPropertyAssignment, receiver: ts.Expression) {
-    return ts.setOriginalNode(
-        ts.setTextRange(
+function createExpressionForShorthandPropertyAssignment(factory: NodeFactory, property: ShorthandPropertyAssignment, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
             factory.createAssignment(
                 createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
                 factory.cloneNode(property.name)
@@ -267,15 +298,15 @@ function createExpressionForShorthandPropertyAssignment(factory: ts.NodeFactory,
     );
 }
 
-function createExpressionForMethodDeclaration(factory: ts.NodeFactory, method: ts.MethodDeclaration, receiver: ts.Expression) {
-    return ts.setOriginalNode(
-        ts.setTextRange(
+function createExpressionForMethodDeclaration(factory: NodeFactory, method: MethodDeclaration, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
             factory.createAssignment(
                 createMemberAccessForPropertyName(factory, receiver, method.name, /*location*/ method.name),
-                ts.setOriginalNode(
-                    ts.setTextRange(
+                setOriginalNode(
+                    setTextRange(
                         factory.createFunctionExpression(
-                            ts.getModifiers(method),
+                            getModifiers(method),
                             method.asteriskToken,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
@@ -295,19 +326,19 @@ function createExpressionForMethodDeclaration(factory: ts.NodeFactory, method: t
 }
 
 /** @internal */
-export function createExpressionForObjectLiteralElementLike(factory: ts.NodeFactory, node: ts.ObjectLiteralExpression, property: ts.ObjectLiteralElementLike, receiver: ts.Expression): ts.Expression | undefined {
-    if (property.name && ts.isPrivateIdentifier(property.name)) {
-        ts.Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+    if (property.name && isPrivateIdentifier(property.name)) {
+        Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
     }
     switch (property.kind) {
-        case ts.SyntaxKind.GetAccessor:
-        case ts.SyntaxKind.SetAccessor:
-            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<ts.PropertyName, ts.PrivateIdentifier> }, receiver, !!node.multiLine);
-        case ts.SyntaxKind.PropertyAssignment:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier> }, receiver, !!node.multiLine);
+        case SyntaxKind.PropertyAssignment:
             return createExpressionForPropertyAssignment(factory, property, receiver);
-        case ts.SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
             return createExpressionForShorthandPropertyAssignment(factory, property, receiver);
-        case ts.SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodDeclaration:
             return createExpressionForMethodDeclaration(factory, property, receiver);
     }
 }
@@ -345,30 +376,30 @@ export function createExpressionForObjectLiteralElementLike(factory: ts.NodeFact
  * @param expression The expression to use as the value to increment or decrement
  * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
  */
-export function expandPreOrPostfixIncrementOrDecrementExpression(factory: ts.NodeFactory, node: ts.PrefixUnaryExpression | ts.PostfixUnaryExpression, expression: ts.Expression, recordTempVariable: (node: ts.Identifier) => void, resultVariable: ts.Identifier | undefined) {
+export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
     const operator = node.operator;
-    ts.Debug.assert(operator === ts.SyntaxKind.PlusPlusToken || operator === ts.SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
+    Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
 
     const temp = factory.createTempVariable(recordTempVariable);
     expression = factory.createAssignment(temp, expression);
-    ts.setTextRange(expression, node.operand);
+    setTextRange(expression, node.operand);
 
-    let operation: ts.Expression = ts.isPrefixUnaryExpression(node) ?
+    let operation: Expression = isPrefixUnaryExpression(node) ?
         factory.createPrefixUnaryExpression(operator, temp) :
         factory.createPostfixUnaryExpression(temp, operator);
-    ts.setTextRange(operation, node);
+    setTextRange(operation, node);
 
     if (resultVariable) {
         operation = factory.createAssignment(resultVariable, operation);
-        ts.setTextRange(operation, node);
+        setTextRange(operation, node);
     }
 
     expression = factory.createComma(expression, operation);
-    ts.setTextRange(expression, node);
+    setTextRange(expression, node);
 
-    if (ts.isPostfixUnaryExpression(node)) {
+    if (isPostfixUnaryExpression(node)) {
         expression = factory.createComma(expression, temp);
-        ts.setTextRange(expression, node);
+        setTextRange(expression, node);
     }
 
     return expression;
@@ -378,16 +409,16 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: ts.Nod
 /**
  * Gets whether an identifier should only be referred to by its internal name.
  */
-export function isInternalName(node: ts.Identifier) {
-    return (ts.getEmitFlags(node) & ts.EmitFlags.InternalName) !== 0;
+export function isInternalName(node: Identifier) {
+    return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
 }
 
 /** @internal */
 /**
  * Gets whether an identifier should only be referred to by its local name.
  */
-export function isLocalName(node: ts.Identifier) {
-    return (ts.getEmitFlags(node) & ts.EmitFlags.LocalName) !== 0;
+export function isLocalName(node: Identifier) {
+    return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
 }
 
 /** @internal */
@@ -395,18 +426,18 @@ export function isLocalName(node: ts.Identifier) {
  * Gets whether an identifier should only be referred to by its export representation if the
  * name points to an exported symbol.
  */
-export function isExportName(node: ts.Identifier) {
-    return (ts.getEmitFlags(node) & ts.EmitFlags.ExportName) !== 0;
+export function isExportName(node: Identifier) {
+    return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
 }
 
-function isUseStrictPrologue(node: ts.ExpressionStatement): boolean {
-    return ts.isStringLiteral(node.expression) && node.expression.text === "use strict";
+function isUseStrictPrologue(node: ExpressionStatement): boolean {
+    return isStringLiteral(node.expression) && node.expression.text === "use strict";
 }
 
 /** @internal */
-export function findUseStrictPrologue(statements: readonly ts.Statement[]): ts.Statement | undefined {
+export function findUseStrictPrologue(statements: readonly Statement[]): Statement | undefined {
     for (const statement of statements) {
-        if (ts.isPrologueDirective(statement)) {
+        if (isPrologueDirective(statement)) {
             if (isUseStrictPrologue(statement)) {
                 return statement;
             }
@@ -419,59 +450,59 @@ export function findUseStrictPrologue(statements: readonly ts.Statement[]): ts.S
 }
 
 /** @internal */
-export function startsWithUseStrict(statements: readonly ts.Statement[]) {
-    const firstStatement = ts.firstOrUndefined(statements);
+export function startsWithUseStrict(statements: readonly Statement[]) {
+    const firstStatement = firstOrUndefined(statements);
     return firstStatement !== undefined
-        && ts.isPrologueDirective(firstStatement)
+        && isPrologueDirective(firstStatement)
         && isUseStrictPrologue(firstStatement);
 }
 
 /** @internal */
-export function isCommaSequence(node: ts.Expression): node is ts.BinaryExpression & {operatorToken: ts.Token<ts.SyntaxKind.CommaToken>} | ts.CommaListExpression {
-    return node.kind === ts.SyntaxKind.BinaryExpression && (node as ts.BinaryExpression).operatorToken.kind === ts.SyntaxKind.CommaToken ||
-        node.kind === ts.SyntaxKind.CommaListExpression;
+export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken ||
+        node.kind === SyntaxKind.CommaListExpression;
 }
 
 /** @internal */
-export function isJSDocTypeAssertion(node: ts.Node): node is ts.JSDocTypeAssertion {
-    return ts.isParenthesizedExpression(node)
-        && ts.isInJSFile(node)
-        && !!ts.getJSDocTypeTag(node);
+export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
+    return isParenthesizedExpression(node)
+        && isInJSFile(node)
+        && !!getJSDocTypeTag(node);
 }
 
 /** @internal */
-export function getJSDocTypeAssertionType(node: ts.JSDocTypeAssertion) {
-    const type = ts.getJSDocType(node);
-    ts.Debug.assertIsDefined(type);
+export function getJSDocTypeAssertionType(node: JSDocTypeAssertion) {
+    const type = getJSDocType(node);
+    Debug.assertIsDefined(type);
     return type;
 }
 
 /** @internal */
-export function isOuterExpression(node: ts.Node, kinds = ts.OuterExpressionKinds.All): node is ts.OuterExpression {
+export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
     switch (node.kind) {
-        case ts.SyntaxKind.ParenthesizedExpression:
-            if (kinds & ts.OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
+        case SyntaxKind.ParenthesizedExpression:
+            if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
                 return false;
             }
-            return (kinds & ts.OuterExpressionKinds.Parentheses) !== 0;
-        case ts.SyntaxKind.TypeAssertionExpression:
-        case ts.SyntaxKind.AsExpression:
-        case ts.SyntaxKind.SatisfiesExpression:
-            return (kinds & ts.OuterExpressionKinds.TypeAssertions) !== 0;
-        case ts.SyntaxKind.NonNullExpression:
-            return (kinds & ts.OuterExpressionKinds.NonNullAssertions) !== 0;
-        case ts.SyntaxKind.PartiallyEmittedExpression:
-            return (kinds & ts.OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
+            return (kinds & OuterExpressionKinds.Parentheses) !== 0;
+        case SyntaxKind.TypeAssertionExpression:
+        case SyntaxKind.AsExpression:
+        case SyntaxKind.SatisfiesExpression:
+            return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
+        case SyntaxKind.NonNullExpression:
+            return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
+        case SyntaxKind.PartiallyEmittedExpression:
+            return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
     }
     return false;
 }
 
 /** @internal */
-export function skipOuterExpressions(node: ts.Expression, kinds?: ts.OuterExpressionKinds): ts.Expression;
+export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
 /** @internal */
-export function skipOuterExpressions(node: ts.Node, kinds?: ts.OuterExpressionKinds): ts.Node;
+export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
-export function skipOuterExpressions(node: ts.Node, kinds = ts.OuterExpressionKinds.All) {
+export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
     while (isOuterExpression(node, kinds)) {
         node = node.expression;
     }
@@ -479,63 +510,63 @@ export function skipOuterExpressions(node: ts.Node, kinds = ts.OuterExpressionKi
 }
 
 /** @internal */
-export function skipAssertions(node: ts.Expression): ts.Expression;
+export function skipAssertions(node: Expression): Expression;
 /** @internal */
-export function skipAssertions(node: ts.Node): ts.Node;
+export function skipAssertions(node: Node): Node;
 /** @internal */
-export function skipAssertions(node: ts.Node): ts.Node {
-    return skipOuterExpressions(node, ts.OuterExpressionKinds.Assertions);
+export function skipAssertions(node: Node): Node {
+    return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
 }
 
 /** @internal */
-export function startOnNewLine<T extends ts.Node>(node: T): T {
-    return ts.setStartsOnNewLine(node, /*newLine*/ true);
+export function startOnNewLine<T extends Node>(node: T): T {
+    return setStartsOnNewLine(node, /*newLine*/ true);
 }
 
 /** @internal */
-export function getExternalHelpersModuleName(node: ts.SourceFile) {
-    const parseNode = ts.getOriginalNode(node, ts.isSourceFile);
+export function getExternalHelpersModuleName(node: SourceFile) {
+    const parseNode = getOriginalNode(node, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return emitNode && emitNode.externalHelpersModuleName;
 }
 
 /** @internal */
-export function hasRecordedExternalHelpers(sourceFile: ts.SourceFile) {
-    const parseNode = ts.getOriginalNode(sourceFile, ts.isSourceFile);
+export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+    const parseNode = getOriginalNode(sourceFile, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
 }
 
 /** @internal */
-export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: ts.NodeFactory, helperFactory: ts.EmitHelperFactory, sourceFile: ts.SourceFile, compilerOptions: ts.CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
-    if (compilerOptions.importHelpers && ts.isEffectiveExternalModule(sourceFile, compilerOptions)) {
-        let namedBindings: ts.NamedImportBindings | undefined;
-        const moduleKind = ts.getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ts.ModuleKind.ES2015 && moduleKind <= ts.ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ts.ModuleKind.ESNext) {
+export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+    if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
+        let namedBindings: NamedImportBindings | undefined;
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
             // use named imports
-            const helpers = ts.getEmitHelpers(sourceFile);
+            const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
                 const helperNames: string[] = [];
                 for (const helper of helpers) {
                     if (!helper.scoped) {
                         const importName = helper.importName;
                         if (importName) {
-                            ts.pushIfUnique(helperNames, importName);
+                            pushIfUnique(helperNames, importName);
                         }
                     }
                 }
-                if (ts.some(helperNames)) {
-                    helperNames.sort(ts.compareStringsCaseSensitive);
+                if (some(helperNames)) {
+                    helperNames.sort(compareStringsCaseSensitive);
                     // Alias the imports if the names are used somewhere in the file.
                     // NOTE: We don't need to care about global import collisions as this is a module.
                     namedBindings = nodeFactory.createNamedImports(
-                        ts.map(helperNames, name => ts.isFileLevelUniqueName(sourceFile, name)
+                        map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
                             ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
                             : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
                         )
                     );
-                    const parseNode = ts.getOriginalNode(sourceFile, ts.isSourceFile);
-                    const emitNode = ts.getOrCreateEmitNode(parseNode);
+                    const parseNode = getOriginalNode(sourceFile, isSourceFile);
+                    const emitNode = getOrCreateEmitNode(parseNode);
                     emitNode.externalHelpers = true;
                 }
             }
@@ -551,29 +582,29 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: ts.N
             const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                nodeFactory.createStringLiteral(ts.externalHelpersModuleNameText),
+                nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                  /*assertClause*/ undefined
             );
-            ts.addEmitFlags(externalHelpersImportDeclaration, ts.EmitFlags.NeverApplyImportHelper);
+            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             return externalHelpersImportDeclaration;
         }
     }
 }
 
 /** @internal */
-export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: ts.NodeFactory, node: ts.SourceFile, compilerOptions: ts.CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
-    if (compilerOptions.importHelpers && ts.isEffectiveExternalModule(node, compilerOptions)) {
+export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+    if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
         const externalHelpersModuleName = getExternalHelpersModuleName(node);
         if (externalHelpersModuleName) {
             return externalHelpersModuleName;
         }
 
-        const moduleKind = ts.getEmitModuleKind(compilerOptions);
-        let create = (hasExportStarsToExportValues || (ts.getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && moduleKind !== ts.ModuleKind.System
-            && (moduleKind < ts.ModuleKind.ES2015 || node.impliedNodeFormat === ts.ModuleKind.CommonJS);
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
+            && moduleKind !== ModuleKind.System
+            && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
         if (!create) {
-            const helpers = ts.getEmitHelpers(node);
+            const helpers = getEmitHelpers(node);
             if (helpers) {
                 for (const helper of helpers) {
                     if (!helper.scoped) {
@@ -585,9 +616,9 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: ts.NodeFac
         }
 
         if (create) {
-            const parseNode = ts.getOriginalNode(node, ts.isSourceFile);
-            const emitNode = ts.getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(ts.externalHelpersModuleNameText));
+            const parseNode = getOriginalNode(node, isSourceFile);
+            const emitNode = getOrCreateEmitNode(parseNode);
+            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
         }
     }
 }
@@ -596,16 +627,16 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: ts.NodeFac
 /**
  * Get the name of that target module from an import or export declaration
  */
-export function getLocalNameForExternalImport(factory: ts.NodeFactory, node: ts.ImportDeclaration | ts.ExportDeclaration | ts.ImportEqualsDeclaration, sourceFile: ts.SourceFile): ts.Identifier | undefined {
-    const namespaceDeclaration = ts.getNamespaceDeclarationNode(node);
-    if (namespaceDeclaration && !ts.isDefaultImport(node) && !ts.isExportNamespaceAsDefaultDeclaration(node)) {
+export function getLocalNameForExternalImport(factory: NodeFactory, node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier | undefined {
+    const namespaceDeclaration = getNamespaceDeclarationNode(node);
+    if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
-        return ts.isGeneratedIdentifier(name) ? name : factory.createIdentifier(ts.getSourceTextOfNodeFromSourceFile(sourceFile, name) || ts.idText(name));
+        return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
-    if (node.kind === ts.SyntaxKind.ImportDeclaration && node.importClause) {
+    if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
         return factory.getGeneratedNameForNode(node);
     }
-    if (node.kind === ts.SyntaxKind.ExportDeclaration && node.moduleSpecifier) {
+    if (node.kind === SyntaxKind.ExportDeclaration && node.moduleSpecifier) {
         return factory.getGeneratedNameForNode(node);
     }
     return undefined;
@@ -620,9 +651,9 @@ export function getLocalNameForExternalImport(factory: ts.NodeFactory, node: ts.
  *  3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
  * Otherwise, a new StringLiteral node representing the module name will be returned.
  */
-export function getExternalModuleNameLiteral(factory: ts.NodeFactory, importNode: ts.ImportDeclaration | ts.ExportDeclaration | ts.ImportEqualsDeclaration | ts.ImportCall, sourceFile: ts.SourceFile, host: ts.EmitHost, resolver: ts.EmitResolver, compilerOptions: ts.CompilerOptions) {
-    const moduleName = ts.getExternalModuleName(importNode);
-    if (moduleName && ts.isStringLiteral(moduleName)) {
+export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+    const moduleName = getExternalModuleName(importNode);
+    if (moduleName && isStringLiteral(moduleName)) {
         return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
             || tryRenameExternalModule(factory, moduleName, sourceFile)
             || factory.cloneNode(moduleName);
@@ -635,7 +666,7 @@ export function getExternalModuleNameLiteral(factory: ts.NodeFactory, importNode
  * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
  * Here we check if alternative name was provided for a given moduleName and return it if possible.
  */
-function tryRenameExternalModule(factory: ts.NodeFactory, moduleName: ts.LiteralExpression, sourceFile: ts.SourceFile) {
+function tryRenameExternalModule(factory: NodeFactory, moduleName: LiteralExpression, sourceFile: SourceFile) {
     const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
     return rename ? factory.createStringLiteral(rename) : undefined;
 }
@@ -648,20 +679,20 @@ function tryRenameExternalModule(factory: ts.NodeFactory, moduleName: ts.Literal
  *  2. --out or --outFile is used, making the name relative to the rootDir
  * Otherwise, a new StringLiteral node representing the module name will be returned.
  */
-export function tryGetModuleNameFromFile(factory: ts.NodeFactory, file: ts.SourceFile | undefined, host: ts.EmitHost, options: ts.CompilerOptions): ts.StringLiteral | undefined {
+export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile | undefined, host: EmitHost, options: CompilerOptions): StringLiteral | undefined {
     if (!file) {
         return undefined;
     }
     if (file.moduleName) {
         return factory.createStringLiteral(file.moduleName);
     }
-    if (!file.isDeclarationFile && ts.outFile(options)) {
-        return factory.createStringLiteral(ts.getExternalModuleNameFromPath(host, file.fileName));
+    if (!file.isDeclarationFile && outFile(options)) {
+        return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
     }
     return undefined;
 }
 
-function tryGetModuleNameFromDeclaration(declaration: ts.ImportEqualsDeclaration | ts.ImportDeclaration | ts.ExportDeclaration | ts.ImportCall, host: ts.EmitHost, factory: ts.NodeFactory, resolver: ts.EmitResolver, compilerOptions: ts.CompilerOptions) {
+function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall, host: EmitHost, factory: NodeFactory, resolver: EmitResolver, compilerOptions: CompilerOptions) {
     return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
 }
 
@@ -669,8 +700,8 @@ function tryGetModuleNameFromDeclaration(declaration: ts.ImportEqualsDeclaration
 /**
  * Gets the initializer of an BindingOrAssignmentElement.
  */
-export function getInitializerOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): ts.Expression | undefined {
-    if (ts.isDeclarationBindingElement(bindingElement)) {
+export function getInitializerOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Expression | undefined {
+    if (isDeclarationBindingElement(bindingElement)) {
         // `1` in `let { a = 1 } = ...`
         // `1` in `let { a: b = 1 } = ...`
         // `1` in `let { a: {b} = 1 } = ...`
@@ -681,31 +712,31 @@ export function getInitializerOfBindingOrAssignmentElement(bindingElement: ts.Bi
         return bindingElement.initializer;
     }
 
-    if (ts.isPropertyAssignment(bindingElement)) {
+    if (isPropertyAssignment(bindingElement)) {
         // `1` in `({ a: b = 1 } = ...)`
         // `1` in `({ a: {b} = 1 } = ...)`
         // `1` in `({ a: [b] = 1 } = ...)`
         const initializer = bindingElement.initializer;
-        return ts.isAssignmentExpression(initializer, /*excludeCompoundAssignment*/ true)
+        return isAssignmentExpression(initializer, /*excludeCompoundAssignment*/ true)
             ? initializer.right
             : undefined;
     }
 
-    if (ts.isShorthandPropertyAssignment(bindingElement)) {
+    if (isShorthandPropertyAssignment(bindingElement)) {
         // `1` in `({ a = 1 } = ...)`
         return bindingElement.objectAssignmentInitializer;
     }
 
-    if (ts.isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+    if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
         // `1` in `[a = 1] = ...`
         // `1` in `[{a} = 1] = ...`
         // `1` in `[[a] = 1] = ...`
         return bindingElement.right;
     }
 
-    if (ts.isSpreadElement(bindingElement)) {
+    if (isSpreadElement(bindingElement)) {
         // Recovery consistent with existing emit.
-        return getInitializerOfBindingOrAssignmentElement(bindingElement.expression as ts.BindingOrAssignmentElement);
+        return getInitializerOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
     }
 }
 
@@ -713,8 +744,8 @@ export function getInitializerOfBindingOrAssignmentElement(bindingElement: ts.Bi
 /**
  * Gets the name of an BindingOrAssignmentElement.
  */
-export function getTargetOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): ts.BindingOrAssignmentElementTarget | undefined {
-    if (ts.isDeclarationBindingElement(bindingElement)) {
+export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementTarget | undefined {
+    if (isDeclarationBindingElement(bindingElement)) {
         // `a` in `let { a } = ...`
         // `a` in `let { a = 1 } = ...`
         // `b` in `let { a: b } = ...`
@@ -734,9 +765,9 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: ts.Binding
         return bindingElement.name;
     }
 
-    if (ts.isObjectLiteralElementLike(bindingElement)) {
+    if (isObjectLiteralElementLike(bindingElement)) {
         switch (bindingElement.kind) {
-            case ts.SyntaxKind.PropertyAssignment:
+            case SyntaxKind.PropertyAssignment:
                 // `b` in `({ a: b } = ...)`
                 // `b` in `({ a: b = 1 } = ...)`
                 // `{b}` in `({ a: {b} } = ...)`
@@ -747,34 +778,34 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: ts.Binding
                 // `b.c` in `({ a: b.c = 1 } = ...)`
                 // `b[0]` in `({ a: b[0] } = ...)`
                 // `b[0]` in `({ a: b[0] = 1 } = ...)`
-                return getTargetOfBindingOrAssignmentElement(bindingElement.initializer as ts.BindingOrAssignmentElement);
+                return getTargetOfBindingOrAssignmentElement(bindingElement.initializer as BindingOrAssignmentElement);
 
-            case ts.SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
                 // `a` in `({ a } = ...)`
                 // `a` in `({ a = 1 } = ...)`
                 return bindingElement.name;
 
-            case ts.SyntaxKind.SpreadAssignment:
+            case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
-                return getTargetOfBindingOrAssignmentElement(bindingElement.expression as ts.BindingOrAssignmentElement);
+                return getTargetOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
         }
 
         // no target
         return undefined;
     }
 
-    if (ts.isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+    if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
         // `a` in `[a = 1] = ...`
         // `{a}` in `[{a} = 1] = ...`
         // `[a]` in `[[a] = 1] = ...`
         // `a.b` in `[a.b = 1] = ...`
         // `a[0]` in `[a[0] = 1] = ...`
-        return getTargetOfBindingOrAssignmentElement(bindingElement.left as ts.BindingOrAssignmentElement);
+        return getTargetOfBindingOrAssignmentElement(bindingElement.left as BindingOrAssignmentElement);
     }
 
-    if (ts.isSpreadElement(bindingElement)) {
+    if (isSpreadElement(bindingElement)) {
         // `a` in `[...a] = ...`
-        return getTargetOfBindingOrAssignmentElement(bindingElement.expression as ts.BindingOrAssignmentElement);
+        return getTargetOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
     }
 
     // `a` in `[a] = ...`
@@ -789,15 +820,15 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: ts.Binding
 /**
  * Determines whether an BindingOrAssignmentElement is a rest element.
  */
-export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): ts.BindingOrAssignmentElementRestIndicator | undefined {
+export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator | undefined {
     switch (bindingElement.kind) {
-        case ts.SyntaxKind.Parameter:
-        case ts.SyntaxKind.BindingElement:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.BindingElement:
             // `...` in `let [...a] = ...`
             return bindingElement.dotDotDotToken;
 
-        case ts.SyntaxKind.SpreadElement:
-        case ts.SyntaxKind.SpreadAssignment:
+        case SyntaxKind.SpreadElement:
+        case SyntaxKind.SpreadAssignment:
             // `...` in `[...a] = ...`
             return bindingElement;
     }
@@ -809,95 +840,95 @@ export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: ts.
 /**
  * Gets the property name of a BindingOrAssignmentElement
  */
-export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): Exclude<ts.PropertyName, ts.PrivateIdentifier> | undefined {
+export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
     const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
-    ts.Debug.assert(!!propertyName || ts.isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
+    Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
     return propertyName;
 }
 
 /** @internal */
-export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: ts.BindingOrAssignmentElement): Exclude<ts.PropertyName, ts.PrivateIdentifier> | undefined {
+export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
     switch (bindingElement.kind) {
-        case ts.SyntaxKind.BindingElement:
+        case SyntaxKind.BindingElement:
             // `a` in `let { a: b } = ...`
             // `[a]` in `let { [a]: b } = ...`
             // `"a"` in `let { "a": b } = ...`
             // `1` in `let { 1: b } = ...`
             if (bindingElement.propertyName) {
                 const propertyName = bindingElement.propertyName;
-                if (ts.isPrivateIdentifier(propertyName)) {
-                    return ts.Debug.failBadSyntaxKind(propertyName);
+                if (isPrivateIdentifier(propertyName)) {
+                    return Debug.failBadSyntaxKind(propertyName);
                 }
-                return ts.isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                     ? propertyName.expression
                     : propertyName;
             }
 
             break;
 
-        case ts.SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyAssignment:
             // `a` in `({ a: b } = ...)`
             // `[a]` in `({ [a]: b } = ...)`
             // `"a"` in `({ "a": b } = ...)`
             // `1` in `({ 1: b } = ...)`
             if (bindingElement.name) {
                 const propertyName = bindingElement.name;
-                if (ts.isPrivateIdentifier(propertyName)) {
-                    return ts.Debug.failBadSyntaxKind(propertyName);
+                if (isPrivateIdentifier(propertyName)) {
+                    return Debug.failBadSyntaxKind(propertyName);
                 }
-                return ts.isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                     ? propertyName.expression
                     : propertyName;
             }
 
             break;
 
-        case ts.SyntaxKind.SpreadAssignment:
+        case SyntaxKind.SpreadAssignment:
             // `a` in `({ ...a } = ...)`
-            if (bindingElement.name && ts.isPrivateIdentifier(bindingElement.name)) {
-                return ts.Debug.failBadSyntaxKind(bindingElement.name);
+            if (bindingElement.name && isPrivateIdentifier(bindingElement.name)) {
+                return Debug.failBadSyntaxKind(bindingElement.name);
             }
             return bindingElement.name;
     }
 
     const target = getTargetOfBindingOrAssignmentElement(bindingElement);
-    if (target && ts.isPropertyName(target)) {
+    if (target && isPropertyName(target)) {
         return target;
     }
 }
 
-function isStringOrNumericLiteral(node: ts.Node): node is ts.StringLiteral | ts.NumericLiteral {
+function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.StringLiteral
-        || kind === ts.SyntaxKind.NumericLiteral;
+    return kind === SyntaxKind.StringLiteral
+        || kind === SyntaxKind.NumericLiteral;
 }
 
 /** @internal */
 /**
  * Gets the elements of a BindingOrAssignmentPattern
  */
-export function getElementsOfBindingOrAssignmentPattern(name: ts.BindingOrAssignmentPattern): readonly ts.BindingOrAssignmentElement[] {
+export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): readonly BindingOrAssignmentElement[] {
     switch (name.kind) {
-        case ts.SyntaxKind.ObjectBindingPattern:
-        case ts.SyntaxKind.ArrayBindingPattern:
-        case ts.SyntaxKind.ArrayLiteralExpression:
+        case SyntaxKind.ObjectBindingPattern:
+        case SyntaxKind.ArrayBindingPattern:
+        case SyntaxKind.ArrayLiteralExpression:
             // `a` in `{a}`
             // `a` in `[a]`
-            return name.elements as readonly ts.BindingOrAssignmentElement[];
+            return name.elements as readonly BindingOrAssignmentElement[];
 
-        case ts.SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.ObjectLiteralExpression:
             // `a` in `{a}`
-            return name.properties as readonly ts.BindingOrAssignmentElement[];
+            return name.properties as readonly BindingOrAssignmentElement[];
     }
 }
 
 /* @internal */
-export function getJSDocTypeAliasName(fullName: ts.JSDocNamespaceBody | undefined) {
+export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
     if (fullName) {
         let rightNode = fullName;
         while (true) {
-            if (ts.isIdentifier(rightNode) || !rightNode.body) {
-                return ts.isIdentifier(rightNode) ? rightNode : rightNode.name;
+            if (isIdentifier(rightNode) || !rightNode.body) {
+                return isIdentifier(rightNode) ? rightNode : rightNode.name;
             }
             rightNode = rightNode.body;
         }
@@ -905,177 +936,177 @@ export function getJSDocTypeAliasName(fullName: ts.JSDocNamespaceBody | undefine
 }
 
 /** @internal */
-export function canHaveIllegalType(node: ts.Node): node is ts.HasIllegalType {
+export function canHaveIllegalType(node: Node): node is HasIllegalType {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.Constructor
-        || kind === ts.SyntaxKind.SetAccessor;
+    return kind === SyntaxKind.Constructor
+        || kind === SyntaxKind.SetAccessor;
 }
 
 /** @internal */
-export function canHaveIllegalTypeParameters(node: ts.Node): node is ts.HasIllegalTypeParameters {
+export function canHaveIllegalTypeParameters(node: Node): node is HasIllegalTypeParameters {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.Constructor
-        || kind === ts.SyntaxKind.GetAccessor
-        || kind === ts.SyntaxKind.SetAccessor;
+    return kind === SyntaxKind.Constructor
+        || kind === SyntaxKind.GetAccessor
+        || kind === SyntaxKind.SetAccessor;
 }
 
 /** @internal */
-export function canHaveIllegalDecorators(node: ts.Node): node is ts.HasIllegalDecorators {
+export function canHaveIllegalDecorators(node: Node): node is HasIllegalDecorators {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.PropertyAssignment
-        || kind === ts.SyntaxKind.ShorthandPropertyAssignment
-        || kind === ts.SyntaxKind.FunctionDeclaration
-        || kind === ts.SyntaxKind.Constructor
-        || kind === ts.SyntaxKind.IndexSignature
-        || kind === ts.SyntaxKind.ClassStaticBlockDeclaration
-        || kind === ts.SyntaxKind.MissingDeclaration
-        || kind === ts.SyntaxKind.VariableStatement
-        || kind === ts.SyntaxKind.InterfaceDeclaration
-        || kind === ts.SyntaxKind.TypeAliasDeclaration
-        || kind === ts.SyntaxKind.EnumDeclaration
-        || kind === ts.SyntaxKind.ModuleDeclaration
-        || kind === ts.SyntaxKind.ImportEqualsDeclaration
-        || kind === ts.SyntaxKind.ImportDeclaration
-        || kind === ts.SyntaxKind.NamespaceExportDeclaration
-        || kind === ts.SyntaxKind.ExportDeclaration
-        || kind === ts.SyntaxKind.ExportAssignment;
+    return kind === SyntaxKind.PropertyAssignment
+        || kind === SyntaxKind.ShorthandPropertyAssignment
+        || kind === SyntaxKind.FunctionDeclaration
+        || kind === SyntaxKind.Constructor
+        || kind === SyntaxKind.IndexSignature
+        || kind === SyntaxKind.ClassStaticBlockDeclaration
+        || kind === SyntaxKind.MissingDeclaration
+        || kind === SyntaxKind.VariableStatement
+        || kind === SyntaxKind.InterfaceDeclaration
+        || kind === SyntaxKind.TypeAliasDeclaration
+        || kind === SyntaxKind.EnumDeclaration
+        || kind === SyntaxKind.ModuleDeclaration
+        || kind === SyntaxKind.ImportEqualsDeclaration
+        || kind === SyntaxKind.ImportDeclaration
+        || kind === SyntaxKind.NamespaceExportDeclaration
+        || kind === SyntaxKind.ExportDeclaration
+        || kind === SyntaxKind.ExportAssignment;
 }
 
 /** @internal */
-export function canHaveIllegalModifiers(node: ts.Node): node is ts.HasIllegalModifiers {
+export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.ClassStaticBlockDeclaration
-        || kind === ts.SyntaxKind.PropertyAssignment
-        || kind === ts.SyntaxKind.ShorthandPropertyAssignment
-        || kind === ts.SyntaxKind.FunctionType
-        || kind === ts.SyntaxKind.MissingDeclaration
-        || kind === ts.SyntaxKind.NamespaceExportDeclaration;
+    return kind === SyntaxKind.ClassStaticBlockDeclaration
+        || kind === SyntaxKind.PropertyAssignment
+        || kind === SyntaxKind.ShorthandPropertyAssignment
+        || kind === SyntaxKind.FunctionType
+        || kind === SyntaxKind.MissingDeclaration
+        || kind === SyntaxKind.NamespaceExportDeclaration;
 }
 
 /** @internal */
-export const isTypeNodeOrTypeParameterDeclaration = ts.or(ts.isTypeNode, ts.isTypeParameterDeclaration) as (node: ts.Node) => node is ts.TypeNode | ts.TypeParameterDeclaration;
+export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
 /** @internal */
-export const isQuestionOrExclamationToken = ts.or(ts.isQuestionToken, ts.isExclamationToken) as (node: ts.Node) => node is ts.QuestionToken | ts.ExclamationToken;
+export const isQuestionOrExclamationToken = or(isQuestionToken, isExclamationToken) as (node: Node) => node is QuestionToken | ExclamationToken;
 /** @internal */
-export const isIdentifierOrThisTypeNode = ts.or(ts.isIdentifier, ts.isThisTypeNode) as (node: ts.Node) => node is ts.Identifier | ts.ThisTypeNode;
+export const isIdentifierOrThisTypeNode = or(isIdentifier, isThisTypeNode) as (node: Node) => node is Identifier | ThisTypeNode;
 /** @internal */
-export const isReadonlyKeywordOrPlusOrMinusToken = ts.or(ts.isReadonlyKeyword, ts.isPlusToken, ts.isMinusToken) as (node: ts.Node) => node is ts.ReadonlyKeyword | ts.PlusToken | ts.MinusToken;
+export const isReadonlyKeywordOrPlusOrMinusToken = or(isReadonlyKeyword, isPlusToken, isMinusToken) as (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
 /** @internal */
-export const isQuestionOrPlusOrMinusToken = ts.or(ts.isQuestionToken, ts.isPlusToken, ts.isMinusToken) as (node: ts.Node) => node is ts.QuestionToken | ts.PlusToken | ts.MinusToken;
+export const isQuestionOrPlusOrMinusToken = or(isQuestionToken, isPlusToken, isMinusToken) as (node: Node) => node is QuestionToken | PlusToken | MinusToken;
 /** @internal */
-export const isModuleName = ts.or(ts.isIdentifier, ts.isStringLiteral) as (node: ts.Node) => node is ts.ModuleName;
+export const isModuleName = or(isIdentifier, isStringLiteral) as (node: Node) => node is ModuleName;
 
 /** @internal */
-export function isLiteralTypeLikeExpression(node: ts.Node): node is ts.NullLiteral | ts.BooleanLiteral | ts.LiteralExpression | ts.PrefixUnaryExpression {
+export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
     const kind = node.kind;
-    return kind === ts.SyntaxKind.NullKeyword
-        || kind === ts.SyntaxKind.TrueKeyword
-        || kind === ts.SyntaxKind.FalseKeyword
-        || ts.isLiteralExpression(node)
-        || ts.isPrefixUnaryExpression(node);
+    return kind === SyntaxKind.NullKeyword
+        || kind === SyntaxKind.TrueKeyword
+        || kind === SyntaxKind.FalseKeyword
+        || isLiteralExpression(node)
+        || isPrefixUnaryExpression(node);
 }
 
-function isExponentiationOperator(kind: ts.SyntaxKind): kind is ts.ExponentiationOperator {
-    return kind === ts.SyntaxKind.AsteriskAsteriskToken;
+function isExponentiationOperator(kind: SyntaxKind): kind is ExponentiationOperator {
+    return kind === SyntaxKind.AsteriskAsteriskToken;
 }
 
-function isMultiplicativeOperator(kind: ts.SyntaxKind): kind is ts.MultiplicativeOperator {
-    return kind === ts.SyntaxKind.AsteriskToken
-        || kind === ts.SyntaxKind.SlashToken
-        || kind === ts.SyntaxKind.PercentToken;
+function isMultiplicativeOperator(kind: SyntaxKind): kind is MultiplicativeOperator {
+    return kind === SyntaxKind.AsteriskToken
+        || kind === SyntaxKind.SlashToken
+        || kind === SyntaxKind.PercentToken;
 }
 
-function isMultiplicativeOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.MultiplicativeOperatorOrHigher {
+function isMultiplicativeOperatorOrHigher(kind: SyntaxKind): kind is MultiplicativeOperatorOrHigher {
     return isExponentiationOperator(kind)
         || isMultiplicativeOperator(kind);
 }
 
-function isAdditiveOperator(kind: ts.SyntaxKind): kind is ts.AdditiveOperator {
-    return kind === ts.SyntaxKind.PlusToken
-        || kind === ts.SyntaxKind.MinusToken;
+function isAdditiveOperator(kind: SyntaxKind): kind is AdditiveOperator {
+    return kind === SyntaxKind.PlusToken
+        || kind === SyntaxKind.MinusToken;
 }
 
-function isAdditiveOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.AdditiveOperatorOrHigher {
+function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
     return isAdditiveOperator(kind)
         || isMultiplicativeOperatorOrHigher(kind);
 }
 
-function isShiftOperator(kind: ts.SyntaxKind): kind is ts.ShiftOperator {
-    return kind === ts.SyntaxKind.LessThanLessThanToken
-        || kind === ts.SyntaxKind.GreaterThanGreaterThanToken
-        || kind === ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+function isShiftOperator(kind: SyntaxKind): kind is ShiftOperator {
+    return kind === SyntaxKind.LessThanLessThanToken
+        || kind === SyntaxKind.GreaterThanGreaterThanToken
+        || kind === SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
 }
 
-function isShiftOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.ShiftOperatorOrHigher {
+function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
     return isShiftOperator(kind)
         || isAdditiveOperatorOrHigher(kind);
 }
 
-function isRelationalOperator(kind: ts.SyntaxKind): kind is ts.RelationalOperator {
-    return kind === ts.SyntaxKind.LessThanToken
-        || kind === ts.SyntaxKind.LessThanEqualsToken
-        || kind === ts.SyntaxKind.GreaterThanToken
-        || kind === ts.SyntaxKind.GreaterThanEqualsToken
-        || kind === ts.SyntaxKind.InstanceOfKeyword
-        || kind === ts.SyntaxKind.InKeyword;
+function isRelationalOperator(kind: SyntaxKind): kind is RelationalOperator {
+    return kind === SyntaxKind.LessThanToken
+        || kind === SyntaxKind.LessThanEqualsToken
+        || kind === SyntaxKind.GreaterThanToken
+        || kind === SyntaxKind.GreaterThanEqualsToken
+        || kind === SyntaxKind.InstanceOfKeyword
+        || kind === SyntaxKind.InKeyword;
 }
 
-function isRelationalOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.RelationalOperatorOrHigher {
+function isRelationalOperatorOrHigher(kind: SyntaxKind): kind is RelationalOperatorOrHigher {
     return isRelationalOperator(kind)
         || isShiftOperatorOrHigher(kind);
 }
 
-function isEqualityOperator(kind: ts.SyntaxKind): kind is ts.EqualityOperator {
-    return kind === ts.SyntaxKind.EqualsEqualsToken
-        || kind === ts.SyntaxKind.EqualsEqualsEqualsToken
-        || kind === ts.SyntaxKind.ExclamationEqualsToken
-        || kind === ts.SyntaxKind.ExclamationEqualsEqualsToken;
+function isEqualityOperator(kind: SyntaxKind): kind is EqualityOperator {
+    return kind === SyntaxKind.EqualsEqualsToken
+        || kind === SyntaxKind.EqualsEqualsEqualsToken
+        || kind === SyntaxKind.ExclamationEqualsToken
+        || kind === SyntaxKind.ExclamationEqualsEqualsToken;
 }
 
-function isEqualityOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.EqualityOperatorOrHigher {
+function isEqualityOperatorOrHigher(kind: SyntaxKind): kind is EqualityOperatorOrHigher {
     return isEqualityOperator(kind)
         || isRelationalOperatorOrHigher(kind);
 }
 
-function isBitwiseOperator(kind: ts.SyntaxKind): kind is ts.BitwiseOperator {
-    return kind === ts.SyntaxKind.AmpersandToken
-        || kind === ts.SyntaxKind.BarToken
-        || kind === ts.SyntaxKind.CaretToken;
+function isBitwiseOperator(kind: SyntaxKind): kind is BitwiseOperator {
+    return kind === SyntaxKind.AmpersandToken
+        || kind === SyntaxKind.BarToken
+        || kind === SyntaxKind.CaretToken;
 }
 
-function isBitwiseOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.BitwiseOperatorOrHigher {
+function isBitwiseOperatorOrHigher(kind: SyntaxKind): kind is BitwiseOperatorOrHigher {
     return isBitwiseOperator(kind)
         || isEqualityOperatorOrHigher(kind);
 }
 
 // NOTE: The version in utilities includes ExclamationToken, which is not a binary operator.
-function isLogicalOperator(kind: ts.SyntaxKind): kind is ts.LogicalOperator {
-    return kind === ts.SyntaxKind.AmpersandAmpersandToken
-        || kind === ts.SyntaxKind.BarBarToken;
+function isLogicalOperator(kind: SyntaxKind): kind is LogicalOperator {
+    return kind === SyntaxKind.AmpersandAmpersandToken
+        || kind === SyntaxKind.BarBarToken;
 }
 
-function isLogicalOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.LogicalOperatorOrHigher {
+function isLogicalOperatorOrHigher(kind: SyntaxKind): kind is LogicalOperatorOrHigher {
     return isLogicalOperator(kind)
         || isBitwiseOperatorOrHigher(kind);
 }
 
-function isAssignmentOperatorOrHigher(kind: ts.SyntaxKind): kind is ts.AssignmentOperatorOrHigher {
-    return kind === ts.SyntaxKind.QuestionQuestionToken
+function isAssignmentOperatorOrHigher(kind: SyntaxKind): kind is AssignmentOperatorOrHigher {
+    return kind === SyntaxKind.QuestionQuestionToken
         || isLogicalOperatorOrHigher(kind)
-        || ts.isAssignmentOperator(kind);
+        || isAssignmentOperator(kind);
 }
 
-function isBinaryOperator(kind: ts.SyntaxKind): kind is ts.BinaryOperator {
+function isBinaryOperator(kind: SyntaxKind): kind is BinaryOperator {
     return isAssignmentOperatorOrHigher(kind)
-        || kind === ts.SyntaxKind.CommaToken;
+        || kind === SyntaxKind.CommaToken;
 }
 
 /** @internal */
-export function isBinaryOperatorToken(node: ts.Node): node is ts.BinaryOperatorToken {
+export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
 
-type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, outerState: TOuterState) => number;
+type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, outerState: TOuterState) => number;
 
 namespace BinaryExpressionState {
     /**
@@ -1084,9 +1115,9 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, outerState: TOuterState): number {
+    export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, outerState: TOuterState): number {
         const prevUserState = stackIndex > 0 ? userStateStack[stackIndex - 1] : undefined;
-        ts.Debug.assertEqual(stateStack[stackIndex], enter);
+        Debug.assertEqual(stateStack[stackIndex], enter);
         userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState, outerState);
         stateStack[stackIndex] = nextState(machine, enter);
         return stackIndex;
@@ -1098,9 +1129,9 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
-        ts.Debug.assertEqual(stateStack[stackIndex], left);
-        ts.Debug.assertIsDefined(machine.onLeft);
+    export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+        Debug.assertEqual(stateStack[stackIndex], left);
+        Debug.assertIsDefined(machine.onLeft);
         stateStack[stackIndex] = nextState(machine, left);
         const nextNode = machine.onLeft(nodeStack[stackIndex].left, userStateStack[stackIndex], nodeStack[stackIndex]);
         if (nextNode) {
@@ -1116,9 +1147,9 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
-        ts.Debug.assertEqual(stateStack[stackIndex], operator);
-        ts.Debug.assertIsDefined(machine.onOperator);
+    export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+        Debug.assertEqual(stateStack[stackIndex], operator);
+        Debug.assertIsDefined(machine.onOperator);
         stateStack[stackIndex] = nextState(machine, operator);
         machine.onOperator(nodeStack[stackIndex].operatorToken, userStateStack[stackIndex], nodeStack[stackIndex]);
         return stackIndex;
@@ -1130,9 +1161,9 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
-        ts.Debug.assertEqual(stateStack[stackIndex], right);
-        ts.Debug.assertIsDefined(machine.onRight);
+    export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+        Debug.assertEqual(stateStack[stackIndex], right);
+        Debug.assertIsDefined(machine.onRight);
         stateStack[stackIndex] = nextState(machine, right);
         const nextNode = machine.onRight(nodeStack[stackIndex].right, userStateStack[stackIndex], nodeStack[stackIndex]);
         if (nextNode) {
@@ -1148,8 +1179,8 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, _outerState: TOuterState): number {
-        ts.Debug.assertEqual(stateStack[stackIndex], exit);
+    export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, _outerState: TOuterState): number {
+        Debug.assertEqual(stateStack[stackIndex], exit);
         stateStack[stackIndex] = nextState(machine, exit);
         const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
         if (stackIndex > 0) {
@@ -1169,8 +1200,8 @@ namespace BinaryExpressionState {
      * Handles a frame that is already done.
      * @returns The `done` state.
      */
-    export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: ts.BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
-        ts.Debug.assertEqual(stateStack[stackIndex], done);
+    export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
+        Debug.assertEqual(stateStack[stackIndex], done);
         return stackIndex;
     }
 
@@ -1188,11 +1219,11 @@ namespace BinaryExpressionState {
             case right: return exit;
             case exit: return done;
             case done: return done;
-            default: ts.Debug.fail("Invalid state");
+            default: Debug.fail("Invalid state");
         }
     }
 
-    function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: ts.BinaryExpression[], userStateStack: TState[], node: ts.BinaryExpression) {
+    function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], node: BinaryExpression) {
         stackIndex++;
         stateStack[stackIndex] = enter;
         nodeStack[stackIndex] = node;
@@ -1200,10 +1231,10 @@ namespace BinaryExpressionState {
         return stackIndex;
     }
 
-    function checkCircularity(stackIndex: number, nodeStack: ts.BinaryExpression[], node: ts.BinaryExpression) {
-        if (ts.Debug.shouldAssert(ts.AssertionLevel.Aggressive)) {
+    function checkCircularity(stackIndex: number, nodeStack: BinaryExpression[], node: BinaryExpression) {
+        if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
             while (stackIndex >= 0) {
-                ts.Debug.assert(nodeStack[stackIndex] !== node, "Circular traversal detected.");
+                Debug.assert(nodeStack[stackIndex] !== node, "Circular traversal detected.");
                 stackIndex--;
             }
         }
@@ -1215,11 +1246,11 @@ namespace BinaryExpressionState {
  */
 class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     constructor(
-        readonly onEnter: (node: ts.BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
-        readonly onLeft: ((left: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-        readonly onOperator: ((operatorToken: ts.BinaryOperatorToken, userState: TState, node: ts.BinaryExpression) => void) | undefined,
-        readonly onRight: ((right: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-        readonly onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
+        readonly onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
+        readonly onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        readonly onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+        readonly onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        readonly onExit: (node: BinaryExpression, userState: TState) => TResult,
         readonly foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
     ) {
     }
@@ -1236,13 +1267,13 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
  * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
  */
  export function createBinaryExpressionTrampoline<TState, TResult>(
-    onEnter: (node: ts.BinaryExpression, prev: TState | undefined) => TState,
-    onLeft: ((left: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onOperator: ((operatorToken: ts.BinaryOperatorToken, userState: TState, node: ts.BinaryExpression) => void) | undefined,
-    onRight: ((right: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
+    onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
+    onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+    onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onExit: (node: BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
-): (node: ts.BinaryExpression) => TResult;
+): (node: BinaryExpression) => TResult;
 /** @internal */
 /**
  * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
@@ -1254,35 +1285,35 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
  * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
  */
 export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
-    onEnter: (node: ts.BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
-    onLeft: ((left: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onOperator: ((operatorToken: ts.BinaryOperatorToken, userState: TState, node: ts.BinaryExpression) => void) | undefined,
-    onRight: ((right: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
+    onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
+    onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+    onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onExit: (node: BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
-): (node: ts.BinaryExpression, outerState: TOuterState) => TResult;
+): (node: BinaryExpression, outerState: TOuterState) => TResult;
 /** @internal */
 export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
-    onEnter: (node: ts.BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
-    onLeft: ((left: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onOperator: ((operatorToken: ts.BinaryOperatorToken, userState: TState, node: ts.BinaryExpression) => void) | undefined,
-    onRight: ((right: ts.Expression, userState: TState, node: ts.BinaryExpression) => ts.BinaryExpression | void) | undefined,
-    onExit: (node: ts.BinaryExpression, userState: TState) => TResult,
+    onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
+    onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+    onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+    onExit: (node: BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
 ) {
     const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
     return trampoline;
 
-    function trampoline(node: ts.BinaryExpression, outerState?: TOuterState) {
+    function trampoline(node: BinaryExpression, outerState?: TOuterState) {
         const resultHolder: { value: TResult } = { value: undefined! };
         const stateStack: BinaryExpressionState[] = [BinaryExpressionState.enter];
-        const nodeStack: ts.BinaryExpression[] = [node];
+        const nodeStack: BinaryExpression[] = [node];
         const userStateStack: TState[] = [undefined!];
         let stackIndex = 0;
         while (stateStack[stackIndex] !== BinaryExpressionState.done) {
             stackIndex = stateStack[stackIndex](machine, stackIndex, stateStack, nodeStack, userStateStack, resultHolder, outerState);
         }
-        ts.Debug.assertEqual(stackIndex, 0);
+        Debug.assertEqual(stackIndex, 0);
         return resultHolder.value;
     }
 }
@@ -1291,31 +1322,31 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
  * If `nodes` is not undefined, creates an empty `NodeArray` that preserves the `pos` and `end` of `nodes`.
  * @internal
  */
-export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T>): ts.NodeArray<T>;
+export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T>): NodeArray<T>;
 /** @internal */
-export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined;
+export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
 /** @internal */
-export function elideNodes<T extends ts.Node>(factory: ts.NodeFactory, nodes: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined {
+export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
     if (nodes === undefined) return undefined;
     if (nodes.length === 0) return nodes;
-    return ts.setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
+    return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
 }
 
 /** @internal */
 /**
  * Gets the node from which a name should be generated.
  */
-export function getNodeForGeneratedName(name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) {
-    if (name.autoGenerateFlags & ts.GeneratedIdentifierFlags.Node) {
+export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+    if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
         const autoGenerateId = name.autoGenerateId;
-        let node = name as ts.Node;
+        let node = name as Node;
         let original = node.original;
         while (original) {
             node = original;
 
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
-            if (ts.isMemberName(node)
-                && !!(node.autoGenerateFlags! & ts.GeneratedIdentifierFlags.Node)
+            if (isMemberName(node)
+                && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
                 && node.autoGenerateId !== autoGenerateId) {
                 break;
             }
@@ -1337,24 +1368,24 @@ export function formatGeneratedNamePart(part: string | undefined): string;
 /**
  * Formats a prefix or suffix of a generated name. If the part is a {@link GeneratedNamePart}, calls {@link generateName} to format the source node.
  */
-export function formatGeneratedNamePart(part: string | ts.GeneratedNamePart | undefined, generateName: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string;
+export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
 /** @internal */
-export function formatGeneratedNamePart(part: string | ts.GeneratedNamePart | undefined, generateName?: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string {
+export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string {
     return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
-        typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === ts.CharacterCodes.hash ? part.slice(1) : part :
+        typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
         "";
 }
 
-function formatIdentifier(name: string | ts.Identifier | ts.PrivateIdentifier, generateName?: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string) {
+function formatIdentifier(name: string | Identifier | PrivateIdentifier, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
     return typeof name === "string" ? name :
-        formatIdentifierWorker(name, ts.Debug.checkDefined(generateName));
+        formatIdentifierWorker(name, Debug.checkDefined(generateName));
 }
 
-function formatIdentifierWorker(node: ts.Identifier | ts.PrivateIdentifier, generateName: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string) {
-    return ts.isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
-        ts.isGeneratedIdentifier(node) ? generateName(node) :
-        ts.isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :
-        ts.idText(node);
+function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+    return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
+        isGeneratedIdentifier(node) ? generateName(node) :
+        isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :
+        idText(node);
 }
 
 /** @internal */
@@ -1375,9 +1406,9 @@ export function formatGeneratedName(privateName: boolean, prefix: string | undef
  * @param suffix The suffix (if any) to include after the base name.
  * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
  */
-export function formatGeneratedName(privateName: boolean, prefix: string | ts.GeneratedNamePart | undefined, baseName: string | ts.Identifier | ts.PrivateIdentifier, suffix: string | ts.GeneratedNamePart | undefined, generateName: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string): string;
+export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
 /** @internal */
-export function formatGeneratedName(privateName: boolean, prefix: string | ts.GeneratedNamePart | undefined, baseName: string | ts.Identifier | ts.PrivateIdentifier, suffix: string | ts.GeneratedNamePart | undefined, generateName?: (name: ts.GeneratedIdentifier | ts.GeneratedPrivateIdentifier) => string) {
+export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
     prefix = formatGeneratedNamePart(prefix, generateName!);
     suffix = formatGeneratedNamePart(suffix, generateName!);
     baseName = formatIdentifier(baseName, generateName);
@@ -1389,7 +1420,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | ts.Ge
 /**
  * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
  */
-export function createAccessorPropertyBackingField(factory: ts.NodeFactory, node: ts.PropertyDeclaration, modifiers: ts.ModifiersArray | undefined, initializer: ts.Expression | undefined) {
+export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
     return factory.updatePropertyDeclaration(
         node,
         modifiers,
@@ -1404,7 +1435,7 @@ export function createAccessorPropertyBackingField(factory: ts.NodeFactory, node
 /**
  * Creates a {@link GetAccessorDeclaration} that reads from a private backing field.
  */
-export function createAccessorPropertyGetRedirector(factory: ts.NodeFactory, node: ts.PropertyDeclaration, modifiers: ts.ModifiersArray | undefined, name: ts.PropertyName) {
+export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
     return factory.createGetAccessorDeclaration(
         modifiers,
         name,
@@ -1425,7 +1456,7 @@ export function createAccessorPropertyGetRedirector(factory: ts.NodeFactory, nod
 /**
  * Creates a {@link SetAccessorDeclaration} that writes to a private backing field.
  */
-export function createAccessorPropertySetRedirector(factory: ts.NodeFactory, node: ts.PropertyDeclaration, modifiers: ts.ModifiersArray | undefined, name: ts.PropertyName) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

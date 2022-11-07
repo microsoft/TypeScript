@@ -1,11 +1,16 @@
-import * as ts from "../_namespaces/ts";
+import {
+    BinaryExpression, createTextSpan, DiagnosticMessageChain, Diagnostics, Expression, factory, find,
+    flattenDiagnosticMessageText, isBinaryExpression, isExpression, Program, SourceFile, SyntaxKind, textChanges,
+    TextSpan,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, findAncestorMatchingSpan, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [
-    ts.Diagnostics.This_condition_will_always_return_0.code,
+    Diagnostics.This_condition_will_always_return_0.code,
 ];
 
-ts.codefix.registerCodeFix({
+registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, span, program } = context;
@@ -13,13 +18,13 @@ ts.codefix.registerCodeFix({
         if (info === undefined) return;
 
         const { suggestion, expression, arg } = info;
-        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
-        return [ts.codefix.createCodeFixAction(fixId, changes, [ts.Diagnostics.Use_0, suggestion], fixId, ts.Diagnostics.Use_Number_isNaN_in_all_conditions)];
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
+        return [createCodeFixAction(fixId, changes, [Diagnostics.Use_0, suggestion], fixId, Diagnostics.Use_Number_isNaN_in_all_conditions)];
     },
     fixIds: [fixId],
     getAllCodeActions: context => {
-        return ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getInfo(context.program, diag.file, ts.createTextSpan(diag.start, diag.length));
+        return codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(context.program, diag.file, createTextSpan(diag.start, diag.length));
             if (info) {
                 doChange(changes, diag.file, info.arg, info.expression);
             }
@@ -29,36 +34,36 @@ ts.codefix.registerCodeFix({
 
 interface Info {
     suggestion: string;
-    expression: ts.BinaryExpression;
-    arg: ts.Expression;
+    expression: BinaryExpression;
+    arg: Expression;
 }
 
-function getInfo(program: ts.Program, sourceFile: ts.SourceFile, span: ts.TextSpan): Info | undefined {
-    const diag = ts.find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
+function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info | undefined {
+    const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
-    const related = ts.find(diag.relatedInformation, related => related.code === ts.Diagnostics.Did_you_mean_0.code);
+    const related = find(diag.relatedInformation, related => related.code === Diagnostics.Did_you_mean_0.code);
     if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) return;
 
-    const token = ts.codefix.findAncestorMatchingSpan(related.file, ts.createTextSpan(related.start, related.length));
+    const token = findAncestorMatchingSpan(related.file, createTextSpan(related.start, related.length));
     if (token === undefined) return;
 
-    if (ts.isExpression(token) && ts.isBinaryExpression(token.parent)) {
+    if (isExpression(token) && isBinaryExpression(token.parent)) {
         return { suggestion: getSuggestion(related.messageText), expression: token.parent, arg: token };
     }
     return undefined;
 }
 
-function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, arg: ts.Expression, expression: ts.BinaryExpression) {
-    const callExpression = ts.factory.createCallExpression(
-        ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier("Number"), ts.factory.createIdentifier("isNaN")), /*typeArguments*/ undefined, [arg]);
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
+    const callExpression = factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")), /*typeArguments*/ undefined, [arg]);
     const operator = expression.operatorToken.kind ;
     changes.replaceNode(sourceFile, expression,
-        operator === ts.SyntaxKind.ExclamationEqualsEqualsToken || operator === ts.SyntaxKind.ExclamationEqualsToken
-            ? ts.factory.createPrefixUnaryExpression(ts.SyntaxKind.ExclamationToken, callExpression) : callExpression);
+        operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken
+            ? factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, callExpression) : callExpression);
 }
 
-function getSuggestion(messageText: string | ts.DiagnosticMessageChain) {
-    const [_, suggestion] = ts.flattenDiagnosticMessageText(messageText, "\n", 0).match(/\'(.*)\'/) || [];
+function getSuggestion(messageText: string | DiagnosticMessageChain) {
+    const [_, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/\'(.*)\'/) || [];
     return suggestion;
 }

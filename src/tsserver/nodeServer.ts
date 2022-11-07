@@ -1,8 +1,26 @@
 import * as ts from "./_namespaces/ts";
+import * as server from "./_namespaces/ts.server";
+import {
+    ActionInvalidate, ActionPackageInstalled, ActionSet, Arguments, BaseLogger, BeginInstallTypes,
+    createInstallTypingsRequest, EndInstallTypes, EventBeginInstallTypes, EventEndInstallTypes,
+    EventInitializationFailed, EventTypesRegistry, findArgument, formatMessage, getLogLevel, hasArgument, indent,
+    InitializationFailedResponse, InstallPackageOptionsWithProject, InstallPackageRequest, InvalidateCachedTypings,
+    ITypingsInstaller, Logger, LogLevel, ModuleImportResult, Msg, nullCancellationToken, nullTypingsInstaller,
+    PackageInstalledResponse, Project, ProjectService, protocol, ServerCancellationToken, ServerHost, Session,
+    SetTypings, StartInput, StartSessionOptions, stringifyIndented, toEvent, TypesRegistryResponse,
+    TypingInstallerRequestUnion,
+} from "./_namespaces/ts.server";
+import {
+    ApplyCodeActionCommandResult, assertType, CharacterCodes, combinePaths, createQueue, Debug, directorySeparator,
+    DirectoryWatcherCallback, ESMap, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
+    JsTyping, LanguageServiceMode, Map, MapLike, noop, noopFileWatcher, normalizeSlashes, resolveJSModule,
+    SortedReadonlyArray, startTracing, stripQuotes, sys, toFileNameLowerCase, tracing, TypeAcquisition,
+    validateLocaleAndSetLanguage, versionMajorMinor, WatchOptions,
+} from "./_namespaces/ts";
 
 interface LogOptions {
     file?: string;
-    detailLevel?: ts.server.LogLevel;
+    detailLevel?: LogLevel;
     traceToConsole?: boolean;
     logToFile?: boolean;
 }
@@ -42,8 +60,8 @@ function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOption
                     logEnv.file = value;
                     break;
                 case "-level":
-                    const level = ts.server.getLogLevel(value);
-                    logEnv.detailLevel = level !== undefined ? level : ts.server.LogLevel.normal;
+                    const level = getLogLevel(value);
+                    logEnv.detailLevel = level !== undefined ? level : LogLevel.normal;
                     break;
                 case "-traceToConsole":
                     logEnv.traceToConsole = value.toLowerCase() === "true";
@@ -59,40 +77,40 @@ function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOption
     function getEntireValue(initialIndex: number) {
         let pathStart = args[initialIndex];
         let extraPartCounter = 0;
-        if (pathStart.charCodeAt(0) === ts.CharacterCodes.doubleQuote &&
-            pathStart.charCodeAt(pathStart.length - 1) !== ts.CharacterCodes.doubleQuote) {
+        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
+            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
             for (let i = initialIndex + 1; i < args.length; i++) {
                 pathStart += " ";
                 pathStart += args[i];
                 extraPartCounter++;
-                if (pathStart.charCodeAt(pathStart.length - 1) === ts.CharacterCodes.doubleQuote) break;
+                if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
             }
         }
-        return { value: ts.stripQuotes(pathStart), extraPartCounter };
+        return { value: stripQuotes(pathStart), extraPartCounter };
     }
 }
 
-function parseServerMode(): ts.LanguageServiceMode | string | undefined {
-    const mode = ts.server.findArgument("--serverMode");
+function parseServerMode(): LanguageServiceMode | string | undefined {
+    const mode = findArgument("--serverMode");
     if (!mode) return undefined;
 
     switch (mode.toLowerCase()) {
         case "semantic":
-            return ts.LanguageServiceMode.Semantic;
+            return LanguageServiceMode.Semantic;
         case "partialsemantic":
-            return ts.LanguageServiceMode.PartialSemantic;
+            return LanguageServiceMode.PartialSemantic;
         case "syntactic":
-            return ts.LanguageServiceMode.Syntactic;
+            return LanguageServiceMode.Syntactic;
         default:
             return mode;
     }
 }
 
 /** @internal */
-export function initializeNodeSystem(): ts.server.StartInput {
-    const sys = ts.Debug.checkDefined(ts.sys) as ts.server.ServerHost;
+export function initializeNodeSystem(): StartInput {
+    const sys = Debug.checkDefined(ts.sys) as ServerHost;
     const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: ts.MapLike<string> }): string | Buffer;
+        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
     } = require("child_process");
 
     interface Stats {
@@ -127,12 +145,12 @@ export function initializeNodeSystem(): ts.server.StartInput {
         stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
     } = require("fs");
 
-    class Logger extends ts.server.BaseLogger {
+    class Logger extends BaseLogger {
         private fd = -1;
         constructor(
             private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            level: ts.server.LogLevel
+            level: LogLevel
         ) {
             super(level);
             if (this.logFilename) {
@@ -147,7 +165,7 @@ export function initializeNodeSystem(): ts.server.StartInput {
 
         close() {
             if (this.fd >= 0) {
-                fs.close(this.fd, ts.noop);
+                fs.close(this.fd, noop);
             }
         }
 
@@ -163,7 +181,7 @@ export function initializeNodeSystem(): ts.server.StartInput {
             return this.fd >= 0 || this.traceToConsole;
         }
 
-        protected write(s: string, _type: ts.server.Msg) {
+        protected write(s: string, _type: Msg) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
                 // eslint-disable-next-line no-null/no-null
@@ -175,53 +193,53 @@ export function initializeNodeSystem(): ts.server.StartInput {
         }
     }
 
-    const nodeVersion = ts.getNodeMajorVersion();
+    const nodeVersion = getNodeMajorVersion();
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
-    const originalWatchDirectory: ts.server.ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
+    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const logger = createLogger();
 
     // enable deprecation logging
-    ts.Debug.loggingHost = {
+    Debug.loggingHost = {
         log(level, s) {
             switch (level) {
                 case ts.LogLevel.Error:
                 case ts.LogLevel.Warning:
-                    return logger.msg(s, ts.server.Msg.Err);
+                    return logger.msg(s, Msg.Err);
                 case ts.LogLevel.Info:
                 case ts.LogLevel.Verbose:
-                    return logger.msg(s, ts.server.Msg.Info);
+                    return logger.msg(s, Msg.Info);
             }
         }
     };
 
-    const pending = ts.createQueue<Buffer>();
+    const pending = createQueue<Buffer>();
     let canWrite = true;
 
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = new ts.Map<string, boolean>();
+        const statusCache = new Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
-                if (logger.hasLevel(ts.server.LogLevel.verbose)) {
+                if (logger.hasLevel(LogLevel.verbose)) {
                     logger.info(`${cacheKey} for path ${path} not found in cache...`);
                 }
                 try {
-                    const args = [ts.combinePaths(__dirname, "watchGuard.js"), path];
-                    if (logger.hasLevel(ts.server.LogLevel.verbose)) {
-                        logger.info(`Starting ${process.execPath} with args:${ts.server.stringifyIndented(args)}`);
+                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
                     childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
                     status = true;
-                    if (logger.hasLevel(ts.server.LogLevel.verbose)) {
+                    if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);
                     }
                 }
                 catch (e) {
                     status = false;
-                    if (logger.hasLevel(ts.server.LogLevel.verbose)) {
+                    if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
                     }
                 }
@@ -229,7 +247,7 @@ export function initializeNodeSystem(): ts.server.StartInput {
                     statusCache.set(cacheKey, status);
                 }
             }
-            else if (logger.hasLevel(ts.server.LogLevel.verbose)) {
+            else if (logger.hasLevel(LogLevel.verbose)) {
                 logger.info(`watchDirectory for ${path} uses cached drive information.`);
             }
             if (status) {
@@ -238,7 +256,7 @@ export function initializeNodeSystem(): ts.server.StartInput {
             }
             else {
                 // this drive is unsafe - return no-op watcher
-                return ts.noopFileWatcher;
+                return noopFileWatcher;
             }
         };
     }
@@ -260,31 +278,31 @@ export function initializeNodeSystem(): ts.server.StartInput {
         sys.gc = () => global.gc?.();
     }
 
-    sys.require = (initialDir: string, moduleName: string): ts.server.ModuleImportResult => {
+    sys.require = (initialDir: string, moduleName: string): ModuleImportResult => {
         try {
-            return { module: require(ts.resolveJSModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };
         }
     };
 
-    let cancellationToken: ts.server.ServerCancellationToken;
+    let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
-        cancellationToken = ts.server.nullCancellationToken;
+        cancellationToken = nullCancellationToken;
     }
 
-    const localeStr = ts.server.findArgument("--locale");
+    const localeStr = findArgument("--locale");
     if (localeStr) {
-        ts.validateLocaleAndSetLanguage(localeStr, sys);
+        validateLocaleAndSetLanguage(localeStr, sys);
     }
 
     const modeOrUnknown = parseServerMode();
-    let serverMode: ts.LanguageServiceMode | undefined;
+    let serverMode: LanguageServiceMode | undefined;
     let unknownServerMode: string | undefined;
     if (modeOrUnknown !== undefined) {
         if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
@@ -301,12 +319,12 @@ export function initializeNodeSystem(): ts.server.StartInput {
 
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLogger() {
-        const cmdLineLogFileName = ts.server.findArgument("--logFile");
-        const cmdLineVerbosity = ts.server.getLogLevel(ts.server.findArgument("--logVerbosity"));
+        const cmdLineLogFileName = findArgument("--logFile");
+        const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
         const unsubstitutedLogFileName = cmdLineLogFileName
-            ? ts.stripQuotes(cmdLineLogFileName)
+            ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
@@ -337,24 +355,24 @@ export function initializeNodeSystem(): ts.server.StartInput {
     }
 
     function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string | undefined) {
-        path = ts.normalizeSlashes(path);
+        path = normalizeSlashes(path);
         if (isUNCPath(path)) {
             // UNC path: extract server name
             // //server/location
             //         ^ <- from 0 to this position
-            const firstSlash = path.indexOf(ts.directorySeparator, 2);
-            return firstSlash !== -1 ? ts.toFileNameLowerCase(path.substring(0, firstSlash)) : path;
+            const firstSlash = path.indexOf(directorySeparator, 2);
+            return firstSlash !== -1 ? toFileNameLowerCase(path.substring(0, firstSlash)) : path;
         }
-        const rootLength = ts.getRootLength(path);
+        const rootLength = getRootLength(path);
         if (rootLength === 0) {
             // relative path - assume file is on the current drive
             return currentDriveKey;
         }
-        if (path.charCodeAt(1) === ts.CharacterCodes.colon && path.charCodeAt(2) === ts.CharacterCodes.slash) {
+        if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
             // rooted path that starts with c:/... - extract drive letter
-            return ts.toFileNameLowerCase(path.charAt(0));
+            return toFileNameLowerCase(path.charAt(0));
         }
-        if (path.charCodeAt(0) === ts.CharacterCodes.slash && path.charCodeAt(1) !== ts.CharacterCodes.slash) {
+        if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
             // rooted path that starts with slash - /somename - use key for current drive
             return currentDriveKey;
         }
@@ -363,18 +381,18 @@ export function initializeNodeSystem(): ts.server.StartInput {
     }
 
     function isUNCPath(s: string): boolean {
-        return s.length > 2 && s.charCodeAt(0) === ts.CharacterCodes.slash && s.charCodeAt(1) === ts.CharacterCodes.slash;
+        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
     }
 
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher {
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
         try {
             return originalWatchDirectory(path, callback, recursive, options);
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);
-            return ts.noopFileWatcher;
+            return noopFileWatcher;
         }
     }
 }
@@ -384,9 +402,9 @@ function parseEventPort(eventPortStr: string | undefined) {
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
 
-function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken) {
+function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: ts.MapLike<string> }): NodeChildProcess;
+        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
     } = require("child_process");
 
     const os: {
@@ -413,15 +431,15 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         operation: () => void;
     }
 
-    class NodeTypingsInstaller implements ts.server.ITypingsInstaller {
+    class NodeTypingsInstaller implements ITypingsInstaller {
         private installer!: NodeChildProcess;
-        private projectService!: ts.server.ProjectService;
+        private projectService!: ProjectService;
         private activeRequestCount = 0;
-        private requestQueue = ts.createQueue<QueuedOperation>();
-        private requestMap = new ts.Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private requestQueue = createQueue<QueuedOperation>();
+        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
-        private typesRegistryCache: ts.ESMap<string, ts.MapLike<string>> | undefined;
+        private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -430,24 +448,24 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ts.ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
-            private readonly logger: ts.server.Logger,
-            private readonly host: ts.server.ServerHost,
+            private readonly logger: Logger,
+            private readonly host: ServerHost,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
             private readonly validateDefaultNpmLocation: boolean,
-            private event: ts.server.Event) {
+            private event: server.Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
             // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-            const validationResult = ts.JsTyping.validatePackageName(name);
-            if (validationResult !== ts.JsTyping.NameValidationResult.Ok) {
+            const validationResult = JsTyping.validatePackageName(name);
+            if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 return false;
             }
 
@@ -460,38 +478,38 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
             return false;
         }
 
-        installPackage(options: ts.server.InstallPackageOptionsWithProject): Promise<ts.ApplyCodeActionCommandResult> {
-            this.send<ts.server.InstallPackageRequest>({ kind: "installPackage", ...options });
-            ts.Debug.assert(this.packageInstalledPromise === undefined);
-            return new Promise<ts.ApplyCodeActionCommandResult>((resolve, reject) => {
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
+            this.send<InstallPackageRequest>({ kind: "installPackage", ...options });
+            Debug.assert(this.packageInstalledPromise === undefined);
+            return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
                 this.packageInstalledPromise = { resolve, reject };
             });
         }
 
-        attach(projectService: ts.server.ProjectService) {
+        attach(projectService: ProjectService) {
             this.projectService = projectService;
-            if (this.logger.hasLevel(ts.server.LogLevel.requestTime)) {
+            if (this.logger.hasLevel(LogLevel.requestTime)) {
                 this.logger.info("Binding...");
             }
 
-            const args: string[] = [ts.server.Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
+            const args: string[] = [Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
             if (this.telemetryEnabled) {
-                args.push(ts.server.Arguments.EnableTelemetry);
+                args.push(Arguments.EnableTelemetry);
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push(ts.server.Arguments.LogFile, ts.combinePaths(ts.getDirectoryPath(ts.normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
+                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
             }
             if (this.typingSafeListLocation) {
-                args.push(ts.server.Arguments.TypingSafeListLocation, this.typingSafeListLocation);
+                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
             }
             if (this.typesMapLocation) {
-                args.push(ts.server.Arguments.TypesMapLocation, this.typesMapLocation);
+                args.push(Arguments.TypesMapLocation, this.typesMapLocation);
             }
             if (this.npmLocation) {
-                args.push(ts.server.Arguments.NpmLocation, this.npmLocation);
+                args.push(Arguments.NpmLocation, this.npmLocation);
             }
             if (this.validateDefaultNpmLocation) {
-                args.push(ts.server.Arguments.ValidateDefaultNpmLocation);
+                args.push(Arguments.ValidateDefaultNpmLocation);
             }
 
             const execArgv: string[] = [];
@@ -508,7 +526,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                 }
             }
 
-            this.installer = childProcess.fork(ts.combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
+            this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
             // We have to schedule this event to the next tick
@@ -522,26 +540,26 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
             });
         }
 
-        onProjectClosed(p: ts.server.Project): void {
+        onProjectClosed(p: Project): void {
             this.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        private send<T extends ts.server.TypingInstallerRequestUnion>(rq: T): void {
+        private send<T extends TypingInstallerRequestUnion>(rq: T): void {
             this.installer.send(rq);
         }
 
-        enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>): void {
-            const request = ts.server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
-            if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-                if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-                    this.logger.info(`Scheduling throttled operation:${ts.server.stringifyIndented(request)}`);
+        enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
+            const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Scheduling throttled operation:${stringifyIndented(request)}`);
                 }
             }
 
             const operationId = project.getProjectName();
             const operation = () => {
-                if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-                    this.logger.info(`Sending request:${ts.server.stringifyIndented(request)}`);
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Sending request:${stringifyIndented(request)}`);
                 }
                 this.send(request);
             };
@@ -551,7 +569,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                 this.scheduleRequest(queuedRequest);
             }
             else {
-                if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Deferring request for: ${operationId}`);
                 }
                 this.requestQueue.enqueue(queuedRequest);
@@ -559,16 +577,16 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
             }
         }
 
-        private handleMessage(response: ts.server.TypesRegistryResponse | ts.server.PackageInstalledResponse | ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.InitializationFailedResponse) {
-            if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-                this.logger.info(`Received response:${ts.server.stringifyIndented(response)}`);
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
 
             switch (response.kind) {
-                case ts.server.EventTypesRegistry:
-                    this.typesRegistryCache = new ts.Map(ts.getEntries(response.typesRegistry));
+                case EventTypesRegistry:
+                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
                     break;
-                case ts.server.ActionPackageInstalled: {
+                case ActionPackageInstalled: {
                     const { success, message } = response;
                     if (success) {
                         this.packageInstalledPromise!.resolve({ successMessage: message });
@@ -584,26 +602,26 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                     this.event(response, "setTypings");
                     break;
                 }
-                case ts.server.EventInitializationFailed: {
-                    const body: ts.server.protocol.TypesInstallerInitializationFailedEventBody = {
+                case EventInitializationFailed: {
+                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
                         message: response.message
                     };
-                    const eventName: ts.server.protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                     this.event(body, eventName);
                     break;
                 }
-                case ts.server.EventBeginInstallTypes: {
-                    const body: ts.server.protocol.BeginInstallTypesEventBody = {
+                case EventBeginInstallTypes: {
+                    const body: protocol.BeginInstallTypesEventBody = {
                         eventId: response.eventId,
                         packages: response.packagesToInstall,
                     };
-                    const eventName: ts.server.protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
                     this.event(body, eventName);
                     break;
                 }
-                case ts.server.EventEndInstallTypes: {
+                case EventEndInstallTypes: {
                     if (this.telemetryEnabled) {
-                        const body: ts.server.protocol.TypingsInstalledTelemetryEventBody = {
+                        const body: protocol.TypingsInstalledTelemetryEventBody = {
                             telemetryEventName: "typingsInstalled",
                             payload: {
                                 installedPackages: response.packagesToInstall.join(","),
@@ -611,29 +629,29 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                                 typingsInstallerVersion: response.typingsInstallerVersion
                             }
                         };
-                        const eventName: ts.server.protocol.TelemetryEventName = "telemetry";
+                        const eventName: protocol.TelemetryEventName = "telemetry";
                         this.event(body, eventName);
                     }
 
-                    const body: ts.server.protocol.EndInstallTypesEventBody = {
+                    const body: protocol.EndInstallTypesEventBody = {
                         eventId: response.eventId,
                         packages: response.packagesToInstall,
                         success: response.installSuccess,
                     };
-                    const eventName: ts.server.protocol.EndInstallTypesEventName = "endInstallTypes";
+                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
                     this.event(body, eventName);
                     break;
                 }
-                case ts.server.ActionInvalidate: {
+                case ActionInvalidate: {
                     this.projectService.updateTypingsForProject(response);
                     break;
                 }
-                case ts.server.ActionSet: {
+                case ActionSet: {
                     if (this.activeRequestCount > 0) {
                         this.activeRequestCount--;
                     }
                     else {
-                        ts.Debug.fail("Received too many responses");
+                        Debug.fail("Received too many responses");
                     }
 
                     while (!this.requestQueue.isEmpty()) {
@@ -644,7 +662,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                             break;
                         }
 
-                        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
                             this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
                         }
                     }
@@ -656,12 +674,12 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                     break;
                 }
                 default:
-                    ts.assertType<never>(response);
+                    assertType<never>(response);
             }
         }
 
         private scheduleRequest(request: QueuedOperation) {
-            if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Scheduling request for: ${request.operationId}`);
             }
             this.activeRequestCount++;
@@ -669,7 +687,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         }
     }
 
-    class IOSession extends ts.server.Session {
+    class IOSession extends Session {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
@@ -681,7 +699,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                 this.event(body, eventName);
             };
 
-            const host = ts.sys as ts.server.ServerHost;
+            const host = sys as ServerHost;
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -691,7 +709,7 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                 host,
                 cancellationToken,
                 ...options,
-                typingsInstaller: typingsInstaller || ts.server.nullTypingsInstaller,
+                typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
@@ -717,18 +735,18 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         }
 
         event<T extends object>(body: T, eventName: string): void {
-            ts.Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
                 if (!this.eventSocket) {
-                    if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
                         this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
                     }
                     (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
                     return;
                 }
                 else {
-                    ts.Debug.assert(this.socketEventQueue === undefined);
+                    Debug.assert(this.socketEventQueue === undefined);
                     this.writeToEventSocket(body, eventName);
                 }
             }
@@ -738,13 +756,13 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         }
 
         private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket!.write(ts.server.formatMessage(ts.server.toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
         exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
-            ts.tracing?.stopTracing();
+            tracing?.stopTracing();
             process.exit(0);
         }
 
@@ -762,18 +780,18 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
 
     class IpcIOSession extends IOSession {
 
-        protected writeMessage(msg: ts.server.protocol.Message): void {
-            const verboseLogging = logger.hasLevel(ts.server.LogLevel.verbose);
+        protected writeMessage(msg: protocol.Message): void {
+            const verboseLogging = logger.hasLevel(LogLevel.verbose);
             if (verboseLogging) {
                 const json = JSON.stringify(msg);
-                logger.info(`${msg.type}:${ts.server.indent(json)}`);
+                logger.info(`${msg.type}:${indent(json)}`);
             }
 
             process.send!(msg);
         }
 
-        protected parseMessage(message: any): ts.server.protocol.Request {
-            return message as ts.server.protocol.Request;
+        protected parseMessage(message: any): protocol.Request {
+            return message as protocol.Request;
         }
 
         protected toStringMessage(message: any) {
@@ -791,20 +809,20 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         }
     }
 
-    const eventPort: number | undefined = parseEventPort(ts.server.findArgument("--eventPort"));
-    const typingSafeListLocation = ts.server.findArgument(ts.server.Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = ts.server.findArgument(ts.server.Arguments.TypesMapLocation) || ts.combinePaths(ts.getDirectoryPath(ts.sys.getExecutingFilePath()), "typesMap.json");
-    const npmLocation = ts.server.findArgument(ts.server.Arguments.NpmLocation);
-    const validateDefaultNpmLocation = ts.server.hasArgument(ts.server.Arguments.ValidateDefaultNpmLocation);
-    const disableAutomaticTypingAcquisition = ts.server.hasArgument("--disableAutomaticTypingAcquisition");
-    const useNodeIpc = ts.server.hasArgument("--useNodeIpc");
-    const telemetryEnabled = ts.server.hasArgument(ts.server.Arguments.EnableTelemetry);
-    const commandLineTraceDir = ts.server.findArgument("--traceDirectory");
+    const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+    const npmLocation = findArgument(Arguments.NpmLocation);
+    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
+    const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+    const useNodeIpc = hasArgument("--useNodeIpc");
+    const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
+    const commandLineTraceDir = findArgument("--traceDirectory");
     const traceDir = commandLineTraceDir
-        ? ts.stripQuotes(commandLineTraceDir)
+        ? stripQuotes(commandLineTraceDir)
         : process.env.TSS_TRACE;
     if (traceDir) {
-        ts.startTracing("server", traceDir);
+        startTracing("server", traceDir);
     }
 
     const ioSession = useNodeIpc ? new IpcIOSession() : new IOSession();
@@ -823,9 +841,9 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
                     process.env.APPDATA ||
                     (os.homedir && os.homedir()) ||
                     process.env.USERPROFILE ||
-                    (process.env.HOMEDRIVE && process.env.HOMEPATH && ts.normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return ts.combinePaths(ts.combinePaths(ts.normalizeSlashes(basePath), "Microsoft/TypeScript"), ts.versionMajorMinor);
+                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }
             case "openbsd":
             case "freebsd":
@@ -834,10 +852,10 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
             case "linux":
             case "android": {
                 const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return ts.combinePaths(ts.combinePaths(cacheLocation, "typescript"), ts.versionMajorMinor);
+                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
-                return ts.Debug.fail(`unsupported platform '${process.platform}'`);
+                return Debug.fail(`unsupported platform '${process.platform}'`);
         }
     }
 
@@ -853,6 +871,6 @@ function startNodeSession(options: ts.server.StartSessionOptions, logger: ts.ser
         const cacheFolder = platformIsDarwin
             ? "Library/Caches"
             : ".cache";
-        return ts.combinePaths(ts.normalizeSlashes(homePath), cacheFolder);
+        return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
 }

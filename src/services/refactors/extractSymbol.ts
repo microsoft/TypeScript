@@ -1,18 +1,46 @@
-import * as ts from "../_namespaces/ts";
+import {
+    __String, ANONYMOUS, ApplicableRefactorInfo, arrayFrom, assertType, BindingElement, Block, BlockLike,
+    BreakStatement, CancellationToken, canHaveModifiers, CharacterCodes, ClassElement, ClassLikeDeclaration, codefix,
+    compareProperties, compareStringsCaseSensitive, compareValues, contains, ContinueStatement, createDiagnosticForNode,
+    createFileDiagnostic, Debug, Declaration, Diagnostic, DiagnosticCategory, DiagnosticMessage, Diagnostics, EmitFlags,
+    emptyArray, EntityName, ESMap, Expression, ExpressionStatement, factory, find, findAncestor,
+    findFirstNonJsxWhitespaceToken, findTokenOnLeftOfPosition, first, firstOrUndefined, forEachChild,
+    formatStringFromArgs, FunctionDeclaration, FunctionLikeDeclaration, getContainingClass, getContainingFunction,
+    getEffectiveTypeParameterDeclarations, getEmitScriptTarget, getEnclosingBlockScopeContainer,
+    getLocaleSpecificMessage, getModifiers, getNodeId, getParentNodeInSpan, getRefactorContextSpan, getRenameLocation,
+    getSymbolId, getSynthesizedDeepClone, getThisContainer, getUniqueName, hasEffectiveModifier, hasSyntacticModifier,
+    Identifier, isArray, isArrowFunction, isAssignmentExpression, isBinaryExpression, isBlock, isBlockScope,
+    isCaseClause, isClassLike, isConstructorDeclaration, isDeclaration, isDeclarationWithTypeParameters,
+    isElementAccessExpression, isExpression, isExpressionNode, isExpressionStatement, isFunctionBody,
+    isFunctionExpression, isFunctionLike, isFunctionLikeDeclaration, isIdentifier, isInJSFile, isIterationStatement,
+    isJsxAttribute, isJsxElement, isJsxFragment, isJsxSelfClosingElement, isKeyword, isModuleBlock,
+    isParenthesizedTypeNode, isPartOfTypeNode, isPrivateIdentifier, isPropertyAccessExpression, isPropertyDeclaration,
+    isQualifiedName, isReturnStatement, isShorthandPropertyAssignment, isSourceFile, isStatement, isStatic,
+    isStringLiteral, isSwitchStatement, isThis, isUnaryExpressionWithWrite, isUnionTypeNode, isVariableDeclaration,
+    isVariableDeclarationList, isVariableStatement, LabeledStatement, last, map, Map, MethodDeclaration, Modifier,
+    ModifierFlags, ModuleBlock, NamedDeclaration, Node, NodeBuilderFlags, NodeFlags, nullTransformationContext,
+    ObjectLiteralElementLike, ParameterDeclaration, positionIsSynthesized, PropertyAccessExpression,
+    rangeContainsStartEnd, ReadonlyESMap, RefactorActionInfo, RefactorContext, RefactorEditInfo, setEmitFlags,
+    ShorthandPropertyAssignment, SignatureKind, singleOrUndefined, skipParentheses, SourceFile, Statement,
+    StringLiteral, suppressLeadingAndTrailingTrivia, Symbol, SymbolFlags, SyntaxKind, textChanges, TextRange, TextSpan,
+    textSpanEnd, TryStatement, Type, TypeChecker, TypeElement, TypeFlags, TypeLiteralNode, TypeNode, TypeParameter,
+    TypeParameterDeclaration, VariableDeclaration, visitEachChild, visitNode, visitNodes, VisitResult,
+} from "../_namespaces/ts";
+import { refactorKindBeginsWith, registerRefactor } from "../_namespaces/ts.refactor";
 
 const refactorName = "Extract Symbol";
 
 const extractConstantAction = {
     name: "Extract Constant",
-    description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_constant),
+    description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
     kind: "refactor.extract.constant",
 };
 const extractFunctionAction = {
     name: "Extract Function",
-    description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_function),
+    description: getLocaleSpecificMessage(Diagnostics.Extract_function),
     kind: "refactor.extract.function",
 };
-ts.refactor.registerRefactor(refactorName, {
+registerRefactor(refactorName, {
     kinds: [
         extractConstantAction.kind,
         extractFunctionAction.kind
@@ -26,25 +54,25 @@ ts.refactor.registerRefactor(refactorName, {
  * Compute the associated code actions
  * Exported for tests.
  */
-export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): readonly ts.ApplicableRefactorInfo[] {
+export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const requestedRefactor = context.kind;
-    const rangeToExtract = getRangeToExtract(context.file, ts.getRefactorContextSpan(context), context.triggerReason === "invoked");
+    const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
     const targetRange = rangeToExtract.targetRange;
 
     if (targetRange === undefined) {
         if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
-            return ts.emptyArray;
+            return emptyArray;
         }
 
         const errors = [];
-        if (ts.refactor.refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
+        if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
             errors.push({
                 name: refactorName,
                 description: extractFunctionAction.description,
                 actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
             });
         }
-        if (ts.refactor.refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+        if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
             errors.push({
                 name: refactorName,
                 description: extractConstantAction.description,
@@ -57,20 +85,20 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
     const extractions = getPossibleExtractions(targetRange, context);
     if (extractions === undefined) {
         // No extractions possible
-        return ts.emptyArray;
+        return emptyArray;
     }
 
-    const functionActions: ts.RefactorActionInfo[] = [];
-    const usedFunctionNames = new ts.Map<string, boolean>();
-    let innermostErrorFunctionAction: ts.RefactorActionInfo | undefined;
+    const functionActions: RefactorActionInfo[] = [];
+    const usedFunctionNames = new Map<string, boolean>();
+    let innermostErrorFunctionAction: RefactorActionInfo | undefined;
 
-    const constantActions: ts.RefactorActionInfo[] = [];
-    const usedConstantNames = new ts.Map<string, boolean>();
-    let innermostErrorConstantAction: ts.RefactorActionInfo | undefined;
+    const constantActions: RefactorActionInfo[] = [];
+    const usedConstantNames = new Map<string, boolean>();
+    let innermostErrorConstantAction: RefactorActionInfo | undefined;
 
     let i = 0;
     for (const { functionExtraction, constantExtraction } of extractions) {
-        if (ts.refactor.refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
+        if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
             const description = functionExtraction.description;
             if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
@@ -95,7 +123,7 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
             }
         }
 
-        if (ts.refactor.refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+        if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
             const description = constantExtraction.description;
             if (constantExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
@@ -125,19 +153,19 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
         i++;
     }
 
-    const infos: ts.ApplicableRefactorInfo[] = [];
+    const infos: ApplicableRefactorInfo[] = [];
 
     if (functionActions.length) {
         infos.push({
             name: refactorName,
-            description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_function),
+            description: getLocaleSpecificMessage(Diagnostics.Extract_function),
             actions: functionActions,
         });
     }
     else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorFunctionAction) {
         infos.push({
             name: refactorName,
-            description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_function),
+            description: getLocaleSpecificMessage(Diagnostics.Extract_function),
             actions: [ innermostErrorFunctionAction ]
         });
     }
@@ -145,21 +173,21 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
     if (constantActions.length) {
         infos.push({
             name: refactorName,
-            description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_constant),
+            description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
             actions: constantActions
         });
     }
     else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorConstantAction) {
         infos.push({
             name: refactorName,
-            description: ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_constant),
+            description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
             actions: [ innermostErrorConstantAction ]
         });
     }
 
-    return infos.length ? infos : ts.emptyArray;
+    return infos.length ? infos : emptyArray;
 
-    function getStringError(errors: readonly ts.Diagnostic[]) {
+    function getStringError(errors: readonly Diagnostic[]) {
         let error = errors[0].messageText;
         if (typeof error !== "string") {
             error = error.messageText;
@@ -170,46 +198,46 @@ export function getRefactorActionsToExtractSymbol(context: ts.RefactorContext): 
 
 /* Exported for tests */
 /** @internal */
-export function getRefactorEditsToExtractSymbol(context: ts.RefactorContext, actionName: string): ts.RefactorEditInfo | undefined {
-    const rangeToExtract = getRangeToExtract(context.file, ts.getRefactorContextSpan(context));
+export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
     const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 
     const parsedFunctionIndexMatch = /^function_scope_(\d+)$/.exec(actionName);
     if (parsedFunctionIndexMatch) {
         const index = +parsedFunctionIndexMatch[1];
-        ts.Debug.assert(isFinite(index), "Expected to parse a finite number from the function scope index");
+        Debug.assert(isFinite(index), "Expected to parse a finite number from the function scope index");
         return getFunctionExtractionAtIndex(targetRange, context, index);
     }
 
     const parsedConstantIndexMatch = /^constant_scope_(\d+)$/.exec(actionName);
     if (parsedConstantIndexMatch) {
         const index = +parsedConstantIndexMatch[1];
-        ts.Debug.assert(isFinite(index), "Expected to parse a finite number from the constant scope index");
+        Debug.assert(isFinite(index), "Expected to parse a finite number from the constant scope index");
         return getConstantExtractionAtIndex(targetRange, context, index);
     }
 
-    ts.Debug.fail("Unrecognized action name");
+    Debug.fail("Unrecognized action name");
 }
 
 // Move these into diagnostic messages if they become user-facing
 /** @internal */
 export namespace Messages {
-    function createMessage(message: string): ts.DiagnosticMessage {
-        return { message, code: 0, category: ts.DiagnosticCategory.Message, key: message };
+    function createMessage(message: string): DiagnosticMessage {
+        return { message, code: 0, category: DiagnosticCategory.Message, key: message };
     }
 
-    export const cannotExtractRange: ts.DiagnosticMessage = createMessage("Cannot extract range.");
-    export const cannotExtractImport: ts.DiagnosticMessage = createMessage("Cannot extract import statement.");
-    export const cannotExtractSuper: ts.DiagnosticMessage = createMessage("Cannot extract super call.");
-    export const cannotExtractJSDoc: ts.DiagnosticMessage = createMessage("Cannot extract JSDoc.");
-    export const cannotExtractEmpty: ts.DiagnosticMessage = createMessage("Cannot extract empty range.");
-    export const expressionExpected: ts.DiagnosticMessage = createMessage("expression expected.");
-    export const uselessConstantType: ts.DiagnosticMessage = createMessage("No reason to extract constant of type.");
-    export const statementOrExpressionExpected: ts.DiagnosticMessage = createMessage("Statement or expression expected.");
-    export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: ts.DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
-    export const cannotExtractRangeContainingConditionalReturnStatement: ts.DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
-    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: ts.DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
-    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: ts.DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
+    export const cannotExtractRange: DiagnosticMessage = createMessage("Cannot extract range.");
+    export const cannotExtractImport: DiagnosticMessage = createMessage("Cannot extract import statement.");
+    export const cannotExtractSuper: DiagnosticMessage = createMessage("Cannot extract super call.");
+    export const cannotExtractJSDoc: DiagnosticMessage = createMessage("Cannot extract JSDoc.");
+    export const cannotExtractEmpty: DiagnosticMessage = createMessage("Cannot extract empty range.");
+    export const expressionExpected: DiagnosticMessage = createMessage("expression expected.");
+    export const uselessConstantType: DiagnosticMessage = createMessage("No reason to extract constant of type.");
+    export const statementOrExpressionExpected: DiagnosticMessage = createMessage("Statement or expression expected.");
+    export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
+    export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
+    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
+    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
     export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
     export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
     export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
@@ -240,12 +268,12 @@ enum RangeFacts {
  * Represents an expression or a list of statements that should be extracted with some extra information
  */
 interface TargetRange {
-    readonly range: ts.Expression | ts.Statement[];
+    readonly range: Expression | Statement[];
     readonly facts: RangeFacts;
     /**
      * If `this` is referring to a function instead of class, we need to retrieve its type.
      */
-    readonly thisNode: ts.Node | undefined;
+    readonly thisNode: Node | undefined;
 }
 
 /**
@@ -253,7 +281,7 @@ interface TargetRange {
  */
 type RangeToExtract = {
     readonly targetRange?: never;
-    readonly errors: readonly ts.Diagnostic[];
+    readonly errors: readonly Diagnostic[];
 } | {
     readonly targetRange: TargetRange;
     readonly errors?: never;
@@ -262,7 +290,7 @@ type RangeToExtract = {
 /*
  * Scopes that can store newly extracted method
  */
-type Scope = ts.FunctionLikeDeclaration | ts.SourceFile | ts.ModuleBlock | ts.ClassLikeDeclaration;
+type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
 
 /** @internal */
 /**
@@ -272,15 +300,15 @@ type Scope = ts.FunctionLikeDeclaration | ts.SourceFile | ts.ModuleBlock | ts.Cl
  * users if they have the provideRefactorNotApplicableReason option set.
  */
 // exported only for tests
-export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, invoked = true): RangeToExtract {
+export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
     const { length } = span;
     if (length === 0 && !invoked) {
-        return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
+        return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
     }
     const cursorRequest = length === 0 && invoked;
 
-    const startToken = ts.findFirstNonJsxWhitespaceToken(sourceFile, span.start);
-    const endToken = ts.findTokenOnLeftOfPosition(sourceFile, ts.textSpanEnd(span));
+    const startToken = findFirstNonJsxWhitespaceToken(sourceFile, span.start);
+    const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
     /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
     refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the
     searched span to cover a real node range making it more likely that something useful will show up. */
@@ -288,37 +316,37 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
 
     // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
     // This may fail (e.g. you select two statements in the root of a source file)
-    const start = cursorRequest ? getExtractableParent(startToken) : ts.getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+    const start = cursorRequest ? getExtractableParent(startToken) : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
 
     // Do the same for the ending position
-    const end = cursorRequest ? start : ts.getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
+    const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
 
     // We'll modify these flags as we walk the tree to collect data
     // about what things need to be done as part of the extraction.
     let rangeFacts = RangeFacts.None;
 
-    let thisNode: ts.Node | undefined;
+    let thisNode: Node | undefined;
 
     if (!start || !end) {
         // cannot find either start or end node
-        return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+        return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
     }
 
-    if (start.flags & ts.NodeFlags.JSDoc) {
-        return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
+    if (start.flags & NodeFlags.JSDoc) {
+        return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
     }
 
     if (start.parent !== end.parent) {
         // start and end nodes belong to different subtrees
-        return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+        return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
     }
 
     if (start !== end) {
         // start and end should be statements and parent should be either block or a source file
         if (!isBlockLike(start.parent)) {
-            return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
         }
-        const statements: ts.Statement[] = [];
+        const statements: Statement[] = [];
         for (const statement of start.parent.statements) {
             if (statement === start || statements.length) {
                 const errors = checkNode(statement);
@@ -338,15 +366,15 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
             // they will never find `start` in `start.parent.statements`.
             // Consider: We could support ranges like [|case 1:|] by refining them to just
             // the expression.
-            return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
         }
 
         return { targetRange: { range: statements, facts: rangeFacts, thisNode } };
     }
 
-    if (ts.isReturnStatement(start) && !start.expression) {
+    if (isReturnStatement(start) && !start.expression) {
         // Makes no sense to extract an expression-less return statement.
-        return { errors: [ts.createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+        return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
     }
 
     // We have a single node (start)
@@ -362,16 +390,16 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
      * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
      * @param node The unrefined extraction node.
      */
-    function refineNode(node: ts.Node): ts.Node {
-        if (ts.isReturnStatement(node)) {
+    function refineNode(node: Node): Node {
+        if (isReturnStatement(node)) {
             if (node.expression) {
                 return node.expression;
             }
         }
-        else if (ts.isVariableStatement(node) || ts.isVariableDeclarationList(node)) {
-            const declarations = ts.isVariableStatement(node) ? node.declarationList.declarations : node.declarations;
+        else if (isVariableStatement(node) || isVariableDeclarationList(node)) {
+            const declarations = isVariableStatement(node) ? node.declarationList.declarations : node.declarations;
             let numInitializers = 0;
-            let lastInitializer: ts.Expression | undefined;
+            let lastInitializer: Expression | undefined;
             for (const declaration of declarations) {
                 if (declaration.initializer) {
                     numInitializers++;
@@ -383,7 +411,7 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
             }
             // No special handling if there are multiple initializers.
         }
-        else if (ts.isVariableDeclaration(node)) {
+        else if (isVariableDeclaration(node)) {
             if (node.initializer) {
                 return node.initializer;
             }
@@ -391,31 +419,31 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
         return node;
     }
 
-    function checkRootNode(node: ts.Node): ts.Diagnostic[] | undefined {
-        if (ts.isIdentifier(ts.isExpressionStatement(node) ? node.expression : node)) {
-            return [ts.createDiagnosticForNode(node, Messages.cannotExtractIdentifier)];
+    function checkRootNode(node: Node): Diagnostic[] | undefined {
+        if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
+            return [createDiagnosticForNode(node, Messages.cannotExtractIdentifier)];
         }
         return undefined;
     }
 
-    function checkForStaticContext(nodeToCheck: ts.Node, containingClass: ts.Node) {
-        let current: ts.Node = nodeToCheck;
+    function checkForStaticContext(nodeToCheck: Node, containingClass: Node) {
+        let current: Node = nodeToCheck;
         while (current !== containingClass) {
-            if (current.kind === ts.SyntaxKind.PropertyDeclaration) {
-                if (ts.isStatic(current)) {
+            if (current.kind === SyntaxKind.PropertyDeclaration) {
+                if (isStatic(current)) {
                     rangeFacts |= RangeFacts.InStaticRegion;
                 }
                 break;
             }
-            else if (current.kind === ts.SyntaxKind.Parameter) {
-                const ctorOrMethod = ts.getContainingFunction(current)!;
-                if (ctorOrMethod.kind === ts.SyntaxKind.Constructor) {
+            else if (current.kind === SyntaxKind.Parameter) {
+                const ctorOrMethod = getContainingFunction(current)!;
+                if (ctorOrMethod.kind === SyntaxKind.Constructor) {
                     rangeFacts |= RangeFacts.InStaticRegion;
                 }
                 break;
             }
-            else if (current.kind === ts.SyntaxKind.MethodDeclaration) {
-                if (ts.isStatic(current)) {
+            else if (current.kind === SyntaxKind.MethodDeclaration) {
+                if (isStatic(current)) {
                     rangeFacts |= RangeFacts.InStaticRegion;
                 }
             }
@@ -424,7 +452,7 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
     }
 
     // Verifies whether we can actually extract this node or not.
-    function checkNode(nodeToCheck: ts.Node): ts.Diagnostic[] | undefined {
+    function checkNode(nodeToCheck: Node): Diagnostic[] | undefined {
         const enum PermittedJumps {
             None = 0,
             Break = 1 << 0,
@@ -433,37 +461,37 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
         }
 
         // We believe it's true because the node is from the (unmodified) tree.
-        ts.Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)");
+        Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)");
 
         // For understanding how skipTrivia functioned:
-        ts.Debug.assert(!ts.positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
+        Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
-        if (!ts.isStatement(nodeToCheck) && !(ts.isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)) {
-            return [ts.createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
+        if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)) {
+            return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
         }
 
-        if (nodeToCheck.flags & ts.NodeFlags.Ambient) {
-            return [ts.createDiagnosticForNode(nodeToCheck, Messages.cannotExtractAmbientBlock)];
+        if (nodeToCheck.flags & NodeFlags.Ambient) {
+            return [createDiagnosticForNode(nodeToCheck, Messages.cannotExtractAmbientBlock)];
         }
 
         // If we're in a class, see whether we're in a static region (static property initializer, static method, class constructor parameter default)
-        const containingClass = ts.getContainingClass(nodeToCheck);
+        const containingClass = getContainingClass(nodeToCheck);
         if (containingClass) {
             checkForStaticContext(nodeToCheck, containingClass);
         }
 
-        let errors: ts.Diagnostic[] | undefined;
+        let errors: Diagnostic[] | undefined;
         let permittedJumps = PermittedJumps.Return;
-        let seenLabels: ts.__String[];
+        let seenLabels: __String[];
 
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = ts.getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
             if (
-                container.kind === ts.SyntaxKind.FunctionDeclaration ||
-                (container.kind === ts.SyntaxKind.MethodDeclaration && container.parent.kind === ts.SyntaxKind.ObjectLiteralExpression) ||
-                container.kind === ts.SyntaxKind.FunctionExpression
+                container.kind === SyntaxKind.FunctionDeclaration ||
+                (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
+                container.kind === SyntaxKind.FunctionExpression
             ) {
                 rangeFacts |= RangeFacts.UsesThisInFunction;
             }
@@ -471,39 +499,39 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
 
         return errors;
 
-        function visit(node: ts.Node) {
+        function visit(node: Node) {
             if (errors) {
                 // already found an error - can stop now
                 return true;
             }
 
-            if (ts.isDeclaration(node)) {
-                const declaringNode = (node.kind === ts.SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
-                if (ts.hasSyntacticModifier(declaringNode, ts.ModifierFlags.Export)) {
+            if (isDeclaration(node)) {
+                const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
+                if (hasSyntacticModifier(declaringNode, ModifierFlags.Export)) {
                     // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                     // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
                     // Also TODO: GH#19956
-                    (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
+                    (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                     return true;
                 }
             }
 
             // Some things can't be extracted in certain situations
             switch (node.kind) {
-                case ts.SyntaxKind.ImportDeclaration:
-                    (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractImport));
+                case SyntaxKind.ImportDeclaration:
+                    (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractImport));
                     return true;
-                case ts.SyntaxKind.ExportAssignment:
-                    (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
+                case SyntaxKind.ExportAssignment:
+                    (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                     return true;
-                case ts.SyntaxKind.SuperKeyword:
+                case SyntaxKind.SuperKeyword:
                     // For a super *constructor call*, we have to be extracting the entire class,
                     // but a super *method call* simply implies a 'this' reference
-                    if (node.parent.kind === ts.SyntaxKind.CallExpression) {
+                    if (node.parent.kind === SyntaxKind.CallExpression) {
                         // Super constructor call
-                        const containingClass = ts.getContainingClass(node);
+                        const containingClass = getContainingClass(node);
                         if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
-                            (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractSuper));
+                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                             return true;
                         }
                     }
@@ -512,60 +540,60 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
                         thisNode = node;
                     }
                     break;
-                case ts.SyntaxKind.ArrowFunction:
+                case SyntaxKind.ArrowFunction:
                     // check if arrow function uses this
-                    ts.forEachChild(node, function check(n) {
-                        if (ts.isThis(n)) {
+                    forEachChild(node, function check(n) {
+                        if (isThis(n)) {
                             rangeFacts |= RangeFacts.UsesThis;
                             thisNode = node;
                         }
-                        else if (ts.isClassLike(n) || (ts.isFunctionLike(n) && !ts.isArrowFunction(n))) {
+                        else if (isClassLike(n) || (isFunctionLike(n) && !isArrowFunction(n))) {
                             return false;
                         }
                         else {
-                            ts.forEachChild(n, check);
+                            forEachChild(n, check);
                         }
                     });
                     // falls through
-                case ts.SyntaxKind.ClassDeclaration:
-                case ts.SyntaxKind.FunctionDeclaration:
-                    if (ts.isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                         // You cannot extract global declarations
-                        (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                        (errors ||= []).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                     }
                     // falls through
-                case ts.SyntaxKind.ClassExpression:
-                case ts.SyntaxKind.FunctionExpression:
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.Constructor:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     // do not dive into functions or classes
                     return false;
             }
 
             const savedPermittedJumps = permittedJumps;
             switch (node.kind) {
-                case ts.SyntaxKind.IfStatement:
+                case SyntaxKind.IfStatement:
                     permittedJumps &= ~PermittedJumps.Return;
                     break;
-                case ts.SyntaxKind.TryStatement:
+                case SyntaxKind.TryStatement:
                     // forbid all jumps inside try blocks
                     permittedJumps = PermittedJumps.None;
                     break;
-                case ts.SyntaxKind.Block:
-                    if (node.parent && node.parent.kind === ts.SyntaxKind.TryStatement && (node.parent as ts.TryStatement).finallyBlock === node) {
+                case SyntaxKind.Block:
+                    if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent as TryStatement).finallyBlock === node) {
                         // allow unconditional returns from finally blocks
                         permittedJumps = PermittedJumps.Return;
                     }
                     break;
-                case ts.SyntaxKind.DefaultClause:
-                case ts.SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.CaseClause:
                     // allow unlabeled break inside case clauses
                     permittedJumps |= PermittedJumps.Break;
                     break;
                 default:
-                    if (ts.isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
+                    if (isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
                         // allow unlabeled break/continue inside loops
                         permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
                     }
@@ -573,51 +601,51 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
             }
 
             switch (node.kind) {
-                case ts.SyntaxKind.ThisType:
-                case ts.SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
+                case SyntaxKind.ThisKeyword:
                     rangeFacts |= RangeFacts.UsesThis;
                     thisNode = node;
                     break;
-                case ts.SyntaxKind.LabeledStatement: {
-                    const label = (node as ts.LabeledStatement).label;
+                case SyntaxKind.LabeledStatement: {
+                    const label = (node as LabeledStatement).label;
                     (seenLabels || (seenLabels = [])).push(label.escapedText);
-                    ts.forEachChild(node, visit);
+                    forEachChild(node, visit);
                     seenLabels.pop();
                     break;
                 }
-                case ts.SyntaxKind.BreakStatement:
-                case ts.SyntaxKind.ContinueStatement: {
-                    const label = (node as ts.BreakStatement | ts.ContinueStatement).label;
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement: {
+                    const label = (node as BreakStatement | ContinueStatement).label;
                     if (label) {
-                        if (!ts.contains(seenLabels, label.escapedText)) {
+                        if (!contains(seenLabels, label.escapedText)) {
                             // attempts to jump to label that is not in range to be extracted
-                            (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
+                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                         }
                     }
                     else {
-                        if (!(permittedJumps & (node.kind === ts.SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                        if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                             // attempt to break or continue in a forbidden context
-                            (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
                         }
                     }
                     break;
                 }
-                case ts.SyntaxKind.AwaitExpression:
+                case SyntaxKind.AwaitExpression:
                     rangeFacts |= RangeFacts.IsAsyncFunction;
                     break;
-                case ts.SyntaxKind.YieldExpression:
+                case SyntaxKind.YieldExpression:
                     rangeFacts |= RangeFacts.IsGenerator;
                     break;
-                case ts.SyntaxKind.ReturnStatement:
+                case SyntaxKind.ReturnStatement:
                     if (permittedJumps & PermittedJumps.Return) {
                         rangeFacts |= RangeFacts.HasReturn;
                     }
                     else {
-                        (errors ||= []).push(ts.createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement));
+                        (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement));
                     }
                     break;
                 default:
-                    ts.forEachChild(node, visit);
+                    forEachChild(node, visit);
                     break;
             }
 
@@ -630,25 +658,25 @@ export function getRangeToExtract(sourceFile: ts.SourceFile, span: ts.TextSpan, 
  * Includes the final semicolon so that the span covers statements in cases where it would otherwise
  * only cover the declaration list.
  */
-function getAdjustedSpanFromNodes(startNode: ts.Node, endNode: ts.Node, sourceFile: ts.SourceFile): ts.TextSpan {
+function getAdjustedSpanFromNodes(startNode: Node, endNode: Node, sourceFile: SourceFile): TextSpan {
     const start = startNode.getStart(sourceFile);
     let end = endNode.getEnd();
-    if (sourceFile.text.charCodeAt(end) === ts.CharacterCodes.semicolon) {
+    if (sourceFile.text.charCodeAt(end) === CharacterCodes.semicolon) {
         end++;
     }
     return { start, length: end - start };
 }
 
-function getStatementOrExpressionRange(node: ts.Node): ts.Statement[] | ts.Expression | undefined {
-    if (ts.isStatement(node)) {
+function getStatementOrExpressionRange(node: Node): Statement[] | Expression | undefined {
+    if (isStatement(node)) {
         return [node];
     }
-    if (ts.isExpressionNode(node)) {
+    if (isExpressionNode(node)) {
         // If our selection is the expression in an ExpressionStatement, expand
         // the selection to include the enclosing Statement (this stops us
         // from trying to care about the return value of the extracted function
         // and eliminates double semicolon insertion in certain scenarios)
-        return ts.isExpressionStatement(node.parent) ? [node.parent] : node as ts.Expression;
+        return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
     }
     if (isStringLiteralJsxAttribute(node)) {
         return node;
@@ -656,9 +684,9 @@ function getStatementOrExpressionRange(node: ts.Node): ts.Statement[] | ts.Expre
     return undefined;
 }
 
-function isScope(node: ts.Node): node is Scope {
-    return ts.isArrowFunction(node) ? ts.isFunctionBody(node.body) :
-        ts.isFunctionLikeDeclaration(node) || ts.isSourceFile(node) || ts.isModuleBlock(node) || ts.isClassLike(node);
+function isScope(node: Node): node is Scope {
+    return isArrowFunction(node) ? isFunctionBody(node.body) :
+        isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
 }
 
 /**
@@ -667,12 +695,12 @@ function isScope(node: ts.Node): node is Scope {
  * depending on what's in the extracted body.
  */
 function collectEnclosingScopes(range: TargetRange): Scope[] {
-    let current: ts.Node = isReadonlyArray(range.range) ? ts.first(range.range) : range.range;
+    let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
     if (range.facts & RangeFacts.UsesThis && !(range.facts & RangeFacts.UsesThisInFunction)) {
         // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
-        const containingClass = ts.getContainingClass(current);
+        const containingClass = getContainingClass(current);
         if (containingClass) {
-            const containingFunction = ts.findAncestor(current, ts.isFunctionLikeDeclaration);
+            const containingFunction = findAncestor(current, isFunctionLikeDeclaration);
             return containingFunction
                 ? [containingFunction, containingClass]
                 : [containingClass];
@@ -683,9 +711,9 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
     while (true) {
         current = current.parent;
         // A function parameter's initializer is actually in the outer scope, not the function declaration
-        if (current.kind === ts.SyntaxKind.Parameter) {
+        if (current.kind === SyntaxKind.Parameter) {
             // Skip all the way to the outer scope of the function that declared this parameter
-            current = ts.findAncestor(current, parent => ts.isFunctionLikeDeclaration(parent))!.parent;
+            current = findAncestor(current, parent => isFunctionLikeDeclaration(parent))!.parent;
         }
 
         // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
@@ -695,34 +723,34 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
         //  * Module/namespace or source file
         if (isScope(current)) {
             scopes.push(current);
-            if (current.kind === ts.SyntaxKind.SourceFile) {
+            if (current.kind === SyntaxKind.SourceFile) {
                 return scopes;
             }
         }
     }
 }
 
-function getFunctionExtractionAtIndex(targetRange: TargetRange, context: ts.RefactorContext, requestedChangesIndex: number): ts.RefactorEditInfo {
+function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
     const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
-    ts.Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
+    Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     context.cancellationToken!.throwIfCancellationRequested(); // TODO: GH#18217
     return extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], exposedVariableDeclarations, targetRange, context);
 }
 
-function getConstantExtractionAtIndex(targetRange: TargetRange, context: ts.RefactorContext, requestedChangesIndex: number): ts.RefactorEditInfo {
+function getConstantExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
     const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
-    ts.Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
-    ts.Debug.assert(exposedVariableDeclarations.length === 0, "Extract constant accepted a range containing a variable declaration?");
+    Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
+    Debug.assert(exposedVariableDeclarations.length === 0, "Extract constant accepted a range containing a variable declaration?");
     context.cancellationToken!.throwIfCancellationRequested();
-    const expression = ts.isExpression(target)
+    const expression = isExpression(target)
         ? target
-        : (target.statements[0] as ts.ExpressionStatement).expression;
+        : (target.statements[0] as ExpressionStatement).expression;
     return extractConstantInScope(expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
 }
 
 interface Extraction {
     readonly description: string;
-    readonly errors: readonly ts.Diagnostic[];
+    readonly errors: readonly Diagnostic[];
 }
 
 interface ScopeExtractions {
@@ -735,37 +763,37 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
-function getPossibleExtractions(targetRange: TargetRange, context: ts.RefactorContext): readonly ScopeExtractions[] | undefined {
+function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
     const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
     const extractions = scopes.map((scope, i): ScopeExtractions => {
         const functionDescriptionPart = getDescriptionForFunctionInScope(scope);
         const constantDescriptionPart = getDescriptionForConstantInScope(scope);
 
-        const scopeDescription = ts.isFunctionLikeDeclaration(scope)
+        const scopeDescription = isFunctionLikeDeclaration(scope)
             ? getDescriptionForFunctionLikeDeclaration(scope)
-            : ts.isClassLike(scope)
+            : isClassLike(scope)
                 ? getDescriptionForClassLikeDeclaration(scope)
                 : getDescriptionForModuleLikeDeclaration(scope);
 
         let functionDescription: string;
         let constantDescription: string;
         if (scopeDescription === SpecialScope.Global) {
-            functionDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "global"]);
-            constantDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "global"]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "global"]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "global"]);
         }
         else if (scopeDescription === SpecialScope.Module) {
-            functionDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "module"]);
-            constantDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "module"]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "module"]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "module"]);
         }
         else {
-            functionDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1), [functionDescriptionPart, scopeDescription]);
-            constantDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_1), [constantDescriptionPart, scopeDescription]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [functionDescriptionPart, scopeDescription]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [constantDescriptionPart, scopeDescription]);
         }
 
         // Customize the phrasing for the innermost scope to increase clarity.
-        if (i === 0 && !ts.isClassLike(scope)) {
-            constantDescription = ts.formatStringFromArgs(ts.getLocaleSpecificMessage(ts.Diagnostics.Extract_to_0_in_enclosing_scope), [constantDescriptionPart]);
+        if (i === 0 && !isClassLike(scope)) {
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope), [constantDescriptionPart]);
         }
 
         return {
@@ -782,7 +810,7 @@ function getPossibleExtractions(targetRange: TargetRange, context: ts.RefactorCo
     return extractions;
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: ts.RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -798,45 +826,45 @@ function getPossibleExtractionsWorker(targetRange: TargetRange, context: ts.Refa
 }
 
 function getDescriptionForFunctionInScope(scope: Scope): string {
-    return ts.isFunctionLikeDeclaration(scope)
+    return isFunctionLikeDeclaration(scope)
         ? "inner function"
-        : ts.isClassLike(scope)
+        : isClassLike(scope)
             ? "method"
             : "function";
 }
 function getDescriptionForConstantInScope(scope: Scope): string {
-    return ts.isClassLike(scope)
+    return isClassLike(scope)
         ? "readonly field"
         : "constant";
 }
-function getDescriptionForFunctionLikeDeclaration(scope: ts.FunctionLikeDeclaration): string {
+function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration): string {
     switch (scope.kind) {
-        case ts.SyntaxKind.Constructor:
+        case SyntaxKind.Constructor:
             return "constructor";
-        case ts.SyntaxKind.FunctionExpression:
-        case ts.SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionDeclaration:
             return scope.name
                 ? `function '${scope.name.text}'`
-                : ts.ANONYMOUS;
-        case ts.SyntaxKind.ArrowFunction:
+                : ANONYMOUS;
+        case SyntaxKind.ArrowFunction:
             return "arrow function";
-        case ts.SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodDeclaration:
             return `method '${scope.name.getText()}'`;
-        case ts.SyntaxKind.GetAccessor:
+        case SyntaxKind.GetAccessor:
             return `'get ${scope.name.getText()}'`;
-        case ts.SyntaxKind.SetAccessor:
+        case SyntaxKind.SetAccessor:
             return `'set ${scope.name.getText()}'`;
         default:
-            throw ts.Debug.assertNever(scope, `Unexpected scope kind ${(scope as ts.FunctionLikeDeclaration).kind}`);
+            throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
     }
 }
-function getDescriptionForClassLikeDeclaration(scope: ts.ClassLikeDeclaration): string {
-    return scope.kind === ts.SyntaxKind.ClassDeclaration
+function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
+    return scope.kind === SyntaxKind.ClassDeclaration
         ? scope.name ? `class '${scope.name.text}'` : "anonymous class declaration"
         : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
 }
-function getDescriptionForModuleLikeDeclaration(scope: ts.SourceFile | ts.ModuleBlock): string | SpecialScope {
-    return scope.kind === ts.SyntaxKind.ModuleBlock
+function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
+    return scope.kind === SyntaxKind.ModuleBlock
         ? `namespace '${scope.parent.name.getText()}'`
         : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
 }
@@ -851,38 +879,38 @@ const enum SpecialScope {
  * Stores either a list of changes that should be applied to extract a range or a list of errors
  */
 function extractFunctionInScope(
-    node: ts.Statement | ts.Expression | ts.Block,
+    node: Statement | Expression | Block,
     scope: Scope,
     { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
-    exposedVariableDeclarations: readonly ts.VariableDeclaration[],
+    exposedVariableDeclarations: readonly VariableDeclaration[],
     range: TargetRange,
-    context: ts.RefactorContext): ts.RefactorEditInfo {
+    context: RefactorContext): RefactorEditInfo {
 
     const checker = context.program.getTypeChecker();
-    const scriptTarget = ts.getEmitScriptTarget(context.program.getCompilerOptions());
-    const importAdder = ts.codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
+    const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
+    const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
 
     // Make a unique name for the extracted function
     const file = scope.getSourceFile();
-    const functionNameText = ts.getUniqueName(ts.isClassLike(scope) ? "newMethod" : "newFunction", file);
-    const isJS = ts.isInJSFile(scope);
+    const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file);
+    const isJS = isInJSFile(scope);
 
-    const functionName = ts.factory.createIdentifier(functionNameText);
+    const functionName = factory.createIdentifier(functionNameText);
 
-    let returnType: ts.TypeNode | undefined;
-    const parameters: ts.ParameterDeclaration[] = [];
-    const callArguments: ts.Identifier[] = [];
+    let returnType: TypeNode | undefined;
+    const parameters: ParameterDeclaration[] = [];
+    const callArguments: Identifier[] = [];
     let writes: UsageEntry[] | undefined;
     usagesInScope.forEach((usage, name) => {
-        let typeNode: ts.TypeNode | undefined;
+        let typeNode: TypeNode | undefined;
         if (!isJS) {
             let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             type = checker.getBaseTypeOfLiteralType(type);
-            typeNode = ts.codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, ts.NodeBuilderFlags.NoTruncation);
+            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
         }
 
-        const paramDecl = ts.factory.createParameterDeclaration(
+        const paramDecl = factory.createParameterDeclaration(
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             /*name*/ name,
@@ -893,48 +921,48 @@ function extractFunctionInScope(
         if (usage.usage === Usage.Write) {
             (writes || (writes = [])).push(usage);
         }
-        callArguments.push(ts.factory.createIdentifier(name));
+        callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = ts.arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
+    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-    const typeParameters: readonly ts.TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
+    const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
         ? undefined
-        : sortedTypeParametersAndDeclarations.map(t => t.declaration as ts.TypeParameterDeclaration);
+        : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.
-    const callTypeArguments: readonly ts.TypeNode[] | undefined = typeParameters !== undefined
-        ? typeParameters.map(decl => ts.factory.createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
+    const callTypeArguments: readonly TypeNode[] | undefined = typeParameters !== undefined
+        ? typeParameters.map(decl => factory.createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
         : undefined;
 
     // Provide explicit return types for contextually-typed functions
     // to avoid problems when there are literal types present
-    if (ts.isExpression(node) && !isJS) {
+    if (isExpression(node) && !isJS) {
         const contextualType = checker.getContextualType(node);
-        returnType = checker.typeToTypeNode(contextualType!, scope, ts.NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
     }
 
     const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
-    ts.suppressLeadingAndTrailingTrivia(body);
+    suppressLeadingAndTrailingTrivia(body);
 
-    let newFunction: ts.MethodDeclaration | ts.FunctionDeclaration;
+    let newFunction: MethodDeclaration | FunctionDeclaration;
 
     const callThis = !!(range.facts & RangeFacts.UsesThisInFunction);
 
-    if (ts.isClassLike(scope)) {
+    if (isClassLike(scope)) {
         // always create private method in TypeScript files
-        const modifiers: ts.Modifier[] = isJS ? [] : [ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)];
+        const modifiers: Modifier[] = isJS ? [] : [factory.createModifier(SyntaxKind.PrivateKeyword)];
         if (range.facts & RangeFacts.InStaticRegion) {
-            modifiers.push(ts.factory.createModifier(ts.SyntaxKind.StaticKeyword));
+            modifiers.push(factory.createModifier(SyntaxKind.StaticKeyword));
         }
         if (range.facts & RangeFacts.IsAsyncFunction) {
-            modifiers.push(ts.factory.createModifier(ts.SyntaxKind.AsyncKeyword));
+            modifiers.push(factory.createModifier(SyntaxKind.AsyncKeyword));
         }
-        newFunction = ts.factory.createMethodDeclaration(
+        newFunction = factory.createMethodDeclaration(
             modifiers.length ? modifiers : undefined,
-            range.facts & RangeFacts.IsGenerator ? ts.factory.createToken(ts.SyntaxKind.AsteriskToken) : undefined,
+            range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
             functionName,
             /*questionToken*/ undefined,
             typeParameters,
@@ -946,7 +974,7 @@ function extractFunctionInScope(
     else {
         if (callThis) {
             parameters.unshift(
-                ts.factory.createParameterDeclaration(
+                factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     /*name*/ "this",
@@ -954,15 +982,15 @@ function extractFunctionInScope(
                     checker.typeToTypeNode(
                         checker.getTypeAtLocation(range.thisNode!),
                         scope,
-                        ts.NodeBuilderFlags.NoTruncation
+                        NodeBuilderFlags.NoTruncation
                     ),
                     /*initializer*/ undefined,
                 )
             );
         }
-        newFunction = ts.factory.createFunctionDeclaration(
-            range.facts & RangeFacts.IsAsyncFunction ? [ts.factory.createToken(ts.SyntaxKind.AsyncKeyword)] : undefined,
-            range.facts & RangeFacts.IsGenerator ? ts.factory.createToken(ts.SyntaxKind.AsteriskToken) : undefined,
+        newFunction = factory.createFunctionDeclaration(
+            range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined,
+            range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
             functionName,
             typeParameters,
             parameters,
@@ -971,8 +999,8 @@ function extractFunctionInScope(
         );
     }
 
-    const changeTracker = ts.textChanges.ChangeTracker.fromContext(context);
-    const minInsertionPos = (isReadonlyArray(range.range) ? ts.last(range.range) : range.range).end;
+    const changeTracker = textChanges.ChangeTracker.fromContext(context);
+    const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
     const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
     if (nodeToInsertBefore) {
         changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, /*blankLineBetween*/ true);
@@ -982,67 +1010,67 @@ function extractFunctionInScope(
     }
     importAdder.writeFixes(changeTracker);
 
-    const newNodes: ts.Node[] = [];
+    const newNodes: Node[] = [];
     // replace range with function call
     const called = getCalledExpression(scope, range, functionNameText);
 
     if (callThis) {
-        callArguments.unshift(ts.factory.createIdentifier("this"));
+        callArguments.unshift(factory.createIdentifier("this"));
     }
 
-    let call: ts.Expression = ts.factory.createCallExpression(
-        callThis ? ts.factory.createPropertyAccessExpression(
+    let call: Expression = factory.createCallExpression(
+        callThis ? factory.createPropertyAccessExpression(
             called,
             "call"
         ) : called,
         callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
         callArguments);
     if (range.facts & RangeFacts.IsGenerator) {
-        call = ts.factory.createYieldExpression(ts.factory.createToken(ts.SyntaxKind.AsteriskToken), call);
+        call = factory.createYieldExpression(factory.createToken(SyntaxKind.AsteriskToken), call);
     }
     if (range.facts & RangeFacts.IsAsyncFunction) {
-        call = ts.factory.createAwaitExpression(call);
+        call = factory.createAwaitExpression(call);
     }
     if (isInJSXContent(node)) {
-        call = ts.factory.createJsxExpression(/*dotDotDotToken*/ undefined, call);
+        call = factory.createJsxExpression(/*dotDotDotToken*/ undefined, call);
     }
 
     if (exposedVariableDeclarations.length && !writes) {
         // No need to mix declarations and writes.
 
         // How could any variables be exposed if there's a return statement?
-        ts.Debug.assert(!returnValueProperty, "Expected no returnValueProperty");
-        ts.Debug.assert(!(range.facts & RangeFacts.HasReturn), "Expected RangeFacts.HasReturn flag to be unset");
+        Debug.assert(!returnValueProperty, "Expected no returnValueProperty");
+        Debug.assert(!(range.facts & RangeFacts.HasReturn), "Expected RangeFacts.HasReturn flag to be unset");
 
         if (exposedVariableDeclarations.length === 1) {
             // Declaring exactly one variable: let x = newFunction();
             const variableDeclaration = exposedVariableDeclarations[0];
-            newNodes.push(ts.factory.createVariableStatement(
+            newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.factory.createVariableDeclarationList(
-                    [ts.factory.createVariableDeclaration(ts.getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ ts.getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)],
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)],
                     variableDeclaration.parent.flags)));
         }
         else {
             // Declaring multiple variables / return properties:
             //   let {x, y} = newFunction();
-            const bindingElements: ts.BindingElement[] = [];
-            const typeElements: ts.TypeElement[] = [];
+            const bindingElements: BindingElement[] = [];
+            const typeElements: TypeElement[] = [];
             let commonNodeFlags = exposedVariableDeclarations[0].parent.flags;
             let sawExplicitType = false;
             for (const variableDeclaration of exposedVariableDeclarations) {
-                bindingElements.push(ts.factory.createBindingElement(
+                bindingElements.push(factory.createBindingElement(
                     /*dotDotDotToken*/ undefined,
                     /*propertyName*/ undefined,
-                    /*name*/ ts.getSynthesizedDeepClone(variableDeclaration.name)));
+                    /*name*/ getSynthesizedDeepClone(variableDeclaration.name)));
 
                 // Being returned through an object literal will have widened the type.
-                const variableType: ts.TypeNode | undefined = checker.typeToTypeNode(
+                const variableType: TypeNode | undefined = checker.typeToTypeNode(
                     checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
                     scope,
-                    ts.NodeBuilderFlags.NoTruncation);
+                    NodeBuilderFlags.NoTruncation);
 
-                typeElements.push(ts.factory.createPropertySignature(
+                typeElements.push(factory.createPropertySignature(
                     /*modifiers*/ undefined,
                     /*name*/ variableDeclaration.symbol.name,
                     /*questionToken*/ undefined,
@@ -1051,16 +1079,16 @@ function extractFunctionInScope(
                 commonNodeFlags = commonNodeFlags & variableDeclaration.parent.flags;
             }
 
-            const typeLiteral: ts.TypeLiteralNode | undefined = sawExplicitType ? ts.factory.createTypeLiteralNode(typeElements) : undefined;
+            const typeLiteral: TypeLiteralNode | undefined = sawExplicitType ? factory.createTypeLiteralNode(typeElements) : undefined;
             if (typeLiteral) {
-                ts.setEmitFlags(typeLiteral, ts.EmitFlags.SingleLine);
+                setEmitFlags(typeLiteral, EmitFlags.SingleLine);
             }
 
-            newNodes.push(ts.factory.createVariableStatement(
+            newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.factory.createVariableDeclarationList(
-                    [ts.factory.createVariableDeclaration(
-                        ts.factory.createObjectBindingPattern(bindingElements),
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(
+                        factory.createObjectBindingPattern(bindingElements),
                         /*exclamationToken*/ undefined,
                         /*type*/ typeLiteral,
                         /*initializer*/call)],
@@ -1071,61 +1099,61 @@ function extractFunctionInScope(
         if (exposedVariableDeclarations.length) {
             // CONSIDER: we're going to create one statement per variable, but we could actually preserve their original grouping.
             for (const variableDeclaration of exposedVariableDeclarations) {
-                let flags: ts.NodeFlags = variableDeclaration.parent.flags;
-                if (flags & ts.NodeFlags.Const) {
-                    flags = (flags & ~ts.NodeFlags.Const) | ts.NodeFlags.Let;
+                let flags: NodeFlags = variableDeclaration.parent.flags;
+                if (flags & NodeFlags.Const) {
+                    flags = (flags & ~NodeFlags.Const) | NodeFlags.Let;
                 }
 
-                newNodes.push(ts.factory.createVariableStatement(
+                newNodes.push(factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    ts.factory.createVariableDeclarationList(
-                        [ts.factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
+                    factory.createVariableDeclarationList(
+                        [factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
                         flags)));
             }
         }
 
         if (returnValueProperty) {
             // has both writes and return, need to create variable declaration to hold return value;
-            newNodes.push(ts.factory.createVariableStatement(
+            newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.factory.createVariableDeclarationList(
-                    [ts.factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))],
-                    ts.NodeFlags.Let)));
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))],
+                    NodeFlags.Let)));
         }
 
         const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
         if (returnValueProperty) {
-            assignments.unshift(ts.factory.createShorthandPropertyAssignment(returnValueProperty));
+            assignments.unshift(factory.createShorthandPropertyAssignment(returnValueProperty));
         }
 
         // propagate writes back
         if (assignments.length === 1) {
             // We would only have introduced a return value property if there had been
             // other assignments to make.
-            ts.Debug.assert(!returnValueProperty, "Shouldn't have returnValueProperty here");
+            Debug.assert(!returnValueProperty, "Shouldn't have returnValueProperty here");
 
-            newNodes.push(ts.factory.createExpressionStatement(ts.factory.createAssignment(assignments[0].name, call)));
+            newNodes.push(factory.createExpressionStatement(factory.createAssignment(assignments[0].name, call)));
 
             if (range.facts & RangeFacts.HasReturn) {
-                newNodes.push(ts.factory.createReturnStatement());
+                newNodes.push(factory.createReturnStatement());
             }
         }
         else {
             // emit e.g.
             //   { a, b, __return } = newFunction(a, b);
             //   return __return;
-            newNodes.push(ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createObjectLiteralExpression(assignments), call)));
+            newNodes.push(factory.createExpressionStatement(factory.createAssignment(factory.createObjectLiteralExpression(assignments), call)));
             if (returnValueProperty) {
-                newNodes.push(ts.factory.createReturnStatement(ts.factory.createIdentifier(returnValueProperty)));
+                newNodes.push(factory.createReturnStatement(factory.createIdentifier(returnValueProperty)));
             }
         }
     }
     else {
         if (range.facts & RangeFacts.HasReturn) {
-            newNodes.push(ts.factory.createReturnStatement(call));
+            newNodes.push(factory.createReturnStatement(call));
         }
         else if (isReadonlyArray(range.range)) {
-            newNodes.push(ts.factory.createExpressionStatement(call));
+            newNodes.push(factory.createExpressionStatement(call));
         }
         else {
             newNodes.push(call);
@@ -1133,32 +1161,32 @@ function extractFunctionInScope(
     }
 
     if (isReadonlyArray(range.range)) {
-        changeTracker.replaceNodeRangeWithNodes(context.file, ts.first(range.range), ts.last(range.range), newNodes);
+        changeTracker.replaceNodeRangeWithNodes(context.file, first(range.range), last(range.range), newNodes);
     }
     else {
         changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes);
     }
 
     const edits = changeTracker.getChanges();
-    const renameRange = isReadonlyArray(range.range) ? ts.first(range.range) : range.range;
+    const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
 
     const renameFilename = renameRange.getSourceFile().fileName;
-    const renameLocation = ts.getRenameLocation(edits, renameFilename, functionNameText, /*isDeclaredBeforeUse*/ false);
+    const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*isDeclaredBeforeUse*/ false);
     return { renameFilename, renameLocation, edits };
 
-    function getTypeDeepCloneUnionUndefined(typeNode: ts.TypeNode | undefined): ts.TypeNode | undefined {
+    function getTypeDeepCloneUnionUndefined(typeNode: TypeNode | undefined): TypeNode | undefined {
         if (typeNode === undefined) {
             return undefined;
         }
 
-        const clone = ts.getSynthesizedDeepClone(typeNode);
+        const clone = getSynthesizedDeepClone(typeNode);
         let withoutParens = clone;
-        while (ts.isParenthesizedTypeNode(withoutParens)) {
+        while (isParenthesizedTypeNode(withoutParens)) {
             withoutParens = withoutParens.type;
         }
-        return ts.isUnionTypeNode(withoutParens) && ts.find(withoutParens.types, t => t.kind === ts.SyntaxKind.UndefinedKeyword)
+        return isUnionTypeNode(withoutParens) && find(withoutParens.types, t => t.kind === SyntaxKind.UndefinedKeyword)
             ? clone
-            : ts.factory.createUnionTypeNode([clone, ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)]);
+            : factory.createUnionTypeNode([clone, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
     }
 }
 
@@ -1167,57 +1195,57 @@ function extractFunctionInScope(
  * Stores either a list of changes that should be applied to extract a range or a list of errors
  */
 function extractConstantInScope(
-    node: ts.Expression,
+    node: Expression,
     scope: Scope,
     { substitutions }: ScopeUsages,
     rangeFacts: RangeFacts,
-    context: ts.RefactorContext): ts.RefactorEditInfo {
+    context: RefactorContext): RefactorEditInfo {
 
     const checker = context.program.getTypeChecker();
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = ts.isPropertyAccessExpression(node) && !ts.isClassLike(scope) && !checker.resolveName(node.name.text, node, ts.SymbolFlags.Value, /*excludeGlobals*/ false) && !ts.isPrivateIdentifier(node.name) && !ts.isKeyword(node.name.originalKeywordKind!)
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
         ? node.name.text
-        : ts.getUniqueName(ts.isClassLike(scope) ? "newProperty" : "newLocal", file);
-    const isJS = ts.isInJSFile(scope);
+        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
         ? undefined
-        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, ts.NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-    let initializer = transformConstantInitializer(ts.skipParentheses(node), substitutions);
+    let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
     ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
 
-    ts.suppressLeadingAndTrailingTrivia(initializer);
+    suppressLeadingAndTrailingTrivia(initializer);
 
-    const changeTracker = ts.textChanges.ChangeTracker.fromContext(context);
+    const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
-    if (ts.isClassLike(scope)) {
-        ts.Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
-        const modifiers: ts.Modifier[] = [];
-        modifiers.push(ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword));
+    if (isClassLike(scope)) {
+        Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
+        const modifiers: Modifier[] = [];
+        modifiers.push(factory.createModifier(SyntaxKind.PrivateKeyword));
         if (rangeFacts & RangeFacts.InStaticRegion) {
-            modifiers.push(ts.factory.createModifier(ts.SyntaxKind.StaticKeyword));
+            modifiers.push(factory.createModifier(SyntaxKind.StaticKeyword));
         }
-        modifiers.push(ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword));
+        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
 
-        const newVariable = ts.factory.createPropertyDeclaration(
+        const newVariable = factory.createPropertyDeclaration(
             modifiers,
             localNameText,
             /*questionToken*/ undefined,
             variableType,
             initializer);
 
-        let localReference: ts.Expression = ts.factory.createPropertyAccessExpression(
+        let localReference: Expression = factory.createPropertyAccessExpression(
             rangeFacts & RangeFacts.InStaticRegion
-                ? ts.factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
-                : ts.factory.createThis(),
-                ts.factory.createIdentifier(localNameText));
+                ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
+                : factory.createThis(),
+                factory.createIdentifier(localNameText));
 
         if (isInJSXContent(node)) {
-            localReference = ts.factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
         }
 
         // Declare
@@ -1229,7 +1257,7 @@ function extractConstantInScope(
         changeTracker.replaceNode(context.file, node, localReference);
     }
     else {
-        const newVariableDeclaration = ts.factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, initializer);
+        const newVariableDeclaration = factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, initializer);
 
         // If the node is part of an initializer in a list of variable declarations, insert a new
         // variable declaration into the list (in case it depends on earlier ones).
@@ -1242,21 +1270,21 @@ function extractConstantInScope(
             changeTracker.insertNodeBefore(context.file, oldVariableDeclaration, newVariableDeclaration);
 
             // Consume
-            const localReference = ts.factory.createIdentifier(localNameText);
+            const localReference = factory.createIdentifier(localNameText);
             changeTracker.replaceNode(context.file, node, localReference);
         }
-        else if (node.parent.kind === ts.SyntaxKind.ExpressionStatement && scope === ts.findAncestor(node, isScope)) {
+        else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
             // If the parent is an expression statement and the target scope is the immediately enclosing one,
             // replace the statement with the declaration.
-            const newVariableStatement = ts.factory.createVariableStatement(
+            const newVariableStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.factory.createVariableDeclarationList([newVariableDeclaration], ts.NodeFlags.Const));
+                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
             changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
         }
         else {
-            const newVariableStatement = ts.factory.createVariableStatement(
+            const newVariableStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                ts.factory.createVariableDeclarationList([newVariableDeclaration], ts.NodeFlags.Const));
+                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
 
             // Declare
             const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
@@ -1268,16 +1296,16 @@ function extractConstantInScope(
             }
 
             // Consume
-            if (node.parent.kind === ts.SyntaxKind.ExpressionStatement) {
+            if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                 // If the parent is an expression statement, delete it.
                 changeTracker.delete(context.file, node.parent);
             }
             else {
-                let localReference: ts.Expression = ts.factory.createIdentifier(localNameText);
+                let localReference: Expression = factory.createIdentifier(localNameText);
                 // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
                 // or it will become a plain text
                 if (isInJSXContent(node)) {
-                    localReference = ts.factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+                    localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
                 }
                 changeTracker.replaceNode(context.file, node, localReference);
             }
@@ -1287,16 +1315,16 @@ function extractConstantInScope(
     const edits = changeTracker.getChanges();
 
     const renameFilename = node.getSourceFile().fileName;
-    const renameLocation = ts.getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
+    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
     return { renameFilename, renameLocation, edits };
 
-    function transformFunctionInitializerAndType(variableType: ts.TypeNode | undefined, initializer: ts.Expression): { variableType: ts.TypeNode | undefined, initializer: ts.Expression } {
+    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
         // If no contextual type exists there is nothing to transfer to the function signature
         if (variableType === undefined) return { variableType, initializer };
         // Only do this for function expressions and arrow functions that are not generic
-        if (!ts.isFunctionExpression(initializer) && !ts.isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
+        if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
         const functionType = checker.getTypeAtLocation(node);
-        const functionSignature = ts.singleOrUndefined(checker.getSignaturesOfType(functionType, ts.SignatureKind.Call));
+        const functionSignature = singleOrUndefined(checker.getSignaturesOfType(functionType, SignatureKind.Call));
 
         // If no function signature, maybe there was an error, do nothing
         if (!functionSignature) return { variableType, initializer };
@@ -1304,7 +1332,7 @@ function extractConstantInScope(
         if (!!functionSignature.getTypeParameters()) return { variableType, initializer };
 
         // We add parameter types if needed
-        const parameters: ts.ParameterDeclaration[] = [];
+        const parameters: ParameterDeclaration[] = [];
         let hasAny = false;
         for (const p of initializer.parameters) {
             if (p.type) {
@@ -1314,9 +1342,9 @@ function extractConstantInScope(
                 const paramType = checker.getTypeAtLocation(p);
                 if (paramType === checker.getAnyType()) hasAny = true;
 
-                parameters.push(ts.factory.updateParameterDeclaration(p,
+                parameters.push(factory.updateParameterDeclaration(p,
                     p.modifiers, p.dotDotDotToken,
-                    p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, ts.NodeBuilderFlags.NoTruncation), p.initializer));
+                    p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.
@@ -1324,45 +1352,45 @@ function extractConstantInScope(
         // is probably actually a worse refactor outcome.
         if (hasAny) return { variableType, initializer };
         variableType = undefined;
-        if (ts.isArrowFunction(initializer)) {
-            initializer = ts.factory.updateArrowFunction(initializer, ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined, initializer.typeParameters,
+        if (isArrowFunction(initializer)) {
+            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters,
                 parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, ts.NodeBuilderFlags.NoTruncation),
+                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
                 initializer.equalsGreaterThanToken,
                 initializer.body);
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
-                const firstParameter = ts.firstOrUndefined(parameters);
+                const firstParameter = firstOrUndefined(parameters);
                 // If the function signature has a this parameter and if the first defined parameter is not the this parameter, we must add it
                 // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
-                if ((!firstParameter || (ts.isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
+                if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                     const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
-                    parameters.splice(0, 0, ts.factory.createParameterDeclaration(
+                    parameters.splice(0, 0, factory.createParameterDeclaration(
                         /* modifiers */ undefined,
                         /* dotDotDotToken */ undefined,
                         "this",
                         /* questionToken */ undefined,
-                        checker.typeToTypeNode(thisType, scope, ts.NodeBuilderFlags.NoTruncation)
+                        checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
                     ));
                 }
             }
-            initializer = ts.factory.updateFunctionExpression(initializer, ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined, initializer.asteriskToken,
+            initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken,
                 initializer.name, initializer.typeParameters,
                 parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, ts.NodeBuilderFlags.NoTruncation),
+                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
                 initializer.body);
         }
         return { variableType, initializer };
     }
 }
 
-function getContainingVariableDeclarationIfInList(node: ts.Node, scope: Scope) {
+function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     let prevNode;
     while (node !== undefined && node !== scope) {
-        if (ts.isVariableDeclaration(node) &&
+        if (isVariableDeclaration(node) &&
             node.initializer === prevNode &&
-            ts.isVariableDeclarationList(node.parent) &&
+            isVariableDeclarationList(node.parent) &&
             node.parent.declarations.length > 1) {
 
             return node;
@@ -1373,7 +1401,7 @@ function getContainingVariableDeclarationIfInList(node: ts.Node, scope: Scope) {
     }
 }
 
-function getFirstDeclaration(type: ts.Type): ts.Declaration | undefined {
+function getFirstDeclaration(type: Type): Declaration | undefined {
     let firstDeclaration;
 
     const symbol = type.symbol;
@@ -1389,134 +1417,134 @@ function getFirstDeclaration(type: ts.Type): ts.Declaration | undefined {
 }
 
 function compareTypesByDeclarationOrder(
-    { type: type1, declaration: declaration1 }: { type: ts.Type, declaration?: ts.Declaration },
-    { type: type2, declaration: declaration2 }: { type: ts.Type, declaration?: ts.Declaration }) {
+    { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
+    { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
 
-    return ts.compareProperties(declaration1, declaration2, "pos", ts.compareValues)
-        || ts.compareStringsCaseSensitive(
+    return compareProperties(declaration1, declaration2, "pos", compareValues)
+        || compareStringsCaseSensitive(
             type1.symbol ? type1.symbol.getName() : "",
             type2.symbol ? type2.symbol.getName() : "")
-        || ts.compareValues(type1.id, type2.id);
+        || compareValues(type1.id, type2.id);
 }
 
-function getCalledExpression(scope: ts.Node, range: TargetRange, functionNameText: string): ts.Expression {
-    const functionReference = ts.factory.createIdentifier(functionNameText);
-    if (ts.isClassLike(scope)) {
-        const lhs = range.facts & RangeFacts.InStaticRegion ? ts.factory.createIdentifier(scope.name!.text) : ts.factory.createThis(); // TODO: GH#18217
-        return ts.factory.createPropertyAccessExpression(lhs, functionReference);
+function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
+    const functionReference = factory.createIdentifier(functionNameText);
+    if (isClassLike(scope)) {
+        const lhs = range.facts & RangeFacts.InStaticRegion ? factory.createIdentifier(scope.name!.text) : factory.createThis(); // TODO: GH#18217
+        return factory.createPropertyAccessExpression(lhs, functionReference);
     }
     else {
         return functionReference;
     }
 }
 
-function transformFunctionBody(body: ts.Node, exposedVariableDeclarations: readonly ts.VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ts.ReadonlyESMap<string, ts.Node>, hasReturn: boolean): { body: ts.Block, returnValueProperty: string | undefined } {
+function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyESMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
-    if (ts.isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
+    if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
-        return { body: ts.factory.createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
+        return { body: factory.createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
     }
     let returnValueProperty: string | undefined;
     let ignoreReturns = false;
-    const statements = ts.factory.createNodeArray(ts.isBlock(body) ? body.statements.slice(0) : [ts.isStatement(body) ? body : ts.factory.createReturnStatement(ts.skipParentheses(body as ts.Expression))]);
+    const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
     // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
     if (hasWritesOrVariableDeclarations || substitutions.size) {
-        const rewrittenStatements = ts.visitNodes(statements, visitor).slice();
-        if (hasWritesOrVariableDeclarations && !hasReturn && ts.isStatement(body)) {
+        const rewrittenStatements = visitNodes(statements, visitor).slice();
+        if (hasWritesOrVariableDeclarations && !hasReturn && isStatement(body)) {
             // add return at the end to propagate writes back in case if control flow falls out of the function body
             // it is ok to know that range has at least one return since it we only allow unconditional returns
             const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
             if (assignments.length === 1) {
-                rewrittenStatements.push(ts.factory.createReturnStatement(assignments[0].name));
+                rewrittenStatements.push(factory.createReturnStatement(assignments[0].name));
             }
             else {
-                rewrittenStatements.push(ts.factory.createReturnStatement(ts.factory.createObjectLiteralExpression(assignments)));
+                rewrittenStatements.push(factory.createReturnStatement(factory.createObjectLiteralExpression(assignments)));
             }
         }
-        return { body: ts.factory.createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
+        return { body: factory.createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
     }
     else {
-        return { body: ts.factory.createBlock(statements, /*multiLine*/ true), returnValueProperty: undefined };
+        return { body: factory.createBlock(statements, /*multiLine*/ true), returnValueProperty: undefined };
     }
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        if (!ignoreReturns && ts.isReturnStatement(node) && hasWritesOrVariableDeclarations) {
-            const assignments: ts.ObjectLiteralElementLike[] = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
+    function visitor(node: Node): VisitResult<Node> {
+        if (!ignoreReturns && isReturnStatement(node) && hasWritesOrVariableDeclarations) {
+            const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
             if (node.expression) {
                 if (!returnValueProperty) {
                     returnValueProperty = "__return";
                 }
-                assignments.unshift(ts.factory.createPropertyAssignment(returnValueProperty, ts.visitNode(node.expression, visitor)));
+                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
             }
             if (assignments.length === 1) {
-                return ts.factory.createReturnStatement(assignments[0].name as ts.Expression);
+                return factory.createReturnStatement(assignments[0].name as Expression);
             }
             else {
-                return ts.factory.createReturnStatement(ts.factory.createObjectLiteralExpression(assignments));
+                return factory.createReturnStatement(factory.createObjectLiteralExpression(assignments));
             }
         }
         else {
             const oldIgnoreReturns = ignoreReturns;
-            ignoreReturns = ignoreReturns || ts.isFunctionLikeDeclaration(node) || ts.isClassLike(node);
-            const substitution = substitutions.get(ts.getNodeId(node).toString());
-            const result = substitution ? ts.getSynthesizedDeepClone(substitution) : ts.visitEachChild(node, visitor, ts.nullTransformationContext);
+            ignoreReturns = ignoreReturns || isFunctionLikeDeclaration(node) || isClassLike(node);
+            const substitution = substitutions.get(getNodeId(node).toString());
+            const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
             ignoreReturns = oldIgnoreReturns;
             return result;
         }
     }
 }
 
-function transformConstantInitializer(initializer: ts.Expression, substitutions: ts.ReadonlyESMap<string, ts.Node>): ts.Expression {
+function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyESMap<string, Node>): Expression {
     return substitutions.size
-        ? visitor(initializer) as ts.Expression
+        ? visitor(initializer) as Expression
         : initializer;
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        const substitution = substitutions.get(ts.getNodeId(node).toString());
-        return substitution ? ts.getSynthesizedDeepClone(substitution) : ts.visitEachChild(node, visitor, ts.nullTransformationContext);
+    function visitor(node: Node): VisitResult<Node> {
+        const substitution = substitutions.get(getNodeId(node).toString());
+        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
     }
 }
 
-function getStatementsOrClassElements(scope: Scope): readonly ts.Statement[] | readonly ts.ClassElement[] {
-    if (ts.isFunctionLikeDeclaration(scope)) {
+function getStatementsOrClassElements(scope: Scope): readonly Statement[] | readonly ClassElement[] {
+    if (isFunctionLikeDeclaration(scope)) {
         const body = scope.body!; // TODO: GH#18217
-        if (ts.isBlock(body)) {
+        if (isBlock(body)) {
             return body.statements;
         }
     }
-    else if (ts.isModuleBlock(scope) || ts.isSourceFile(scope)) {
+    else if (isModuleBlock(scope) || isSourceFile(scope)) {
         return scope.statements;
     }
-    else if (ts.isClassLike(scope)) {
+    else if (isClassLike(scope)) {
         return scope.members;
     }
     else {
-        ts.assertType<never>(scope);
+        assertType<never>(scope);
     }
 
-    return ts.emptyArray;
+    return emptyArray;
 }
 
 /**
  * If `scope` contains a function after `minPos`, then return the first such function.
  * Otherwise, return `undefined`.
  */
-function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): ts.Statement | ts.ClassElement | undefined {
-    return ts.find<ts.Statement | ts.ClassElement>(getStatementsOrClassElements(scope), child =>
-        child.pos >= minPos && ts.isFunctionLikeDeclaration(child) && !ts.isConstructorDeclaration(child));
+function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
+    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
+        child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
 }
 
-function getNodeToInsertPropertyBefore(maxPos: number, scope: ts.ClassLikeDeclaration): ts.ClassElement {
+function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
     const members = scope.members;
-    ts.Debug.assert(members.length > 0, "Found no members"); // There must be at least one child, since we extracted from one.
+    Debug.assert(members.length > 0, "Found no members"); // There must be at least one child, since we extracted from one.
 
-    let prevMember: ts.ClassElement | undefined;
+    let prevMember: ClassElement | undefined;
     let allProperties = true;
     for (const member of members) {
         if (member.pos > maxPos) {
             return prevMember || members[0];
         }
-        if (allProperties && !ts.isPropertyDeclaration(member)) {
+        if (allProperties && !isPropertyDeclaration(member)) {
             // If it is non-vacuously true that all preceding members are properties,
             // insert before the current member (i.e. at the end of the list of properties).
             if (prevMember !== undefined) {
@@ -1528,12 +1556,12 @@ function getNodeToInsertPropertyBefore(maxPos: number, scope: ts.ClassLikeDeclar
         prevMember = member;
     }
 
-    if (prevMember === undefined) return ts.Debug.fail(); // If the loop didn't return, then it did set prevMember.
+    if (prevMember === undefined) return Debug.fail(); // If the loop didn't return, then it did set prevMember.
     return prevMember;
 }
 
-function getNodeToInsertConstantBefore(node: ts.Node, scope: Scope): ts.Statement {
-    ts.Debug.assert(!ts.isClassLike(scope));
+function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
+    Debug.assert(!isClassLike(scope));
 
     let prevScope: Scope | undefined;
     for (let curr = node; curr !== scope; curr = curr.parent) {
@@ -1544,7 +1572,7 @@ function getNodeToInsertConstantBefore(node: ts.Node, scope: Scope): ts.Statemen
 
     for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
         if (isBlockLike(curr)) {
-            let prevStatement: ts.Statement | undefined;
+            let prevStatement: Statement | undefined;
             for (const statement of curr.statements) {
                 if (statement.pos > node.pos) {
                     break;
@@ -1552,26 +1580,26 @@ function getNodeToInsertConstantBefore(node: ts.Node, scope: Scope): ts.Statemen
                 prevStatement = statement;
             }
 
-            if (!prevStatement && ts.isCaseClause(curr)) {
+            if (!prevStatement && isCaseClause(curr)) {
                 // We must have been in the expression of the case clause.
-                ts.Debug.assert(ts.isSwitchStatement(curr.parent.parent), "Grandparent isn't a switch statement");
+                Debug.assert(isSwitchStatement(curr.parent.parent), "Grandparent isn't a switch statement");
                 return curr.parent.parent;
             }
 
             // There must be at least one statement since we started in one.
-            return ts.Debug.checkDefined(prevStatement, "prevStatement failed to get set");
+            return Debug.checkDefined(prevStatement, "prevStatement failed to get set");
         }
 
-        ts.Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");
+        Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");
     }
 }
 
 function getPropertyAssignmentsForWritesAndVariableDeclarations(
-    exposedVariableDeclarations: readonly ts.VariableDeclaration[],
+    exposedVariableDeclarations: readonly VariableDeclaration[],
     writes: readonly UsageEntry[] | undefined
-): ts.ShorthandPropertyAssignment[] {
-    const variableAssignments = ts.map(exposedVariableDeclarations, v => ts.factory.createShorthandPropertyAssignment(v.symbol.name));
-    const writeAssignments = ts.map(writes, w => ts.factory.createShorthandPropertyAssignment(w.symbol.name));
+): ShorthandPropertyAssignment[] {
+    const variableAssignments = map(exposedVariableDeclarations, v => factory.createShorthandPropertyAssignment(v.symbol.name));
+    const writeAssignments = map(writes, w => factory.createShorthandPropertyAssignment(w.symbol.name));
 
     // TODO: GH#18217 `variableAssignments` not possibly undefined!
     return variableAssignments === undefined
@@ -1582,7 +1610,7 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
 }
 
 function isReadonlyArray(v: any): v is readonly any[] {
-    return ts.isArray(v);
+    return isArray(v);
 }
 
 /**
@@ -1594,9 +1622,9 @@ function isReadonlyArray(v: any): v is readonly any[] {
  *   var someThing = foo + bar;
  *  this returns     ^-------^
  */
-function getEnclosingTextRange(targetRange: TargetRange, sourceFile: ts.SourceFile): ts.TextRange {
+function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): TextRange {
     return isReadonlyArray(targetRange.range)
-        ? { pos: ts.first(targetRange.range).getStart(sourceFile), end: ts.last(targetRange.range).getEnd() }
+        ? { pos: first(targetRange.range).getStart(sourceFile), end: last(targetRange.range).getEnd() }
         : targetRange.range;
 }
 
@@ -1609,62 +1637,62 @@ const enum Usage {
 
 interface UsageEntry {
     readonly usage: Usage;
-    readonly symbol: ts.Symbol;
-    readonly node: ts.Node;
+    readonly symbol: Symbol;
+    readonly node: Node;
 }
 
 interface ScopeUsages {
-    readonly usages: ts.ESMap<string, UsageEntry>;
-    readonly typeParameterUsages: ts.ESMap<string, ts.TypeParameter>; // Key is type ID
-    readonly substitutions: ts.ESMap<string, ts.Node>;
+    readonly usages: ESMap<string, UsageEntry>;
+    readonly typeParameterUsages: ESMap<string, TypeParameter>; // Key is type ID
+    readonly substitutions: ESMap<string, Node>;
 }
 
 interface ReadsAndWrites {
-    readonly target: ts.Expression | ts.Block;
+    readonly target: Expression | Block;
     readonly usagesPerScope: readonly ScopeUsages[];
-    readonly functionErrorsPerScope: readonly (readonly ts.Diagnostic[])[];
-    readonly constantErrorsPerScope: readonly (readonly ts.Diagnostic[])[];
-    readonly exposedVariableDeclarations: readonly ts.VariableDeclaration[];
+    readonly functionErrorsPerScope: readonly (readonly Diagnostic[])[];
+    readonly constantErrorsPerScope: readonly (readonly Diagnostic[])[];
+    readonly exposedVariableDeclarations: readonly VariableDeclaration[];
 }
 function collectReadsAndWrites(
     targetRange: TargetRange,
     scopes: Scope[],
-    enclosingTextRange: ts.TextRange,
-    sourceFile: ts.SourceFile,
-    checker: ts.TypeChecker,
-    cancellationToken: ts.CancellationToken): ReadsAndWrites {
+    enclosingTextRange: TextRange,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    cancellationToken: CancellationToken): ReadsAndWrites {
 
-    const allTypeParameterUsages = new ts.Map<string, ts.TypeParameter>(); // Key is type ID
+    const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
     const usagesPerScope: ScopeUsages[] = [];
-    const substitutionsPerScope: ts.ESMap<string, ts.Node>[] = [];
-    const functionErrorsPerScope: ts.Diagnostic[][] = [];
-    const constantErrorsPerScope: ts.Diagnostic[][] = [];
-    const visibleDeclarationsInExtractedRange: ts.NamedDeclaration[] = [];
-    const exposedVariableSymbolSet = new ts.Map<string, true>(); // Key is symbol ID
-    const exposedVariableDeclarations: ts.VariableDeclaration[] = [];
-    let firstExposedNonVariableDeclaration: ts.NamedDeclaration | undefined;
+    const substitutionsPerScope: ESMap<string, Node>[] = [];
+    const functionErrorsPerScope: Diagnostic[][] = [];
+    const constantErrorsPerScope: Diagnostic[][] = [];
+    const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
+    const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
+    const exposedVariableDeclarations: VariableDeclaration[] = [];
+    let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
     const expression = !isReadonlyArray(targetRange.range)
         ? targetRange.range
-        : targetRange.range.length === 1 && ts.isExpressionStatement(targetRange.range[0])
+        : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
             ? targetRange.range[0].expression
             : undefined;
 
-    let expressionDiagnostic: ts.Diagnostic | undefined;
+    let expressionDiagnostic: Diagnostic | undefined;
     if (expression === undefined) {
-        const statements = targetRange.range as readonly ts.Statement[];
-        const start = ts.first(statements).getStart();
-        const end = ts.last(statements).end;
-        expressionDiagnostic = ts.createFileDiagnostic(sourceFile, start, end - start, Messages.expressionExpected);
+        const statements = targetRange.range as readonly Statement[];
+        const start = first(statements).getStart();
+        const end = last(statements).end;
+        expressionDiagnostic = createFileDiagnostic(sourceFile, start, end - start, Messages.expressionExpected);
     }
-    else if (checker.getTypeAtLocation(expression).flags & (ts.TypeFlags.Void | ts.TypeFlags.Never)) {
-        expressionDiagnostic = ts.createDiagnosticForNode(expression, Messages.uselessConstantType);
+    else if (checker.getTypeAtLocation(expression).flags & (TypeFlags.Void | TypeFlags.Never)) {
+        expressionDiagnostic = createDiagnosticForNode(expression, Messages.uselessConstantType);
     }
 
     // initialize results
     for (const scope of scopes) {
-        usagesPerScope.push({ usages: new ts.Map<string, UsageEntry>(), typeParameterUsages: new ts.Map<string, ts.TypeParameter>(), substitutions: new ts.Map<string, ts.Expression>() });
-        substitutionsPerScope.push(new ts.Map<string, ts.Expression>());
+        usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
+        substitutionsPerScope.push(new Map<string, Expression>());
 
         functionErrorsPerScope.push([]);
 
@@ -1672,20 +1700,20 @@ function collectReadsAndWrites(
         if (expressionDiagnostic) {
             constantErrors.push(expressionDiagnostic);
         }
-        if (ts.isClassLike(scope) && ts.isInJSFile(scope)) {
-            constantErrors.push(ts.createDiagnosticForNode(scope, Messages.cannotExtractToJSClass));
+        if (isClassLike(scope) && isInJSFile(scope)) {
+            constantErrors.push(createDiagnosticForNode(scope, Messages.cannotExtractToJSClass));
         }
-        if (ts.isArrowFunction(scope) && !ts.isBlock(scope.body)) {
+        if (isArrowFunction(scope) && !isBlock(scope.body)) {
             // TODO (https://github.com/Microsoft/TypeScript/issues/18924): allow this
-            constantErrors.push(ts.createDiagnosticForNode(scope, Messages.cannotExtractToExpressionArrowFunction));
+            constantErrors.push(createDiagnosticForNode(scope, Messages.cannotExtractToExpressionArrowFunction));
         }
         constantErrorsPerScope.push(constantErrors);
     }
 
-    const seenUsages = new ts.Map<string, Usage>();
-    const target = isReadonlyArray(targetRange.range) ? ts.factory.createBlock(targetRange.range) : targetRange.range;
+    const seenUsages = new Map<string, Usage>();
+    const target = isReadonlyArray(targetRange.range) ? factory.createBlock(targetRange.range) : targetRange.range;
 
-    const unmodifiedNode = isReadonlyArray(targetRange.range) ? ts.first(targetRange.range) : targetRange.range;
+    const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
     const inGenericContext = isInGenericContext(unmodifiedNode);
 
     collectUsages(target);
@@ -1693,16 +1721,16 @@ function collectReadsAndWrites(
     // Unfortunately, this code takes advantage of the knowledge that the generated method
     // will use the contextual type of an expression as the return type of the extracted
     // method (and will therefore "use" all the types involved).
-    if (inGenericContext && !isReadonlyArray(targetRange.range) && !ts.isJsxAttribute(targetRange.range)) {
+    if (inGenericContext && !isReadonlyArray(targetRange.range) && !isJsxAttribute(targetRange.range)) {
         const contextualType = checker.getContextualType(targetRange.range)!; // TODO: GH#18217
         recordTypeParameterUsages(contextualType);
     }
 
     if (allTypeParameterUsages.size > 0) {
-        const seenTypeParameterUsages = new ts.Map<string, ts.TypeParameter>(); // Key is type ID
+        const seenTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
 
         let i = 0;
-        for (let curr: ts.Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
+        for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
             if (curr === scopes[i]) {
                 // Copy current contents of seenTypeParameterUsages into scope.
                 seenTypeParameterUsages.forEach((typeParameter, id) => {
@@ -1713,9 +1741,9 @@ function collectReadsAndWrites(
             }
 
             // Note that we add the current node's type parameters *after* updating the corresponding scope.
-            if (ts.isDeclarationWithTypeParameters(curr)) {
-                for (const typeParameterDecl of ts.getEffectiveTypeParameterDeclarations(curr)) {
-                    const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as ts.TypeParameter;
+            if (isDeclarationWithTypeParameters(curr)) {
+                for (const typeParameterDecl of getEffectiveTypeParameterDeclarations(curr)) {
+                    const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as TypeParameter;
                     if (allTypeParameterUsages.has(typeParameter.id.toString())) {
                         seenTypeParameterUsages.set(typeParameter.id.toString(), typeParameter);
                     }
@@ -1726,16 +1754,16 @@ function collectReadsAndWrites(
         // If we didn't get through all the scopes, then there were some that weren't in our
         // parent chain (impossible at time of writing).  A conservative solution would be to
         // copy allTypeParameterUsages into all remaining scopes.
-        ts.Debug.assert(i === scopes.length, "Should have iterated all scopes");
+        Debug.assert(i === scopes.length, "Should have iterated all scopes");
     }
 
     // If there are any declarations in the extracted block that are used in the same enclosing
     // lexical scope, we can't move the extraction "up" as those declarations will become unreachable
     if (visibleDeclarationsInExtractedRange.length) {
-        const containingLexicalScopeOfExtraction = ts.isBlockScope(scopes[0], scopes[0].parent)
+        const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent)
             ? scopes[0]
-            : ts.getEnclosingBlockScopeContainer(scopes[0]);
-        ts.forEachChild(containingLexicalScopeOfExtraction, checkForUsedDeclarations);
+            : getEnclosingBlockScopeContainer(scopes[0]);
+        forEachChild(containingLexicalScopeOfExtraction, checkForUsedDeclarations);
     }
 
     for (let i = 0; i < scopes.length; i++) {
@@ -1745,41 +1773,41 @@ function collectReadsAndWrites(
         // local will actually be declared at the same level as the extracted expression).
         if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
             const errorNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
-            constantErrorsPerScope[i].push(ts.createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
+            constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
         }
 
-        if (targetRange.facts & RangeFacts.UsesThisInFunction && ts.isClassLike(scopes[i])) {
-            functionErrorsPerScope[i].push(ts.createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
+        if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
+            functionErrorsPerScope[i].push(createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
         }
 
         let hasWrite = false;
-        let readonlyClassPropertyWrite: ts.Declaration | undefined;
+        let readonlyClassPropertyWrite: Declaration | undefined;
         usagesPerScope[i].usages.forEach(value => {
             if (value.usage === Usage.Write) {
                 hasWrite = true;
-                if (value.symbol.flags & ts.SymbolFlags.ClassMember &&
+                if (value.symbol.flags & SymbolFlags.ClassMember &&
                     value.symbol.valueDeclaration &&
-                    ts.hasEffectiveModifier(value.symbol.valueDeclaration, ts.ModifierFlags.Readonly)) {
+                    hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
                     readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                 }
             }
         });
 
         // If an expression was extracted, then there shouldn't have been any variable declarations.
-        ts.Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0, "No variable declarations expected if something was extracted");
+        Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0, "No variable declarations expected if something was extracted");
 
         if (hasWrite && !isReadonlyArray(targetRange.range)) {
-            const diag = ts.createDiagnosticForNode(targetRange.range, Messages.cannotWriteInExpression);
+            const diag = createDiagnosticForNode(targetRange.range, Messages.cannotWriteInExpression);
             functionErrorsPerScope[i].push(diag);
             constantErrorsPerScope[i].push(diag);
         }
         else if (readonlyClassPropertyWrite && i > 0) {
-            const diag = ts.createDiagnosticForNode(readonlyClassPropertyWrite, Messages.cannotExtractReadonlyPropertyInitializerOutsideConstructor);
+            const diag = createDiagnosticForNode(readonlyClassPropertyWrite, Messages.cannotExtractReadonlyPropertyInitializerOutsideConstructor);
             functionErrorsPerScope[i].push(diag);
             constantErrorsPerScope[i].push(diag);
         }
         else if (firstExposedNonVariableDeclaration) {
-            const diag = ts.createDiagnosticForNode(firstExposedNonVariableDeclaration, Messages.cannotExtractExportedEntity);
+            const diag = createDiagnosticForNode(firstExposedNonVariableDeclaration, Messages.cannotExtractExportedEntity);
             functionErrorsPerScope[i].push(diag);
             constantErrorsPerScope[i].push(diag);
         }
@@ -1787,11 +1815,11 @@ function collectReadsAndWrites(
 
     return { target, usagesPerScope, functionErrorsPerScope, constantErrorsPerScope, exposedVariableDeclarations };
 
-    function isInGenericContext(node: ts.Node) {
-        return !!ts.findAncestor(node, n => ts.isDeclarationWithTypeParameters(n) && ts.getEffectiveTypeParameterDeclarations(n).length !== 0);
+    function isInGenericContext(node: Node) {
+        return !!findAncestor(node, n => isDeclarationWithTypeParameters(n) && getEffectiveTypeParameterDeclarations(n).length !== 0);
     }
 
-    function recordTypeParameterUsages(type: ts.Type) {
+    function recordTypeParameterUsages(type: Type) {
         // PERF: This is potentially very expensive.  `type` could be a library type with
         // a lot of properties, each of which the walker will visit.  Unfortunately, the
         // solution isn't as trivial as filtering to user types because of (e.g.) Array.
@@ -1805,65 +1833,65 @@ function collectReadsAndWrites(
         }
     }
 
-    function collectUsages(node: ts.Node, valueUsage = Usage.Read) {
+    function collectUsages(node: Node, valueUsage = Usage.Read) {
         if (inGenericContext) {
             const type = checker.getTypeAtLocation(node);
             recordTypeParameterUsages(type);
         }
 
-        if (ts.isDeclaration(node) && node.symbol) {
+        if (isDeclaration(node) && node.symbol) {
             visibleDeclarationsInExtractedRange.push(node);
         }
 
-        if (ts.isAssignmentExpression(node)) {
+        if (isAssignmentExpression(node)) {
             // use 'write' as default usage for values
             collectUsages(node.left, Usage.Write);
             collectUsages(node.right);
         }
-        else if (ts.isUnaryExpressionWithWrite(node)) {
+        else if (isUnaryExpressionWithWrite(node)) {
             collectUsages(node.operand, Usage.Write);
         }
-        else if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+        else if (isPropertyAccessExpression(node) || isElementAccessExpression(node)) {
             // use 'write' as default usage for values
-            ts.forEachChild(node, collectUsages);
+            forEachChild(node, collectUsages);
         }
-        else if (ts.isIdentifier(node)) {
+        else if (isIdentifier(node)) {
             if (!node.parent) {
                 return;
             }
-            if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
+            if (isQualifiedName(node.parent) && node !== node.parent.left) {
                 return;
             }
-            if (ts.isPropertyAccessExpression(node.parent) && node !== node.parent.expression) {
+            if (isPropertyAccessExpression(node.parent) && node !== node.parent.expression) {
                 return;
             }
-            recordUsage(node, valueUsage, /*isTypeNode*/ ts.isPartOfTypeNode(node));
+            recordUsage(node, valueUsage, /*isTypeNode*/ isPartOfTypeNode(node));
         }
         else {
-            ts.forEachChild(node, collectUsages);
+            forEachChild(node, collectUsages);
         }
     }
 
-    function recordUsage(n: ts.Identifier, usage: Usage, isTypeNode: boolean) {
+    function recordUsage(n: Identifier, usage: Usage, isTypeNode: boolean) {
         const symbolId = recordUsagebySymbol(n, usage, isTypeNode);
         if (symbolId) {
             for (let i = 0; i < scopes.length; i++) {
                 // push substitution from map<symbolId, subst> to map<nodeId, subst> to simplify rewriting
                 const substitution = substitutionsPerScope[i].get(symbolId);
                 if (substitution) {
-                    usagesPerScope[i].substitutions.set(ts.getNodeId(n).toString(), substitution);
+                    usagesPerScope[i].substitutions.set(getNodeId(n).toString(), substitution);
                 }
             }
         }
     }
 
-    function recordUsagebySymbol(identifier: ts.Identifier, usage: Usage, isTypeName: boolean) {
+    function recordUsagebySymbol(identifier: Identifier, usage: Usage, isTypeName: boolean) {
         const symbol = getSymbolReferencedByIdentifier(identifier);
         if (!symbol) {
             // cannot find symbol - do nothing
             return undefined;
         }
-        const symbolId = ts.getSymbolId(symbol).toString();
+        const symbolId = getSymbolId(symbol).toString();
         const lastUsage = seenUsages.get(symbolId);
         // there are two kinds of value usages
         // - reads - if range contains a read from the value located outside of the range then value should be passed as a parameter
@@ -1889,18 +1917,18 @@ function collectReadsAndWrites(
         }
         // find first declaration in this file
         const decls = symbol.getDeclarations();
-        const declInFile = decls && ts.find(decls, d => d.getSourceFile() === sourceFile);
+        const declInFile = decls && find(decls, d => d.getSourceFile() === sourceFile);
         if (!declInFile) {
             return undefined;
         }
-        if (ts.rangeContainsStartEnd(enclosingTextRange, declInFile.getStart(), declInFile.end)) {
+        if (rangeContainsStartEnd(enclosingTextRange, declInFile.getStart(), declInFile.end)) {
             // declaration is located in range to be extracted - do nothing
             return undefined;
         }
         if (targetRange.facts & RangeFacts.IsGenerator && usage === Usage.Write) {
             // this is write to a reference located outside of the target scope and range is extracted into generator
             // currently this is unsupported scenario
-            const diag = ts.createDiagnosticForNode(identifier, Messages.cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators);
+            const diag = createDiagnosticForNode(identifier, Messages.cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators);
             for (const errors of functionErrorsPerScope) {
                 errors.push(diag);
             }
@@ -1922,8 +1950,8 @@ function collectReadsAndWrites(
                 else if (isTypeName) {
                     // If the symbol is a type parameter that won't be in scope, we'll pass it as a type argument
                     // so there's no problem.
-                    if (!(symbol.flags & ts.SymbolFlags.TypeParameter)) {
-                        const diag = ts.createDiagnosticForNode(identifier, Messages.typeWillNotBeVisibleInTheNewScope);
+                    if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                        const diag = createDiagnosticForNode(identifier, Messages.typeWillNotBeVisibleInTheNewScope);
                         functionErrorsPerScope[i].push(diag);
                         constantErrorsPerScope[i].push(diag);
                     }
@@ -1936,20 +1964,20 @@ function collectReadsAndWrites(
         return symbolId;
     }
 
-    function checkForUsedDeclarations(node: ts.Node) {
+    function checkForUsedDeclarations(node: Node) {
         // If this node is entirely within the original extraction range, we don't need to do anything.
-        if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.indexOf(node as ts.Statement) >= 0)) {
+        if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.indexOf(node as Statement) >= 0)) {
             return;
         }
 
         // Otherwise check and recurse.
-        const sym = ts.isIdentifier(node)
+        const sym = isIdentifier(node)
             ? getSymbolReferencedByIdentifier(node)
             : checker.getSymbolAtLocation(node);
         if (sym) {
-            const decl = ts.find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
+            const decl = find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
             if (decl) {
-                if (ts.isVariableDeclaration(decl)) {
+                if (isVariableDeclaration(decl)) {
                     const idString = decl.symbol.id!.toString();
                     if (!exposedVariableSymbolSet.has(idString)) {
                         exposedVariableDeclarations.push(decl);
@@ -1964,40 +1992,40 @@ function collectReadsAndWrites(
             }
         }
 
-        ts.forEachChild(node, checkForUsedDeclarations);
+        forEachChild(node, checkForUsedDeclarations);
     }
 
     /**
      * Return the symbol referenced by an identifier (even if it declares a different symbol).
      */
-    function getSymbolReferencedByIdentifier(identifier: ts.Identifier) {
+    function getSymbolReferencedByIdentifier(identifier: Identifier) {
         // If the identifier is both a property name and its value, we're only interested in its value
         // (since the name is a declaration and will be included in the extracted range).
-        return identifier.parent && ts.isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
+        return identifier.parent && isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
             ? checker.getShorthandAssignmentValueSymbol(identifier.parent)
             : checker.getSymbolAtLocation(identifier);
     }
 
-    function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: ts.Symbol | undefined, scopeDecl: ts.Node, isTypeNode: boolean): ts.PropertyAccessExpression | ts.EntityName | undefined {
+    function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol | undefined, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName | undefined {
         if (!symbol) {
             return undefined;
         }
         const decls = symbol.getDeclarations();
         if (decls && decls.some(d => d.parent === scopeDecl)) {
-            return ts.factory.createIdentifier(symbol.name);
+            return factory.createIdentifier(symbol.name);
         }
         const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);
         if (prefix === undefined) {
             return undefined;
         }
         return isTypeNode
-            ? ts.factory.createQualifiedName(prefix as ts.EntityName, ts.factory.createIdentifier(symbol.name))
-            : ts.factory.createPropertyAccessExpression(prefix as ts.Expression, symbol.name);
+            ? factory.createQualifiedName(prefix as EntityName, factory.createIdentifier(symbol.name))
+            : factory.createPropertyAccessExpression(prefix as Expression, symbol.name);
     }
 }
 
-function getExtractableParent(node: ts.Node | undefined): ts.Node | undefined {
-    return ts.findAncestor(node, node => node.parent && isExtractableExpression(node) && !ts.isBinaryExpression(node.parent));
+function getExtractableParent(node: Node | undefined): Node | undefined {
+    return findAncestor(node, node => node.parent && isExtractableExpression(node) && !isBinaryExpression(node.parent));
 }
 
 /**
@@ -2007,48 +2035,48 @@ function getExtractableParent(node: ts.Node | undefined): ts.Node | undefined {
  * such as `import x from 'y'` -- the 'y' is a StringLiteral but is *not* an expression
  * in the sense of something that you could extract on
  */
-function isExtractableExpression(node: ts.Node): boolean {
+function isExtractableExpression(node: Node): boolean {
     const { parent } = node;
     switch (parent.kind) {
-        case ts.SyntaxKind.EnumMember:
+        case SyntaxKind.EnumMember:
             return false;
     }
 
     switch (node.kind) {
-        case ts.SyntaxKind.StringLiteral:
-            return parent.kind !== ts.SyntaxKind.ImportDeclaration &&
-                parent.kind !== ts.SyntaxKind.ImportSpecifier;
+        case SyntaxKind.StringLiteral:
+            return parent.kind !== SyntaxKind.ImportDeclaration &&
+                parent.kind !== SyntaxKind.ImportSpecifier;
 
-        case ts.SyntaxKind.SpreadElement:
-        case ts.SyntaxKind.ObjectBindingPattern:
-        case ts.SyntaxKind.BindingElement:
+        case SyntaxKind.SpreadElement:
+        case SyntaxKind.ObjectBindingPattern:
+        case SyntaxKind.BindingElement:
             return false;
 
-        case ts.SyntaxKind.Identifier:
-            return parent.kind !== ts.SyntaxKind.BindingElement &&
-                parent.kind !== ts.SyntaxKind.ImportSpecifier &&
-                parent.kind !== ts.SyntaxKind.ExportSpecifier;
+        case SyntaxKind.Identifier:
+            return parent.kind !== SyntaxKind.BindingElement &&
+                parent.kind !== SyntaxKind.ImportSpecifier &&
+                parent.kind !== SyntaxKind.ExportSpecifier;
     }
     return true;
 }
 
-function isBlockLike(node: ts.Node): node is ts.BlockLike {
+function isBlockLike(node: Node): node is BlockLike {
     switch (node.kind) {
-        case ts.SyntaxKind.Block:
-        case ts.SyntaxKind.SourceFile:
-        case ts.SyntaxKind.ModuleBlock:
-        case ts.SyntaxKind.CaseClause:
+        case SyntaxKind.Block:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.CaseClause:
             return true;
         default:
             return false;
     }
 }
 
-function isInJSXContent(node: ts.Node) {
+function isInJSXContent(node: Node) {
     return isStringLiteralJsxAttribute(node) ||
-        (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) && (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent));
+        (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
 }
 
-function isStringLiteralJsxAttribute(node: ts.Node): node is ts.StringLiteral {
-    return ts.isStringLiteral(node) && node.parent && ts.isJsxAttribute(node.parent);
+function isStringLiteralJsxAttribute(node: Node): node is StringLiteral {
+    return isStringLiteral(node) && node.parent && isJsxAttribute(node.parent);
 }

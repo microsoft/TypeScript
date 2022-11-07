@@ -1,57 +1,61 @@
-import * as ts from "../_namespaces/ts";
+import {
+    Debug, Diagnostics, emptyArray, factory, findAncestor, first, getTokenAtPosition, IfStatement, isBlock, isStatement,
+    sliceAfter, SourceFile, SyntaxKind, textChanges,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "fixUnreachableCode";
-const errorCodes = [ts.Diagnostics.Unreachable_code_detected.code];
-ts.codefix.registerCodeFix({
+const errorCodes = [Diagnostics.Unreachable_code_detected.code];
+registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const syntacticDiagnostics = context.program.getSyntacticDiagnostics(context.sourceFile, context.cancellationToken);
         if (syntacticDiagnostics.length) return;
-        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
-        return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Remove_unreachable_code, fixId, ts.Diagnostics.Remove_all_unreachable_code)];
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
+        return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
 });
 
-function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, start: number, length: number, errorCode: number): void {
-    const token = ts.getTokenAtPosition(sourceFile, start);
-    const statement = ts.findAncestor(token, ts.isStatement)!;
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number, errorCode: number): void {
+    const token = getTokenAtPosition(sourceFile, start);
+    const statement = findAncestor(token, isStatement)!;
     if (statement.getStart(sourceFile) !== token.getStart(sourceFile)) {
         const logData = JSON.stringify({
-            statementKind: ts.Debug.formatSyntaxKind(statement.kind),
-            tokenKind: ts.Debug.formatSyntaxKind(token.kind),
+            statementKind: Debug.formatSyntaxKind(statement.kind),
+            tokenKind: Debug.formatSyntaxKind(token.kind),
             errorCode,
             start,
             length
         });
-        ts.Debug.fail("Token and statement should start at the same point. " + logData);
+        Debug.fail("Token and statement should start at the same point. " + logData);
     }
 
-    const container = (ts.isBlock(statement.parent) ? statement.parent : statement).parent;
-    if (!ts.isBlock(statement.parent) || statement === ts.first(statement.parent.statements)) {
+    const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
+    if (!isBlock(statement.parent) || statement === first(statement.parent.statements)) {
         switch (container.kind) {
-            case ts.SyntaxKind.IfStatement:
-                if ((container as ts.IfStatement).elseStatement) {
-                    if (ts.isBlock(statement.parent)) {
+            case SyntaxKind.IfStatement:
+                if ((container as IfStatement).elseStatement) {
+                    if (isBlock(statement.parent)) {
                         break;
                     }
                     else {
-                        changes.replaceNode(sourceFile, statement, ts.factory.createBlock(ts.emptyArray));
+                        changes.replaceNode(sourceFile, statement, factory.createBlock(emptyArray));
                     }
                     return;
                 }
                 // falls through
-            case ts.SyntaxKind.WhileStatement:
-            case ts.SyntaxKind.ForStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
                 changes.delete(sourceFile, container);
                 return;
         }
     }
 
-    if (ts.isBlock(statement.parent)) {
+    if (isBlock(statement.parent)) {
         const end = start + length;
-        const lastStatement = ts.Debug.checkDefined(lastWhere(ts.sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
+        const lastStatement = Debug.checkDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
         changes.deleteNodeRange(sourceFile, statement, lastStatement);
     }
     else {
