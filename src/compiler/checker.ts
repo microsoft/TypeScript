@@ -12021,7 +12021,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type;
         }
         if (type.flags & TypeFlags.Union) {
-            return mapType(type as UnionType, getLowerBoundOfKeyType);
+            return mapType(type as UnionType, getLowerBoundOfKeyType, /*noReductions*/ true);
         }
         if (type.flags & TypeFlags.Intersection) {
             // Similarly to getTypeFromIntersectionTypeNode, we preserve the special string & {}, number & {},
@@ -12075,11 +12075,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
         }
         else {
-            forEachType(constraintType, t => {
-                if (t.flags & include) {
-                    addMemberForKeyType(t);
-                }
-            });
             forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
         }
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos || emptyArray);
