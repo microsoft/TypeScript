@@ -71,7 +71,7 @@ ${logText.trim()}`;
     ]);
     if (produceLKG) {
         runSequence([
-            ["gulp", ["LKG"]],
+            ["node", ["./node_modules/hereby/dist/cli.js", "LKG"]],
             ["git", ["add", "lib"]],
             ["git", ["commit", "-m", `"Update LKG"`]]
         ]);
