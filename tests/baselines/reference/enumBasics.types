@@ -79,15 +79,15 @@ enum E3 {
 >E3 : E3
 
     X = 'foo'.length, Y = 4 + 3, Z = +'foo'
->X : E3
+>X : E3.X
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
->Y : E3
+>Y : E3.Y
 >4 + 3 : number
 >4 : 4
 >3 : 3
->Z : E3
+>Z : E3.Z
 >+'foo' : number
 >'foo' : "foo"
 }
@@ -97,10 +97,10 @@ enum E4 {
 >E4 : E4
 
     X = 0, Y, Z = 'foo'.length
->X : E4
+>X : E4.X
 >0 : 0
->Y : E4
->Z : E4
+>Y : E4.Y
+>Z : E4.Z
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
@@ -172,8 +172,8 @@ enum E9 {
 // (refer to .js to validate)
 // Enum constant members are propagated
 var doNotPropagate = [
->doNotPropagate : (E3 | E4 | E7 | E8)[]
->[    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z] : (E3 | E4 | E7 | E8)[]
+>doNotPropagate : (E8 | E7 | E4.Z | E3)[]
+>[    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z] : (E8 | E7 | E4.Z | E3)[]
 
     E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
 >E8.B : E8
@@ -182,18 +182,18 @@ var doNotPropagate = [
 >E7.A : E7
 >E7 : typeof E7
 >A : E7
->E4.Z : E4
+>E4.Z : E4.Z
 >E4 : typeof E4
->Z : E4
->E3.X : E3
+>Z : E4.Z
+>E3.X : E3.X
 >E3 : typeof E3
->X : E3
->E3.Y : E3
+>X : E3.X
+>E3.Y : E3.Y
 >E3 : typeof E3
->Y : E3
->E3.Z : E3
+>Y : E3.Y
+>E3.Z : E3.Z
 >E3 : typeof E3
->Z : E3
+>Z : E3.Z
 
 ];
 // Enum computed members are not propagated

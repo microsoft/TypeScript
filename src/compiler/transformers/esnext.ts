@@ -1,24 +1,27 @@
-/*@internal*/
-namespace ts {
-  export function transformESNext(context: TransformationContext) {
-      return chainBundle(context, transformSourceFile);
+import {
+    Bundle,
+    chainBundle, Node, SourceFile, TransformationContext, TransformFlags, visitEachChild, VisitResult,
+} from "../_namespaces/ts";
 
-      function transformSourceFile(node: SourceFile) {
-          if (node.isDeclarationFile) {
-              return node;
-          }
+/** @internal */
+export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
+  return chainBundle(context, transformSourceFile);
 
-          return visitEachChild(node, visitor, context);
+  function transformSourceFile(node: SourceFile) {
+      if (node.isDeclarationFile) {
+          return node;
       }
 
-      function visitor(node: Node): VisitResult<Node> {
-          if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
-              return node;
-          }
-          switch (node.kind) {
-              default:
-                  return visitEachChild(node, visitor, context);
-          }
+      return visitEachChild(node, visitor, context);
+  }
+
+  function visitor(node: Node): VisitResult<Node> {
+      if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+          return node;
+      }
+      switch (node.kind) {
+          default:
+              return visitEachChild(node, visitor, context);
       }
   }
 }
