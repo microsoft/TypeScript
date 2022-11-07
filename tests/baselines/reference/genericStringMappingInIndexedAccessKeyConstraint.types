@@ -1,0 +1,82 @@
+=== tests/cases/compiler/genericStringMappingInIndexedAccessKeyConstraint.ts ===
+export function childByTag<K extends Uppercase<keyof HTMLElementTagNameMap>>(
+>childByTag : { <K extends "OBJECT" | "A" | "ABBR" | "ADDRESS" | "AREA" | "ARTICLE" | "ASIDE" | "AUDIO" | "B" | "BASE" | "BDI" | "BDO" | "BLOCKQUOTE" | "BODY" | "BR" | "BUTTON" | "CANVAS" | "CAPTION" | "CITE" | "CODE" | "COL" | "COLGROUP" | "DATA" | "DATALIST" | "DD" | "DEL" | "DETAILS" | "DFN" | "DIALOG" | "DIV" | "DL" | "DT" | "EM" | "EMBED" | "FIELDSET" | "FIGCAPTION" | "FIGURE" | "FOOTER" | "FORM" | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "HEAD" | "HEADER" | "HGROUP" | "HR" | "HTML" | "I" | "IFRAME" | "IMG" | "INPUT" | "INS" | "KBD" | "LABEL" | "LEGEND" | "LI" | "LINK" | "MAIN" | "MAP" | "MARK" | "MENU" | "META" | "METER" | "NAV" | "NOSCRIPT" | "OL" | "OPTGROUP" | "OPTION" | "OUTPUT" | "P" | "PICTURE" | "PRE" | "PROGRESS" | "Q" | "RP" | "RT" | "RUBY" | "S" | "SAMP" | "SCRIPT" | "SECTION" | "SELECT" | "SLOT" | "SMALL" | "SOURCE" | "SPAN" | "STRONG" | "STYLE" | "SUB" | "SUMMARY" | "SUP" | "TABLE" | "TBODY" | "TD" | "TEMPLATE" | "TEXTAREA" | "TFOOT" | "TH" | "THEAD" | "TIME" | "TITLE" | "TR" | "TRACK" | "U" | "UL" | "VAR" | "VIDEO" | "WBR">(element: Element, tagName: K): HTMLElementTagNameMap[Lowercase<K>] | null; (element: Element, tagName: string): Element; }
+
+    element: Element,
+>element : Element
+
+    tagName: K,
+>tagName : K
+
+): HTMLElementTagNameMap[Lowercase<K>] | null; // this overload is rejected
+>null : null
+
+export function childByTag(element: Element, tagName: string): Element | null;
+>childByTag : { <K extends "OBJECT" | "A" | "ABBR" | "ADDRESS" | "AREA" | "ARTICLE" | "ASIDE" | "AUDIO" | "B" | "BASE" | "BDI" | "BDO" | "BLOCKQUOTE" | "BODY" | "BR" | "BUTTON" | "CANVAS" | "CAPTION" | "CITE" | "CODE" | "COL" | "COLGROUP" | "DATA" | "DATALIST" | "DD" | "DEL" | "DETAILS" | "DFN" | "DIALOG" | "DIV" | "DL" | "DT" | "EM" | "EMBED" | "FIELDSET" | "FIGCAPTION" | "FIGURE" | "FOOTER" | "FORM" | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "HEAD" | "HEADER" | "HGROUP" | "HR" | "HTML" | "I" | "IFRAME" | "IMG" | "INPUT" | "INS" | "KBD" | "LABEL" | "LEGEND" | "LI" | "LINK" | "MAIN" | "MAP" | "MARK" | "MENU" | "META" | "METER" | "NAV" | "NOSCRIPT" | "OL" | "OPTGROUP" | "OPTION" | "OUTPUT" | "P" | "PICTURE" | "PRE" | "PROGRESS" | "Q" | "RP" | "RT" | "RUBY" | "S" | "SAMP" | "SCRIPT" | "SECTION" | "SELECT" | "SLOT" | "SMALL" | "SOURCE" | "SPAN" | "STRONG" | "STYLE" | "SUB" | "SUMMARY" | "SUP" | "TABLE" | "TBODY" | "TD" | "TEMPLATE" | "TEXTAREA" | "TFOOT" | "TH" | "THEAD" | "TIME" | "TITLE" | "TR" | "TRACK" | "U" | "UL" | "VAR" | "VIDEO" | "WBR">(element: Element, tagName: K): HTMLElementTagNameMap[Lowercase<K>]; (element: Element, tagName: string): Element | null; }
+>element : Element
+>tagName : string
+>null : null
+
+export function childByTag(element: Element, tagName: string): Element | null {
+>childByTag : { <K extends "OBJECT" | "A" | "ABBR" | "ADDRESS" | "AREA" | "ARTICLE" | "ASIDE" | "AUDIO" | "B" | "BASE" | "BDI" | "BDO" | "BLOCKQUOTE" | "BODY" | "BR" | "BUTTON" | "CANVAS" | "CAPTION" | "CITE" | "CODE" | "COL" | "COLGROUP" | "DATA" | "DATALIST" | "DD" | "DEL" | "DETAILS" | "DFN" | "DIALOG" | "DIV" | "DL" | "DT" | "EM" | "EMBED" | "FIELDSET" | "FIGCAPTION" | "FIGURE" | "FOOTER" | "FORM" | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "HEAD" | "HEADER" | "HGROUP" | "HR" | "HTML" | "I" | "IFRAME" | "IMG" | "INPUT" | "INS" | "KBD" | "LABEL" | "LEGEND" | "LI" | "LINK" | "MAIN" | "MAP" | "MARK" | "MENU" | "META" | "METER" | "NAV" | "NOSCRIPT" | "OL" | "OPTGROUP" | "OPTION" | "OUTPUT" | "P" | "PICTURE" | "PRE" | "PROGRESS" | "Q" | "RP" | "RT" | "RUBY" | "S" | "SAMP" | "SCRIPT" | "SECTION" | "SELECT" | "SLOT" | "SMALL" | "SOURCE" | "SPAN" | "STRONG" | "STYLE" | "SUB" | "SUMMARY" | "SUP" | "TABLE" | "TBODY" | "TD" | "TEMPLATE" | "TEXTAREA" | "TFOOT" | "TH" | "THEAD" | "TIME" | "TITLE" | "TR" | "TRACK" | "U" | "UL" | "VAR" | "VIDEO" | "WBR">(element: Element, tagName: K): HTMLElementTagNameMap[Lowercase<K>]; (element: Element, tagName: string): Element; }
+>element : Element
+>tagName : string
+>null : null
+
+    for (let i = 0; i < element.childElementCount; i++) {
+>i : number
+>0 : 0
+>i < element.childElementCount : boolean
+>i : number
+>element.childElementCount : number
+>element : Element
+>childElementCount : number
+>i++ : number
+>i : number
+
+        if (element.children[i].nodeName === tagName) {
+>element.children[i].nodeName === tagName : boolean
+>element.children[i].nodeName : string
+>element.children[i] : Element
+>element.children : HTMLCollection
+>element : Element
+>children : HTMLCollection
+>i : number
+>nodeName : string
+>tagName : string
+
+            return element.children[i];
+>element.children[i] : Element
+>element.children : HTMLCollection
+>element : Element
+>children : HTMLCollection
+>i : number
+        }
+    }
+
+    return null;
+>null : null
+}
+
+const anchor = childByTag(document.documentElement, 'A');
+>anchor : HTMLAnchorElement
+>childByTag(document.documentElement, 'A') : HTMLAnchorElement
+>childByTag : { <K extends "OBJECT" | "A" | "ABBR" | "ADDRESS" | "AREA" | "ARTICLE" | "ASIDE" | "AUDIO" | "B" | "BASE" | "BDI" | "BDO" | "BLOCKQUOTE" | "BODY" | "BR" | "BUTTON" | "CANVAS" | "CAPTION" | "CITE" | "CODE" | "COL" | "COLGROUP" | "DATA" | "DATALIST" | "DD" | "DEL" | "DETAILS" | "DFN" | "DIALOG" | "DIV" | "DL" | "DT" | "EM" | "EMBED" | "FIELDSET" | "FIGCAPTION" | "FIGURE" | "FOOTER" | "FORM" | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "HEAD" | "HEADER" | "HGROUP" | "HR" | "HTML" | "I" | "IFRAME" | "IMG" | "INPUT" | "INS" | "KBD" | "LABEL" | "LEGEND" | "LI" | "LINK" | "MAIN" | "MAP" | "MARK" | "MENU" | "META" | "METER" | "NAV" | "NOSCRIPT" | "OL" | "OPTGROUP" | "OPTION" | "OUTPUT" | "P" | "PICTURE" | "PRE" | "PROGRESS" | "Q" | "RP" | "RT" | "RUBY" | "S" | "SAMP" | "SCRIPT" | "SECTION" | "SELECT" | "SLOT" | "SMALL" | "SOURCE" | "SPAN" | "STRONG" | "STYLE" | "SUB" | "SUMMARY" | "SUP" | "TABLE" | "TBODY" | "TD" | "TEMPLATE" | "TEXTAREA" | "TFOOT" | "TH" | "THEAD" | "TIME" | "TITLE" | "TR" | "TRACK" | "U" | "UL" | "VAR" | "VIDEO" | "WBR">(element: Element, tagName: K): HTMLElementTagNameMap[Lowercase<K>]; (element: Element, tagName: string): Element; }
+>document.documentElement : HTMLElement
+>document : Document
+>documentElement : HTMLElement
+>'A' : "A"
+
+if (anchor) {
+>anchor : HTMLAnchorElement
+
+    console.log(anchor.href); // Would be rejected without the first overload.
+>console.log(anchor.href) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>anchor.href : string
+>anchor : HTMLAnchorElement
+>href : string
+
+};

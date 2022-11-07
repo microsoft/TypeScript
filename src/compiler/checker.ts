@@ -12198,6 +12198,10 @@ namespace ts {
                 if (indexedAccess) {
                     return indexedAccess;
                 }
+                const bound = getBoundOfIndexedAccess(type.objectType, indexConstraint);
+                if (bound) {
+                    return bound;
+                }
             }
             const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
@@ -12415,6 +12419,9 @@ namespace ts {
                     const baseObjectType = getBaseConstraint((t as IndexedAccessType).objectType);
                     const baseIndexType = getBaseConstraint((t as IndexedAccessType).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).accessFlags);
+                    if (!baseIndexedAccess && baseObjectType && baseIndexType) {
+                        return getBoundOfIndexedAccess(baseObjectType, baseIndexType);
+                    }
                     return baseIndexedAccess && getBaseConstraint(baseIndexedAccess);
                 }
                 if (t.flags & TypeFlags.Conditional) {
@@ -12426,6 +12433,29 @@ namespace ts {
                 }
                 return t;
             }
+        }
+
+        function getBoundOfIndexedAccess(objectType: Type, indexType: Type) {
+            // In `getIndexedAccessTypeOrUndefined`, given T[U], we only produce a result if `T` contains a match for `U` exactly. So if U = string,
+            // `T[string]` requires `T` have an index signature. This is quite strict. When relating types, we relate keys to index signatures and vice-versa.
+            // Similarly, here we allow ourselves to return concrete property types for index types which would normally require an index signature to match.
+            let types: Type[] | undefined;
+            const props = objectType.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(objectType as IntersectionType) : getPropertiesOfType(objectType);
+            for (const prop of props) {
+                if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), indexType)) {
+                    const propType = getNonMissingTypeOfSymbol(prop);
+                    types = append(types, propType);
+                }
+            }
+            for (const info of getIndexInfosOfType(objectType)) {
+                if (isApplicableIndexType(info.keyType, indexType)) {
+                    types = append(types, info.type);
+                }
+            }
+            if (types) {
+                return getUnionType(types);
+            }
+            return undefined;
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
