@@ -32377,6 +32377,18 @@ namespace ts {
             }
         }
 
+        function isWellKnownSymbol(node: Node) {
+            const symbol = getSymbolAtLocation(node);
+            if (!symbol) {
+                return false;
+            }
+            const symbolConstructorSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
+            if (!symbolConstructorSymbol) {
+                return false;
+            }
+            return !!getPropertiesOfObjectType((getTypeOfSymbol(symbolConstructorSymbol) as ObjectType)).includes(symbol);
+        }
+
         function isSymbolOrSymbolForCall(node: Node) {
             if (!isCallExpression(node)) return false;
             let left = node.expression;
@@ -32387,13 +32399,17 @@ namespace ts {
                 return false;
             }
 
+            return isReferenceToGlobalESSymbolConstructorSymbol(left);
+        }
+
+        function isReferenceToGlobalESSymbolConstructorSymbol(node: Identifier) {
             // make sure `Symbol` is the global symbol
             const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
             if (!globalESSymbol) {
                 return false;
             }
 
-            return globalESSymbol === resolveName(left, "Symbol" as __String, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+            return globalESSymbol === resolveName(node, "Symbol" as __String, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
         }
 
         function checkImportCallExpression(node: ImportCall): Type {
@@ -37864,7 +37880,8 @@ namespace ts {
                         const symbol = getSymbolOfNode(member);
                         if (!symbol.isReferenced
                             && (hasEffectiveModifier(member, ModifierFlags.Private) || isNamedDeclaration(member) && isPrivateIdentifier(member.name))
-                            && !(member.flags & NodeFlags.Ambient)) {
+                            && !(member.flags & NodeFlags.Ambient)
+                            && !(isNamedDeclaration(member) && isComputedPropertyName(member.name) && isWellKnownSymbol(member.name.expression))) {
                             addDiagnostic(member, UnusedKind.Local, createDiagnosticForNode(member.name!, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
                         }
                         break;
