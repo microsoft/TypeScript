@@ -1,0 +1,31 @@
+tests/cases/compiler/forInGenericPrimitive.ts(15,21): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'B'.
+tests/cases/compiler/forInGenericPrimitive.ts(16,21): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'C'.
+tests/cases/compiler/forInGenericPrimitive.ts(17,21): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'D'.
+
+
+==== tests/cases/compiler/forInGenericPrimitive.ts (3 errors) ====
+    function f<
+    A,
+    B extends { a: number } | string,
+    C extends string | void,
+    D extends number | { s: string } | null | string,
+    E extends { x: number },
+    >(
+        a: A,
+        b: B,
+        c: C,
+        d: D,
+        e: E,
+    ) {
+        for (const _ in a) { }
+        for (const _ in b) { }
+                        ~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'B'.
+        for (const _ in c) { }
+                        ~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'C'.
+        for (const _ in d) { }
+                        ~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'D'.
+        for (const _ in e) { }
+    }
