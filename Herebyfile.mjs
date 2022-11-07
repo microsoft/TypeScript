@@ -190,7 +190,6 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
- * @property {boolean} [setDynamicImport]
  * @property {boolean} [treeShaking]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
@@ -257,22 +256,12 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.exportIsTsObject) {
-            // These snippets cannot appear in the actual source files, otherwise they will be rewritten
-            // to things like exports or requires.
-
+            // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
+            options.format = "iife";
+            // Name the variable ts, matching our old big bundle and so we can use the code below.
+            options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
-            let footer = `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }`;
-
-            if (taskOptions.setDynamicImport) {
-                // If we are in a server bundle, inject the dynamicImport function.
-                // This only works because the web server's "start" function returns;
-                // the node server does not, but we don't use this there.
-                footer += `\nif (ts.server && ts.server.setDynamicImport) { ts.server.setDynamicImport(id => import(id)); }`;
-            }
-
-            options.format = "iife"; // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-            options.globalName = "ts"; // Name the variable ts, matching our old big bundle and so we can use the code below.
-            options.footer = { js: footer };
+            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
         }
 
         return options;
@@ -416,7 +405,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     // this is used in the browser too. Do the same thing that we do for our
     // libraries and generate an IIFE with name `ts`, as to not pollute the global
     // scope.
-    bundlerOptions: { exportIsTsObject: true, setDynamicImport: true },
+    bundlerOptions: { exportIsTsObject: true },
 });
 export { tsserver, watchTsserver };
 
