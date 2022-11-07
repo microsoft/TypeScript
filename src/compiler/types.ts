@@ -4261,6 +4261,7 @@ namespace ts {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
         /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
+        /*@internal*/ differsOnlyInMap?: true;
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -4369,6 +4370,11 @@ namespace ts {
     /*@internal*/
     export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
 
+    /*@internal*/
+    export const enum EmitOnly{
+        Js,
+        Dts,
+    }
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
         /**
@@ -4404,7 +4410,7 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
         /*@internal*/
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -4468,7 +4474,7 @@ namespace ts {
         /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
+        /*@internal*/ getBuildInfo?(bundle: BundleBuildInfo | undefined): BuildInfo;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /**
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
@@ -6856,8 +6862,7 @@ namespace ts {
         affectsEmit?: true;                                     // true if the options affects emit
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
         affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
-        affectsMultiFileEmitBuildInfo?: true;                   // true if this options should be emitted in buildInfo without --out
-        affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
+        affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
@@ -7188,6 +7193,11 @@ namespace ts {
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
+    export interface ModuleResolutionInfo {
+        names: readonly StringLiteralLike[];
+        reusedNames: readonly StringLiteralLike[] | undefined;
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7208,7 +7218,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -7534,7 +7544,7 @@ namespace ts {
         getPrependNodes(): readonly (InputFiles | UnparsedSource)[];
 
         writeFile: WriteFileCallback;
-        getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getBuildInfo(bundle: BundleBuildInfo | undefined): BuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
         createHash?(data: string): string;

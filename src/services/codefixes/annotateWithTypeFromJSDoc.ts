@@ -90,11 +90,24 @@ namespace ts.codefix {
                 return transformJSDocFunctionType(node as JSDocFunctionType);
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
+            case SyntaxKind.JSDocTypeLiteral:
+                return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
             default:
                 const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
+    }
+
+    function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
+        const typeNode = factory.createTypeLiteralNode(map(node.jsDocPropertyTags, tag =>
+            factory.createPropertySignature(
+                /*modifiers*/ undefined,
+                isIdentifier(tag.name) ? tag.name : tag.name.right,
+                isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword))));
+        setEmitFlags(typeNode, EmitFlags.SingleLine);
+        return typeNode;
     }
 
     function transformJSDocOptionalType(node: JSDocOptionalType) {

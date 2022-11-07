@@ -161,15 +161,15 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../shared/types/db.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "../src/main.ts",
-        "Full"
+        "Js | Dts"
       ],
       [
         "../src/other.ts",
-        "Full"
+        "Js | Dts"
       ]
     ]
   },
@@ -539,7 +539,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../src/main.ts",
-        "Full"
+        "Js | Dts"
       ]
     ]
   },

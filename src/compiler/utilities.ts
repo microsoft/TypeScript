@@ -211,19 +211,18 @@ namespace ts {
     }
 
     export function hasChangesInResolutions<T>(
-        names: readonly string[] | readonly FileReference[],
+        names: readonly StringLiteralLike[] | readonly FileReference[],
+        newSourceFile: SourceFile,
         newResolutions: readonly (T | undefined)[],
         oldResolutions: ModeAwareCache<T | undefined> | undefined,
-        oldSourceFile: SourceFile | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
 
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
             const entry = names[i];
-            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
-            const mode = !isString(entry) ? getModeForFileReference(entry, oldSourceFile?.impliedNodeFormat) : oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i);
+            const name = getResolutionName(entry);
+            const mode = getResolutionMode(entry, newSourceFile);
             const oldResolution = oldResolutions && oldResolutions.get(name, mode);
             const changed =
                 oldResolution
@@ -7789,5 +7788,13 @@ namespace ts {
     export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
         return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
             || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+    }
+
+    export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+        if (!isJSDocPropertyLikeTag(node)) {
+            return false;
+        }
+        const { isBracketed, typeExpression } = node;
+        return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
     }
 }

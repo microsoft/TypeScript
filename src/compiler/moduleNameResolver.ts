@@ -734,8 +734,9 @@ namespace ts {
 
     /* @internal */
     export function createModeAwareCache<T>(): ModeAwareCache<T> {
-        const underlying = new Map<string, T>();
-        const memoizedReverseKeys = new Map<string, [specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined]>();
+        const underlying = new Map<ModeAwareCacheKey, T>();
+        type ModeAwareCacheKey = string & { __modeAwareCacheKey: any; };
+        const memoizedReverseKeys = new Map<ModeAwareCacheKey, [specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined]>();
 
         const cache: ModeAwareCache<T> = {
             get(specifier, mode) {
@@ -765,22 +766,30 @@ namespace ts {
         return cache;
 
         function getUnderlyingCacheKey(specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) {
-            const result = mode === undefined ? specifier : `${mode}|${specifier}`;
+            const result = (mode === undefined ? specifier : `${mode}|${specifier}`) as ModeAwareCacheKey;
             memoizedReverseKeys.set(result, [specifier, mode]);
             return result;
         }
     }
 
     /* @internal */
-    export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly string[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
+    export function getResolutionName(entry: FileReference | StringLiteralLike) {
+        // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+        return isStringLiteralLike(entry) ? entry.text : entry.fileName.toLowerCase();
+    }
+
+    /* @internal */
+    export function getResolutionMode(entry: FileReference | StringLiteralLike, file: SourceFile) {
+        return isStringLiteralLike(entry) ? getModeForUsageLocation(file, entry) : entry.resolutionMode || file.impliedNodeFormat;
+    }
+
+    /* @internal */
+    export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly StringLiteralLike[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
         Debug.assert(keys.length === values.length);
         const map = createModeAwareCache<V>();
         for (let i = 0; i < keys.length; ++i) {
             const entry = keys[i];
-            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
-            const mode = !isString(entry) ? entry.resolutionMode || file.impliedNodeFormat : getModeForResolutionAtIndex(file, i);
-            map.set(name, mode, values[i]);
+            map.set(getResolutionName(entry), getResolutionMode(entry, file), values[i]);
         }
         return map;
     }

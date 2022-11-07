@@ -2120,8 +2120,8 @@ namespace ts {
         return indentation === MAX_SMI_X86 ? undefined : indentation;
     }
 
-    export function isStringLiteralLike(node: Node): node is StringLiteralLike {
-        return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    export function isStringLiteralLike(node: Node | FileReference): node is StringLiteralLike {
+        return (node as Node).kind === SyntaxKind.StringLiteral || (node as Node).kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
     export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
