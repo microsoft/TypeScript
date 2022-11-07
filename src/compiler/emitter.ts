@@ -4406,15 +4406,15 @@ namespace ts {
             }
         }
 
-        function emitList<Parent extends Node, Child extends Node, Children extends NodeArray<Child>>(parentNode: Parent | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
+        function emitList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
             emitNodeList(emit, parentNode, children, format, parenthesizerRule, start, count);
         }
 
-        function emitExpressionList<Parent extends Expression, Child extends Node, Children extends NodeArray<Child>>(parentNode: Parent | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
+        function emitExpressionList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
             emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
         }
 
-        function emitNodeList<Parent extends Node, Child extends Node, Children extends NodeArray<Child>>(emit: EmitFunction, parentNode: Parent | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start = 0, count = children ? children.length - start : 0) {
+        function emitNodeList<Child extends Node, Children extends NodeArray<Child>>(emit: EmitFunction, parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start = 0, count = children ? children.length - start : 0) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
@@ -4464,7 +4464,7 @@ namespace ts {
          *
          * NOTE: You probably don't want to call this directly and should be using `emitList` or `emitExpressionList` instead.
          */
-         function emitNodeListItems<Parent extends Node, Child extends Node>(emit: EmitFunction, parentNode: Parent | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
+         function emitNodeListItems<Child extends Node>(emit: EmitFunction, parentNode: Node | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
             // Write the opening line terminator or leading whitespace.
             const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
             let shouldEmitInterveningComments = mayEmitInterveningComments;
