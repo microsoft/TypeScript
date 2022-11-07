@@ -773,9 +773,9 @@ namespace ts {
     }
 
     /* @internal */
-    export function getResolutionName(entry: FileReference | StringLiteralLike) {
+    export function getResolutionName(entry: string | FileReference | StringLiteralLike) {
         // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-        return isStringLiteralLike(entry) ? entry.text : entry.fileName.toLowerCase();
+        return !isString(entry) ? isStringLiteralLike(entry) ? entry.text : toFileNameLowerCase(entry.fileName) : entry;
     }
 
     /* @internal */

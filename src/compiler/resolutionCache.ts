@@ -14,7 +14,13 @@ namespace ts {
             resolutionInfo: ModuleResolutionInfo | undefined
         ): (ResolvedModuleFull | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives(
+            typeDirectiveNames: string[] | readonly FileReference[],
+            containingFile: string,
+            redirectedReference: ResolvedProjectReference | undefined,
+            containingFileMode: SourceFile["impliedNodeFormat"] | undefined,
+            resolutionInfo: TypeReferenceDirectiveResolutionInfo | undefined,
+        ): (ResolvedTypeReferenceDirective | undefined)[];
 
         invalidateResolutionsOfFailedLookupLocations(): boolean;
         invalidateResolutionOfFile(filePath: Path): void;
@@ -416,7 +422,7 @@ namespace ts {
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
             reusedNames?: readonly string[];
-            resolutionInfo?: ModuleResolutionInfo;
+            resolutionInfo?: ModuleResolutionInfo | TypeReferenceDirectiveResolutionInfo;
             logChanges?: boolean;
             containingSourceFile?: SourceFile;
             containingSourceFileMode?: SourceFile["impliedNodeFormat"];
@@ -450,7 +456,7 @@ namespace ts {
             const seenNamesInFile = createModeAwareCache<true>();
             let i = 0;
             for (const entry of containingSourceFile && resolutionInfo ? resolutionInfo.names : names) {
-                const name = !isString(entry) ? getResolutionName(entry) : entry;
+                const name = getResolutionName(entry);
                 // Imports supply a `containingSourceFile` but no `containingSourceFileMode` - it would be redundant
                 // they require calculating the mode for a given import from it's position in the resolution table, since a given
                 // import's syntax may override the file's default mode.
@@ -547,7 +553,13 @@ namespace ts {
             }
 
             if (containingSourceFile && resolutionInfo) {
-                resolutionInfo.reusedNames?.forEach(literal => seenNamesInFile.set(literal.text, getModeForUsageLocation(containingSourceFile, literal), true));
+                resolutionInfo.reusedNames?.forEach(entry => seenNamesInFile.set(
+                    getResolutionName(entry),
+                    !isString(entry) && isStringLiteralLike(entry) ?
+                        getModeForUsageLocation(containingSourceFile, entry) :
+                        getModeForFileReference(entry, containingSourceFile.impliedNodeFormat),
+                    true,
+                ));
                 reusedNames = undefined;
             }
             if (resolutionsInFile.size() !== seenNamesInFile.size()) {
@@ -581,7 +593,13 @@ namespace ts {
             }
         }
 
-        function resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[] {
+        function resolveTypeReferenceDirectives(
+            typeDirectiveNames: string[] | readonly FileReference[],
+            containingFile: string,
+            redirectedReference?: ResolvedProjectReference,
+            containingFileMode?: SourceFile["impliedNodeFormat"],
+            resolutionInfo?: TypeReferenceDirectiveResolutionInfo,
+        ): (ResolvedTypeReferenceDirective | undefined)[] {
             return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
                 names: typeDirectiveNames,
                 containingFile,
@@ -591,7 +609,8 @@ namespace ts {
                 loader: resolveTypeReferenceDirective,
                 getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
                 shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
-                containingSourceFileMode: containingFileMode
+                containingSourceFileMode: containingFileMode,
+                resolutionInfo,
             });
         }
 
