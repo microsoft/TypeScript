@@ -27,7 +27,7 @@ import {
     ResolvedModuleWithFailedLookupLocations, ResolvedProjectReference, ResolvedTypeReferenceDirective,
     resolvePackageNameToPackageJson, returnFalse, returnTrue, ScriptKind, Set, some, sort, sortAndDeduplicate,
     SortedReadonlyArray, SourceFile, SourceMapper, startsWith, stripQuotes, StructureIsReused, SymlinkCache,
-    ThrottledCancellationToken, timestamp, toPath, tracing, TypeAcquisition, updateErrorForNoInputFiles,
+    ThrottledCancellationToken, timestamp, toPath, tracing, TypeAcquisition, TypeReferenceDirectiveResolutionInfo, updateErrorForNoInputFiles,
     updateMissingFilePathsWatch, WatchDirectoryFlags, WatchOptions, WatchType,
 } from "./_namespaces/ts";
 
@@ -554,8 +554,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
     }
 
-    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[] {
-        return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode);
+    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
+        return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo);
     }
 
     directoryExists(path: string): boolean {

@@ -17,6 +17,7 @@ import {
     ParsedCommandLine, Path, perfLogger, PollingInterval, ProjectReference, ResolutionCacheHost, ResolvedModule,
     ResolvedProjectReference, ResolvedTypeReferenceDirective, returnFalse, returnTrue, ScriptTarget,
     setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, SourceFile, sys, System, toPath,
+    TypeReferenceDirectiveResolutionInfo,
     updateErrorForNoInputFiles, updateMissingFilePathsWatch, updateSharedExtendedConfigFileWatcher,
     updateWatchingWildcardDirectories, version, WatchDirectoryFlags, WatchOptions, WatchType, WatchTypeRegistry,
     WildcardDirectoryWatcher,
@@ -134,7 +135,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
     /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -397,7 +398,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile, resolutionInfo) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile, resolutionInfo));
     compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
         ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode));
+        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode, resolutionInfo) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo));
     compilerHost.getModuleResolutionCache = host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
         (() => resolutionCache.getModuleResolutionCache());
