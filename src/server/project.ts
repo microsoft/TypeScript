@@ -506,8 +506,8 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile);
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModuleFull | undefined)[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile, resolutionInfo);
         }
 
         getModuleResolutionCache(): ModuleResolutionCache | undefined {
