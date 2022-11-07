@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.9";
+    const versionMajorMinor = "5.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -2063,7 +2063,7 @@ declare namespace ts {
     }
     export type FlowType = Type | IncompleteType;
     export interface IncompleteType {
-        flags: TypeFlags;
+        flags: TypeFlags | 0;
         type: Type;
     }
     export interface AmdDependency {
@@ -2781,8 +2781,11 @@ declare namespace ts {
     }
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
+        /** Number of required or variadic elements */
         minLength: number;
+        /** Number of initial required or optional elements */
         fixedLength: number;
+        /** True if tuple has any rest or variadic elements */
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
@@ -4579,8 +4582,8 @@ declare namespace ts {
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
+    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
      */
