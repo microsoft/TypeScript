@@ -65,7 +65,7 @@ var C = function () {
     var _y_initializers = [];
     var C = _classThis = /** @class */ (function () {
         function C_1(x) {
-            this.y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers));
+            this.y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
         }
         C_1.prototype.method = function (x) { };
         Object.defineProperty(C_1.prototype, "x", {
@@ -99,7 +99,7 @@ var C = function () {
         C = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _staticExtraInitializers);
     })();
-    _classThis.y = __runInitializers(_classThis, _static_y_initializers);
+    _classThis.y = __runInitializers(_classThis, _static_y_initializers, void 0);
     (function () {
         __runInitializers(_classThis, _classExtraInitializers);
     })();
@@ -122,7 +122,7 @@ var C = function () {
     var _y_initializers = [];
     var C = (_classThis_1 = /** @class */ (function () {
             function class_1(x) {
-                this.y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers));
+                this.y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
             }
             class_1.prototype.method = function (x) { };
             Object.defineProperty(class_1.prototype, "x", {
@@ -156,7 +156,7 @@ var C = function () {
             C = _classThis_1 = _classDescriptor_1.value;
             __runInitializers(_classThis_1, _staticExtraInitializers_1);
         })(),
-        _classThis_1.y = __runInitializers(_classThis_1, _static_y_initializers),
+        _classThis_1.y = __runInitializers(_classThis_1, _static_y_initializers, void 0),
         (function () {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         })(),

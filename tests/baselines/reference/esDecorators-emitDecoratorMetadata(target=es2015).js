@@ -64,7 +64,7 @@ let C = (() => {
     let _y_initializers = [];
     var C = _classThis = class {
         constructor(x) {
-            this.y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers));
+            this.y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
         }
         method(x) { }
         set x(x) { }
@@ -89,7 +89,7 @@ let C = (() => {
         C = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _staticExtraInitializers);
     })();
-    _classThis.y = __runInitializers(_classThis, _static_y_initializers);
+    _classThis.y = __runInitializers(_classThis, _static_y_initializers, void 0);
     (() => {
         __runInitializers(_classThis, _classExtraInitializers);
     })();
@@ -112,7 +112,7 @@ let C = (() => {
     let _y_initializers = [];
     var C = (_classThis_1 = class {
             constructor(x) {
-                this.y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers));
+                this.y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
             }
             method(x) { }
             set x(x) { }
@@ -137,7 +137,7 @@ let C = (() => {
             C = _classThis_1 = _classDescriptor_1.value;
             __runInitializers(_classThis_1, _staticExtraInitializers_1);
         })(),
-        _classThis_1.y = __runInitializers(_classThis_1, _static_y_initializers),
+        _classThis_1.y = __runInitializers(_classThis_1, _static_y_initializers, void 0),
         (() => {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         })(),

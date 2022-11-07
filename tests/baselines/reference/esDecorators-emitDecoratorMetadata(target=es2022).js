@@ -83,10 +83,10 @@ let C = (() => {
         constructor(x) { }
         method(x) { }
         set x(x) { }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
         static method(x) { }
         static set x(x) { }
-        static y = __runInitializers(_classThis, _static_y_initializers);
+        static y = __runInitializers(_classThis, _static_y_initializers, void 0);
         static {
             __runInitializers(_classThis, _classExtraInitializers);
         }
@@ -129,10 +129,10 @@ let C = (() => {
         constructor(x) { }
         method(x) { }
         set x(x) { }
-        y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
         static method(x) { }
         static set x(x) { }
-        static y = __runInitializers(_classThis_1, _static_y_initializers);
+        static y = __runInitializers(_classThis_1, _static_y_initializers, void 0);
         static {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }

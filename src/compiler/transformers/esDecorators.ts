@@ -1139,7 +1139,7 @@ namespace ts {
                 initializer = emitHelpers().createRunInitializersHelper(
                     thisArg ?? factory.createThis(),
                     initializersName,
-                    initializer);
+                    initializer ?? factory.createVoidZero());
             }
 
             if (!isStatic(node) && classInfo?.instanceExtraInitializersName && !classInfo?.hasInjectedInstanceInitializers) {

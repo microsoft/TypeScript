@@ -57,7 +57,7 @@ x = (() => {
             _y_decorators = [dec];
             __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers);
         }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -87,7 +87,7 @@ x &&= (() => {
             _y_decorators = [dec];
             __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers_1);
         }
-        y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -117,7 +117,7 @@ x ||= (() => {
             _y_decorators = [dec];
             __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers_2);
         }
-        y = (__runInitializers(this, _instanceExtraInitializers_2), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers_2), __runInitializers(this, _y_initializers, void 0));
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -147,6 +147,6 @@ x ??= (() => {
             _y_decorators = [dec];
             __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers_3);
         }
-        y = (__runInitializers(this, _instanceExtraInitializers_3), __runInitializers(this, _y_initializers));
+        y = (__runInitializers(this, _instanceExtraInitializers_3), __runInitializers(this, _y_initializers, void 0));
     };
 })();

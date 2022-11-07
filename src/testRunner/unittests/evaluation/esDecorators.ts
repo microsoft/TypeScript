@@ -1559,6 +1559,15 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 `;
                 assert.strictEqual(C.x, 2);
             });
+            it("undefined initializer works", () => {
+                const { C } = exec`
+                    export class C {
+                        @((t, c) => () => 2)
+                        static x: any;
+                    }
+                `;
+                assert.strictEqual(C.x, 2);
+            });
             it("multiple initializer pipe-throughs applied in reverse order", () => {
                 const { C } = exec`
                     function initializer(x) { return x + 1; }
