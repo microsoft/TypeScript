@@ -9,6 +9,6 @@ namespace ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-        /* @internal */ buildInfo?: BuildInfo
+        /* @internal */ data?: WriteFileCallbackData;
     }
 }

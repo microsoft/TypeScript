@@ -20,6 +20,7 @@ namespace ts {
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
         OutOfDateBuildInfo,
+        OutOfDateOptions,
         UpstreamOutOfDate,
         UpstreamBlocked,
         ComputingUpstream,
@@ -116,7 +117,7 @@ namespace ts {
          * Buildinfo indicates that build is out of date
          */
         export interface OutOfDateBuildInfo {
-            type: UpToDateStatusType.OutOfDateBuildInfo,
+            type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions,
             buildInfoFile: string;
         }
 

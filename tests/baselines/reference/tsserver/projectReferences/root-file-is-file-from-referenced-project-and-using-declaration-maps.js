@@ -176,7 +176,7 @@ export {};
 //# sourceMappingURL=keyboard.test.d.ts.map
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-31108785029-export declare function evaluateKeyboardEvent(): void;\n//# sourceMappingURL=keyboard.d.ts.map",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[4,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./common/input/keyboard.test.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-14411843863-export declare function evaluateKeyboardEvent(): void;\n",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[4,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./common/input/keyboard.test.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -203,8 +203,8 @@ export {};
         "affectsGlobalScope": true
       },
       "./input/keyboard.d.ts": {
-        "version": "-31108785029-export declare function evaluateKeyboardEvent(): void;\n//# sourceMappingURL=keyboard.d.ts.map",
-        "signature": "-31108785029-export declare function evaluateKeyboardEvent(): void;\n//# sourceMappingURL=keyboard.d.ts.map"
+        "version": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n",
+        "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
       },
       "../src/terminal.ts": {
         "original": {
@@ -247,7 +247,7 @@ export {};
     "latestChangedDtsFile": "./common/input/keyboard.test.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1374
+  "size": 1336
 }
 
 

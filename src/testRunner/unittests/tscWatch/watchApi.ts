@@ -611,4 +611,97 @@ namespace ts.tscWatch {
             });
         });
     });
+
+    describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitOnlyDtsFiles", () => {
+        function verify(subScenario: string, outFile?: string) {
+            it(subScenario, () => {
+                const system = createWatchedSystem({
+                    [`${projectRoot}/tsconfig.json`]: JSON.stringify({
+                        compilerOptions: { composite: true, noEmitOnError: true, module: "amd", outFile },
+                        files: ["a.ts", "b.ts"],
+                    }),
+                    [`${projectRoot}/a.ts`]: "export const x = 10;",
+                    [`${projectRoot}/b.ts`]: "export const y: 10 = 20;",
+                    [libFile.path]: libFile.content,
+                }, { currentDirectory: projectRoot });
+                const baseline = createBaseline(system);
+                const compilerHost = createWatchCompilerHostOfConfigFileForBaseline({
+                    cb: baseline.cb,
+                    system,
+                    configFileName: `${projectRoot}/tsconfig.json`,
+                    optionsToExtend: { extendedDiagnostics: true }
+                });
+                const originalEmitProgram = compilerHost.afterProgramCreate;
+                compilerHost.afterProgramCreate = myAfterProgramCreate;
+                let callFullEmit = true;
+                const watch = createWatchProgram(compilerHost);
+                runWatchBaseline({
+                    scenario: "watchApi",
+                    subScenario,
+                    commandLineArgs: ["--w", "--extendedDiagnostics"],
+                    ...baseline,
+                    changes: [
+                        {
+                            caption: "Fix error but run emit with emitOnlyDts",
+                            change: sys => {
+                                sys.writeFile(`${projectRoot}/b.ts`, `export const y = 10;`);
+                                callFullEmit = false;
+                            },
+                            timeouts: checkSingleTimeoutQueueLengthAndRun,
+                        },
+                        {
+                            caption: "Emit with emitOnlyDts shouldnt emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit all files",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit();
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit with emitOnlyDts shouldnt emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit full should not emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit();
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                    ],
+                    watchOrSolution: watch
+                });
+
+                function myAfterProgramCreate(program: EmitAndSemanticDiagnosticsBuilderProgram) {
+                    if (callFullEmit) {
+                        originalEmitProgram!.call(compilerHost, program);
+                    }
+                    else {
+                        program.getSemanticDiagnostics(); // Get Diagnostics
+                        program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                        baseline.cb(program);
+                    }
+                }
+            });
+        }
+        verify("when emitting with emitOnlyDtsFiles");
+        verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
+    });
 }
