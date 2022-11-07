@@ -1021,8 +1021,8 @@ namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-    export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
+    export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): Program;
+    export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): Program {
         const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
         let { oldProgram } = createProgramOptions;
@@ -1072,6 +1072,9 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
         const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
+
+        let _typeScriptVersion: Version | undefined;
+        const _ignoreDeprecations = new Map<DeprecationPhase, Version>();
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = new Map<string, boolean>();
@@ -3439,6 +3442,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
+            verifyDeprecatedCompilerOptions();
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
@@ -3698,6 +3702,55 @@ namespace ts {
                         emitFilesSeen.add(emitFileKey);
                     }
                 }
+            }
+        }
+
+        function verifyDeprecatedCompilerOptions() {
+            const version = isString(typeScriptVersion) && typeScriptVersion ? new Version(typeScriptVersion) : getTypeScriptVersion();
+            if (options.ignoreDeprecations) {
+                const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion(options.ignoreDeprecations);
+                if (ignoreDeprecationsVersion.compareTo(version) === Comparison.LessThan) {
+                    createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
+                }
+                if (ignoreDeprecationsVersion.compareTo(version) >= 0) {
+                    return;
+                }
+            }
+            if (options.target === ScriptTarget.ES3) {
+                createDeprecatedDiagnosticForOption(version, "target", "ES3");
+            }
+            if (options.noImplicitUseStrict) {
+                createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
+            }
+            if (options.keyofStringsOnly) {
+                createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
+            }
+            if (options.suppressExcessPropertyErrors) {
+                createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
+            }
+            if (options.suppressImplicitAnyIndexErrors) {
+                createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
+            }
+            if (options.noStrictGenericChecks) {
+                createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
+            }
+            if (options.charset) {
+                createDeprecatedDiagnosticForOption(version, "charset");
+            }
+            if (options.out) {
+                createDeprecatedDiagnosticForOption(version, "out");
+            }
+        }
+
+        function createDeprecatedDiagnosticForOption(version: Version, name: string, value?: string) {
+            if (version.compareTo(getIgnoreDeprecationsVersion(DeprecationPhase.Phase3)) === Comparison.EqualTo) {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_please_remove_it_from_your_configuration, value || name);
+            }
+            else {
+                const { major, minor } = version;
+                const nextPhase = version.compareTo(getIgnoreDeprecationsVersion(DeprecationPhase.Phase2)) === Comparison.EqualTo ? DeprecationPhase.Phase3 : DeprecationPhase.Phase2;
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
+                    Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationPhaseToVersionMap[nextPhase], `${major}.${minor}`);
             }
         }
 
@@ -3970,6 +4023,21 @@ namespace ts {
                 }
             }
             return _compilerOptionsObjectLiteralSyntax || undefined;
+        }
+
+        function getTypeScriptVersion() {
+            if (_typeScriptVersion === undefined) {
+                _typeScriptVersion = new Version(versionMajorMinor);
+            }
+            return _typeScriptVersion;
+        }
+
+        function getIgnoreDeprecationsVersion(phase: DeprecationPhase) {
+            let version = _ignoreDeprecations.get(phase);
+            if (version === undefined) {
+                _ignoreDeprecations.set(phase, version = new Version(DeprecationPhaseToVersionMap[phase]));
+            }
+            return version;
         }
 
         function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {

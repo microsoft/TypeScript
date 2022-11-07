@@ -6582,6 +6582,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/generateTrace?: string;
         /*@internal*/help?: boolean;
+        ignoreDeprecations?: DeprecationPhase;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         /*@internal*/init?: boolean;
@@ -6739,6 +6740,19 @@ namespace ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1
     }
+
+    export const enum DeprecationPhase {
+        Phase1 = 1,
+        Phase2 = 2,
+        Phase3 = 3,
+    }
+
+    /* @internal */
+    export const DeprecationPhaseToVersionMap = {
+        [DeprecationPhase.Phase1]: "5.0",
+        [DeprecationPhase.Phase2]: "5.5",
+        [DeprecationPhase.Phase3]: "6.0",
+    };
 
     export interface LineAndCharacter {
         /** 0-based. */

@@ -1352,7 +1352,16 @@ namespace ts {
             description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
             category: Diagnostics.Language_and_Environment,
             defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
-        }
+        },
+        {
+            name: "ignoreDeprecations",
+            type: new Map(getEntries({
+                [DeprecationPhaseToVersionMap[DeprecationPhase.Phase1]]: DeprecationPhase.Phase1,
+                [DeprecationPhaseToVersionMap[DeprecationPhase.Phase2]]: DeprecationPhase.Phase2,
+                [DeprecationPhaseToVersionMap[DeprecationPhase.Phase3]]: DeprecationPhase.Phase3,
+            })),
+            defaultValueDescription: undefined,
+        },
     ];
 
     /* @internal */
