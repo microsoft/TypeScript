@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export interface TranspileOptions {
     compilerOptions?: ts.CompilerOptions;
     fileName?: string;
@@ -149,5 +150,4 @@ export function fixupCompilerOptions(options: ts.CompilerOptions, diagnostics: t
     }
 
     return options;
-}
 }

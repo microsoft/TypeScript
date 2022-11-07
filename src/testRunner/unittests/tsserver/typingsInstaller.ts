@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
 
@@ -2178,4 +2179,3 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         ts.projectSystem.checkProjectActualFiles(project, [file.path]);
     });
 });
-}

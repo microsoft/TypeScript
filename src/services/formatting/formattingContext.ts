@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export const enum FormattingRequestKind {
     FormatDocument,
     FormatSelection,
@@ -9,6 +10,7 @@ export const enum FormattingRequestKind {
     FormatOnClosingCurlyBrace
 }
 
+/** @internal */
 export class FormattingContext {
     public currentTokenSpan!: ts.formatting.TextRangeWithKind;
     public nextTokenSpan!: ts.formatting.TextRangeWithKind;
@@ -98,5 +100,4 @@ export class FormattingContext {
         }
         return false;
     }
-}
 }

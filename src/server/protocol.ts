@@ -1,9 +1,11 @@
+import * as ts from "./_namespaces/ts";
+
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
 /**
  * Declaration module describing the TypeScript Server protocol
  */
-namespace ts.server.protocol {
+
 // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
@@ -3629,5 +3631,4 @@ export const enum ClassificationType {
     jsxText = 23,
     jsxAttributeStringLiteralValue = 24,
     bigintLiteral = 25,
-}
 }

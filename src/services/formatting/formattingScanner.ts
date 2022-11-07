@@ -1,8 +1,9 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
 const standardScanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ false, ts.LanguageVariant.Standard);
 const jsxScanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ false, ts.LanguageVariant.JSX);
 
+/** @internal */
 export interface FormattingScanner {
     advance(): void;
     getStartPos(): number;
@@ -26,6 +27,7 @@ const enum ScanAction {
     RescanJsxAttributeValue,
 }
 
+/** @internal */
 export function getFormattingScanner<T>(text: string, languageVariant: ts.LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
     const scanner = languageVariant === ts.LanguageVariant.JSX ? jsxScanner : standardScanner;
 
@@ -305,5 +307,4 @@ export function getFormattingScanner<T>(text: string, languageVariant: ts.Langua
         leadingTrivia = undefined;
         trailingTrivia = undefined;
     }
-}
 }

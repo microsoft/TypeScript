@@ -1,118 +1,149 @@
-namespace ts {
-export interface Node {
-    getSourceFile(): ts.SourceFile;
-    getChildCount(sourceFile?: ts.SourceFile): number;
-    getChildAt(index: number, sourceFile?: ts.SourceFile): ts.Node;
-    getChildren(sourceFile?: ts.SourceFile): ts.Node[];
-    /* @internal */
-    getChildren(sourceFile?: ts.SourceFileLike): ts.Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
-    getStart(sourceFile?: ts.SourceFile, includeJsDocComment?: boolean): number;
-    /* @internal */
-    getStart(sourceFile?: ts.SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
-    getFullStart(): number;
-    getEnd(): number;
-    getWidth(sourceFile?: ts.SourceFileLike): number;
-    getFullWidth(): number;
-    getLeadingTriviaWidth(sourceFile?: ts.SourceFile): number;
-    getFullText(sourceFile?: ts.SourceFile): string;
-    getText(sourceFile?: ts.SourceFile): string;
-    getFirstToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
-    /* @internal */
-    getFirstToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    getLastToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
-    /* @internal */
-    getLastToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    // See ts.forEachChild for documentation.
-    forEachChild<T>(cbNode: (node: ts.Node) => T | undefined, cbNodeArray?: (nodes: ts.NodeArray<ts.Node>) => T | undefined): T | undefined;
+import * as ts from "./_namespaces/ts";
+
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Node {
+        getSourceFile(): ts.SourceFile;
+        getChildCount(sourceFile?: ts.SourceFile): number;
+        getChildAt(index: number, sourceFile?: ts.SourceFile): ts.Node;
+        getChildren(sourceFile?: ts.SourceFile): ts.Node[];
+        /* @internal */
+        getChildren(sourceFile?: ts.SourceFileLike): ts.Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+        getStart(sourceFile?: ts.SourceFile, includeJsDocComment?: boolean): number;
+        /* @internal */
+        getStart(sourceFile?: ts.SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
+        getFullStart(): number;
+        getEnd(): number;
+        getWidth(sourceFile?: ts.SourceFileLike): number;
+        getFullWidth(): number;
+        getLeadingTriviaWidth(sourceFile?: ts.SourceFile): number;
+        getFullText(sourceFile?: ts.SourceFile): string;
+        getText(sourceFile?: ts.SourceFile): string;
+        getFirstToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
+        /* @internal */
+        getFirstToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        getLastToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
+        /* @internal */
+        getLastToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        // See ts.forEachChild for documentation.
+        forEachChild<T>(cbNode: (node: ts.Node) => T | undefined, cbNodeArray?: (nodes: ts.NodeArray<ts.Node>) => T | undefined): T | undefined;
+    }
 }
 
-export interface Identifier {
-    readonly text: string;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Identifier {
+        readonly text: string;
+    }
 }
 
-export interface PrivateIdentifier {
-    readonly text: string;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface PrivateIdentifier {
+        readonly text: string;
+    }
 }
 
-export interface Symbol {
-    readonly name: string;
-    getFlags(): ts.SymbolFlags;
-    getEscapedName(): ts.__String;
-    getName(): string;
-    getDeclarations(): ts.Declaration[] | undefined;
-    getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
-    /* @internal */
-    getContextualDocumentationComment(context: ts.Node | undefined, checker: ts.TypeChecker | undefined): SymbolDisplayPart[]
-    getJsDocTags(checker?: ts.TypeChecker): JSDocTagInfo[];
-    /* @internal */
-    getContextualJsDocTags(context: ts.Node | undefined, checker: ts.TypeChecker | undefined): JSDocTagInfo[];
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Symbol {
+        readonly name: string;
+        getFlags(): ts.SymbolFlags;
+        getEscapedName(): ts.__String;
+        getName(): string;
+        getDeclarations(): ts.Declaration[] | undefined;
+        getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
+        /* @internal */
+        getContextualDocumentationComment(context: ts.Node | undefined, checker: ts.TypeChecker | undefined): SymbolDisplayPart[]
+        getJsDocTags(checker?: ts.TypeChecker): JSDocTagInfo[];
+        /* @internal */
+        getContextualJsDocTags(context: ts.Node | undefined, checker: ts.TypeChecker | undefined): JSDocTagInfo[];
+    }
 }
 
-export interface Type {
-    getFlags(): ts.TypeFlags;
-    getSymbol(): ts.Symbol | undefined;
-    getProperties(): ts.Symbol[];
-    getProperty(propertyName: string): ts.Symbol | undefined;
-    getApparentProperties(): ts.Symbol[];
-    getCallSignatures(): readonly ts.Signature[];
-    getConstructSignatures(): readonly ts.Signature[];
-    getStringIndexType(): ts.Type | undefined;
-    getNumberIndexType(): ts.Type | undefined;
-    getBaseTypes(): ts.BaseType[] | undefined;
-    getNonNullableType(): ts.Type;
-    /*@internal*/ getNonOptionalType(): ts.Type;
-    /*@internal*/ isNullableType(): boolean;
-    getConstraint(): ts.Type | undefined;
-    getDefault(): ts.Type | undefined;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Type {
+        getFlags(): ts.TypeFlags;
+        getSymbol(): ts.Symbol | undefined;
+        getProperties(): ts.Symbol[];
+        getProperty(propertyName: string): ts.Symbol | undefined;
+        getApparentProperties(): ts.Symbol[];
+        getCallSignatures(): readonly ts.Signature[];
+        getConstructSignatures(): readonly ts.Signature[];
+        getStringIndexType(): ts.Type | undefined;
+        getNumberIndexType(): ts.Type | undefined;
+        getBaseTypes(): ts.BaseType[] | undefined;
+        getNonNullableType(): ts.Type;
+        /*@internal*/ getNonOptionalType(): ts.Type;
+        /*@internal*/ isNullableType(): boolean;
+        getConstraint(): ts.Type | undefined;
+        getDefault(): ts.Type | undefined;
 
-    isUnion(): this is ts.UnionType;
-    isIntersection(): this is ts.IntersectionType;
-    isUnionOrIntersection(): this is ts.UnionOrIntersectionType;
-    isLiteral(): this is ts.LiteralType;
-    isStringLiteral(): this is ts.StringLiteralType;
-    isNumberLiteral(): this is ts.NumberLiteralType;
-    isTypeParameter(): this is ts.TypeParameter;
-    isClassOrInterface(): this is ts.InterfaceType;
-    isClass(): this is ts.InterfaceType;
-    isIndexType(): this is ts.IndexType;
+        isUnion(): this is ts.UnionType;
+        isIntersection(): this is ts.IntersectionType;
+        isUnionOrIntersection(): this is ts.UnionOrIntersectionType;
+        isLiteral(): this is ts.LiteralType;
+        isStringLiteral(): this is ts.StringLiteralType;
+        isNumberLiteral(): this is ts.NumberLiteralType;
+        isTypeParameter(): this is ts.TypeParameter;
+        isClassOrInterface(): this is ts.InterfaceType;
+        isClass(): this is ts.InterfaceType;
+        isIndexType(): this is ts.IndexType;
+    }
 }
 
-export interface TypeReference {
-    typeArguments?: readonly ts.Type[];
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface TypeReference {
+        typeArguments?: readonly ts.Type[];
+    }
 }
 
-export interface Signature {
-    getDeclaration(): ts.SignatureDeclaration;
-    getTypeParameters(): ts.TypeParameter[] | undefined;
-    getParameters(): ts.Symbol[];
-    getTypeParameterAtPosition(pos: number): ts.Type;
-    getReturnType(): ts.Type;
-    getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
-    getJsDocTags(): JSDocTagInfo[];
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Signature {
+        getDeclaration(): ts.SignatureDeclaration;
+        getTypeParameters(): ts.TypeParameter[] | undefined;
+        getParameters(): ts.Symbol[];
+        getTypeParameterAtPosition(pos: number): ts.Type;
+        getReturnType(): ts.Type;
+        getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
+    }
 }
 
-export interface SourceFile {
-    /* @internal */ version: string;
-    /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-    /* @internal */ nameTable: ts.UnderscoreEscapedMap<number> | undefined;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface SourceFile {
+        /* @internal */ version: string;
+        /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
+        /* @internal */ nameTable: ts.UnderscoreEscapedMap<number> | undefined;
 
-    /* @internal */ getNamedDeclarations(): ts.ESMap<string, readonly ts.Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ts.ESMap<string, readonly ts.Declaration[]>;
 
-    getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
-    getLineEndOfPosition(pos: number): number;
-    getLineStarts(): readonly number[];
-    getPositionOfLineAndCharacter(line: number, character: number): number;
-    update(newText: string, textChangeRange: ts.TextChangeRange): ts.SourceFile;
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+        getLineEndOfPosition(pos: number): number;
+        getLineStarts(): readonly number[];
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+        update(newText: string, textChangeRange: ts.TextChangeRange): ts.SourceFile;
 
-    /* @internal */ sourceMapper?: ts.DocumentPositionMapper;
+        /* @internal */ sourceMapper?: ts.DocumentPositionMapper;
+    }
 }
 
-export interface SourceFileLike {
-    getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface SourceFileLike {
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+    }
 }
 
-export interface SourceMapSource {
-    getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface SourceMapSource {
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+    }
 }
 
 /**
@@ -1674,5 +1705,4 @@ export interface InlayHintsContext {
     host: LanguageServiceHost;
     span: ts.TextSpan;
     preferences: ts.UserPreferences;
-}
 }

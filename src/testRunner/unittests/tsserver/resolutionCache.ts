@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {
         const file1 = {
@@ -600,4 +601,3 @@ export const x = 10;`
         });
     });
 });
-}

@@ -1,10 +1,10 @@
+import * as ts from "../_namespaces/ts";
+
 // DEPRECATION: Node factory top-level exports
 // DEPRECATION PLAN:
 //     - soft: 4.0
 //     - warn: 4.1
 //     - error: 5.0
-namespace ts {
-
 // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance and exist here purely for backwards compatibility reasons.
 const factoryDeprecation: ts.DeprecationOptions = { since: "4.0", warnAfter: "4.1", message: "Use the appropriate method on 'ts.factory' or the 'factory' supplied by your transformation context instead." };
 
@@ -1303,4 +1303,3 @@ export const getMutableClone = ts.Debug.deprecate(function getMutableClone<T ext
     ts.setParent(clone, node.parent);
     return clone;
 }, { since: "4.0", warnAfter: "4.1", message: "Use an appropriate `factory.update...` method instead, use `setCommentRange` or `setSourceMapRange`, and avoid setting `parent`." });
-}

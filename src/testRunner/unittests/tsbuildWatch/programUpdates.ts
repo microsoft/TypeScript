@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 import projectsLocation = ts.TestFSWithWatch.tsbuildProjectsLocation;
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {
@@ -743,4 +744,3 @@ export function someFn() { }`),
         changes: ts.emptyArray
     });
 });
-}

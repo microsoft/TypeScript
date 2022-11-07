@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export interface PackageJsonCache {
     addOrUpdate(fileName: ts.Path): void;
     forEach(action: (info: ts.ProjectPackageJsonInfo, fileName: ts.Path) => void): void;
@@ -10,6 +11,7 @@ export interface PackageJsonCache {
     searchDirectoryAndAncestors(directory: ts.Path): void;
 }
 
+/** @internal */
 export function createPackageJsonCache(host: ts.server.ProjectService): PackageJsonCache {
     const packageJsons = new ts.Map<string, ts.ProjectPackageJsonInfo>();
     const directoriesWithoutPackageJson = new ts.Map<string, true>();
@@ -52,5 +54,4 @@ export function createPackageJsonCache(host: ts.server.ProjectService): PackageJ
             directoriesWithoutPackageJson.has(directory) ? ts.Ternary.False :
             ts.Ternary.Maybe;
     }
-}
 }

@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function getFileEmitOutput(program: ts.Program, sourceFile: ts.SourceFile, emitOnlyDtsFiles: boolean,
     cancellationToken?: ts.CancellationToken, customTransformers?: ts.CustomTransformers, forceDtsEmit?: boolean): ts.EmitOutput {
     const outputFiles: ts.OutputFile[] = [];
@@ -10,6 +11,7 @@ export function getFileEmitOutput(program: ts.Program, sourceFile: ts.SourceFile
         outputFiles.push({ name: fileName, writeByteOrderMark, text });
     }
 }
+/** @internal */
 export interface BuilderState {
     /**
      * Information of the file eg. its version, signature etc
@@ -57,6 +59,7 @@ export interface BuilderState {
      */
     allFileNames?: readonly string[];
 }
+/** @internal */
 export namespace BuilderState {
     /**
      * Information about the source file: Its version and optional signature from last emit
@@ -628,5 +631,4 @@ export namespace BuilderState {
         // Return array of values that needs emit
         return ts.arrayFrom(ts.mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
-}
 }

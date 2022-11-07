@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../../_namespaces/ts";
+
 describe("unittests:: services:: extract:: extractFunctions", () => {
     testExtractFunction("extractFunction1",
         `namespace A {
@@ -565,5 +566,4 @@ function F() {
 
 function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
     ts.testExtractSymbol(caption, text, "extractFunction", ts.Diagnostics.Extract_function, includeLib);
-}
 }

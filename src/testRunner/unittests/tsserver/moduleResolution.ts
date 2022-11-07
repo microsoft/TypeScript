@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {
         function setup(packageFileContents: string) {
@@ -118,4 +120,3 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         });
     });
 });
-}

@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
     const loggerFile: ts.tscWatch.File = {
         path: `${ts.tscWatch.projectRoot}/logger.ts`,
@@ -358,4 +360,3 @@ a;b;
         changes: ts.emptyArray,
     });
 });
-}

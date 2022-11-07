@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {
         const f1 = {
@@ -148,4 +149,3 @@ describe("unittests:: tsserver:: reload", () => {
         }
     });
 });
-}

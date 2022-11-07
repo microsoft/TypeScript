@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformES2016(context: ts.TransformationContext) {
     const {
         factory,
@@ -101,5 +102,4 @@ export function transformES2016(context: ts.TransformationContext) {
         const right = ts.visitNode(node.right, visitor, ts.isExpression);
         return ts.setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
     }
-}
 }

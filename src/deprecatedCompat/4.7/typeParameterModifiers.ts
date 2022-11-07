@@ -1,15 +1,19 @@
+import * as ts from "../_namespaces/ts";
+
 // DEPRECATION: Overloads to createTypeParameter/updateTypeParameter that does not accept `modifiers`
 // DEPRECATION PLAN:
 //     - soft: 4.7
 //     - warn: 4.8
 //     - error: 5.0
-namespace ts {
-export interface NodeFactory {
-    /** @deprecated Use the overload that accepts 'modifiers' */
-    createTypeParameterDeclaration(name: string | ts.Identifier, constraint?: ts.TypeNode, defaultType?: ts.TypeNode): ts.TypeParameterDeclaration;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface NodeFactory {
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        createTypeParameterDeclaration(name: string | ts.Identifier, constraint?: ts.TypeNode, defaultType?: ts.TypeNode): ts.TypeParameterDeclaration;
 
-    /** @deprecated Use the overload that accepts 'modifiers' */
-    updateTypeParameterDeclaration(node: ts.TypeParameterDeclaration, name: ts.Identifier, constraint: ts.TypeNode | undefined, defaultType: ts.TypeNode | undefined): ts.TypeParameterDeclaration;
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        updateTypeParameterDeclaration(node: ts.TypeParameterDeclaration, name: ts.Identifier, constraint: ts.TypeNode | undefined, defaultType: ts.TypeNode | undefined): ts.TypeParameterDeclaration;
+    }
 }
 
 function patchNodeFactory(factory: ts.NodeFactory) {
@@ -69,4 +73,3 @@ ts.addNodeFactoryPatcher(patchNodeFactory);
 
 // Patch `ts.factory` because its public
 patchNodeFactory(ts.factory);
-}

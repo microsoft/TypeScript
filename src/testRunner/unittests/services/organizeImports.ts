@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {
         it("Sort - non-relative vs non-relative", () => {
@@ -1137,4 +1139,3 @@ export * from "lib";
         }
     }
 });
-}

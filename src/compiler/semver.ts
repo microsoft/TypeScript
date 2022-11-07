@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 // https://semver.org/#spec-item-2
 // > A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative
 // > integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor
@@ -28,6 +28,7 @@ const buildPartRegExp = /^[a-z0-9-]+$/i;
 // > Numeric identifiers MUST NOT include leading zeroes.
 const numericIdentifierRegExp = /^(0|[1-9]\d*)$/;
 
+/** @internal */
 /**
  * Describes a precise semantic version number, https://semver.org
  */
@@ -182,6 +183,7 @@ function comparePrereleaseIdentifiers(left: readonly string[], right: readonly s
     return ts.compareValues(left.length, right.length);
 }
 
+/** @internal */
 /**
  * Describes a semantic version range, per https://github.com/npm/node-semver#ranges
  */
@@ -412,5 +414,4 @@ function formatAlternative(comparators: readonly Comparator[]) {
 
 function formatComparator(comparator: Comparator) {
     return `${comparator.operator}${comparator.operand}`;
-}
 }

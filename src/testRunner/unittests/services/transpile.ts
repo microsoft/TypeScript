@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: services:: Transpile", () => {
 
     interface TranspileTestSettings {
@@ -500,4 +502,3 @@ export * as alias from './file';`, {
         }
     );
 });
-}

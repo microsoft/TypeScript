@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc:: listFilesOnly::", () => {
     ts.verifyTsc({
         scenario: "listFilesOnly",
@@ -41,4 +43,3 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         ]
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should be turned on for js-only inferred projects", () => {
         const file1 = {
@@ -226,4 +227,3 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         assert.equal(errorResult[0].code, ts.Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
     });
 });
-}

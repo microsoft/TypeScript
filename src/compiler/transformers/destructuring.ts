@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 interface FlattenContext {
     context: ts.TransformationContext;
     level: FlattenLevel;
@@ -14,11 +14,13 @@ interface FlattenContext {
     visitor?: (node: ts.Node) => ts.VisitResult<ts.Node>;
 }
 
+/** @internal */
 export const enum FlattenLevel {
     All,
     ObjectRest,
 }
 
+/** @internal */
 /**
  * Flattens a DestructuringAssignment or a VariableDeclaration to an expression.
  *
@@ -158,6 +160,7 @@ function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: ts.Bi
     return !!ts.forEach(ts.getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
 }
 
+/** @internal */
 /**
  * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
  *
@@ -540,5 +543,4 @@ function makeBindingElement(factory: ts.NodeFactory, name: ts.Identifier) {
 
 function makeAssignmentElement(name: ts.Identifier) {
     return name;
-}
 }

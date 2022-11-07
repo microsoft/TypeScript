@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "addMissingConst";
 const errorCodes = [
     ts.Diagnostics.Cannot_find_name_0.code,
@@ -107,5 +107,4 @@ function expressionCouldBeVariableDeclaration(expression: ts.Node, checker: ts.T
     return expression.operatorToken.kind === ts.SyntaxKind.EqualsToken
         && ts.isIdentifier(expression.left)
         && !checker.getSymbolAtLocation(expression.left);
-}
 }

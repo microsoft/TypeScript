@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;
     before(() => {
@@ -161,4 +163,3 @@ ${internal} export enum internalEnum { a, b, c }`);
         });
     });
 });
-}

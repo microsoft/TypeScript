@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: services:: hostNewLineSupport", () => {
     function testLSWithFiles(settings: ts.CompilerOptions, files: Harness.Compiler.TestFile[]) {
         function snapFor(path: string): ts.IScriptSnapshot | undefined {
@@ -74,4 +76,3 @@ describe("unittests:: services:: hostNewLineSupport", () => {
             { newLine: ts.NewLineKind.LineFeed });
     });
 });
-}

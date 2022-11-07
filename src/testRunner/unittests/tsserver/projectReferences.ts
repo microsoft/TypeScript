@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 export function createHostWithSolutionBuild(files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
     const host = ts.projectSystem.createServerHost(files);
     // ts build should succeed
@@ -1590,4 +1591,3 @@ const b: B = new B();`
         /* eslint-enable local/boolean-trivia */
     });
 });
-}

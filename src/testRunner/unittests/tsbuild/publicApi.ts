@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: ts.TscCompileSystem;
     before(() => {
@@ -119,4 +122,3 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     });
     ts.verifyTscBaseline(() => sys);
 });
-}

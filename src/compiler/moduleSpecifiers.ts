@@ -1,6 +1,7 @@
+import * as ts from "./_namespaces/ts";
+
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
-/* @internal */
-namespace ts.moduleSpecifiers {
+
 const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
 // See UserPreferences#importPathEnding
 const enum Ending { Minimal, Index, JsExtension }
@@ -63,6 +64,7 @@ function getModuleResolutionHost(host: ts.ModuleSpecifierResolutionHost): ts.Mod
 // Because when this is called by the file renamer, `importingSourceFile` is the file being renamed,
 // while `importingSourceFileName` its *new* name. We need a source file just to get its
 // `impliedNodeFormat` and to detect certain preferences from existing import module specifiers.
+/** @internal */
 export function updateModuleSpecifier(
     compilerOptions: ts.CompilerOptions,
     importingSourceFile: ts.SourceFile,
@@ -83,6 +85,7 @@ export function updateModuleSpecifier(
 // one currently being produced; the latter to the one being imported). We need an implementation file
 // just to get its `impliedNodeFormat` and to detect certain preferences from existing import module
 // specifiers.
+/** @internal */
 export function getModuleSpecifier(
     compilerOptions: ts.CompilerOptions,
     importingSourceFile: ts.SourceFile,
@@ -94,6 +97,7 @@ export function getModuleSpecifier(
     return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences(host, {}, compilerOptions, importingSourceFile), {}, options);
 }
 
+/** @internal */
 export function getNodeModulesPackageName(
     compilerOptions: ts.CompilerOptions,
     importingSourceFile: ts.SourceFile,
@@ -124,6 +128,7 @@ function getModuleSpecifierWorker(
         getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
 }
 
+/** @internal */
 export function tryGetModuleSpecifiersFromCache(
     moduleSymbol: ts.Symbol,
     importingSourceFile: ts.SourceFile,
@@ -156,6 +161,7 @@ function tryGetModuleSpecifiersFromCacheWorker(
     return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
 }
 
+/** @internal */
 /** Returns an import for each symlink and for the realpath. */
 export function getModuleSpecifiers(
     moduleSymbol: ts.Symbol,
@@ -177,6 +183,7 @@ export function getModuleSpecifiers(
     ).moduleSpecifiers;
 }
 
+/** @internal */
 export function getModuleSpecifiersWithCacheInfo(
     moduleSymbol: ts.Symbol,
     checker: ts.TypeChecker,
@@ -361,6 +368,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
 }
 
+/** @internal */
 export function countPathComponents(path: string): number {
     let count = 0;
     for (let i = ts.startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
@@ -386,6 +394,7 @@ function getNearestAncestorDirectoryWithPackageJson(host: ts.ModuleSpecifierReso
     });
 }
 
+/** @internal */
 export function forEachFileNameOfModule<T>(
     importingFileName: string,
     importedFileName: string,
@@ -923,6 +932,7 @@ function getJSExtensionForFile(fileName: string, options: ts.CompilerOptions): t
     return tryGetJSExtensionForFile(fileName, options) ?? ts.Debug.fail(`Extension ${ts.extensionFromPath(fileName)} is unsupported:: FileName:: ${fileName}`);
 }
 
+/** @internal */
 export function tryGetJSExtensionForFile(fileName: string, options: ts.CompilerOptions): ts.Extension | undefined {
     const ext = ts.tryGetExtensionFromPath(fileName);
     switch (ext) {
@@ -955,5 +965,4 @@ function getRelativePathIfInDirectory(path: string, directoryPath: string, getCa
 
 function isPathRelativeToParent(path: string): boolean {
     return ts.startsWith(path, "..");
-}
 }

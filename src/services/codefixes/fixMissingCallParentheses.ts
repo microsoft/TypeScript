@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixMissingCallParentheses";
 const errorCodes = [
     ts.Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead.code,
@@ -41,5 +41,4 @@ function getCallName(sourceFile: ts.SourceFile, start: number): ts.Identifier | 
     }
 
     return undefined;
-}
 }

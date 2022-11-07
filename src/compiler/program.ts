@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return ts.forEachAncestorDirectory(searchPath, ancestor => {
         const fileName = ts.combinePaths(ancestor, configName);
@@ -4417,5 +4418,4 @@ export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: S
         // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
     }
     ts.Debug.fail("should never ask for module name at index higher than possible module name");
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: with project references and compile on save", () => {
     const dependecyLocation = `${ts.tscWatch.projectRoot}/dependency`;
     const usageLocation = `${ts.tscWatch.projectRoot}/usage`;
@@ -1733,4 +1734,3 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         ts.projectSystem.baselineTsserverLogs("projectReferenceCompileOnSave", "compile on save emits same output as project build with external project", session);
     });
 });
-}

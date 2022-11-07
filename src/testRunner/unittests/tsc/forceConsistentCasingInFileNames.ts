@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
     ts.verifyTsc({
         scenario: "forceConsistentCasingInFileNames",
@@ -15,4 +17,3 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         }),
     });
 });
-}

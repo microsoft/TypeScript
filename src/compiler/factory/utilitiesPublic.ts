@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 export function setTextRange<T extends ts.TextRange>(range: T, location: ts.TextRange | undefined): T {
     return location ? ts.setTextRangePosEnd(range, location.pos, location.end) : range;
 }
@@ -41,5 +42,4 @@ export function canHaveDecorators(node: ts.Node): node is ts.HasDecorators {
         || kind === ts.SyntaxKind.SetAccessor
         || kind === ts.SyntaxKind.ClassExpression
         || kind === ts.SyntaxKind.ClassDeclaration;
-}
 }

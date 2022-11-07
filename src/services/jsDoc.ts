@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.JsDoc {
+import * as ts from "./_namespaces/ts";
+
 const jsDocTagNames = [
     "abstract",
     "access",
@@ -83,6 +83,7 @@ const jsDocTagNames = [
 let jsDocTagNameCompletionEntries: ts.CompletionEntry[];
 let jsDocTagCompletionEntries: ts.CompletionEntry[];
 
+/** @internal */
 export function getJsDocCommentsFromDeclarations(declarations: readonly ts.Declaration[], checker?: ts.TypeChecker): ts.SymbolDisplayPart[] {
     // Only collect doc comments from duplicate declarations once:
     // In case of a union property there might be same declaration multiple times
@@ -135,6 +136,7 @@ function getCommentHavingNodes(declaration: ts.Declaration): readonly (ts.JSDoc 
     }
 }
 
+/** @internal */
 export function getJsDocTagsFromDeclarations(declarations?: ts.Declaration[], checker?: ts.TypeChecker): ts.JSDocTagInfo[] {
     // Only collect doc comments from duplicate declarations once.
     const infos: ts.JSDocTagInfo[] = [];
@@ -244,6 +246,7 @@ function getTagNameDisplayPart(kind: ts.SyntaxKind): (text: string) => ts.Symbol
     }
 }
 
+/** @internal */
 export function getJSDocTagNameCompletions(): ts.CompletionEntry[] {
     return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
         return {
@@ -255,8 +258,10 @@ export function getJSDocTagNameCompletions(): ts.CompletionEntry[] {
     }));
 }
 
+/** @internal */
 export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
+/** @internal */
 export function getJSDocTagCompletions(): ts.CompletionEntry[] {
     return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
         return {
@@ -268,6 +273,7 @@ export function getJSDocTagCompletions(): ts.CompletionEntry[] {
     }));
 }
 
+/** @internal */
 export function getJSDocTagCompletionDetails(name: string): ts.CompletionEntryDetails {
     return {
         name,
@@ -280,6 +286,7 @@ export function getJSDocTagCompletionDetails(name: string): ts.CompletionEntryDe
     };
 }
 
+/** @internal */
 export function getJSDocParameterNameCompletions(tag: ts.JSDocParameterTag): ts.CompletionEntry[] {
     if (!ts.isIdentifier(tag.name)) {
         return ts.emptyArray;
@@ -302,6 +309,7 @@ export function getJSDocParameterNameCompletions(tag: ts.JSDocParameterTag): ts.
     });
 }
 
+/** @internal */
 export function getJSDocParameterNameCompletionDetails(name: string): ts.CompletionEntryDetails {
     return {
         name,
@@ -314,6 +322,7 @@ export function getJSDocParameterNameCompletionDetails(name: string): ts.Complet
     };
 }
 
+/** @internal */
 /**
  * Checks if position points to a valid position to add JSDoc comments, and if so,
  * returns the appropriate template. Otherwise returns an empty string.
@@ -508,5 +517,4 @@ function getRightHandSideOfAssignment(rightHandSide: ts.Expression): ts.Function
         case ts.SyntaxKind.ClassExpression:
             return ts.find((rightHandSide as ts.ClassExpression).members, ts.isConstructorDeclaration);
     }
-}
 }

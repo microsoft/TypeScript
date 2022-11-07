@@ -1,4 +1,9 @@
-namespace vfs {
+import * as collections from "./_namespaces/collections";
+import * as ts from "./_namespaces/ts";
+import * as vpath from "./_namespaces/vpath";
+import * as documents from "./_namespaces/documents";
+import * as Harness from "./_namespaces/Harness";
+
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
  */
@@ -1626,5 +1631,4 @@ function* iteratePatchWorker(dirname: string, container: FileSet): IterableItera
             yield new documents.TextDocument(file, content);
         }
     }
-}
 }

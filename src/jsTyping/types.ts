@@ -1,4 +1,5 @@
-declare namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export interface TypingInstallerResponse {
     readonly kind: ts.server.ActionSet | ts.server.ActionInvalidate | ts.server.EventTypesRegistry | ts.server.ActionPackageInstalled | ts.server.EventBeginInstallTypes | ts.server.EventEndInstallTypes | ts.server.EventInitializationFailed;
 }
@@ -98,4 +99,3 @@ export interface SetTypings extends ProjectResponse {
 
 /* @internal */
 export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
-}

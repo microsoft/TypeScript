@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {
         const coreConfig = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json");
@@ -267,4 +268,3 @@ export class A {}`
         });
     });
 });
-}

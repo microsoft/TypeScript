@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
         ts.verifyTscWithEdits({
@@ -31,4 +32,3 @@ describe("unittests:: tsbuild:: noEmit", () => {
     verifyNoEmit("syntax errors", `const a = "hello`);
     verifyNoEmit("semantic errors", `const a: number = "hello"`);
 });
-}

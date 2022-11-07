@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: inlayHints", () => {
     const configFile: ts.projectSystem.File = {
         path: "/a/b/tsconfig.json",
@@ -60,4 +61,3 @@ describe("unittests:: tsserver:: inlayHints", () => {
         }
     });
 });
-}

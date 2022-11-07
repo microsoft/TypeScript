@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsserver:: with metadata in response", () => {
     const metadata = "Extra Info";
     function verifyOutput(host: ts.projectSystem.TestServerHost, expectedResponse: ts.projectSystem.protocol.Response) {
@@ -101,4 +103,3 @@ describe("unittests:: tsserver:: with metadata in response", () => {
         });
     });
 });
-}

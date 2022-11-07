@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 const scenario = "emit";
 describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
     function verifyOutAndOutFileSetting(subScenario: string, out?: string, outFile?: string) {
@@ -517,4 +518,3 @@ describe("unittests:: tsc-watch:: emit with when module emit is specified as nod
         ],
     });
 });
-}

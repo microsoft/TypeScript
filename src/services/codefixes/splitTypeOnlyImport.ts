@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const errorCodes = [ts.Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
 const fixId = "splitTypeOnlyImport";
 ts.codefix.registerCodeFix({
@@ -39,5 +39,4 @@ function splitTypeOnlyImport(changes: ts.textChanges.ChangeTracker, importDeclar
         ts.factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
         importDeclaration.moduleSpecifier,
         importDeclaration.assertClause));
-}
 }

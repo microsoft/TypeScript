@@ -1,4 +1,10 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness";
+import * as evaluator from "../_namespaces/evaluator";
+import * as vfs from "../_namespaces/vfs";
+import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -659,5 +665,4 @@ const MyClass = class {
     });
 
 });
-}
 

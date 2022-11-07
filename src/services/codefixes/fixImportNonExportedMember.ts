@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixImportNonExportedMember";
 const errorCodes = [
     ts.Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported.code,
@@ -159,5 +159,4 @@ function getNodeOfSymbol(symbol: ts.Symbol) {
     const declaration = symbol.valueDeclaration;
     const variableStatement = ts.isVariableDeclaration(declaration) ? ts.tryCast(declaration.parent.parent, ts.isVariableStatement) : undefined;
     return variableStatement && ts.length(variableStatement.declarationList.declarations) === 1 ? variableStatement : declaration;
-}
 }

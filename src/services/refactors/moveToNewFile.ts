@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Move to a new file";
 const description = ts.getLocaleSpecificMessage(ts.Diagnostics.Move_to_a_new_file);
 
@@ -849,5 +849,4 @@ function createExportAssignment(name: string): ts.Statement {
             ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier("exports"), ts.factory.createIdentifier(name)),
             ts.SyntaxKind.EqualsToken,
             ts.factory.createIdentifier(name)));
-}
 }

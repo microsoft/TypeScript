@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 const brackets = createBracketsMap();
 
 /*@internal*/
@@ -6049,5 +6050,4 @@ function getEmitListItem<T extends ts.Node, R extends ParenthesizerRuleOrSelecto
     return emit.length === 1 ? emitListItemNoParenthesizer :
         typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
         emitListItemWithParenthesizerRule;
-}
 }

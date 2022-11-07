@@ -1,7 +1,15 @@
+import * as ts from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as Utils from "./_namespaces/Utils";
+import * as vpath from "./_namespaces/vpath";
+import * as documents from "./_namespaces/documents";
+import * as collections from "./_namespaces/collections";
+import * as Harness from "./_namespaces/Harness";
+
 /**
  * Fake implementations of various compiler dependencies.
  */
-namespace fakes {
+
 const processExitSentinel = new Error("System exit");
 
 export interface SystemOptions {
@@ -593,6 +601,5 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
     now() {
         return this.sys.now();
     }
-}
 }
 

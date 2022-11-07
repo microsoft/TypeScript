@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {
         function withOptionChange(subScenario: string, ...options: readonly string[]): ts.TestTscEdit {
@@ -424,4 +425,3 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         });
     });
 });
-}

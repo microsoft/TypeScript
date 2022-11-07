@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 import CommandNames = ts.server.CommandNames;
 function createTestTypingsInstaller(host: ts.server.ServerHost) {
     return new ts.projectSystem.TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
@@ -1048,4 +1049,3 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
         file: `${ts.tscWatch.projectRoot}/core/core.ts`,
     });
 });
-}

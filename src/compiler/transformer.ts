@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 function getModuleTransformer(moduleKind: ts.ModuleKind): ts.TransformerFactory<ts.SourceFile | ts.Bundle> {
     switch (moduleKind) {
         case ts.ModuleKind.ESNext:
@@ -29,8 +29,10 @@ const enum SyntaxKindFeatureFlags {
     EmitNotifications = 1 << 1,
 }
 
+/** @internal */
 export const noTransformers: ts.EmitTransformers = { scriptTransformers: ts.emptyArray, declarationTransformers: ts.emptyArray };
 
+/** @internal */
 export function getTransformers(compilerOptions: ts.CompilerOptions, customTransformers?: ts.CustomTransformers, emitOnly?: boolean | ts.EmitOnly): ts.EmitTransformers {
     return {
         scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnly),
@@ -134,14 +136,17 @@ function wrapDeclarationTransformerFactory(transformer: ts.TransformerFactory<ts
     return wrapCustomTransformerFactory(transformer, (_, node) => node);
 }
 
+/** @internal */
 export function noEmitSubstitution(_hint: ts.EmitHint, node: ts.Node) {
     return node;
 }
 
+/** @internal */
 export function noEmitNotification(hint: ts.EmitHint, node: ts.Node, callback: (hint: ts.EmitHint, node: ts.Node) => void) {
     callback(hint, node);
 }
 
+/** @internal */
 /**
  * Transforms an array of SourceFiles by passing them through each transformer.
  *
@@ -566,6 +571,7 @@ export function transformNodes<T extends ts.Node>(resolver: ts.EmitResolver | un
     }
 }
 
+/** @internal */
 export const nullTransformationContext: ts.TransformationContext = {
     factory: ts.factory, // eslint-disable-line object-shorthand
     getCompilerOptions: () => ({}),
@@ -594,4 +600,3 @@ export const nullTransformationContext: ts.TransformationContext = {
     onEmitNode: noEmitNotification,
     addDiagnostic: ts.noop,
 };
-}

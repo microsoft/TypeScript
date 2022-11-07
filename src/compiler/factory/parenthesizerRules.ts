@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function createParenthesizerRules(factory: ts.NodeFactory): ts.ParenthesizerRules {
     interface BinaryPlusExpression extends ts.BinaryExpression {
         cachedLiteralKind: ts.SyntaxKind;
@@ -602,6 +603,7 @@ export function createParenthesizerRules(factory: ts.NodeFactory): ts.Parenthesi
     }
 }
 
+/** @internal */
 export const nullParenthesizerRules: ts.ParenthesizerRules = {
     getParenthesizeLeftSideOfBinaryForOperator: _ => ts.identity,
     getParenthesizeRightSideOfBinaryForOperator: _ => ts.identity,
@@ -634,4 +636,3 @@ export const nullParenthesizerRules: ts.ParenthesizerRules = {
     parenthesizeTypeArguments: nodes => nodes && ts.cast(nodes, ts.isNodeArray),
     parenthesizeLeadingTypeArgument: ts.identity,
 };
-}

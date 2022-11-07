@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: with project references and error reporting", () => {
     const dependecyLocation = `${ts.tscWatch.projectRoot}/dependency`;
     const usageLocation = `${ts.tscWatch.projectRoot}/usage`;
@@ -128,4 +129,3 @@ fnErr();
         verifyUsageAndDependency("with non module", dependencyTs, dependencyConfig, usageTs, usageConfig);
     });
 });
-}

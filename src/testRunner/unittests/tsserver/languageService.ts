@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {
         const lib = {
@@ -65,4 +67,3 @@ describe("unittests:: tsserver:: languageService", () => {
         ts.Debug.assertEqual(proj2Diags.length, 1);
     });
 });
-}

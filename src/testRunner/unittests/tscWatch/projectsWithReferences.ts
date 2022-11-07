@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "projectsWithReferences",
@@ -442,4 +443,3 @@ X;`,
         baselineDependencies: true
     });
 });
-}

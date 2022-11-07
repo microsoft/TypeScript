@@ -1,6 +1,6 @@
+import * as ts from "./_namespaces/ts";
 
-/* @internal */
-namespace ts {
+/** @internal */
 export const enum ModuleInstanceState {
     NonInstantiated = 0,
     Instantiated = 1,
@@ -15,6 +15,7 @@ interface ActiveLabel {
     referenced: boolean;
 }
 
+/** @internal */
 export function getModuleInstanceState(node: ts.ModuleDeclaration, visited?: ts.ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     if (node.body && !node.body.parent) {
         // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
@@ -173,6 +174,7 @@ function initFlowNode<T extends ts.FlowNode>(node: T) {
 
 const binder = createBinder();
 
+/** @internal */
 export function bindSourceFile(file: ts.SourceFile, options: ts.CompilerOptions) {
     ts.performance.mark("beforeBind");
     ts.perfLogger.logStartBindFile("" + file.fileName);
@@ -3498,6 +3500,7 @@ function isPurelyTypeDeclaration(s: ts.Statement): boolean {
     }
 }
 
+/** @internal */
 export function isExportsOrModuleExportsOrAlias(sourceFile: ts.SourceFile, node: ts.Expression): boolean {
     let i = 0;
     const q = ts.createQueue<ts.Expression>();
@@ -3532,5 +3535,4 @@ function lookupSymbolForName(container: ts.Node, name: ts.__String): ts.Symbol |
         return container.jsGlobalAugmentations.get(name);
     }
     return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
-}
 }

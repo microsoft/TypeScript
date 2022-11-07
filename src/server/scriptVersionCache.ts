@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 const lineCollectionCapacity = 4;
 
 interface LineCollection {
@@ -9,6 +9,7 @@ interface LineCollection {
     walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void;
 }
 
+/** @internal */
 export interface AbsolutePositionAndLineText {
     absolutePosition: number;
     lineText: string | undefined;
@@ -248,6 +249,7 @@ class TextChange {
     }
 }
 
+/** @internal */
 export class ScriptVersionCache {
     private changes: TextChange[] = [];
     private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
@@ -384,6 +386,7 @@ class LineIndexSnapshot implements ts.IScriptSnapshot {
     }
 }
 
+/** @internal */
 export class LineIndex {
     root!: LineNode;
     // set this to true to check each edit for accuracy
@@ -831,5 +834,4 @@ class LineLeaf implements LineCollection {
     lineCount() {
         return 1;
     }
-}
 }

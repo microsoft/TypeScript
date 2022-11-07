@@ -1,9 +1,11 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export interface ModuleSpecifierResolutionCacheHost {
     watchNodeModulesForPackageJsonChanges(directoryPath: string): ts.FileWatcher;
 }
 
+/** @internal */
 export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ts.ModuleSpecifierCache {
     let containedNodeModulesWatchers: ts.ESMap<string, ts.FileWatcher> | undefined;
     let cache: ts.ESMap<ts.Path, ts.ResolvedModuleSpecifierInfo> | undefined;
@@ -91,5 +93,4 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
     ): ts.ResolvedModuleSpecifierInfo {
         return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
     }
-}
 }

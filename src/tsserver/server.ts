@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 declare const addEventListener: any;
 declare const removeEventListener: any;
 function findArgumentStringArray(argName: string): readonly string[] {
@@ -10,6 +10,7 @@ function findArgumentStringArray(argName: string): readonly string[] {
     return arg.split(",").filter(name => name !== "");
 }
 
+/** @internal */
 export function getLogLevel(level: string | undefined) {
     if (level) {
         const l = level.toLowerCase();
@@ -22,6 +23,7 @@ export function getLogLevel(level: string | undefined) {
     return undefined;
 }
 
+/** @internal */
 export interface StartInput {
     args: readonly string[];
     logger: ts.server.Logger;
@@ -87,5 +89,4 @@ else {
         start(ts.server.initializeWebSystem(args), "web");
     };
     addEventListener("message", listener);
-}
 }

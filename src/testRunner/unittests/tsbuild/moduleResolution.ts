@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {
         return ts.tscWatch.createWatchedSystem([
@@ -118,4 +120,3 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         edits: ts.noChangeOnlyRuns
     });
 });
-}

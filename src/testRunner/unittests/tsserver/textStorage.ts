@@ -1,4 +1,5 @@
-namespace ts.textStorage {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {
         path: "/a/app.ts",
@@ -145,4 +146,3 @@ describe("unittests:: tsserver:: Text storage", () => {
         assert.strictEqual(newText.length, ts1.getTelemetryFileSize());
     });
 });
-}

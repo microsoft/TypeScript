@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 const angularFormsDts: ts.projectSystem.File = {
     path: "/node_modules/@angular/forms/forms.d.ts",
     content: "export declare class PatternValidator {}",
@@ -349,5 +350,4 @@ function setup(files: ts.projectSystem.File[]) {
             }
         });
     }
-}
 }

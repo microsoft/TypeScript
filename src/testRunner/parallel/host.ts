@@ -1,4 +1,7 @@
-namespace Harness.Parallel.Host {
+import * as Harness from "../_namespaces/Harness";
+import * as Utils from "../_namespaces/Utils";
+import * as ts from "../_namespaces/ts";
+
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
@@ -625,5 +628,4 @@ export function start() {
 
     // eslint-disable-next-line no-restricted-globals
     setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "useBigintLiteral";
 const errorCodes = [
     ts.Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers.code,
@@ -29,5 +29,4 @@ function makeChange(changeTracker: ts.textChanges.ChangeTracker, sourceFile: ts.
     const newText = numericLiteral.getText(sourceFile) + "n";
 
     changeTracker.replaceNode(sourceFile, numericLiteral, ts.factory.createBigIntLiteral(newText));
-}
 }

@@ -1,5 +1,8 @@
+import * as ts from "./_namespaces/ts";
+
 /** @internal */
-namespace ts {
+
+/** @internal */
 export function createGetSymbolWalker(
     getRestTypeOfSignature: (sig: ts.Signature) => ts.Type,
     getTypePredicateOfSignature: (sig: ts.Signature) => ts.TypePredicate | undefined,
@@ -186,5 +189,4 @@ export function createGetSymbolWalker(
             return false;
         }
     }
-}
 }

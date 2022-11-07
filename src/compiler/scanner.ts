@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export type ErrorCallback = (message: ts.DiagnosticMessage, length: number) => void;
 
 /* @internal */
@@ -2658,5 +2659,4 @@ const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any)
 /* @internal */
 export function utf16EncodeAsString(codePoint: number) {
     return utf16EncodeAsStringWorker(codePoint);
-}
 }

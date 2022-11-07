@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsc:: incremental::", () => {
     ts.verifyTscWithEdits({
         scenario: "incremental",
@@ -816,4 +819,3 @@ console.log(a);`,
         });
     });
 });
-}

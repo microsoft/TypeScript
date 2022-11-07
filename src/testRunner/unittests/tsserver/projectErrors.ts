@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Project Errors", () => {
     function checkProjectErrors(projectFiles: ts.server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
         assert.isTrue(projectFiles !== undefined, "missing project files");
@@ -888,4 +889,3 @@ describe("unittests:: tsserver:: Project Errors with npm install when", () => {
         verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
     });
 });
-}

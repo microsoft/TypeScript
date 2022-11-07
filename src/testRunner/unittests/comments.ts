@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("comment parsing", () => {
     const withShebang = `#! node
 /** comment */
@@ -29,4 +30,3 @@ describe("comment parsing", () => {
         assert.strictEqual(result![0].kind, ts.SyntaxKind.SingleLineCommentTrivia);
     });
 });
-}
