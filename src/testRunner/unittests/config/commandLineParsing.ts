@@ -220,7 +220,7 @@ namespace ts {
         assertParseResult("parse build with --incremental", ["--incremental", "tests"]);
         assertParseResult("parse build with --locale en-us", ["--locale", "en-us", "src"]);
         assertParseResult("parse build with --tsBuildInfoFile", ["--tsBuildInfoFile", "build.tsbuildinfo", "tests"]);
-        assertParseResult("reports other common may not be used with --build flags", ["--declaration", "--strict"]);
+        assertParseResult("reports other common may not be used with --build flags", ["--strict"]);
 
         describe("Combining options that make no sense together", () => {
             function verifyInvalidCombination(flag1: keyof BuildOptions, flag2: keyof BuildOptions) {

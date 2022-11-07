@@ -985,6 +985,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         write(message: string) {
+            if (Debug.isDebugging) console.log(message);
             this.output.push(message);
         }
 

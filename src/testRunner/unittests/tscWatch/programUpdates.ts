@@ -1164,7 +1164,9 @@ declare const eval: any`
                         };
                         const tsconfig: File = {
                             path: `${projectRoot}/tsconfig.json`,
-                            content: generateTSConfig(options, emptyArray, "\n")
+                            content: JSON.stringify({
+                                compilerOptions: compilerOptionsToConfigJson(options)
+                            })
                         };
                         return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: projectRoot });
                     },
